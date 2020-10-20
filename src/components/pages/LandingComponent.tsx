@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'reactstrap';
 import image1 from '../../assets/images/image 1.png';
 import image2 from '../../assets/images/image 2.png';
 import ellipse1 from '../../assets/images/Ellipse 1.png';
