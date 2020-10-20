@@ -1,0 +1,38 @@
+.landing.image {
+    position: absolute;
+    max-width: 500px;
+}
+
+.landing.image1 {
+    width: 52%;
+    top: 25%;
+    left: 0;
+    max-width: 450px;
+}
+
+.landing.ellipse1 {
+    width: 65%;
+    top: 20%;
+    left: 12%;
+}
+
+.landing.ellipse2 {
+    width: 65%;
+    right: 0;
+    top: 32%;
+}
+
+.landing.image2 {
+    width: 56%;
+    right: 0;
+    top: 45%;
+}
+
+.landing.btn {
+    background-color: black;
+    color: white;
+}
+
+.landing.btn:active {
+    background-color: gray;
+}
