@@ -5,6 +5,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ConfigureStore } from './store/configureStore';
 
+import ListOfAllUsers from './components/pages/ListOfAllUsers';
+
 const store = ConfigureStore();
 
 function App() {
@@ -12,7 +14,8 @@ function App() {
         <Provider store={store}>
             <BrowserRouter>
                 <div>
-                    <Main/>
+                    {/*<Main/>*/}
+                    <ListOfAllUsers />
                 </div>
             </BrowserRouter>
         </Provider>

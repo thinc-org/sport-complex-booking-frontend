@@ -55,6 +55,7 @@ class ListOfAllUsers extends Component {
             let usersList = this.state.users.map(user => {
                   return (
                         <tr key={user.id}>
+                              <td> { user.id } </td>
                               <td> { user.name } </td>
                               <td> { user.surname } </td>
                               <td> { user.username } </td>
@@ -83,6 +84,7 @@ class ListOfAllUsers extends Component {
                         <table id="usersTable">
                               <tbody>
                                     <tr>
+                                          <th key="number">#</th>
                                           <th key="firstName">First Name</th>
                                           <th key="lastName">Last Name</th>
                                           <th key="userName">User Name</th>
