@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Form, Row, Col, Button, Pagination } from 'react-bootstrap';
+import { Link } from "react-router-dom";
 
 interface stateTemplate {
       page_no: number;
@@ -50,9 +51,9 @@ class ListOfAllUsers extends Component {
             console.log(this.state.searchName + " " + allStatus[this.state.status]);
       }
 
-      handleInfo = (e) => {
-            console.log("go to : " + e.target.id)
-      }
+      // handleInfo = (e) => {
+      //       console.log(this.state.users[1])
+      // }
 
       handleAddMember = (e) => {
             console.log("Go to add member page")
@@ -84,7 +85,11 @@ class ListOfAllUsers extends Component {
                               <td> {user.surname} </td>
                               <td> {user.username} </td>
                               <td> {(user.is_penalize) ? "Banned" : "Good"} </td>
-                              <td><Button className="border" variant="light" id={String(user.id)} onClick={this.handleInfo}>ดูข้อมูล</Button></td>
+                              <td>
+                                    <Link to={"/userInfo/" + user.id}>
+                                          <Button className="border" variant="light" id={String(user.id)}>ดูข้อมูล</Button>
+                                    </Link>
+                              </td>
                         </tr>
                   )
             })

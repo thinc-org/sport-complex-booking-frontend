@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
+import { Link } from "react-router-dom";
 
 interface stateTemplate {
       user: {
@@ -28,7 +29,6 @@ class UserInfo extends Component {
 
       renderForm = () => {
             this.getInfo(); //set state with incoming values
-            //console.log(this.state.user.expired_penalize_date.toString());
             let user = this.state.user;
             return (
                   <div className="userInformation">
@@ -89,7 +89,9 @@ class UserInfo extends Component {
                   <div className="UserInfo">
                         <Row>
                               <Col sm="auto">
-                                    <Button variant="outline-primary">กลับ</Button>
+                                    <Link to="/listOfAllUsers">
+                                          <Button variant="outline-primary">กลับ</Button>
+                                    </Link>
                               </Col>
                               <Col>
                                     {this.renderForm()}
