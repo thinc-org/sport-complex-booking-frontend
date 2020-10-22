@@ -1,13 +1,7 @@
 import * as React from "react"
 import ReactDOM from "react-dom"
+import "./index.css"
 import "bootstrap/dist/css/bootstrap.min.css"
-import App from "./App"
+import AppModule from "./core/modules/app.module"
 
-ReactDOM.render(<div>helloworld</div>, document.getElementById("root"))
-
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById("root")
-)
+ReactDOM.render(<AppModule />, document.getElementById("root"))

@@ -3,10 +3,13 @@ import Main from "./components/pages/MainComponent"
 import "./App.css"
 import { BrowserRouter, Switch, Route } from "react-router-dom"
 import { Provider } from "react-redux"
-import { ConfigureStore } from "./store/configureStore"
+import { configureStore } from "./core/redux/configureStore"
 import FrontLogin from "./components/pages/front-login"
 import NavigationBar from "./components/ui/navbar"
-const store = ConfigureStore()
+
+// MIGRATE TO src/core/modules/app.module.tsx
+
+const store = configureStore()
 
 function App() {
   return (
