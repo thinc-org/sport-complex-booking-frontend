@@ -16,7 +16,6 @@ function App() {
         <Provider store={store}>
             <BrowserRouter>
                 <NavigationBar/>
-                <ListOfAllUsers />
                 <Switch>
                     <Route path="/login">
                         <FrontLogin/>
