@@ -1,13 +1,13 @@
-import React from "react";
-import Header from "../ui/HeaderComponent";
-import Landing from "./LandingComponent";
-import { Switch, Route, Redirect, withRouter } from "react-router-dom";
-import { TransitionGroup } from "react-transition-group";
+import React from "react"
+import Header from "../ui/HeaderComponent"
+import Landing from "./LandingComponent"
+import { Switch, Route, Redirect, withRouter } from "react-router-dom"
+import { TransitionGroup } from "react-transition-group"
 
 function Main() {
   const LandingPage = () => {
-    return <Landing />;
-  };
+    return <Landing />
+  }
 
   return (
     <div>
@@ -19,7 +19,7 @@ function Main() {
         </Switch>
       </TransitionGroup>
     </div>
-  );
+  )
 }
 
-export default Main;
+export default Main

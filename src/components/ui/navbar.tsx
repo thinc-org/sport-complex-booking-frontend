@@ -1,8 +1,8 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
-import { Navbar, NavDropdown, Container, Nav } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import Logo from "../../assets/images/logo.png";
+import * as React from "react"
+import { useState, useEffect } from "react"
+import { Navbar, NavDropdown, Container, Nav } from "react-bootstrap"
+import { Link } from "react-router-dom"
+import Logo from "../../assets/images/logo.png"
 const NavigationBar = (props: any) => {
   return (
     <Navbar expand="lg" style={{ background: "var(--grey-color)" }}>
@@ -37,6 +37,6 @@ const NavigationBar = (props: any) => {
         </Navbar.Collapse>
       </Container>
     </Navbar>
-  );
-};
-export default NavigationBar;
+  )
+}
+export default NavigationBar

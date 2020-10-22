@@ -1,8 +1,8 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
-import LoginForm from "../ui/login-form";
-import { Container, Row, Col } from "react-bootstrap";
-import Slide from "../ui/slideshow";
+import * as React from "react"
+import { useState, useEffect } from "react"
+import LoginForm from "../ui/login-form"
+import { Container, Row, Col } from "react-bootstrap"
+import Slide from "../ui/slideshow"
 const FrontLogin = (props: any) => {
   return (
     <Container className="page-wrap">
@@ -15,6 +15,6 @@ const FrontLogin = (props: any) => {
         </Col>
       </Row>
     </Container>
-  );
-};
-export default FrontLogin;
+  )
+}
+export default FrontLogin

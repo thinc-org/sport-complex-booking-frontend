@@ -1,26 +1,26 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
-import { Form, Button, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import * as React from "react"
+import { useState, useEffect } from "react"
+import { Form, Button, Container } from "react-bootstrap"
+import { Link } from "react-router-dom"
+import axios from "axios"
 export const LoginForm = (props: any) => {
-  let [password, setPassword] = useState("");
-  let [email, setEmail] = useState("");
-  let [isLoading, setLoading] = useState(false);
+  let [password, setPassword] = useState("")
+  let [email, setEmail] = useState("")
+  let [isLoading, setLoading] = useState(false)
   const onChangePw = (e: any) => {
-    setPassword(e.target.value);
-  };
+    setPassword(e.target.value)
+  }
   const onChangeEmail = (e: any) => {
-    setEmail(e.target.value);
-  };
+    setEmail(e.target.value)
+  }
   const onLogin = async () => {
-    setLoading(true);
+    setLoading(true)
     await setTimeout(() => {
-      setLoading(false);
-    }, 3000);
+      setLoading(false)
+    }, 3000)
     // send post request to backend
     //and then direct to account-info or first_login page
-  };
+  }
   return (
     <div className="default-wrapper">
       <h1>SIGN IN</h1>
@@ -48,6 +48,6 @@ export const LoginForm = (props: any) => {
         <Link to="/">Forget password?</Link>
       </div>
     </div>
-  );
-};
-export default LoginForm;
+  )
+}
+export default LoginForm

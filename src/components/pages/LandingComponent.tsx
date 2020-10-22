@@ -1,8 +1,8 @@
-import React from "react";
-import image1 from "../../assets/images/image 1.png";
-import image2 from "../../assets/images/image 2.png";
-import ellipse1 from "../../assets/images/Ellipse 1.png";
-import ellipse2 from "../../assets/images/Ellipse 2.png";
+import React from "react"
+import image1 from "../../assets/images/image 1.png"
+import image2 from "../../assets/images/image 2.png"
+import ellipse1 from "../../assets/images/Ellipse 1.png"
+import ellipse2 from "../../assets/images/Ellipse 2.png"
 
 function Landing() {
   return (
@@ -24,7 +24,7 @@ function Landing() {
         </a>
       </div>
     </div>
-  );
+  )
 }
 
-export default Landing;
+export default Landing
