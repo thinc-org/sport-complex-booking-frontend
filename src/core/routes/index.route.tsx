@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from 'react';
-import Switch from "react-bootstrap/esm/Switch"
+import { Switch } from "react-router-dom";
 import { Route } from "react-router"
 import FrontLoginPage from '../components/pages/front-login'
 import Landing from '../components/pages/LandingComponent'

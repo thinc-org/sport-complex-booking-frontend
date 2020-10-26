@@ -4,13 +4,9 @@
 
   width: 100%;
   box-sizing: border-box;
-  display: block;
 }
 .custom-switch{
   padding-left: 0 ;
-  height: 100%;
-  display: block;
-  
 }
 .btn {
     font-weight: 700 ;
