@@ -1,12 +1,79 @@
 import React, { Component } from 'react';
 import { Table, Form, Row, Col, Button, Pagination } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Link, RouteComponentProps } from "react-router-dom";
+
+interface CUTemplate {
+      account_type: Account;
+      is_thai_language: boolean,
+      name_th: string,
+      surname_th: string;
+      name_en: string,
+      surname_en: string;
+      username: string;
+      personal_email: string,
+      phone: string,
+      is_penalize: boolean;
+      expired_penalize_date: Date,
+      is_first_login: boolean,
+}
+
+interface OtherTemplate {
+      account_type: Account,
+      is_thai_language: boolean,
+      prefix: string,
+      name: string,
+      surname: string,
+      birthday: string,
+      //national_id: string,
+      gender: string,
+      marital_status: string,
+      address: string,
+      phone: string,
+      home_phone: string,
+      personal_email: string,
+      contact_person: Contact_person
+      medical_condition: string,
+      membership_type: string,
+      username: string,
+      password: string,
+      is_penalize: boolean,
+      expired_penalize_date: Date,
+      verification_status: Verification
+      ejected_info: string[],
+      account_expiration_date: Date,
+      user_photo: string, // object id
+      medical_ceritficate: string, // object id
+      national_id: string, // object id
+      house_registration_number: string, // object id
+      relationship_verification_document: string // object id
+}
+
+interface SatitTemplate {
+      account_type: Account,
+      is_thai_language: boolean,
+      name: string,
+      surname: string,
+      personal_email: string,
+      phone: string,
+      username: string,
+      password: string,
+      is_penalize: boolean,
+      expired_penalize_date: Date
+}
 
 interface stateTemplate {
       page_no: number;
       searchName: string;
       status: allStatus;
-      users: { name: string, surname: string, username: string; is_penalize: boolean; id: number }[];
+      users: (CUTemplate | SatitTemplate | OtherTemplate)[];
+}
+
+interface Contact_person {
+      contact_person_prefix: string,
+      contact_person_name: string,
+      contact_person_surname: string,
+      contact_person_home_phone: string,
+      contact_person_phone: string
 }
 
 enum allStatus {
@@ -15,22 +82,48 @@ enum allStatus {
       Banned
 }
 
-class ListOfAllUsers extends Component {
+enum Account {
+      CuStudent,
+      SatitAndCuPersonel,
+      Other
+}
+
+enum Verification {
+      NotSubmitted,
+      Submitted,
+      Verified,
+      Rejected
+}
+
+class ListOfAllUsers extends Component<RouteComponentProps, {}> {
       state: stateTemplate = {
             page_no: 1,
             searchName: "",
             status: allStatus.All,
             users: [
-                  { name: "beam", surname: "eiei", username: "b1", is_penalize: false, id: 1 },
-                  { name: "black", surname: "burst", username: "b2", is_penalize: true, id: 2 },
-                  { name: "b3", surname: "burst", username: "b3", is_penalize: true, id: 3 },
-                  { name: "b4", surname: "burst", username: "b4", is_penalize: false, id: 4 },
-                  { name: "b5", surname: "burst", username: "b5", is_penalize: true, id: 5 },
-                  { name: "b6", surname: "burst", username: "b6", is_penalize: true, id: 6 },
-                  { name: "b7", surname: "burst", username: "b7", is_penalize: true, id: 7 },
-                  { name: "b9", surname: "burst", username: "b8", is_penalize: true, id: 8 },
-                  { name: "b10", surname: "burst", username: "b9", is_penalize: false, id: 9 },
-                  { name: "b11", surname: "burst", username: "b10", is_penalize: true, id: 10 }
+                  {
+                        account_type: Account.CuStudent,
+                        is_thai_language: true,
+                        name_th: "บีม",
+                        surname_th: "อิอิ",
+                        name_en: "beam",
+                        surname_en: "eiei",
+                        username: "b1",
+                        personal_email: "eiei@",
+                        phone: "101",
+                        is_penalize: true,
+                        expired_penalize_date: new Date(),
+                        is_first_login: false
+                  },
+                  // { name: "black", surname: "burst", username: "b2", is_penalize: true},
+                  // { name: "b3", surname: "burst", username: "b3", is_penalize: true},
+                  // { name: "b4", surname: "burst", username: "b4", is_penalize: false},
+                  // { name: "b5", surname: "burst", username: "b5", is_penalize: true},
+                  // { name: "b6", surname: "burst", username: "b6", is_penalize: true},
+                  // { name: "b7", surname: "burst", username: "b7", is_penalize: true},
+                  // { name: "b9", surname: "burst", username: "b8", is_penalize: true},
+                  // { name: "b10", surname: "burst", username: "b9", is_penalize: false},
+                  // { name: "b11", surname: "burst", username: "b10", is_penalize: true}
             ]
       }
 
@@ -51,9 +144,25 @@ class ListOfAllUsers extends Component {
             console.log(this.state.searchName + " " + allStatus[this.state.status]);
       }
 
-      // handleInfo = (e) => {
-      //       console.log(this.state.users[1])
-      // }
+      handleInfo = (username: string, account_type: Account) => {
+            if (account_type === Account.CuStudent) {
+                  this.props.history.push({
+                        pathname: "/CUInfo/" + username,
+                        state: this.state.users
+                  });
+            } else if (account_type === Account.SatitAndCuPersonel) {
+                  this.props.history.push({
+                        pathname: "/SatitInfo/" + username,
+                        state: this.state.users
+                  });
+            } else {
+                  this.props.history.push({
+                        pathname: "/UserInfo/" + username,
+                        state: this.state.users
+                  });
+            }
+            // console.log(this.state.users[1])
+      }
 
       handleAddMember = (e) => {
             console.log("Go to add member page")
@@ -77,18 +186,30 @@ class ListOfAllUsers extends Component {
       }
 
       renderUsersTable = () => {
-            let usersList = this.state.users.map(user => {
+            let id = ((this.state.page_no - 1) * 10) + 1;
+            let user;
+            let usersList = this.state.users.map(current_user => {
+                  if (current_user.account_type === Account.CuStudent) {
+                        user = current_user as CUTemplate;
+                  } else if (current_user.account_type === Account.Other) {
+                        user = current_user as OtherTemplate;
+                  } else {
+                        user = current_user as SatitTemplate;
+                  }
                   return (
-                        <tr key={user.id}>
-                              <td> {user.id} </td>
-                              <td> {user.name} </td>
-                              <td> {user.surname} </td>
+                        <tr key={id}>
+                              <td> {id++} </td>
+                              <td> {(user.account_type === Account.CuStudent) ? user.name_th : user.name} </td>
+                              <td> {(user.account_type === Account.CuStudent) ? user.surname_th : user.surname} </td>
                               <td> {user.username} </td>
-                              <td> {(user.is_penalize) ? "Banned" : "Good"} </td>
+                              <td> {(user.is_penalize) ? "โดนแบน" : "ปกติ"} </td>
                               <td>
-                                    <Link to={"/userInfo/" + user.id}>
-                                          <Button className="border" variant="light" id={String(user.id)}>ดูข้อมูล</Button>
-                                    </Link>
+                                    {/* <Link to={{
+                                          pathname: "/userInfo/" + user.id,
+                                          state: this.state.users
+                                    }}> */}
+                                    <Button className="border" variant="light" id={String(user.id)} onClick={() => { this.handleInfo(user.username, user.account_type) }}>ดูข้อมูล</Button>
+                                    {/* </Link> */}
                               </td>
                         </tr>
                   )
@@ -135,7 +256,9 @@ class ListOfAllUsers extends Component {
                         </Table>
                         <Row>
                               <Col>
-                                    <Button variant="light" className="border" size="lg" onClick={this.handleAddMember}>เพิ่มผู้ใช้</Button>
+                                    <Link to="/addUser">
+                                          <Button variant="light" className="border" size="lg" onClick={this.handleAddMember}>เพิ่มผู้ใช้</Button>
+                                    </Link>
                               </Col>
                               <Col>
                                     {this.loadPagination()}
