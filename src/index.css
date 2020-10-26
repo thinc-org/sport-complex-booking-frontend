@@ -1,1 +1,36 @@
 /* To config bootraps */
+.custom-control{
+  padding-left: 0 ;
+
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+}
+.custom-switch{
+  padding-left: 0 ;
+  height: 100%;
+  display: block;
+  
+}
+.btn {
+    font-weight: 700 ;
+    font-size: 1.25rem ;
+    padding: 13px 19px 13px 19px;
+}
+.form-control{
+    background: #ECECEC;
+    border-radius: 15px;
+    border-color: transparent;
+    padding: 1.25rem;
+}
+.form-control:focus{
+  background: #ECECEC;
+  box-shadow: 0 0 0;
+  border: transparent;
+}
+.btn-group>.btn-group:not(:last-child)>.btn, .btn-group>.btn:not(:last-child):not(.dropdown-toggle) {
+  border-radius: 4px;
+}
+.btn-group>.btn-group:not(:first-child)>.btn, .btn-group>.btn:not(:first-child) {
+  border-radius: 4px;
+}
