@@ -1,0 +1,13 @@
+.carousel-caption h1,
+h3,
+p {
+  color: black;
+}
+.carousel-indicators li {
+  background-color: black;
+}
+.login-header {
+  margin-bottom: 30px;
+  font-weight: bold;
+  font-size: 2rem;
+}

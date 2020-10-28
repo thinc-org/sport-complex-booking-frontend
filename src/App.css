@@ -1,15 +1,22 @@
+@import './core/components/ui/footer/footer.css';
+@import './core/components/ui/login/login.css';
+@import './core/components/ui/navbar/navbar.css';
+@import './core/components/ui/navbar/staff-sidebar.css';
+@import './core/components/staff.css';
+
+
 :root {
-  --grey-color: #f7f7f9;
-  --darkgrey-color: #7e7e7e;
-  --white-color: #fafafa;
-  --defaultTextColor: rgba(0, 0, 0, 0.3);
+  --lightpink-color: #FFECED;
+  --pink-color : #FF80AB;
+  --darkpink-color: #C94F7C;
+  --red-color: #C9302C;
+  --bg-color: #FAFAFA;
+  --lightgrey-color : #EEEEEE;
+  --text-color: #373A3C;
   --sm-width: 576px;
   --md-width: 768px;
   --lg-width: 992px;
   --xlg-width: 1200px;
-}
-h1 {
-  margin-bottom: 30px;
 }
 body,
 html,
@@ -18,43 +25,64 @@ html,
   height: 100%;
   overflow: auto;
 }
+*{
+  font-weight: 700;
+}
 #root {
-  background: white;
+  background: var(--bg-color);
 }
 .button-group button {
-  max-width: 342px;
+  max-width: auto;
   max-height: 52px;
   width: 100%;
-  background: black;
-  border: 1px solid #000000;
   box-sizing: border-box;
-  border-radius: 4px;
+  border: transparent;
+  border-radius: 15px;
   margin-bottom: 20px;
 }
+.btn-pink {
+  background-color:var(--pink-color);
+  color: white;
+}
+.btn-toggle{
+  font-size: 16px;
+  margin-right: 10px;
+  background-color: var(--lightgrey-color);
+  border-radius: 4px;
+}
+.btn-toggle.focus{
+  background-color: var(--pink-color);
+  outline: 0;
+  color: white;
+  box-shadow: 0 0 0;
+}
+.btn-darkpink{
+  background: var(--darkpink-color);
+  color:white;
+}
+.btn-pink:focus,.btn-darkpink:focus{
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(255, 128, 171,.25);
+}
 label {
-  font-weight: 500;
+  font-weight: 400;
 }
-.button-group button:active {
-  background: var(--darkgrey-color) !important;
-}
-.button-group button:focus {
-  background-color: var(--darkgrey-color) !important;
-  border-color: var(--darkgrey-color) !important;
-  box-shadow: 0 0 0 0.2rem rgba(126, 126, 126, 0.5) !important;
-}
-.button-group button:hover {
-  background-color: var(--darkgrey-color) !important;
-  border-color: var(--darkgrey-color) !important;
-}
+@media(min-width: 769px){
 .default-wrapper {
   padding: 70px 50px 70px 50px;
-  background: var(--white-color);
+  background: white;
   box-shadow: 0px 10px 20px -5px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
+  }
+}
+
+.page-wrap{
+  padding-bottom: 80px;
+  min-height: 500px;
 }
 @media (max-width: 768px) {
   .page-wrap {
-    margin-top: 12%;
+    margin-top: 30px;
   }
 }
 @media (min-width: 768px) {
@@ -70,23 +98,9 @@ label {
   }
 }
 .logo {
+  margin-left: 9vw;
   max-width: 81px;
   max-height: 54px;
-}
-.nav-link-group span {
-  padding-right: 1.5rem !important;
-}
-.nav-link a {
-  color: var(--darkgrey-color);
-  text-decoration-line: none;
-}
-.carousel-caption h1,
-h3,
-p {
-  color: black;
-}
-.carousel-indicators li {
-  background-color: var(--darkgrey-color);
 }
 .landing.image {
   position: absolute;
@@ -118,11 +132,34 @@ p {
   top: 45%;
 }
 
-.landing.btn {
-  background-color: black;
+.styled-link {
+  text-decoration-line: none;
   color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.3s;
+}
+.styled-link:hover {
+  text-decoration-line: none;
+  color: black;
+  font-weight: bold;
+  font-size: 18px;
 }
 
-.landing.btn:active {
-  background-color: gray;
+.styled-link-black-button {
+  text-decoration-line: none;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.3s;
 }
+.styled-link:hover {
+  text-decoration-line: none;
+  color: var(--pink-color);
+  font-weight: bold;
+  font-size: 18px;
+}
+
+
+
+

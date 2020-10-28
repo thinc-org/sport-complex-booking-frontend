@@ -3,6 +3,8 @@ import image1 from "../../assets/images/image 1.png"
 import image2 from "../../assets/images/image 2.png"
 import ellipse1 from "../../assets/images/Ellipse 1.png"
 import ellipse2 from "../../assets/images/Ellipse 2.png"
+import { Link } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 
 function Landing() {
   return (
@@ -18,10 +20,11 @@ function Landing() {
         <img className="landing image image2" src={image2} />
       </div>
       <div className="col mb-4 fixed-bottom">
-        <a className="landing btn btn-lg col" role="button">
-          {" "}
-          Enter Sports Complex{" "}
-        </a>
+        <Link className="landing btn btn-lg col button-group" to='/login'>
+          <Button variant='pink'>
+            Enter Sports Complex
+          </Button>
+        </Link>
       </div>
     </div>
   )
