@@ -1,8 +1,12 @@
 @import './core/components/ui/footer/footer.css';
 @import './core/components/ui/login/login.css';
 @import './core/components/ui/navbar/navbar.css';
+@import './core/components/ui/navbar/staff-sidebar.css';
+@import './core/components/staff.css';
+
 
 :root {
+  --lightpink-color: #FFECED;
   --pink-color : #FF80AB;
   --darkpink-color: #C94F7C;
   --red-color: #C9302C;
@@ -28,7 +32,7 @@ html,
   background: var(--bg-color);
 }
 .button-group button {
-  max-width: 342px;
+  max-width: auto;
   max-height: 52px;
   width: 100%;
   box-sizing: border-box;
@@ -94,6 +98,7 @@ label {
   }
 }
 .logo {
+  margin-left: 9vw;
   max-width: 81px;
   max-height: 54px;
 }
@@ -127,15 +132,6 @@ label {
   top: 45%;
 }
 
-.landing.btn {
-  background-color: black;
-  color: white;
-}
-
-.landing.btn:active {
-  background-color: gray;
-}
-
 .styled-link {
   text-decoration-line: none;
   color: white;
@@ -150,6 +146,19 @@ label {
   font-size: 18px;
 }
 
+.styled-link-black-button {
+  text-decoration-line: none;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.3s;
+}
+.styled-link:hover {
+  text-decoration-line: none;
+  color: var(--pink-color);
+  font-weight: bold;
+  font-size: 18px;
+}
 
 
 
