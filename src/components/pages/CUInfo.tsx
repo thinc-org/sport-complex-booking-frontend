@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event';
 import React, { Component } from 'react';
-import { Row, Col, Button, Form } from 'react-bootstrap';
+import { Row, Col, Button, Form, Card } from 'react-bootstrap';
 import { Link, RouteComponentProps } from "react-router-dom";
 
 
@@ -108,57 +108,78 @@ class UserInfo extends Component<RouteComponentProps<TParams, any, userState[]>,
 
       renderForm = () => {
             let user = this.state.user;
+            let date: Date = user.expired_penalize_date;
+            let expired_date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
             return (
-                  <div className="userInformation">
+                  <div className="userInformation" style={{ paddingLeft: "2rem" }}>
                         <Row>
-                              <Col className="border py-3">
-                                    <p>ชื่อ (ไทย)</p>
-                                    <p className="font-weight-bold mb-0">{user.name_th}</p>
-                              </Col>
-                              <Col className="border py-3">
-                                    <p>นามสกุล (ไทย)</p>
-                                    <p className="font-weight-bold mb-0">{user.surname_th}</p>
+                              <Col className="py-3">
+                                    <p>ประเภท</p>
+                                    <p className="font-weight-bold mb-0">{Account[user.account_type]}</p>
                               </Col>
                         </Row>
                         <Row>
-                              <Col className="border py-3">
+                              <Col className="py-3">
                                     <p>ชื่อ (อังกฤษ)</p>
                                     <p className="font-weight-bold mb-0">{user.name_en}</p>
                               </Col>
-                              <Col className="border py-3">
+                              <Col className="py-3">
                                     <p>นามสกุล (อังกฤษ)</p>
                                     <p className="font-weight-bold mb-0" >{user.surname_en}</p>
                               </Col>
                         </Row>
                         <Row>
-                              <Col className="border py-3" md={7}>
+                              <Col className="py-3">
+                                    <p>ชื่อ (ไทย)</p>
+                                    <p className="font-weight-bold mb-0">{user.name_th}</p>
+                              </Col>
+                              <Col className="py-3">
+                                    <p>นามสกุล (ไทย)</p>
+                                    <p className="font-weight-bold mb-0">{user.surname_th}</p>
+                              </Col>
+                        </Row>
+                        <Row>
+                              <Col className="py-3">
                                     <p>ชื่อผู้ใช้</p>
                                     <p className="font-weight-bold mb-0">{user.username}</p>
                               </Col>
-                              <Col className="border py-3">
-                                    <p>เบอร์โทร</p>
-                                    <p className="font-weight-bold mb-0">{user.phone}</p>
-                              </Col>
                         </Row>
-                        <Row className="border">
+                        <Row>
                               <Col className="py-3">
                                     <p>อีเมลส่วนตัว</p>
                                     <p className="font-weight-bold mb-0">{user.personal_email}</p>
                               </Col>
                         </Row>
-                        <Row className="border">
+                        <Row>
                               <Col className="py-3">
-                                    <p>ประเภทบัญชี</p>
-                                    <p className="font-weight-bold mb-0">{Account[user.account_type]}</p>
+                                    <p>เบอร์โทร</p>
+                                    <p className="font-weight-bold mb-0">{user.phone}</p>
                               </Col>
                         </Row>
-                        <Row className="border">
+                        <Row>
                               <Col className="py-3">
                                     <p>สถานะการแบน</p>
                                     <p className="font-weight-bold mb-0">{(user.is_penalize) ? ("โดนแบน") : ("ปกติ")}</p>
                               </Col>
                         </Row>
-                        <Button className="mt-5" variant="outline-primary" onClick={this.handleEdit}>แก้ไข</Button>
+                        <Row>
+                              <Col className="py-3">
+                                    {/* <p>ชื่อ (ไทย)</p>
+                                    <p className="font-weight-bold mb-0">{user.name_th}</p> */}
+                                    <Form.Label>สิ้นสุดการแบน</Form.Label>
+                                    <Form.Control style={{ width: "50%" }} disabled type="date" value={(user.is_penalize) ? expired_date : "XXXX-XX-XX"} />
+                              </Col>
+                        </Row>
+                        <Row className="mt-4">
+                              <Col>
+                                    <Link to="/listOfAllUsers">
+                                          <Button variant="outline-primary">กลับ</Button>
+                                    </Link>
+                              </Col>
+                              <Col className="text-right" >
+                                    <Button variant="outline-primary" onClick={this.handleEdit}>แก้ไข</Button>
+                              </Col>
+                        </Row>
                   </div>
             )
       }
@@ -171,60 +192,62 @@ class UserInfo extends Component<RouteComponentProps<TParams, any, userState[]>,
             return (
                   <div className="userInformation">
                         <Row>
-                              <Col className="border py-3">
-                                    <p>ชื่อ (ไทย)</p>
-                                    <Form.Control id="name_th" onChange={this.handleChange} value={temp_user.name_th} />
-                              </Col>
-                              <Col className="border py-3">
-                                    <p>นามสกุล (ไทย)</p>
-                                    <Form.Control id="surname_th" onChange={this.handleChange} value={temp_user.surname_th} />
+                              <Col className="py-3">
+                                    <p>ประเภทบัญชี</p>
+                                    <Form.Label className="font-weight-bold">{Account[user.account_type]}</Form.Label>
                               </Col>
                         </Row>
                         <Row>
-                              <Col className="border py-3">
+                              <Col className="py-3">
                                     <p>ชื่อ (อังกฤษ)</p>
                                     <Form.Control id="name_en" onChange={this.handleChange} value={temp_user.name_en} />
                               </Col>
-                              <Col className="border py-3">
+                              <Col className="py-3">
                                     <p>นามสกุล (อังกฤษ)</p>
                                     <Form.Control id="surname_en" onChange={this.handleChange} value={temp_user.surname_en} />
                               </Col>
                         </Row>
                         <Row>
-                              <Col className="border py-3" md={7}>
-                                    <p>ชื่อผู้ใช้</p>
-                                    <p className="font-weight-bold">{temp_user.username}</p>
+                              <Col className="py-3">
+                                    <p>ชื่อ (ไทย)</p>
+                                    <Form.Control id="name_th" onChange={this.handleChange} value={temp_user.name_th} />
                               </Col>
-                              <Col className="border py-3">
-                                    <p>เบอร์โทร</p>
-                                    <Form.Control id="phone" onChange={this.handleChange} value={temp_user.phone} />
+                              <Col className="py-3">
+                                    <p>นามสกุล (ไทย)</p>
+                                    <Form.Control id="surname_th" onChange={this.handleChange} value={temp_user.surname_th} />
                               </Col>
                         </Row>
-                        <Row className="border py-3">
+                        <Row>
+                              <Col className="py-3">
+                                    <p>ชื่อผู้ใช้</p>
+                                    <Form.Label className="font-weight-bold">{temp_user.username}</Form.Label>
+                              </Col>
+                        </Row>
+                        <Row className="py-3">
                               <Col>
                                     <p>อีเมลส่วนตัว</p>
                                     <Form.Control id="personal_email" onChange={this.handleChange} value={temp_user.personal_email} />
                               </Col>
                         </Row>
-                        <Row className="border py-3">
-                              <Col>
-                                    <p>ประเภทบัญชี</p>
-                                    <p className="font-weight-bold">{Account[user.account_type]}</p>
+                        <Row>
+                              <Col className="py-3">
+                                    <p>เบอร์โทร</p>
+                                    <Form.Control id="phone" onChange={this.handleChange} value={temp_user.phone} />
                               </Col>
                         </Row>
-                        <Row className="border py-3">
+                        <Row className="py-3">
                               <Col>
-                                    <p>สถานะการแบน</p>
+                                    <Form.Label>สถานะการแบน</Form.Label>
                                     <Form.Control as="select" id="is_penalize" onChange={this.handleChange} defaultValue={(temp_user.is_penalize) ? "Banned" : "OK"}>
                                           <option value="OK">ปกติ</option>
                                           <option value="Banned">โดนแบน</option>
                                     </Form.Control>
                               </Col>
                         </Row>
-                        <Row className="border py-3">
-                              <Col sm={4}>
+                        <Row className="py-3">
+                              <Col>
                                     <Form.Label>สิ้นสุดการแบน</Form.Label>
-                                    <Form.Control disabled={(temp_user.is_penalize) ? false : true} id="expired_penalize_date" type="date" onChange={this.handleChange} value={expired_date} />
+                                    <Form.Control style={{ width: "50%" }} disabled={(temp_user.is_penalize) ? false : true} id="expired_penalize_date" type="date" onChange={this.handleChange} value={(user.is_penalize) ? expired_date : "XXXX-XX-XX"} />
                               </Col>
                         </Row>
                         <Row className="mt-5">
@@ -240,16 +263,13 @@ class UserInfo extends Component<RouteComponentProps<TParams, any, userState[]>,
       render() {
             return (
                   <div className="UserInfo">
-                        <Row className="justify-content-center align-middle">
-                              <Col sm={1}>
-                                    <Link to="/listOfAllUsers">
-                                          <Button variant="outline-primary">กลับ</Button>
-                                    </Link>
-                              </Col>
-                              <Col lg={5}>
-                                    {this.state.is_editing ? this.renderEditingForm() : this.renderForm()}
-                              </Col>
-                        </Row>
+                        <Card body border="secondary" style={{ width: "60%" }} className="justify-content-center">
+                              <Row className="justify-content-center">
+                                    <Col sm={10}>
+                                          {this.state.is_editing ? this.renderEditingForm() : this.renderForm()}
+                                    </Col>
+                              </Row>
+                        </Card>
                   </div >
             )
       }

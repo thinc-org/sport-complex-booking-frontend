@@ -63,6 +63,7 @@ interface SatitTemplate {
 
 interface stateTemplate {
       page_no: number;
+      max_user: number;
       searchName: string;
       status: allStatus;
       users: (CUTemplate | SatitTemplate | OtherTemplate)[];
@@ -98,6 +99,7 @@ enum Verification {
 class ListOfAllUsers extends Component<RouteComponentProps, {}> {
       state: stateTemplate = {
             page_no: 1,
+            max_user: 69,
             searchName: "",
             status: allStatus.All,
             users: [
@@ -125,6 +127,11 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
                   // { name: "b10", surname: "burst", username: "b9", is_penalize: false},
                   // { name: "b11", surname: "burst", username: "b10", is_penalize: true}
             ]
+      }
+
+      requestUsers = () => {
+            //  request users from server
+            // this.setState({["users"]: })
       }
 
       handleChangeInput = (e) => {
@@ -168,24 +175,48 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
             console.log("Go to add member page")
       }
 
+      handlePagination = (next_page: number) => {
+            let max_page: number = Math.floor((this.state.max_user + 9) / 10);
+            if (next_page >= 1 && next_page <= max_page) {
+                  this.setState({ ["page_no"]: next_page })
+                  this.forceUpdate()
+            }
+            // console.log(page_no)
+      }
+
       loadPagination = () => {
             let { page_no } = this.state;
+            let max_page: number = Math.floor((this.state.max_user + 9) / 10);
+            let numList: Array<number> = [];
+            let i = 0;
+            while (numList.length < 5) {
+                  let page = page_no + i - 2;
+                  if (page >= 1 && page <= max_page) {
+                        numList.push(page);
+                  } else if (page > max_page) {
+                        break;
+                  }
+                  i++;
+                  console.log(page)
+            }
+            // for (let i = page_no + 1; i <= Math.min(page_no + 4, max_page); i++) numList.push(i);
+            let elementList = numList.map(num => {
+                  if (num == page_no) return (<Pagination.Item active={true}>{num}</Pagination.Item>);
+                  return (
+                        <Pagination.Item key={num} onClick={() => { this.handlePagination(num) }}>{num}</Pagination.Item>
+                  )
+            })
             return (
                   <Pagination className="justify-content-md-end">
-                        <Pagination.First />
-                        <Pagination.Prev />
-                        <Pagination.Item active={true}>{page_no}</Pagination.Item>
-                        <Pagination.Item>{page_no + 1}</Pagination.Item>
-                        <Pagination.Item>{page_no + 2}</Pagination.Item>
-                        <Pagination.Item>{page_no + 3}</Pagination.Item>
-                        <Pagination.Item>{page_no + 4}</Pagination.Item>
-                        <Pagination.Next />
-                        <Pagination.Last />
+                        <Pagination.Prev onClick={() => { this.handlePagination(page_no - 1) }} />
+                        { elementList}
+                        <Pagination.Next onClick={() => { this.handlePagination(page_no + 1) }} />
                   </Pagination>
             );
       }
 
       renderUsersTable = () => {
+            this.requestUsers();
             let id = ((this.state.page_no - 1) * 10) + 1;
             let user;
             let usersList = this.state.users.map(current_user => {
@@ -222,21 +253,21 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
                   <div className="allUsers" style={{ margin: "20px" }}>
                         <h1> รายชื่อผู้ใช้ </h1>
                         <Form onSubmit={this.handleSearch} style={{ height: "50px" }}>
-                              <Form.Row className="justify-content-end">
+                              <Form.Row className="justify-content-end align-items-center">
                                     <Col md="auto">
-                                          <Form.Label> ค้นหาสมาชิก </Form.Label>
+                                          <Form.Label className="mb-0"> ค้นหาสมาชิก </Form.Label>
                                     </Col>
                                     <Col md="3">
                                           <Form.Control type="text" id="searchName" placeholder=" ค้นหา " onChange={this.handleChangeInput} />
                                     </Col>
-                                    <Button variant="light" className="border">ค้นหา</Button>
-                                    <Col sm="auto" style={{ paddingLeft: "50px" }}>
+                                    <Col sm="auto">
                                           <Form.Control onChange={this.handleChangeStatus} as="select" custom>
                                                 <option value={allStatus.All}>ทั้งหมด</option>
                                                 <option value={allStatus.Normal}>ปกติ</option>
                                                 <option value={allStatus.Banned}>โดนแบน</option>
                                           </Form.Control>
                                     </Col>
+                                    <Button variant="light" className="border" style={{ paddingLeft: "25px", paddingRight: "25px" }}>ค้นหา</Button>
                               </Form.Row>
                         </Form >
                         <Table responsive className="text-center" size="md">
@@ -257,7 +288,7 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
                         <Row>
                               <Col>
                                     <Link to="/addUser">
-                                          <Button variant="light" className="border" size="lg" onClick={this.handleAddMember}>เพิ่มผู้ใช้</Button>
+                                          <Button variant="light" className="border" onClick={this.handleAddMember} style={{ paddingLeft: "25px", paddingRight: "25px" }}>เพิ่มผู้ใช้</Button>
                                     </Link>
                               </Col>
                               <Col>
