@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Table, Form, Row, Col, Button, Pagination } from 'react-bootstrap';
+import { Table, Form, Row, Col, Button, Pagination, Modal } from 'react-bootstrap';
 import { Link, RouteComponentProps } from "react-router-dom";
+import axios from 'axios';
 
 interface CUTemplate {
       account_type: Account;
@@ -64,6 +65,7 @@ interface SatitTemplate {
 interface stateTemplate {
       page_no: number;
       max_user: number;
+      show: boolean;
       searchName: string;
       status: allStatus;
       users: (CUTemplate | SatitTemplate | OtherTemplate)[];
@@ -100,6 +102,7 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
       state: stateTemplate = {
             page_no: 1,
             max_user: 69,
+            show: false,
             searchName: "",
             status: allStatus.All,
             users: [
@@ -129,9 +132,31 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
             ]
       }
 
+      showPopUp = () => {
+            this.setState({ ['show']: true })
+      }
+
+      closePopUp = () => {
+            this.setState({ ['show']: false })
+      }
+
       requestUsers = () => {
+            // Send JWT //
+
+
             //  request users from server
-            // this.setState({["users"]: })
+
+
+            // axios.get(`http:// url`)
+            // .then(res => {
+            // console.log(res.data);
+            // let users = 
+            // let max_user: number = 
+            // this.setState({
+            //       ['users']: users,
+            //       ['max_user']: max_user
+            // })
+            // })
       }
 
       handleChangeInput = (e) => {
@@ -147,11 +172,15 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
       }
 
       handleSearch = (e) => {
+            // send jwt and get
+            // if no user -> "user not found"
             e.preventDefault();
             console.log(this.state.searchName + " " + allStatus[this.state.status]);
       }
 
       handleInfo = (username: string, account_type: Account) => {
+            //send jwt and username
+            // if no data of that user -> show pop up
             if (account_type === Account.CuStudent) {
                   this.props.history.push({
                         pathname: "/CUInfo/" + username,
@@ -168,7 +197,7 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
                         state: this.state.users
                   });
             }
-            // console.log(this.state.users[1])
+            // this.showPopUp();
       }
 
       handleAddMember = (e) => {
@@ -181,7 +210,6 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
                   this.setState({ ["page_no"]: next_page })
                   this.forceUpdate()
             }
-            // console.log(page_no)
       }
 
       loadPagination = () => {
@@ -197,11 +225,9 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
                         break;
                   }
                   i++;
-                  console.log(page)
             }
-            // for (let i = page_no + 1; i <= Math.min(page_no + 4, max_page); i++) numList.push(i);
             let elementList = numList.map(num => {
-                  if (num == page_no) return (<Pagination.Item active={true}>{num}</Pagination.Item>);
+                  if (num === page_no) return (<Pagination.Item active={true}>{num}</Pagination.Item>);
                   return (
                         <Pagination.Item key={num} onClick={() => { this.handlePagination(num) }}>{num}</Pagination.Item>
                   )
@@ -235,12 +261,7 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
                               <td> {user.username} </td>
                               <td> {(user.is_penalize) ? "โดนแบน" : "ปกติ"} </td>
                               <td>
-                                    {/* <Link to={{
-                                          pathname: "/userInfo/" + user.id,
-                                          state: this.state.users
-                                    }}> */}
                                     <Button className="border" variant="light" id={String(user.id)} onClick={() => { this.handleInfo(user.username, user.account_type) }}>ดูข้อมูล</Button>
-                                    {/* </Link> */}
                               </td>
                         </tr>
                   )
@@ -251,7 +272,6 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
       render() {
             return (
                   <div className="allUsers" style={{ margin: "20px" }}>
-                        <h1> รายชื่อผู้ใช้ </h1>
                         <Form onSubmit={this.handleSearch} style={{ height: "50px" }}>
                               <Form.Row className="justify-content-end align-items-center">
                                     <Col md="auto">
@@ -267,7 +287,7 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
                                                 <option value={allStatus.Banned}>โดนแบน</option>
                                           </Form.Control>
                                     </Col>
-                                    <Button variant="light" className="border" style={{ paddingLeft: "25px", paddingRight: "25px" }}>ค้นหา</Button>
+                                    <Button variant="light" className="border" size="sm" onClick={this.handleSearch}>ค้นหา</Button>
                               </Form.Row>
                         </Form >
                         <Table responsive className="text-center" size="md">
@@ -295,6 +315,16 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
                                     {this.loadPagination()}
                               </Col>
                         </Row>
+                        <Modal show={this.state.show} onHide={this.closePopUp} backdrop="static" keyboard={false} >
+                              <Modal.Header closeButton>
+                                    <Modal.Title>คำเตือน</Modal.Title>
+                              </Modal.Header>
+                              <Modal.Body> ไม่พบข้อมูล </Modal.Body>
+                              <Modal.Footer>
+                                    <Button variant="secondary" onClick={this.closePopUp}>ยกเลิก</Button>
+                                    <Button variant="primary" onClick={this.closePopUp}>ตกลง</Button>
+                              </Modal.Footer>
+                        </Modal>
                   </div>
             )
       }

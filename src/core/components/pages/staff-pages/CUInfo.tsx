@@ -33,7 +33,8 @@ enum Account {
       Other
 }
 
-class UserInfo extends Component<RouteComponentProps<TParams, any, userState[]>, {}> {
+class UserInfo extends Component<RouteComponentProps<TParams>, {}> {
+      // class UserInfo extends Component<RouteComponentProps<TParams, any, userState[]>, {}> {
       state: stateTemplate = {
             is_editing: false,
             user: {
@@ -53,10 +54,10 @@ class UserInfo extends Component<RouteComponentProps<TParams, any, userState[]>,
       getInfo = () => {
             // console.log(this.props);
             let username: string = this.props.match.params.username;
-            let user = this.props.location.state.find(user => (user.username === username));
-            this.setState({
-                  user: user,
-            });
+            // let user = this.props.location.state.find(user => (user.username === username));
+            // this.setState({
+            //       user: user,
+            // });
       }
 
       handleChange = (e) => {
@@ -66,10 +67,6 @@ class UserInfo extends Component<RouteComponentProps<TParams, any, userState[]>,
                   else new_user[e.target.id] = true;
             } else if (e.target.id === "expired_penalize_date") {
                   let date: Date = new Date(e.target.value)
-                  // console.log(date.getFullYear())
-                  // console.log(date.getMonth())
-                  // console.log(date.getDate())
-                  // console.log(date <= new Date())
                   if (date < new Date()) date = new Date();
                   new_user[e.target.id] = date;
             } else {
@@ -78,6 +75,7 @@ class UserInfo extends Component<RouteComponentProps<TParams, any, userState[]>,
             this.setState({
                   temp_user: new_user
             })
+            // console.log(this.state)
             if (e.target.id === "is_penalize") this.forceUpdate();
       }
 
@@ -87,7 +85,7 @@ class UserInfo extends Component<RouteComponentProps<TParams, any, userState[]>,
                   temp_user: this.state.user
             })
             this.forceUpdate()
-            console.log(this.state)
+            // console.log(this.state)
       }
 
       handleCancelChange = () => {
@@ -111,7 +109,7 @@ class UserInfo extends Component<RouteComponentProps<TParams, any, userState[]>,
             let date: Date = user.expired_penalize_date;
             let expired_date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
             return (
-                  <div className="userInformation" style={{ paddingLeft: "2rem" }}>
+                  <div className="userInformation" >
                         <Row>
                               <Col className="py-3">
                                     <p>ประเภท</p>
@@ -167,7 +165,7 @@ class UserInfo extends Component<RouteComponentProps<TParams, any, userState[]>,
                                     {/* <p>ชื่อ (ไทย)</p>
                                     <p className="font-weight-bold mb-0">{user.name_th}</p> */}
                                     <Form.Label>สิ้นสุดการแบน</Form.Label>
-                                    <Form.Control style={{ width: "50%" }} disabled type="date" value={(user.is_penalize) ? expired_date : "XXXX-XX-XX"} />
+                                    <Form.Control style={{ width: "50%" }} disabled type="date" value={(user.is_penalize) ? expired_date : ""} />
                               </Col>
                         </Row>
                         <Row className="mt-4">
@@ -188,7 +186,7 @@ class UserInfo extends Component<RouteComponentProps<TParams, any, userState[]>,
             let user: userState = this.state.user;
             let temp_user: userState = this.state.temp_user;
             let date: Date = temp_user.expired_penalize_date;
-            let expired_date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+            let expired_date: string = String(date.getFullYear()) + "-" + String((date.getMonth() + 1 < 10) ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) + "-" + String((date.getDate() < 10) ? "0" + date.getDate() : date.getDate());
             return (
                   <div className="userInformation">
                         <Row>
@@ -238,7 +236,7 @@ class UserInfo extends Component<RouteComponentProps<TParams, any, userState[]>,
                         <Row className="py-3">
                               <Col>
                                     <Form.Label>สถานะการแบน</Form.Label>
-                                    <Form.Control as="select" id="is_penalize" onChange={this.handleChange} defaultValue={(temp_user.is_penalize) ? "Banned" : "OK"}>
+                                    <Form.Control as="select" id="is_penalize" onChange={this.handleChange} value={(temp_user.is_penalize) ? "Banned" : "OK"} style={{ height: "auto" }}>
                                           <option value="OK">ปกติ</option>
                                           <option value="Banned">โดนแบน</option>
                                     </Form.Control>
@@ -247,7 +245,7 @@ class UserInfo extends Component<RouteComponentProps<TParams, any, userState[]>,
                         <Row className="py-3">
                               <Col>
                                     <Form.Label>สิ้นสุดการแบน</Form.Label>
-                                    <Form.Control style={{ width: "50%" }} disabled={(temp_user.is_penalize) ? false : true} id="expired_penalize_date" type="date" onChange={this.handleChange} value={(user.is_penalize) ? expired_date : "XXXX-XX-XX"} />
+                                    <Form.Control style={{ width: "50%" }} disabled={(temp_user.is_penalize) ? false : true} id="expired_penalize_date" type="date" onChange={this.handleChange} value={(temp_user.is_penalize) ? expired_date : ""} />
                               </Col>
                         </Row>
                         <Row className="mt-5">
@@ -263,8 +261,8 @@ class UserInfo extends Component<RouteComponentProps<TParams, any, userState[]>,
       render() {
             return (
                   <div className="UserInfo">
-                        <Card body border="secondary" style={{ width: "60%" }} className="justify-content-center">
-                              <Row className="justify-content-center">
+                        <Card body border="light" className="justify-content-center ml-1 mr-3 my-3 shadow">
+                              <Row style={{ paddingLeft: "1em" }}>
                                     <Col sm={10}>
                                           {this.state.is_editing ? this.renderEditingForm() : this.renderForm()}
                                     </Col>
