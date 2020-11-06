@@ -6,7 +6,7 @@ import FrontLoginPage from "../components/pages/front-login"
 import Landing from "../components/pages/LandingComponent"
 import StaffLogin from "../components/pages/staff-login"
 import StaffSidebar from "../components/ui/navbar/staff-sidebar"
-import { Sidebar } from "../components/ui/navbar/navbar"
+import Sidebar from "../components/ui/navbar/navbar"
 import StaffProfile from "../components/pages/staff-pages/staff-profile"
 import StaffNavbar from "../components/ui/navbar/staff-navbar"
 import ReserveNow from "../components/pages/ReserveNow"
@@ -19,6 +19,7 @@ import CUInfo from "../components/pages/staff-pages/list-of-all-users-pages/CUIn
 import UserInfo from "../components/pages/staff-pages/list-of-all-users-pages/UserInfo"
 import VeritificationApproval from "../components/pages/staff-pages/verification-approval-pages/VerificationApproval"
 import VerifyInfo from "../components/pages/staff-pages/verification-approval-pages/VerifyInfo"
+
 
 export default function MainRoute() {
   let [navHead, setNavHead] = useState("CU Sports Center")
@@ -50,41 +51,24 @@ export default function MainRoute() {
   }
 
   return (
-    <NavHeader.Provider value={val}>
+    <>
+      <Sidebar></Sidebar>
+      <StaffNavbar />
       <Switch>
-        <Route
-          exact
-          path="/"
-          render={() => {
-            setNavHead("CU Sports Center")
-            return <Landing />
-          }}
-        />
+        <Route exact path="/" render={() => {
+          return <Landing />
+        }} />
 
-        <Route
-          path="/login"
-          render={() => {
-            setNavHead("CU Sports Center")
-            return <FrontLoginPage />
-          }}
-        />
-        <Route
-          exact
-          path="/register"
-          render={() => {
-            setNavHead("CU Sports Center")
-            return <div>Under maintenance</div>
-          }}
-        />
+        <Route path="/login" render={() => {
+          return <FrontLoginPage />
+        }} />
+        <Route exact path="/register" render={() => {
+          return <div>Under maintenance</div>
+        }} />
 
-        <Route
-          exact
-          path="/profile"
-          render={() => {
-            setNavHead("CU Sports Center")
-            return <div>Under maintenance</div>
-          }}
-        />
+        <Route exact path="/profile" render={() => {
+          return <div>Under maintenance</div>
+        }} />
 
         <Route
           exact
@@ -180,11 +164,6 @@ export default function MainRoute() {
           }}
         />
       </Switch>
-    </NavHeader.Provider>
+    </>
   )
 }
-interface NavHeadContext {
-  head: String
-  setHead: any
-}
-export const NavHeader = React.createContext({} as NavHeadContext)

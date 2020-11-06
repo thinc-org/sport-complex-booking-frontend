@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useContext } from 'react';
-import { NavHeader } from '../../../routes/index.route'
 import { Form, ToggleButton, Container, Button, ToggleButtonGroup } from 'react-bootstrap';
 const PersonalInfo = (props: any) => {
-    let { head, setHead } = useContext(NavHeader)
     let [lang, setLang] = useState('EN')
     let [telnum, setTelnum] = useState('');
     let [pemail, setPEmail] = useState('');

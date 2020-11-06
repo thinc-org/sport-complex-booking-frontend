@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navbar, NavbarBrand, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import logo from '../../../assets/images/logo.png';
 
 function StaffNavbar() {
-
+    let location = useLocation()
+    let [hide, setHidden] = useState(false);
+    useEffect(() => {
+        if (!(location.pathname.toLowerCase().includes('staff')) || location.pathname.toLowerCase() == "/stafflogin") setHidden(true)
+        else setHidden(false)
+    }, [location])
     const onLogout = async (e) => {
 
     }
 
     return (
-        <Navbar>
+        <Navbar style={{ display: hide ? 'none' : '' }}>
             <NavbarBrand className='mr-auto'>
                 <img className='logo' src={logo} />
             </NavbarBrand>

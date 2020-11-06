@@ -1,13 +1,12 @@
 import * as React from "react"
 import { useState, useEffect, useContext } from "react"
 import { Navbar, NavDropdown, Container, Nav } from "react-bootstrap"
-import { Link, useRouteMatch } from "react-router-dom"
+import { Link, useRouteMatch, useLocation, withRouter } from "react-router-dom"
 import Logo from "../../../assets/images/logo.png"
 import Toggler from '../../../assets/images/icons/hamburger.svg'
 import { CSSTransition } from 'react-transition-group';
 import Exit from '../../../assets/images/icons/exit.svg'
 import { data } from './sidebarData';
-import { NavHeader } from '../../../routes/index.route'
 const NavigationBar = (props: any) => {
   return (
     <Navbar expand="lg" style={{ background: "var(--bg-color)", paddingTop: '60px' }}>
@@ -47,30 +46,37 @@ const NavigationBar = (props: any) => {
   )
 }
 
-export const Sidebar = (props: any) => {
-  let { head, setHead } = useContext(NavHeader)
-  let [header, setHeader] = useState(head)
+const Sidebar = (props: any) => {
+  let location = useLocation()
+  let [header, setHeader] = useState('CU Sports Center')
+  let [hide, setHidden] = useState(false);
+  let [inProp, setInProp] = useState(false);
   useEffect(() => {
-    setHeader(head)
-  }, [head])
+    if (location.pathname.toLowerCase() == "/login/personal") setHeader('Tell us about yourself')
+    else if (location.pathname.toLowerCase().includes('staff')) setHidden(true)
+    else {
+      setHidden(false)
+      setHeader('CU Sports Center')
+    }
+  }, [location])
   const listItems = data.map((item, index) => (
     <li key={index}>
       <Link className="styled-link" to={item.path} onClick={() => setInProp(false)}>
         {item.name}
       </Link>
     </li>));
-  let [sidebar, setSidebar] = useState(false);
-  let [inProp, setInProp] = useState(false);
   return (
     <>
-      <div className="sidebar-toggler d-flex flex-row justify-content-center">
+      <div className="sidebar-toggler flex-row justify-content-center" style={{
+        display: hide ? 'none' : 'flex'
+      }}>
         <img src={Toggler} onClick={() => setInProp(true)} />
         <h1 className="d-flex flex-row justify-content-center w-100">
           {header}
         </h1>
       </div>
       <CSSTransition in={inProp} timeout={300} classNames='fade'>
-        <div className="sidebar">
+        <div className="sidebar" style={{ display: (hide) ? 'none' : '' }}>
           <nav>
             <div style={{
               paddingBottom: '64px'
@@ -93,8 +99,8 @@ export const Sidebar = (props: any) => {
           </nav>
         </div>
       </CSSTransition>
-      <span className="backdrop" style={{ display: inProp ? 'flex' : 'none' }} />
+      <span className="backdrop" style={{ display: (inProp && !hide) ? 'flex' : 'none' }} />
     </>
   )
 }
-export default NavigationBar
+export default Sidebar
