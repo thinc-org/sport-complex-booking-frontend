@@ -15,7 +15,9 @@ function StaffLogin() {
     const onChangeUsername = (e: any) => {
         setUsername(e.target.value)
     }
-    const onLogin = async () => { }
+    const onLogin = async () => {
+
+    }
 
     return (
         <React.Fragment>

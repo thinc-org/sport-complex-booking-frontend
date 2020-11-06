@@ -6,7 +6,7 @@ import FrontLoginPage from '../components/pages/front-login'
 import Landing from '../components/pages/LandingComponent'
 import StaffLogin from '../components/pages/staff-login'
 import StaffSidebar from '../components/ui/navbar/staff-sidebar'
-import { Sidebar } from '../components/ui/navbar/navbar'
+import Sidebar from '../components/ui/navbar/navbar'
 import StaffProfile from '../components/pages/staff-pages/staff-profile'
 import StaffNavbar from '../components/ui/navbar/staff-navbar';
 
@@ -37,25 +37,22 @@ export default function MainRoute() {
   }
 
   return (
-    <NavHeader.Provider value={val}>
+    <>
+      <Sidebar></Sidebar>
       <StaffNavbar />
       <Switch>
         <Route exact path="/" render={() => {
-          setNavHead('CU Sports Center')
           return <Landing />
         }} />
 
         <Route path="/login" render={() => {
-          setNavHead('CU Sports Center')
           return <FrontLoginPage />
         }} />
         <Route exact path="/register" render={() => {
-          setNavHead('CU Sports Center')
           return <div>Under maintenance</div>
         }} />
 
         <Route exact path="/profile" render={() => {
-          setNavHead('CU Sports Center')
           return <div>Under maintenance</div>
         }} />
 
@@ -79,13 +76,7 @@ export default function MainRoute() {
             </div>
           )
         }} />
-
       </Switch>
-    </NavHeader.Provider>
+    </>
   )
 }
-interface NavHeadContext {
-  head: String,
-  setHead: any
-}
-export const NavHeader = React.createContext({} as NavHeadContext)
