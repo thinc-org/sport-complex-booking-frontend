@@ -1,38 +1,40 @@
-import * as React from "react";
-import { useState, useEffect } from 'react';
-import { Switch } from "react-router-dom";
+import * as React from "react"
+import { useState, useEffect } from "react"
+import { Switch } from "react-router-dom"
 import { Route } from "react-router"
-import FrontLoginPage from '../components/pages/front-login'
-import Landing from '../components/pages/LandingComponent'
-import StaffLogin from '../components/pages/staff-login'
-import StaffSidebar from '../components/ui/navbar/staff-sidebar'
-import { Sidebar } from '../components/ui/navbar/navbar'
-import StaffProfile from '../components/pages/staff-pages/staff-profile'
-import StaffNavbar from '../components/ui/navbar/staff-navbar';
-import ReserveNow from "../components/pages/ReserveNow";
-import JoinWaitingRoom from "../components/pages/JoinWaitingRoom";
-import AccountPage from "../components/pages/AccountPage";
+import FrontLoginPage from "../components/pages/front-login"
+import Landing from "../components/pages/LandingComponent"
+import StaffLogin from "../components/pages/staff-login"
+import StaffSidebar from "../components/ui/navbar/staff-sidebar"
+import { Sidebar } from "../components/ui/navbar/navbar"
+import StaffProfile from "../components/pages/staff-pages/staff-profile"
+import StaffNavbar from "../components/ui/navbar/staff-navbar"
+import ReserveNow from "../components/pages/ReserveNow"
+import JoinWaitingRoom from "../components/pages/JoinWaitingRoom"
+import AccountPage from "../components/pages/AccountPage"
 
-import ListOfAllUsers from '../components/pages/ListOfAllUsers';
-import CUInfo from "../components/pages/CUInfo";
-import AddUser from "../components/pages/AddUser";
-// import SatitInfo from "../../components/pages/SatitInfo"
+import ListOfAllUsers from "../components/pages/staff-pages/ListOfAllUsers"
+import CUInfo from "../components/pages/staff-pages/CUInfo"
+import AddUser from "../components/pages/staff-pages/AddUser"
 
 export default function MainRoute() {
-  let [navHead, setNavHead] = useState('CU Sports Center')
+  let [navHead, setNavHead] = useState("CU Sports Center")
   const val = { head: navHead, setHead: setNavHead }
 
   function staff(page, header) {
     return (
-      <div className='staff background d-block' style={{ backgroundColor: 'white', minHeight: '80vh' }}>
-        <div className='container d-block' >
-          <div className='row justify-content-center' >
-            <div className='col' style={{ backgroundColor: ' var(--lightpink-color)', marginTop: '5vh', marginBottom: '5vh', minHeight: '80vh', borderRadius: '15px' }}>
-              <div className='row justify-content-center' style={{ minHeight: '80vh' }}>
-                <div className='col-3 justify-content-center' style={{ maxHeight: '800px' }}>
+      <div className="staff background d-block" style={{ backgroundColor: "white", minHeight: "80vh" }}>
+        <div className="container d-block">
+          <div className="row justify-content-center">
+            <div
+              className="col"
+              style={{ backgroundColor: " var(--lightpink-color)", marginTop: "5vh", marginBottom: "5vh", minHeight: "80vh", borderRadius: "15px" }}
+            >
+              <div className="row justify-content-center" style={{ minHeight: "80vh" }}>
+                <div className="col-3 justify-content-center" style={{ maxHeight: "800px" }}>
                   <StaffSidebar />
                 </div>
-                <div className='col-9 mt-5' style={{ minHeight: '600px' }}>
+                <div className="col-9 mt-5" style={{ minHeight: "600px" }}>
                   <h1> {header} </h1>
                   {page}
                 </div>
@@ -47,73 +49,118 @@ export default function MainRoute() {
   return (
     <NavHeader.Provider value={val}>
       <Switch>
-        <Route exact path="/" render={() => {
-          setNavHead('CU Sports Center')
-          return <Landing />
-        }} />
+        <Route
+          exact
+          path="/"
+          render={() => {
+            setNavHead("CU Sports Center")
+            return <Landing />
+          }}
+        />
 
-        <Route path="/login" render={() => {
-          setNavHead('CU Sports Center')
-          return <FrontLoginPage />
-        }} />
-        <Route exact path="/register" render={() => {
-          setNavHead('CU Sports Center')
-          return <div>Under maintenance</div>
-        }} />
+        <Route
+          path="/login"
+          render={() => {
+            setNavHead("CU Sports Center")
+            return <FrontLoginPage />
+          }}
+        />
+        <Route
+          exact
+          path="/register"
+          render={() => {
+            setNavHead("CU Sports Center")
+            return <div>Under maintenance</div>
+          }}
+        />
 
-        <Route exact path="/profile" render={() => {
-          setNavHead('CU Sports Center')
-          return <div>Under maintenance</div>
-        }} />
+        <Route
+          exact
+          path="/profile"
+          render={() => {
+            setNavHead("CU Sports Center")
+            return <div>Under maintenance</div>
+          }}
+        />
 
-        <Route exact path='/staffLogin' render={() => {
-          return <StaffLogin />
-        }} />
+        <Route
+          exact
+          path="/staffLogin"
+          render={() => {
+            return <StaffLogin />
+          }}
+        />
 
-        <Route path='/staffprofile' render={() => {
-          return (
-            staff(<StaffProfile />, 'ยินดีต้อนรับ')
+        <Route
+          path="/staffprofile"
+          render={() => {
+            return staff(<StaffProfile />, "ยินดีต้อนรับ")
             // example
             // add pages here staff(page)
-          )
-        }} />
+          }}
+        />
 
-        <Route path='/จัดการสตาฟ' render={() => {
-          return (
-            // add pages here staff(page)
-            <div>
-              under maintainance
-            </div>
-          )
-        }} />
+        <Route
+          path="/จัดการสตาฟ"
+          render={() => {
+            return (
+              // add pages here staff(page)
+              <div>under maintainance</div>
+            )
+          }}
+        />
 
-        <Route path = '/reservenow' render = {() => {
-          setNavHead('Reserve Now')
-          return (
-            <ReserveNow />
-          )
-        }} />
+        <Route
+          path="/reservenow"
+          render={() => {
+            setNavHead("Reserve Now")
+            return <ReserveNow />
+          }}
+        />
 
-        <Route path = '/joinwaitingroom' render = {() => {
-          setNavHead('Join a Waiting Room')
-          return (
-            <JoinWaitingRoom />
-          )
-        }} />
+        <Route
+          path="/joinwaitingroom"
+          render={() => {
+            setNavHead("Join a Waiting Room")
+            return <JoinWaitingRoom />
+          }}
+        />
 
-        <Route path = '/account' render = {() => {
-          setNavHead('Account')
-          return (
-            <AccountPage />
-          )
-        }} />
+        <Route
+          path="/account"
+          render={() => {
+            setNavHead("Account")
+            return <AccountPage />
+          }}
+        />
 
+        <Route
+          exact
+          path="/listOfAllUsers"
+          render={(props) => {
+            return staff(<ListOfAllUsers {...props} />, "รายชื่อผู้ใช้")
+          }}
+        />
+        <Route
+          exact
+          path="/CUInfo/:username"
+          render={(props) => {
+            return staff(<CUInfo {...props} />, "ข้อมูลผู้ใช้")
+          }}
+        />
+        <Route
+          exact
+          path="/addUser"
+          render={(props) => {
+            return staff(<AddUser {...props} />, "เพิ่มผู้ใช้")
+          }}
+        />
       </Switch>
     </NavHeader.Provider>
   )
 }
 interface NavHeadContext {
-  head: String,
+  head: String
   setHead: any
 }
 export const NavHeader = React.createContext({} as NavHeadContext)

@@ -12,7 +12,8 @@ export const data = [
     {
         icon: '',
         name: 'ผู้ใช้ทั้งหมด',
-        path: '/ผู้ใช้ทั้งหมด'
+        // path: '/ผู้ใช้ทั้งหมด'
+        path: '/listOfAllUsers'
     },
     {
         icon: '',
