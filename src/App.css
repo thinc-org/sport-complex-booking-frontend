@@ -64,6 +64,33 @@ html,
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(255, 128, 171, 0.25);
 }
+.btn-normal {
+  font-size: medium;
+  font-weight: normal;
+  border-radius: 15px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.btn-normal:hover {
+  background-color: #ff2e7e;
+  color: white;
+}
+.btn-outline-black:hover {
+  background-color: grey;
+  border-color: transparent;
+  color: white;
+}
+.btn-outline-pink {
+  color: var(--pink-color);
+  border-color: var(--pink-color);
+}
+.btn-outline-pink:hover {
+  background-color: var(--pink-color);
+  color: white;
+  border-color: white;
+}
 label {
   font-weight: 400;
 }
@@ -144,4 +171,44 @@ label {
   color: var(--pink-color);
   font-weight: bold;
   font-size: 18px;
+}
+
+.table td {
+  font-weight: lighter;
+  vertical-align: middle;
+}
+.tr-normal {
+  background-color: white;
+}
+.tr-pink {
+  background-color: rgb(252, 177, 223);
+}
+
+p {
+  font-weight: lighter;
+}
+
+.page-link {
+  font-weight: lighter;
+  background: var(--pink-color);
+  color: white;
+  border-color: white;
+}
+.page-link:hover {
+  background: #df609f;
+  color: white;
+}
+.page-item.active .page-link {
+  border-color: white;
+  background: #b84f83;
+}
+
+.form-control {
+  height: 3rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.card {
+  border-radius: 15px;
 }
