@@ -10,10 +10,10 @@ import { Sidebar } from '../components/ui/navbar/navbar'
 import StaffProfile from '../components/pages/staff-pages/staff-profile'
 import StaffNavbar from '../components/ui/navbar/staff-navbar';
 
-import ListOfAllUsers from '../components/pages/ListOfAllUsers';
-import CUInfo from "../components/pages/CUInfo";
-import AddUser from "../components/pages/AddUser";
-// import SatitInfo from "../../components/pages/SatitInfo"
+import ListOfAllUsers from '../components/pages/staff-pages/ListOfAllUsers';
+import CUInfo from "../components/pages/staff-pages/CUInfo";
+import AddUser from "../components/pages/staff-pages/AddUser";
+
 
 export default function MainRoute() {
   let [navHead, setNavHead] = useState('CU Sports Center')
@@ -84,6 +84,23 @@ export default function MainRoute() {
             </div>
           )
         }} />
+
+        <Route exact path='/listOfAllUsers' render={(props) => {
+          return (
+            staff(<ListOfAllUsers {...props} />, 'รายชื่อผู้ใช้')
+          )
+        }} />
+        <Route exact path='/CUInfo/:username' render={(props) => {
+          return (
+            staff(<CUInfo {...props} />, 'ข้อมูลผู้ใช้')
+          )
+        }} />
+        <Route exact path='/addUser' render={(props) => {
+          return (
+            staff(<AddUser {...props} />, 'เพิ่มผู้ใช้')
+          )
+        }} />
+
 
       </Switch>
     </NavHeader.Provider>
