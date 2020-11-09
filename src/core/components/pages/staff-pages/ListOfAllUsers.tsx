@@ -1,346 +1,371 @@
-import React, { Component } from 'react';
-import { Table, Form, Row, Col, Button, Pagination, Modal } from 'react-bootstrap';
-import { Link, RouteComponentProps } from "react-router-dom";
-import axios from 'axios';
+import React, { Component } from "react"
+import { Table, Form, Row, Col, Button, Pagination, Modal } from "react-bootstrap"
+import { Link, RouteComponentProps } from "react-router-dom"
+import axios from "axios"
 
 interface CUTemplate {
-      account_type: Account;
-      is_thai_language: boolean,
-      name_th: string,
-      surname_th: string;
-      name_en: string,
-      surname_en: string;
-      username: string;
-      personal_email: string,
-      phone: string,
-      is_penalize: boolean;
-      expired_penalize_date: Date,
-      is_first_login: boolean,
+  account_type: Account
+  is_thai_language: boolean
+  name_th: string
+  surname_th: string
+  name_en: string
+  surname_en: string
+  username: string
+  personal_email: string
+  phone: string
+  is_penalize: boolean
+  expired_penalize_date: Date
+  is_first_login: boolean
 }
 
 interface OtherTemplate {
-      account_type: Account,
-      is_thai_language: boolean,
-      prefix: string,
-      name: string,
-      surname: string,
-      birthday: string,
-      //national_id: string,
-      gender: string,
-      marital_status: string,
-      address: string,
-      phone: string,
-      home_phone: string,
-      personal_email: string,
-      contact_person: Contact_person
-      medical_condition: string,
-      membership_type: string,
-      username: string,
-      password: string,
-      is_penalize: boolean,
-      expired_penalize_date: Date,
-      verification_status: Verification
-      ejected_info: string[],
-      account_expiration_date: Date,
-      user_photo: string, // object id
-      medical_ceritficate: string, // object id
-      national_id: string, // object id
-      house_registration_number: string, // object id
-      relationship_verification_document: string // object id
+  account_type: Account
+  is_thai_language: boolean
+  prefix: string
+  name: string
+  surname: string
+  birthday: string
+  //national_id: string,
+  gender: string
+  marital_status: string
+  address: string
+  phone: string
+  home_phone: string
+  personal_email: string
+  contact_person: Contact_person
+  medical_condition: string
+  membership_type: string
+  username: string
+  password: string
+  is_penalize: boolean
+  expired_penalize_date: Date
+  verification_status: Verification
+  ejected_info: string[]
+  account_expiration_date: Date
+  user_photo: string // object id
+  medical_ceritficate: string // object id
+  national_id: string // object id
+  house_registration_number: string // object id
+  relationship_verification_document: string // object id
 }
 
 interface SatitTemplate {
-      account_type: Account,
-      is_thai_language: boolean,
-      name: string,
-      surname: string,
-      personal_email: string,
-      phone: string,
-      username: string,
-      password: string,
-      is_penalize: boolean,
-      expired_penalize_date: Date
+  account_type: Account
+  is_thai_language: boolean
+  name: string
+  surname: string
+  personal_email: string
+  phone: string
+  username: string
+  password: string
+  is_penalize: boolean
+  expired_penalize_date: Date
 }
 
 interface stateTemplate {
-      page_no: number;
-      max_user: number;
-      // show: boolean;
-      searchName: string;
-      status: allStatus;
-      users: (CUTemplate | SatitTemplate | OtherTemplate)[];
+  page_no: number
+  max_user: number
+  // show: boolean;
+  searchName: string
+  status: allStatus
+  users: (CUTemplate | SatitTemplate | OtherTemplate)[]
 }
 
 interface Contact_person {
-      contact_person_prefix: string,
-      contact_person_name: string,
-      contact_person_surname: string,
-      contact_person_home_phone: string,
-      contact_person_phone: string
+  contact_person_prefix: string
+  contact_person_name: string
+  contact_person_surname: string
+  contact_person_home_phone: string
+  contact_person_phone: string
 }
 
 enum allStatus {
-      All,
-      Normal,
-      Banned
+  All,
+  Normal,
+  Banned,
 }
 
 enum Account {
-      CuStudent,
-      SatitAndCuPersonel,
-      Other
+  CuStudent,
+  SatitAndCuPersonel,
+  Other,
 }
 
 enum Verification {
-      NotSubmitted,
-      Submitted,
-      Verified,
-      Rejected
+  NotSubmitted,
+  Submitted,
+  Verified,
+  Rejected,
 }
 
 class ListOfAllUsers extends Component<RouteComponentProps, {}> {
-      state: stateTemplate = {
-            page_no: 1,
-            max_user: 69,
-            // show: false,
-            searchName: "",
-            status: allStatus.All,
-            users: [
-                  {
-                        account_type: Account.CuStudent,
-                        is_thai_language: true,
-                        name_th: "นายอิอิ",
-                        surname_th: "อิอิ",
-                        name_en: "beam",
-                        surname_en: "eiei",
-                        username: "b1",
-                        personal_email: "eiei@",
-                        phone: "101",
-                        is_penalize: true,
-                        expired_penalize_date: new Date(),
-                        is_first_login: false
-                  },
-                  {
-                        account_type: Account.CuStudent,
-                        is_thai_language: true,
-                        name_th: "black",
-                        surname_th: "burst",
-                        name_en: "beam",
-                        surname_en: "eiei",
-                        username: "b2",
-                        personal_email: "eiei@",
-                        phone: "101",
-                        is_penalize: false,
-                        expired_penalize_date: new Date(),
-                        is_first_login: false
-                  },
-            ]
+  state: stateTemplate = {
+    page_no: 1,
+    max_user: 69,
+    // show: false,
+    searchName: "",
+    status: allStatus.All,
+    users: [
+      {
+        account_type: Account.CuStudent,
+        is_thai_language: true,
+        name_th: "นายอิอิ",
+        surname_th: "อิอิ",
+        name_en: "beam",
+        surname_en: "eiei",
+        username: "b1",
+        personal_email: "eiei@",
+        phone: "101",
+        is_penalize: true,
+        expired_penalize_date: new Date(),
+        is_first_login: false,
+      },
+      {
+        account_type: Account.CuStudent,
+        is_thai_language: true,
+        name_th: "black",
+        surname_th: "burst",
+        name_en: "beam",
+        surname_en: "eiei",
+        username: "b2",
+        personal_email: "eiei@",
+        phone: "101",
+        is_penalize: false,
+        expired_penalize_date: new Date(),
+        is_first_login: false,
+      },
+    ],
+  }
+
+  // showPopUp = () => {
+  //       this.setState({ ['show']: true })
+  // }
+
+  // closePopUp = () => {
+  //       this.setState({ ['show']: false })
+  // }
+
+  shouldComponentUpdate(nextProp, nextState) {
+    // re-render when page_no, status, users change
+    let { page_no, status, users } = this.state
+    if (page_no !== nextState.page_no || status != nextState.status || users != nextState.users) return true
+    return false
+  }
+
+  requestUsers = () => {
+    // Send JWT //
+
+    // get params for request //
+    let { page_no, searchName, status } = this.state
+    let param = {
+      first: (page_no - 1) * 10,
+      last: page_no * 10 - 1,
+    }
+    if (searchName !== "") param["name"] = searchName
+    if (status != allStatus.All) param["is_penalize"] = allStatus.Banned == status
+    //  request users from server  //
+    axios({
+      method: "get",
+      url: "/listOfAllUsers",
+      params: param,
+    })
+      .then((res) => {
+        console.log(res.data)
+        // let users = ;
+        // let max_user: number = ;
+        // this.setState({
+        //       ['users']: users,
+        //       ['max_user']: max_user
+        // })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  handleChangeInput = (e) => {
+    this.setState({
+      [e.target.id]: e.target.value,
+    })
+  }
+
+  handleChangeStatus = (e) => {
+    this.setState({
+      status: e.target.value,
+    })
+  }
+
+  handleSearch = (e) => {
+    // send jwt and get //
+    // if no user -> "user not found"
+    e.preventDefault()
+    this.forceUpdate()
+  }
+
+  handleInfo = (username: string, account_type: Account) => {
+    //send jwt and username
+    // if no data of that user -> show pop up
+    if (account_type === Account.CuStudent) {
+      this.props.history.push({
+        pathname: "/CUInfo/" + username,
+        state: this.state.users,
+      })
+    } else {
+      this.props.history.push({
+        pathname: "/UserInfo/" + username,
+        state: this.state.users,
+      })
+    }
+  }
+
+  handlePagination = (next_page: number) => {
+    let max_page: number = Math.floor((this.state.max_user + 9) / 10)
+    if (next_page >= 1 && next_page <= max_page) {
+      this.setState({ ["page_no"]: next_page })
+      // this.forceUpdate()
+    }
+  }
+
+  loadPagination = () => {
+    let { page_no } = this.state
+    let max_page: number = Math.floor((this.state.max_user + 9) / 10)
+    let numList: Array<number> = []
+    let i = 0
+    while (numList.length < 5) {
+      let page = page_no + i - 2
+      if (page >= 1 && page <= max_page) {
+        numList.push(page)
+      } else if (page > max_page) {
+        break
       }
+      i++
+    }
+    let elementList = numList.map((num) => {
+      if (num === page_no) return <Pagination.Item active={true}>{num}</Pagination.Item>
+      return (
+        <Pagination.Item
+          key={num}
+          onClick={() => {
+            this.handlePagination(num)
+          }}
+        >
+          {num}
+        </Pagination.Item>
+      )
+    })
+    return (
+      <Pagination className="justify-content-md-end">
+        <Pagination.Prev
+          onClick={() => {
+            this.handlePagination(page_no - 1)
+          }}
+        />
+        {elementList}
+        <Pagination.Next
+          onClick={() => {
+            this.handlePagination(page_no + 1)
+          }}
+        />
+      </Pagination>
+    )
+  }
 
-      // showPopUp = () => {
-      //       this.setState({ ['show']: true })
-      // }
-
-      // closePopUp = () => {
-      //       this.setState({ ['show']: false })
-      // }
-
-      shouldComponentUpdate(nextProp, nextState) {
-            // re-render when page_no, status, users change
-            let { page_no, status, users } = this.state;
-            if (page_no !== nextState.page_no || status != nextState.status || users != nextState.users) return true;
-            return false;
+  renderUsersTable = () => {
+    this.requestUsers()
+    let id = (this.state.page_no - 1) * 10 + 1
+    let user
+    let usersList = this.state.users.map((current_user) => {
+      if (current_user.account_type === Account.CuStudent) {
+        user = current_user as CUTemplate
+      } else if (current_user.account_type === Account.Other) {
+        user = current_user as OtherTemplate
+      } else {
+        user = current_user as SatitTemplate
       }
+      return (
+        <tr key={id} className="tr-normal">
+          <td className="font-weight-bold"> {id++} </td>
+          <td> {user.account_type === Account.CuStudent ? user.name_th : user.name} </td>
+          <td> {user.account_type === Account.CuStudent ? user.surname_th : user.surname} </td>
+          <td> {user.username} </td>
+          <td> {user.is_penalize ? "โดนแบน" : "ปกติ"} </td>
+          <td>
+            <Button
+              className="btn-normal btn-outline-black"
+              variant="outline-secondary"
+              id={String(user.id)}
+              onClick={() => {
+                this.handleInfo(user.username, user.account_type)
+              }}
+            >
+              ดูข้อมูล
+            </Button>
+          </td>
+        </tr>
+      )
+    })
+    return usersList
+  }
 
-      requestUsers = () => {
-            // Send JWT //
-
-
-            // get params for request //
-            let { page_no, searchName, status } = this.state
-            let param = {
-                  first: (page_no - 1) * 10,
-                  last: (page_no * 10) - 1
-            }
-            if (searchName !== "") param['name'] = searchName;
-            if (status != allStatus.All) param['is_penalize'] = (allStatus.Banned == status);
-            //  request users from server  //
-            axios({
-                  method: "get",
-                  url: "/listOfAllUsers",
-                  params: param
-            })
-                  .then(res => {
-                        console.log(res.data);
-                        // let users = ;
-                        // let max_user: number = ;
-                        // this.setState({
-                        //       ['users']: users,
-                        //       ['max_user']: max_user
-                        // })
-                  })
-                  .catch(err => {
-                        console.log(err)
-                  })
-      }
-
-      handleChangeInput = (e) => {
-            this.setState({
-                  [e.target.id]: e.target.value
-            })
-      }
-
-      handleChangeStatus = (e) => {
-            this.setState({
-                  ["status"]: e.target.value
-            })
-      }
-
-      handleSearch = (e) => {
-            // send jwt and get //
-            // if no user -> "user not found"
-            e.preventDefault();
-            this.forceUpdate()
-      }
-
-      handleInfo = (username: string, account_type: Account) => {
-            //send jwt and username
-            // if no data of that user -> show pop up
-            if (account_type === Account.CuStudent) {
-                  this.props.history.push({
-                        pathname: "/CUInfo/" + username,
-                        state: this.state.users
-                  });
-            }
-            // else if (account_type === Account.SatitAndCuPersonel) {
-            //       this.props.history.push({
-            //             pathname: "/SatitInfo/" + username,
-            //             state: this.state.users
-            //       });
-            // } 
-            else {
-                  this.props.history.push({
-                        pathname: "/UserInfo/" + username,
-                        state: this.state.users
-                  });
-            }
-      }
-
-      handlePagination = (next_page: number) => {
-            let max_page: number = Math.floor((this.state.max_user + 9) / 10);
-            if (next_page >= 1 && next_page <= max_page) {
-                  this.setState({ ["page_no"]: next_page })
-                  // this.forceUpdate()
-            }
-      }
-
-      loadPagination = () => {
-            let { page_no } = this.state;
-            let max_page: number = Math.floor((this.state.max_user + 9) / 10);
-            let numList: Array<number> = [];
-            let i = 0;
-            while (numList.length < 5) {
-                  let page = page_no + i - 2;
-                  if (page >= 1 && page <= max_page) {
-                        numList.push(page);
-                  } else if (page > max_page) {
-                        break;
-                  }
-                  i++;
-            }
-            let elementList = numList.map(num => {
-                  if (num === page_no) return (<Pagination.Item active={true}>{num}</Pagination.Item>);
-                  return (
-                        <Pagination.Item key={num} onClick={() => { this.handlePagination(num) }}>{num}</Pagination.Item>
-                  )
-            })
-            return (
-                  <Pagination className="justify-content-md-end">
-                        <Pagination.Prev onClick={() => { this.handlePagination(page_no - 1) }} />
-                        { elementList}
-                        <Pagination.Next onClick={() => { this.handlePagination(page_no + 1) }} />
-                  </Pagination>
-            );
-      }
-
-      renderUsersTable = () => {
-            this.requestUsers();
-            let id = ((this.state.page_no - 1) * 10) + 1;
-            let user;
-            let usersList = this.state.users.map(current_user => {
-                  if (current_user.account_type === Account.CuStudent) {
-                        user = current_user as CUTemplate;
-                  } else if (current_user.account_type === Account.Other) {
-                        user = current_user as OtherTemplate;
-                  } else {
-                        user = current_user as SatitTemplate;
-                  }
-                  return (
-                        <tr key={id} className="tr-normal">
-                              <td className="font-weight-bold"> {id++} </td>
-                              <td> {(user.account_type === Account.CuStudent) ? user.name_th : user.name} </td>
-                              <td> {(user.account_type === Account.CuStudent) ? user.surname_th : user.surname} </td>
-                              <td> {user.username} </td>
-                              <td> {(user.is_penalize) ? "โดนแบน" : "ปกติ"} </td>
-                              <td>
-                                    <Button className="btn-normal btn-outline-black" variant="outline-secondary" id={String(user.id)} onClick={() => { this.handleInfo(user.username, user.account_type) }}>ดูข้อมูล</Button>
-                              </td>
-                        </tr>
-                  )
-            })
-            return usersList;
-      }
-
-      render() {
-            // console.log("re-rendered")
-            // console.log(this.state)
-            return (
-                  <div className="allUsers" style={{ margin: "20px" }}>
-                        <Form onSubmit={this.handleSearch} style={{ height: "50px" }}>
-                              <Form.Row className="justify-content-end align-items-center">
-                                    <Col md="auto">
-                                          <Form.Label className="mb-0 font-weight-bold"> ค้นหาผู้ใช้ </Form.Label>
-                                    </Col>
-                                    <Col md="5">
-                                          <Form.Control className="border" style={{ backgroundColor: "white" }} type="text" id="searchName" placeholder=" ค้นหา " onChange={this.handleChangeInput} />
-                                    </Col>
-                                    <Col sm="auto">
-                                          <Form.Control onChange={this.handleChangeStatus} as="select" custom defaultValue={0}>
-                                                <option disabled value={allStatus.All}>สถานะ</option>
-                                                <option value={allStatus.All}>ทั้งหมด</option>
-                                                <option value={allStatus.Normal}>ปกติ</option>
-                                                <option value={allStatus.Banned}>โดนแบน</option>
-                                          </Form.Control>
-                                    </Col>
-                                    <Button variant="pink" className="py-1 btn-normal" onClick={this.handleSearch}>ค้นหา</Button>
-                              </Form.Row>
-                        </Form >
-                        <Table responsive className="text-center" size="md">
-                              <thead className="bg-light">
-                                    <tr className="tr-pink">
-                                          <th>#</th>
-                                          <th>ชื่อ</th>
-                                          <th>นามสกุล</th>
-                                          <th>ชื่อผู้ใช้</th>
-                                          <th>สถานะ</th>
-                                          <th></th>
-                                    </tr>
-                              </thead>
-                              <tbody>
-                                    {this.renderUsersTable()}
-                              </tbody>
-                        </Table>
-                        <Row>
-                              <Col>
-                                    <Link to="/addUser">
-                                          <Button variant="pink" className="btn-normal">เพิ่มผู้ใช้</Button>
-                                    </Link>
-                              </Col>
-                              <Col>
-                                    {this.loadPagination()}
-                              </Col>
-                        </Row>
-                        {/* <Modal show={this.state.show} onHide={this.closePopUp} backdrop="static" keyboard={false} >
+  render() {
+    // console.log("re-rendered")
+    // console.log(this.state)
+    return (
+      <div className="allUsers" style={{ margin: "20px" }}>
+        <Form onSubmit={this.handleSearch} style={{ height: "50px" }}>
+          <Form.Row className="justify-content-end align-items-center">
+            <Col md="auto">
+              <Form.Label className="mb-0 font-weight-bold"> ค้นหาผู้ใช้ </Form.Label>
+            </Col>
+            <Col md="5">
+              <Form.Control
+                className="border"
+                style={{ backgroundColor: "white" }}
+                type="text"
+                id="searchName"
+                placeholder=" ค้นหา "
+                onChange={this.handleChangeInput}
+              />
+            </Col>
+            <Col sm="auto">
+              <Form.Control onChange={this.handleChangeStatus} as="select" custom defaultValue={0}>
+                <option disabled value={allStatus.All}>
+                  สถานะ
+                </option>
+                <option value={allStatus.All}>ทั้งหมด</option>
+                <option value={allStatus.Normal}>ปกติ</option>
+                <option value={allStatus.Banned}>โดนแบน</option>
+              </Form.Control>
+            </Col>
+            <Button variant="pink" className="py-1 btn-normal" onClick={this.handleSearch}>
+              ค้นหา
+            </Button>
+          </Form.Row>
+        </Form>
+        <Table responsive className="text-center" size="md">
+          <thead className="bg-light">
+            <tr className="tr-pink">
+              <th>#</th>
+              <th>ชื่อ</th>
+              <th>นามสกุล</th>
+              <th>ชื่อผู้ใช้</th>
+              <th>สถานะ</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>{this.renderUsersTable()}</tbody>
+        </Table>
+        <Row>
+          <Col>
+            <Link to="/addUser">
+              <Button variant="pink" className="btn-normal">
+                เพิ่มผู้ใช้
+              </Button>
+            </Link>
+          </Col>
+          <Col>{this.loadPagination()}</Col>
+        </Row>
+        {/* <Modal show={this.state.show} onHide={this.closePopUp} backdrop="static" keyboard={false} >
                               <Modal.Header closeButton>
                                     <Modal.Title>คำเตือน</Modal.Title>
                               </Modal.Header>
@@ -350,9 +375,9 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
                                     <Button variant="primary" onClick={this.closePopUp}>ตกลง</Button>
                               </Modal.Footer>
                         </Modal> */}
-                  </div>
-            )
-      }
+      </div>
+    )
+  }
 }
 
-export default ListOfAllUsers;
+export default ListOfAllUsers
