@@ -38,7 +38,6 @@ export default function MainRoute() {
 
   return (
     <NavHeader.Provider value={val}>
-      <StaffNavbar />
       <Switch>
         <Route exact path="/" render={() => {
           setNavHead('CU Sports Center')
