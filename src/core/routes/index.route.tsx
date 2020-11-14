@@ -9,6 +9,9 @@ import StaffSidebar from '../components/ui/navbar/staff-sidebar'
 import { Sidebar } from '../components/ui/navbar/navbar'
 import StaffProfile from '../components/pages/staff-pages/staff-profile'
 import StaffNavbar from '../components/ui/navbar/staff-navbar';
+import ReserveNow from "../components/pages/ReserveNow";
+import JoinWaitingRoom from "../components/pages/JoinWaitingRoom";
+import AccountPage from "../components/pages/AccountPage";
 
 export default function MainRoute() {
   let [navHead, setNavHead] = useState('CU Sports Center')
@@ -76,6 +79,27 @@ export default function MainRoute() {
             <div>
               under maintainance
             </div>
+          )
+        }} />
+
+        <Route path = '/reservenow' render = {() => {
+          setNavHead('Reserve Now')
+          return (
+            <ReserveNow />
+          )
+        }} />
+
+        <Route path = '/joinwaitingroom' render = {() => {
+          setNavHead('Join a Waiting Room')
+          return (
+            <JoinWaitingRoom />
+          )
+        }} />
+
+        <Route path = '/account' render = {() => {
+          setNavHead('Account')
+          return (
+            <AccountPage />
           )
         }} />
 
