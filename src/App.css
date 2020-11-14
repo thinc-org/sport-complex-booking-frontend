@@ -1,17 +1,17 @@
-@import './core/components/ui/footer/footer.css';
-@import './core/components/ui/login/login.css';
-@import './core/components/ui/navbar/navbar.css';
-@import './core/components/ui/navbar/staff-sidebar.css';
-@import './core/components/pages/landing.css';
+@import "./core/components/ui/footer/footer.css";
+@import "./core/components/ui/login/login.css";
+@import "./core/components/ui/navbar/navbar.css";
+@import "./core/components/ui/navbar/staff-sidebar.css";
+@import "./core/components/pages/landing.css";
 
 :root {
-  --lightpink-color: #FFECED;
-  --pink-color : #FF80AB;
-  --darkpink-color: #C94F7C;
-  --red-color: #C9302C;
-  --bg-color: #FAFAFA;
-  --lightgrey-color : #EEEEEE;
-  --text-color: #373A3C;
+  --lightpink-color: #ffeced;
+  --pink-color: #ff80ab;
+  --darkpink-color: #c94f7c;
+  --red-color: #c9302c;
+  --bg-color: #fafafa;
+  --lightgrey-color: #eeeeee;
+  --text-color: #373a3c;
   --sm-width: 576px;
   --md-width: 768px;
   --lg-width: 992px;
@@ -24,7 +24,7 @@ html,
   height: 100%;
   overflow: auto;
 }
-*{
+* {
   font-weight: 700;
 }
 #root {
@@ -40,42 +40,58 @@ html,
   margin-bottom: 20px;
 }
 .btn-pink {
-  background-color:var(--pink-color);
+  background-color: var(--pink-color);
   color: white;
 }
-.btn-toggle{
+.btn-toggle {
   font-size: 16px;
   margin-right: 10px;
   background-color: var(--lightgrey-color);
   border-radius: 4px;
 }
-.btn-toggle.focus{
+.btn-toggle.focus {
   background-color: var(--pink-color);
   outline: 0;
   color: white;
   box-shadow: 0 0 0;
 }
-.btn-darkpink{
+.btn-darkpink {
   background: var(--darkpink-color);
-  color:white;
+  color: white;
 }
-.btn-pink:focus,.btn-darkpink:focus{
+.btn-pink:focus,
+.btn-darkpink:focus {
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(255, 128, 171,.25);
+  box-shadow: 0 0 0 0.2rem rgba(255, 128, 171, 0.25);
 }
 label {
   font-weight: 400;
 }
-@media(min-width: 769px){
-.default-wrapper {
-  padding: 70px 50px 70px 50px;
+
+.default-mobile-wrapper {
+  padding: 20px 20px 20px 20px;
   background: white;
   box-shadow: 0px 10px 20px -5px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
+}
+
+.dropdown-item {
+  white-space: normal;
+}
+.fit-button {
+  white-space: normal;
+}
+
+@media (min-width: 769px) {
+  .default-wrapper {
+    padding: 70px 50px 70px 50px;
+    background: white;
+    box-shadow: 0px 10px 20px -5px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
   }
 }
 
-.page-wrap{
+.page-wrap {
   padding-bottom: 80px;
   min-height: 500px;
 }
@@ -129,7 +145,3 @@ label {
   font-weight: bold;
   font-size: 18px;
 }
-
-
-
-
