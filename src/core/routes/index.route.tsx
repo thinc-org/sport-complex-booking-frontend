@@ -13,6 +13,11 @@ import ReserveNow from "../components/pages/ReserveNow";
 import JoinWaitingRoom from "../components/pages/JoinWaitingRoom";
 import AccountPage from "../components/pages/AccountPage";
 
+import ListOfAllUsers from '../components/pages/ListOfAllUsers';
+import CUInfo from "../components/pages/CUInfo";
+import AddUser from "../components/pages/AddUser";
+// import SatitInfo from "../../components/pages/SatitInfo"
+
 export default function MainRoute() {
   let [navHead, setNavHead] = useState('CU Sports Center')
   const val = { head: navHead, setHead: setNavHead }
