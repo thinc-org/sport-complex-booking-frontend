@@ -15,6 +15,7 @@ import AccountPage from "../components/pages/AccountPage"
 
 import ListOfAllUsers from "../components/pages/staff-pages/ListOfAllUsers"
 import CUInfo from "../components/pages/staff-pages/CUInfo"
+import UserInfo from "../components/pages/staff-pages/UserInfo"
 import AddUser from "../components/pages/staff-pages/AddUser"
 
 export default function MainRoute() {
@@ -143,9 +144,16 @@ export default function MainRoute() {
         />
         <Route
           exact
-          path="/CUInfo/:username"
+          path="/cuInfo/:username"
           render={(props) => {
             return staff(<CUInfo {...props} />, "ข้อมูลผู้ใช้")
+          }}
+        />
+        <Route
+          exact
+          path="/userInfo/:username"
+          render={(props) => {
+            return staff(<UserInfo {...props} />, "ข้อมูลผู้ใช้")
           }}
         />
         <Route

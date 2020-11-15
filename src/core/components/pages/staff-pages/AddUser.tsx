@@ -289,7 +289,7 @@ class AddUser extends Component {
   }
 
   render() {
-    // console.log("re-render")
+    console.log("adduser re-render")
     let { showAdd, showCom, showErr } = this.state
     // console.log(showAdd)
     return (

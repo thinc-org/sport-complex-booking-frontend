@@ -21,32 +21,10 @@ interface CUTemplate {
 interface OtherTemplate {
   account_type: Account
   is_thai_language: boolean
-  prefix: string
   name: string
   surname: string
-  birthday: string
-  //national_id: string,
-  gender: string
-  marital_status: string
-  address: string
-  phone: string
-  home_phone: string
-  personal_email: string
-  contact_person: Contact_person
-  medical_condition: string
-  membership_type: string
   username: string
-  password: string
   is_penalize: boolean
-  expired_penalize_date: Date
-  verification_status: Verification
-  ejected_info: string[]
-  account_expiration_date: Date
-  user_photo: string // object id
-  medical_ceritficate: string // object id
-  national_id: string // object id
-  house_registration_number: string // object id
-  relationship_verification_document: string // object id
 }
 
 interface SatitTemplate {
@@ -69,14 +47,6 @@ interface stateTemplate {
   searchName: string
   status: allStatus
   users: (CUTemplate | SatitTemplate | OtherTemplate)[]
-}
-
-interface Contact_person {
-  contact_person_prefix: string
-  contact_person_name: string
-  contact_person_surname: string
-  contact_person_home_phone: string
-  contact_person_phone: string
 }
 
 enum allStatus {
@@ -121,18 +91,20 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
         is_first_login: false,
       },
       {
-        account_type: Account.CuStudent,
+        account_type: Account.Other,
         is_thai_language: true,
-        name_th: "black",
-        surname_th: "burst",
-        name_en: "beam",
-        surname_en: "eiei",
+        name: "black",
+        surname: "burst",
         username: "b2",
-        personal_email: "eiei@",
-        phone: "101",
         is_penalize: false,
-        expired_penalize_date: new Date(),
-        is_first_login: false,
+      },
+      {
+        account_type: Account.Other,
+        is_thai_language: false,
+        name: "b",
+        surname: "but",
+        username: "b3",
+        is_penalize: true,
       },
     ],
   }
@@ -202,18 +174,21 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
     this.forceUpdate()
   }
 
-  handleInfo = (username: string, account_type: Account) => {
+  handleInfo = (e) => {
     //send jwt and username
     // if no data of that user -> show pop up
+    let index = parseInt(e.target.id) - 1
+    let username: String = this.state.users[index].username
+    let account_type: Account = this.state.users[index].account_type
     if (account_type === Account.CuStudent) {
       this.props.history.push({
-        pathname: "/CUInfo/" + username,
-        state: this.state.users,
+        pathname: "/cuInfo/" + username,
+        // state: this.state.users,
       })
     } else {
       this.props.history.push({
-        pathname: "/UserInfo/" + username,
-        state: this.state.users,
+        pathname: "/userInfo/" + username,
+        // state: this.state.users,
       })
     }
   }
@@ -284,20 +259,13 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
       }
       return (
         <tr key={id} className="tr-normal">
-          <td className="font-weight-bold"> {id++} </td>
+          <td className="font-weight-bold"> {id} </td>
           <td> {user.account_type === Account.CuStudent ? user.name_th : user.name} </td>
           <td> {user.account_type === Account.CuStudent ? user.surname_th : user.surname} </td>
           <td> {user.username} </td>
           <td> {user.is_penalize ? "โดนแบน" : "ปกติ"} </td>
           <td>
-            <Button
-              className="btn-normal btn-outline-black"
-              variant="outline-secondary"
-              id={String(user.id)}
-              onClick={() => {
-                this.handleInfo(user.username, user.account_type)
-              }}
-            >
+            <Button className="btn-normal btn-outline-black" variant="outline-secondary" id={String(id++)} onClick={this.handleInfo}>
               ดูข้อมูล
             </Button>
           </td>
