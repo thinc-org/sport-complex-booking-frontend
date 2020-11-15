@@ -8,19 +8,8 @@ const FrontLoginPage = (props: any) => {
   return (
     <>
       <Switch>
-<<<<<<< HEAD
         <Route path={`${path}/personal`} component={PersonalInfo} />
         <Route exact path={path} component={FrontLoginMain} />
-=======
-        <Route path={`${path}/personal`} render={() => {
-          return (
-            <PersonalInfo />
-          )
-        }} />
-        <Route exact path={path} render={() => {
-          return <FrontLoginMain />
-        }} />
->>>>>>> a1671ec... fixed front navbar and staff navbar both show up, remove navheader Context
       </Switch>
       <Footer />
     </>
