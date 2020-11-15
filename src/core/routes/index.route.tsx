@@ -2,6 +2,7 @@ import * as React from "react"
 import { useState, useEffect } from "react"
 import { Switch } from "react-router-dom"
 import { Route } from "react-router"
+<<<<<<< HEAD
 import FrontLoginPage from "../components/pages/front-login"
 import Landing from "../components/pages/LandingComponent"
 import StaffLogin from "../components/pages/staff-login"
@@ -24,6 +25,19 @@ import FrontLoginMain from "../components/ui/login/login-main"
 
 
 import { NavHeader } from '../components/ui/navbar/navbarSideEffect';
+=======
+import FrontLoginPage from '../components/pages/front-login'
+import Landing from '../components/pages/LandingComponent'
+import StaffLogin from '../components/pages/staff-login'
+import StaffSidebar from '../components/ui/navbar/staff-sidebar'
+import Sidebar from '../components/ui/navbar/navbar'
+import StaffProfile from '../components/pages/staff-pages/staff-profile'
+import StaffNavbar from '../components/ui/navbar/staff-navbar';
+import ReserveNow from "../components/pages/ReserveNow";
+import JoinWaitingRoom from "../components/pages/JoinWaitingRoom";
+import AccountPage from "../components/pages/AccountPage";
+import {NavHeader} from '../components/ui/navbar/navbarSideEffect';
+>>>>>>> ab18fe6... add useNavHeader hook that can be used to change navbar header
 
 export default function MainRoute() {
 
@@ -90,11 +104,40 @@ export default function MainRoute() {
           }}
         />
 
+<<<<<<< HEAD
         <Route path='/reservenow' component={ReserveNow} />
 
         <Route path='/joinwaitingroom' component={JoinWaitingRoom} />
 
         <Route path='/account' component={AccountPage} />
+=======
+        <Route path = '/reservenow' render = {() => {
+          return (
+            <>
+            <NavHeader header="Reserve Now"/>
+            <ReserveNow />
+            </>
+          )
+        }} />
+
+        <Route path = '/joinwaitingroom' render = {() => {
+          return (
+            <>
+            <NavHeader header="Join a waiting room"/>
+            <JoinWaitingRoom />
+            </>
+          )
+        }} />
+
+        <Route path = '/account' render = {() => {
+          return (
+            <>
+            <NavHeader header="Account"/>
+            <AccountPage />
+            </>
+          )
+        }} />
+>>>>>>> ab18fe6... add useNavHeader hook that can be used to change navbar header
 
         <Route
           exact
