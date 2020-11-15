@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { useState, useEffect, useContext } from 'react';
 import { Form, ToggleButton, Container, Button, ToggleButtonGroup } from 'react-bootstrap';
+<<<<<<< HEAD
 import { NavHeader } from '../ui/navbar/navbarSideEffect'
+=======
+>>>>>>> ab18fe6... add useNavHeader hook that can be used to change navbar header
 // import MaterialIcon, {colorPalette} from 'material-icons-react';
 // import HelpIcon from '@material-ui/icons/Help';
 
