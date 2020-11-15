@@ -10,7 +10,9 @@ const FrontLoginPage = (props: any) => {
     <>
       <Switch>
         <Route path={`${path}/personal`} render={() => {
-          return <PersonalInfo />
+          return (
+            <PersonalInfo />
+          )
         }} />
         <Route exact path={path} render={() => {
           return <FrontLoginMain />
