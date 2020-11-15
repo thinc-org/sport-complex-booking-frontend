@@ -4,6 +4,7 @@ import ChulaAccount from "./ChulaAccount"
 import SatitAndCUPersonelAccount from "./SatitAndCUPersonelAccount"
 import OtherAccount from "./OtherAccount"
 import axios from "axios"
+import { NavHeader } from "../ui/navbar/navbarSideEffect"
 
 export default function AccountPage() {
   enum Account {
@@ -12,7 +13,7 @@ export default function AccountPage() {
     Other = "Other",
   }
 
-  const jwt ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmIwMDQ4ZTU5ODYwYzMzOTQ0MmFhZmUiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjA1MzcxMDIyfQ.2041BQR9ZCram8nmLVkcjZuvIFzciacRlcJ02Wgfe-U"
+  const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmIwMDQ4ZTU5ODYwYzMzOTQ0MmFhZmUiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjA1MzcxMDIyfQ.2041BQR9ZCram8nmLVkcjZuvIFzciacRlcJ02Wgfe-U"
   let [account_type, set_account_type] = useState<Account>()
 
   useEffect(() => {
@@ -49,5 +50,10 @@ export default function AccountPage() {
       }
     }
   }
-  return showPage(account_type, jwt)
+  return (
+    <>
+      <NavHeader header="Account" />
+      {showPage(account_type, jwt)}
+    </>
+  )
 }
