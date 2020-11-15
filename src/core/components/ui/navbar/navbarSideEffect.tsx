@@ -39,6 +39,7 @@ const navHeaderSideEffect = withSideEffect(
 function useNavHeader(): navHeaderState | navHeaderProps {
     const [state, setState] = useState(currentState);
     useEffect(() => {
+        setState(currentState)
         const listener = (newState: navHeaderState) => {
             console.log(JSON.stringify(newState))
             setState(newState);
@@ -46,7 +47,7 @@ function useNavHeader(): navHeaderState | navHeaderProps {
         emitter.addListener('change', listener)
         return () => { emitter.removeListener('change', listener); }
     }
-    )
+    ,[])
     return state || navHeaderSideEffect.peek();
 }
 

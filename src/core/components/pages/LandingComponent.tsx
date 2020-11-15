@@ -8,7 +8,7 @@ import { Button } from 'react-bootstrap';
 
 function Landing() {
   return (
-    <div className="d-block pt-5 p-0 landing" style={{ backgroundColor: 'white', width: '100vw', height: '100%' }}>
+    <div className="d-block pt-5 p-0 landing" style={{ backgroundColor: 'var(--bg-color)', width: '100vw', height: '100%' }}>
       <div className="col p-4 m-0 textgroup">
         <h4> Chulalongkorn University </h4>
         <h4> Sports Center </h4>
