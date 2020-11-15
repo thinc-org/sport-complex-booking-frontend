@@ -58,7 +58,7 @@ const Sidebar = (props: any) => {
     </li>));
   return (
     <>
-      <div className="sidebar-toggler flex-row justify-content-center">
+      <div className="sidebar-toggler d-flex flex-row justify-content-center">
         <img src={Toggler} onClick={() => setInProp(true)} />
         <h1 className="d-flex flex-row justify-content-center w-100">
           {header ? header : 'CU Sports Complex'}

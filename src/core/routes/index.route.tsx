@@ -19,11 +19,11 @@ import CUInfo from "../components/pages/staff-pages/list-of-all-users-pages/CUIn
 import UserInfo from "../components/pages/staff-pages/list-of-all-users-pages/UserInfo"
 import VeritificationApproval from "../components/pages/staff-pages/verification-approval-pages/VerificationApproval"
 import VerifyInfo from "../components/pages/staff-pages/verification-approval-pages/VerifyInfo"
+import FrontLoginMain from "../components/ui/login/login-main"
+
 
 
 export default function MainRoute() {
-  let [navHead, setNavHead] = useState("CU Sports Center")
-  const val = { head: navHead, setHead: setNavHead }
 
   function staff(page, header) {
     return (
@@ -55,13 +55,9 @@ export default function MainRoute() {
       <Sidebar></Sidebar>
       <StaffNavbar />
       <Switch>
-        <Route exact path="/" render={() => {
-          return <Landing />
-        }} />
+        <Route exact path="/" component={Landing} />
 
-        <Route path="/login" render={() => {
-          return <FrontLoginPage />
-        }} />
+        <Route path="/login" component={FrontLoginMain} />
         <Route exact path="/register" render={() => {
           return <div>Under maintenance</div>
         }} />
@@ -73,9 +69,7 @@ export default function MainRoute() {
         <Route
           exact
           path="/staffLogin"
-          render={() => {
-            return <StaffLogin />
-          }}
+          component={StaffLogin}
         />
 
         <Route
@@ -97,29 +91,11 @@ export default function MainRoute() {
           }}
         />
 
-        <Route
-          path="/reservenow"
-          render={() => {
-            setNavHead("Reserve Now")
-            return <ReserveNow />
-          }}
-        />
+        <Route path='/reservenow' component={ReserveNow} />
 
-        <Route
-          path="/joinwaitingroom"
-          render={() => {
-            setNavHead("Join a Waiting Room")
-            return <JoinWaitingRoom />
-          }}
-        />
+        <Route path='/joinwaitingroom' component={JoinWaitingRoom} />
 
-        <Route
-          path="/account"
-          render={() => {
-            setNavHead("Account")
-            return <AccountPage />
-          }}
-        />
+        <Route path='/account' component={AccountPage} />
 
         <Route
           exact
