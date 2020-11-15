@@ -13,7 +13,9 @@ const FrontLoginPage = (props: any) => {
         <Route exact path={path} component={FrontLoginMain} />
 =======
         <Route path={`${path}/personal`} render={() => {
-          return <PersonalInfo />
+          return (
+            <PersonalInfo />
+          )
         }} />
         <Route exact path={path} render={() => {
           return <FrontLoginMain />

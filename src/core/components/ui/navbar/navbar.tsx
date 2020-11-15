@@ -58,16 +58,14 @@ const Sidebar = (props: any) => {
     </li>));
   return (
     <>
-      <div className="sidebar-toggler flex-row justify-content-center" style={{
-        display: hide ? 'none' : 'flex'
-      }}>
+      <div className="sidebar-toggler flex-row justify-content-center">
         <img src={Toggler} onClick={() => setInProp(true)} />
         <h1 className="d-flex flex-row justify-content-center w-100">
           {header ? header : 'CU Sports Complex'}
         </h1>
       </div>
       <CSSTransition in={inProp} timeout={300} classNames='fade'>
-        <div className="sidebar" style={{ display: (hide) ? 'none' : '' }}>
+        <div className="sidebar">
           <nav>
             <div style={{
               paddingBottom: '64px'
@@ -90,7 +88,7 @@ const Sidebar = (props: any) => {
           </nav>
         </div>
       </CSSTransition>
-      <span className="backdrop" style={{ display: (inProp && !hide) ? 'flex' : 'none' }} />
+      <span className="backdrop" style={{ display: inProp ? 'flex' : 'none' }} />
     </>
   )
 }
