@@ -91,6 +91,11 @@ html,
   color: white;
   border-color: white;
 }
+.btn-outline-red:hover {
+  background-color: var(--red-color);
+  color: white;
+  border-color: white;
+}
 label {
   font-weight: 400;
 }
@@ -188,6 +193,13 @@ p {
   font-weight: lighter;
 }
 
+p.link {
+  cursor: pointer;
+  font-weight: lighter;
+  text-decoration: underline;
+  width: 25%;
+}
+
 .page-link {
   font-weight: lighter;
   background: var(--pink-color);
@@ -211,4 +223,9 @@ p {
 
 .card {
   border-radius: 15px;
+}
+
+.card .dim-white {
+  border: transparent;
+  background-color: whitesmoke;
 }
