@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Table, Form, Row, Col, Button, Pagination, Modal } from "react-bootstrap"
+import { Table, Form, Row, Col, Button, Pagination } from "react-bootstrap"
 import { Link, RouteComponentProps } from "react-router-dom"
 import axios from "axios"
 
@@ -171,7 +171,8 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
     // send jwt and get //
     // if no user -> "user not found"
     e.preventDefault()
-    this.forceUpdate()
+    this.requestUsers()
+    // this.forceUpdate()
   }
 
   handleInfo = (e) => {
@@ -280,7 +281,7 @@ class ListOfAllUsers extends Component<RouteComponentProps, {}> {
     // console.log(this.state)
     return (
       <div className="allUsers" style={{ margin: "20px" }}>
-        <Form onSubmit={this.handleSearch} style={{ height: "50px" }}>
+        <Form onSubmit={this.handleSearch} className="mb-2">
           <Form.Row className="justify-content-end align-items-center">
             <Col md="auto">
               <Form.Label className="mb-0 font-weight-bold"> ค้นหาผู้ใช้ </Form.Label>

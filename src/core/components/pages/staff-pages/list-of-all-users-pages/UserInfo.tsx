@@ -5,37 +5,7 @@ import axios from "axios"
 import OtherViewInfoComponent from "./OtherViewInfoComponent"
 import OtherEditInfoComponent from "./OtherEditInfoComponent"
 import ModalsComponent from "./OtherModalsComponent"
-
-export interface Info {
-  prefix: string
-  name: string
-  surname: string
-  gender: string
-  birthday: Date
-  national_id: string
-  marital_status: string
-  address: string
-  email: string
-  phone: string
-  home_phone: string
-  medical_condition: string
-  contact_person: ContactPerson
-  membership_type: string
-  // object id //
-  user_photo: string
-  medical_certifiate: string
-  national_id_photo: string
-  house_registration_number: string
-  relationship_verification_document: string
-}
-
-interface ContactPerson {
-  contact_person_prefix: string
-  contact_person_name: string
-  contact_person_surname: string
-  contact_person_home_phone: string
-  contact_person_phone: string
-}
+import Info, { ContactPerson } from "../interfaces/InfoInterface"
 
 export const convertDate = (date: Date) => {
   if (date < new Date()) {
@@ -104,7 +74,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (
   useEffect(() => {
     console.log("re-rendered")
     // fetchUserData()
-  })
+  }, [])
 
   const fetchUserData = async () => {
     await axios
@@ -259,17 +229,17 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (
   // renders //
   const renderTopSection = () => {
     return (
-      <div className="topSection">
+      <div className="topSection px-4 pt-2">
         <div className="row">
           <div className="col">
-            <label className="form-label mt-2">ประเภท</label>
+            <label className="mt-2">ประเภท</label>
 
             <p className="font-weight-bold">{account_type}</p>
           </div>
         </div>
         <div className="row">
           <div className="col">
-            <label className="form-label mt-2">ชื่อผู้ใช้</label>
+            <label className="mt-2">ชื่อผู้ใช้</label>
             {isEdit ? (
               <Form.Control
                 className="border"
@@ -291,7 +261,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (
               <div />
             ) : (
               <div>
-                <label className="form-label mt-2">ประเภทบัญชี</label>
+                <label className="mt-2">ประเภทบัญชี</label>
                 <p className="font-weight-bold">{membership_type}</p>
               </div>
             )}
@@ -299,7 +269,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (
         </div>
         <div className="row">
           <div className="col">
-            <label className="form-label mt-2">สถานะการแบน</label>
+            <label className="mt-2">สถานะการแบน</label>
             {isEdit ? (
               <Form.Control
                 className="border"
@@ -320,7 +290,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (
         </div>
         <div className="row">
           <div className="col">
-            <label className="form-label mt-2">สิ้นสุดการแบน</label>
+            <label className="mt-2">สิ้นสุดการแบน</label>
             <Form.Control
               type="date"
               disabled={!isEdit}
@@ -331,7 +301,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (
             />
           </div>
           <div className="col">
-            <label className="form-label mt-2">วันหมดอายุสมาชิก</label>
+            <label className="mt-2">วันหมดอายุสมาชิก</label>
             <Form.Control
               type="date"
               disabled={!isEdit}
@@ -397,7 +367,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (
         <ModalsComponent
           showDel={show_del_modal}
           setShowDel={set_show_del_modal}
+          showSave={show_save_modal}
           setShowSave={set_show_save_modal}
+          showErr={show_err_modal}
           setShowErr={set_show_err_modal}
           info={{ username, handleDeleteUser }}
         />
@@ -405,9 +377,11 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (
     else if (show_save_modal)
       return (
         <ModalsComponent
+          showDel={show_del_modal}
           setShowDel={set_show_del_modal}
           showSave={show_save_modal}
           setShowSave={set_show_save_modal}
+          showErr={show_err_modal}
           setShowErr={set_show_err_modal}
           info={{ handleSave }}
         />
@@ -415,7 +389,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (
     else {
       return (
         <ModalsComponent
+          showDel={show_del_modal}
           setShowDel={set_show_del_modal}
+          showSave={show_save_modal}
           setShowSave={set_show_save_modal}
           showErr={show_err_modal}
           setShowErr={set_show_err_modal}
@@ -423,7 +399,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (
         />
       )
     }
-    return
   }
 
   return (

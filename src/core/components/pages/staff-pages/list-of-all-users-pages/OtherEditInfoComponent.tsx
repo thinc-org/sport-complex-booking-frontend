@@ -1,8 +1,9 @@
 import React from "react"
 import { useState, useEffect } from "react"
-import { Button, Card, Col, Form, Row } from "react-bootstrap"
+import { Card, Form } from "react-bootstrap"
 import axios from "axios"
-import { Info, convertDate } from "./UserInfo"
+import { convertDate } from "./UserInfo"
+import Info from "../interfaces/InfoInterface"
 
 export default function OtherEditInfoComponent({
   jwt,

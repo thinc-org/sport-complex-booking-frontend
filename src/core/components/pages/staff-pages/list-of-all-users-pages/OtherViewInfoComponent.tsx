@@ -2,7 +2,8 @@ import React from "react"
 import { useState, useEffect } from "react"
 import { Button, Card } from "react-bootstrap"
 import axios from "axios"
-import { Info, convertDate } from "./UserInfo"
+import { convertDate } from "./UserInfo"
+import Info from "../interfaces/InfoInterface"
 
 export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; info: Info }) {
   /// Page states
@@ -75,7 +76,7 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
           </div>
           <div className="row">
             <div className="col">
-              <label className="form-label mt-2">{is_thai ? "คำนำหน้า *" : "Prefix *"}</label>
+              <label className="form-label mt-2">{is_thai ? "คำนำหน้าชื่อ *" : "Prefix *"}</label>
               <p>{prefix}</p>
             </div>
             <div className="col">
@@ -83,7 +84,6 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
               <p>{name}</p>
             </div>
           </div>
-          <hr />
           <div className="row">
             <div className="col">
               <label className="form-label mt-2">{is_thai ? "นามสกุล *" : "Last Name *"}</label>
@@ -94,32 +94,25 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
               <p>{gender}</p>
             </div>
           </div>
-          <hr />
           <label className="form-label mt-2">{is_thai ? "วันเกิด *" : "Birthdate *"}</label>
           <div className="row">
             <div className="col">
               <p>{convertDate(birthday)}</p>
             </div>
           </div>
-          <hr />
           <label className="form-label mt-2">{is_thai ? "เลขประจำตัวประชาชน / หนังสือเดินทาง *" : "National ID / Passport *"}</label>
           <p>{national_id}</p>
-          <hr />
           <label className="form-label mt-2">{is_thai ? "สถานะสมรส" : "Marital Status"}</label>
           <p>{marital_status}</p>
           <hr />
           <label className="form-label mt-2">{is_thai ? "ที่อยู่" : "Address"}</label>
           <p>{address}</p>
-          <hr />
           <label className="form-label mt-2">{is_thai ? "อีเมล" : "Email"}</label>
           <p>{email}</p>
-          <hr />
           <label className="form-label mt-2">{is_thai ? "เบอร์โทรศัพท์ที่บ้าน" : "Home Phone Number"}</label>
           <p>{home_phone}</p>
-          <hr />
           <label className="form-label mt-2">{is_thai ? "เบอร์โทรศัพท์มือถือ" : "Mobile Phone Number"}</label>
           <p>{phone}</p>
-          <hr />
           <label className="form-label mt-2">
             {is_thai
               ? "คุณมีโรคประจำตัวหรือไม่ (ถ้าไม่มี โปรดเว้นว่างเอาไว้)"
@@ -142,13 +135,10 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
               <p>{contact_person_name}</p>
             </div>
           </div>
-          <hr />
           <label className="form-label mt-2">{is_thai ? "นามสกุล *" : "Last Name *"}</label>
           <p>{contact_person_surname}</p>
-          <hr />
           <label className="form-label mt-2">{is_thai ? "เบอร์โทรศัพท์ที่บ้าน" : "Home Phone Number"}</label>
           <p>{contact_person_home_phone}</p>
-          <hr />
           <label className="form-label mt-2">{is_thai ? "เบอร์โทรศัพท์มือถือ" : "Mobile Phone Number"}</label>
           <p>{contact_person_phone}</p>
         </Card>
@@ -162,7 +152,6 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
               View PDF
             </p>
           </div>
-          <hr />
           <label className="form-label my-2">
             {is_thai ? "เลขประจำตัวประชาชน / หนังสือเดินทาง (.pdf เท่านั้น)" : "National ID / Passport (.pdf only)"}
           </label>
@@ -171,14 +160,12 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
               View PDF
             </p>
           </div>
-          <hr />
           <label className="form-label my-2">{is_thai ? "ใบรับรองแพทย์ (.pdf เท่านั้น)" : "Medical Certificate (.pdf only)"}</label>
           <div className="form-file">
             <p className="link" id={info.medical_certifiate} onClick={handlePDF}>
               View PDF
             </p>
           </div>
-          <hr />
           <label className="form-label my-2">
             {is_thai
               ? "ไม่บังคับ: ทะเบียนบ้านที่มีหน้าของคุณ (.pdf เท่านั้น)"
@@ -189,7 +176,6 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
               View PDF
             </p>
           </div>
-          <hr />
           <label className="form-label my-2">
             {is_thai ? "ไม่บังคับ: เอกสารยืนยันตัวตน (.pdf เท่านั้น)" : "Optional: Relationship Verification document (.pdf only)"}
           </label>

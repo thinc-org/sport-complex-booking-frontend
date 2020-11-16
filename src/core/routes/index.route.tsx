@@ -13,10 +13,12 @@ import ReserveNow from "../components/pages/ReserveNow"
 import JoinWaitingRoom from "../components/pages/JoinWaitingRoom"
 import AccountPage from "../components/pages/AccountPage"
 
-import ListOfAllUsers from "../components/pages/staff-pages/ListOfAllUsers"
-import CUInfo from "../components/pages/staff-pages/CUInfo"
-import UserInfo from "../components/pages/staff-pages/UserInfo"
-import AddUser from "../components/pages/staff-pages/AddUser"
+import ListOfAllUsers from "../components/pages/staff-pages/list-of-all-users-pages/ListOfAllUsers"
+import AddUser from "../components/pages/staff-pages/list-of-all-users-pages/AddUser"
+import CUInfo from "../components/pages/staff-pages/list-of-all-users-pages/CUInfo"
+import UserInfo from "../components/pages/staff-pages/list-of-all-users-pages/UserInfo"
+import VeritificationApproval from "../components/pages/staff-pages/verification-approval-pages/VerificationApproval"
+import VerifyInfo from "../components/pages/staff-pages/verification-approval-pages/VerifyInfo"
 
 export default function MainRoute() {
   let [navHead, setNavHead] = useState("CU Sports Center")
@@ -144,6 +146,13 @@ export default function MainRoute() {
         />
         <Route
           exact
+          path="/addUser"
+          render={(props) => {
+            return staff(<AddUser {...props} />, "เพิ่มผู้ใช้")
+          }}
+        />
+        <Route
+          exact
           path="/cuInfo/:username"
           render={(props) => {
             return staff(<CUInfo {...props} />, "ข้อมูลผู้ใช้")
@@ -158,9 +167,16 @@ export default function MainRoute() {
         />
         <Route
           exact
-          path="/addUser"
+          path="/verifyApprove"
           render={(props) => {
-            return staff(<AddUser {...props} />, "เพิ่มผู้ใช้")
+            return staff(<VeritificationApproval {...props} />, "รับรองการลงทะเบียน")
+          }}
+        />
+        <Route
+          exact
+          path="/verifyInfo/:username"
+          render={(props) => {
+            return staff(<VerifyInfo {...props} />, "รับรองการลงทะเบียนรายบุคคล")
           }}
         />
       </Switch>

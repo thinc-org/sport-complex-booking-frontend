@@ -1,17 +1,17 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
 import { Modal, Button } from "react-bootstrap"
 
-// interface props {
-//   showDel: boolean
-//   setShowDel: () => void
-//   showSave = boolean
-//   setShowSave: () => void
-//   showErr = boolean
-//   setShowErr: () => void
-//   info: any
-// }
+interface props {
+  showDel: boolean
+  setShowDel: (isShow: boolean) => void
+  showSave: boolean
+  setShowSave: (isShow: boolean) => void
+  showErr: boolean
+  setShowErr: (isShow: boolean) => void
+  info: any
+}
 
-const ModalsComponent = ({ showDel = false, setShowDel, showSave = false, setShowSave, showErr = false, setShowErr, info }) => {
+const ModalsComponent = ({ showDel = false, setShowDel, showSave = false, setShowSave, showErr = false, setShowErr, info }: props) => {
   const renderDelModal = (info: { username: string; handleDeleteUser: () => void }) => {
     return (
       <Modal
