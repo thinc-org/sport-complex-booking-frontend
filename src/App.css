@@ -96,6 +96,11 @@ html,
   color: white;
   border-color: white;
 }
+.btn-outline-green:hover {
+  background-color: green;
+  color: white;
+  border-color: white;
+}
 label {
   font-weight: 400;
 }
@@ -228,4 +233,8 @@ p.link {
 .card .dim-white {
   border: transparent;
   background-color: whitesmoke;
+}
+
+.form-label {
+  font-weight: bold;
 }
