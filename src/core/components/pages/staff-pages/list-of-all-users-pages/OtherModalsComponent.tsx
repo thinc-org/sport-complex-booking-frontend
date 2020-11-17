@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from "react"
+import React from "react"
 import { Modal, Button } from "react-bootstrap"
 
 interface props {
