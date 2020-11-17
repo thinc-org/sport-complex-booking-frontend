@@ -29,8 +29,20 @@ export interface ContactPerson {
   contact_person_phone: string
 }
 
-// export interface RejectInfo {
-//   information: boolean
-//   emergency_contact: string
-//   photo: string
-// }
+export interface RejectInfo {
+  Information: boolean
+  "Emergency contact": boolean
+  Photo: boolean
+  "National ID/Passport": boolean
+  "Medical certificate": boolean
+  "House registeration": boolean
+  "Relation verification": boolean
+  "Check me out": boolean
+}
+
+export interface ModalInfo {
+  show_confirm_accept: boolean
+  show_uncom_accept: boolean
+  show_uncom_reject: boolean
+  show_confirm_reject: boolean
+}

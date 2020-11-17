@@ -3,8 +3,11 @@ import { RouteComponentProps, Link } from "react-router-dom"
 import { Button, Card, Form, Collapse } from "react-bootstrap"
 import axios from "axios"
 import OtherViewInfoComponent from "../list-of-all-users-pages/OtherViewInfoComponent"
+import VerifyModals from "./VerifyModalsComopnent"
 import Info, { ContactPerson } from "../interfaces/InfoInterface"
+import { RejectInfo, ModalInfo } from "../interfaces/InfoInterface"
 
+/// global function ///
 export const convertDate = (date: Date) => {
   let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate()
   let month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1
@@ -13,27 +16,28 @@ export const convertDate = (date: Date) => {
   return format_date
 }
 
-const allRejectionInfo = [
-  "Information",
-  "Emergency contact",
-  "Photo",
-  "National ID/Passport",
-  "Medical certificate",
-  "House registeration",
-  "Relation verification",
-  "Check me out",
-]
-
+/// start of main function ///
 const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (props) => {
   // page state //
   const [jwt, setJwt] = useState<string>("this_is_jwt")
   const [show_reject, set_show_reject] = useState<boolean>(false)
-  // const [show_del_modal, set_show_del_modal] = useState<boolean>(false)
-  // const [show_save_modal, set_show_save_modal] = useState<boolean>(false)
-  // const [show_err_modal, set_show_err_modal] = useState<boolean>(false)
   const [account_expired_date, set_account_expired_date] = useState<Date>()
-  // reject info //
-  const [reject_info, set_reject_info] = useState<string>("")
+  const [show_modal_info, set_show_modal_info] = useState<ModalInfo>({
+    show_confirm_accept: false,
+    show_uncom_accept: false,
+    show_confirm_reject: false,
+    show_uncom_reject: false,
+  })
+  const [reject_info, set_reject_info] = useState<RejectInfo>({
+    Information: false,
+    "Emergency contact": false,
+    Photo: false,
+    "National ID/Passport": false,
+    "Medical certificate": false,
+    "House registeration": false,
+    "Relation verification": false,
+    "Check me out": false,
+  })
 
   // Non CU state //
   const [username, setUsername] = useState<string>(props.match.params.username)
@@ -70,9 +74,12 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
   })
 
   useEffect(() => {
-    console.log(account_expired_date)
-    fetchUserData()
-  }, [])
+    console.log(reject_info)
+    // fetchUserData()
+  }, [reject_info])
+  // useEffect(() => {
+  //   console.log(show_modal_info)
+  // }, [show_modal_info])
 
   const fetchUserData = async () => {
     await axios
@@ -128,6 +135,65 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
 
   const confirmReject = () => {
     // check if at least one condition is checked
+    let checked: boolean = false
+    for (const key in reject_info) {
+      if (reject_info[key] === true) {
+        checked = true
+        break
+      }
+    }
+    if (!checked) set_show_modal_info({ ...show_modal_info, show_uncom_reject: true })
+    else set_show_modal_info({ ...show_modal_info, show_confirm_reject: true })
+  }
+
+  const requestReject = () => {
+    console.log("request rejected!!!")
+    let rejectList: string[] = []
+    for (const name in reject_info) {
+      if (reject_info[name]) rejectList.push(name)
+    }
+    // send request //
+    axios
+      .patch("http://localhost:3000/reject", {
+        header: {
+          Authorization: "bearer " + jwt,
+        },
+        data: {
+          username: username,
+          reject_info: rejectList,
+        },
+      })
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    // close reject modal
+    set_show_modal_info({ ...show_modal_info, show_confirm_reject: false })
+  }
+
+  const requestAccept = () => {
+    console.log("request accepted!!!")
+    // send request //
+    axios
+      .patch("http://localhost:3000/approve", {
+        header: {
+          Authorization: "bearer " + jwt,
+        },
+        data: {
+          username: username,
+          newExpiredDate: account_expired_date,
+        },
+      })
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    // close accept modal
+    set_show_modal_info({ ...show_modal_info, show_confirm_accept: false })
   }
 
   // handles //
@@ -137,7 +203,11 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
     else set_account_expired_date(new Date(date))
   }
 
-  const handleAccept = () => {}
+  const handleAccept = () => {
+    if (account_expired_date) {
+      set_show_modal_info({ ...show_modal_info, show_confirm_accept: true })
+    } else set_show_modal_info({ ...show_modal_info, show_uncom_accept: true })
+  }
 
   // renders //
   const renderTopSection = () => {
@@ -203,14 +273,20 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
   }
 
   const renderRejectionInfo = () => {
-    let infoList = allRejectionInfo.map((info) => {
+    let infoList = Object.keys(reject_info).map((name, index) => {
       return (
         <Form.Check
-          label={info}
+          key={index}
+          label={name}
+          id={name}
           type="checkbox"
-          // onChange={(e) => {
-          //   set_temp_info({ ...temp_info, marital_status: e.target.value })
-          // }}
+          defaultChecked={reject_info[name]}
+          onChange={(e) => {
+            set_reject_info({
+              ...reject_info,
+              [e.target.id]: e.target.checked,
+            })
+          }}
         />
       )
     })
@@ -229,12 +305,20 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
     )
   }
 
-  // const renderModal = () => {
-  // }
+  const renderModal = () => {
+    if (show_modal_info["show_confirm_reject"])
+      return <VerifyModals show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ requestReject }} />
+    else if (show_modal_info["show_uncom_reject"])
+      return <VerifyModals show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{}} />
+    else if (show_modal_info["show_confirm_accept"])
+      return <VerifyModals show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ requestAccept }} />
+    else if (show_modal_info["show_uncom_accept"])
+      return <VerifyModals show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{}} />
+  }
 
   return (
     <div className="VerifyInfo mt-4">
-      {/* {renderModal()} */}
+      {renderModal()}
       {/* Info start here */}
       <Link to="/verifyApprove">
         <Button variant="pink" className="btn-normal mb-3 px-5">
