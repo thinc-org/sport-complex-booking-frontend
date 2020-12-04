@@ -1,7 +1,6 @@
-import React from "react"
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { Button, Card } from "react-bootstrap"
-import axios from "axios"
+import fetch from "../interfaces/axiosTemplate"
 import { convertDate } from "./UserInfo"
 import Info from "../interfaces/InfoInterface"
 
@@ -12,43 +11,23 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
   // functions //
   useEffect(() => {
     console.log("Function triggered by useEffect")
-    // fetchUserData()
   }, [])
-
-  // const toggleEditButton = () => {
-  //   if (is_editting) {
-  //     set_is_editting(false)
-  //     fetchUserData()
-  //   } else {
-  //     set_is_editting(true)
-  //   }
-  // }
-
-  // const showWarningMessage = (verification_status) => {
-  //   switch (verification_status) {
-  //     case "NotSubmitted": {
-  //       return (
-  //         <div className="alert alert-danger" role="alert">
-  //           <h3>{is_thai_language ? "คำเตือน" : "Warning"}</h3>
-  //           <h6>{is_thai_language ? "กรุณาส่งข้อมูลการสมัคร" : "Please submit the registration form."}</h6>
-  //         </div>
-  //       )
-  //     }
 
   // handles //
   const handlePDF = (e) => {
     let fileId = e.target.id
     console.log("trying to open pdf: " + fileId)
-    axios
-      .get("http://localhost:3000/fs/viewFileToken/" + fileId, {
-        headers: {
-          Authorization: "bearer " + jwt,
-        },
-      })
+    fetch({
+      method: "GET",
+      url: "/fs/viewFileToken/" + fileId,
+      headers: {
+        Authorization: "bearer " + jwt,
+      },
+    })
       .then(({ data }) => {
         // data is token //
         console.log(data)
-        window.open("http://localhost:3000/fs/view?token=" + data, "_blank")
+        window.open(fetch.defaults.baseURL + "/fs/view?token=" + data, "_blank")
       })
       .catch((err) => {
         console.log(err)
