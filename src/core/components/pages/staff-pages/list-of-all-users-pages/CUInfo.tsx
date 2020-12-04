@@ -1,13 +1,7 @@
-import userEvent from "@testing-library/user-event"
-import Axios from "axios"
-import React, { Component } from "react"
+import React, { useState, useEffect, FunctionComponent } from "react"
 import { Row, Col, Button, Form, Card, Modal, Alert } from "react-bootstrap"
 import { Link, RouteComponentProps } from "react-router-dom"
-import axios from "axios"
-
-interface TParams {
-  username: string
-}
+import fetch from "../interfaces/axiosTemplate"
 
 interface userState {
   account_type: Account
@@ -24,76 +18,69 @@ interface userState {
   is_first_login: boolean
 }
 
-interface stateTemplate {
-  is_editing: boolean
-  showConfirm: boolean
-  showCom: boolean
-  showErr: boolean
-  showAlert: boolean
-  user: userState
-  temp_user: userState
-}
-
 enum Account {
   CuStudent,
   SatitAndCuPersonel,
   Other,
 }
 
-class UserInfo extends Component<RouteComponentProps<TParams>, {}> {
-  // class UserInfo extends Component<RouteComponentProps<TParams, any, userState[]>, {}> {
-  state: stateTemplate = {
-    is_editing: false,
-    showConfirm: false,
-    showCom: false,
-    showErr: false,
-    showAlert: false,
-    user: {
-      account_type: Account.CuStudent,
-      is_thai_language: true,
-      name_th: "ไก่",
-      surname_th: "กา",
-      name_en: "chicky",
-      surname_en: "crowy",
-      username: "123",
-      personal_email: "email",
-      phone: "191",
-      is_penalize: false,
-      expired_penalize_date: new Date(),
-      is_first_login: true,
-    },
-    temp_user: {
-      account_type: Account.CuStudent,
-      is_thai_language: true,
-      name_th: "ไก่",
-      surname_th: "กา",
-      name_en: "chicky",
-      surname_en: "crowy",
-      username: "123",
-      personal_email: "email",
-      phone: "191",
-      is_penalize: false,
-      expired_penalize_date: new Date(),
-      is_first_login: true,
-    },
-  }
+const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
+  // page states
+  const [is_editing, set_editing] = useState<boolean>(false)
+  const [showConfirm, setShowConfirm] = useState<boolean>(false)
+  const [showCom, setShowCom] = useState<boolean>(false)
+  const [showErr, setShowErr] = useState<boolean>(false)
+  const [showAlert, setShowAlert] = useState<boolean>(false)
+  // const [_id, setId] = useState<number>()
+  const [jwt, setJwt] = useState<string>("")
 
-  componentDidMount = () => {
-    this.getInfo() //set state with incoming values
-  }
+  // user states
+  const [user, setUser] = useState<userState>({
+    account_type: Account.CuStudent,
+    is_thai_language: true,
+    name_th: "",
+    surname_th: "",
+    name_en: "",
+    surname_en: "",
+    username: "",
+    personal_email: "",
+    phone: "",
+    is_penalize: false,
+    expired_penalize_date: new Date(),
+    is_first_login: true,
+  })
+  const [temp_user, set_temp_user] = useState<userState>(user)
 
-  getInfo = () => {
+  useEffect(() => {
+    fetch({
+      method: "GET",
+      url: "/testing/adminToken",
+      headers: {
+        Authorization: "bearer " + jwt,
+      },
+    }).then(({ data }) => {
+      setJwt(data.token.token)
+    })
+  }, [])
+  useEffect(() => {
+    getInfo()
+  }, [jwt])
+
+  const getInfo = () => {
     // console.log(this.props);
-    axios({
-      method: "get",
-      url: "url..",
+    fetch({
+      method: "GET",
+      url: "/users",
+      headers: {
+        Authorization: "bearer " + jwt,
+      },
       params: {
-        username: this.props.match.params.username,
+        username: props.match.params._id,
       },
     })
-      .then((res) => {
-        // let user = res.data ......
-        // this.setState({ ['user']: user })
+      .then(({ data }) => {
+        // need review
+        user: data
       })
       .catch((err) => {
         console.log(err)
@@ -101,12 +88,12 @@ class UserInfo extends Component<RouteComponentProps<TParams>, {}> {
   }
 
   // Modals & Alert //
-  renderConfirmModal = () => {
+  const renderConfirmModal = () => {
     return (
       <Modal
-        show={this.state.showConfirm}
+        show={showConfirm}
         onHide={() => {
-          this.setState({ showConfirm: false })
+          setShowConfirm(false)
         }}
         backdrop="static"
         keyboard={false}
@@ -120,24 +107,24 @@ class UserInfo extends Component<RouteComponentProps<TParams>, {}> {
             variant="outline-secondary"
             className="btn-normal btn-outline-pink"
             onClick={() => {
-              this.setState({ showConfirm: false })
+              setShowConfirm(false)
             }}
           >
             ยกเลิก
           </Button>
-          <Button variant="pink" className="btn-normal" onClick={this.requestUserChange}>
+          <Button variant="pink" className="btn-normal" onClick={requestUserChange}>
             ยืนยัน
           </Button>
         </Modal.Footer>
       </Modal>
     )
   }
-  renderComModal = () => {
+  const renderComModal = () => {
     return (
       <Modal
-        show={this.state.showCom}
+        show={showCom}
         onHide={() => {
-          this.setState({ showCom: false })
+          setShowCom(false)
         }}
         backdrop="static"
         keyboard={false}
@@ -147,19 +134,19 @@ class UserInfo extends Component<RouteComponentProps<TParams>, {}> {
         </Modal.Header>
         <Modal.Body style={{ fontWeight: "lighter" }}> บันทึกการเปลี่ยนแปลงเรียบร้อย </Modal.Body>
         <Modal.Footer>
-          <Button variant="pink" className="btn-normal" onClick={this.completedChange}>
+          <Button variant="pink" className="btn-normal" onClick={completedChange}>
             ตกลง
           </Button>
         </Modal.Footer>
       </Modal>
     )
   }
-  renderErrModal = () => {
+  const renderErrModal = () => {
     return (
       <Modal
-        show={this.state.showErr}
+        show={showErr}
         onHide={() => {
-          this.setState({ showErr: false })
+          setShowErr(false)
         }}
         backdrop="static"
         keyboard={false}
@@ -173,7 +160,7 @@ class UserInfo extends Component<RouteComponentProps<TParams>, {}> {
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              this.setState({ showErr: false })
+              setShowErr(false)
             }}
           >
             ตกลง
@@ -182,17 +169,17 @@ class UserInfo extends Component<RouteComponentProps<TParams>, {}> {
       </Modal>
     )
   }
-  renderAlert = () => {
+  const renderAlert = () => {
     return (
-      <Alert show={this.state.showAlert} variant="danger" style={{ fontWeight: "lighter" }}>
+      <Alert show={showAlert} variant="danger" style={{ fontWeight: "lighter" }}>
         กรุณากรอกรายละเอียดให้ครบ
       </Alert>
     )
   }
 
   // handles //
-  handleChange = (e) => {
-    let new_user: userState = { ...this.state.temp_user }
+  const handleChange = (e) => {
+    let new_user: userState = { ...temp_user }
     if (e.target.id === "is_penalize") {
       if (e.target.value === "OK") new_user[e.target.id] = false
       else new_user[e.target.id] = true
@@ -203,73 +190,58 @@ class UserInfo extends Component<RouteComponentProps<TParams>, {}> {
     } else {
       new_user[e.target.id] = e.target.value
     }
-    this.setState({
-      temp_user: new_user,
-    })
-    // console.log(this.state)
-    if (e.target.id === "is_penalize") this.forceUpdate()
+    set_temp_user(new_user)
+    // if (e.target.id === "is_penalize") this.forceUpdate()
   }
-  handleEdit = () => {
-    this.setState({
-      is_editing: true,
-      temp_user: this.state.user,
-    })
-    // console.log(this.state)
+  const handleEdit = () => {
+    set_editing(true)
+    set_temp_user(user)
   }
-  handleCancelChange = () => {
+  const handleCancelChange = () => {
     // need to undo changes
-    this.setState({
-      is_editing: false,
-      showAlert: false,
-    })
+    set_editing(false)
+    setShowAlert(false)
   }
-  handleConfirmChange = () => {
+  const handleConfirmChange = () => {
     // if some input is blank -> alert //
     // else -> try change //
-    let { name_th, surname_th, name_en, surname_en, personal_email, phone } = this.state.temp_user
-    if (name_th !== "" && surname_th !== "" && name_en !== "" && surname_en !== "" && personal_email !== "" && phone !== "") {
-      this.setState({ showConfirm: true })
-    } else {
-      this.setState({ showAlert: true })
-    }
+    let { name_th, surname_th, name_en, surname_en, personal_email, phone } = temp_user
+    if (name_th !== "" && surname_th !== "" && name_en !== "" && surname_en !== "" && personal_email !== "" && phone !== "") setShowConfirm(true)
+    else setShowAlert(true)
   }
 
-  requestUserChange = () => {
+  const requestUserChange = () => {
     // if change complete -> pop up "ok" //
     // if change error -> pop up "not complete" -> back to old data //
-    this.setState({
-      showConfirm: false,
-      showAlert: false,
-    })
-    axios({
+    setShowConfirm(false)
+    setShowAlert(false)
+    fetch({
       method: "PUT",
-      url: "url ...",
+      url: "/account_info",
+      headers: {
+        Authorization: "bearer " + jwt,
+      },
       data: {
-        user: this.state.temp_user, // ???
+        user: temp_user,
       },
     })
-      .then((res) => {
-        this.setState({
-          user: this.state.temp_user,
-          showCom: true,
-        })
+      .then(({ data }) => {
+        setUser(temp_user)
+        setShowCom(true)
       })
       .catch((err) => {
         console.log(err)
-        this.setState({ showErr: true })
+        setShowErr(true)
       })
   }
 
-  completedChange = () => {
+  const completedChange = () => {
     // run after pop up "complete"
-    this.setState({
-      showCom: false,
-      is_editing: false,
-    })
+    set_editing(false)
+    setShowCom(false)
   }
 
-  renderForm = () => {
-    let user = this.state.user
+  const renderForm = () => {
     let date: Date = user.expired_penalize_date
     let expired_date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
     return (
@@ -341,7 +313,7 @@ class UserInfo extends Component<RouteComponentProps<TParams>, {}> {
             </Link>
           </Col>
           <Col className="text-right">
-            <Button variant="pink" className="btn-normal" onClick={this.handleEdit}>
+            <Button variant="pink" className="btn-normal" onClick={handleEdit}>
               แก้ไข
             </Button>
           </Col>
@@ -350,9 +322,7 @@ class UserInfo extends Component<RouteComponentProps<TParams>, {}> {
     )
   }
 
-  renderEditingForm = () => {
-    let user: userState = this.state.user
-    let temp_user: userState = this.state.temp_user
+  const renderEditingForm = () => {
     let date: Date = temp_user.expired_penalize_date
     let expired_date: string =
       String(date.getFullYear()) +
@@ -371,21 +341,21 @@ class UserInfo extends Component<RouteComponentProps<TParams>, {}> {
         <Row>
           <Col className="py-3">
             <p>ชื่อ (อังกฤษ)</p>
-            <Form.Control id="name_en" onChange={this.handleChange} value={temp_user.name_en} />
+            <Form.Control id="name_en" onChange={handleChange} value={temp_user.name_en} />
           </Col>
           <Col className="py-3">
             <p>นามสกุล (อังกฤษ)</p>
-            <Form.Control id="surname_en" onChange={this.handleChange} value={temp_user.surname_en} />
+            <Form.Control id="surname_en" onChange={handleChange} value={temp_user.surname_en} />
           </Col>
         </Row>
         <Row>
           <Col className="py-3">
             <p>ชื่อ (ไทย)</p>
-            <Form.Control id="name_th" onChange={this.handleChange} value={temp_user.name_th} />
+            <Form.Control id="name_th" onChange={handleChange} value={temp_user.name_th} />
           </Col>
           <Col className="py-3">
             <p>นามสกุล (ไทย)</p>
-            <Form.Control id="surname_th" onChange={this.handleChange} value={temp_user.surname_th} />
+            <Form.Control id="surname_th" onChange={handleChange} value={temp_user.surname_th} />
           </Col>
         </Row>
         <Row>
@@ -397,19 +367,19 @@ class UserInfo extends Component<RouteComponentProps<TParams>, {}> {
         <Row className="py-3">
           <Col>
             <p>อีเมลส่วนตัว</p>
-            <Form.Control id="personal_email" onChange={this.handleChange} value={temp_user.personal_email} />
+            <Form.Control id="personal_email" onChange={handleChange} value={temp_user.personal_email} />
           </Col>
         </Row>
         <Row>
           <Col className="py-3">
             <p>เบอร์โทร</p>
-            <Form.Control id="phone" onChange={this.handleChange} value={temp_user.phone} />
+            <Form.Control id="phone" onChange={handleChange} value={temp_user.phone} />
           </Col>
         </Row>
         <Row className="py-3">
           <Col>
             <Form.Label>สถานะการแบน</Form.Label>
-            <Form.Control as="select" id="is_penalize" onChange={this.handleChange} value={temp_user.is_penalize ? "Banned" : "OK"}>
+            <Form.Control as="select" id="is_penalize" onChange={handleChange} value={temp_user.is_penalize ? "Banned" : "OK"}>
               <option value="OK">ปกติ</option>
               <option value="Banned">โดนแบน</option>
             </Form.Control>
@@ -423,17 +393,17 @@ class UserInfo extends Component<RouteComponentProps<TParams>, {}> {
               disabled={temp_user.is_penalize ? false : true}
               id="expired_penalize_date"
               type="date"
-              onChange={this.handleChange}
+              onChange={handleChange}
               value={temp_user.is_penalize ? expired_date : ""}
             />
           </Col>
         </Row>
         <Row className="mt-5">
           <Col className="text-right">
-            <Button className="mr-4 btn-normal btn-outline-pink" variant="outline-secondary" onClick={this.handleCancelChange}>
+            <Button className="mr-4 btn-normal btn-outline-pink" variant="outline-secondary" onClick={handleCancelChange}>
               ยกเลิก
             </Button>
-            <Button variant="pink" className="btn-normal" onClick={this.handleConfirmChange}>
+            <Button variant="pink" className="btn-normal" onClick={handleConfirmChange}>
               บันทึก
             </Button>
           </Col>
@@ -442,21 +412,19 @@ class UserInfo extends Component<RouteComponentProps<TParams>, {}> {
     )
   }
 
-  render() {
-    return (
-      <div className="UserInfo">
-        <Card body border="light" className="justify-content-center px-3 ml-1 mr-3 my-4 shadow">
-          <Row className="pb-3">
-            <Col>{this.state.is_editing ? this.renderEditingForm() : this.renderForm()}</Col>
-          </Row>
-          {this.renderAlert()}
-        </Card>
-        {this.renderConfirmModal()}
-        {this.renderComModal()}
-        {this.renderErrModal()}
-      </div>
-    )
-  }
+  return (
+    <div className="UserInfo">
+      <Card body border="light" className="justify-content-center px-3 ml-1 mr-3 my-4 shadow">
+        <Row className="pb-3">
+          <Col>{is_editing ? renderEditingForm() : renderForm()}</Col>
+        </Row>
+        {renderAlert()}
+      </Card>
+      {renderConfirmModal()}
+      {renderComModal()}
+      {renderErrModal()}
+    </div>
+  )
 }
 
 export default UserInfo

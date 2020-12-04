@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
 import { RouteComponentProps, Link } from "react-router-dom"
 import { Button, Card, Form } from "react-bootstrap"
-import axios from "axios"
+import fetch from "../interfaces/axiosTemplate"
 import OtherViewInfoComponent from "./OtherViewInfoComponent"
 import OtherEditInfoComponent from "./OtherEditInfoComponent"
 import ModalsComponent from "./OtherModalsComponent"
@@ -22,50 +22,50 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (
   // console.log(props)
   // page state //
   const [isEdit, setEdit] = useState<boolean>(false)
-  const [jwt, setJwt] = useState<string>("this_is_jwt")
+  const [jwt, setJwt] = useState<string>("")
   const [show_del_modal, set_show_del_modal] = useState<boolean>(false)
   const [show_save_modal, set_show_save_modal] = useState<boolean>(false)
   const [show_err_modal, set_show_err_modal] = useState<boolean>(false)
 
   // Non CU state //
   const [username, setUsername] = useState<string>(props.match.params.username)
-  const [account_type, set_account_type] = useState<string>("asdada")
-  const [membership_type, set_membership_type] = useState<string>("dasdada")
+  const [account_type, set_account_type] = useState<string>("")
+  const [membership_type, set_membership_type] = useState<string>("")
   const [is_penalize, set_penalize] = useState<boolean>(false)
   const [expired_penalize_date, set_expired_penalize_date] = useState<Date>(new Date())
   const [account_expired_date, set_account_expired_date] = useState<Date>(new Date())
   const [contact, setContact] = useState<ContactPerson>({
-    contact_person_prefix: "asd",
-    contact_person_name: "g",
-    contact_person_surname: "dfh",
-    contact_person_home_phone: "dfh",
-    contact_person_phone: "hdf",
+    contact_person_prefix: "",
+    contact_person_name: "",
+    contact_person_surname: "",
+    contact_person_home_phone: "",
+    contact_person_phone: "",
   })
   const [info, setInfo] = useState<Info>({
-    prefix: "นาย",
-    name: "naem",
-    surname: "vbvb",
-    gender: "string",
+    prefix: "",
+    name: "",
+    surname: "",
+    gender: "",
     birthday: new Date(),
-    national_id: "string",
-    marital_status: "string",
-    address: "string",
-    email: "string",
-    phone: "081",
-    home_phone: "02",
-    medical_condition: "string",
+    national_id: "",
+    marital_status: "",
+    address: "",
+    email: "",
+    phone: "",
+    home_phone: "",
+    medical_condition: "",
     contact_person: contact,
     membership_type: membership_type,
     // object id //
     user_photo: "",
-    medical_certifiate: " { Object }",
-    national_id_photo: "{ Object }",
-    house_registration_number: "{ Object }",
-    relationship_verification_document: "{ Object }",
+    medical_certifiate: "",
+    national_id_photo: "",
+    house_registration_number: "",
+    relationship_verification_document: "",
   })
   // temp data
   const [temp_username, set_temp_username] = useState<string>(props.match.params.username)
-  const [temp_membership_type, set_temp_membership_type] = useState<string>("dasdada")
+  const [temp_membership_type, set_temp_membership_type] = useState<string>("")
   const [temp_is_penalize, set_temp_penalize] = useState<boolean>(false)
   const [temp_expired_penalize_date, set_temp_expired_penalize_date] = useState<Date>(new Date())
   const [temp_account_expired_date, set_temp_account_expired_date] = useState<Date>(new Date())
@@ -73,19 +73,27 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (
 
   useEffect(() => {
     console.log("re-rendered")
-    // fetchUserData()
+    fetch({
+      method: "GET",
+      url: "/testing/adminToken",
+    }).then(({ data }) => {
+      setJwt(data.token.token)
+    })
   }, [])
+  useEffect(() => {
+    fetchUserData()
+  }, [jwt])
 
   const fetchUserData = async () => {
-    await axios
-      .get("http://localhost:3000/testing/addTestCuUser", {
+    await fetch({
+      method: "GET",
+      url: "/account_info",
+      headers: {
         headers: {
           Authorization: "bearer " + jwt,
         },
-        // params: {
-        //   username: username,
-        // },
-      })
+      },
+    })
       .then(({ data }) => {
         console.log(data)
         if (data.contact_person) {
@@ -117,8 +125,8 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (
           medical_condition: data.medical_condition,
           contact_person: contact,
           ///////// FIX //////////
-          membership_type: "string",
-          user_photo: "",
+          membership_type: "asd",
+          user_photo: "sada",
           medical_certifiate: "",
           national_id_photo: "{ Object }",
           house_registration_number: "{ Object }",
@@ -167,28 +175,29 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (
     } = temp_info
     console.log("saving...")
     set_show_save_modal(false)
-    axios
-      .put("http://localhost:3000/account_info/", {
-        header: {
-          Authorization: "bearer " + jwt,
-        },
-        data: {
-          personal_email: email,
-          phone: phone,
-          is_thai_language: true,
-          prefix: prefix,
-          name: name,
-          surname: surname,
-          birthday: birthday,
-          national_id: national_id,
-          gender: gender,
-          marital_status: marital_status,
-          address: address,
-          home_phone: home_phone,
-          contact_person: contact_person,
-          medical_condition: medical_condition,
-        },
-      })
+    fetch({
+      method: "PUT",
+      url: "/account_info/",
+      headers: {
+        Authorization: "bearer " + jwt,
+      },
+      data: {
+        personal_email: email,
+        phone: phone,
+        is_thai_language: true,
+        prefix: prefix,
+        name: name,
+        surname: surname,
+        birthday: birthday,
+        national_id: national_id,
+        gender: gender,
+        marital_status: marital_status,
+        address: address,
+        home_phone: home_phone,
+        contact_person: contact_person,
+        medical_condition: medical_condition,
+      },
+    })
       .then(({ data }) => {
         console.log("Update completed")
         console.log(data)
@@ -210,15 +219,18 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (
   const handleDeleteUser = () => {
     console.log("YEET!!")
     set_show_del_modal(false)
-    axios
-      .delete("http://localhost:3000/admin/delete/:fileId", {
-        headers: {
-          Authorization: "bearer " + jwt,
-        },
-      })
+    fetch({
+      method: "DELETE",
+      url: "/fs/admin/delete/",
+      headers: {
+        Authorization: "bearer " + jwt,
+      },
+    })
       .then(({ data }) => {
         console.log(data)
-        // .....
+        props.history.push({
+          pathname: "/listOfAllUsers",
+        })
       })
       .catch((err) => {
         console.log(err)
@@ -342,7 +354,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (
     return (
       <div>
         <OtherEditInfoComponent jwt={jwt} temp_info={temp_info} set_temp_info={set_temp_info} />
-        {/* <OtherEditInfoComponent jwt={jwt} /> */}
         <div className="mt-5">
           <Button variant="pink" className="float-right btn-normal" onClick={handleSave}>
             บันทึก
