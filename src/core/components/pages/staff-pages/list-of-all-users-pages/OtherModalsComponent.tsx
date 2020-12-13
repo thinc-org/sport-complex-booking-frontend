@@ -1,23 +1,31 @@
 import React from "react"
+import { RouteComponentProps } from "react-router-dom"
 import { Modal, Button } from "react-bootstrap"
+import { ModalUserInfo } from "../interfaces/InfoInterface"
 
-interface props {
-  showDel: boolean
-  setShowDel: (isShow: boolean) => void
-  showSave: boolean
-  setShowSave: (isShow: boolean) => void
-  showErr: boolean
-  setShowErr: (isShow: boolean) => void
+interface propsTemplate {
+  show_modal_info: ModalUserInfo
+  set_show_modal_info: React.Dispatch<React.SetStateAction<ModalUserInfo>>
   info: any
+  props: RouteComponentProps
 }
 
-const ModalsComponent = ({ showDel = false, setShowDel, showSave = false, setShowSave, showErr = false, setShowErr, info }: props) => {
-  const renderDelModal = (info: { username: string; handleDeleteUser: () => void }) => {
+const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: propsTemplate) => {
+  let { show_delete, show_com_delete, show_save, show_com_save, show_err } = show_modal_info
+
+  const redirectBack = () => {
+    props.history.push({
+      pathname: "/listOfAllUsers",
+    })
+  }
+
+  // Delete Modal //
+  const renderDelete = (info: { username: string; handleDeleteUser: () => void }) => {
     return (
       <Modal
-        show={showDel}
+        show={show_delete}
         onHide={() => {
-          setShowDel(false)
+          set_show_modal_info({ ...show_modal_info, show_delete: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -35,7 +43,7 @@ const ModalsComponent = ({ showDel = false, setShowDel, showSave = false, setSho
             variant="outline-secondary"
             className="btn-normal btn-outline-pink"
             onClick={() => {
-              setShowDel(false)
+              set_show_modal_info({ ...show_modal_info, show_delete: false })
             }}
           >
             ยกเลิก
@@ -48,12 +56,44 @@ const ModalsComponent = ({ showDel = false, setShowDel, showSave = false, setSho
     )
   }
 
-  const renderSaveModal = (info: { handleSave: () => void }) => {
+  const renderCompleteDelete = (info: { username: string }) => {
     return (
       <Modal
-        show={showSave}
+        show={show_com_delete}
         onHide={() => {
-          setShowSave(false)
+          set_show_modal_info({ ...show_modal_info, show_com_delete: false })
+        }}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>เสร็จสิ้น</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ fontWeight: "lighter" }}>{"ลบผู้ใช้ " + info.username + " ออกจากระบบเรียบร้อยแล้ว"}</Modal.Body>
+
+        <Modal.Footer>
+          <Button
+            variant="pink"
+            className="btn-normal"
+            onClick={() => {
+              set_show_modal_info({ ...show_modal_info, show_com_delete: false })
+              redirectBack()
+            }}
+          >
+            ตกลง
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    )
+  }
+
+  // Save Modal //
+  const renderSave = (info: { handleSave: () => void }) => {
+    return (
+      <Modal
+        show={show_save}
+        onHide={() => {
+          set_show_modal_info({ ...show_modal_info, show_save: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -68,7 +108,7 @@ const ModalsComponent = ({ showDel = false, setShowDel, showSave = false, setSho
             variant="outline-secondary"
             className="btn-normal btn-outline-pink"
             onClick={() => {
-              setShowSave(false)
+              set_show_modal_info({ ...show_modal_info, show_save: false })
             }}
           >
             ยกเลิก
@@ -81,12 +121,44 @@ const ModalsComponent = ({ showDel = false, setShowDel, showSave = false, setSho
     )
   }
 
+  const renderCompleteSave = () => {
+    return (
+      <Modal
+        show={show_com_save}
+        onHide={() => {
+          set_show_modal_info({ ...show_modal_info, show_com_save: false })
+        }}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>เสร็จสิ้น</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ fontWeight: "lighter" }}>บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว</Modal.Body>
+
+        <Modal.Footer>
+          <Button
+            variant="pink"
+            className="btn-normal"
+            onClick={() => {
+              console.log("click com save")
+              set_show_modal_info({ ...show_modal_info, show_com_save: false })
+            }}
+          >
+            ตกลง
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    )
+  }
+
+  // Error Modal //
   const renderErrModal = () => {
     return (
       <Modal
-        show={showErr}
+        show={show_err}
         onHide={() => {
-          setShowErr(false)
+          set_show_modal_info({ ...show_modal_info, show_err: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -100,7 +172,7 @@ const ModalsComponent = ({ showDel = false, setShowDel, showSave = false, setSho
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              setShowErr(false)
+              set_show_modal_info({ ...show_modal_info, show_err: false })
             }}
           >
             ตกลง
@@ -112,8 +184,10 @@ const ModalsComponent = ({ showDel = false, setShowDel, showSave = false, setSho
 
   return (
     <div className="Modals">
-      {renderDelModal(info)}
-      {renderSaveModal(info)}
+      {renderDelete(info)}
+      {renderCompleteDelete(info)}
+      {renderSave(info)}
+      {renderCompleteSave()}
       {renderErrModal()}
     </div>
   )

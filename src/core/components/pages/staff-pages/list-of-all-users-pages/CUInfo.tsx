@@ -2,27 +2,7 @@ import React, { useState, useEffect, FunctionComponent } from "react"
 import { Row, Col, Button, Form, Card, Modal, Alert } from "react-bootstrap"
 import { Link, RouteComponentProps } from "react-router-dom"
 import fetch from "../interfaces/axiosTemplate"
-
-interface userState {
-  account_type: Account
-  is_thai_language: boolean
-  name_th: string
-  surname_th: string
-  name_en: string
-  surname_en: string
-  username: string
-  personal_email: string
-  phone: string
-  is_penalize: boolean
-  expired_penalize_date: Date
-  is_first_login: boolean
-}
-
-enum Account {
-  CuStudent,
-  SatitAndCuPersonel,
-  Other,
-}
+import { CuInfo, Account } from "../interfaces/InfoInterface"
 
 const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
   // page states
@@ -31,11 +11,11 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const [showCom, setShowCom] = useState<boolean>(false)
   const [showErr, setShowErr] = useState<boolean>(false)
   const [showAlert, setShowAlert] = useState<boolean>(false)
-  // const [_id, setId] = useState<number>()
   const [jwt, setJwt] = useState<string>("")
 
   // user states
-  const [user, setUser] = useState<userState>({
+  const [_id] = useState<string>(props.match.params._id)
+  const [user, setUser] = useState<CuInfo>({
     account_type: Account.CuStudent,
     is_thai_language: true,
     name_th: "",
@@ -49,12 +29,12 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     expired_penalize_date: new Date(),
     is_first_login: true,
   })
-  const [temp_user, set_temp_user] = useState<userState>(user)
+  const [temp_user, set_temp_user] = useState<CuInfo>(user)
 
   useEffect(() => {
     fetch({
       method: "GET",
-      url: "/testing/adminToken",
+      url: "/account_info/testing/adminToken",
       headers: {
         Authorization: "bearer " + jwt,
       },
@@ -67,20 +47,16 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   }, [jwt])
 
   const getInfo = () => {
-    // console.log(this.props);
     fetch({
       method: "GET",
-      url: "/users",
+      url: "/list-all-user/findById/" + _id,
       headers: {
         Authorization: "bearer " + jwt,
       },
-      params: {
-        username: props.match.params._id,
-      },
     })
       .then(({ data }) => {
-        // need review
-        user: data
+        // console.log(data)
+        setUser(data)
       })
       .catch((err) => {
         console.log(err)
@@ -179,7 +155,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
 
   // handles //
   const handleChange = (e) => {
-    let new_user: userState = { ...temp_user }
+    let new_user: CuInfo = { ...temp_user }
     if (e.target.id === "is_penalize") {
       if (e.target.value === "OK") new_user[e.target.id] = false
       else new_user[e.target.id] = true
@@ -191,7 +167,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       new_user[e.target.id] = e.target.value
     }
     set_temp_user(new_user)
-    // if (e.target.id === "is_penalize") this.forceUpdate()
   }
   const handleEdit = () => {
     set_editing(true)
@@ -213,19 +188,28 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const requestUserChange = () => {
     // if change complete -> pop up "ok" //
     // if change error -> pop up "not complete" -> back to old data //
+    const { name_th, surname_th, name_en, surname_en, personal_email, phone, is_penalize, expired_penalize_date } = temp_user
     setShowConfirm(false)
     setShowAlert(false)
     fetch({
-      method: "PUT",
-      url: "/account_info",
+      method: "PATCH",
+      url: "/list-all-user/" + _id,
       headers: {
         Authorization: "bearer " + jwt,
       },
       data: {
-        user: temp_user,
+        name_th,
+        name_en,
+        surname_th,
+        surname_en,
+        phone,
+        personal_email,
+        is_penalize,
+        expired_penalize_date,
       },
     })
       .then(({ data }) => {
+        console.log(data)
         setUser(temp_user)
         setShowCom(true)
       })
@@ -242,14 +226,14 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   }
 
   const renderForm = () => {
-    let date: Date = user.expired_penalize_date
+    let date: Date = new Date(user.expired_penalize_date)
     let expired_date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
     return (
       <div className="userInformation">
         <Row>
           <Col className="py-3">
             <p>ประเภท</p>
-            <p className="font-weight-bold mb-0">{Account[user.account_type]}</p>
+            <p className="font-weight-bold mb-0">{user.account_type}</p>
           </Col>
         </Row>
         <Row>
@@ -298,8 +282,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         </Row>
         <Row>
           <Col className="py-3">
-            {/* <p>ชื่อ (ไทย)</p>
-                                    <p className="font-weight-bold mb-0">{user.name_th}</p> */}
             <Form.Label>สิ้นสุดการแบน</Form.Label>
             <Form.Control style={{ width: "40%" }} disabled type="date" value={user.is_penalize ? expired_date : ""} />
           </Col>
@@ -323,7 +305,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   }
 
   const renderEditingForm = () => {
-    let date: Date = temp_user.expired_penalize_date
+    let date: Date = new Date(temp_user.expired_penalize_date)
     let expired_date: string =
       String(date.getFullYear()) +
       "-" +
@@ -335,7 +317,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         <Row>
           <Col className="py-3">
             <p>ประเภทบัญชี</p>
-            <Form.Label className="font-weight-bold">{Account[user.account_type]}</Form.Label>
+            <Form.Label className="font-weight-bold">{user.account_type}</Form.Label>
           </Col>
         </Row>
         <Row>
