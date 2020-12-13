@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
 import { Table, Form, Row, Col, Button, Pagination } from "react-bootstrap"
 import { Link, RouteComponentProps } from "react-router-dom"
-import qs from "querystring"
 import fetch from "../interfaces/axiosTemplate"
 
 interface CUTemplate {
@@ -20,8 +19,10 @@ interface CUTemplate {
 interface OtherTemplate {
   account_type: Account
   reject_info: string[]
-  name: string
-  surname: string
+  name_th: string
+  surname_th: string
+  name_en: string
+  surname_en: string
   username: string
   is_penalize: boolean
   _id: string
@@ -54,13 +55,6 @@ enum Account {
   Other,
 }
 
-// enum Verification {
-//   NotSubmitted,
-//   Submitted,
-//   Verified,
-//   Rejected,
-// }
-
 const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
   // page state
   const [page_no, set_page_no] = useState<number>(1)
@@ -82,8 +76,6 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
       _id: "",
     },
   ])
-  const [, updateState] = React.useState()
-  const forceUpdate = React.useCallback(() => updateState(undefined), [])
 
   // useEffect //
   useEffect(() => {
@@ -104,38 +96,28 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
     requestUsers()
   }, [jwt])
 
-  useEffect(() => {
-    console.log(users)
-  }, [users, status])
-
-  // shouldComponentUpdate(nextProp, nextState) {
-  //   // re-render when page_no, status, users change
-  //   let { page_no, status, users } = this.state
-  //   if (page_no !== nextState.page_no || status != nextState.status || users != nextState.users) return true
-  //   return false
-  // }
+  // useEffect(() => {
+  //   console.log("user ::")
+  //   console.log(users)
+  // }, [users, status])
 
   const requestUsers = () => {
     // Send JWT //
     // get params for request //
-    let data = { name_th: "" }
-    // if (searchName !== "") data["name_th"] = searchName
-    // if (status !== allStatus.All) data["is_penalize"] = allStatus.Banned === status
+    let param_data = {
+      begin: (page_no - 1) * 10,
+      end: page_no * 10 - 1,
+    }
+    if (searchName !== "") param_data["name"] = searchName
+    if (status !== allStatus.All) param_data["penalize"] = allStatus.Banned === status
     //  request users from server  //
-    // data = qs.stringify(data)
-    console.log(data)
     fetch({
       method: "GET",
       url: "/list-all-user/getUser",
       headers: {
         Authorization: "bearer " + jwt,
-        "Content-Type": "application/x-www-form-urlencoded",
       },
-      params: {
-        begin: (page_no - 1) * 10,
-        end: page_no * 10 - 1,
-      },
-      data: qs.stringify(data),
+      params: param_data,
     })
       .then(({ data }) => {
         console.log(data)
@@ -198,7 +180,12 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
       i++
     }
     let elementList = numList.map((num) => {
-      if (num === page_no) return <Pagination.Item active={true}>{num}</Pagination.Item>
+      if (num === page_no)
+        return (
+          <Pagination.Item key={num} active={true}>
+            {num}
+          </Pagination.Item>
+        )
       return (
         <Pagination.Item
           key={num}
@@ -229,20 +216,20 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
 
   const renderUsersTable = () => {
     let index = (page_no - 1) * 10 + 1
-    let user
-    let usersList = users.map((current_user) => {
-      if (current_user.account_type === Account.CuStudent) {
-        user = current_user as CUTemplate
-      } else if (current_user.account_type === Account.Other) {
-        user = current_user as OtherTemplate
-      } else {
-        user = current_user as SatitTemplate
-      }
+    // let user
+    let usersList = users.map((user) => {
+      // if (current_user.account_type === Account.CuStudent) {
+      //   user = current_user as CUTemplate
+      // } else if (current_user.account_type === Account.Other) {
+      //   user = current_user as OtherTemplate
+      // } else {
+      //   user = current_user as SatitTemplate
+      // }
       return (
         <tr key={index} className="tr-normal">
           <td className="font-weight-bold"> {index} </td>
-          <td> {user.account_type !== Account.Other ? user.name_th : user.name} </td>
-          <td> {user.account_type !== Account.Other ? user.surname_th : user.surname} </td>
+          <td> {user.name_th} </td>
+          <td> {user.surname_th} </td>
           <td> {user.username} </td>
           <td> {user.is_penalize ? "โดนแบน" : "ปกติ"} </td>
           <td>
@@ -255,8 +242,6 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
     })
     return usersList
   }
-
-  console.log("rerendered")
 
   return (
     <div className="allUsers" style={{ margin: "20px" }}>

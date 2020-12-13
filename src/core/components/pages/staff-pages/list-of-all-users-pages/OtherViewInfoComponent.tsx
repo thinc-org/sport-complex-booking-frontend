@@ -16,7 +16,7 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
   // handles //
   const handlePDF = (e) => {
     let fileId = e.target.id
-    console.log("trying to open pdf: " + fileId)
+    // console.log("trying to open pdf: " + fileId)
     fetch({
       method: "GET",
       url: "/fs/viewFileToken/" + fileId,
@@ -26,8 +26,7 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
     })
       .then(({ data }) => {
         // data is token //
-        console.log(data)
-        window.open(fetch.defaults.baseURL + "/fs/view?token=" + data, "_blank")
+        window.open(fetch.defaults.baseURL + "/fs/view?token=" + data.token, "_blank")
       })
       .catch((err) => {
         console.log(err)
@@ -35,8 +34,27 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
   }
 
   /// JSX Begins here
-  let { prefix, gender, name, surname, national_id, marital_status, birthday, address, email, home_phone, phone, medical_condition } = info
+  let {
+    prefix,
+    gender,
+    name_th,
+    surname_th,
+    name_en,
+    surname_en,
+    national_id,
+    marital_status,
+    birthday,
+    address,
+    email,
+    home_phone,
+    phone,
+    medical_condition,
+  } = info
   let { contact_person_prefix, contact_person_name, contact_person_surname, contact_person_home_phone, contact_person_phone } = info.contact_person
+  // console.log(birthday)
+  // console.log(new Date(birthday))
+  // console.log("DATEEEEE " + birthday.getDate)
+
   return (
     <div className="row mr-4 mt-5">
       <div className="col">
@@ -60,13 +78,13 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
             </div>
             <div className="col">
               <label className="form-label mt-2">{is_thai ? "ชื่อ *" : "First Name *"}</label>
-              <p>{name}</p>
+              <p>{is_thai ? name_th : name_en}</p>
             </div>
           </div>
           <div className="row">
             <div className="col">
               <label className="form-label mt-2">{is_thai ? "นามสกุล *" : "Last Name *"}</label>
-              <p>{surname}</p>
+              <p>{is_thai ? surname_th : surname_en}</p>
             </div>
             <div className="col">
               <label className="form-label mt-2">{is_thai ? "เพศ *" : "Gender *"}</label>
@@ -76,7 +94,7 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
           <label className="form-label mt-2">{is_thai ? "วันเกิด *" : "Birthdate *"}</label>
           <div className="row">
             <div className="col">
-              <p>{convertDate(birthday)}</p>
+              <p>{birthday ? convertDate(new Date(birthday)) : ""}</p>
             </div>
           </div>
           <label className="form-label mt-2">{is_thai ? "เลขประจำตัวประชาชน / หนังสือเดินทาง *" : "National ID / Passport *"}</label>
@@ -101,7 +119,7 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
         </Card>
       </div>
       <br />
-      <div className="col">
+      <div className="col" style={{ maxWidth: "40%" }}>
         <Card body className="row shadow dim-white">
           <h4>{is_thai ? "การติดต่อในกรณีฉุกเฉิน" : "Contact Person in Case of Emergency"}</h4>
           <div className="row">

@@ -153,14 +153,14 @@ export default function MainRoute() {
         />
         <Route
           exact
-          path="/cuInfo/:username"
+          path="/cuInfo/:_id"
           render={(props) => {
             return staff(<CUInfo {...props} />, "ข้อมูลผู้ใช้")
           }}
         />
         <Route
           exact
-          path="/userInfo/:username"
+          path="/userInfo/:_id"
           render={(props) => {
             return staff(<UserInfo {...props} />, "ข้อมูลผู้ใช้")
           }}

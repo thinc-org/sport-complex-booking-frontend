@@ -1,7 +1,7 @@
 import React from "react"
 import { useState, useEffect } from "react"
 import { Card, Form } from "react-bootstrap"
-import axios from "axios"
+import fetch from "../interfaces/axiosTemplate"
 import { convertDate } from "./UserInfo"
 import Info from "../interfaces/InfoInterface"
 
@@ -9,17 +9,19 @@ export default function OtherEditInfoComponent({
   jwt,
   temp_info,
   set_temp_info,
+  _id,
 }: {
   jwt: string
   temp_info: Info
   set_temp_info: React.Dispatch<React.SetStateAction<Info>>
+  _id: string
 }) {
   // Page state //
-  const [user_photo_file, set_user_photo_file] = useState()
-  const [medical_certifiate_file, set_medical_certifiate_file] = useState()
-  const [national_id_photo_file, set_national_id_photo_file] = useState()
-  const [house_registration_number_file, set_house_registration_number_file] = useState()
-  const [relationship_verification_document_file, set_relationship_verification_document_file] = useState()
+  const [user_photo_file, set_user_photo_file] = useState<File>()
+  const [medical_certifiate_file, set_medical_certifiate_file] = useState<File>()
+  const [national_id_photo_file, set_national_id_photo_file] = useState<File>()
+  const [house_registration_number_file, set_house_registration_number_file] = useState<File>()
+  const [relationship_verification_document_file, set_relationship_verification_document_file] = useState<File>()
 
   // const [pdf_token, set_pdf_token] = useState<string>("")
 
@@ -31,22 +33,32 @@ export default function OtherEditInfoComponent({
     // fetchUserData()
   }, [user_photo_file])
 
+  useEffect(() => {
+    console.log(temp_info)
+  }, [temp_info])
+
   // handles //
-  const handleUpload = (id, file) => {
+  const handleUpload = (typename, file) => {
+    console.log(file)
     const formData = new FormData()
-    // let selectedFile
     let selectedFile = file
-    let userId = 1234 ///////// FIX ////////////
     // Update the formData object
     if (selectedFile) {
-      formData.append(id, selectedFile, selectedFile.name)
+      formData.append(typename, selectedFile, selectedFile.name)
       // Request made to the backend api
-      axios
-        .post("http://localhost:3000/fs/upload" + userId, {
-          header: { Authorization: "bearer " + jwt },
-          formData,
-        })
+      fetch({
+        method: "POST",
+        url: "/fs/admin/upload/" + _id,
+        headers: {
+          Authorization: "bearer " + jwt,
+        },
+        data: formData,
+      })
         .then(({ data }) => {
+          set_temp_info({
+            ...temp_info,
+            [Object.keys(data)[0]]: data[Object.keys(data)[0]],
+          })
           console.log(data)
         })
         .catch((err) => {
@@ -59,8 +71,10 @@ export default function OtherEditInfoComponent({
   let {
     prefix,
     gender,
-    name,
-    surname,
+    name_th,
+    surname_th,
+    name_en,
+    surname_en,
     national_id,
     marital_status,
     birthday,
@@ -86,7 +100,7 @@ export default function OtherEditInfoComponent({
   } = temp_info.contact_person
   return (
     <div className="row mr-4 mt-5">
-      <div className="col">
+      <div className="col px-0">
         <Card body className="shadow mx-4 dim-white">
           {/* START OF THE FORM */}
           <h4>ข้อมูลสมาชิก</h4>
@@ -97,42 +111,18 @@ export default function OtherEditInfoComponent({
                 className="border"
                 style={{ backgroundColor: "white" }}
                 as="select"
-                defaultValue={prefix}
+                defaultValue={prefix ? prefix : "ไม่มี"}
                 onChange={(e) => {
                   set_temp_info({ ...temp_info, prefix: e.target.value })
                 }}
               >
+                <option disabled value="ไม่มี">
+                  เลือกคำนำหน้า
+                </option>
                 <option value="นาย">นาย</option>
                 <option value="นางสาว">นางสาว</option>
                 <option value="นาง">นาง</option>
               </Form.Control>
-            </div>
-            <div className="col">
-              <label className="form-label mt-2">ชื่อ *</label>
-              <Form.Control
-                className="border"
-                style={{ backgroundColor: "white" }}
-                type="text"
-                defaultValue={name}
-                onChange={(e) => {
-                  set_temp_info({ ...temp_info, name: e.target.value })
-                }}
-              />
-            </div>
-          </div>
-          <hr />
-          <div className="row">
-            <div className="col">
-              <label className="form-label mt-2">นามสกุล *</label>
-              <Form.Control
-                className="border"
-                style={{ backgroundColor: "white" }}
-                type="text"
-                defaultValue={surname}
-                onChange={(e) => {
-                  set_temp_info({ ...temp_info, surname: e.target.value })
-                }}
-              />
             </div>
             <div className="col">
               <label className="form-label mt-2">เพศ *</label>
@@ -140,14 +130,69 @@ export default function OtherEditInfoComponent({
                 className="border"
                 style={{ backgroundColor: "white" }}
                 as="select"
-                defaultValue={gender}
+                defaultValue={gender ? gender : "ไม่มี"}
                 onChange={(e) => {
                   set_temp_info({ ...temp_info, gender: e.target.value })
                 }}
               >
+                <option value="ไม่มี" disabled>
+                  เลือกเพศ
+                </option>
                 <option value="Male">ชาย</option>
                 <option value="Female">หญิง</option>
               </Form.Control>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <label className="form-label mt-2">ชื่อ (ภาษาไทย) *</label>
+              <Form.Control
+                className="border"
+                style={{ backgroundColor: "white" }}
+                type="text"
+                defaultValue={name_th}
+                onChange={(e) => {
+                  set_temp_info({ ...temp_info, name_th: e.target.value })
+                }}
+              />
+            </div>
+            <div className="col">
+              <label className="form-label mt-2">นามสกุล (ภาษาไทย) *</label>
+              <Form.Control
+                className="border"
+                style={{ backgroundColor: "white" }}
+                type="text"
+                defaultValue={surname_th}
+                onChange={(e) => {
+                  set_temp_info({ ...temp_info, surname_th: e.target.value })
+                }}
+              />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <label className="form-label mt-2">Name (English) *</label>
+              <Form.Control
+                className="border"
+                style={{ backgroundColor: "white" }}
+                type="text"
+                defaultValue={name_en}
+                onChange={(e) => {
+                  set_temp_info({ ...temp_info, name_en: e.target.value })
+                }}
+              />
+            </div>
+            <div className="col">
+              <label className="form-label mt-2">Surname (English) *</label>
+              <Form.Control
+                className="border"
+                style={{ backgroundColor: "white" }}
+                type="text"
+                defaultValue={surname_en}
+                onChange={(e) => {
+                  set_temp_info({ ...temp_info, surname_en: e.target.value })
+                }}
+              />
             </div>
           </div>
           <hr />
@@ -158,7 +203,7 @@ export default function OtherEditInfoComponent({
                 className="border"
                 style={{ backgroundColor: "white" }}
                 type="date"
-                defaultValue={convertDate(birthday)}
+                defaultValue={birthday ? convertDate(new Date(birthday)) : ""}
                 onChange={(e) => {
                   set_temp_info({ ...temp_info, birthday: new Date(e.target.value) })
                 }}
@@ -278,7 +323,7 @@ export default function OtherEditInfoComponent({
         </Card>
       </div>
       <br />
-      <div className="col">
+      <div className="col" style={{ maxWidth: "40%" }}>
         <Card body className="row shadow dim-white">
           <h4>การติดต่อในกรณีฉุกเฉิน</h4>
           <div className="row">
@@ -288,11 +333,14 @@ export default function OtherEditInfoComponent({
                 className="border"
                 style={{ backgroundColor: "white" }}
                 as="select"
-                defaultValue={contact_person_prefix}
+                defaultValue={contact_person_prefix ? contact_person_prefix : "ไม่มี"}
                 onChange={(e) => {
                   set_temp_info({ ...temp_info, contact_person: { ...contact_person, contact_person_prefix: e.target.value } })
                 }}
               >
+                <option disabled value="ไม่มี">
+                  เลือกคำนำหน้า
+                </option>
                 <option value="นาย">นาย</option>
                 <option value="นางสาว">นางสาว</option>
                 <option value="นาง">นาง</option>
@@ -386,7 +434,7 @@ export default function OtherEditInfoComponent({
           <div className="form-file">
             <Form.File
               label={medical_certifiate_file ? (medical_certifiate_file! as File).name : "Choose File"}
-              id="medical_certifiate"
+              id="medical_certificate"
               custom
               onChange={(e) => {
                 if (e.target.files[0]) {
