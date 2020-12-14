@@ -482,7 +482,6 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
                       },
                     })} placeholder="xxxxxxxxx" defaultValue={user.contact_person?.contact_person_home_phone} className="form-control"/>
                   {errors.contact_person_home_phone && <p id="input-error">{errors.contact_person_home_phone.message}</p>}
-
                 <hr />
                 <label className="form-label mt-2">{is_thai_language ? "หมายเลขโทรศัพท์มือถือ *" : "Mobile Phone Number *"}</label>
                 <input name="contact_person.contact_person_phone" type="number" ref={register({

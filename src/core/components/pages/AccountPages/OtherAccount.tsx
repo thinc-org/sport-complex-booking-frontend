@@ -9,6 +9,12 @@ export default function OtherAccount({ jwt }) {
   /// Page states
   let [is_editting, set_is_editting] = useState(false)
 
+  /// Non-cu student states
+  let [birthday, set_birthday] = useState<Date>()
+  let [verification_status, set_verification_status] = useState("")
+  /// Contact Person States
+  /// functions
+
   return (
     <UserContext.Consumer>
       {(context) => {
