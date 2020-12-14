@@ -11,7 +11,7 @@ import StaffProfile from "../components/pages/staff-pages/staff-profile"
 import StaffNavbar from "../components/ui/navbar/staff-navbar"
 import ReserveNow from "../components/pages/ReserveNow"
 import JoinWaitingRoom from "../components/pages/JoinWaitingRoom"
-import AccountPage from "../components/pages/AccountPage"
+import AccountPage from "../components/pages/AccountPages/AccountPage"
 
 import ListOfAllUsers from "../components/pages/staff-pages/list-of-all-users-pages/ListOfAllUsers"
 import AddUser from "../components/pages/staff-pages/list-of-all-users-pages/AddUser"
