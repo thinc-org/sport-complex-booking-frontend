@@ -1,6 +1,6 @@
-import React, { Component } from "react"
-import { useState, useEffect, useContext } from "react"
-import { Form , Button } from "react-bootstrap"
+import React from "react"
+import { useState } from "react"
+import { Button } from "react-bootstrap"
 import { useForm } from "react-hook-form";
 
 import axios from "axios"
@@ -10,64 +10,19 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
 
   // React Hook Forms
   const { register, handleSubmit, errors  } = useForm();
-
   // Page states
   let [is_editting, set_is_editting] = useState(false)
-  enum Account {
-    CuStudent,
-    SatitAndCuPersonel,
-    Other,
-  }
-  let Contact_person = {
-    contact_person_prefix: "",
-    contact_person_name: "",
-    contact_person_surname: "",
-    contact_person_home_phone: "",
-    contact_person_phone: "",
-  }
-
   /// Non-cu student states
-  let [account_type, setAccountType] = useState(Account.CuStudent)
-  let [prefix, setPrefix] = useState("Mr.")
-  let [gender, setGender] = useState("Male")
   let [is_thai_language, set_is_thai_language] = useState(false)
-  let [name_th, set_name_th] = useState("")
-  let [surname_th, set_surname_th] = useState("")
-  let [name_en, set_name_en] = useState("")
-  let [surname_en, set_surname_en] = useState("")
-  let [birthday, set_birthday] = useState<Date>()
-  let [birthday_day, set_birthday_day] = useState("")
-  let [birthday_month, set_birthday_month] = useState("")
-  let [birthday_year, set_birthday_year] = useState("")
 
-  let [national_id, set_national_id] = useState("")
-  let [marital_status, set_marital_status] = useState("")
-  let [address, set_address] = useState("")
-  let [phone, set_phone] = useState("")
-  let [home_phone, set_home_phone] = useState("")
-  let [personal_email, set_personal_email] = useState("")
-  let [medical_condition, set_medical_condition] = useState("")
-  let [membership_type, set_membership_type] = useState("")
-  let [is_penalize, set_is_penalize] = useState(false)
-  let [expired_penalize_date, set_expired_penalize_date] = useState(Date)
   let [verification_status, set_verification_status] = useState("")
-  let [rejected_info, set_rejected_info] = useState<String[]>([])
-  let [account_expiration_date, set_account_expiration_date] = useState<Date>()
   let [user_photo, set_user_photo] = useState()
   let [national_id_scan, set_national_id_scan] = useState()
   let [medical_certificate, set_medical_certificate] = useState()
   let [house_registration_number, set_house_registration_number] = useState()
   let [relationship_verification_document, set_relationship_verification_document] = useState()
 
-  /// Contact Person States
-  let [contact_person_prefix, set_contact_person_prefix] = useState("Mr.")
-  let [contact_person_name, set_contact_person_name] = useState("")
-  let [contact_person_surname, set_contact_person_surname] = useState("")
-  let [contact_person_home_phone, set_contact_person_home_phone] = useState("")
-  let [contact_person_phone, set_contact_person_phone] = useState("")
-
-
-
+ 
   /// JSX Begins here
   return (
     <UserContext.Consumer>
@@ -76,209 +31,196 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
         const user = Other
 
         const postDataToBackend = async (data: any) => {
-    console.log("send data to backend")
+          console.log("send data to backend")
 
-    console.log(data)
-    await axios
-      .put("http://localhost:3000/account_info/", data, {
-        headers: {
-          Authorization: "bearer " + jwt,
-        },
-      })
-      .then(({ data }) => {
-        console.log(data)
+          console.log(data)
+          await axios
+            .put("http://localhost:3000/account_info/", data, {
+              headers: {
+                Authorization: "bearer " + jwt,
+                headers: { 'Content-Type': 'multipart/form-data' },
+              },
+            })
+            .then(({ data }) => {
+              console.log(data)
 
-        if (data.verification_status === "Submitted") {
-          handleAllFilesUpload(user_photo, national_id_scan, medical_certificate, house_registration_number, relationship_verification_document)
-          //window.location.reload(false)
+              if (data.verification_status === "Submitted") {
+                handleAllFilesUpload(user_photo, national_id_scan, medical_certificate, house_registration_number, relationship_verification_document)
+                //window.location.reload(false)
+              }
+            })
+            .catch(function (error) {
+              if (error.response) {
+                console.log("POST Error")
+                console.log(error.response.data)
+                console.log(error.response.status)
+                console.log(error.response.headers)
+              }
+            })
         }
-      })
-      .catch(function (error) {
-        if (error.response) {
-          console.log(error.response.data)
-          console.log(error.response.status)
-          console.log(error.response.headers)
+
+        const onSubmit = (data: any) => {
+          console.log(JSON.parse(JSON.stringify(data)))
+          let newData = formatDate(data)
+          postDataToBackend(newData)
         }
-      })
-  }
 
-  const onSubmit = (data) => {
-    console.log(JSON.parse(JSON.stringify(data)))
-    formatDate(data)
-    postDataToBackend(data)
-  }
-
-  const handleCancel = (e) => {
-    e.preventDefault()
-    toggleEditButton()
-  }
-
-  const toggleEditButton = () => {
-    if (is_editting) {
-      set_is_editting(false)
-
-    } else {
-      set_is_editting(true)
-    }
-  }
-
-  // Formatters
-  const formatDisplayDate = () => {
-    const day = birthday?.getDay
-    const month = birthday?.getMonth
-    const year = birthday?.getFullYear
-    if (day && month && year) {
-      set_birthday_day(day + "")
-      set_birthday_month(month + "")
-      set_birthday_year(year + "")
-    } else {
-      set_birthday_day("")
-      set_birthday_month("")
-      set_birthday_year("")
-    }
-  }
-
-  const formatDate = (data: any) => {
-    let date: Date = new Date(`${birthday_year}-${birthday_month}-${birthday_day}`)
-    data = {
-      ...data,
-      birthday: date
-    }
-    delete data.birthday_day;
-    delete data.birthday_month;
-    delete data.birthday_year;
-    console.log("birthday is " + data.birthday)
-  }
-
-  // Handlers
-  const handleFileUpload = async (formData) => {
-    await axios
-      .post("http://localhost:3000/fs/upload", formData, {
-        headers: {
-          Authorization: "bearer " + jwt,
-        },
-      })
-      .then(({ data }) => {
-        console.log(data)
-      })
-      .catch(function (error) {
-        if (error.response) {
-          console.log(error.response.data)
-          console.log(error.response.status)
-          console.log(error.response.headers)
+        const handleCancel = (e: any) => {
+          e.preventDefault()
+          toggleEditButton()
         }
-      })
-  }
 
-  const handleAllFilesUpload = async (
-    user_photo_input: any,
-    national_id_input: any,
-    medical_certificate_input: any,
-    house_registration_number_input: any,
-    relationship_verification_document_input: any
-  ) => {
-    upload_user_photo(user_photo_input)
-    upload_national_id(national_id_input)
-    upload_medical_certificate(medical_certificate_input)
-    upload_house_registration_number(house_registration_number_input)
-    upload_relationship_verification_document(relationship_verification_document_input)
-  }
-  const upload_user_photo = (file: any) => {
-    console.log(file)
-    let formData = new FormData()
-    formData.append("user_photo", file, file.name)
-    handleFileUpload(formData)
-  }
-  const upload_national_id = (file: any) => {
-    console.log(file)
-    let formData = new FormData()
-    formData.append("national_id_photo", file, file.name)
-    handleFileUpload(formData)
-  }
-  const upload_medical_certificate = (file: any) => {
-    console.log(file)
-    let formData = new FormData()
-    formData.append("medical_cerficicate", file, file.name)
-    handleFileUpload(formData)
-  }
-  const upload_house_registration_number = (file: any) => {
-    console.log(file)
-    let formData = new FormData()
-    formData.append("house_registration_number", file, file.name)
-    handleFileUpload(formData)
-  }
-  const upload_relationship_verification_document = (file: any) => {
-    console.log(file)
-    let formData = new FormData()
-    formData.append("relationship_verification_document", file, file.name)
-    handleFileUpload(formData)
-  }
+        const toggleEditButton = () => {
+          if (is_editting) {
+            set_is_editting(false)
 
-  // These functions save the input file to the states
-  const assign_user_photo = (file: any) => {
-    console.log(file)
-    set_user_photo(file[0])
-  }
-  const assign_national_id = (file: any) => {
-    console.log(file)
-    set_national_id_scan(file[0])
-  }
-  const assign_medical_certificate = (file: any) => {
-    console.log(file)
-    set_medical_certificate(file[0])
-  }
-  const assign_house_registration_number = (file: any) => {
-    console.log(file)
-    set_house_registration_number(file[0])
-  }
-  const assign_relationship_verification_document = (file: any) => {
-    console.log(file)
-    set_relationship_verification_document(file[0])
-  }
+          } else {
+            set_is_editting(true)
+          }
+        }
 
-  const showWarningMessage = (verification_status: any) => {
-    switch (verification_status) {
-      case "NotSubmitted": {
-        return (
-          <div className="alert alert-danger" role="alert">
-            <h3>{is_thai_language ? "คำเตือน" : "Warning"}</h3>
-            <h6>{is_thai_language ? "กรุณาส่งข้อมูลการสมัคร" : "Please submit the registration form."}</h6>
-          </div>
-        )
-      }
-      case "Rejected": {
-        return (
-          <div className="alert alert-danger" role="alert">
-            <h3>{is_thai_language ? "ข้อมูลการสมัครไม่ถูกต้อง" : "Incorrect Information"}</h3>
-            <h6>{is_thai_language ? "กรุณาส่งข้อมูลการสมัครอีกครั้ง" : "Please resubmit the form."}</h6>
-          </div>
-        )
-      }
-      case "Submitted": {
-        return (
-          <div className="alert alert-info" role="alert">
-            <h3>{is_thai_language ? "ข้อมูลการสมัครถูกส่งแล้ว" : "Registration form submitted."}</h3>
-            <h6>{is_thai_language ? "โปรดรอการยืนยัน" : "Please wait for approval."}</h6>
-          </div>
-        )
-      }
-      case "Approved": {
-        return (
-          <div className="alert alert-info" role="alert">
-            <h3>{is_thai_language ? "ข้อมูลการสมัครถูกส่งแล้ว" : "Registration form approved."}</h3>
-            <h6>
-              {is_thai_language
-                ? "หากต้องการแก้ไขข้อทูลกรณาติดต่อเจ้าหน้าทีสปอรต์เซ็นเตอร์โดยตรงที่สนาม"
-                : "To edit your personal information, please contact CU Sports Complex."}
-            </h6>
-          </div>
-        )
-      }
-      default: {
-        return <div></div>
-      }
-    }
-  }
+        const formatDate = (data: any) => {
+          let date: Date = new Date(`${data.birthday_year}-${data.birthday_month}-${data.birthday_day}`)
+          data = {
+            ...data,
+            birthday: date
+          }
+          
+          delete data.birthday_day;
+          delete data.birthday_month;
+          delete data.birthday_year;
+          return data
+        }
+
+        // Handlers
+        const handleFileUpload = async (formData: any) => {
+          await axios
+            .post("http://localhost:3000/fs/upload", formData, {
+              headers: {
+                Authorization: "bearer " + jwt,
+              },
+            })
+            .then(({ data }) => {
+              console.log(data)
+            })
+            .catch(function (error) {
+              if (error.response) {
+                console.log(error.response.data)
+                console.log(error.response.status)
+                console.log(error.response.headers)
+              }
+            })
+        }
+
+        const handleAllFilesUpload = async (
+          user_photo_input: any,
+          national_id_input: any,
+          medical_certificate_input: any,
+          house_registration_number_input: any,
+          relationship_verification_document_input: any
+        ) => {
+          user_photo_input ? upload_user_photo(user_photo_input): console.log("no file selected")
+          national_id_input ? upload_national_id(national_id_input): console.log("no file selected")
+          medical_certificate_input ? upload_medical_certificate(medical_certificate_input): console.log("no file selected")
+          house_registration_number_input ? upload_house_registration_number(house_registration_number_input): console.log("no file selected")
+          relationship_verification_document_input ? upload_relationship_verification_document(relationship_verification_document_input): console.log("no file selected")
+        }
+        const upload_user_photo = (file: any) => {
+          console.log(file)
+          let formData = new FormData()
+          formData.append("user_photo", file? file: file, file?.name)
+          handleFileUpload(formData)
+        }
+        const upload_national_id = (file: any) => {
+          console.log(file)
+          let formData = new FormData()
+          formData.append("national_id_photo",  file? file: file, file?.name)
+          handleFileUpload(formData)
+        }
+        const upload_medical_certificate = (file: any) => {
+          console.log(file)
+          let formData = new FormData()
+          formData.append("medical_cerficicate",  file? file: file, file?.name)
+          handleFileUpload(formData)
+        }
+        const upload_house_registration_number = (file: any) => {
+          console.log(file)
+          let formData = new FormData()
+          formData.append("house_registration_number",  file? file: file, file?.name)
+          handleFileUpload(formData)
+        }
+        const upload_relationship_verification_document = (file: any) => {
+          console.log(file)
+          let formData = new FormData()
+          formData.append("relationship_verification_document", file, file.name)
+          handleFileUpload(formData)
+        }
+
+        // These functions save the input file to the states
+        const assign_user_photo = (file: any) => {
+          console.log(file)
+          set_user_photo(file[0])
+        }
+        const assign_national_id = (file: any) => {
+          console.log(file)
+          set_national_id_scan(file[0])
+        }
+        const assign_medical_certificate = (file: any) => {
+          console.log(file)
+          set_medical_certificate(file[0])
+        }
+        const assign_house_registration_number = (file: any) => {
+          console.log(file)
+          set_house_registration_number(file[0])
+        }
+        const assign_relationship_verification_document = (file: any) => {
+          console.log(file)
+          set_relationship_verification_document(file[0])
+        }
+
+        const showWarningMessage = (verification_status: any) => {
+          switch (verification_status) {
+            case "NotSubmitted": {
+              return (
+                <div className="alert alert-danger" role="alert">
+                  <h3>{is_thai_language ? "คำเตือน" : "Warning"}</h3>
+                  <h6>{is_thai_language ? "กรุณาส่งข้อมูลการสมัคร" : "Please submit the registration form."}</h6>
+                </div>
+              )
+            }
+            case "Rejected": {
+              return (
+                <div className="alert alert-danger" role="alert">
+                  <h3>{is_thai_language ? "ข้อมูลการสมัครไม่ถูกต้อง" : "Incorrect Information"}</h3>
+                  <h6>{is_thai_language ? "กรุณาส่งข้อมูลการสมัครอีกครั้ง" : "Please resubmit the form."}</h6>
+                </div>
+              )
+            }
+            case "Submitted": {
+              return (
+                <div className="alert alert-info" role="alert">
+                  <h3>{is_thai_language ? "ข้อมูลการสมัครถูกส่งแล้ว" : "Registration form submitted."}</h3>
+                  <h6>{is_thai_language ? "โปรดรอการยืนยัน" : "Please wait for approval."}</h6>
+                </div>
+              )
+            }
+            case "Approved": {
+              return (
+                <div className="alert alert-info" role="alert">
+                  <h3>{is_thai_language ? "ข้อมูลการสมัครถูกส่งแล้ว" : "Registration form approved."}</h3>
+                  <h6>
+                    {is_thai_language
+                      ? "หากต้องการแก้ไขข้อทูลกรณาติดต่อเจ้าหน้าทีสปอรต์เซ็นเตอร์โดยตรงที่สนาม"
+                      : "To edit your personal information, please contact CU Sports Complex."}
+                  </h6>
+                </div>
+              )
+            }
+            default: {
+              return <div></div>
+            }
+          }
+        }
 
         return (
           /// THIS IS THE START OF THE EDITING VIEW
@@ -492,11 +434,8 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
                       : "Do you have any medical conditions? (If there are none, please leave this blank"}
                     )
                   </label>
-                  <input name="medical_condition" type="text" ref={register({
-                      
-                    })} placeholder="Ex: Asthma" defaultValue={user.medical_condition} className="form-control"/>
+                  <input name="medical_condition" type="text" ref={register({})} placeholder="Ex: Asthma" defaultValue={user.medical_condition} className="form-control"/>
 
-                  
                 </div>
               </div>
               <br />
@@ -504,7 +443,6 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
                 <h4>{is_thai_language ? "ผู้ติดต่อยามฉุกเฉิน" : "Contact Person in Case of Emergency"}</h4>
                 <div className="col-md-4">
                   <label className="form-label mt-2">{is_thai_language ? "คำนำหน้าขื่อ *" : "Prefix *"}</label>
-
                   <select name="contact_person.contact_person_prefix" ref={register}>
                     <option value="Mr.">{is_thai_language ? "นาย" : "Mr."}</option>
                     <option value="Ms.">{is_thai_language ? "นางสาว" : "Ms."}</option>
@@ -544,8 +482,7 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
                       },
                     })} placeholder="xxxxxxxxx" defaultValue={user.contact_person?.contact_person_home_phone} className="form-control"/>
                   {errors.contact_person_home_phone && <p id="input-error">{errors.contact_person_home_phone.message}</p>}
-                
-                
+
                 <hr />
                 <label className="form-label mt-2">{is_thai_language ? "หมายเลขโทรศัพท์มือถือ *" : "Mobile Phone Number *"}</label>
                 <input name="contact_person.contact_person_phone" type="number" ref={register({
@@ -561,7 +498,6 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
               <br />
               <div className="default-mobile-wrapper">
                 <h4>{is_thai_language ? "สมาชิก" : "Membership"}</h4>
-
                 <hr />
                 <label className="form-label my-2">{is_thai_language ? "รูปภาพของคุณ" : "Your Photo (Image File)"}</label>
                 <div className="form-file">
@@ -623,7 +559,6 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
                     Cancel
                   </Button>
                 )}
-
                 <Button variant="pink" className="btn-secondary" data-toggle="modal" data-target="#exampleModal">
                   {is_thai_language ? "บันทึกและส่ง" : "Save and Submit"}
                 </Button>

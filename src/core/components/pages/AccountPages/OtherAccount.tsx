@@ -1,7 +1,5 @@
 import React from "react"
-import { useState, useEffect, useContext } from "react"
-import "bootstrap"
-import axios from "axios"
+import { useState} from "react"
 import OtherAaccountDisplay from "./AccountPageUI/OtherDisplay"
 import OtherAccountEdit from "./AccountPageUI/OtherEdit"
 import { UserContext } from "../../../contexts/UsersContext"
@@ -10,12 +8,6 @@ import NavigationBar from "../../ui/navbar/navbar"
 export default function OtherAccount({ jwt }) {
   /// Page states
   let [is_editting, set_is_editting] = useState(false)
-
-  /// Non-cu student states
-  let [birthday, set_birthday] = useState<Date>()
-  let [verification_status, set_verification_status] = useState("")
-  /// Contact Person States
-  /// functions
 
   return (
     <UserContext.Consumer>

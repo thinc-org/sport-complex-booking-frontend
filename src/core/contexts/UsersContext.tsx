@@ -77,15 +77,15 @@ class UserContextProvider extends Component {
     }
     
   }
-  setCuStudent = (value) => {
+  setCuStudent = (value: String) => {
     this.setState({ CuStudent: value});
     console.log("SET VALUE IS CALLED", this.state.CuStudent)
   }
-  setSatit = (value) => {
+  setSatit = (value: String) => {
     this.setState({ SatitCuPersonel: value});
     console.log("SET VALUE IS CALLED", this.state.SatitCuPersonel)
   }
-  setOther = (value) => {
+  setOther = (value: String ) => {
     this.setState({ Other: value});
     console.log("SET VALUE IS CALLED", this.state.Other)
   }
