@@ -22,9 +22,6 @@ import VerifyInfo from "../components/pages/staff-pages/verification-approval-pa
 import FrontLoginMain from "../components/ui/login/login-main"
 
 
-
-import { NavHeader } from '../components/ui/navbar/navbarSideEffect';
-
 export default function MainRoute() {
 
   function staff(page, header) {
