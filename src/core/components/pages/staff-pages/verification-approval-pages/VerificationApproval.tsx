@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
-import { Table, Form, Row, Col, Button, Pagination } from "react-bootstrap"
+import { Table, Form, Col, Button, Pagination, Modal } from "react-bootstrap"
 import { RouteComponentProps } from "react-router-dom"
 import fetch from "../interfaces/axiosTemplate"
 import { OtherInfo } from "../interfaces/InfoInterface"
@@ -10,6 +10,7 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
   const [page_no, set_page_no] = useState<number>(1)
   const [max_user_per_page] = useState<number>(10) // > 1
   const [searchName, setSearchName] = useState<string>("")
+  const [show_no_user, set_show_no_user] = useState<boolean>(false)
   const [users, setUsers] = useState<OtherInfo[]>([])
 
   /// functions ///
@@ -96,12 +97,58 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
   const handleInfo = (e) => {
     //send jwt and username
     // if no data of that user -> show pop up
-    props.history.push({
-      pathname: "/verifyInfo/" + e.target.id,
+    let username = e.target.id
+    fetch({
+      method: "GET",
+      url: "/approval/" + username,
+      headers: {
+        Authorization: "bearer " + jwt,
+      },
     })
+      .then(({ data }) => {
+        props.history.push({
+          pathname: "/verifyInfo/" + username,
+        })
+      })
+      .catch(({ response }) => {
+        if (response.data.message === "User not found") {
+          set_show_no_user(true)
+        } else {
+          console.log(response)
+        }
+      })
   }
 
   // renders //
+  const renderNoUserModal = () => {
+    return (
+      <Modal
+        show={show_no_user}
+        onHide={() => {
+          set_show_no_user(false)
+        }}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>เกิดข้อผิดพลาด</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ fontWeight: "lighter" }}>ไม่พบข้อมูลของผู้ใช้คนนี้</Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="pink"
+            className="btn-normal"
+            onClick={() => {
+              set_show_no_user(false)
+            }}
+          >
+            ตกลง
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    )
+  }
+
   const renderUsersTable = () => {
     let id = 1
     let usersList = users.map((user) => {
@@ -156,7 +203,10 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
             <th>รายละเอียด</th>
           </tr>
         </thead>
-        <tbody>{renderUsersTable()}</tbody>
+        <tbody>
+          {renderUsersTable()}
+          {renderNoUserModal()}
+        </tbody>
       </Table>
       <div className="text-right">{loadPagination()}</div>
     </div>

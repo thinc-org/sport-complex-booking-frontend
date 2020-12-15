@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
-import { Table, Form, Row, Col, Button, Pagination } from "react-bootstrap"
+import { Table, Form, Row, Col, Button, Pagination, Modal } from "react-bootstrap"
 import { Link, RouteComponentProps } from "react-router-dom"
 import fetch from "../interfaces/axiosTemplate"
 
@@ -62,6 +62,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
   const [searchName, setSearchName] = useState<string>("")
   const [status, set_status] = useState<number>(allStatus.All)
   const [jwt, set_jwt] = useState<string>("")
+  const [show_no_user, set_show_no_user] = useState<boolean>(false)
   const [users, setUsers] = useState<Users>([
     {
       account_type: Account.CuStudent,
@@ -94,7 +95,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
 
   useEffect(() => {
     requestUsers()
-  }, [jwt])
+  }, [jwt, page_no])
 
   // useEffect(() => {
   //   console.log("user ::")
@@ -106,7 +107,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
     // get params for request //
     let param_data = {
       begin: (page_no - 1) * 10,
-      end: page_no * 10 - 1,
+      end: page_no * 10,
     }
     if (searchName !== "") param_data["name"] = searchName
     if (status !== allStatus.All) param_data["penalize"] = allStatus.Banned === status
@@ -120,7 +121,6 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
       params: param_data,
     })
       .then(({ data }) => {
-        console.log(data)
         let userList = data[1].map((user) => {
           if (user.account_type === "CuStudent") return { ...user, account_type: Account.CuStudent }
           else if (user.account_type === "SatitAndCuPersonel") return { ...user, account_type: Account.SatitAndCuPersonel }
@@ -129,8 +129,8 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
         set_max_user(data[0])
         setUsers(userList)
       })
-      .catch((err) => {
-        if (err.response.status === 401) console.log("Unauthorize")
+      .catch(({ response }) => {
+        console.log(response)
       })
   }
 
@@ -147,16 +147,32 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
     // if no data of that user -> show pop up
     let index = parseInt(e.target.id) - 1
     let _id: String = users[index]._id
-    let account_type: Account = users[index].account_type
-    if (account_type === Account.CuStudent) {
-      props.history.push({
-        pathname: "/cuInfo/" + _id,
+    fetch({
+      method: "GET",
+      url: "/list-all-user/findById/" + _id,
+      headers: {
+        Authorization: "bearer " + jwt,
+      },
+    })
+      .then(({ data }) => {
+        if (data) {
+          let account_type: Account = users[index].account_type
+          if (account_type === Account.CuStudent) {
+            props.history.push({
+              pathname: "/cuInfo/" + _id,
+            })
+          } else {
+            props.history.push({
+              pathname: "/userInfo/" + _id,
+            })
+          }
+        } else {
+          set_show_no_user(true)
+        }
       })
-    } else {
-      props.history.push({
-        pathname: "/userInfo/" + _id,
+      .catch((err) => {
+        console.log(err)
       })
-    }
   }
 
   const handlePagination = (next_page: number) => {
@@ -211,6 +227,35 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
           }}
         />
       </Pagination>
+    )
+  }
+
+  const renderNoUserModal = () => {
+    return (
+      <Modal
+        show={show_no_user}
+        onHide={() => {
+          set_show_no_user(false)
+        }}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>เกิดข้อผิดพลาด</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ fontWeight: "lighter" }}>ไม่พบข้อมูลของผู้ใช้คนนี้</Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="pink"
+            className="btn-normal"
+            onClick={() => {
+              set_show_no_user(false)
+            }}
+          >
+            ตกลง
+          </Button>
+        </Modal.Footer>
+      </Modal>
     )
   }
 
@@ -295,7 +340,10 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
             <th></th>
           </tr>
         </thead>
-        <tbody>{renderUsersTable()}</tbody>
+        <tbody>
+          {renderUsersTable()}
+          {renderNoUserModal()}
+        </tbody>
       </Table>
       <Row>
         <Col>
