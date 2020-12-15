@@ -4,8 +4,7 @@ import ChulaAccount from "./ChulaAccount"
 import SatitAndCUPersonelAccount from "./SatitAndCUPersonelAccount"
 import OtherAccount from "./OtherAccount"
 import axios from "axios"
-import { NavHeader } from "../ui/navbar/navbarSideEffect"
-
+import { NavHeader } from '../ui/navbar/navbarSideEffect'
 export default function AccountPage() {
   enum Account {
     CuStudent = "CuStudent",

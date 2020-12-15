@@ -8,14 +8,8 @@ const FrontLoginPage = (props: any) => {
   return (
     <>
       <Switch>
-        <Route path={`${path}/personal`} render={() => {
-          return (
-            <PersonalInfo />
-          )
-        }} />
-        <Route exact path={path} render={() => {
-          return <FrontLoginMain />
-        }} />
+        <Route path={`${path}/personal`} component={PersonalInfo} />
+        <Route exact path={path} component={FrontLoginMain} />
       </Switch>
       <Footer />
     </>

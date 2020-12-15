@@ -23,6 +23,8 @@ import FrontLoginMain from "../components/ui/login/login-main"
 
 
 
+import { NavHeader } from '../components/ui/navbar/navbarSideEffect';
+
 export default function MainRoute() {
 
   function staff(page, header) {
@@ -57,7 +59,8 @@ export default function MainRoute() {
       <Switch>
         <Route exact path="/" component={Landing} />
 
-        <Route path="/login" component={FrontLoginMain} />
+        <Route path="/login" component={FrontLoginPage} />
+
         <Route exact path="/register" render={() => {
           return <div>Under maintenance</div>
         }} />
@@ -66,11 +69,7 @@ export default function MainRoute() {
           return <div>Under maintenance</div>
         }} />
 
-        <Route
-          exact
-          path="/staffLogin"
-          component={StaffLogin}
-        />
+        <Route exact path='/staffLogin' component={StaffLogin} />
 
         <Route
           path="/staffprofile"
