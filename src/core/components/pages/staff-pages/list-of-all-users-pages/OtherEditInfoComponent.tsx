@@ -18,7 +18,7 @@ export default function OtherEditInfoComponent({
 }) {
   // Page state //
   const [user_photo_file, set_user_photo_file] = useState<File>()
-  const [medical_certifiate_file, set_medical_certifiate_file] = useState<File>()
+  const [medical_certificate_file, set_medical_certificate_file] = useState<File>()
   const [national_id_photo_file, set_national_id_photo_file] = useState<File>()
   const [house_registration_number_file, set_house_registration_number_file] = useState<File>()
   const [relationship_verification_document_file, set_relationship_verification_document_file] = useState<File>()
@@ -26,20 +26,19 @@ export default function OtherEditInfoComponent({
   // const [pdf_token, set_pdf_token] = useState<string>("")
 
   // functions //
-  useEffect(() => {
-    console.log("changing state")
-    // console.log(temp_info)
-    console.log("useseffect " + user_photo_file)
-    // fetchUserData()
-  }, [user_photo_file])
+  // useEffect(() => {
+  //   console.log("changing state")
+  //   // console.log(temp_info)
+  //   console.log("useseffect " + user_photo_file)
+  //   // fetchUserData()
+  // }, [medical_certificate_file])
 
-  useEffect(() => {
-    console.log(temp_info)
-  }, [temp_info])
+  // useEffect(() => {
+  //   console.log(temp_info)
+  // }, [temp_info])
 
   // handles //
   const handleUpload = (typename, file) => {
-    console.log(file)
     const formData = new FormData()
     let selectedFile = file
     // Update the formData object
@@ -55,11 +54,11 @@ export default function OtherEditInfoComponent({
         data: formData,
       })
         .then(({ data }) => {
+          console.log(data)
           set_temp_info({
             ...temp_info,
             [Object.keys(data)[0]]: data[Object.keys(data)[0]],
           })
-          console.log(data)
         })
         .catch((err) => {
           console.log(err)
@@ -85,11 +84,6 @@ export default function OtherEditInfoComponent({
     contact_person,
     medical_condition,
     membership_type,
-    // user_photo,
-    // medical_certifiate,
-    // national_id_photo,
-    // house_registration_number,
-    // relationship_verification_document,
   } = temp_info
   let {
     contact_person_prefix,
@@ -130,7 +124,7 @@ export default function OtherEditInfoComponent({
                 className="border"
                 style={{ backgroundColor: "white" }}
                 as="select"
-                defaultValue={gender ? gender : "ไม่มี"}
+                defaultValue={gender === "ชาย" || gender === "หญิง" ? gender : "ไม่มี"}
                 onChange={(e) => {
                   set_temp_info({ ...temp_info, gender: e.target.value })
                 }}
@@ -138,8 +132,8 @@ export default function OtherEditInfoComponent({
                 <option value="ไม่มี" disabled>
                   เลือกเพศ
                 </option>
-                <option value="Male">ชาย</option>
-                <option value="Female">หญิง</option>
+                <option value="ชาย">ชาย</option>
+                <option value="หญิง">หญิง</option>
               </Form.Control>
             </div>
           </div>
@@ -404,7 +398,6 @@ export default function OtherEditInfoComponent({
               id="user_photo"
               custom
               onChange={(e) => {
-                // console.log(e.target.files[0])
                 if (e.target.files[0]) {
                   // console.log(e.target.files[0])
                   set_user_photo_file(e.target.files[0])
@@ -433,12 +426,12 @@ export default function OtherEditInfoComponent({
           <label className="form-label my-2">ใบรับรองแพทย์ (.pdf เท่านั้น)</label>
           <div className="form-file">
             <Form.File
-              label={medical_certifiate_file ? (medical_certifiate_file! as File).name : "Choose File"}
+              label={medical_certificate_file ? (medical_certificate_file! as File).name : "Choose File"}
               id="medical_certificate"
               custom
               onChange={(e) => {
                 if (e.target.files[0]) {
-                  set_medical_certifiate_file(e.target.files[0])
+                  set_medical_certificate_file(e.target.files[0])
                   handleUpload(e.target.id, e.target.files[0])
                 }
               }}

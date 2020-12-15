@@ -63,7 +63,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
     membership_type: membership_type,
     // object id //
     user_photo: "",
-    medical_certifiate: " { Object }",
+    medical_certificate: " { Object }",
     national_id_photo: "{ Object }",
     house_registration_number: "{ Object }",
     relationship_verification_document: "{ Object }",
@@ -136,7 +136,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
           // Files //
           membership_type: data.membership_type,
           user_photo: data.user_photo,
-          medical_certifiate: data.medical_certifiate,
+          medical_certificate: data.medical_certificate,
           national_id_photo: data.national_id_photo,
           house_registration_number: data.house_registration_number,
           relationship_verification_document: data.relationship_verification_document,
