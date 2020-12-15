@@ -5,7 +5,7 @@ import fetch from "../interfaces/axiosTemplate"
 import OtherViewInfoComponent from "./OtherViewInfoComponent"
 import OtherEditInfoComponent from "./OtherEditInfoComponent"
 import ModalsComponent from "./OtherModalsComponent"
-import Info, { ContactPerson } from "../interfaces/InfoInterface"
+import Info, { Account, ThaiLangAccount, ContactPerson } from "../interfaces/InfoInterface"
 import { ModalUserInfo } from "../interfaces/InfoInterface"
 
 export const convertDate = (date: Date) => {
@@ -40,13 +40,13 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const [is_penalize, set_penalize] = useState<boolean>(false)
   const [expired_penalize_date, set_expired_penalize_date] = useState<Date>(new Date())
   const [account_expired_date, set_account_expired_date] = useState<Date>(new Date())
-  const [contact, setContact] = useState<ContactPerson>({
-    contact_person_prefix: "",
-    contact_person_name: "",
-    contact_person_surname: "",
-    contact_person_home_phone: "",
-    contact_person_phone: "",
-  })
+  // const [contact, setContact] = useState<ContactPerson>({
+  // contact_person_prefix: "",
+  // contact_person_name: "",
+  // contact_person_surname: "",
+  // contact_person_home_phone: "",
+  // contact_person_phone: "",
+  // })
   const [info, setInfo] = useState<Info>({
     prefix: "",
     name_th: "",
@@ -62,11 +62,17 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     phone: "",
     home_phone: "",
     medical_condition: "",
-    contact_person: contact,
+    contact_person: {
+      contact_person_prefix: "",
+      contact_person_name: "",
+      contact_person_surname: "",
+      contact_person_home_phone: "",
+      contact_person_phone: "",
+    },
     membership_type: membership_type,
     // object id //
     user_photo: "",
-    medical_certifiate: "",
+    medical_certificate: "",
     national_id_photo: "",
     house_registration_number: "",
     relationship_verification_document: "",
@@ -80,7 +86,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const [temp_info, set_temp_info] = useState<Info>(info)
 
   useEffect(() => {
-    // console.log("re-rendered")
     fetch({
       method: "GET",
       url: "/account_info/testing/adminToken",
@@ -94,8 +99,8 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   }, [jwt])
 
   // useEffect(() => {
-  //   console.log(membership_type)
-  // }, [membership_type])
+  //   setInfo({ ...info, contact_person: contact })
+  // }, [contact])
 
   const fetchUserData = async () => {
     await fetch({
@@ -107,15 +112,15 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     })
       .then(({ data }) => {
         console.log(data)
-        if (data.contact_person) {
-          setContact({
-            contact_person_prefix: data.contact_person.contact_person_prefix,
-            contact_person_name: data.contact_person.contact_person_name,
-            contact_person_surname: data.contact_person.contact_person_surname,
-            contact_person_home_phone: data.contact_person.contact_person_home_phone,
-            contact_person_phone: data.contact_person.contact_person_phone,
-          })
-        }
+        // if (data.contact_person) {
+        //   setContact({
+        //     contact_person_prefix: data.contact_person.contact_person_prefix,
+        //     contact_person_name: data.contact_person.contact_person_name,
+        //     contact_person_surname: data.contact_person.contact_person_surname,
+        //     contact_person_home_phone: data.contact_person.contact_person_home_phone,
+        //     contact_person_phone: data.contact_person.contact_person_phone,
+        //   })
+        // }
         set_username(data.username)
         set_account_type(data.account_type)
         set_membership_type(data.membership_type)
@@ -137,11 +142,17 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
           phone: data.phone,
           home_phone: data.home_phone,
           medical_condition: data.medical_condition,
-          contact_person: contact,
+          contact_person: {
+            contact_person_prefix: data.contact_person.contact_person_prefix,
+            contact_person_name: data.contact_person.contact_person_name,
+            contact_person_surname: data.contact_person.contact_person_surname,
+            contact_person_home_phone: data.contact_person.contact_person_home_phone,
+            contact_person_phone: data.contact_person.contact_person_phone,
+          },
           membership_type: data.membership_type,
           // Files(Object id) //
           user_photo: data.user_photo,
-          medical_certifiate: data.medical_certifiate,
+          medical_certificate: data.medical_certificate,
           national_id_photo: data.national_id_photo,
           house_registration_number: data.house_registration_number,
           relationship_verification_document: data.relationship_verification_document,
@@ -181,7 +192,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       contact_person,
       medical_condition,
       user_photo,
-      medical_certifiate,
+      medical_certificate,
       national_id_photo,
       house_registration_number,
       relationship_verification_document,
@@ -219,7 +230,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         expired_penalize_date: temp_expired_penalize_date,
         // files //
         user_photo: user_photo,
-        medical_certifiate: medical_certifiate,
+        medical_certificate: medical_certificate,
         national_id_photo: national_id_photo,
         house_registration_number: house_registration_number,
         relationship_verification_document: relationship_verification_document,
@@ -271,8 +282,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         <div className="row">
           <div className="col">
             <label className="mt-2">ประเภท</label>
-
-            <p className="font-weight-bold">{account_type}</p>
+            <p className="font-weight-bold">{ThaiLangAccount[Account[account_type]]}</p>
           </div>
         </div>
         <div className="row pb-2">
@@ -293,40 +303,42 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
             )}
           </div>
         </div>
-        <div className="row pb-2">
-          <div className="col">
-            <label className="mt-2">ประเภทบัญชี</label>
-            {isEdit ? (
-              <div>
-                <Form.Control
-                  as="select"
-                  onChange={(e) => {
-                    set_temp_membership_type(e.target.value)
-                  }}
-                  defaultValue={temp_membership_type !== "" ? temp_membership_type : "ไม่มี"}
-                >
-                  <option disabled value="ไม่มี">
-                    เลือกประเภทบัญชี
-                  </option>
-                  <option>สมาชิกสามัญ ก (staff membership)</option>
-                  <option>สมาชิกสามัญ ข (student membership)</option>
-                  <option>สมาชิกสามัญสมทบ ก (staff-spouse membership)</option>
-                  <option>สมาชิกสามัญสมทบ ข (alumni membership)</option>
-                  <option>สมาชิกวิสามัญ (full membership)</option>
-                  <option>สมาชิกวิสามัญสมทบ (full membership-spouse and children)</option>
-                  <option>สมาชิกวิสามัญเฉพาะสนามกีฬาในร่ม (indoor stadium)</option>
-                  <option>สมาชิกวิสามัญสมทบเฉพาะสนามกีฬาในร่ม (indoor stadium-spouse and children)</option>
-                  <option>สมาชิกรายเดือนสนามกีฬาในร่ม (monthly membership-indoor stadium)</option>
-                  <option>นักเรียนสาธิตจุฬา / บุคลากรจุฬา</option>
-                </Form.Control>
-              </div>
-            ) : (
-              <div>
-                <p className="font-weight-bold">{membership_type}</p>
-              </div>
-            )}
+        {account_type === "Other" ? (
+          <div className="row pb-2">
+            <div className="col">
+              <label className="mt-2">ประเภทบัญชี</label>
+              {isEdit ? (
+                <div>
+                  <Form.Control
+                    as="select"
+                    onChange={(e) => {
+                      set_temp_membership_type(e.target.value)
+                    }}
+                    defaultValue={temp_membership_type !== "" ? temp_membership_type : "ไม่มี"}
+                  >
+                    <option disabled value="ไม่มี">
+                      เลือกประเภทบัญชี
+                    </option>
+                    <option>สมาชิกสามัญ ก (staff membership)</option>
+                    <option>สมาชิกสามัญ ข (student membership)</option>
+                    <option>สมาชิกสามัญสมทบ ก (staff-spouse membership)</option>
+                    <option>สมาชิกสามัญสมทบ ข (alumni membership)</option>
+                    <option>สมาชิกวิสามัญ (full membership)</option>
+                    <option>สมาชิกวิสามัญสมทบ (full membership-spouse and children)</option>
+                    <option>สมาชิกวิสามัญเฉพาะสนามกีฬาในร่ม (indoor stadium)</option>
+                    <option>สมาชิกวิสามัญสมทบเฉพาะสนามกีฬาในร่ม (indoor stadium-spouse and children)</option>
+                    <option>สมาชิกรายเดือนสนามกีฬาในร่ม (monthly membership-indoor stadium)</option>
+                    <option>นักเรียนสาธิตจุฬา / บุคลากรจุฬา</option>
+                  </Form.Control>
+                </div>
+              ) : (
+                <div>
+                  <p className="font-weight-bold">{membership_type}</p>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        ) : null}
         <div className="row pb-2">
           <div className="col">
             <label className="mt-2">สถานะการแบน</label>
@@ -337,7 +349,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
                 as="select"
                 defaultValue={is_penalize ? 1 : 0}
                 onChange={(e) => {
-                  set_temp_penalize(e.target.value ? true : false)
+                  set_temp_penalize(e.target.value !== "0" ? true : false)
                 }}
               >
                 <option value={0}>ปกติ</option>
@@ -356,10 +368,10 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
               disabled={!isEdit}
               value={
                 isEdit
-                  ? temp_expired_penalize_date
+                  ? temp_expired_penalize_date && temp_is_penalize
                     ? convertDate(new Date(temp_expired_penalize_date))
                     : ""
-                  : temp_expired_penalize_date
+                  : is_penalize
                   ? convertDate(new Date(expired_penalize_date))
                   : ""
               }

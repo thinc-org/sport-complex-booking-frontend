@@ -2,7 +2,7 @@ import React, { useState, useEffect, FunctionComponent } from "react"
 import { Row, Col, Button, Form, Card, Modal, Alert } from "react-bootstrap"
 import { Link, RouteComponentProps } from "react-router-dom"
 import fetch from "../interfaces/axiosTemplate"
-import { CuInfo, Account } from "../interfaces/InfoInterface"
+import { CuInfo, ThaiLangAccount, Account } from "../interfaces/InfoInterface"
 
 const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
   // page states
@@ -233,7 +233,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         <Row>
           <Col className="py-3">
             <p>ประเภท</p>
-            <p className="font-weight-bold mb-0">{user.account_type}</p>
+            <p className="font-weight-bold mb-0">{ThaiLangAccount[Account[user.account_type]]}</p>
           </Col>
         </Row>
         <Row>

@@ -4,6 +4,12 @@ export enum Account {
   Other,
 }
 
+export enum ThaiLangAccount {
+  นิสิตจุฬา,
+  นักเรียนสาธิตจุฬาหรือบุคลากรจุฬา,
+  อื่นๆ,
+}
+
 export default interface Info {
   prefix: string
   name_th: string
@@ -23,7 +29,7 @@ export default interface Info {
   membership_type: string
   // object id //
   user_photo: string
-  medical_certifiate: string
+  medical_certificate: string
   national_id_photo: string
   house_registration_number: string
   relationship_verification_document: string

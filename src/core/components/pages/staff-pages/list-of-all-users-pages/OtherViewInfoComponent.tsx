@@ -16,6 +16,7 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
   // handles //
   const handlePDF = (e) => {
     let fileId = e.target.id
+    console.log(fileId)
     // console.log("trying to open pdf: " + fileId)
     fetch({
       method: "GET",
@@ -49,8 +50,9 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
     home_phone,
     phone,
     medical_condition,
+    contact_person,
   } = info
-  let { contact_person_prefix, contact_person_name, contact_person_surname, contact_person_home_phone, contact_person_phone } = info.contact_person
+  let { contact_person_prefix, contact_person_name, contact_person_surname, contact_person_home_phone, contact_person_phone } = contact_person
   // console.log(birthday)
   // console.log(new Date(birthday))
   // console.log("DATEEEEE " + birthday.getDate)
@@ -159,7 +161,7 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
           </div>
           <label className="form-label my-2">{is_thai ? "ใบรับรองแพทย์ (.pdf เท่านั้น)" : "Medical Certificate (.pdf only)"}</label>
           <div className="form-file">
-            <p className="link" id={info.medical_certifiate} onClick={handlePDF}>
+            <p className="link" id={info.medical_certificate} onClick={handlePDF}>
               View PDF
             </p>
           </div>
