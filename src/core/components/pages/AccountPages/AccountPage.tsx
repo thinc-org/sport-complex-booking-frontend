@@ -18,7 +18,7 @@ export default function AccountPage() {
   let [account_type, set_account_type] = useState();
 
   const userContext = useContext(UserContext);
-  const jwt ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmE2ZWFkYmQyNjI5NDMwNDA3YTA5YTciLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjA0Nzc0NjE5fQ.7Ll_-8RuQdeKp9_7nnyg9zBc4Qap549Wwv4Yp0QDOBo"
+  const jwt ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQ4NjA0NDQwN2JjYTIwMjgwZjIxZTMiLCJpc1N0YWZmIjpmYWxzZSwiaWF0IjoxNjA4MDE1OTQwLCJleHAiOjE2MDg2MjA3NDB9.M49vaNCoCSo59VZk3tB5jGolv4hM-mEluCP2rLFlcfg"
 
   useEffect(() => {
     fetch_account_type()
@@ -45,7 +45,7 @@ export default function AccountPage() {
       })
   }
 
-  const showPage = (account_type, jwt) => {
+  const showPage = (account_type: any, jwt: String) => {
     switch (account_type) {
       case Account.CuStudent: {
         return <ChulaAccount />

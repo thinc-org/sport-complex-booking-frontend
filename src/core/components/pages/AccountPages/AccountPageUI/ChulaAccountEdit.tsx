@@ -6,7 +6,7 @@ import axios from "axios"
 import { UserContext } from "../../../../contexts/UsersContext"
 
 export default function ChulaAccountEdit({  toggle_edit_button}) {
-  let [is_thai_language, set_is_thai_language] = useState(false)
+  let [is_thai_language] = useState(false)
 
   // React Hook Forms
   const { register, handleSubmit, errors } = useForm();
@@ -39,13 +39,13 @@ export default function ChulaAccountEdit({  toggle_edit_button}) {
           }
         }
 
-        const postDataToBackend = async (data) => {
+        const postDataToBackend = async (data: any) => {
           console.log("send data to backend")
           data = {
             ...data,
             is_thai_language: user.is_thai_language,
           }
-          console.log("data is" + JSON.stringify(data))
+          console.log("data is" + JSON.parse(JSON.stringify(data)))
           await axios
             .put("http://localhost:3000/account_info/", data, {
               headers: {
@@ -76,7 +76,7 @@ export default function ChulaAccountEdit({  toggle_edit_button}) {
               <form onSubmit={handleSubmit(onSubmit)}>
 
                   <label className="form-label mt-2">Mobile</label>
-                  <input name="mobile" type="text" ref={register({
+                  <input name="phone" type="text" ref={register({
                     required: "Enter your phone number",
                     pattern: {
                       value: /^[A-Z0-9._%+-]/i,

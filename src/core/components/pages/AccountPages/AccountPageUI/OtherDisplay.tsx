@@ -1,113 +1,14 @@
-import React, { Component } from "react"
-import { useState, useEffect, useContext } from "react"
-import { Form, ToggleButton, Container, Button, ToggleButtonGroup } from "react-bootstrap"
-import "bootstrap"
-import axios from "axios"
+import React from "react"
+import { useState } from "react"
 import { UserContext } from "../../../../contexts/UsersContext"
 
 export default function OtherAaccountDisplay({ jwt, toggle_edit_button }) {
-  /// Page states
-  let [is_editting, set_is_editting] = useState(false)
-  let [showEditButton, setShowEditButton] = useState(true)
-  enum Account {
-    CuStudent,
-    SatitAndCuPersonel,
-    Other,
-  }
 
   /// Non-cu student states
+  let [is_thai_language] = useState(false)
+  let [verification_status] = useState("")
 
-  let [is_thai_language, set_is_thai_language] = useState(false)
-
-  let [birthday, set_birthday] = useState<Date>()
-  let [birthday_day, set_birthday_day] = useState("")
-  let [birthday_month, set_birthday_month] = useState("")
-  let [birthday_year, set_birthday_year] = useState("")
-
-  let [verification_status, set_verification_status] = useState("")
-
-
-  /// functions
-
-  useEffect(() => {
-    console.log("Function triggered by useEffect")
-    formatDisplayDate()
-    //fetchUserData()
-  }, [])
-
-  // const fetchUserData = async () => {
-  //   await axios
-  //     .get("http://localhost:3000/account_info/", {
-  //       headers: {
-  //         Authorization: "bearer " + jwt,
-  //       },
-  //     })
-  //     .then(({ data }) => {
-  //       console.log(data)
-  //       console.log(data.verification_status)
-  //       set_verification_status(data.verification_status)
-  //       set_name_en(data.name_en)
-  //       set_surname_en(data.surname_en)
-  //       set_name_th(data.name_th)
-  //       set_surname_th(data.surname_th)
-  //       set_phone(data.phone)
-  //       set_personal_email(data.personal_email)
-  //       set_phone(data.phone)
-  //       set_is_thai_language(data.is_thai_language)
-  //       setPrefix(data.prefix)
-  //       set_birthday(data.birthday)
-  //       set_national_id(data.national_id)
-  //       setGender(data.gender)
-  //       set_marital_status(data.marital_status)
-  //       set_address(data.address)
-  //       set_home_phone(data.home_phone)
-  //       if (data.contact_person) {
-  //         set_contact_person_home_phone(data.contact_person.contact_person_home_phone)
-  //         set_contact_person_name(data.contact_person.contact_person_name)
-  //         set_contact_person_phone(data.contact_person.contact_person_phone)
-  //         set_contact_person_prefix(data.contact_person.contact_person_prefix)
-  //         set_contact_person_surname(data.contact_person.contact_person_surname)
-  //       }
-  //       set_medical_condition(data.medical_condition)
-  //       formatDisplayDate()
-  //       if (data.verification_status === "NotSubmitted") {
-  //         console.log("editting view")
-  //         set_is_editting(true)
-  //         setShowEditButton(true)
-  //       } else if (data.verification_status === "Submitted") {
-  //         console.log("successfully submitted")
-  //         set_is_editting(false)
-  //         setShowEditButton(false)
-  //       }
-  //     })
-  // }
-
-  const toggleEditButton = () => {
-    if (is_editting) {
-      set_is_editting(false)
-      //fetchUserData()
-    } else {
-      set_is_editting(true)
-    }
-  }
-
-  // Formatters
-  const formatDisplayDate = () => {
-    const day = birthday?.getDay
-    const month = birthday?.getMonth
-    const year = birthday?.getFullYear
-    if (day && month && year) {
-      set_birthday_day(day + "")
-      set_birthday_month(month + "")
-      set_birthday_year(year + "")
-    } else {
-      set_birthday_day("")
-      set_birthday_month("")
-      set_birthday_year("")
-    }
-  }
-
-  const showWarningMessage = (verification_status) => {
+  const showWarningMessage = (verification_status: String) => {
     switch (verification_status) {
       case "NotSubmitted": {
         return (
@@ -195,15 +96,7 @@ export default function OtherAaccountDisplay({ jwt, toggle_edit_button }) {
                 <label className="form-label mt-2">Birthdate</label>
                 <div className="row">
                   <div className="col-sm-4">
-                    <p>{user.birthday_day}</p>
-                    <div className="valid-feedback"></div>
-                  </div>
-                  <div className="col-sm-4">
-                    <p>{user.birthday_month}</p>
-                    <div className="valid-feedback"></div>
-                  </div>
-                  <div className="col-sm-4">
-                    <p>{user.birthday_year}</p>
+                    <p>{user.birthday.substring(0,10)}</p>
                     <div className="valid-feedback"></div>
                   </div>
                 </div>

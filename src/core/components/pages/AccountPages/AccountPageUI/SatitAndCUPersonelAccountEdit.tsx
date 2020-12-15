@@ -1,6 +1,6 @@
 import React from "react"
 import { useState} from "react"
-import { Form, Button } from "react-bootstrap"
+import { Button } from "react-bootstrap"
 import { useForm } from "react-hook-form";
 import axios from "axios"
 import { UserContext } from "../../../../contexts/UsersContext"
@@ -8,7 +8,7 @@ import { UserContext } from "../../../../contexts/UsersContext"
 
 
 export default function SatitAndCUPersonelAccountEdit({  toggle_edit_button}) {
-  let [is_thai_language, set_is_thai_language] = useState(false)
+  let [is_thai_language] = useState(false)
   
   // React Hook Forms
   const { register, handleSubmit, errors  } = useForm();
@@ -23,7 +23,7 @@ export default function SatitAndCUPersonelAccountEdit({  toggle_edit_button}) {
           postDataToBackend(data)
         };
 
-        const handleCancel = (e) => {
+        const handleCancel = (e: any) => {
           e.preventDefault()
           window.location.reload(false)
         }
@@ -41,18 +41,7 @@ export default function SatitAndCUPersonelAccountEdit({  toggle_edit_button}) {
           }
         }
 
-        const handlePhoneChange = (value: string) => {
-          const newValue = { ...user }
-          newValue.phone = value
-          context.setSatit(newValue)
-        }
-        const handlePersonalEmailChange = (value: string) => {
-          const newValue = { ...user }
-          newValue.personal_email = value
-          context.setSatit(newValue)
-        }
-
-        const postDataToBackend = async (data) => {
+        const postDataToBackend = async (data: any) => {
           console.log("send data to backend")
           data = {
             ...data,
@@ -88,7 +77,7 @@ export default function SatitAndCUPersonelAccountEdit({  toggle_edit_button}) {
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="">
                   <label className="form-label mt-2">Mobile</label>
-                  <input name="mobile" type="text" ref={register({
+                  <input name="phone" type="text" ref={register({
                       required: "Enter your phone number",
                       pattern: {
                         value: /^[A-Z0-9._%+-]/i,
