@@ -17,7 +17,6 @@ export default function SatitAndCuPersonel() {
 
   return (
     <div>
-      <NavigationBar/>
       {
         !is_editting ? (
           <SatitAndCUPersonelAccountDisplay toggle_edit_button={toggleEditButton} />
