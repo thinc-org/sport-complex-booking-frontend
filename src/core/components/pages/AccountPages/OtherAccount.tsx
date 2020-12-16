@@ -26,7 +26,6 @@ export default function OtherAccount({ jwt }) {
         /// JSX Begins here
         return (
           <div>
-            <NavigationBar/>
             {
               user.verification_status === "Submitted" || user.verification_status === "Approved" ? (
                 <OtherAaccountDisplay jwt={jwt} toggle_edit_button={toggleEditButton} />

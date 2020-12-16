@@ -18,7 +18,6 @@ export default function ChulaAccount() {
 
   return (
     <div>
-      <NavigationBar />
       {!is_editting ? <ChulaAccountDisplay toggle_edit_button={toggleEditButton} /> : <ChulaAccountEdit toggle_edit_button={toggleEditButton} />}
     </div>
   )

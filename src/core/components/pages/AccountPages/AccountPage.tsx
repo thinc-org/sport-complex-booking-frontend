@@ -63,13 +63,13 @@ export default function AccountPage() {
   }
   
   return (<UserContext.Consumer>{(context) => {
-    // const { CuStudent } = context;
-    // const user = CuStudent;
-    //const account_type = user.account_type;
+    
     return (
       <>
         <NavHeader header="Account" />
-        {showPage(account_type, jwt)}
+        { 
+          showPage(account_type, jwt)
+        }
       </>
     )
   }}</UserContext.Consumer>)
