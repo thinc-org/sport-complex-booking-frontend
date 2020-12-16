@@ -22,6 +22,11 @@ name: "จัดการสตาฟ",
   },
   {
     icon: "",
+    name: "ห้องรอการจองทั้งหมด",
+    path: "/allWaiting",
+  },
+  {
+    icon: "",
     name: "รับรองการลงทะเบียน",
     // path: '/รับรองการลงทะเบียน'
     path: "/staff/verifyApprove",
