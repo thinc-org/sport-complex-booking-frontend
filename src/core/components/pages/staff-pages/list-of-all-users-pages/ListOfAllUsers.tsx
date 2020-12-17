@@ -61,7 +61,9 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
   const [max_user, set_max_user] = useState<number>(1)
   const [searchName, setSearchName] = useState<string>("")
   const [status, set_status] = useState<number>(allStatus.All)
-  const [jwt, set_jwt] = useState<string>("")
+  const [jwt, set_jwt] = useState<string>(
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODIyOTExNX0.ejaYqHHmkB2qC5Ds59nYhtV1ryWeLlxEB-MNsuIpquY"
+  )
   const [show_no_user, set_show_no_user] = useState<boolean>(false)
   const [users, setUsers] = useState<Users>([
     {
@@ -121,6 +123,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
       params: param_data,
     })
       .then(({ data }) => {
+        // console.log(data)
         let userList = data[1].map((user) => {
           if (user.account_type === "CuStudent") return { ...user, account_type: Account.CuStudent }
           else if (user.account_type === "SatitAndCuPersonel") return { ...user, account_type: Account.SatitAndCuPersonel }
@@ -324,7 +327,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
               <option value={allStatus.Banned}>โดนแบน</option>
             </Form.Control>
           </Col>
-          <Button variant="pink" className="py-1 btn-normal" onClick={handleSearch}>
+          <Button variant="pink" className="ml-3 py-1 btn-normal" onClick={handleSearch}>
             ค้นหา
           </Button>
         </Form.Row>

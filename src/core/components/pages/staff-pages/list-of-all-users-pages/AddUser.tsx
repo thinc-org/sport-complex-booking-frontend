@@ -6,7 +6,9 @@ import { AddInfo } from "../interfaces/InfoInterface"
 
 const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
   // Page states //
-  const [jwt, setJwt] = useState<string>("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmRjYTMxNjZhNDMwOTQyOWM5MmI4MjkiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDg3MzYxMTEsImV4cCI6MTYwOTM0MDkxMX0.NxmksdEUKg_2EU8ukKcO-vjisYY79a4TrJRGAibPvVQ")
+  const [jwt, setJwt] = useState<string>(
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmRjYTMxNjZhNDMwOTQyOWM5MmI4MjkiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDg3MzYxMTEsImV4cCI6MTYwOTM0MDkxMX0.NxmksdEUKg_2EU8ukKcO-vjisYY79a4TrJRGAibPvVQ"
+  )
   const [selectingSatit, setSelectingSatit] = useState<boolean>(false)
   const [showAdd, setShowAdd] = useState<boolean>(false)
   const [showCom, setShowCom] = useState<boolean>(false)
@@ -50,7 +52,10 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
     return (
       <Form.Group>
         <Form.Label>ประเภท</Form.Label>
-        <Form.Control as="select" onChange={handleChangeType} defaultValue={option}>
+        <Form.Control className="m-0" as="select" onChange={handleChangeType} defaultValue={option}>
+          <option value={0} disabled>
+            เลือกประเภทสมาชิก
+          </option>
           <option>สมาชิกสามัญ ก (staff membership)</option>
           <option>สมาชิกสามัญ ข (student membership)</option>
           <option>สมาชิกสามัญสมทบ ก (staff-spouse membership)</option>
@@ -90,7 +95,7 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
         {renderSelector(9)}
         <Form.Group>
           <Form.Label>ภาษา</Form.Label>
-          <Form.Control as="select" id="is_thai_language" onChange={handleChange} value={is_thai_language ? 1 : 0}>
+          <Form.Control className="m-0" as="select" id="is_thai_language" onChange={handleChange} value={is_thai_language ? 1 : 0}>
             <option value={1}>ภาษาไทย</option>
             <option value={0}>English</option>
           </Form.Control>
@@ -274,7 +279,7 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
   const handleAdd = (e) => {
     // if form has been completed -> request add //
     let { membership_type, username, password, name_th, surname_th, name_en, surname_en, personal_email, phone } = user
-    if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && username !== "" && password !== "") {
+    if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && membership_type !== "" && username !== "" && password !== "") {
       setShowAdd(true)
     } else if (
       username !== "" &&
