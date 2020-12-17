@@ -159,27 +159,27 @@ export default function OtherAaccountDisplay({ jwt, toggle_edit_button }) {
               <h4>Membership</h4>
               <label className="form-label my-2">Your Photo (Image File)</label>
               <div className="form-file">
-                <p>{user.verification_status == "Submitted" || user.verification_status == "Approved" ? "File Submitted." : ""}</p>
+                <p>{user.verification_status === "Submitted" || user.verification_status === "Approved" ? "File Submitted." : ""}</p>
               </div>
               <hr />
               <label className="form-label my-2">National ID / Passpord (.pdf only)</label>
               <div className="form-file">
-                <p>{user.verification_status == "Submitted" || user.verification_status == "Approved" ? "File Submitted." : ""}</p>
+                <p>{user.verification_status === "Submitted" || user.verification_status === "Approved" ? "File Submitted." : ""}</p>
               </div>
               <hr />
               <label className="form-label my-2">Medical Certificate (.pdf only)</label>
               <div className="form-file">
-                <p>{user.verification_status == "Submitted" || user.verification_status == "Approved" ? "File Submitted." : ""}</p>
+                <p>{user.verification_status === "Submitted" || user.verification_status === "Approved" ? "File Submitted." : ""}</p>
               </div>
               <hr />
               <label className="form-label my-2">Optional: House Registration Document with reference person (.pdf only)</label>
               <div className="form-file">
-                <p>{user.verification_status == "Submitted" || user.verification_status == "Approved" ? "File Submitted." : ""}</p>
+                <p>{user.verification_status === "Submitted" || user.verification_status === "Approved" ? "File Submitted." : ""}</p>
               </div>
               <hr />
               <label className="form-label my-2">Optional: Relationship Verification document (.pdf only)</label>
               <div className="form-file">
-                <p>{user.verification_status == "Submitted" || verification_status == "Approved" ? "File Submitted." : ""}</p>
+                <p>{user.verification_status === "Submitted" || verification_status === "Approved" ? "File Submitted." : ""}</p>
               </div>
             </div>
             {/* END OF FORM */}

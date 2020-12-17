@@ -18,7 +18,7 @@ export default function AccountPage() {
   let [account_type, set_account_type] = useState();
 
   const userContext = useContext(UserContext);
-  const jwt ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQ4NjA0NDQwN2JjYTIwMjgwZjIxZTMiLCJpc1N0YWZmIjpmYWxzZSwiaWF0IjoxNjA4MDE1OTQwLCJleHAiOjE2MDg2MjA3NDB9.M49vaNCoCSo59VZk3tB5jGolv4hM-mEluCP2rLFlcfg"
+  const jwt ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmRiMWQ0NTJhZGJmZDM5MThkZmIxZWIiLCJpc1N0YWZmIjpmYWxzZSwiaWF0IjoxNjA4MTk1Mzk3LCJleHAiOjE2MDg4MDAxOTd9.qw9oZkFwC5jfkK0F-nnkSsIGuBIiZD9h0f19wgTkFvo"
 
   useEffect(() => {
     fetch_account_type()
