@@ -9,6 +9,9 @@ import { AddModal, ComModal, ErrModal, UsernameErrModal, AlertUncom, AlertErrorP
 
 const AddUser: FunctionComponent = () => {
   // Page states //
+  const [jwt, setJwt] = useState<string>(
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODIyOTExNX0.ejaYqHHmkB2qC5Ds59nYhtV1ryWeLlxEB-MNsuIpquY"
+  )
   const [selectingSatit, setSelectingSatit] = useState<boolean>(false)
   // Modals & Alerts //
   const [showModals, setShowModals] = useState<ModalAddUser>({
@@ -91,7 +94,13 @@ const AddUser: FunctionComponent = () => {
         {renderSelector(9)}
         <Form.Group>
           <Form.Label>ภาษา</Form.Label>
+<<<<<<< HEAD
           <Form.Control ref={register} name="is_thai_language" className="m-0" as="select" defaultValue={is_thai_language ? 1 : 0}>
+||||||| constructed merge base
+          <Form.Control as="select" id="is_thai_language" onChange={handleChange} value={is_thai_language ? 1 : 0}>
+=======
+          <Form.Control className="m-0" as="select" id="is_thai_language" onChange={handleChange} value={is_thai_language ? 1 : 0}>
+>>>>>>> fix: add user internal error
             <option value={1}>ภาษาไทย</option>
             <option value={0}>English</option>
           </Form.Control>
@@ -167,6 +176,7 @@ const AddUser: FunctionComponent = () => {
       setSelectingSatit(!selectingSatit)
   }
 
+<<<<<<< HEAD
   const handleAdd = (data: AddUserComponentInfo) => {
     let { username, name_th, surname_th, name_en, surname_en, personal_email, phone, password, confirmPassword } = data
     let newUser = data.is_thai_language ? { ...data, membership_type: user.membership_type } : { ...user, username: data.username }
@@ -178,6 +188,21 @@ const AddUser: FunctionComponent = () => {
       setShowModals({ ...showModals, showAdd: true })
     else if (
       user.membership_type &&
+||||||| constructed merge base
+  const handleAdd = (e) => {
+    // if form has been completed -> request add //
+    let { membership_type, username, password, name_th, surname_th, name_en, surname_en, personal_email, phone } = user
+    if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && username !== "" && password !== "") {
+      setShowAdd(true)
+    } else if (
+=======
+  const handleAdd = (e) => {
+    // if form has been completed -> request add //
+    let { membership_type, username, password, name_th, surname_th, name_en, surname_en, personal_email, phone } = user
+    if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && membership_type !== "" && username !== "" && password !== "") {
+      setShowAdd(true)
+    } else if (
+>>>>>>> fix: add user internal error
       username !== "" &&
       password !== "" &&
       name_th !== "" &&
