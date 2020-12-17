@@ -23,7 +23,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   // console.log(props)
   // page state //
   const [isEdit, setEdit] = useState<boolean>(false)
-  const [jwt, setJwt] = useState<string>("")
+  const [jwt, setJwt] = useState<string>(
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODIyOTExNX0.ejaYqHHmkB2qC5Ds59nYhtV1ryWeLlxEB-MNsuIpquY"
+  )
   const [show_modal_info, set_show_modal_info] = useState<ModalUserInfo>({
     show_delete: false,
     show_com_delete: false,
