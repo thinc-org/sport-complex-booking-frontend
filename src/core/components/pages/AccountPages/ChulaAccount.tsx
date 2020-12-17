@@ -3,7 +3,6 @@ import { useState } from "react"
 
 import ChulaAccountEdit from "./AccountPageUI/ChulaAccountEdit"
 import ChulaAccountDisplay from "./AccountPageUI/ChulaAccountDisplay"
-import NavigationBar from "../../ui/navbar/navbar"
 
 export default function ChulaAccount() {
   let [is_editting, set_is_editting] = useState(false)

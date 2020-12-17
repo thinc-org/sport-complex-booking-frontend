@@ -38,10 +38,17 @@
 }
 
 select {
-  margin: 5px 10px;
-  background-color: rgb(231, 231, 231);
+  margin: 5px 0px;
+  width: 100%;
+  max-width: 90vw;
+  background-color: rgb(240, 240, 240);
   color: #000000;
-  padding: 13px 19px 13px 29px;
+  padding: 13px 9px 13px 9px;
   border: None;
   border-radius: 5px;
+}
+.react-datepicker-wrapper,
+.react-datepicker__input-container {
+  display: block;
+  wixth: 100%;
 }

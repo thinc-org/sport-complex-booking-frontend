@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap"
 import { UserContext } from "../../../../contexts/UsersContext"
 
 export default function ChulaAccountDisplay({ toggle_edit_button }) {
-  let [is_thai_language, set_is_thai_language] = useState(false)
+  let [is_thai_language] = useState(false)
 
   const showWarningMessage = (firstLogin: boolean) => {
     if (firstLogin) {

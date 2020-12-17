@@ -2,7 +2,6 @@ import SatitAndCUPersonelAccountDisplay from "./AccountPageUI/SatitAndCUPersonel
 import SatitAndCUPersonelAccountEdit from "./AccountPageUI/SatitAndCUPersonelAccountEdit"
 import React from "react"
 import { useState } from "react"
-import NavigationBar from "../../ui/navbar/navbar"
 
 export default function SatitAndCuPersonel() {
   let [is_editting, set_is_editting] = useState(false)
