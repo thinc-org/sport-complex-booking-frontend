@@ -1,0 +1,7 @@
+.cancel-court .default-wrapper{
+    box-shadow: 'none';
+}
+.cancel-court .field{
+    border-radius: 5px;
+    height: 2rem;
+}
