@@ -2,11 +2,11 @@ import * as React from "react"
 import { useEffect } from "react"
 import { Switch } from "react-router-dom"
 import { Route } from "react-router"
-import { useAuthContext } from '../controllers/authContext'
+import { useAuthContext } from "../controllers/authContext"
 import FrontLoginPage from "../components/pages/front-login"
 import Landing from "../components/pages/LandingComponent"
 
-import StaffRoute from './staff-page.route';
+import StaffRoute from "./staff-page.route"
 import Sidebar from "../components/ui/navbar/navbar"
 import StaffNavbar from "../components/ui/navbar/staff-navbar"
 import AccountPage from "../components/pages/AccountPages/AccountPage"
@@ -18,9 +18,11 @@ import ChangePassword from "../components/pages/AccountPages/AccountPageUI/Chang
 import WaitingRoomBan from "../components/pages/Reservation/WaitingRoomBan"
 import Hooray from "../components/pages/Reservation/Hooray"
 
-
 export default function MainRoute() {
   const { isUser, setToken } = useAuthContext()
+  useEffect(() => {
+    if (getCookie("token")) setToken(getCookie("token"))
+  }, [isUser])
   return (
     <>
       <Sidebar></Sidebar>
@@ -30,13 +32,21 @@ export default function MainRoute() {
 
         <Route path="/login" component={FrontLoginPage} />
 
-        <Route exact path="/register" render={() => {
-          return <div>Under maintenance</div>
-        }} />
+        <Route
+          exact
+          path="/register"
+          render={() => {
+            return <div>Under maintenance</div>
+          }}
+        />
 
-        <Route exact path="/profile" render={() => {
-          return <div>Under maintenance</div>
-        }} />
+        <Route
+          exact
+          path="/profile"
+          render={() => {
+            return <div>Under maintenance</div>
+          }}
+        />
         <Route exact path="/reservenow" component={ReserveNow} />
 
         <Route exact path="/joinwaitingroom" component={JoinWaitingRoom} />
@@ -45,14 +55,13 @@ export default function MainRoute() {
 
         <Route exact path="/account" component={AccountPage} />
 
-        <Route path='/staff' component={StaffRoute} />
+        <Route path="/staff" component={StaffRoute} />
 
-        <Route exact path='/changePassword' component={ChangePassword} />
+        <Route exact path="/changePassword" component={ChangePassword} />
 
-        <Route exact path='/banned' component={WaitingRoomBan} />
+        <Route exact path="/banned" component={WaitingRoomBan} />
 
-        <Route exact path='/hooray' component={Hooray} />
-
+        <Route exact path="/hooray" component={Hooray} />
       </Switch>
     </>
   )
