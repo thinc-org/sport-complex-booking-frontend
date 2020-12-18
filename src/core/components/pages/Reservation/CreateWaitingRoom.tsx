@@ -13,8 +13,7 @@ export default function CreateWaitingRoom() {
   const [today] = useState<Date>(new Date());
   let [is_thai_language] = useState(false)
   let [details, setDetails] = useState({sports: "", court: "", time: ""});
-
-  let [quote, setquota] = useState()
+  let [quota, setquota] = useState(120)
   let [courts, setCourts] = useState(['1', '2', '3'])
   const courtOptions = courts.map((item, i) => (<option key={i} value={item}>{"Court" + item}</option>));
   let [time, setTime] = useState(['9:00-9:30', '9:30-10:00', '10:00-10:30'])
@@ -25,8 +24,6 @@ export default function CreateWaitingRoom() {
   let [showTime, setShowTime] = useState(false)
 
   // Functions
-  const handleCalendarClose = () => console.log("Calendar closed");
-  const handleCalendarOpen = () => console.log("Calendar opened");
   const [show, setShow] = useState(false);
   const [showDateWarning, setShowDateWarning] = useState(true);
   const handleClose = () => setShow(false);
@@ -62,7 +59,7 @@ export default function CreateWaitingRoom() {
           <div className="mx">
             <div className="default-mobile-wrapper mt-3">
               <h6>Reservation Quota Remaining</h6>
-              <h4>123 mins remaining</h4>
+              <h4>{quota} mins remaining</h4>
             </div>
             <hr/>
           </div>
@@ -83,8 +80,6 @@ export default function CreateWaitingRoom() {
                     setShowDateWarning(false);
                   }        
                 }}
-                onCalendarClose={handleCalendarClose}
-                onCalendarOpen={handleCalendarOpen}
               />
             </div>
 

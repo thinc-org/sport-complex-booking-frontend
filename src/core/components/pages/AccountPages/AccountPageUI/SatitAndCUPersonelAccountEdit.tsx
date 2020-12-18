@@ -10,9 +10,8 @@ import { UserContext } from "../../../../contexts/UsersContext"
 export default function SatitAndCUPersonelAccountEdit({  toggle_edit_button}) {
   let [is_thai_language] = useState(false)
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
   const [showErr, setShowErr] = useState(false);
+
   
   // React Hook Forms
   const { register, handleSubmit, errors  } = useForm();
@@ -23,13 +22,13 @@ export default function SatitAndCUPersonelAccountEdit({  toggle_edit_button}) {
         const { SatitCuPersonel } = context
         const user = SatitCuPersonel
 
-        const onSubmit = (data: any) => {
+        const onSubmit = (data: Object) => {
           postDataToBackend(data)
         };
 
-        const handleCancel = (e: any) => {
+        const handleCancel = (e) => {
           e.preventDefault()
-          window.location.reload(false)
+          window.location.reload()
         }
 
         const showWarningMessage = (firstLogin: Boolean) => {
@@ -45,7 +44,7 @@ export default function SatitAndCUPersonelAccountEdit({  toggle_edit_button}) {
           }
         }
 
-        const postDataToBackend = async (data: any) => {
+        const postDataToBackend = async (data: Object) => {
           console.log("send data to backend")
           data = {
             ...data,
@@ -59,7 +58,7 @@ export default function SatitAndCUPersonelAccountEdit({  toggle_edit_button}) {
             })
             .then(({ data }) => {
               console.log("SENT", data)
-              window.location.reload(false)
+              window.location.reload()
             })
             .catch((err) => {
               console.log(err);
@@ -114,19 +113,19 @@ export default function SatitAndCUPersonelAccountEdit({  toggle_edit_button}) {
                 <br />
                 <div className="row">
                   <div className="button-group col-md-12">
-                    <Button variant="gray" className="btn-secondary" onClick={handleCancel}>
+                    <Button variant="gray" className="btn-secondary" onClick={() => handleCancel}>
                       Cancel
                     </Button>
                   </div>
                   <div className="button-group col-md-12">
-                    <Button variant="pink" className="btn-secondary" onClick={handleShow}>
+                    <Button variant="pink" className="btn-secondary" onClick={()=> setShow(true)}>
                       {is_thai_language ? "บันทึกและส่ง" : "Save and Submit"}
                     </Button>
                   </div>
                 </div>
 
                 {/* MODAL CONFIRM DIALOGUE */}
-                <Modal show={show} onHide={handleClose}>
+                <Modal show={show} onHide={()=>setShow(false)}>
                   <div className="modal-content">
                       <div className="modal-header">
                         <h5 className="modal-title" id="confirmModalLabel">

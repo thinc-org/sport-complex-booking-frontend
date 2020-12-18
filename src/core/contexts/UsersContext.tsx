@@ -8,6 +8,7 @@ class UserContextProvider extends Component {
   verificationSchemaType = {type: String, enum: ['NotSubmitted','Submitted','Verified','Rejected']};
 
   state = {
+    jwt : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmRjMmNlZDZjZjYwNTM0NTQ5NjNjOTUiLCJpc1N0YWZmIjpmYWxzZSwiaWF0IjoxNjA4MjY0OTQxLCJleHAiOjE2MDg4Njk3NDF9.e1VaBwo8A4lNuUiDpWA5RE-jSPrUBRMO9Hy_VjWF1IQ",
     account_type: this.accountSchemaType,
     CuStudent: {
       account_type: this.accountSchemaType,

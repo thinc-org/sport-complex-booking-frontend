@@ -10,7 +10,7 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
 
   // React Hook Forms
   const { register, handleSubmit, errors  } = useForm();
-  let [is_editting, set_is_editting] = useState(false)
+
   let [is_thai_language, set_is_thai_language] = useState(false)
   let [verification_status] = useState("")
   let [user_photo, set_user_photo] = useState()
@@ -20,8 +20,6 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
   let [relationship_verification_document, set_relationship_verification_document] = useState()
 
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
   const [showErr, setShowErr] = useState(false);
 
   /// JSX Begins here
@@ -31,7 +29,7 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
         const { Other } = context
         const user = Other
 
-        const postDataToBackend = async (data: any) => {
+        const postDataToBackend = async (data: Object) => {
           console.log("send data to backend")
 
           console.log(data)
@@ -60,28 +58,15 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
             })
         }
 
-        const onSubmit = (data: any) => {
+        const onSubmit = (data: Object) => {
           console.log(JSON.parse(JSON.stringify(data)))
           let newData = formatDate(data)
           postDataToBackend(newData)
-          window.location.reload(false)
-        }
-
-        const handleCancel = (e: any) => {
-          e.preventDefault()
-          toggleEditButton()
-        }
-
-        const toggleEditButton = () => {
-          if (is_editting) {
-            set_is_editting(false)
-
-          } else {
-            set_is_editting(true)
-          }
+          //window.location.reload()
         }
 
         const formatDate = (data: any) => {
+          console.log("type of data is " + typeof(data))
           let date: Date = new Date(`${data.birthday_year}-${data.birthday_month}-${data.birthday_day}`)
           data = {
             ...data,
@@ -95,6 +80,12 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
         }
 
         // Handlers
+
+        const handleCancel = (e: any) => {
+          e.preventDefault()
+          //window.location.reload()
+        }
+
         const handleFileUpload = async (formData: any) => {
           await axios
             .post("http://localhost:3000/fs/upload", formData, {
@@ -180,7 +171,7 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
           set_relationship_verification_document(file[0])
         }
 
-        const showWarningMessage = (verification_status: any) => {
+        const showWarningMessage = (verification_status: String) => {
           switch (verification_status) {
             case "NotSubmitted": {
               return (
@@ -558,17 +549,17 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
               <br />
               <div className="button-group col-md-12">
                 {verification_status === "NotSubmitted" ? null : (
-                  <Button variant="gray" className="btn-secondary" onClick={handleCancel}>
+                  <Button variant="gray" className="btn-secondary" onClick={()=>  handleCancel}>
                     Cancel
                   </Button>
                 )}
-                <Button variant="pink" className="btn-secondary" onClick={handleShow}>
+                <Button variant="pink" className="btn-secondary" onClick={()=> setShow(true)}>
                   {is_thai_language ? "บันทึกและส่ง" : "Save and Submit"}
                 </Button>
               </div>
 
               {/* MODAL CONFIRM DIALOGUE */}
-              <Modal show={show} onHide={handleClose}>
+              <Modal show={show} onHide={()=> setShow(false)}>
                   <div className="modal-content">
                       <div className="modal-header">
                         <h5 className="modal-title" id="confirmModalLabel">
