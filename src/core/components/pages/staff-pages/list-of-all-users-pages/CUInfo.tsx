@@ -11,7 +11,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const [showCom, setShowCom] = useState<boolean>(false)
   const [showErr, setShowErr] = useState<boolean>(false)
   const [showAlert, setShowAlert] = useState<boolean>(false)
-  const [jwt, setJwt] = useState<string>("")
+  const [jwt, setJwt] = useState<string>(
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
+  )
 
   // user states
   const [_id] = useState<string>(props.match.params._id)
@@ -31,17 +33,17 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   })
   const [temp_user, set_temp_user] = useState<CuInfo>(user)
 
-  useEffect(() => {
-    fetch({
-      method: "GET",
-      url: "/account_info/testing/adminToken",
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
-    }).then(({ data }) => {
-      setJwt(data.token.token)
-    })
-  }, [])
+  // useEffect(() => {
+  //   fetch({
+  //     method: "GET",
+  //     url: "/account_info/testing/adminToken",
+  //     headers: {
+  //       Authorization: "bearer " + jwt,
+  //     },
+  //   }).then(({ data }) => {
+  //     setJwt(data.token.token)
+  //   })
+  // }, [])
   useEffect(() => {
     getInfo()
   }, [jwt])

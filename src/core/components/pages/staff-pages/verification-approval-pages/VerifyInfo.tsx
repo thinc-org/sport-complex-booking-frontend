@@ -9,9 +9,11 @@ import Info, { ContactPerson } from "../interfaces/InfoInterface"
 import { RejectInfo, ModalVerify } from "../interfaces/InfoInterface"
 
 /// start of main function ///
-const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (props) => {
+const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
   // page state //
-  const [jwt, setJwt] = useState<string>("")
+  const [jwt, setJwt] = useState<string>(
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
+  )
   const [show_reject, set_show_reject] = useState<boolean>(false)
   const [account_expired_date, set_account_expired_date] = useState<Date>(new Date())
   const [show_modal_info, set_show_modal_info] = useState<ModalVerify>({
@@ -34,7 +36,8 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
   })
 
   // Non CU state //
-  const [username, setUsername] = useState<string>(props.match.params.username)
+  const [_id] = useState<string>(props.match.params._id)
+  const [username, set_username] = useState<string>("")
   const [account_type, set_account_type] = useState<string>("asdada")
   const [membership_type, set_membership_type] = useState<string>("dasdada")
   const [contact, setContact] = useState<ContactPerson>({
@@ -69,19 +72,19 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
     relationship_verification_document: "{ Object }",
   })
 
-  useEffect(() => {
-    // request token
-    fetch({
-      method: "GET",
-      url: "/account_info/testing/adminToken",
-    })
-      .then(({ data }) => {
-        setJwt(data.token.token)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [])
+  // useEffect(() => {
+  //   // request token
+  //   fetch({
+  //     method: "GET",
+  //     url: "/account_info/testing/adminToken",
+  //   })
+  //     .then(({ data }) => {
+  //       setJwt(data.token.token)
+  //     })
+  //     .catch((err) => {
+  //       console.log(err)
+  //     })
+  // }, [])
 
   useEffect(() => {
     console.log(reject_info)
@@ -98,7 +101,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
   const fetchUserData = () => {
     fetch({
       method: "GET",
-      url: "/approval/" + username,
+      url: "/approval/" + _id,
       headers: {
         Authorization: "bearer " + jwt,
       },
@@ -114,6 +117,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
             contact_person_phone: data.contact_person.contact_person_phone,
           })
         }
+        set_username(data.username)
         set_account_type(data.account_type)
         set_membership_type(data.membership_type)
         set_account_expired_date(new Date(data.account_expiration_date))
@@ -166,6 +170,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
     for (const name in reject_info) {
       if (reject_info[name]) rejectList.push(name)
     }
+    console.log(rejectList)
     // send request //
     fetch({
       method: "PATCH",
@@ -174,7 +179,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
         Authorization: "bearer " + jwt,
       },
       data: {
-        username: username,
+        id: _id,
         reject_info: rejectList,
       },
     })
@@ -198,7 +203,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
         Authorization: "bearer " + jwt,
       },
       data: {
-        username: username,
+        id: _id,
         newExpiredDate: account_expired_date,
       },
     })
