@@ -9,8 +9,6 @@ import { UserContext } from "../../../../contexts/UsersContext"
 export default function ChulaAccountEdit({  toggle_edit_button}) {
   let [is_thai_language] = useState(false)
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
   const [showErr, setShowErr] = useState(false);
 
 
@@ -23,11 +21,11 @@ export default function ChulaAccountEdit({  toggle_edit_button}) {
         const { CuStudent } = context
         const user = CuStudent
 
-        const onSubmit = (data: any) => {
+        const onSubmit = (data: Object) => {
           postDataToBackend(data)
         };
 
-        const handleCancel = (e: any) => {
+        const handleCancel = (e) => {
           e.preventDefault()
           window.location.reload(false)
         }
@@ -45,7 +43,7 @@ export default function ChulaAccountEdit({  toggle_edit_button}) {
           }
         }
 
-        const postDataToBackend = async (data: any) => {
+        const postDataToBackend = async (data: Object) => {
           console.log("send data to backend")
           data = {
             ...data,
@@ -60,8 +58,9 @@ export default function ChulaAccountEdit({  toggle_edit_button}) {
             })
             .then(({ data }) => {
               console.log("SENT", data)
-              window.location.reload(false)
+              window.location.reload()
             })
+
             .catch((err) => {
               console.log(err);
               setShowErr(true);
@@ -84,6 +83,7 @@ export default function ChulaAccountEdit({  toggle_edit_button}) {
               </div>
               <hr className="mx-1" />
               <form onSubmit={handleSubmit(onSubmit)}>
+
                   <label className="form-label mt-2">Mobile</label>
                   <input name="phone" type="text" ref={register({
                     required: "Enter your phone number",
@@ -115,14 +115,14 @@ export default function ChulaAccountEdit({  toggle_edit_button}) {
                     </Button>
                   </div>
                   <div className="button-group col-md-12">
-                    <Button variant="pink" className="btn-secondary" onClick={handleShow}>
+                    <Button variant="pink" className="btn-secondary" onClick={()=> setShow(true)}>
                       {is_thai_language ? "บันทึกและส่ง" : "Save and Submit"}
                     </Button>
                   </div>
                 </div>
 
                 {/* MODAL CONFIRM DIALOGUE */}
-                <Modal show={show} onHide={handleClose}>
+                <Modal show={show} onHide={() => setShow(false)}>
                   <div className="modal-content">
                       <div className="modal-header">
                         <h5 className="modal-title" id="confirmModalLabel">
@@ -136,6 +136,7 @@ export default function ChulaAccountEdit({  toggle_edit_button}) {
                         {is_thai_language ? "คุณต้องการส่งใบสมัครหรือไม่" : "Do you want to submit the registration form?"}
                       </div>
                       <div className="modal-footer">
+
                         <Button onClick={() => setShow(false)} type="button" variant="outline-secondary" className="btn-normal" data-dismiss="modal">
                           {is_thai_language ? "ยกเลิก" : "Cancel"}
                         </Button>
@@ -170,7 +171,6 @@ export default function ChulaAccountEdit({  toggle_edit_button}) {
                     </Button>
                   </Modal.Footer>
                 </Modal>
-
               </form>
             </div>
             <br />

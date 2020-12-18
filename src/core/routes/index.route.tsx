@@ -88,38 +88,13 @@ export default function MainRoute() {
           }}
         />
 
-        <Route
-          exact
-          path="/reservenow"
-          render={() => {
-            return <ReserveNow />
-          }}
-        />
+        <Route exact path="/reservenow" component={ReserveNow} />
 
-        <Route
-          exact
-          path="/joinwaitingroom"
-          render={() => {
-            return <JoinWaitingRoom />
-          }}
-        />
+        <Route exact path="/joinwaitingroom" component={JoinWaitingRoom} />
 
-        <Route
-          exact
-          path="/createwaitingroom"
-          render={() => {
-            return <CreateWaitingRoom />
-          }}
-        />
+        <Route exact path="/createwaitingroom" component={CreateWaitingRoom} />
 
-        <Route
-          exact
-          path="/account"
-          render={() => {
-            return <AccountPage />
-          }}
-        />
-
+        <Route exact path="/account" component={AccountPage} />
 
         <Route
           exact

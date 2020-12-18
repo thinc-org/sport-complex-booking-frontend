@@ -179,6 +179,7 @@ export default function OtherAaccountDisplay({ jwt, toggle_edit_button }) {
               <hr />
               <label className="form-label my-2">Optional: Relationship Verification document (.pdf only)</label>
               <div className="form-file">
+
                 <p>{user.verification_status === "Submitted" || verification_status === "Approved" ? "File Submitted." : ""}</p>
               </div>
             </div>
