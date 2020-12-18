@@ -159,6 +159,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     for (const name in rejectInfo) {
       if (rejectInfo[name]) rejectList.push(name)
     }
+    console.log(rejectList)
     // send request //
     client({
       method: "PATCH",
