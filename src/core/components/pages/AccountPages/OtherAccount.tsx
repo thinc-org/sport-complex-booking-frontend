@@ -3,7 +3,6 @@ import { useState} from "react"
 import OtherAaccountDisplay from "./AccountPageUI/OtherDisplay"
 import OtherAccountEdit from "./AccountPageUI/OtherEdit"
 import { UserContext } from "../../../contexts/UsersContext"
-import NavigationBar from "../../ui/navbar/navbar"
 
 export default function OtherAccount({ jwt }) {
   /// Page states

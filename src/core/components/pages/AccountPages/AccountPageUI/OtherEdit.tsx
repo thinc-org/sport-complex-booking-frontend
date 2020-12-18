@@ -1,6 +1,6 @@
 import React from "react"
 import { useState } from "react"
-import { Button } from "react-bootstrap"
+import {  Button, Modal } from "react-bootstrap"
 import { useForm } from "react-hook-form";
 
 import axios from "axios"
@@ -10,19 +10,18 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
 
   // React Hook Forms
   const { register, handleSubmit, errors  } = useForm();
-  // Page states
-  let [is_editting, set_is_editting] = useState(false)
-  /// Non-cu student states
-  let [is_thai_language, set_is_thai_language] = useState(false)
 
-  let [verification_status, set_verification_status] = useState("")
+  let [is_thai_language, set_is_thai_language] = useState(false)
+  let [verification_status] = useState("")
   let [user_photo, set_user_photo] = useState()
   let [national_id_scan, set_national_id_scan] = useState()
   let [medical_certificate, set_medical_certificate] = useState()
   let [house_registration_number, set_house_registration_number] = useState()
   let [relationship_verification_document, set_relationship_verification_document] = useState()
 
- 
+  const [show, setShow] = useState(false);
+  const [showErr, setShowErr] = useState(false);
+
   /// JSX Begins here
   return (
     <UserContext.Consumer>
@@ -30,7 +29,7 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
         const { Other } = context
         const user = Other
 
-        const postDataToBackend = async (data: any) => {
+        const postDataToBackend = async (data: Object) => {
           console.log("send data to backend")
 
           console.log(data)
@@ -46,7 +45,6 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
 
               if (data.verification_status === "Submitted") {
                 handleAllFilesUpload(user_photo, national_id_scan, medical_certificate, house_registration_number, relationship_verification_document)
-                //window.location.reload(false)
               }
             })
             .catch(function (error) {
@@ -55,31 +53,20 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
                 console.log(error.response.data)
                 console.log(error.response.status)
                 console.log(error.response.headers)
+                setShowErr(true);
               }
             })
         }
 
-        const onSubmit = (data: any) => {
+        const onSubmit = (data: Object) => {
           console.log(JSON.parse(JSON.stringify(data)))
           let newData = formatDate(data)
           postDataToBackend(newData)
-        }
-
-        const handleCancel = (e: any) => {
-          e.preventDefault()
-          toggleEditButton()
-        }
-
-        const toggleEditButton = () => {
-          if (is_editting) {
-            set_is_editting(false)
-
-          } else {
-            set_is_editting(true)
-          }
+          //window.location.reload()
         }
 
         const formatDate = (data: any) => {
+          console.log("type of data is " + typeof(data))
           let date: Date = new Date(`${data.birthday_year}-${data.birthday_month}-${data.birthday_day}`)
           data = {
             ...data,
@@ -93,6 +80,12 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
         }
 
         // Handlers
+
+        const handleCancel = (e: any) => {
+          e.preventDefault()
+          //window.location.reload()
+        }
+
         const handleFileUpload = async (formData: any) => {
           await axios
             .post("http://localhost:3000/fs/upload", formData, {
@@ -178,7 +171,7 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
           set_relationship_verification_document(file[0])
         }
 
-        const showWarningMessage = (verification_status: any) => {
+        const showWarningMessage = (verification_status: String) => {
           switch (verification_status) {
             case "NotSubmitted": {
               return (
@@ -225,7 +218,7 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
         return (
           /// THIS IS THE START OF THE EDITING VIEW
           <div className="mx-auto col-md-6">
-            {showWarningMessage(verification_status)}
+            {showWarningMessage(user.verification_status)}
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="default-mobile-wrapper my-3">
                 <h4 className="align-right mb-2">{is_thai_language ? "ถาษา" : "Language"}</h4>
@@ -261,9 +254,9 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
                       <label className="form-label mt-2">{is_thai_language ? "คำนำหน้าขื่อ * " : "Prefix *"}</label>
 
                       <select name="prefix" ref={register}>
-                        <option value="Mr.">{is_thai_language ? "นาย" : "Mr."}</option>
-                        <option value="Ms.">{is_thai_language ? "นางสาว" : "Ms."}</option>
-                        <option value="Mrs.">{is_thai_language ? "นาง" : "Mrs."}</option>
+                        <option value={is_thai_language ? "นาย" : "Mr."}>{is_thai_language ? "นาย" : "Mr."}</option>
+                        <option value={is_thai_language ? "นางสาว" : "Ms."}>{is_thai_language ? "นางสาว" : "Ms."}</option>
+                        <option value={is_thai_language ? "นาง" : "Mrs."}>{is_thai_language ? "นาง" : "Mrs."}</option>
                       </select>
 
                     </div>
@@ -271,15 +264,16 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
                       <label className="form-label mt-2">{is_thai_language ? "เพศ *" : "Gender *"}</label>
 
                       <select name="gender" ref={register}>
-                        <option value="Male">{is_thai_language ? "ชาย" : "Male"}</option>
-                        <option value="Female">{is_thai_language ? "หญิง" : "Female"}</option>
-                        <option value="Other">{is_thai_language ? "อื่นๆ" : "Other"}</option>
+                        <option value={is_thai_language ? "ชาย" : "Male"}>{is_thai_language ? "ชาย" : "Male"}</option>
+                        <option value={is_thai_language ? "หญิง" : "Female"}>{is_thai_language ? "หญิง" : "Female"}</option>
+                        <option value={is_thai_language ? "อื่นๆ" : "Other"}>{is_thai_language ? "อื่นๆ" : "Other"}</option>
                       </select>
 
                     </div>
                   </div>
                   <hr />
                   <label className="form-label mt-2">{is_thai_language ? "ชื่อจริง *" : "ชื่อจริง *"}</label>
+                  <h6 className="font-weight-light">{is_thai_language? "" : "If you do not have a Thai name, please type '-'."}</h6>
                   <input name="name_th" type="text" ref={register({
                       required: "Enter your Thai name",
                       pattern: {
@@ -291,6 +285,7 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
 
                   <hr />
                   <label className="form-label mt-2">{is_thai_language ? "นามสกุล *" : "นามสกุล *"}</label>
+                  <h6 className="font-weight-light">{is_thai_language? "" : "If you do not have a Thai surname, please type '-'."}</h6>
                   <input name="surname_th" type="text" ref={register({
                       required: "Enter your Thai surname",
                       pattern: {
@@ -444,9 +439,9 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
                 <div className="col-md-4">
                   <label className="form-label mt-2">{is_thai_language ? "คำนำหน้าขื่อ *" : "Prefix *"}</label>
                   <select name="contact_person.contact_person_prefix" ref={register}>
-                    <option value="Mr.">{is_thai_language ? "นาย" : "Mr."}</option>
-                    <option value="Ms.">{is_thai_language ? "นางสาว" : "Ms."}</option>
-                    <option value="Mrs.">{is_thai_language ? "นาง" : "Mrs."}</option>
+                    <option value={is_thai_language ? "นาย" : "Mr."}>{is_thai_language ? "นาย" : "Mr."}</option>
+                    <option value={is_thai_language ? "นางสาว" : "Ms."}>{is_thai_language ? "นางสาว" : "Ms."}</option>
+                    <option value={is_thai_language ? "นาง" : "Mrs."}>{is_thai_language ? "นาง" : "Mrs."}</option>
                   </select>
 
                 </div>
@@ -554,43 +549,63 @@ export default function OtherAccountEdit({ jwt, toggle_edit_button }) {
               <br />
               <div className="button-group col-md-12">
                 {verification_status === "NotSubmitted" ? null : (
-                  <Button variant="gray" className="btn-secondary" onClick={handleCancel}>
+                  <Button variant="gray" className="btn-secondary" onClick={()=>  handleCancel}>
                     Cancel
                   </Button>
                 )}
-                <Button variant="pink" className="btn-secondary" data-toggle="modal" data-target="#exampleModal">
+                <Button variant="pink" className="btn-secondary" onClick={()=> setShow(true)}>
                   {is_thai_language ? "บันทึกและส่ง" : "Save and Submit"}
                 </Button>
               </div>
 
               {/* MODAL CONFIRM DIALOGUE */}
-              <div className="modal fade" id="exampleModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog" role="document">
+              <Modal show={show} onHide={()=> setShow(false)}>
                   <div className="modal-content">
-                    <div className="modal-header">
-                      <h5 className="modal-title" id="exampleModalLabel">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="confirmModalLabel">
+                          {is_thai_language ? "ยืนยันการส่งใบสมัคร" : "Confirm submit"}
+                        </h5>
+                        <Button type="button"  onClick={() => setShow(false)} className="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </Button>
+                      </div>
+                      <div className="modal-body">
                         {is_thai_language ? "คุณต้องการส่งใบสมัครหรือไม่" : "Do you want to submit the registration form?"}
-                      </h5>
-                      <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
+                      </div>
+                      <div className="modal-footer">
+                        <Button onClick={() => setShow(false)} type="button" variant="outline-secondary" className="btn-normal" data-dismiss="modal">
+                          {is_thai_language ? "ยกเลิก" : "Cancel"}
+                        </Button>
+                        <Button onClick={handleSubmit(onSubmit)} variant="pink" className="btn-normal">
+                          {is_thai_language ? "บันทึกและส่ง" : "Save and Submit"}
+                        </Button>
+                      </div>
                     </div>
-                    <div className="modal-body">
-                      {is_thai_language
-                        ? "หากต้องการแก้ไขข้อมูลคุณต้องติดต่อ Sports Center โดยตรง"
-                        : "Once submitted, if you want to edit, you need to contact the Sports Center directly"}
-                    </div>
-                    <div className="modal-footer">
-                      <button type="button" className="btn btn-secondary" data-dismiss="modal">
-                        {is_thai_language ? "ยกเลิก" : "Cancel"}
-                      </button>
-                      <Button type="submit" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                        {is_thai_language ? "บันทึกและส่ง" : "Save and Submit"}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                </Modal>
+                {/* MODAL ERROR */}
+                <Modal
+                  show={showErr}
+                  onHide={() => {
+                    setShowErr(false)
+                  }}
+                  backdrop="static"
+                  keyboard={false}
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title>{is_thai_language ? "เกิดข้อผิดพลาด" : "An error has occured"}</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body style={{ fontWeight: "lighter" }}> {is_thai_language ? "ไม่แก้ไขข้อมูลผู้ใช้ได้ในขณะนี้" : "Cannot edit account information at the moment"} </Modal.Body>
+                  <Modal.Footer>
+                    <Button
+                      variant="pink"
+                      className="btn-normal"
+                      onClick={() => {
+                        setShowErr(false)
+                      }}
+                    >ตกลง
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
               {/* END OF FORM */}
             </form>
           </div>

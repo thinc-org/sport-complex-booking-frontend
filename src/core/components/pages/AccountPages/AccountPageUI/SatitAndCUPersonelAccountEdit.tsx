@@ -1,6 +1,6 @@
 import React from "react"
 import { useState} from "react"
-import { Button } from "react-bootstrap"
+import {  Button, Modal } from "react-bootstrap"
 import { useForm } from "react-hook-form";
 import axios from "axios"
 import { UserContext } from "../../../../contexts/UsersContext"
@@ -9,6 +9,9 @@ import { UserContext } from "../../../../contexts/UsersContext"
 
 export default function SatitAndCUPersonelAccountEdit({  toggle_edit_button}) {
   let [is_thai_language] = useState(false)
+  const [show, setShow] = useState(false);
+  const [showErr, setShowErr] = useState(false);
+
   
   // React Hook Forms
   const { register, handleSubmit, errors  } = useForm();
@@ -19,13 +22,13 @@ export default function SatitAndCUPersonelAccountEdit({  toggle_edit_button}) {
         const { SatitCuPersonel } = context
         const user = SatitCuPersonel
 
-        const onSubmit = (data: any) => {
+        const onSubmit = (data: Object) => {
           postDataToBackend(data)
         };
 
-        const handleCancel = (e: any) => {
+        const handleCancel = (e) => {
           e.preventDefault()
-          window.location.reload(false)
+          window.location.reload()
         }
 
         const showWarningMessage = (firstLogin: Boolean) => {
@@ -41,7 +44,7 @@ export default function SatitAndCUPersonelAccountEdit({  toggle_edit_button}) {
           }
         }
 
-        const postDataToBackend = async (data: any) => {
+        const postDataToBackend = async (data: Object) => {
           console.log("send data to backend")
           data = {
             ...data,
@@ -55,7 +58,11 @@ export default function SatitAndCUPersonelAccountEdit({  toggle_edit_button}) {
             })
             .then(({ data }) => {
               console.log("SENT", data)
-              window.location.reload(false)
+              window.location.reload()
+            })
+            .catch((err) => {
+              console.log(err);
+              setShowErr(true);
             })
         }
 
@@ -106,21 +113,20 @@ export default function SatitAndCUPersonelAccountEdit({  toggle_edit_button}) {
                 <br />
                 <div className="row">
                   <div className="button-group col-md-12">
-                    <Button variant="gray" className="btn-secondary" onClick={handleCancel}>
+                    <Button variant="gray" className="btn-secondary" onClick={() => handleCancel}>
                       Cancel
                     </Button>
                   </div>
                   <div className="button-group col-md-12">
-                    <Button variant="pink" className="btn-secondary" data-toggle="modal" data-target="#confirmModal">
+                    <Button variant="pink" className="btn-secondary" onClick={()=> setShow(true)}>
                       {is_thai_language ? "บันทึกและส่ง" : "Save and Submit"}
                     </Button>
                   </div>
                 </div>
 
                 {/* MODAL CONFIRM DIALOGUE */}
-                <div className="modal fade" id="confirmModal" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
-                  <div className="modal-dialog" role="document">
-                    <div className="modal-content">
+                <Modal show={show} onHide={()=>setShow(false)}>
+                  <div className="modal-content">
                       <div className="modal-header">
                         <h5 className="modal-title" id="confirmModalLabel">
                           {is_thai_language ? "ยืนยันการส่งใบสมัคร" : "Confirm submit"}
@@ -133,16 +139,40 @@ export default function SatitAndCUPersonelAccountEdit({  toggle_edit_button}) {
                         {is_thai_language ? "คุณต้องการส่งใบสมัครหรือไม่" : "Do you want to submit the registration form?"}
                       </div>
                       <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-dismiss="modal">
+                        <Button onClick={() => setShow(false)} type="button" variant="outline-secondary" className="btn-normal" data-dismiss="modal">
                           {is_thai_language ? "ยกเลิก" : "Cancel"}
-                        </button>
-                        <Button type="submit" className="btn btn-primary" data-toggle="modal" data-target="#confirmModal">
+                        </Button>
+                        <Button onClick={handleSubmit(onSubmit)} variant="pink" className="btn-normal">
                           {is_thai_language ? "บันทึกและส่ง" : "Save and Submit"}
                         </Button>
                       </div>
                     </div>
-                  </div>
-                </div>
+                </Modal>
+                {/* MODAL ERROR */}
+                <Modal
+                  show={showErr}
+                  onHide={() => {
+                    setShowErr(false)
+                  }}
+                  backdrop="static"
+                  keyboard={false}
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title>{is_thai_language ? "เกิดข้อผิดพลาด" : "An error has occured"}</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body style={{ fontWeight: "lighter" }}> {is_thai_language ? "ไม่แก้ไขข้อมูลผู้ใช้ได้ในขณะนี้" : "Cannot edit account information at the moment"} </Modal.Body>
+                  <Modal.Footer>
+                    <Button
+                      variant="pink"
+                      className="btn-normal"
+                      onClick={() => {
+                        setShowErr(false)
+                      }}
+                    >
+                      ตกลง
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
               </form>
             </div>
             <br />

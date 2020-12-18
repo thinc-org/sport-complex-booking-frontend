@@ -9,8 +9,6 @@ import StaffSidebar from "../components/ui/navbar/staff-sidebar"
 import Sidebar from "../components/ui/navbar/navbar"
 import StaffProfile from "../components/pages/staff-pages/staff-profile"
 import StaffNavbar from "../components/ui/navbar/staff-navbar"
-import ReserveNow from "../components/pages/ReserveNow"
-import JoinWaitingRoom from "../components/pages/JoinWaitingRoom"
 import AccountPage from "../components/pages/AccountPages/AccountPage"
 
 import ListOfAllUsers from "../components/pages/staff-pages/list-of-all-users-pages/ListOfAllUsers"
@@ -20,6 +18,9 @@ import UserInfo from "../components/pages/staff-pages/list-of-all-users-pages/Us
 import VeritificationApproval from "../components/pages/staff-pages/verification-approval-pages/VerificationApproval"
 import VerifyInfo from "../components/pages/staff-pages/verification-approval-pages/VerifyInfo"
 import FrontLoginMain from "../components/ui/login/login-main"
+import ReserveNow from "../components/pages/Reservation/ReserveNow"
+import JoinWaitingRoom from "../components/pages/Reservation/JoinWaitingRoom"
+import CreateWaitingRoom from "../components/pages/Reservation/CreateWaitingRoom"
 
 
 export default function MainRoute() {
@@ -87,11 +88,13 @@ export default function MainRoute() {
           }}
         />
 
-        <Route path='/reservenow' component={ReserveNow} />
+        <Route exact path="/reservenow" component={ReserveNow} />
 
-        <Route path='/joinwaitingroom' component={JoinWaitingRoom} />
+        <Route exact path="/joinwaitingroom" component={JoinWaitingRoom} />
 
-        <Route path='/account' component={AccountPage} />
+        <Route exact path="/createwaitingroom" component={CreateWaitingRoom} />
+
+        <Route exact path="/account" component={AccountPage} />
 
         <Route
           exact
