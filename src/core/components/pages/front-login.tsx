@@ -12,6 +12,11 @@ const FrontLoginPage = (props: any) => {
   return (
     <>
       <Switch>
+        <Route path={`${path}/sso`} component={() => {
+          window.location.href = 'https://account.it.chula.ac.th/html/login.html?service=http://localhost:3001/login';
+          return null
+        }}
+        />
         <Route path={`${path}/personal`} component={PersonalInfo} />
         <Route exact path={path} component={FrontLoginMain} />
       </Switch>
