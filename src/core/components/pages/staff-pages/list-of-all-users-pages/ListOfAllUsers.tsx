@@ -62,7 +62,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
   const [searchName, setSearchName] = useState<string>("")
   const [status, set_status] = useState<number>(allStatus.All)
   const [jwt, set_jwt] = useState<string>(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODIyOTExNX0.ejaYqHHmkB2qC5Ds59nYhtV1ryWeLlxEB-MNsuIpquY"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
   )
   const [show_no_user, set_show_no_user] = useState<boolean>(false)
   const [users, setUsers] = useState<Users>([
@@ -81,28 +81,23 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
   ])
 
   // useEffect //
-  useEffect(() => {
-    // request token
-    fetch({
-      method: "GET",
-      url: "/account_info/testing/adminToken",
-    })
-      .then(({ data }) => {
-        set_jwt(data.token.token)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [])
+  // useEffect(() => {
+  //   // request token
+  //   fetch({
+  //     method: "GET",
+  //     url: "/account_info/testing/adminToken",
+  //   })
+  //     .then(({ data }) => {
+  //       set_jwt(data.token.token)
+  //     })
+  //     .catch((err) => {
+  //       console.log(err)
+  //     })
+  // }, [])
 
   useEffect(() => {
     requestUsers()
   }, [jwt, page_no])
-
-  // useEffect(() => {
-  //   console.log("user ::")
-  //   console.log(users)
-  // }, [users, status])
 
   const requestUsers = () => {
     // Send JWT //
@@ -142,7 +137,8 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
     // send jwt and get //
     // if no user -> "user not found"
     e.preventDefault()
-    requestUsers()
+    if (page_no !== 1) set_page_no(1)
+    else requestUsers()
   }
 
   const handleInfo = (e) => {
