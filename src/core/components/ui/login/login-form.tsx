@@ -42,7 +42,7 @@ export const LoginForm = (props: any) => {
         <h3>One moment...</h3>
         <p>Verifying that you're a Chulalongkorn student</p>
       </div>
-    </div>
+    </div >
   )
 }
 export default LoginForm
