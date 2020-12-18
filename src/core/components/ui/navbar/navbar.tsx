@@ -3,6 +3,7 @@ import { useState, useEffect, useContext } from "react"
 import { Navbar, NavDropdown, Container, Nav } from "react-bootstrap"
 import { Link, useRouteMatch, useLocation, withRouter } from "react-router-dom"
 import Logo from "../../../assets/images/logo.png"
+import { getCookie, setCookie } from '../../../contexts/cookieHandler'
 import Toggler from '../../../assets/images/icons/hamburger.svg'
 import { CSSTransition } from 'react-transition-group';
 import Exit from '../../../assets/images/icons/exit.svg'
@@ -56,6 +57,12 @@ const Sidebar = (props: any) => {
         {item.name}
       </Link>
     </li>));
+  useEffect(() => {
+    console.log(getCookie('token'))
+  }, [])
+  const onLogOut = async () => {
+    setCookie('token', null, 0)
+  }
   return (
     <>
       <div className="sidebar-toggler d-flex flex-row justify-content-center">
@@ -79,9 +86,13 @@ const Sidebar = (props: any) => {
               <div>
                 <li>Language</li>
                 <li>
-                  <Link to="/login" className="styled-link" onClick={() => setInProp(false)}>
-                    Sign In
-                    </Link>
+                  {!getCookie('token') ?
+                    <Link to="/login" className="styled-link" onClick={() => setInProp(false)}>
+                      Sign In
+                  </Link> :
+                    <Link to='/' className='styled-link' onClick={onLogOut}>
+                      Sign Out
+                  </Link>}
                 </li>
               </div>
             </ul>

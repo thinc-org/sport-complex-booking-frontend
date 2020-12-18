@@ -1,21 +1,45 @@
 import * as React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Form, Button } from "react-bootstrap"
 import { useHistory, useRouteMatch } from "react-router-dom"
-import axios from "axios"
+import { setCookie } from '../../../contexts/cookieHandler'
 import { useForm } from 'react-hook-form'
+import Axios from "axios"
 export const LoginForm = (props: any) => {
   const { register, handleSubmit, watch, errors } = useForm();
   let history = useHistory();
   let { url, path } = useRouteMatch();
-  let [isCU, setCU] = useState<Boolean>(false)
   let [isLoading, setLoading] = useState<Boolean>(false)
+  useEffect(() => {
+    if (history.location.search) {
+      console.log(history.location)
+      const params = history.location.search
+      const ticket = params.slice(params.indexOf('=') + 1)
+      Axios.post('http://localhost:3000/users/validation', {
+        'appticket': ticket
+      }
+      )
+        .then((res) => {
+          console.log(res)
+          setCookie('token', res.data.token, 1)
+          if (res.data.is_first_login) history.push(`${path}/personal`)
+          else history.push('/account')
+        })
+        .catch((err) => console.log(err))
+    }
+  }, [])
   const onLogin = async (data) => {
-    data['isCU'] = isCU
-    console.log(data)
-    history.push(`${path}/personal`)
-    // send post request to backend
-    //and then direct to account-info or first_login page
+    Axios.post('http://localhost:3000/users/login', {
+      username: data.username,
+      password: data.password
+    })
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => console.log(err))
+  }
+  const SSOLogin = async () => {
+    history.push('/login/sso')
   }
   return (
     <div className="default-wrapper">
@@ -25,7 +49,7 @@ export const LoginForm = (props: any) => {
           <div style={{ marginBottom: "40px" }}>
             <Form.Group>
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" placeholder="Email" name='email' ref={register({ required: true })} />
+              <Form.Control type="email" placeholder="Email" name='username' ref={register({ required: true })} />
               <Form.Text>{errors.email && "Email is required"}</Form.Text>
             </Form.Group>
             <Form.Group controlId="formBasicPassword">
@@ -35,10 +59,10 @@ export const LoginForm = (props: any) => {
             </Form.Group>
           </div>
           <div className="d-flex flex-column align-items-center button-group mb-4">
-            <Button variant='pink' type='submit' onClick={async () => setCU(false)}>
+            <Button variant='pink' type='submit'>
               Sign in
           </Button>
-            <Button variant='darkpink' type='submit' onClick={async () => setCU(true)}>
+            <Button variant='darkpink' onClick={SSOLogin}>
               Sign in as a CU student
           </Button>
           </div>
@@ -48,7 +72,7 @@ export const LoginForm = (props: any) => {
         <h3>One moment...</h3>
         <p>Verifying that you're a Chulalongkorn student</p>
       </div>
-    </div>
+    </div >
   )
 }
 export default LoginForm

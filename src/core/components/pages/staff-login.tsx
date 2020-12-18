@@ -2,22 +2,22 @@ import React, { useState } from 'react';
 import { Form, Button, Navbar, NavbarBrand } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/images/logo.png';
-
+import { useForm } from 'react-hook-form'
+import Axios from 'axios';
+import { getCookie, setCookie } from '../../contexts/cookieHandler'
 
 
 function StaffLogin() {
+    const { register, handleSubmit, watch, errors } = useForm();
+    const onLogin = async (data) => {
+        console.log(data)
+        await Axios.post('http://localhost:3000/staffs/login', { username: data.username, password: data.password })
+            .then((res) => {
+                setCookie('token', res.data.jwt, 1)
+            })
+            .catch(err => console.log(err))
+    }
 
-    let [password, setPassword] = useState("")
-    let [username, setUsername] = useState("")
-    const onChangePassword = (e: any) => {
-        setPassword(e.target.value)
-    }
-    const onChangeUsername = (e: any) => {
-        setUsername(e.target.value)
-    }
-    const onLogin = async () => {
-
-    }
 
     return (
         <React.Fragment>
@@ -35,23 +35,24 @@ function StaffLogin() {
                             <header style={{ padding: '0 0 20px 0', fontSize: '36px', fontWeight: 'lighter' }}>
                                 เข้าสู่ระบบจัดการ Sports Center ของเจ้าหน้าที่
                             </header>
-                            <div>
-                                <Form.Group>
-                                    <Form.Label> Username </Form.Label>
-                                    <Form.Control type='name' placeholder='' onChange={onChangeUsername} value={username} />
-                                </Form.Group>
-                                <Form.Group>
-                                    <Form.Label> Password </Form.Label>
-                                    <Form.Control type='password' placeholder='' onChange={onChangePassword} value={password} />
-                                </Form.Group>
-                            </div>
-                            <div className='d-flex flex-column mt-5 button-group'>
-                                <Button variant='pink' onClick={onLogin}>
-                                    <Link to='/staffprofile' className='styled-link'>
+                            <Form onSubmit={handleSubmit(onLogin)}>
+                                <div>
+                                    <Form.Group>
+                                        <Form.Label> Username </Form.Label>
+                                        <Form.Control type='name' name='username' placeholder='' ref={register({ required: true })} />
+                                    </Form.Group>
+                                    <Form.Group>
+                                        <Form.Label> Password </Form.Label>
+                                        <Form.Control type='password' name='password' placeholder='' ref={register({ required: true })} />
+                                    </Form.Group>
+                                    <Form.Text>{(errors.username || errors.password) && 'กรุณากรอกทั้ง Username และ Password'}</Form.Text>
+                                </div>
+                                <div className='d-flex flex-column mt-5 button-group'>
+                                    <Button variant='pink' type='submit'>
                                         เข้าสู่ระบบ
-                                    </Link>
                                 </Button>
-                            </div>
+                                </div>
+                            </Form>
                         </div>
                     </div>
                 </div>

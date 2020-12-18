@@ -3,13 +3,33 @@ import { useState, useEffect } from 'react';
 import { Form, ToggleButton, Container, Button, ToggleButtonGroup } from 'react-bootstrap';
 import { NavHeader } from "../../ui/navbar/navbarSideEffect";
 import { useForm } from 'react-hook-form'
+import { getCookie } from '../../../contexts/cookieHandler'
+import { useHistory } from 'react-router-dom'
+import Axios from 'axios'
 const PersonalInfo = (props: any) => {
+    const history = useHistory()
     const { register, handleSubmit, watch, errors } = useForm();
     const onSubmit = (data) => {
-        console.log(data)
+        Axios.put('http://localhost:3000/users/validation', {
+            is_thai_language: data.is_thai_language,
+            personal_email: data.personal_email,
+            phone: data.phone
+        },
+            {
+                headers: {
+                    Authorization: `Bearer ${getCookie('token')}`
+                }
+            })
+            .then((res) => {
+                console.log(res)
+                history.push('/account')
+
+            })
+            .catch((err) => console.log(err))
     }
     useEffect(() => {
         // TODO: if user not first logged in, redirect to account page
+
     }, [])
     return (
         <>
