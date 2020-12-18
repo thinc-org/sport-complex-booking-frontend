@@ -6,27 +6,30 @@ import { OtherInfo } from "../interfaces/InfoInterface"
 
 const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) => {
   // page state
-  const [jwt, setJwt] = useState<string>("")
+  const [jwt, setJwt] = useState<string>(
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
+  )
   const [page_no, set_page_no] = useState<number>(1)
   const [max_user_per_page] = useState<number>(10) // > 1
+  const [max_user, set_max_user] = useState<number>(1)
   const [searchName, setSearchName] = useState<string>("")
   const [show_no_user, set_show_no_user] = useState<boolean>(false)
   const [users, setUsers] = useState<OtherInfo[]>([])
 
   /// functions ///
-  useEffect(() => {
-    // request token
-    fetch({
-      method: "GET",
-      url: "/account_info/testing/adminToken",
-    })
-      .then(({ data }) => {
-        setJwt(data.token.token)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [])
+  // useEffect(() => {
+  //   // request token
+  //   fetch({
+  //     method: "GET",
+  //     url: "/account_info/testing/adminToken",
+  //   })
+  //     .then(({ data }) => {
+  //       setJwt(data.token.token)
+  //     })
+  //     .catch((err) => {
+  //       console.log(err)
+  //     })
+  // }, [])
 
   // useEffect(() => {
   //   console.log("users: ")
@@ -39,23 +42,27 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
 
   const requestUsers = () => {
     //  request users from server  //
-    let begin = (page_no - 1) * max_user_per_page
-    let end = page_no * max_user_per_page
-    let additional_url = searchName === "" ? begin + "/" + end : searchName + "/" + begin + "/" + end
+    let params = {
+      start: (page_no - 1) * max_user_per_page,
+      end: page_no * max_user_per_page,
+    }
+    if (searchName !== "") params["name"] = searchName
     fetch({
-      method: "get",
-      url: "/approval/" + additional_url,
+      method: "GET",
+      url: "/approval",
       headers: {
         Authorization: "bearer " + jwt,
       },
+      params: params,
     })
       .then(({ data }) => {
-        let userList: OtherInfo[] = data
+        let userList: OtherInfo[] = data[1]
         let newUserList: OtherInfo[] = []
         for (let user of userList) {
           newUserList = [...newUserList, user]
         }
         setUsers(newUserList)
+        set_max_user(data[0])
       })
       .catch((err) => {
         console.log(err)
@@ -63,6 +70,36 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
   }
 
   const loadPagination = () => {
+    let max_page: number = Math.floor((max_user + max_user_per_page - 1) / max_user_per_page)
+    let numList: Array<number> = []
+    let i = 0
+    while (numList.length < 5) {
+      let page = page_no + i - 2
+      if (page >= 1 && page <= max_page) {
+        numList.push(page)
+      } else if (page > max_page) {
+        break
+      }
+      i++
+    }
+    let elementList = numList.map((num) => {
+      if (num === page_no)
+        return (
+          <Pagination.Item key={num} active={true}>
+            {num}
+          </Pagination.Item>
+        )
+      return (
+        <Pagination.Item
+          key={num}
+          onClick={() => {
+            handlePagination(num)
+          }}
+        >
+          {num}
+        </Pagination.Item>
+      )
+    })
     return (
       <Pagination className="justify-content-md-end">
         <Pagination.Prev
@@ -70,7 +107,7 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
             handlePagination(page_no - 1)
           }}
         />
-        <Pagination.Item active={true}>{page_no}</Pagination.Item>
+        {elementList}
         <Pagination.Next
           onClick={() => {
             handlePagination(page_no + 1)
@@ -80,9 +117,33 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
     )
   }
 
+  // const loadPagination = () => {
+  //   return (
+  //     <Pagination className="justify-content-md-end">
+  //       <Pagination.Prev
+  //         onClick={() => {
+  //           handlePagination(page_no - 1)
+  //         }}
+  //       />
+  //       <Pagination.Item active={true}>{page_no}</Pagination.Item>
+  //       <Pagination.Next
+  //         onClick={() => {
+  //           handlePagination(page_no + 1)
+  //         }}
+  //       />
+  //     </Pagination>
+  //   )
+  // }
+
   // handles //
+  // const handlePagination = (next_page: number) => {
+  //   if ((page_no > next_page && next_page >= 1) || (page_no < next_page && users.length === max_user_per_page)) {
+  //     set_page_no(next_page)
+  //   }
+  // }
   const handlePagination = (next_page: number) => {
-    if ((page_no > next_page && next_page >= 1) || (page_no < next_page && users.length === max_user_per_page)) {
+    let max_page: number = Math.floor((max_user + max_user_per_page - 1) / max_user_per_page)
+    if (next_page >= 1 && next_page <= max_page) {
       set_page_no(next_page)
     }
   }
@@ -91,23 +152,24 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
     // send jwt and get //
     // if no user -> "user not found"
     e.preventDefault()
-    requestUsers()
+    if (page_no !== 1) set_page_no(1)
+    else requestUsers()
   }
 
   const handleInfo = (e) => {
     //send jwt and username
     // if no data of that user -> show pop up
-    let username = e.target.id
+    let _id = e.target.id
     fetch({
       method: "GET",
-      url: "/approval/" + username,
+      url: "/approval/" + _id,
       headers: {
         Authorization: "bearer " + jwt,
       },
     })
       .then(({ data }) => {
         props.history.push({
-          pathname: "/verifyInfo/" + username,
+          pathname: "/verifyInfo/" + _id,
         })
       })
       .catch(({ response }) => {
@@ -159,7 +221,7 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
           <td> {user.surname_en} </td>
           <td> {user.username} </td>
           <td>
-            <Button className="btn-normal btn-outline-black" variant="outline-secondary" id={user.username} onClick={handleInfo}>
+            <Button className="btn-normal btn-outline-black" variant="outline-secondary" id={user._id} onClick={handleInfo}>
               ดูรายละเอียด
             </Button>
           </td>

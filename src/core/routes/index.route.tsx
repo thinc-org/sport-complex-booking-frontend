@@ -22,9 +22,7 @@ import ReserveNow from "../components/pages/Reservation/ReserveNow"
 import JoinWaitingRoom from "../components/pages/Reservation/JoinWaitingRoom"
 import CreateWaitingRoom from "../components/pages/Reservation/CreateWaitingRoom"
 
-
 export default function MainRoute() {
-
   function staff(page, header) {
     return (
       <div className="staff background d-block" style={{ backgroundColor: "white", minHeight: "80vh" }}>
@@ -59,15 +57,23 @@ export default function MainRoute() {
 
         <Route path="/login" component={FrontLoginPage} />
 
-        <Route exact path="/register" render={() => {
-          return <div>Under maintenance</div>
-        }} />
+        <Route
+          exact
+          path="/register"
+          render={() => {
+            return <div>Under maintenance</div>
+          }}
+        />
 
-        <Route exact path="/profile" render={() => {
-          return <div>Under maintenance</div>
-        }} />
+        <Route
+          exact
+          path="/profile"
+          render={() => {
+            return <div>Under maintenance</div>
+          }}
+        />
 
-        <Route exact path='/staffLogin' component={StaffLogin} />
+        <Route exact path="/staffLogin" component={StaffLogin} />
 
         <Route
           path="/staffprofile"
@@ -133,7 +139,7 @@ export default function MainRoute() {
         />
         <Route
           exact
-          path="/verifyInfo/:username"
+          path="/verifyInfo/:_id"
           render={(props) => {
             return staff(<VerifyInfo {...props} />, "รับรองการลงทะเบียนรายบุคคล")
           }}
