@@ -1,20 +1,17 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Form } from 'react-bootstrap';
+import { Form, Dropdown, DropdownButton } from 'react-bootstrap';
 import { useForm } from 'react-hook-form'
 
 const CancelCourt = (props) => {
     return (
         <div className='default-wrapper cancel-court'>
             <Form>
-                <Form.Group>
-                    <Form.Label>ชื่อกีฬา</Form.Label>
-                    <Form.Control type='text' name='sport' className='cancel-court field'></Form.Control>
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>หมายเลขคอร์ด</Form.Label>
-                    <Form.Control type='text' name='sport' className='cancel-court field'></Form.Control>
-                </Form.Group>
+                <DropdownButton title="Dropdown button" size='sm'>
+                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                </DropdownButton>
             </Form>
         </div>
     )
