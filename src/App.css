@@ -3,12 +3,13 @@
 @import "./core/components/ui/navbar/navbar.css";
 @import "./core/components/ui/navbar/staff-sidebar.css";
 @import "./core/components/pages/landing.css";
-@import './core//components//pages//staff-pages/cancel-court/cancel-court.css';
+@import './core/components/pages/staff-pages/disable-court/disable-court.css';
 
 :root {
   --lightpink-color: #ffeced;
   --pink-color: #ff80ab;
   --darkpink-color: #c94f7c;
+  --grey-color: #e6e6e6;
   --red-color: #c9302c;
   --bg-color: #fafafa;
   --lightgrey-color: #eeeeee;
