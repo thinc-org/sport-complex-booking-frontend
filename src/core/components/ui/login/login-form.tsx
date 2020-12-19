@@ -17,11 +17,13 @@ export const LoginForm = (props: any) => {
       console.log(history.location)
       const params = history.location.search
       const ticket = params.slice(params.indexOf('=') + 1)
+      setLoading(true)
       Axios.post('http://localhost:3000/users/validation', {
         'appticket': ticket
       }
       )
         .then((res) => {
+          setLoading(false)
           console.log(res)
           setCookie('token', res.data.token, 1)
           setToken(res.data.token)
@@ -30,6 +32,7 @@ export const LoginForm = (props: any) => {
           else history.push('/account')
         })
         .catch((err) => {
+          setLoading(false)
           setError('invalid', {
             type: 'async',
             message: 'Something bad happened, please try again'
@@ -46,6 +49,11 @@ export const LoginForm = (props: any) => {
       .then((res) => {
         setLoading(false)
         console.log(res)
+        setCookie('token', res.data.token, 1)
+        setToken(res.data.token)
+        localStorage.setItem('is_first_login', res.data.is_first_login);
+        if (res.data.is_first_login) history.push(`${path}/personal`)
+        else history.push('/account')
       })
       .catch((err) => {
         setLoading(false)
