@@ -7,7 +7,7 @@ function StaffNavbar() {
     let location = useLocation()
     let [hide, setHidden] = useState(false);
     useEffect(() => {
-        if (!(location.pathname.toLowerCase().includes('staff')) || location.pathname.toLowerCase() == "/stafflogin") setHidden(true)
+        if (!(location.pathname.toLowerCase().includes('staff')) || location.pathname.toLowerCase() === "/stafflogin") setHidden(true)
         else setHidden(false)
     }, [location])
     const onLogout = async (e) => {

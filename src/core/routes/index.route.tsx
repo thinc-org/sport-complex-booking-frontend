@@ -1,7 +1,8 @@
 import * as React from "react"
-import { useState, useEffect } from "react"
+import { useContext, useEffect } from "react"
 import { Switch } from "react-router-dom"
 import { Route } from "react-router"
+import { AuthContext, useAuthContext } from '../controllers/auth.controller'
 import FrontLoginPage from "../components/pages/front-login"
 import Landing from "../components/pages/LandingComponent"
 import StaffLogin from "../components/pages/staff-login"
@@ -17,10 +18,10 @@ import CUInfo from "../components/pages/staff-pages/list-of-all-users-pages/CUIn
 import UserInfo from "../components/pages/staff-pages/list-of-all-users-pages/UserInfo"
 import VeritificationApproval from "../components/pages/staff-pages/verification-approval-pages/VerificationApproval"
 import VerifyInfo from "../components/pages/staff-pages/verification-approval-pages/VerifyInfo"
-import FrontLoginMain from "../components/ui/login/login-main"
 import ReserveNow from "../components/pages/Reservation/ReserveNow"
 import JoinWaitingRoom from "../components/pages/Reservation/JoinWaitingRoom"
 import CreateWaitingRoom from "../components/pages/Reservation/CreateWaitingRoom"
+import { getCookie } from "../contexts/cookieHandler"
 
 
 export default function MainRoute() {
@@ -49,7 +50,10 @@ export default function MainRoute() {
       </div>
     )
   }
-
+  const { isUser, setToken } = useAuthContext()
+  useEffect(() => {
+    if (getCookie('token')) setToken(getCookie('token'))
+  }, [isUser])
   return (
     <>
       <Sidebar></Sidebar>

@@ -5,6 +5,8 @@ import { NavHeader } from "../../ui/navbar/navbarSideEffect";
 import { useForm } from 'react-hook-form'
 import { getCookie } from '../../../contexts/cookieHandler'
 import { useHistory } from 'react-router-dom'
+import withUserGuard from '../../../guards/user.guard'
+import jwt_decode from 'jwt-decode'
 import Axios from 'axios'
 const PersonalInfo = (props: any) => {
     const history = useHistory()
@@ -29,7 +31,10 @@ const PersonalInfo = (props: any) => {
     }
     useEffect(() => {
         // TODO: if user not first logged in, redirect to account page
-
+        if (getCookie('token')) {
+            const token: string = getCookie('token') ?? "none"
+            console.log(jwt_decode(token));
+        }
     }, [])
     return (
         <>
@@ -67,4 +72,4 @@ const PersonalInfo = (props: any) => {
         </>
     )
 }
-export default PersonalInfo;
+export default withUserGuard(PersonalInfo);

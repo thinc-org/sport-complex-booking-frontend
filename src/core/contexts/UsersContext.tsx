@@ -4,11 +4,12 @@ let defaultValue;
 export const UserContext = createContext(defaultValue);
 
 class UserContextProvider extends Component {
-  accountSchemaType = {type: String, enum:['CuStudent','SatitAndCuPersonel','Other']};
-  verificationSchemaType = {type: String, enum: ['NotSubmitted','Submitted','Verified','Rejected']};
+  accountSchemaType = { type: String, enum: ['CuStudent', 'SatitAndCuPersonel', 'Other', 'Staff'] };
+  verificationSchemaType = { type: String, enum: ['NotSubmitted', 'Submitted', 'Verified', 'Rejected'] };
 
   state = {
-    jwt : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmRjMmNlZDZjZjYwNTM0NTQ5NjNjOTUiLCJpc1N0YWZmIjpmYWxzZSwiaWF0IjoxNjA4MjY0OTQxLCJleHAiOjE2MDg4Njk3NDF9.e1VaBwo8A4lNuUiDpWA5RE-jSPrUBRMO9Hy_VjWF1IQ",
+    jwt: '',
+    isUser: false,
     account_type: this.accountSchemaType,
     CuStudent: {
       account_type: this.accountSchemaType,
@@ -39,7 +40,7 @@ class UserContextProvider extends Component {
       expired_penalize_date: Date,
     },
     Other: {
-    account_type: this.accountSchemaType,
+      account_type: this.accountSchemaType,
       is_thai_language: Boolean,
       prefix: String, //(เพื่อแสดง นาย/นาง/นางสาว)
       name_en: String,
@@ -55,11 +56,11 @@ class UserContextProvider extends Component {
       home_phone: String,
       personal_email: String,
       contact_person: {
-          contact_person_prefix: String,
-          contact_person_name: String,
-          contact_person_surname: String,
-          contact_person_home_phone: String,
-          contact_person_phone: String,
+        contact_person_prefix: String,
+        contact_person_name: String,
+        contact_person_surname: String,
+        contact_person_home_phone: String,
+        contact_person_phone: String,
       },
       medical_condition: String,
       membership_type: String,
@@ -69,34 +70,45 @@ class UserContextProvider extends Component {
       expired_penalize_date: Date,
       verification_status: this.verificationSchemaType,
       rejected_info: [String],
-      account_expiration_date :Date,
+      account_expiration_date: Date,
       user_photo: Object, //(ของcollectionที่เก็บรูป)
       medical_ceritficate: Object,
       national_id_photo: Object, //also passport photo
       house_registration_number: Object,//with reference person
       relationship_verification_document: Object,
     }
-    
+
   }
   setCuStudent = (value: String) => {
-    this.setState({ CuStudent: value});
+    this.setState({ CuStudent: value });
     console.log("SET VALUE IS CALLED", this.state.CuStudent)
   }
   setSatit = (value: String) => {
-    this.setState({ SatitCuPersonel: value});
+    this.setState({ SatitCuPersonel: value });
     console.log("SET VALUE IS CALLED", this.state.SatitCuPersonel)
   }
-  setOther = (value: String ) => {
-    this.setState({ Other: value});
+  setOther = (value: String) => {
+    this.setState({ Other: value });
     console.log("SET VALUE IS CALLED", this.state.Other)
   }
-  render() { 
+  setToken = (value: String, isUser?: Boolean) => {
+    this.setState({ jwt: value })
+    if (typeof (isUser) === 'undefined') {
+      this.setState({ isUser: true })
+      console.log('set user to true')
+    }
+    else {
+      this.setState({ isUser: isUser })
+      console.log('set user to input')
+    }
+  }
+  render() {
     return (
-      <UserContext.Provider value={{...this.state, setCuStudent: this.setCuStudent, setSatit: this.setSatit, setOther: this.setOther}}>
+      <UserContext.Provider value={{ ...this.state, setCuStudent: this.setCuStudent, setSatit: this.setSatit, setOther: this.setOther, setToken: this.setToken }}>
         {this.props.children}
       </UserContext.Provider>
     );
   }
 }
- 
+
 export default UserContextProvider;
