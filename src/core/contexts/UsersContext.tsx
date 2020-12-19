@@ -9,7 +9,6 @@ class UserContextProvider extends Component {
 
   state = {
     jwt: '',
-    isUser: false,
     account_type: this.accountSchemaType,
     CuStudent: {
       account_type: this.accountSchemaType,
