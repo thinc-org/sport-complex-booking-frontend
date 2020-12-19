@@ -33,9 +33,9 @@ function Landing() {
           </Button>
           </Link>
         </div>
-
       </div>
     </>
+
 
   )
 }
