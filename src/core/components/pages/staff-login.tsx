@@ -4,18 +4,27 @@ import { Link } from 'react-router-dom';
 import logo from '../../assets/images/logo.png';
 import { useForm } from 'react-hook-form'
 import Axios from 'axios';
-import { getCookie, setCookie } from '../../contexts/cookieHandler'
+import { setCookie } from '../../contexts/cookieHandler'
+import { useAuthContext } from '../../controllers/auth.controller'
+import { useHistory } from 'react-router-dom'
 
 
 function StaffLogin() {
-    const { register, handleSubmit, watch, errors } = useForm();
+    const { register, handleSubmit, setError, errors } = useForm();
+    const { setToken } = useAuthContext()
+    let history = useHistory()
     const onLogin = async (data) => {
         console.log(data)
-        await Axios.post('http://localhost:3000/staffs/login', { username: data.username, password: data.password })
+        await Axios.post('http://localhost:3000/staffs/login', { 'username': data.username, 'password': data.password })
             .then((res) => {
-                setCookie('token', res.data.jwt, 1)
+                console.log('done')
+                setCookie('token', res.data.token, 1)
+                setToken(res.data.token)
+                history.push('/staffprofile')
             })
-            .catch(err => console.log(err))
+            .catch((err) => {
+                setError('invalid', { type: 'async', message: 'Username หรือ Password ไม่ถูกต้อง' })
+            })
     }
 
 
@@ -46,6 +55,7 @@ function StaffLogin() {
                                         <Form.Control type='password' name='password' placeholder='' ref={register({ required: true })} />
                                     </Form.Group>
                                     <Form.Text>{(errors.username || errors.password) && 'กรุณากรอกทั้ง Username และ Password'}</Form.Text>
+                                    <Form.Text>{errors.invalid && errors.invalid.message}</Form.Text>
                                 </div>
                                 <div className='d-flex flex-column mt-5 button-group'>
                                     <Button variant='pink' type='submit'>
