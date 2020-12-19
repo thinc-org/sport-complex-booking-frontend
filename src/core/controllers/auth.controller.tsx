@@ -15,6 +15,7 @@ export const useAuthContext = () => useContext(AuthContext)
 const AuthProvider = ({ ...props }) => {
   const [token, setToken] = useState<string>(getCookie('token') ?? '')
   const isUser = useMemo(() => {
+    console.log(token)
     const decodedToken = token ? jwt_decode(token) : ''
     return decodedToken ? true : false
   }, [token])
