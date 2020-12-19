@@ -5,6 +5,6 @@ export const setCookie = (name, value, exdays) => {
     document.cookie = name + "=" + value + ";" + expires + ";path=/";
 }
 export const getCookie = (value) => {
-    var match = document.cookie.match('(^|;)\\s*' + value + '\\s*=\\s*([^;]+)');
-    return (match && match.pop() !== 'undefined') ? match.pop() : '';
+    let m = document.cookie.match('(^|;)\\s*' + value + '\\s*=\\s*([^;]+)');
+    return (m && m[m.length - 1] !== 'undefined') ? m.pop() : ''
 }
