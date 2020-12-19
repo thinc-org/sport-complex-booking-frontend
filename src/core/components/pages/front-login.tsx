@@ -1,15 +1,17 @@
 import * as React from "react"
-import { useEffect } from 'react'
+import { useEffect, useContext } from 'react'
 import { Switch, Route, useRouteMatch, useHistory } from 'react-router-dom';
 import { getCookie } from '../../contexts/cookieHandler'
 import FrontLoginMain from '../ui/login/login-main'
 import Footer from '../ui/footer/footer'
+import { UserContext } from '../../contexts/UsersContext'
 import PersonalInfo from '../ui/login/personal-info-form';
 const FrontLoginPage = (props: any) => {
   let { url, path } = useRouteMatch()
   let history = useHistory()
+  const { isUser } = useContext(UserContext)
   useEffect(() => {
-    if (getCookie('token')) history.push('/account')
+    if (isUser) history.push('/account')
   }, [])
   return (
     <>
