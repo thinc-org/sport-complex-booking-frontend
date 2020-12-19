@@ -5,10 +5,12 @@ import { NavHeader } from "../../ui/navbar/navbarSideEffect";
 import { useForm } from 'react-hook-form'
 import { getCookie } from '../../../contexts/cookieHandler'
 import { useHistory } from 'react-router-dom'
+import { useAuthContext } from '../../../controllers/auth.controller'
 import withUserGuard from '../../../guards/user.guard'
 import jwt_decode from 'jwt-decode'
 import Axios from 'axios'
 const PersonalInfo = (props: any) => {
+    const { token } = useAuthContext()
     const history = useHistory()
     const { register, handleSubmit, watch, errors } = useForm();
     const onSubmit = (data) => {
@@ -19,11 +21,12 @@ const PersonalInfo = (props: any) => {
         },
             {
                 headers: {
-                    Authorization: `Bearer ${getCookie('token')}`
+                    Authorization: `Bearer ${token}`
                 }
             })
             .then((res) => {
                 console.log(res)
+                localStorage.setItem('is_first_login', '')
                 history.push('/account')
 
             })
@@ -31,9 +34,9 @@ const PersonalInfo = (props: any) => {
     }
     useEffect(() => {
         // TODO: if user not first logged in, redirect to account page
-        if (getCookie('token')) {
-            const token: string = getCookie('token') ?? "none"
-            console.log(jwt_decode(token));
+        console.log(localStorage.getItem('is_first_login') ?? 'none')
+        if (!localStorage.getItem('is_first_login') || localStorage.getItem('is_first_login') == "false") {
+            history.push('/account')
         }
     }, [])
     return (

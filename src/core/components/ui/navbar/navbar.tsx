@@ -51,7 +51,7 @@ const NavigationBar = (props: any) => {
 
 const Sidebar = (props: any) => {
   let [inProp, setInProp] = useState(false);
-  const { header } = useNavHeader()
+  const { header, isOnStaffPage } = useNavHeader()
   const { isUser, setToken } = useAuthContext()
   const listItems = data.map((item, index) => (
     <li key={index}>

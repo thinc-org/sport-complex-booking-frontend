@@ -25,6 +25,7 @@ export const LoginForm = (props: any) => {
           console.log(res)
           setCookie('token', res.data.token, 1)
           setToken(res.data.token)
+          localStorage.setItem('is_first_login', res.data.is_first_login);
           if (res.data.is_first_login) history.push(`${path}/personal`)
           else history.push('/account')
         })
