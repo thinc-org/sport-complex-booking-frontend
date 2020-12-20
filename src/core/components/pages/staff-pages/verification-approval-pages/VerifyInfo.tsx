@@ -15,7 +15,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
   )
   const [show_reject, set_show_reject] = useState<boolean>(false)
-  const [account_expired_date, set_account_expired_date] = useState<Date>(new Date())
+  const [account_expired_date, set_account_expired_date] = useState<Date>()
   const [show_modal_info, set_show_modal_info] = useState<ModalVerify>({
     show_confirm_accept: false,
     show_uncom_accept: false,
@@ -38,8 +38,8 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   // Non CU state //
   const [_id] = useState<string>(props.match.params._id)
   const [username, set_username] = useState<string>("")
-  const [account_type, set_account_type] = useState<string>("asdada")
-  const [membership_type, set_membership_type] = useState<string>("dasdada")
+  const [account_type, set_account_type] = useState<string>("")
+  const [membership_type, set_membership_type] = useState<string>("")
   const [contact, setContact] = useState<ContactPerson>({
     contact_person_prefix: "asd",
     contact_person_name: "g",
@@ -90,9 +90,9 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     console.log(reject_info)
   }, [reject_info])
 
-  useEffect(() => {
-    console.log(info)
-  }, [info])
+  // useEffect(() => {
+  //   console.log(info)
+  // }, [info])
 
   useEffect(() => {
     fetchUserData()
@@ -217,12 +217,12 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
       })
   }
 
-  const redirectBack = () => {
-    console.log(props)
-    // props.history.push({
-    //   pathname: "/verifyApprove",
-    // })
-  }
+  // const redirectBack = () => {
+  //   console.log(props)
+  //   props.history.push({
+  //     pathname: "/verifyApprove",
+  //   })
+  // }
 
   // handles //
   const handleChangeExpire = (e) => {
@@ -248,7 +248,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
         <div className="row">
           <div className="col">
             <label className="mt-2">ประเภท</label>
-            <p className="font-weight-bold">{account_type}</p>
+            <p className="font-weight-bold">{membership_type}</p>
           </div>
         </div>
         <div className="row">
