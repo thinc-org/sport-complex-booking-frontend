@@ -17,6 +17,23 @@ const ReservationDetail: FunctionComponent<RouteComponentProps<{ _id: string }>>
   // reservation detail state
   let [members, set_members] = useState<{}[]>([{}, {}, {}, {}])
 
+  // useEffects //
+  useEffect(() => {
+    fetch({
+      method: "GET",
+      url: "/....",
+      headers: {
+        Authorization: jwt,
+      },
+    })
+      .then(({ data }) => {
+        console.log(data)
+      })
+      .catch(({ response }) => {
+        console.log(response)
+      })
+  }, [])
+
   // request //
   const requestDelete = () => {}
 

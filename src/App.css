@@ -645,3 +645,13 @@ td {
 .time-picker {
   height: 30px;
 }
+
+.form-pink {
+  background-color: rgb(255, 194, 232);
+  border-radius: 5px;
+}
+
+.form-pink:focus {
+  background-color: rgb(255, 194, 232);
+  border-radius: 5px;
+}
