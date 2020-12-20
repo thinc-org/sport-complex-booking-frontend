@@ -82,20 +82,12 @@ const ListOfAllUsers: FunctionComponent = () => {
     },
   ])
 
+  const { token } = useAuthContext()
+
   // useEffect //
-  // useEffect(() => {
-  //   // request token
-  //   fetch({
-  //     method: "GET",
-  //     url: "/account_info/testing/adminToken",
-  //   })
-  //     .then(({ data }) => {
-  //       set_jwt(data.token.token)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //     })
-  // }, [])
+  useEffect(() => {
+    if (token) set_jwt(token)
+  }, [])
 
   useEffect(() => {
     requestUsers()
