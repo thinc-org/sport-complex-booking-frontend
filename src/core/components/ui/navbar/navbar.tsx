@@ -67,7 +67,7 @@ const Sidebar = (props: any) => {
     setCookie('token', null, 0)
   }
   return (
-    <>
+    <div style={{ display: isOnStaffPage ? 'none' : '' }}>
       <div className="sidebar-toggler d-flex flex-row justify-content-center">
         <img src={Toggler} onClick={() => setInProp(true)} />
         <h1 className="d-flex flex-row justify-content-center w-100">
@@ -103,7 +103,7 @@ const Sidebar = (props: any) => {
         </div>
       </CSSTransition>
       <span className="backdrop" style={{ display: inProp ? 'flex' : 'none' }} />
-    </>
+    </div>
   )
 }
 export default Sidebar
