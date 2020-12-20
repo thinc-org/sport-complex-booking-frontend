@@ -7,10 +7,14 @@ import { CuInfo, ThaiLangAccount, Account } from "../interfaces/InfoInterface"
 const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
   // page states
   const [is_editing, set_editing] = useState<boolean>(false)
+  // Modals & Alert //
   const [showConfirm, setShowConfirm] = useState<boolean>(false)
   const [showCom, setShowCom] = useState<boolean>(false)
+  const [showDel, setShowDel] = useState<boolean>(false)
+  const [showComDel, setShowComDel] = useState<boolean>(false)
   const [showErr, setShowErr] = useState<boolean>(false)
   const [showAlert, setShowAlert] = useState<boolean>(false)
+
   const [jwt, setJwt] = useState<string>(
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
   )
@@ -119,6 +123,59 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       </Modal>
     )
   }
+  const renderDelModal = () => {
+    return (
+      <Modal
+        show={showDel}
+        onHide={() => {
+          setShowDel(false)
+        }}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>คำเตือน</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ fontWeight: "lighter" }}> {"ท่านกำลังจะลบผู้ใช้ " + user.username + " ต้องการดำเนินการต่อหรือไม่"} </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="outline-secondary"
+            className="btn-normal btn-outline-pink"
+            onClick={() => {
+              setShowDel(false)
+            }}
+          >
+            ยกเลิก
+          </Button>
+          <Button variant="danger" className="btn-normal btn-outline-red" onClick={requestDelete}>
+            ลบผู้ใช้
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    )
+  }
+  const renderComDelModal = () => {
+    return (
+      <Modal
+        show={showComDel}
+        onHide={() => {
+          setShowComDel(false)
+        }}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>เสร็จสิ้น</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ fontWeight: "lighter" }}> ลบผู้ใช้เรียบร้อย </Modal.Body>
+        <Modal.Footer>
+          <Button variant="pink" className="btn-normal" onClick={redirectBack}>
+            ตกลง
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    )
+  }
   const renderErrModal = () => {
     return (
       <Modal
@@ -132,7 +189,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         <Modal.Header closeButton>
           <Modal.Title>เกิดข้อผิดพลาด</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ fontWeight: "lighter" }}> ไม่สามารถบันทึกการเปลี่ยนแปลงได้ </Modal.Body>
+        <Modal.Body style={{ fontWeight: "lighter" }}> ไม่สามารถบันทึก/ลบผู้ใช้งานได้ในขณะนี้ </Modal.Body>
         <Modal.Footer>
           <Button
             variant="pink"
@@ -187,6 +244,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     else setShowAlert(true)
   }
 
+  // requests //
   const requestUserChange = () => {
     // if change complete -> pop up "ok" //
     // if change error -> pop up "not complete" -> back to old data //
@@ -220,13 +278,39 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         setShowErr(true)
       })
   }
+  const requestDelete = () => {
+    setShowDel(false)
+    setShowAlert(false)
+    fetch({
+      method: "DELETE",
+      url: "/list-all-user/User/" + _id,
+      headers: {
+        Authorization: "bearer " + jwt,
+      },
+    })
+      .then(({ data }) => {
+        // console.log(data)
+        setShowComDel(true)
+      })
+      .catch(({ response }) => {
+        console.log(response)
+        setShowErr(true)
+      })
+  }
 
+  // other functions //
   const completedChange = () => {
     // run after pop up "complete"
     set_editing(false)
     setShowCom(false)
   }
+  const redirectBack = () => {
+    props.history.push({
+      pathname: "/listOfAllUsers",
+    })
+  }
 
+  // renders //
   const renderForm = () => {
     let date: Date = new Date(user.expired_penalize_date)
     let expired_date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
@@ -297,6 +381,15 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
             </Link>
           </Col>
           <Col className="text-right">
+            <Button
+              variant="outline-danger"
+              className="btn-normal btn-outline-red mr-3"
+              onClick={() => {
+                setShowDel(true)
+              }}
+            >
+              ลบผู้ใช้
+            </Button>
             <Button variant="pink" className="btn-normal" onClick={handleEdit}>
               แก้ไข
             </Button>
@@ -363,7 +456,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         <Row className="py-3">
           <Col>
             <Form.Label>สถานะการแบน</Form.Label>
-            <Form.Control as="select" id="is_penalize" onChange={handleChange} value={temp_user.is_penalize ? "Banned" : "OK"}>
+            <Form.Control className="m-0" as="select" id="is_penalize" onChange={handleChange} value={temp_user.is_penalize ? "Banned" : "OK"}>
               <option value="OK">ปกติ</option>
               <option value="Banned">โดนแบน</option>
             </Form.Control>
@@ -406,6 +499,8 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       </Card>
       {renderConfirmModal()}
       {renderComModal()}
+      {renderDelModal()}
+      {renderComDelModal()}
       {renderErrModal()}
     </div>
   )
