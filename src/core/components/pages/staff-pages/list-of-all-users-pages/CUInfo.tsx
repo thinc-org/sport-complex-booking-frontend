@@ -292,6 +292,11 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     set_editing(false)
     set_show_modals({ ...show_modals, show_com: false })
   }
+  const redirectBack = () => {
+    props.history.push({
+      pathname: "/listOfAllUsers",
+    })
+  }
 
   // renders //
   const renderModals = () => {
