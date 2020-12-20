@@ -24,7 +24,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   // page state //
   const [isEdit, setEdit] = useState<boolean>(false)
   const [jwt, setJwt] = useState<string>(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODIyOTExNX0.ejaYqHHmkB2qC5Ds59nYhtV1ryWeLlxEB-MNsuIpquY"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODgzMzkxNX0.sp6jlYKkRhTIwzvR9MIRfcsjM2Z_AZ7lxsAUOBoMQAk"
   )
   const [show_modal_info, set_show_modal_info] = useState<ModalUserInfo>({
     show_delete: false,
@@ -313,10 +313,11 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
                 <div>
                   <Form.Control
                     as="select"
+                    className="m-0"
+                    defaultValue={temp_membership_type !== "" ? temp_membership_type : "ไม่มี"}
                     onChange={(e) => {
                       set_temp_membership_type(e.target.value)
                     }}
-                    defaultValue={temp_membership_type !== "" ? temp_membership_type : "ไม่มี"}
                   >
                     <option disabled value="ไม่มี">
                       เลือกประเภทบัญชี
@@ -346,7 +347,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
             <label className="mt-2">สถานะการแบน</label>
             {isEdit ? (
               <Form.Control
-                className="border"
+                className="border m-0"
                 style={{ backgroundColor: "white" }}
                 as="select"
                 defaultValue={is_penalize ? 1 : 0}

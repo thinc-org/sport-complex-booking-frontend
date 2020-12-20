@@ -9,9 +9,9 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
   const [is_thai, set_thai] = useState<boolean>(true)
 
   // functions //
-  useEffect(() => {
-    console.log("Function triggered by useEffect")
-  }, [])
+  // useEffect(() => {
+  //   console.log(info)
+  // }, [info])
 
   // handles //
   const handlePDF = (e) => {
