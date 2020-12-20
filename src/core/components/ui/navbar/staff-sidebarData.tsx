@@ -2,43 +2,43 @@ export const data = [
   {
     icon: "",
     name: "โปรไฟล์",
-    path: "/staffprofile",
+    path: "/staff/staffprofile",
   },
   {
     icon: "",
     name: "จัดการสตาฟ",
-    path: "/จัดการสตาฟ",
+    path: "/staff/จัดการสตาฟ",
   },
   {
     icon: "",
     name: "ผู้ใช้ทั้งหมด",
     // path: '/ผู้ใช้ทั้งหมด'
-    path: "/listOfAllUsers",
+    path: "/staff/listOfAllUsers",
   },
   {
     icon: "",
     name: "การจองทั้งหมด",
-    path: "/การจองทั้งหมด",
+    path: "/staff/การจองทั้งหมด",
   },
   {
     icon: "",
     name: "รับรองการลงทะเบียน",
     // path: '/รับรองการลงทะเบียน'
-    path: "/verifyApprove",
+    path: "/staff/verifyApprove",
   },
   {
     icon: "",
     name: "การปิดคอร์ด",
-    path: "/การปิดคอร์ด",
+    path: "/staff/การปิดคอร์ด",
   },
   {
     icon: "",
     name: "QR Code",
-    path: "/qrcode",
+    path: "/staff/qrcode",
   },
   {
     icon: "",
     name: "การตั้งค่า",
-    path: "/การตั้งค่า",
+    path: "/staff/การตั้งค่า",
   },
 ]
