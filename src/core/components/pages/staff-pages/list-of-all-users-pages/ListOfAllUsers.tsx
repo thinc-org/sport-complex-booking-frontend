@@ -2,6 +2,7 @@ import React, { FunctionComponent, useState, useEffect } from "react"
 import { Table, Form, Row, Col, Button, Pagination, Modal } from "react-bootstrap"
 import { Link, RouteComponentProps } from "react-router-dom"
 import fetch from "../interfaces/axiosTemplate"
+import { useAuthContext } from "../../../../controllers/auth.controller"
 
 interface CUTemplate {
   account_type: Account
@@ -80,20 +81,12 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
     },
   ])
 
+  const { token } = useAuthContext()
+
   // useEffect //
-  // useEffect(() => {
-  //   // request token
-  //   fetch({
-  //     method: "GET",
-  //     url: "/account_info/testing/adminToken",
-  //   })
-  //     .then(({ data }) => {
-  //       set_jwt(data.token.token)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //     })
-  // }, [])
+  useEffect(() => {
+    if (token) set_jwt(token)
+  }, [])
 
   useEffect(() => {
     requestUsers()
@@ -144,7 +137,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
   const handleInfo = (e) => {
     //send jwt and username
     // if no data of that user -> show pop up
-    let index = parseInt(e.target.id) - 1
+    let index = parseInt(e.target.id) - (page_no - 1) * 10 - 1
     let _id: String = users[index]._id
     fetch({
       method: "GET",

@@ -7,13 +7,15 @@ import { AddInfo } from "../interfaces/InfoInterface"
 const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
   // Page states //
   const [jwt, setJwt] = useState<string>(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODIyOTExNX0.ejaYqHHmkB2qC5Ds59nYhtV1ryWeLlxEB-MNsuIpquY"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
   )
   const [selectingSatit, setSelectingSatit] = useState<boolean>(false)
   const [showAdd, setShowAdd] = useState<boolean>(false)
   const [showCom, setShowCom] = useState<boolean>(false)
   const [showErr, setShowErr] = useState<boolean>(false)
+  const [showUsernameErr, setShowUsernameErr] = useState<boolean>(false)
   const [showAlert, setShowAlert] = useState<boolean>(false)
+  const [showAlertUsername, setShowAlertUsername] = useState<boolean>(false)
   // User states //
   const [user, setUser] = useState<AddInfo>({
     membership_type: "",
@@ -29,6 +31,7 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
   })
   // const [tempUser, setTempUser] = useState()
 
+  // functions //
   useEffect(() => {
     fetch({
       method: "GET",
@@ -48,6 +51,11 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
     })
   }
 
+  const validCheck = (s: string) => {
+    return s.match(/.*([A-z])+.*/g)
+  }
+
+  // renders //
   const renderSelector = (option: number) => {
     return (
       <Form.Group>
@@ -80,6 +88,7 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
           <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
           <Form.Control id="username" onChange={handleChange} value={username} />
         </Form.Group>
+        {renderAlertInvalidUsername()}
         <Form.Group>
           <Form.Label>รหัสผ่าน (เบอร์โทรศัพท์)</Form.Label>
           <Form.Control id="password" onChange={handleChange} value={password} />
@@ -135,7 +144,7 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
           </Row>
         </Form.Group>
         <Form.Group>
-          <Row>
+          <Row className="mb-3">
             <Col>
               <Form.Label>ชื่อผู้ใช้</Form.Label>
               <Form.Control id="username" onChange={handleChange} value={username} />
@@ -145,6 +154,7 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
               <Form.Control id="password" onChange={handleChange} value={password} />
             </Col>
           </Row>
+          {renderAlertInvalidUsername()}
         </Form.Group>
       </Form>
     )
@@ -241,6 +251,35 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
     )
   }
 
+  const renderUsernameErrModal = () => {
+    return (
+      <Modal
+        show={showUsernameErr}
+        onHide={() => {
+          setShowUsernameErr(false)
+        }}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>เกิดข้อผิดพลาด</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ fontWeight: "lighter" }}> {"ชื่อผู้ใช้นี้ (" + user.username + ") ถูกใช้ไปแล้ว"} </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="pink"
+            className="btn-normal"
+            onClick={() => {
+              setShowUsernameErr(false)
+            }}
+          >
+            ตกลง
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    )
+  }
+
   const renderAlert = () => {
     return (
       <Alert show={showAlert} variant="danger" style={{ fontWeight: "lighter" }}>
@@ -249,6 +288,15 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
     )
   }
 
+  const renderAlertInvalidUsername = () => {
+    return (
+      <Alert show={showAlertUsername} variant="danger" style={{ fontWeight: "lighter" }}>
+        ชื่อผู้ใช้ (Username) ต้องมีตัวอักษรอย่างน้อย 1 ตัว
+      </Alert>
+    )
+  }
+
+  // handles //
   const handleChangeType = (e) => {
     setUser({ ...user, membership_type: e.target.value })
     if (e.target.value === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" || user.membership_type === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา") {
@@ -278,8 +326,12 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
 
   const handleAdd = (e) => {
     // if form has been completed -> request add //
+    setShowAlert(false)
+    setShowAlertUsername(false)
     let { membership_type, username, password, name_th, surname_th, name_en, surname_en, personal_email, phone } = user
-    if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && membership_type !== "" && username !== "" && password !== "") {
+    if (!validCheck(username)) {
+      setShowAlertUsername(true)
+    } else if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && membership_type !== "" && username !== "" && password !== "") {
       setShowAdd(true)
     } else if (
       username !== "" &&
@@ -297,6 +349,7 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
     }
   }
 
+  // requests //
   const requestAdd = () => {
     setShowAdd(false)
     let url = "/list-all-user/"
@@ -327,9 +380,10 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
         // go back to list-of-all-users page
         setShowCom(true)
       })
-      .catch((err) => {
-        console.log(err)
-        setShowErr(true)
+      .catch(({ response }) => {
+        console.log(response)
+        if (response.data.statusCode === 400) setShowUsernameErr(true)
+        else setShowErr(true)
       })
   }
 
@@ -354,6 +408,7 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
       {renderAddModal()}
       {renderComModal()}
       {renderErrModal()}
+      {renderUsernameErrModal()}
     </div>
   )
 }
