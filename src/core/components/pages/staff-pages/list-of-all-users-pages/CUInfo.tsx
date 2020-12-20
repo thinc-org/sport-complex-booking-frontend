@@ -167,6 +167,25 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         setShowModals({ ...showModals, showConfirm: false, showErr: true })
       })
   }
+  const requestDelete = () => {
+    setShowDel(false)
+    setShowAlert(false)
+    fetch({
+      method: "DELETE",
+      url: "/list-all-user/User/" + _id,
+      headers: {
+        Authorization: "bearer " + jwt,
+      },
+    })
+      .then(({ data }) => {
+        // console.log(data)
+        setShowComDel(true)
+      })
+      .catch(({ response }) => {
+        console.log(response)
+        setShowErr(true)
+      })
+  }
 
   const requestDelete = () => {
     setShowModals({ ...showModals, showDel: false })
@@ -208,6 +227,11 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     // run after pop up "complete"
     setEditing(false)
     setShowModals({ ...showModals, showCom: false })
+  }
+  const redirectBack = () => {
+    props.history.push({
+      pathname: "/listOfAllUsers",
+    })
   }
 
   // renders //
