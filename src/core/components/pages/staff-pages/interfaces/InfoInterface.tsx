@@ -81,13 +81,63 @@ export interface ContactPerson {
 }
 
 export interface RejectInfo {
-  Information: boolean
-  "Emergency contact": boolean
-  Photo: boolean
-  "National ID/Passport": boolean
-  "Medical certificate": boolean
-  "House registeration": boolean
-  "Relation verification": boolean
+  prefix: boolean
+  name_th: boolean
+  surname_th: boolean
+  name_en: boolean
+  surname_en: boolean
+  birthday: boolean
+  national_id: boolean
+  gender: boolean
+  marital_status: boolean
+  address: boolean
+  phone: boolean
+  home_phone: boolean
+  personal_email: boolean
+  contact_person_prefix: boolean
+  contact_person_name: boolean
+  contact_person_surname: boolean
+  contact_person_home_phone: boolean
+  contact_person_phone: boolean
+  medical_condition: boolean
+  membership_type: boolean
+  username: boolean
+  password: boolean
+  user_photo: boolean
+  medical_certificate: boolean
+  national_id_photo: boolean
+  house_registration_number: boolean
+  relationship_verification_document: boolean
+}
+
+export const RejectInfoLabel = {
+  prefix: "Prefix",
+  name_th: "Thai name",
+  surname_th: "Thai surname",
+  name_en: "English name",
+  surname_en: "English surname",
+  birthday: "Birthdate",
+  national_id: "National ID number",
+  gender: "Gender",
+  marital_status: "Marital status",
+  address: "Address",
+  phone: "Mobile phone",
+  home_phone: "Home phone",
+  personal_email: "Email",
+  contact_person_prefix: "Contact person's prefix",
+  contact_person_name: "Contact person's name",
+  contact_person_surname: "Contact person's surname",
+  contact_person_home_phone: "Contact person's home phone",
+  contact_person_phone: "Contact person's mobile phone",
+  medical_condition: "Medical condition",
+  membership_type: "Membership type",
+  username: "Username",
+  password: "Password",
+  user_photo: "Photo",
+  medical_certificate: "Medical certificate",
+  national_id_photo: "National ID / Passport photo",
+  house_registration_number: "House registration photo",
+  relationship_verification_document: "Relation verification photo",
 }
 
 export interface ModalVerify {
