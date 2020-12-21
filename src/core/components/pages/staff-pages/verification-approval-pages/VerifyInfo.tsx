@@ -6,7 +6,7 @@ import OtherViewInfoComponent from "../list-of-all-users-pages/OtherViewInfoComp
 import VerifyModals from "./VerifyModalsComopnent"
 import { convertDate } from "../list-of-all-users-pages/UserInfo"
 import Info, { ContactPerson } from "../interfaces/InfoInterface"
-import { RejectInfo, ModalVerify } from "../interfaces/InfoInterface"
+import { RejectInfo, ModalVerify, RejectInfoLabel } from "../interfaces/InfoInterface"
 
 /// start of main function ///
 const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
@@ -26,13 +26,33 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     show_err: false,
   })
   const [reject_info, set_reject_info] = useState<RejectInfo>({
-    Information: false,
-    "Emergency contact": false,
-    Photo: false,
-    "National ID/Passport": false,
-    "Medical certificate": false,
-    "House registeration": false,
-    "Relation verification": false,
+    prefix: false,
+    name_th: false,
+    surname_th: false,
+    name_en: false,
+    surname_en: false,
+    birthday: false,
+    national_id: false,
+    gender: false,
+    marital_status: false,
+    address: false,
+    phone: false,
+    home_phone: false,
+    personal_email: false,
+    contact_person_prefix: false,
+    contact_person_name: false,
+    contact_person_surname: false,
+    contact_person_home_phone: false,
+    contact_person_phone: false,
+    medical_condition: false,
+    membership_type: false,
+    username: false,
+    password: false,
+    user_photo: false,
+    medical_certificate: false,
+    national_id_photo: false,
+    house_registration_number: false,
+    relationship_verification_document: false,
   })
 
   // Non CU state //
@@ -72,6 +92,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     relationship_verification_document: "{ Object }",
   })
 
+  // useEffects //
   // useEffect(() => {
   //   // request token
   //   fetch({
@@ -89,10 +110,6 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   useEffect(() => {
     console.log(reject_info)
   }, [reject_info])
-
-  // useEffect(() => {
-  //   console.log(info)
-  // }, [info])
 
   useEffect(() => {
     fetchUserData()
@@ -217,13 +234,6 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
       })
   }
 
-  // const redirectBack = () => {
-  //   console.log(props)
-  //   props.history.push({
-  //     pathname: "/verifyApprove",
-  //   })
-  // }
-
   // handles //
   const handleChangeExpire = (e) => {
     let date = e.target.value
@@ -309,7 +319,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
       return (
         <Form.Check
           key={index}
-          label={name}
+          label={RejectInfoLabel[name]}
           id={name}
           type="checkbox"
           defaultChecked={reject_info[name]}

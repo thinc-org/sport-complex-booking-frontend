@@ -359,7 +359,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
                     <option>สมาชิกวิสามัญเฉพาะสนามกีฬาในร่ม (indoor stadium)</option>
                     <option>สมาชิกวิสามัญสมทบเฉพาะสนามกีฬาในร่ม (indoor stadium-spouse and children)</option>
                     <option>สมาชิกรายเดือนสนามกีฬาในร่ม (monthly membership-indoor stadium)</option>
-                    <option>นักเรียนสาธิตจุฬา / บุคลากรจุฬา</option>
                   </Form.Control>
                 </div>
               ) : (

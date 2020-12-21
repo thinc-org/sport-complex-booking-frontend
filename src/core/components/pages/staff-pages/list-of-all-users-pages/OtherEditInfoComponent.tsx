@@ -92,6 +92,7 @@ export default function OtherEditInfoComponent({
     contact_person_home_phone,
     contact_person_phone,
   } = temp_info.contact_person
+
   return (
     <div className="row mr-4 mt-5">
       <div className="col px-0">
