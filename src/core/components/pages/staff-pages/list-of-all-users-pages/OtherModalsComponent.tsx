@@ -88,7 +88,7 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
   }
 
   // Save Modal //
-  const renderSave = (info: { handleSave: () => void }) => {
+  const renderSave = (info: { requestSave: () => void }) => {
     return (
       <Modal
         show={show_save}
@@ -113,7 +113,7 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
           >
             ยกเลิก
           </Button>
-          <Button variant="pink" className="btn-normal" onClick={info.handleSave}>
+          <Button variant="pink" className="btn-normal" onClick={info.requestSave}>
             ยืนยัน
           </Button>
         </Modal.Footer>

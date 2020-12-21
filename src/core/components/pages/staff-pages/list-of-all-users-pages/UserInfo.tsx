@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
 import { RouteComponentProps, Link } from "react-router-dom"
-import { Button, Card, Form } from "react-bootstrap"
+import { Button, Card, Form, Alert } from "react-bootstrap"
 import fetch from "../interfaces/axiosTemplate"
 import OtherViewInfoComponent from "./OtherViewInfoComponent"
 import OtherEditInfoComponent from "./OtherEditInfoComponent"
@@ -37,6 +37,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   // Non CU state //
   const [_id] = useState<string>(props.match.params._id)
   const [username, set_username] = useState<string>("")
+  const [password, set_password] = useState<string>("")
   const [account_type, set_account_type] = useState<string>("")
   const [membership_type, set_membership_type] = useState<string>("")
   const [is_penalize, set_penalize] = useState<boolean>(false)
@@ -81,29 +82,31 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   })
   // temp data
   const [temp_username, set_temp_username] = useState<string>("")
+  const [temp_password, set_temp_password] = useState<string>("")
   const [temp_membership_type, set_temp_membership_type] = useState<string>("")
   const [temp_is_penalize, set_temp_penalize] = useState<boolean>(false)
   const [temp_expired_penalize_date, set_temp_expired_penalize_date] = useState<Date>(new Date())
   const [temp_account_expired_date, set_temp_account_expired_date] = useState<Date>(new Date())
   const [temp_info, set_temp_info] = useState<Info>(info)
 
-  useEffect(() => {
-    fetch({
-      method: "GET",
-      url: "/account_info/testing/adminToken",
-    }).then(({ data }) => {
-      setJwt(data.token.token)
-    })
-  }, [])
+  // useEffect(() => {
+  //   fetch({
+  //     method: "GET",
+  //     url: "/account_info/testing/adminToken",
+  //   }).then(({ data }) => {
+  //     setJwt(data.token.token)
+  //   })
+  // }, [])
 
   useEffect(() => {
     fetchUserData()
   }, [jwt])
-
   // useEffect(() => {
-  //   setInfo({ ...info, contact_person: contact })
-  // }, [contact])
+  //   window.scroll({ top: 0, left: 0, behavior: "smooth" })
+  //   window.scrollTo(0, 0)
+  // }, [show_password_alert])
 
+  // requests //
   const fetchUserData = async () => {
     await fetch({
       method: "GET",
@@ -124,6 +127,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         //   })
         // }
         set_username(data.username)
+        set_password(data.password)
         set_account_type(data.account_type)
         set_membership_type(data.membership_type)
         set_penalize(data.is_penalize)
@@ -165,18 +169,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       })
   }
 
-  // handles //
-  const handleEdit = () => {
-    set_temp_info(info)
-    set_temp_username(username)
-    set_temp_membership_type(membership_type)
-    set_temp_penalize(is_penalize)
-    set_temp_expired_penalize_date(expired_penalize_date)
-    set_temp_account_expired_date(account_expired_date)
-    setEdit(true)
-  }
-
-  const handleSave = () => {
+  const requestSave = () => {
     const {
       email,
       phone,
@@ -226,6 +219,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         medical_condition: medical_condition,
         // top section //
         username: temp_username,
+        password: temp_password,
         membership_type: temp_membership_type,
         account_expiration_date: temp_account_expired_date,
         is_penalize: temp_is_penalize,
@@ -242,6 +236,8 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         // console.log("Update completed")
         console.log(data)
         // set temp to data
+        set_username(temp_username)
+        set_password(temp_password)
         set_membership_type(temp_membership_type)
         set_penalize(temp_is_penalize)
         set_expired_penalize_date(temp_expired_penalize_date)
@@ -256,6 +252,22 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         console.log(err)
         set_show_modal_info({ ...show_modal_info, show_save: false, show_err: true })
       })
+  }
+
+  // handles //
+  const handleEdit = () => {
+    set_temp_info(info)
+    set_temp_username(username)
+    set_temp_password(password)
+    set_temp_membership_type(membership_type)
+    set_temp_penalize(is_penalize)
+    set_temp_expired_penalize_date(expired_penalize_date)
+    set_temp_account_expired_date(account_expired_date)
+    setEdit(true)
+  }
+
+  const handleSave = (e) => {
+    set_show_modal_info({ ...show_modal_info, show_save: true })
   }
 
   const handleDeleteUser = () => {
@@ -302,6 +314,22 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
               />
             ) : (
               <p className="font-weight-bold">{username}</p>
+            )}
+          </div>
+          <div className="col">
+            <label className="mt-2">รหัสผ่าน</label>
+            {isEdit ? (
+              <Form.Control
+                className="border"
+                style={{ backgroundColor: "white" }}
+                type="text"
+                defaultValue={password}
+                onChange={(e) => {
+                  set_temp_password(e.target.value)
+                }}
+              />
+            ) : (
+              <p className="font-weight-bold">{password}</p>
             )}
           </div>
         </div>
@@ -443,8 +471,8 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
           <Button
             variant="pink"
             className="float-right btn-normal"
-            onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_save: true })
+            onClick={(e) => {
+              handleSave(e)
             }}
           >
             บันทึก
@@ -476,7 +504,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     else if (show_modal_info.show_com_delete)
       return <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ username }} props={props} />
     else if (show_modal_info.show_save)
-      return <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ handleSave }} props={props} />
+      return <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ requestSave }} props={props} />
     else if (show_modal_info.show_err || show_modal_info.show_com_save) {
       return <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{}} props={props} />
     }
