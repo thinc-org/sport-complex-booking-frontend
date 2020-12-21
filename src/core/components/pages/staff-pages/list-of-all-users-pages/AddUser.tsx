@@ -27,6 +27,7 @@ const AddUser: FunctionComponent = () => {
   })
 
   // User states //
+  const [confirm_password, set_confirm_password] = useState<string>("")
   const [user, setUser] = useState<AddInfo>({
     membership_type: "",
     is_thai_language: true,
@@ -139,6 +140,17 @@ const AddUser: FunctionComponent = () => {
               <Form.Label>ชื่อผู้ใช้</Form.Label>
               <Form.Control ref={register} name="username" defaultValue={username} />
             </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>กรอกรหัสผ่านอีกครั้ง</Form.Label>
+                <Form.Control
+                  onChange={(e) => {
+                    set_confirm_password(e.target.value)
+                  }}
+                  value={confirm_password}
+                />
+              </Form.Group>
+            </Col>
           </Row>
           {renderPasswordSection()}
           <AlertInvalidUsername show={showAlerts} />
@@ -160,6 +172,14 @@ const AddUser: FunctionComponent = () => {
         <ErrModal show={showModals} setShow={setShowModals} />
         <UsernameErrModal show={showModals} setShow={setShowModals} />
       </div>
+    )
+  }
+
+  const renderAlertErrorPassword = () => {
+    return (
+      <Alert show={showAlertPassword} variant="danger" style={{ fontWeight: "lighter" }}>
+        รหัสผ่านไม่ตรงกัน
+      </Alert>
     )
   }
 
