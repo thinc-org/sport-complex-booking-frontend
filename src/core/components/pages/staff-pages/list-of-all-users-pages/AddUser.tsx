@@ -16,7 +16,9 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
   const [showUsernameErr, setShowUsernameErr] = useState<boolean>(false)
   const [showAlert, setShowAlert] = useState<boolean>(false)
   const [showAlertUsername, setShowAlertUsername] = useState<boolean>(false)
+  const [showAlertPassword, setShowAlertPassword] = useState<boolean>(false)
   // User states //
+  const [confirm_password, set_confirm_password] = useState<string>("")
   const [user, setUser] = useState<AddInfo>({
     membership_type: "",
     is_thai_language: true,
@@ -89,10 +91,26 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
           <Form.Control id="username" onChange={handleChange} value={username} />
         </Form.Group>
         {renderAlertInvalidUsername()}
-        <Form.Group>
-          <Form.Label>รหัสผ่าน (เบอร์โทรศัพท์)</Form.Label>
-          <Form.Control id="password" onChange={handleChange} value={password} />
-        </Form.Group>
+        <Row>
+          <Col>
+            <Form.Group>
+              <Form.Label>รหัสผ่าน (เบอร์โทรศัพท์)</Form.Label>
+              <Form.Control id="password" onChange={handleChange} value={password} />
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group>
+              <Form.Label>กรอกรหัสผ่านอีกครั้ง</Form.Label>
+              <Form.Control
+                onChange={(e) => {
+                  set_confirm_password(e.target.value)
+                }}
+                value={confirm_password}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+        {renderAlertErrorPassword()}
       </Form>
     )
   }
@@ -149,12 +167,26 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
               <Form.Label>ชื่อผู้ใช้</Form.Label>
               <Form.Control id="username" onChange={handleChange} value={username} />
             </Col>
+          </Row>
+          <Row>
             <Col>
               <Form.Label>รหัสผ่าน</Form.Label>
               <Form.Control id="password" onChange={handleChange} value={password} />
             </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>กรอกรหัสผ่านอีกครั้ง</Form.Label>
+                <Form.Control
+                  onChange={(e) => {
+                    set_confirm_password(e.target.value)
+                  }}
+                  value={confirm_password}
+                />
+              </Form.Group>
+            </Col>
           </Row>
           {renderAlertInvalidUsername()}
+          {renderAlertErrorPassword()}
         </Form.Group>
       </Form>
     )
@@ -264,7 +296,7 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
         <Modal.Header closeButton>
           <Modal.Title>เกิดข้อผิดพลาด</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ fontWeight: "lighter" }}> {"ชื่อผู้ใช้นี้ (" + user.username + ") ถูกใช้ไปแล้ว"} </Modal.Body>
+        <Modal.Body style={{ fontWeight: "lighter" }}> {"ชื่อผู้ใช้หรืออีเมลนี้ถูกใช้ไปแล้ว"} </Modal.Body>
         <Modal.Footer>
           <Button
             variant="pink"
@@ -296,44 +328,35 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
     )
   }
 
+  const renderAlertErrorPassword = () => {
+    return (
+      <Alert show={showAlertPassword} variant="danger" style={{ fontWeight: "lighter" }}>
+        รหัสผ่านไม่ตรงกัน
+      </Alert>
+    )
+  }
+
   // handles //
   const handleChangeType = (e) => {
     setUser({ ...user, membership_type: e.target.value })
-    if (e.target.value === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" || user.membership_type === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา") {
-      // setUser({...user, membership_type: e.target.value})
+    if (e.target.value === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" || user.membership_type === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา")
       setSelectingSatit(!selectingSatit)
-      // this.setState({
-      //   accountType: e.target.value,
-      //   user: user,
-      //   selectingSatit: !this.state.selectingSatit,
-      // })
-    }
-    // else {
-    //   this.setState({
-    //     accountType: e.target.value,
-    //     user: user,
-    //   })
-    // }
   }
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.id]: e.target.value })
-    // user[e.target.id] = e.target.value
-    // this.setState({
-    //   user: user,
-    // })
   }
 
   const handleAdd = (e) => {
     // if form has been completed -> request add //
     setShowAlert(false)
     setShowAlertUsername(false)
+    setShowAlertPassword(false)
     let { membership_type, username, password, name_th, surname_th, name_en, surname_en, personal_email, phone } = user
-    if (!validCheck(username)) {
-      setShowAlertUsername(true)
-    } else if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && membership_type !== "" && username !== "" && password !== "") {
-      setShowAdd(true)
-    } else if (
+    if (!validCheck(username)) setShowAlertUsername(true)
+    else if (password !== confirm_password) setShowAlertPassword(true)
+    else if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && membership_type !== "" && username !== "" && password !== "") setShowAdd(true)
+    else if (
       username !== "" &&
       password !== "" &&
       name_th !== "" &&
@@ -342,11 +365,9 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
       surname_en !== "" &&
       personal_email !== "" &&
       phone !== ""
-    ) {
+    )
       setShowAdd(true)
-    } else {
-      setShowAlert(true)
-    }
+    else setShowAlert(true)
   }
 
   // requests //
