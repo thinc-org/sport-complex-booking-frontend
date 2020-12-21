@@ -19,7 +19,6 @@ import WaitingRoomBan from "../components/pages/Reservation/WaitingRoomBan"
 import Hooray from "../components/pages/Reservation/Hooray"
 
 export default function MainRoute() {
-  useEffect(() => {
   const { isUser, setToken } = useAuthContext()
   useEffect(() => {
     if (getCookie("token")) setToken(getCookie("token"))
