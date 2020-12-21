@@ -82,13 +82,9 @@ const ListOfAllUsers: FunctionComponent = () => {
     },
   ])
 
-  const { token } = useAuthContext()
+  const history = useHistory()
 
   // useEffect //
-  useEffect(() => {
-    if (token) set_jwt(token)
-  }, [])
-
   useEffect(() => {
     requestUsers()
   }, [pageNo])

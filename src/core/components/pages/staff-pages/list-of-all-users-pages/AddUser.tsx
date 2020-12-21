@@ -175,14 +175,6 @@ const AddUser: FunctionComponent = () => {
     )
   }
 
-  const renderAlertErrorPassword = () => {
-    return (
-      <Alert show={showAlertPassword} variant="danger" style={{ fontWeight: "lighter" }}>
-        รหัสผ่านไม่ตรงกัน
-      </Alert>
-    )
-  }
-
   // handles //
   const handleChangeType = (e) => {
     setUser({ ...user, membership_type: e.target.value })
