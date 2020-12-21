@@ -295,6 +295,22 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
               <p className="font-weight-bold">{username}</p>
             )}
           </div>
+          <div className="col">
+            <label className="mt-2">รหัสผ่าน</label>
+            {isEdit ? (
+              <Form.Control
+                className="border"
+                style={{ backgroundColor: "white" }}
+                type="text"
+                defaultValue={password}
+                onChange={(e) => {
+                  set_temp_password(e.target.value)
+                }}
+              />
+            ) : (
+              <p className="font-weight-bold">{password}</p>
+            )}
+          </div>
         </div>
         <div className="row pb-2">
           <div className="col">
