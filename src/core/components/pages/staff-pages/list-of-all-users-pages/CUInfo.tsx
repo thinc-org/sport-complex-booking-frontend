@@ -292,10 +292,18 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     set_editing(false)
     set_show_modals({ ...show_modals, show_com: false })
   }
-  const redirectBack = () => {
-    props.history.push({
-      pathname: "/listOfAllUsers",
-    })
+
+  // renders //
+  const renderModals = () => {
+    if (show_modals.show_confirm)
+      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestUserChange }} props={props} />
+    else if (show_modals.show_com)
+      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ completedChange }} props={props} />
+    else if (show_modals.show_del)
+      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestDelete }} props={props} />
+    else if (show_modals.show_confirm_change)
+      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestChangePassword }} props={props} />
+    else return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{}} props={props} />
   }
 
   // renders //
