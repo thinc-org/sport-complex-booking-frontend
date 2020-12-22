@@ -67,6 +67,13 @@ export interface CuAndSatitInfo {
   is_penalize: boolean
   expired_penalize_date: Date
   is_first_login: boolean
+  password: string
+}
+
+export interface CuPagePasswordToggle {
+  old_password: boolean
+  new_password: boolean
+  confirm_password: boolean
 }
 
 export interface CuSatitComponentInfo {
