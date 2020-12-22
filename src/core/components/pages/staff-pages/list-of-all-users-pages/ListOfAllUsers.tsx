@@ -149,7 +149,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
       .then(({ data }) => {
         if (data) {
           let account_type: Account = users[index].account_type
-          if (account_type === Account.CuStudent) {
+          if (account_type !== Account.Other) {
             props.history.push({
               pathname: "/cuInfo/" + _id,
             })

@@ -1,3 +1,4 @@
+// enums //
 export enum Account {
   CuStudent,
   SatitAndCuPersonel,
@@ -10,6 +11,7 @@ export enum ThaiLangAccount {
   อื่นๆ,
 }
 
+// interfaces //
 export default interface Info {
   prefix: string
   name_th: string
@@ -35,7 +37,7 @@ export default interface Info {
   relationship_verification_document: string
 }
 
-export interface CuInfo {
+export interface CuAndSatitInfo {
   account_type: Account
   is_thai_language: boolean
   name_th: string
@@ -48,6 +50,13 @@ export interface CuInfo {
   is_penalize: boolean
   expired_penalize_date: Date
   is_first_login: boolean
+  password: string
+}
+
+export interface CuPagePasswordToggle {
+  old_password: boolean
+  new_password: boolean
+  confirm_password: boolean
 }
 
 export interface AddInfo {
@@ -138,6 +147,18 @@ export const RejectInfoLabel = {
   national_id_photo: "National ID / Passport photo",
   house_registration_number: "House registration photo",
   relationship_verification_document: "Relation verification photo",
+}
+
+// Interface for Modals //
+export interface ModalCuAndSatit {
+  show_confirm: boolean
+  show_com: boolean
+  show_del: boolean
+  show_com_delete: boolean
+  show_err: boolean
+  show_password_err: boolean
+  show_change_password: boolean
+  show_confirm_change: boolean
 }
 
 export interface ModalVerify {

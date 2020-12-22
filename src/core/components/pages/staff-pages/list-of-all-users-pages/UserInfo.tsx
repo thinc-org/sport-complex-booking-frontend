@@ -333,42 +333,40 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
             )}
           </div>
         </div>
-        {account_type === "Other" ? (
-          <div className="row pb-2">
-            <div className="col">
-              <label className="mt-2">ประเภทบัญชี</label>
-              {isEdit ? (
-                <div>
-                  <Form.Control
-                    as="select"
-                    className="m-0"
-                    defaultValue={temp_membership_type !== "" ? temp_membership_type : "ไม่มี"}
-                    onChange={(e) => {
-                      set_temp_membership_type(e.target.value)
-                    }}
-                  >
-                    <option disabled value="ไม่มี">
-                      เลือกประเภทบัญชี
-                    </option>
-                    <option>สมาชิกสามัญ ก (staff membership)</option>
-                    <option>สมาชิกสามัญ ข (student membership)</option>
-                    <option>สมาชิกสามัญสมทบ ก (staff-spouse membership)</option>
-                    <option>สมาชิกสามัญสมทบ ข (alumni membership)</option>
-                    <option>สมาชิกวิสามัญ (full membership)</option>
-                    <option>สมาชิกวิสามัญสมทบ (full membership-spouse and children)</option>
-                    <option>สมาชิกวิสามัญเฉพาะสนามกีฬาในร่ม (indoor stadium)</option>
-                    <option>สมาชิกวิสามัญสมทบเฉพาะสนามกีฬาในร่ม (indoor stadium-spouse and children)</option>
-                    <option>สมาชิกรายเดือนสนามกีฬาในร่ม (monthly membership-indoor stadium)</option>
-                  </Form.Control>
-                </div>
-              ) : (
-                <div>
-                  <p className="font-weight-bold">{membership_type}</p>
-                </div>
-              )}
-            </div>
+        <div className="row pb-2">
+          <div className="col">
+            <label className="mt-2">ประเภทบัญชี</label>
+            {isEdit ? (
+              <div>
+                <Form.Control
+                  as="select"
+                  className="m-0"
+                  defaultValue={temp_membership_type !== "" ? temp_membership_type : "ไม่มี"}
+                  onChange={(e) => {
+                    set_temp_membership_type(e.target.value)
+                  }}
+                >
+                  <option disabled value="ไม่มี">
+                    เลือกประเภทบัญชี
+                  </option>
+                  <option>สมาชิกสามัญ ก (staff membership)</option>
+                  <option>สมาชิกสามัญ ข (student membership)</option>
+                  <option>สมาชิกสามัญสมทบ ก (staff-spouse membership)</option>
+                  <option>สมาชิกสามัญสมทบ ข (alumni membership)</option>
+                  <option>สมาชิกวิสามัญ (full membership)</option>
+                  <option>สมาชิกวิสามัญสมทบ (full membership-spouse and children)</option>
+                  <option>สมาชิกวิสามัญเฉพาะสนามกีฬาในร่ม (indoor stadium)</option>
+                  <option>สมาชิกวิสามัญสมทบเฉพาะสนามกีฬาในร่ม (indoor stadium-spouse and children)</option>
+                  <option>สมาชิกรายเดือนสนามกีฬาในร่ม (monthly membership-indoor stadium)</option>
+                </Form.Control>
+              </div>
+            ) : (
+              <div>
+                <p className="font-weight-bold">{membership_type}</p>
+              </div>
+            )}
           </div>
-        ) : null}
+        </div>
         <div className="row pb-2">
           <div className="col">
             <label className="mt-2">สถานะการแบน</label>
