@@ -13,4 +13,4 @@ function withAdminGuard<P>(Component: ComponentType<P>): FC<P> {
     }
 }
 
-// export default withAdminGuard
+export default withAdminGuard
