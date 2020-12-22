@@ -7,7 +7,7 @@ export const data = [
   {
     icon: "",
     name: "จัดการสตาฟ",
-    path: "/staff/จัดการสตาฟ",
+    path: "/staff/staffManagement",
   },
   {
     icon: "",
@@ -18,7 +18,7 @@ export const data = [
   {
     icon: "",
     name: "การจองทั้งหมด",
-    path: "/staff/การจองทั้งหมด",
+    path: "/staff/allReservation",
   },
   {
     icon: "",
@@ -29,7 +29,7 @@ export const data = [
   {
     icon: "",
     name: "การปิดคอร์ด",
-    path: "/staff/การปิดคอร์ด",
+    path: "/staff/disableCourt",
   },
   {
     icon: "",
@@ -39,6 +39,6 @@ export const data = [
   {
     icon: "",
     name: "การตั้งค่า",
-    path: "/staff/การตั้งค่า",
+    path: "/staff/setting",
   },
 ]
