@@ -1,17 +1,8 @@
-.disable-court-wrapper{
-    background-color: white;
+.disable-court-wrapper {
+  background-color: white;
 }
-.disable-court-dropdown button{
-    border-radius: 3px !important;
-    background-color: var(--grey-color) !important;
-    color: var(--text-color) !important;
-    border-color: var(--grey-color) !important;
-}
-.disable-court-dropdown button:hover,.disable-court-dropdown button:active,.disable-court-dropdown button:focus{
-    background-color: var(--grey-color) !important;
-    color: var(--text-color) !important;
-    outline: 0 !important;
-    border-color: var(--grey-color) !important;
-    box-shadow: 0 0 0 0 !important;
-    
+.disable-court-form select {
+  height: 2.5rem;
+  border-radius: 4px;
+  margin-right: 2px;
 }
