@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
-import { Form, Card, Row, Col, Button, Modal, Alert } from "react-bootstrap"
+import { Form, InputGroup, Card, Row, Col, Button, Modal, Alert } from "react-bootstrap"
 import { RouteComponentProps, Link } from "react-router-dom"
 import fetch from "../interfaces/axiosTemplate"
 import { AddInfo } from "../interfaces/InfoInterface"
@@ -10,6 +10,7 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmRjYTMxNjZhNDMwOTQyOWM5MmI4MjkiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDg3MzYxMTEsImV4cCI6MTYwOTM0MDkxMX0.NxmksdEUKg_2EU8ukKcO-vjisYY79a4TrJRGAibPvVQ"
   )
   const [selectingSatit, setSelectingSatit] = useState<boolean>(false)
+  // Modals & Alerts //
   const [showAdd, setShowAdd] = useState<boolean>(false)
   const [showCom, setShowCom] = useState<boolean>(false)
   const [showErr, setShowErr] = useState<boolean>(false)
@@ -17,6 +18,9 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
   const [showAlert, setShowAlert] = useState<boolean>(false)
   const [showAlertUsername, setShowAlertUsername] = useState<boolean>(false)
   const [showAlertPassword, setShowAlertPassword] = useState<boolean>(false)
+
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [showConPassword, setShowConPassword] = useState<boolean>(false)
   // User states //
   const [confirm_password, set_confirm_password] = useState<string>("")
   const [user, setUser] = useState<AddInfo>({
@@ -81,42 +85,74 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
     )
   }
 
-  const renderNormalForm = () => {
-    let { username, password } = user
+  const renderPasswordSection = () => {
     return (
-      <Form>
-        {renderSelector(0)}
-        <Form.Group>
-          <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
-          <Form.Control id="username" onChange={handleChange} value={username} />
-        </Form.Group>
-        {renderAlertInvalidUsername()}
-        <Row>
-          <Col>
-            <Form.Group>
-              <Form.Label>รหัสผ่าน (เบอร์โทรศัพท์)</Form.Label>
-              <Form.Control id="password" onChange={handleChange} value={password} />
-            </Form.Group>
-          </Col>
-          <Col>
-            <Form.Group>
-              <Form.Label>กรอกรหัสผ่านอีกครั้ง</Form.Label>
+      <Row>
+        <Col>
+          <Form.Group>
+            <Form.Label>{selectingSatit ? "รหัสผ่าน" : "รหัสผ่าน (เบอร์โทรศัพท์)"}</Form.Label>
+            <InputGroup>
+              <Form.Control id="password" type={showPassword ? "text" : "password"} onChange={handleChange} value={user.password} />
+              <InputGroup.Append>
+                <Button
+                  className="btn-normal btn-outline-black"
+                  variant="secondary"
+                  onClick={() => {
+                    setShowPassword(!showPassword)
+                  }}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </Button>
+              </InputGroup.Append>
+            </InputGroup>
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group>
+            <Form.Label>กรอกรหัสผ่านอีกครั้ง</Form.Label>
+            <InputGroup>
               <Form.Control
                 onChange={(e) => {
                   set_confirm_password(e.target.value)
                 }}
                 value={confirm_password}
+                type={showConPassword ? "text" : "password"}
               />
-            </Form.Group>
-          </Col>
-        </Row>
+              <InputGroup.Append>
+                <Button
+                  className="btn-normal btn-outline-black"
+                  variant="secondary"
+                  onClick={() => {
+                    setShowConPassword(!showConPassword)
+                  }}
+                >
+                  {showConPassword ? "Hide" : "Show"}
+                </Button>
+              </InputGroup.Append>
+            </InputGroup>
+          </Form.Group>
+        </Col>
+      </Row>
+    )
+  }
+
+  const renderNormalForm = () => {
+    return (
+      <Form>
+        {renderSelector(0)}
+        <Form.Group>
+          <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
+          <Form.Control id="username" onChange={handleChange} value={user.username} />
+        </Form.Group>
+        {renderAlertInvalidUsername()}
+        {renderPasswordSection()}
         {renderAlertErrorPassword()}
       </Form>
     )
   }
 
   const renderSatitForm = () => {
-    let { name_th, surname_th, name_en, surname_en, personal_email, phone, username, password, is_thai_language } = user
+    const { name_th, surname_th, name_en, surname_en, personal_email, phone, username, is_thai_language } = user
     return (
       <Form>
         {renderSelector(9)}
@@ -168,23 +204,7 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
               <Form.Control id="username" onChange={handleChange} value={username} />
             </Col>
           </Row>
-          <Row>
-            <Col>
-              <Form.Label>รหัสผ่าน</Form.Label>
-              <Form.Control id="password" onChange={handleChange} value={password} />
-            </Col>
-            <Col>
-              <Form.Group>
-                <Form.Label>กรอกรหัสผ่านอีกครั้ง</Form.Label>
-                <Form.Control
-                  onChange={(e) => {
-                    set_confirm_password(e.target.value)
-                  }}
-                  value={confirm_password}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
+          {renderPasswordSection()}
           {renderAlertInvalidUsername()}
           {renderAlertErrorPassword()}
         </Form.Group>
