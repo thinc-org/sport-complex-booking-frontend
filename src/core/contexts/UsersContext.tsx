@@ -1,17 +1,18 @@
 import React, { Component, createContext } from 'react';
-
+import { useState } from "react"
 let defaultValue;
 export const UserContext = createContext(defaultValue);
 
-class UserContextProvider extends Component {
-  accountSchemaType = { type: String, enum: ['CuStudent', 'SatitAndCuPersonel', 'Other', 'Staff'] };
-  verificationSchemaType = { type: String, enum: ['NotSubmitted', 'Submitted', 'Verified', 'Rejected'] };
+export default function UserContextProvider(props: any) {
+  let accountSchemaType = { type: String, enum: ['CuStudent', 'SatitAndCuPersonel', 'Other'] };
+  let verificationSchemaType = { type: String, enum: ['NotSubmitted', 'Submitted', 'Verified', 'Rejected'] };
 
-  state = {
-    jwt: '',
-    account_type: this.accountSchemaType,
+  let [state, setState] = useState({
+    jwt: "",
+    is_thai_language: Boolean,
+    account_type: accountSchemaType,
     CuStudent: {
-      account_type: this.accountSchemaType,
+      account_type: accountSchemaType,
       is_thai_language: Boolean,
       name_en: String,
       surname_en: String,
@@ -25,7 +26,7 @@ class UserContextProvider extends Component {
       is_first_login: Boolean,
     },
     SatitCuPersonel: {
-      account_type: this.accountSchemaType,
+      account_type: accountSchemaType,
       is_thai_language: Boolean,
       name_en: String,
       surname_en: String,
@@ -39,7 +40,7 @@ class UserContextProvider extends Component {
       expired_penalize_date: Date,
     },
     Other: {
-      account_type: this.accountSchemaType,
+      account_type: accountSchemaType,
       is_thai_language: Boolean,
       prefix: String, //(เพื่อแสดง นาย/นาง/นางสาว)
       name_en: String,
@@ -67,7 +68,7 @@ class UserContextProvider extends Component {
       password: String, //pass=phone(editable)
       is_penalize: Boolean,
       expired_penalize_date: Date,
-      verification_status: this.verificationSchemaType,
+      verification_status: verificationSchemaType,
       rejected_info: [String],
       account_expiration_date: Date,
       user_photo: Object, //(ของcollectionที่เก็บรูป)
@@ -77,37 +78,27 @@ class UserContextProvider extends Component {
       relationship_verification_document: Object,
     }
 
-  }
-  setCuStudent = (value: String) => {
-    this.setState({ CuStudent: value });
-    console.log("SET VALUE IS CALLED", this.state.CuStudent)
-  }
-  setSatit = (value: String) => {
-    this.setState({ SatitCuPersonel: value });
-    console.log("SET VALUE IS CALLED", this.state.SatitCuPersonel)
-  }
-  setOther = (value: String) => {
-    this.setState({ Other: value });
-    console.log("SET VALUE IS CALLED", this.state.Other)
-  }
-  setToken = (value: String, isUser?: Boolean) => {
-    this.setState({ jwt: value })
-    if (typeof (isUser) === 'undefined') {
-      this.setState({ isUser: true })
-      console.log('set user to true')
-    }
-    else {
-      this.setState({ isUser: isUser })
-      console.log('set user to input')
-    }
-  }
-  render() {
-    return (
-      <UserContext.Provider value={{ ...this.state, setCuStudent: this.setCuStudent, setSatit: this.setSatit, setOther: this.setOther, setToken: this.setToken }}>
-        {this.props.children}
-      </UserContext.Provider>
-    );
-  }
-}
+  })
 
-export default UserContextProvider;
+  let setCuStudent = (value) => {
+    state.CuStudent = value
+    console.log("SET VALUE IS CALLED", state.CuStudent)
+  }
+  let setSatit = (value) => {
+    state.SatitCuPersonel = value
+    console.log("SET VALUE IS CALLED", state.SatitCuPersonel)
+  }
+  let setOther = (value) => {
+    state.Other = value
+    console.log("SET VALUE IS CALLED", state.Other)
+  }
+  let setLanguage = (value) => {
+    setState({ ...state, is_thai_language: value })
+    console.log("SET VALUE IS CALLED", state)
+  }
+  return (
+    <UserContext.Provider value={{ ...state, setCuStudent: setCuStudent, setSatit: setSatit, setOther: setOther, setLanguage: setLanguage }}>
+      {props.children}
+    </UserContext.Provider>
+  );
+}
