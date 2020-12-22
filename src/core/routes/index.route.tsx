@@ -21,7 +21,7 @@ import FrontLoginMain from "../components/ui/login/login-main"
 import ReserveNow from "../components/pages/Reservation/ReserveNow"
 import JoinWaitingRoom from "../components/pages/Reservation/JoinWaitingRoom"
 import CreateWaitingRoom from "../components/pages/Reservation/CreateWaitingRoom"
-
+import HomePage from '../components/pages/HomePage';
 
 export default function MainRoute() {
 
@@ -95,6 +95,8 @@ export default function MainRoute() {
         <Route exact path="/createwaitingroom" component={CreateWaitingRoom} />
 
         <Route exact path="/account" component={AccountPage} />
+
+        <Route exact path='/home' component={HomePage} />
 
         <Route
           exact
