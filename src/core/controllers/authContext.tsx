@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react"
+import React, { useContext, useEffect, useMemo, useState } from "react"
 import jwt_decode from 'jwt-decode'
 import { getCookie } from '../contexts/cookieHandler'
 interface AuthContextConstruct {
@@ -13,12 +13,9 @@ export const AuthContext = React.createContext({} as AuthContextConstruct)
 export const useAuthContext = () => useContext(AuthContext)
 
 const AuthProvider = ({ ...props }) => {
-  const [token, setToken] = useState<string>(getCookie('token') ?? '')
-  const isUser = useMemo(() => {
-    const decodedToken = token ? jwt_decode(token) : ''
-    return decodedToken ? true : false
-  }, [token])
-  const isAdmin = useMemo(() => false, [])
+  const [token, setToken] = useState(getCookie('token') ?? '')
+  const isUser = !!(token ? jwt_decode(token) : '')
+  const isAdmin = false // this is currently unused
   const value = { token, isUser, setToken, isAdmin }
   return <AuthContext.Provider value={value} {...props} />
 }

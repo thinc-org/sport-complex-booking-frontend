@@ -7,12 +7,8 @@ import Footer from '../ui/footer/footer'
 import { useAuthContext } from '../../controllers/authContext'
 import PersonalInfo from '../ui/login/personal-info-form';
 const FrontLoginPage = (props: any) => {
-  let { url, path } = useRouteMatch()
-  let history = useHistory()
-  const { isUser } = useAuthContext()
-  useEffect(() => {
-    if (isUser) history.push('/account')
-  }, [])
+  const { url, path } = useRouteMatch()
+  const prevent = usePreventUserFromSignIn()
   return (
     <>
       <Switch>
@@ -23,4 +19,12 @@ const FrontLoginPage = (props: any) => {
     </>
   )
 }
-export default FrontLoginPage;
+
+const usePreventUserFromSignIn = () => {
+  const history = useHistory()
+  const { isUser } = useAuthContext()
+  useEffect(() => {
+    if (isUser) history.push('/account')
+  }, [])
+}
+export default FrontLoginPage; 

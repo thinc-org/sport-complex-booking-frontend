@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
-import StaffLogin from "../components/pages/staff-login"
+import StaffLogin from "../components/pages/staff-pages/staff-login"
 import StaffSidebar from "../components/ui/navbar/staff-sidebar"
 import StaffProfile from "../components/pages/staff-pages/staff-profile"
 import { NavHeader } from '../components/ui/navbar/navbarSideEffect'
