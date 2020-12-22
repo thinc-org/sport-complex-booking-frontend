@@ -1,35 +1,13 @@
 import React, { useState } from 'react';
 import { Form, Button, Navbar, NavbarBrand } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import logo from '../../assets/images/logo.png';
+import logo from '../../../assets/images/logo.png';
 import { useForm } from 'react-hook-form'
-import Axios from 'axios';
-import { setCookie } from '../../contexts/cookieHandler'
-import { useAuthContext } from '../../controllers/authContext'
-import { useHistory } from 'react-router-dom'
-interface StaffResponse {
-    jwt: string,
-    message: string,
-    statusCode: string
-}
+import { useStaffLogin } from './staffHooks'
+
 
 function StaffLogin() {
     const { register, handleSubmit, setError, errors } = useForm();
-    const { setToken } = useAuthContext()
-    let history = useHistory()
-    const onLogin = async (data) => {
-        await Axios.post<StaffResponse>(`${process.env.REACT_APP_API_URL}/staffs/login`, { 'username': data.username, 'password': data.password })
-            .then((res) => {
-                setCookie('token', res.data.jwt, 1)
-                setToken(res.data.jwt)
-                history.push('/staff/staffprofile')
-            })
-            .catch((err) => {
-                setError('invalid', { type: 'async', message: 'Username หรือ Password ไม่ถูกต้อง' })
-            })
-    }
-
-
+    const { onLogin } = useStaffLogin(setError)
     return (
         <React.Fragment>
             <Navbar style={{ backgroundColor: '#F1E2E3' }}>

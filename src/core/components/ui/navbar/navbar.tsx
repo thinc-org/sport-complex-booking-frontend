@@ -49,8 +49,9 @@ const NavigationBar = (props: any) => {
   )
 }
 
+
 const Sidebar = (props: any) => {
-  let [inProp, setInProp] = useState(false);
+  const [inProp, setInProp] = useState(false);
   const { header, isOnStaffPage } = useNavHeader()
   const { isUser, setToken } = useAuthContext()
   const listItems = data.map((item, index) => (
@@ -62,6 +63,7 @@ const Sidebar = (props: any) => {
   const onLogOut = async () => {
     setToken('');
     setCookie('token', null, 0)
+    setInProp(false)
   }
   return (
     <div style={{ display: isOnStaffPage ? 'none' : '' }}>

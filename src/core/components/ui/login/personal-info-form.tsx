@@ -3,39 +3,11 @@ import { useState, useEffect } from 'react';
 import { Form, ToggleButton, Container, Button, ToggleButtonGroup } from 'react-bootstrap';
 import { NavHeader } from "../../ui/navbar/navbarSideEffect";
 import { useForm } from 'react-hook-form'
-import { getCookie } from '../../../contexts/cookieHandler'
-import { useHistory } from 'react-router-dom'
-import { useAuthContext } from '../../../controllers/authContext'
 import withUserGuard from '../../../guards/user.guard'
-import jwt_decode from 'jwt-decode'
-import Axios from 'axios'
+import { usePersonalInfo } from './loginHooks'
 const PersonalInfo = (props: any) => {
-    const { token } = useAuthContext()
-    const history = useHistory()
+    const { onSubmit } = usePersonalInfo()
     const { register, handleSubmit, errors } = useForm();
-    const onSubmit = (data) => {
-        Axios.put(`${process.env.REACT_APP_API_URL}/users/validation`, {
-            is_thai_language: data.is_thai_language,
-            personal_email: data.personal_email,
-            phone: data.phone
-        },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            .then((res) => {
-                localStorage.setItem('is_first_login', '')
-                history.push('/account')
-
-            })
-            .catch((err) => console.log(err))
-    }
-    useEffect(() => {
-        if (!localStorage.getItem('is_first_login') || (localStorage.getItem('is_first_login') == "false")) {
-            history.push('/account')
-        }
-    }, [])
     return (
         <>
             <NavHeader header="Tell us about yourself" />

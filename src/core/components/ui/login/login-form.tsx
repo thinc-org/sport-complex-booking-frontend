@@ -1,72 +1,12 @@
 import * as React from "react"
-import { useState, useEffect, useContext } from "react"
 import { Form, Button } from "react-bootstrap"
-import { useHistory, useRouteMatch } from "react-router-dom"
-import { setCookie } from '../../../contexts/cookieHandler'
 import { useForm } from 'react-hook-form'
-import { useAuthContext } from "../../../controllers/authContext"
-import Axios, { AxiosResponse } from "axios"
-interface UserResponse {
-  token: string,
-  is_first_login: boolean
-  is_thai_language: boolean
-}
+import { useLogin } from './loginHooks'
+
+
 export const LoginForm = (props: any) => {
   const { register, handleSubmit, setError, errors } = useForm();
-  let history = useHistory();
-  let { url, path } = useRouteMatch();
-  const { setToken } = useAuthContext()
-  let [isLoading, setLoading] = useState<Boolean>(false)
-  useEffect(() => {
-    if (history.location.search) {
-      const params = history.location.search
-      const ticket = params.slice(params.indexOf('=') + 1)
-      setLoading(true)
-      Axios.post<UserResponse>(`${process.env.REACT_APP_API_URL}/users/validation`, {
-        'appticket': ticket
-      }
-      )
-        .then((res) => {
-          setLoading(false)
-          setCookie('token', res.data.token, 1)
-          setToken(res.data.token)
-          localStorage.setItem('is_first_login', res.data.is_first_login.toString());
-          if (res.data.is_first_login) history.push(`${path}/personal`)
-          else history.push('/account')
-        })
-        .catch((err) => {
-          setLoading(false)
-          setError('invalid', {
-            type: 'async',
-            message: 'Something bad happened, please try again'
-          })
-        })
-    }
-  }, [])
-  const onLogin = async (data) => {
-    setLoading(true)
-    await Axios.post<UserResponse>(`${process.env.API_URL}/users/login`, {
-      username: data.username,
-      password: data.password
-    })
-      .then((res) => {
-        setLoading(false)
-        console.log(res)
-        setCookie('token', res.data.token, 1)
-        setToken(res.data.token)
-        localStorage.setItem('is_first_login', res.data.is_first_login.toString());
-        if (res.data.is_first_login) history.push(`${path}/personal`)
-        else history.push('/account')
-      })
-      .catch((err) => {
-        setLoading(false)
-        setError('invalid', {
-          type: 'async',
-          message: 'Invalid Username or Password'
-        })
-      })
-
-  }
+  const { isLoading, onLogin } = useLogin(setError)
   const SSOLogin = async () => {
     window.location.href = `https://account.it.chula.ac.th/html/login.html?service=${process.env.REACT_APP_URL}/login`
   }
