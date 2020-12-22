@@ -131,6 +131,10 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       setShowModals({ ...showModals, showConfirm: true })
     else setShowAlert(true)
   }
+  const handleChangePassword = () => {
+    if (temp_user.password !== user.password || new_password !== confirm_password) set_show_modals({ ...show_modals, show_password_err: true })
+    else set_show_modals({ ...show_modals, show_confirm_change: true })
+  }
 
   const handleChangePassword = () => {
     if (tempUser.password !== user.password || newPassword !== confirmPassword) setShowModals({ ...showModals, showPasswordErr: true })
@@ -168,7 +172,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       })
   }
   const requestDelete = () => {
-    setShowDel(false)
+    set_show_modals({ ...show_modals, show_del: false })
     setShowAlert(false)
     fetch({
       method: "DELETE",
@@ -179,11 +183,32 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     })
       .then(({ data }) => {
         // console.log(data)
-        setShowComDel(true)
+        set_show_modals({ ...show_modals, show_com_delete: true })
       })
       .catch(({ response }) => {
         console.log(response)
-        setShowErr(true)
+        set_show_modals({ ...show_modals, show_err: true })
+      })
+  }
+  const requestChangePassword = () => {
+    fetch({
+      method: "PATCH",
+      url: "/list-all-user/" + _id,
+      headers: {
+        Authorization: "bearer " + jwt,
+      },
+      data: {
+        password: new_password,
+      },
+    })
+      .then(({ data }) => {
+        console.log(data)
+        setUser({ ...user, password: data.password })
+        set_show_modals({ ...show_modals, show_change_password: false, show_confirm_change: false })
+      })
+      .catch((err) => {
+        console.log(err)
+        set_show_modals({ ...show_modals, show_err: true })
       })
   }
 
@@ -228,10 +253,18 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     setEditing(false)
     setShowModals({ ...showModals, showCom: false })
   }
-  const redirectBack = () => {
-    props.history.push({
-      pathname: "/listOfAllUsers",
-    })
+
+  // renders //
+  const renderModals = () => {
+    if (show_modals.show_confirm)
+      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestUserChange }} props={props} />
+    else if (show_modals.show_com)
+      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ completedChange }} props={props} />
+    else if (show_modals.show_del)
+      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestDelete }} props={props} />
+    else if (show_modals.show_confirm_change)
+      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestChangePassword }} props={props} />
+    else return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{}} props={props} />
   }
 
   // renders //
