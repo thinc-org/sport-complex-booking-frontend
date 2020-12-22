@@ -105,3 +105,10 @@ export interface ModalUserInfo {
   show_com_save: boolean
   show_err: boolean
 }
+
+export interface StaffResponse {
+  jwt: string,
+  message: string,
+  statusCode: string
+}
+

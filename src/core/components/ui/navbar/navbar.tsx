@@ -2,7 +2,7 @@ import * as React from "react"
 import { useState, useEffect, useContext } from "react"
 import { Navbar, Container, Nav } from "react-bootstrap"
 import { Link } from "react-router-dom"
-import { useAuthContext } from '../../../controllers/auth.controller'
+import { useAuthContext } from '../../../controllers/authContext'
 import { getCookie, setCookie } from '../../../contexts/cookieHandler'
 import Toggler from '../../../assets/images/icons/hamburger.svg'
 import { CSSTransition } from 'react-transition-group';
@@ -59,9 +59,6 @@ const Sidebar = (props: any) => {
         {item.name}
       </Link>
     </li>));
-  useEffect(() => {
-    console.log(getCookie('token'))
-  }, [])
   const onLogOut = async () => {
     setToken('');
     setCookie('token', null, 0)

@@ -5,7 +5,7 @@ interface AuthContextConstruct {
   token: string | undefined
   isUser: Boolean,
   setToken: Function
-  // isAdmin: Boolean
+  isAdmin: Boolean
 }
 
 export const AuthContext = React.createContext({} as AuthContextConstruct)
@@ -15,12 +15,11 @@ export const useAuthContext = () => useContext(AuthContext)
 const AuthProvider = ({ ...props }) => {
   const [token, setToken] = useState<string>(getCookie('token') ?? '')
   const isUser = useMemo(() => {
-    console.log(token)
     const decodedToken = token ? jwt_decode(token) : ''
     return decodedToken ? true : false
   }, [token])
-  // const isAdmin = useMemo(() => true, [])
-  const value = { token, isUser, setToken }
+  const isAdmin = useMemo(() => false, [])
+  const value = { token, isUser, setToken, isAdmin }
   return <AuthContext.Provider value={value} {...props} />
 }
 

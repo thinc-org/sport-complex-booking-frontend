@@ -5,22 +5,24 @@ import logo from '../../assets/images/logo.png';
 import { useForm } from 'react-hook-form'
 import Axios from 'axios';
 import { setCookie } from '../../contexts/cookieHandler'
-import { useAuthContext } from '../../controllers/auth.controller'
+import { useAuthContext } from '../../controllers/authContext'
 import { useHistory } from 'react-router-dom'
-
+interface StaffResponse {
+    jwt: string,
+    message: string,
+    statusCode: string
+}
 
 function StaffLogin() {
     const { register, handleSubmit, setError, errors } = useForm();
     const { setToken } = useAuthContext()
     let history = useHistory()
     const onLogin = async (data) => {
-        console.log(data)
-        await Axios.post('http://localhost:3000/staffs/login', { 'username': data.username, 'password': data.password })
+        await Axios.post<StaffResponse>(`${process.env.REACT_APP_API_URL}/staffs/login`, { 'username': data.username, 'password': data.password })
             .then((res) => {
-                console.log('done')
-                setCookie('token', res.data.token, 1)
-                setToken(res.data.token)
-                history.push('/staffprofile')
+                setCookie('token', res.data.jwt, 1)
+                setToken(res.data.jwt)
+                history.push('/staff/staffprofile')
             })
             .catch((err) => {
                 setError('invalid', { type: 'async', message: 'Username หรือ Password ไม่ถูกต้อง' })

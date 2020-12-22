@@ -4,8 +4,13 @@ import { Form, Button } from "react-bootstrap"
 import { useHistory, useRouteMatch } from "react-router-dom"
 import { setCookie } from '../../../contexts/cookieHandler'
 import { useForm } from 'react-hook-form'
-import { useAuthContext } from "../../../controllers/auth.controller"
-import Axios from "axios"
+import { useAuthContext } from "../../../controllers/authContext"
+import Axios, { AxiosResponse } from "axios"
+interface UserResponse {
+  token: string,
+  is_first_login: boolean
+  is_thai_language: boolean
+}
 export const LoginForm = (props: any) => {
   const { register, handleSubmit, setError, errors } = useForm();
   let history = useHistory();
@@ -14,20 +19,18 @@ export const LoginForm = (props: any) => {
   let [isLoading, setLoading] = useState<Boolean>(false)
   useEffect(() => {
     if (history.location.search) {
-      console.log(history.location)
       const params = history.location.search
       const ticket = params.slice(params.indexOf('=') + 1)
       setLoading(true)
-      Axios.post('http://localhost:3000/users/validation', {
+      Axios.post<UserResponse>(`${process.env.REACT_APP_API_URL}/users/validation`, {
         'appticket': ticket
       }
       )
         .then((res) => {
           setLoading(false)
-          console.log(res)
           setCookie('token', res.data.token, 1)
           setToken(res.data.token)
-          localStorage.setItem('is_first_login', res.data.is_first_login);
+          localStorage.setItem('is_first_login', res.data.is_first_login.toString());
           if (res.data.is_first_login) history.push(`${path}/personal`)
           else history.push('/account')
         })
@@ -42,7 +45,7 @@ export const LoginForm = (props: any) => {
   }, [])
   const onLogin = async (data) => {
     setLoading(true)
-    await Axios.post('http://localhost:3000/users/login', {
+    await Axios.post<UserResponse>(`${process.env.API_URL}/users/login`, {
       username: data.username,
       password: data.password
     })
@@ -51,7 +54,7 @@ export const LoginForm = (props: any) => {
         console.log(res)
         setCookie('token', res.data.token, 1)
         setToken(res.data.token)
-        localStorage.setItem('is_first_login', res.data.is_first_login);
+        localStorage.setItem('is_first_login', res.data.is_first_login.toString());
         if (res.data.is_first_login) history.push(`${path}/personal`)
         else history.push('/account')
       })
@@ -65,7 +68,7 @@ export const LoginForm = (props: any) => {
 
   }
   const SSOLogin = async () => {
-    history.push('/login/sso')
+    window.location.href = `https://account.it.chula.ac.th/html/login.html?service=${process.env.REACT_APP_URL}/login`
   }
   return (
     <div className="default-wrapper">

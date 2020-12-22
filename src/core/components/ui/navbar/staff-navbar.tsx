@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Navbar, NavbarBrand, Button } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
+import { useAuthContext } from '../../../controllers/authContext'
+import { setCookie } from '../../../contexts/cookieHandler'
 import logo from '../../../assets/images/logo.png';
 
 function StaffNavbar() {
+    const { setToken } = useAuthContext()
     let location = useLocation()
+    const history = useHistory()
     let [hide, setHidden] = useState(false);
     useEffect(() => {
         if (!(location.pathname.toLowerCase().includes('staff')) || location.pathname.toLowerCase() === "/stafflogin") setHidden(true)
         else setHidden(false)
     }, [location])
     const onLogout = async (e) => {
-
+        await setToken('')
+        setCookie('token', '', 0)
+        history.replace('/staff')
     }
 
     return (

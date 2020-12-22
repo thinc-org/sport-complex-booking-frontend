@@ -52,7 +52,7 @@ const StaffRoute = (props) => {
                     }}
                 />
                 <Route
-                    path={`${path}/จัดการสตาฟ`}
+                    path={`${path}/staffManagement`}
                     render={() => {
                         return (
                             // add pages here staff(page)
