@@ -1,0 +1,104 @@
+import * as React from 'react';
+import { useState, useEffect } from 'react';
+import { useHistory, useRouteMatch } from 'react-router-dom'
+import { useAuthContext } from '../../../controllers/authContext'
+import { setCookie } from '../../../contexts/cookieHandler'
+import { setFirstLogin } from '../../../../constant'
+import { is_first_login } from '../../../../constant'
+import { client } from '../../../../axiosConfig'
+import Axios from 'axios'
+interface UserResponse {
+    token: string,
+    is_first_login: boolean
+    is_thai_language: boolean
+}
+export const useLogin = (setError) => {
+    const { setToken } = useAuthContext()
+    const history = useHistory()
+    const { url, path } = useRouteMatch()
+    const [isLoading, setLoading] = useState(false)
+    const onLogin = async (data) => {
+        setLoading(true)
+        await client.post<UserResponse>(`/users/login`, {
+            username: data.username,
+            password: data.password
+        })
+            .then((res) => {
+                setLoading(false)
+                setCookie('token', res.data.token, 1)
+                setToken(res.data.token)
+                const first_time_login = res.data.is_first_login.toString()
+                setFirstLogin(first_time_login)
+                if (res.data.is_first_login) history.push(`${path}/personal`)
+                else history.push('/account')
+            })
+            .catch((err) => {
+                setLoading(false)
+                setError('invalid', {
+                    type: 'async',
+                    message: 'Invalid Username or Password'
+                })
+            })
+    }
+    useEffect(() => {
+        if (history.location.search) {
+            const params = history.location.search
+            const ticket = params.slice(params.indexOf('=') + 1)
+            setLoading(true)
+            client.post<UserResponse>(`/users/validation`, {
+                'appticket': ticket
+            }
+            )
+                .then((res) => {
+                    setLoading(false)
+                    setCookie('token', res.data.token, 1)
+                    setToken(res.data.token)
+                    const first_time_login = res.data.is_first_login.toString()
+                    setFirstLogin(first_time_login)
+                    if (res.data.is_first_login) history.push(`${path}/personal`)
+                    else history.push('/account')
+                })
+                .catch((err) => {
+                    setLoading(false)
+                    setError('invalid', {
+                        type: 'async',
+                        message: 'Something bad happened, please try again'
+                    })
+                })
+        }
+    }, [])
+
+    return { isLoading, onLogin }
+}
+
+export const usePersonalInfo = () => {
+    const { token } = useAuthContext()
+    const history = useHistory()
+    const onSubmit = (data) => {
+        Axios.put(`${process.env.REACT_APP_API_URL}/users/validation`, {
+            is_thai_language: data.is_thai_language,
+            personal_email: data.personal_email,
+            phone: data.phone
+        },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then((res) => {
+                setFirstLogin('')
+                history.push('/account')
+
+            })
+            .catch((err) => console.log(err))
+    }
+    useEffect(() => {
+        if (!is_first_login || (is_first_login == "false")) {
+            history.push('/account')
+        }
+    }, [])
+    return { onSubmit }
+}
+
+
+
