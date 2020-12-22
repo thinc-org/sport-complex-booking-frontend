@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 import { useState, useEffect } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { useAuthContext } from '../../../controllers/authContext'
@@ -75,7 +75,7 @@ export const usePersonalInfo = () => {
     const { token } = useAuthContext()
     const history = useHistory()
     const onSubmit = (data) => {
-        Axios.put(`${process.env.REACT_APP_API_URL}/users/validation`, {
+        client.put(`/users/validation`, {
             is_thai_language: data.is_thai_language,
             personal_email: data.personal_email,
             phone: data.phone
