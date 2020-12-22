@@ -3,7 +3,7 @@
 @import "./core/components/ui/navbar/navbar.css";
 @import "./core/components/ui/navbar/staff-sidebar.css";
 @import "./core/components/pages/landing.css";
-@import './core/components/pages/staff-pages/disable-court/disable-court.css';
+@import "./core/components/pages/staff-pages/disable-court/disable-court.css";
 
 :root {
   --lightpink-color: #ffeced;
