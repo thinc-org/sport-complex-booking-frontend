@@ -1,8 +1,9 @@
-import Axios from 'axios';
+import Axios, { AxiosResponse } from 'axios';
 import { setCookie } from '../../../contexts/cookieHandler'
 import { useAuthContext } from '../../../controllers/authContext'
 import { useHistory } from 'react-router-dom'
 import { client } from '../../../../axiosConfig'
+
 interface StaffResponse {
     jwt: string,
     message: string,
@@ -13,7 +14,7 @@ export const useStaffLogin = (setError) => {
     let history = useHistory()
     const onLogin = async (data) => {
         await client.post<StaffResponse>(`/staffs/login`, { 'username': data.username, 'password': data.password })
-            .then((res) => {
+            .then((res: AxiosResponse<StaffResponse>) => {
                 setCookie('token', res.data.jwt, 1)
                 setToken(res.data.jwt)
                 history.push('/staff/staffprofile')
