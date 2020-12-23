@@ -19,7 +19,7 @@ export const useLogin = (setError) => {
     const history = useHistory()
     const { url, path } = useRouteMatch()
     const [isLoading, setLoading] = useState(false)
-    const {i18n} = useTranslation()
+    const { i18n } = useTranslation()
     const changeLanguage = (language) => {
         i18n.changeLanguage(language);
     }
