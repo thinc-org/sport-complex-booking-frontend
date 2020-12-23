@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { useAuthContext } from '../../../controllers/authContext'
 import { setCookie } from '../../../contexts/cookieHandler'
-import { setFirstLogin } from '../../../../constant'
+import { setIsFirstLogin } from '../../../../constant'
 import { is_first_login } from '../../../../constant'
 import { client } from '../../../../axiosConfig'
 import Axios, { AxiosResponse } from 'axios'
@@ -26,7 +26,7 @@ export const useLogin = (setError) => {
                 setLoading(false)
                 setCookie('token', res.data.token, 1)
                 setToken(res.data.token)
-                setFirstLogin(false)
+                setIsFirstLogin(false)
                 if (res.data.is_first_login) history.push(`${path}/personal`)
                 else history.push('/account')
             })
@@ -52,7 +52,7 @@ export const useLogin = (setError) => {
                     setCookie('token', res.data.token, 1)
                     setToken(res.data.token)
                     const first_time_login = res.data.is_first_login
-                    setFirstLogin(first_time_login)
+                    setIsFirstLogin(first_time_login)
                     if (res.data.is_first_login) history.push(`${path}/personal`)
                     else history.push('/account')
                 })
@@ -84,7 +84,7 @@ export const usePersonalInfo = () => {
                 }
             })
             .then((res) => {
-                setFirstLogin(false)
+                setIsFirstLogin(false)
                 history.push('/account')
 
             })
