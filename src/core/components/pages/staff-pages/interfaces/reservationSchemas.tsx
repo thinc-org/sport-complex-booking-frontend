@@ -24,6 +24,13 @@ export interface BookingTime {
   end_time: number
 }
 
+export interface UserInfo {
+  username: string
+  personal_email: string
+  phone: string
+}
+
+// Modals //
 export interface DeleteModal {
   show_confirm_del: boolean
   show_com_del: boolean
