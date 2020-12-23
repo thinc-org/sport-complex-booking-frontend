@@ -2,7 +2,7 @@ export const data = [
     {
         icon: '',
         name: 'Home',
-        path: '/'
+        path: '/home'
     },
     {
         icon: '',
