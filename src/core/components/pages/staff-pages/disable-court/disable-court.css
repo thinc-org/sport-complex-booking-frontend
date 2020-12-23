@@ -1,8 +1,12 @@
 .disable-court-wrapper {
-  background-color: white;
+  background-color: transparent
 }
-.disable-court-form select {
+.disable-court-form select, .disable-court-form input {
+  background-color: var(--medium-pink-color);
   height: 2.5rem;
-  border-radius: 4px;
-  margin-right: 2px;
+  height: 50px;
+  border-radius: 5px;
+  margin-right: 5px !important;
+  max-width: 150px;
+  transition: 0.2s;
 }
