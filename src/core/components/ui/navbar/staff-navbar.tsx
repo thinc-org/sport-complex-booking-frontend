@@ -15,7 +15,7 @@ function StaffNavbar() {
         else setHidden(false)
     }, [location])
     const onLogout = async (e) => {
-        await setToken('')
+        setToken('')
         setCookie('token', '', 0)
         history.replace('/staff')
     }

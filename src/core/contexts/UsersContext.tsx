@@ -4,10 +4,10 @@ let defaultValue;
 export const UserContext = createContext(defaultValue);
 
 export default function UserContextProvider(props: any) {
-  let accountSchemaType = { type: String, enum: ['CuStudent', 'SatitAndCuPersonel', 'Other'] };
-  let verificationSchemaType = { type: String, enum: ['NotSubmitted', 'Submitted', 'Verified', 'Rejected'] };
+  const accountSchemaType = { type: String, enum: ['CuStudent', 'SatitAndCuPersonel', 'Other'] };
+  const verificationSchemaType = { type: String, enum: ['NotSubmitted', 'Submitted', 'Verified', 'Rejected'] };
 
-  let [state, setState] = useState({
+  const [state, setState] = useState({
     jwt: "",
     is_thai_language: Boolean,
     account_type: accountSchemaType,
@@ -80,19 +80,19 @@ export default function UserContextProvider(props: any) {
 
   })
 
-  let setCuStudent = (value) => {
+  const setCuStudent = (value) => {
     state.CuStudent = value
     console.log("SET VALUE IS CALLED", state.CuStudent)
   }
-  let setSatit = (value) => {
+  const setSatit = (value) => {
     state.SatitCuPersonel = value
     console.log("SET VALUE IS CALLED", state.SatitCuPersonel)
   }
-  let setOther = (value) => {
+  const setOther = (value) => {
     state.Other = value
     console.log("SET VALUE IS CALLED", state.Other)
   }
-  let setLanguage = (value) => {
+  const setLanguage = (value) => {
     setState({ ...state, is_thai_language: value })
     console.log("SET VALUE IS CALLED", state)
   }

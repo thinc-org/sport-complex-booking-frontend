@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { useAuthContext } from '../../../controllers/authContext'
@@ -6,7 +5,7 @@ import { setCookie } from '../../../contexts/cookieHandler'
 import { setFirstLogin } from '../../../../constant'
 import { is_first_login } from '../../../../constant'
 import { client } from '../../../../axiosConfig'
-import Axios from 'axios'
+import Axios, { AxiosResponse } from 'axios'
 interface UserResponse {
     token: string,
     is_first_login: boolean
@@ -23,7 +22,7 @@ export const useLogin = (setError) => {
             username: data.username,
             password: data.password
         })
-            .then((res) => {
+            .then((res: AxiosResponse<UserResponse>) => {
                 setLoading(false)
                 setCookie('token', res.data.token, 1)
                 setToken(res.data.token)
@@ -49,7 +48,7 @@ export const useLogin = (setError) => {
                 'appticket': ticket
             }
             )
-                .then((res) => {
+                .then((res: AxiosResponse<UserResponse>) => {
                     setLoading(false)
                     setCookie('token', res.data.token, 1)
                     setToken(res.data.token)
