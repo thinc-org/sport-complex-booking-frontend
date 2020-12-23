@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
 import { useDate, useOption } from './disable-court-hook'
 import { ErrorAlert } from './errorModal'
+import { CourtTable } from './disabled-court-table'
 const ListOfCourts = (props) => {
     let { register, handleSubmit, setError, errors, watch, setValue } = useForm();
     const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate(setError)
@@ -51,6 +52,7 @@ const ListOfCourts = (props) => {
                 </Form>
 
             </div>
+            <CourtTable />
         </>
 
     )

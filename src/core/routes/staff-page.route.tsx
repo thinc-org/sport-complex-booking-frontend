@@ -11,7 +11,7 @@ import CUInfo from "../components/pages/staff-pages/list-of-all-users-pages/CUIn
 import UserInfo from "../components/pages/staff-pages/list-of-all-users-pages/UserInfo"
 import VeritificationApproval from "../components/pages/staff-pages/verification-approval-pages/VerificationApproval"
 import VerifyInfo from "../components/pages/staff-pages/verification-approval-pages/VerifyInfo"
-
+import DisableCourt from '../components/pages/staff-pages/disable-court/disable-court.page.main'
 const StaffRoute = (props) => {
     const { path, url } = useRouteMatch()
     function staff(page, header) {
@@ -49,6 +49,12 @@ const StaffRoute = (props) => {
                         return staff(<StaffProfile />, "ยินดีต้อนรับ")
                         // example
                         // add pages here staff(page)
+                    }}
+                />
+                <Route
+                    path={`${path}/disableCourt`}
+                    render={() => {
+                        return staff(<DisableCourt />, 'การปิดคอร์ด')
                     }}
                 />
                 <Route
