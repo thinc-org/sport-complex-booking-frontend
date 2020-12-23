@@ -8,6 +8,7 @@
 :root {
   --lightpink-color: #ffeced;
   --pink-color: #ff80ab;
+  --medium-pink-color : #ffb2dd;
   --darkpink-color: #c94f7c;
   --grey-color: #e6e6e6;
   --red-color: #c9302c;
@@ -41,6 +42,10 @@ html,
   border-radius: 15px;
   margin-bottom: 20px;
 }
+.btn-mediumPink {
+  background-color: var(--medium-pink-color);
+  color:black;
+}
 .btn-pink {
   background-color: var(--pink-color);
   color: white;
@@ -62,7 +67,8 @@ html,
   color: white;
 }
 .btn-pink:focus,
-.btn-darkpink:focus {
+.btn-darkpink:focus,
+.btn-mediumPink:focus {
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(255, 128, 171, 0.25);
 }
