@@ -52,11 +52,7 @@ export const useLogin = (setError) => {
                     setCookie('token', res.data.token, 1)
                     setToken(res.data.token)
                     const first_time_login = res.data.is_first_login
-<<<<<<< HEAD
                     setIsFirstLogin(first_time_login)
-=======
-                    setFirstLogin(first_time_login)
->>>>>>> 10d4d0d... change is_first_login to boolean
                     if (res.data.is_first_login) history.push(`${path}/personal`)
                     else history.push('/account')
                 })
@@ -88,11 +84,7 @@ export const usePersonalInfo = () => {
                 }
             })
             .then((res) => {
-<<<<<<< HEAD
                 setIsFirstLogin(false)
-=======
-                setFirstLogin(false)
->>>>>>> 10d4d0d... change is_first_login to boolean
                 history.push('/account')
 
             })
