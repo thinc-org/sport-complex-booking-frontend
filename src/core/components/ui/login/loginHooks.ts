@@ -26,7 +26,7 @@ export const useLogin = (setError) => {
                 setLoading(false)
                 setCookie('token', res.data.token, 1)
                 setToken(res.data.token)
-                setFirstLogin('false')
+                setFirstLogin(false)
                 if (res.data.is_first_login) history.push(`${path}/personal`)
                 else history.push('/account')
             })
@@ -51,7 +51,7 @@ export const useLogin = (setError) => {
                     setLoading(false)
                     setCookie('token', res.data.token, 1)
                     setToken(res.data.token)
-                    const first_time_login = res.data.is_first_login.toString()
+                    const first_time_login = res.data.is_first_login
                     setFirstLogin(first_time_login)
                     if (res.data.is_first_login) history.push(`${path}/personal`)
                     else history.push('/account')
@@ -84,14 +84,14 @@ export const usePersonalInfo = () => {
                 }
             })
             .then((res) => {
-                setFirstLogin('')
+                setFirstLogin(false)
                 history.push('/account')
 
             })
             .catch((err) => console.log(err))
     }
     useEffect(() => {
-        if (!is_first_login || (is_first_login == "false")) {
+        if (!is_first_login) {
             history.push('/account')
         }
     }, [])
