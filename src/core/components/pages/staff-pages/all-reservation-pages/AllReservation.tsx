@@ -36,7 +36,7 @@ const AllReservation: FunctionComponent<RouteComponentProps> = (props) => {
   // handles //
   const handleInfo = (e) => {
     props.history.push({
-      pathname: "/reservationDetail/" + "1",
+      pathname: "/reservationDetail/" + e.target.id,
     })
   }
 

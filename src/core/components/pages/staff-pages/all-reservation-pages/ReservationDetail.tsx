@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState, useEffect } from "react"
 import { RouteComponentProps, Link } from "react-router-dom"
 import { ListGroup, Table, Row, Col, Button, Card } from "react-bootstrap"
 import fetch from "../interfaces/axiosTemplate"
-import { DeleteModal } from "../interfaces/reservationSchemas"
+import { DeleteModal, UserInfo } from "../interfaces/reservationSchemas"
 import DeleteModalComponent from "./DeleteModalComponent"
 
 const ReservationDetail: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
@@ -14,8 +14,13 @@ const ReservationDetail: FunctionComponent<RouteComponentProps<{ _id: string }>>
     show_com_del: false,
     show_err: false,
   })
+
   // reservation detail state
-  let [members, set_members] = useState<{}[]>([{}, {}, {}, {}])
+  let [sport_name, set_sport_name] = useState<string>("แบตมินตัน")
+  let [date, set_date] = useState<Date>(new Date())
+  let [court_no, set_court_no] = useState<number>(1)
+  let [time_slot, set_time_slot] = useState<number[]>([1, 9])
+  let [members, set_members] = useState<UserInfo[]>([])
 
   // useEffects //
   useEffect(() => {
@@ -34,10 +39,47 @@ const ReservationDetail: FunctionComponent<RouteComponentProps<{ _id: string }>>
       })
   }, [])
 
+  // other functions //
+  const getAllTime = (): string => {
+    let time: string = ""
+    for (let idx = 0; idx < time_slot.length; idx++) time += convertSlotToTime(time_slot[idx]) + (idx !== time_slot.length - 1 ? "," : "")
+    return time
+  }
+
+  const convertSlotToTime = (slot: number): string => {
+    if (slot % 2 === 0) return String(slot / 2) + ":00-" + String(slot / 2 - 1) + ":30"
+    return String(Math.floor(slot / 2)) + ":30-" + String(Math.floor(slot / 2)) + ":00"
+  }
+
   // request //
   const requestDelete = () => {}
 
   // renders //
+  const renderHeader = () => {
+    return (
+      <Card className=" mb-4 shadow">
+        <Row>
+          <Col className="px-0 pt-4 text-center" style={{ whiteSpace: "pre-wrap" }}>
+            ชื่อกีฬา {"\n"}
+            <label>{sport_name}</label>
+          </Col>
+          <hr style={{ height: "60px", width: "0px", borderWidth: "1px", borderStyle: "ridge" }} />
+          <Col className="px-0 pt-3 text-center" style={{ whiteSpace: "pre-wrap" }}>
+            วันที่ / เวลา {"\n"}
+            <label style={{ whiteSpace: "pre-wrap" }}>
+              {date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + "\n" + getAllTime()}
+            </label>
+          </Col>
+          <hr style={{ height: "60px", width: "0px", borderWidth: "1px", borderStyle: "ridge" }} />
+          <Col className="px-0 pt-4 text-center" style={{ whiteSpace: "pre-wrap" }}>
+            เลขคอร์ด {"\n"}
+            <label>{court_no}</label>
+          </Col>
+        </Row>
+      </Card>
+    )
+  }
+
   const renderMemberTable = () => {
     let index = 1
     let memberList = members.map((member) => {
@@ -62,15 +104,7 @@ const ReservationDetail: FunctionComponent<RouteComponentProps<{ _id: string }>>
 
   return (
     <div className="reservationDetail px-5">
-      <Card className="mb-4 shadow">
-        <Row>
-          <Col className="px-0 pt-4 text-center ">ชื่อกีฬา</Col>
-          <hr style={{ height: "40px", width: "0px", borderWidth: "1px", borderStyle: "ridge" }} />
-          <Col className="px-0 pt-4 text-center font-weight-normal">วันที่</Col>
-          <hr style={{ height: "40px", width: "0px", borderWidth: "1px", borderStyle: "ridge" }} />
-          <Col className="px-0 pt-4 text-center font-weight-normal">เลขคอร์ด</Col>
-        </Row>
-      </Card>
+      {renderHeader()}
       <Table>{renderMemberTable()}</Table>
       <Row className="mt-4">
         <Col>
