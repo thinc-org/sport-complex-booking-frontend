@@ -25,6 +25,7 @@ export const useLogin = (setError) => {
     }
     const onLogin = async (data) => {
         setLoading(true)
+        console.log(data)
         await client.post<UserResponse>(`/users/login`, {
             username: data.username,
             password: data.password
