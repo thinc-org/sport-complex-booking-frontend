@@ -1,7 +1,7 @@
 import React, { useState, useEffect, FunctionComponent } from "react"
 import { Row, Col, Button, Form, Card, Modal, Alert, InputGroup } from "react-bootstrap"
 import { Link, RouteComponentProps } from "react-router-dom"
-import fetch from "../interfaces/axiosTemplate"
+import { client } from "../../../../../axiosConfig"
 import { CuAndSatitInfo, CuPagePasswordToggle, ThaiLangAccount, Account, ModalCuAndSatit } from "../interfaces/InfoInterface"
 import CuAndSatitModals from "./CuAndSatitModals"
 
@@ -27,9 +27,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   // Alert //
   const [showAlert, setShowAlert] = useState<boolean>(false)
 
-  const [jwt, setJwt] = useState<string>(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
-  )
+  // const [jwt, setJwt] = useState<string>(
+  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
+  // )
 
   // user states
   const [_id] = useState<string>(props.match.params._id)
@@ -52,31 +52,18 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   })
   const [temp_user, set_temp_user] = useState<CuAndSatitInfo>(user)
 
-  // useEffect(() => {
-  //   fetch({
-  //     method: "GET",
-  //     url: "/account_info/testing/adminToken",
-  //     headers: {
-  //       Authorization: "bearer " + jwt,
-  //     },
-  //   }).then(({ data }) => {
-  //     setJwt(data.token.token)
-  //   })
-  // }, [])
+  // useEffects //
   useEffect(() => {
     getInfo()
-  }, [jwt])
-  useEffect(() => {
-    console.log(user)
-  }, [user])
+  }, [])
+  // useEffect(() => {
+  //   console.log(user)
+  // }, [user])
 
   const getInfo = () => {
-    fetch({
+    client({
       method: "GET",
       url: "/list-all-user/findById/" + _id,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
     })
       .then(({ data }) => {
         console.log(data)
@@ -240,12 +227,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     const { name_th, surname_th, name_en, surname_en, personal_email, phone, is_penalize, expired_penalize_date } = temp_user
     set_show_modals({ ...show_modals, show_confirm: false })
     setShowAlert(false)
-    fetch({
+    client({
       method: "PATCH",
       url: "/list-all-user/" + _id,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
       data: {
         name_th,
         name_en,
@@ -270,12 +254,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const requestDelete = () => {
     set_show_modals({ ...show_modals, show_del: false })
     setShowAlert(false)
-    fetch({
+    client({
       method: "DELETE",
       url: "/list-all-user/User/" + _id,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
     })
       .then(({ data }) => {
         // console.log(data)
@@ -287,12 +268,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       })
   }
   const requestChangePassword = () => {
-    fetch({
+    client({
       method: "PATCH",
       url: "/list-all-user/" + _id,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
       data: {
         password: new_password,
       },
@@ -317,12 +295,13 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
 
   // renders //
   const renderModals = () => {
+    const { username } = user
     if (show_modals.show_confirm)
       return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestUserChange }} props={props} />
     else if (show_modals.show_com)
       return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ completedChange }} props={props} />
     else if (show_modals.show_del)
-      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestDelete }} props={props} />
+      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestDelete, username }} props={props} />
     else if (show_modals.show_confirm_change)
       return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestChangePassword }} props={props} />
     else return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{}} props={props} />
@@ -391,7 +370,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         </Row>
         <Row className="mt-4">
           <Col>
-            <Link to="/listOfAllUsers">
+            <Link to="/staff/listOfAllUsers">
               <Button variant="outline-secondary" className="btn-normal btn-outline-pink">
                 กลับ
               </Button>

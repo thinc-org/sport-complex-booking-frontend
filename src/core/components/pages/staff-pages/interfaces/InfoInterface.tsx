@@ -178,5 +178,3 @@ export interface ModalUserInfo {
   show_com_save: boolean
   show_err: boolean
 }
-
-

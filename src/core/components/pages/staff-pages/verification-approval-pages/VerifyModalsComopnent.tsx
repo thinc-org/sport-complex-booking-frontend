@@ -24,7 +24,7 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
   const redirectBack = () => {
     console.log(props)
     props.history.push({
-      pathname: "/verifyApprove",
+      pathname: "/staff/verifyApprove",
     })
   }
 

@@ -1,8 +1,7 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
 import { Table, Form, Row, Col, Button, Pagination, Modal } from "react-bootstrap"
 import { Link, RouteComponentProps } from "react-router-dom"
-import fetch from "../interfaces/axiosTemplate"
-import { useAuthContext } from "../../../../controllers/auth.controller"
+import { client } from "../../../../../axiosConfig"
 
 interface CUTemplate {
   account_type: Account
@@ -62,9 +61,9 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
   const [max_user, set_max_user] = useState<number>(1)
   const [searchName, setSearchName] = useState<string>("")
   const [status, set_status] = useState<number>(allStatus.All)
-  const [jwt, set_jwt] = useState<string>(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
-  )
+  // const [jwt, set_jwt] = useState<string>(
+  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
+  // )
   const [show_no_user, set_show_no_user] = useState<boolean>(false)
   const [users, setUsers] = useState<Users>([
     {
@@ -81,16 +80,9 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
     },
   ])
 
-  const { token } = useAuthContext()
-
-  // useEffect //
-  useEffect(() => {
-    if (token) set_jwt(token)
-  }, [])
-
   useEffect(() => {
     requestUsers()
-  }, [jwt, page_no])
+  }, [page_no])
 
   const requestUsers = () => {
     // Send JWT //
@@ -102,16 +94,12 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
     if (searchName !== "") param_data["name"] = searchName
     if (status !== allStatus.All) param_data["penalize"] = allStatus.Banned === status
     //  request users from server  //
-    fetch({
+    client({
       method: "GET",
       url: "/list-all-user/getUser",
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
       params: param_data,
     })
       .then(({ data }) => {
-        // console.log(data)
         let userList = data[1].map((user) => {
           if (user.account_type === "CuStudent") return { ...user, account_type: Account.CuStudent }
           else if (user.account_type === "SatitAndCuPersonel") return { ...user, account_type: Account.SatitAndCuPersonel }
@@ -139,23 +127,20 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
     // if no data of that user -> show pop up
     let index = parseInt(e.target.id) - (page_no - 1) * 10 - 1
     let _id: String = users[index]._id
-    fetch({
+    client({
       method: "GET",
       url: "/list-all-user/findById/" + _id,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
     })
       .then(({ data }) => {
         if (data) {
           let account_type: Account = users[index].account_type
           if (account_type !== Account.Other) {
             props.history.push({
-              pathname: "/cuInfo/" + _id,
+              pathname: "/staff/cuInfo/" + _id,
             })
           } else {
             props.history.push({
-              pathname: "/userInfo/" + _id,
+              pathname: "/staff/userInfo/" + _id,
             })
           }
         } else {
@@ -177,14 +162,13 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
   const loadPagination = () => {
     let max_page: number = Math.floor((max_user + 9) / 10)
     let numList: Array<number> = []
+    let haveMore: boolean = true
     let i = 0
     while (numList.length < 5) {
       let page = page_no + i - 2
-      if (page >= 1 && page <= max_page) {
-        numList.push(page)
-      } else if (page > max_page) {
-        break
-      }
+      if (page >= max_page) haveMore = false
+      if (page >= 1 && page <= max_page) numList.push(page)
+      else if (page > max_page) break
       i++
     }
     let elementList = numList.map((num) => {
@@ -205,6 +189,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
         </Pagination.Item>
       )
     })
+    if (haveMore) elementList.push(<Pagination.Ellipsis key={max_page + 1} />)
     return (
       <Pagination className="justify-content-md-end">
         <Pagination.Prev
@@ -255,13 +240,6 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
     let index = (page_no - 1) * 10 + 1
     // let user
     let usersList = users.map((user) => {
-      // if (current_user.account_type === Account.CuStudent) {
-      //   user = current_user as CUTemplate
-      // } else if (current_user.account_type === Account.Other) {
-      //   user = current_user as OtherTemplate
-      // } else {
-      //   user = current_user as SatitTemplate
-      // }
       return (
         <tr key={index} className="tr-normal">
           <td className="font-weight-bold"> {index} </td>
@@ -339,7 +317,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
       </Table>
       <Row>
         <Col>
-          <Link to="/addUser">
+          <Link to="/staff/addUser">
             <Button variant="pink" className="btn-normal">
               เพิ่มผู้ใช้
             </Button>
