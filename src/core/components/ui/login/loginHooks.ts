@@ -91,7 +91,7 @@ export const usePersonalInfo = () => {
             .catch((err) => console.log(err))
     }
     useEffect(() => {
-        if (!is_first_login) {
+        if (!is_first_login()) {
             history.push('/account')
         }
     }, [])

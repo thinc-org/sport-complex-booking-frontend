@@ -1,2 +1,2 @@
-export const is_first_login = localStorage.getItem('is_first_login') == 'true'
+export const is_first_login = () => localStorage.getItem('is_first_login') == 'true'
 export const setIsFirstLogin = (value: boolean) => localStorage.setItem('is_first_login', value.toString())
