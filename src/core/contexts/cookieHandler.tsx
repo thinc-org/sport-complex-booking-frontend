@@ -1,4 +1,4 @@
-export const setCookie = (name: string, value: string | null, exdays: number) => {
+export const setCookie = (name: string, value: string | boolean | null, exdays: number) => {
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     var expires = "expires=" + d.toUTCString();

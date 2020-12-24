@@ -17,7 +17,7 @@ export default function ChulaAccount() {
 
   return (
     <div>
-      {!is_editting ? <ChulaAccountDisplay toggle_edit_button={toggleEditButton} /> : <ChulaAccountEdit toggle_edit_button={toggleEditButton} />}
+      {!is_editting ? <ChulaAccountDisplay toggle_edit_button={toggleEditButton} /> : <ChulaAccountEdit />}
     </div>
   )
 }
