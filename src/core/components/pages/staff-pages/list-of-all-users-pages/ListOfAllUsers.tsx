@@ -100,7 +100,6 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
       params: param_data,
     })
       .then(({ data }) => {
-        // console.log(data)
         let userList = data[1].map((user) => {
           if (user.account_type === "CuStudent") return { ...user, account_type: Account.CuStudent }
           else if (user.account_type === "SatitAndCuPersonel") return { ...user, account_type: Account.SatitAndCuPersonel }
