@@ -76,10 +76,8 @@ export interface AddInfo {
 export interface OtherInfo {
   _id: string
   username: string
-  name_en: string
-  surname_en: string
-  personal_email: string,
-  phone: string
+  name_th: string
+  surname_th: string
 }
 
 export interface ContactPerson {
