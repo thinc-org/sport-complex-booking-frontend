@@ -1,33 +1,27 @@
 import React, { useState, useEffect } from "react"
 import { Button, Card } from "react-bootstrap"
-import fetch from "../interfaces/axiosTemplate"
+import { client } from "../../../../../axiosConfig"
 import { convertDate } from "./UserInfo"
 import Info from "../interfaces/InfoInterface"
 
-export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; info: Info }) {
+export default function OtherViewInfoComponent({ info }: { info: Info }) {
   /// Page states
   const [is_thai, set_thai] = useState<boolean>(true)
 
   // functions //
-  // useEffect(() => {
-  //   console.log(info)
-  // }, [info])
 
   // handles //
   const handlePDF = (e) => {
     let fileId = e.target.id
     console.log(fileId)
     // console.log("trying to open pdf: " + fileId)
-    fetch({
+    client({
       method: "GET",
       url: "/fs/viewFileToken/" + fileId,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
     })
       .then(({ data }) => {
         // data is token //
-        window.open(fetch.defaults.baseURL + "/fs/view?token=" + data.token, "_blank")
+        window.open(client.defaults.baseURL + "/fs/view?token=" + data.token, "_blank")
       })
       .catch((err) => {
         console.log(err)

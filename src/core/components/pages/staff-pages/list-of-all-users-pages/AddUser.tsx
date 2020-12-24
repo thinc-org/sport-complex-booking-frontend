@@ -1,14 +1,24 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
 import { Form, InputGroup, Card, Row, Col, Button, Modal, Alert } from "react-bootstrap"
 import { RouteComponentProps, Link } from "react-router-dom"
-import fetch from "../interfaces/axiosTemplate"
 import { AddInfo } from "../interfaces/InfoInterface"
+import { client } from "../../../../../axiosConfig"
 
 const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
   // Page states //
+<<<<<<< HEAD
   const [jwt, setJwt] = useState<string>(
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmRjYTMxNjZhNDMwOTQyOWM5MmI4MjkiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDg3MzYxMTEsImV4cCI6MTYwOTM0MDkxMX0.NxmksdEUKg_2EU8ukKcO-vjisYY79a4TrJRGAibPvVQ"
   )
+||||||| constructed merge base
+  const [jwt, setJwt] = useState<string>(
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
+  )
+=======
+  // const [jwt, setJwt] = useState<string>(
+  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
+  // )
+>>>>>>> route bug fix, minor bugs fix, improve pagination
   const [selectingSatit, setSelectingSatit] = useState<boolean>(false)
   // Modals & Alerts //
   const [showAdd, setShowAdd] = useState<boolean>(false)
@@ -35,25 +45,11 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
     personal_email: "",
     phone: "",
   })
-  // const [tempUser, setTempUser] = useState()
 
   // functions //
-  useEffect(() => {
-    fetch({
-      method: "GET",
-      url: "/account_info/testing/adminToken",
-    })
-      .then(({ data }) => {
-        setJwt(data.token.token)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [])
-
   const backToListPage = () => {
     props.history.push({
-      pathname: "/listOfAllUsers",
+      pathname: "/staff/listOfAllUsers",
     })
   }
 
@@ -407,12 +403,9 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
       url += "SatitUser"
       data = user
     }
-    fetch({
+    client({
       method: "POST",
       url,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
       data,
     })
       .then(({ data }) => {
@@ -435,7 +428,7 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
         {renderAlert()}
         <Row className="pt-5">
           <Col className="text-right">
-            <Link to="/listOfAllUsers">
+            <Link to="/staff/listOfAllUsers">
               <Button size="lg" variant="outline-secondary" className="mr-2 btn-normal btn-outline-pink">
                 ยกเลิก
               </Button>

@@ -1,14 +1,14 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
 import { Table, Form, Col, Button, Pagination, Modal } from "react-bootstrap"
 import { RouteComponentProps } from "react-router-dom"
-import fetch from "../interfaces/axiosTemplate"
+import { client } from "../../../../../axiosConfig"
 import { OtherInfo } from "../interfaces/InfoInterface"
 
 const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) => {
   // page state
-  const [jwt, setJwt] = useState<string>(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
-  )
+  // const [jwt, setJwt] = useState<string>(
+  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
+  // )
   const [page_no, set_page_no] = useState<number>(1)
   const [max_user_per_page] = useState<number>(10) // > 1
   const [max_user, set_max_user] = useState<number>(1)
@@ -38,7 +38,7 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
 
   useEffect(() => {
     requestUsers()
-  }, [jwt, page_no])
+  }, [page_no])
 
   const requestUsers = () => {
     //  request users from server  //
@@ -47,12 +47,9 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
       end: page_no * max_user_per_page,
     }
     if (searchName !== "") params["name"] = searchName
-    fetch({
+    client({
       method: "GET",
       url: "/approval",
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
       params: params,
     })
       .then(({ data }) => {
@@ -72,14 +69,13 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
   const loadPagination = () => {
     let max_page: number = Math.floor((max_user + max_user_per_page - 1) / max_user_per_page)
     let numList: Array<number> = []
+    let haveMore = true
     let i = 0
     while (numList.length < 5) {
       let page = page_no + i - 2
-      if (page >= 1 && page <= max_page) {
-        numList.push(page)
-      } else if (page > max_page) {
-        break
-      }
+      if (page >= max_page) haveMore = false
+      if (page >= 1 && page <= max_page) numList.push(page)
+      else if (page > max_page) break
       i++
     }
     let elementList = numList.map((num) => {
@@ -100,6 +96,7 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
         </Pagination.Item>
       )
     })
+    if (haveMore) elementList.push(<Pagination.Ellipsis key={max_page + 1} />)
     return (
       <Pagination className="justify-content-md-end">
         <Pagination.Prev
@@ -160,16 +157,13 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
     //send jwt and username
     // if no data of that user -> show pop up
     let _id = e.target.id
-    fetch({
+    client({
       method: "GET",
       url: "/approval/" + _id,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
     })
       .then(({ data }) => {
         props.history.push({
-          pathname: "/verifyInfo/" + _id,
+          pathname: "/staff/verifyInfo/" + _id,
         })
       })
       .catch(({ response }) => {
@@ -217,8 +211,8 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
       return (
         <tr key={id} className="tr-normal">
           <td className="font-weight-bold"> {id++} </td>
-          <td> {user.name_en} </td>
-          <td> {user.surname_en} </td>
+          <td> {user.name_th} </td>
+          <td> {user.surname_th} </td>
           <td> {user.username} </td>
           <td>
             <Button className="btn-normal btn-outline-black" variant="outline-secondary" id={user._id} onClick={handleInfo}>

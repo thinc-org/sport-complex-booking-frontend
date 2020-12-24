@@ -15,7 +15,7 @@ const CuAndSatitModals = ({ show_modals, set_show_modals, info, props }: propsTe
 
   const redirectBack = () => {
     props.history.push({
-      pathname: "/listOfAllUsers",
+      pathname: "/staff/listOfAllUsers",
     })
   }
 

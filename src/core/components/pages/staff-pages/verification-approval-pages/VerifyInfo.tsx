@@ -1,19 +1,19 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
 import { RouteComponentProps, Link } from "react-router-dom"
 import { Button, Card, Form, Collapse } from "react-bootstrap"
-import fetch from "../interfaces/axiosTemplate"
+import { client } from "../../../../../axiosConfig"
 import OtherViewInfoComponent from "../list-of-all-users-pages/OtherViewInfoComponent"
 import VerifyModals from "./VerifyModalsComopnent"
 import { convertDate } from "../list-of-all-users-pages/UserInfo"
-import Info, { ContactPerson } from "../interfaces/InfoInterface"
+import Info from "../interfaces/InfoInterface"
 import { RejectInfo, ModalVerify, RejectInfoLabel } from "../interfaces/InfoInterface"
 
 /// start of main function ///
 const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
   // page state //
-  const [jwt, setJwt] = useState<string>(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
-  )
+  // const [jwt, setJwt] = useState<string>(
+  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
+  // )
   const [show_reject, set_show_reject] = useState<boolean>(false)
   const [account_expired_date, set_account_expired_date] = useState<Date>()
   const [show_modal_info, set_show_modal_info] = useState<ModalVerify>({
@@ -60,80 +60,64 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   const [username, set_username] = useState<string>("")
   const [account_type, set_account_type] = useState<string>("")
   const [membership_type, set_membership_type] = useState<string>("")
-  const [contact, setContact] = useState<ContactPerson>({
-    contact_person_prefix: "asd",
-    contact_person_name: "g",
-    contact_person_surname: "dfh",
-    contact_person_home_phone: "dfh",
-    contact_person_phone: "hdf",
-  })
+  // const [contact, setContact] = useState<ContactPerson>({
+  // contact_person_prefix: "",
+  // contact_person_name: "",
+  // contact_person_surname: "",
+  // contact_person_home_phone: "",
+  // contact_person_phone: "",
+  // })
   const [info, setInfo] = useState<Info>({
-    prefix: "นาย",
-    name_th: "naem",
-    surname_th: "vbvb",
-    name_en: "naem",
-    surname_en: "vbvb",
-    gender: "string",
+    prefix: "",
+    name_th: "",
+    surname_th: "",
+    name_en: "",
+    surname_en: "",
+    gender: "",
     birthday: new Date(),
-    national_id: "string",
-    marital_status: "string",
-    address: "string",
-    email: "string",
-    phone: "081",
-    home_phone: "02",
-    medical_condition: "string",
-    contact_person: contact,
+    national_id: "",
+    marital_status: "",
+    address: "",
+    email: "",
+    phone: "",
+    home_phone: "",
+    medical_condition: "",
+    contact_person: {
+      contact_person_prefix: "",
+      contact_person_name: "",
+      contact_person_surname: "",
+      contact_person_home_phone: "",
+      contact_person_phone: "",
+    },
     membership_type: membership_type,
     // object id //
     user_photo: "",
-    medical_certificate: " { Object }",
-    national_id_photo: "{ Object }",
-    house_registration_number: "{ Object }",
-    relationship_verification_document: "{ Object }",
+    medical_certificate: "",
+    national_id_photo: "",
+    house_registration_number: "",
+    relationship_verification_document: "",
   })
 
   // useEffects //
-  // useEffect(() => {
-  //   // request token
-  //   fetch({
-  //     method: "GET",
-  //     url: "/account_info/testing/adminToken",
-  //   })
-  //     .then(({ data }) => {
-  //       setJwt(data.token.token)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //     })
-  // }, [])
-
-  useEffect(() => {
-    console.log(reject_info)
-  }, [reject_info])
-
   useEffect(() => {
     fetchUserData()
-  }, [jwt])
+  }, [])
 
   const fetchUserData = () => {
-    fetch({
+    client({
       method: "GET",
       url: "/approval/" + _id,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
     })
       .then(({ data }) => {
-        console.log(data)
-        if (data.contact_person) {
-          setContact({
-            contact_person_prefix: data.contact_person.contact_person_prefix,
-            contact_person_name: data.contact_person.contact_person_name,
-            contact_person_surname: data.contact_person.contact_person_surname,
-            contact_person_home_phone: data.contact_person.contact_person_home_phone,
-            contact_person_phone: data.contact_person.contact_person_phone,
-          })
-        }
+        // if (data.contact_person) {
+        //   setContact({
+        //     contact_person_prefix: data.contact_person.contact_person_prefix,
+        //     contact_person_name: data.contact_person.contact_person_name,
+        //     contact_person_surname: data.contact_person.contact_person_surname,
+        //     contact_person_home_phone: data.contact_person.contact_person_home_phone,
+        //     contact_person_phone: data.contact_person.contact_person_phone,
+        //   })
+        // }
         set_username(data.username)
         set_account_type(data.account_type)
         set_membership_type(data.membership_type)
@@ -153,7 +137,13 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
           phone: data.phone,
           home_phone: data.home_phone,
           medical_condition: data.medical_condition,
-          contact_person: contact,
+          contact_person: {
+            contact_person_prefix: data.contact_person.contact_person_prefix,
+            contact_person_name: data.contact_person.contact_person_name,
+            contact_person_surname: data.contact_person.contact_person_surname,
+            contact_person_home_phone: data.contact_person.contact_person_home_phone,
+            contact_person_phone: data.contact_person.contact_person_phone,
+          },
           // Files //
           membership_type: data.membership_type,
           user_photo: data.user_photo,
@@ -189,12 +179,9 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     }
     console.log(rejectList)
     // send request //
-    fetch({
+    client({
       method: "PATCH",
       url: "/approval/reject",
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
       data: {
         id: _id,
         reject_info: rejectList,
@@ -213,12 +200,9 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   const requestAccept = () => {
     // console.log("request accepted!!!")
     // send request //
-    fetch({
+    client({
       method: "PATCH",
       url: "/approval/approve",
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
       data: {
         id: _id,
         newExpiredDate: account_expired_date,
@@ -295,7 +279,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   const renderViewForm = () => {
     return (
       <div>
-        <OtherViewInfoComponent jwt={jwt} info={info} />
+        <OtherViewInfoComponent info={info} />
         <div className="mt-5 text-center">
           <Button
             variant="danger"
@@ -362,7 +346,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     <div className="VerifyInfo mt-4">
       {renderModal()}
       {/* Info start here */}
-      <Link to="/verifyApprove">
+      <Link to="/staff/verifyApprove">
         <Button variant="pink" className="btn-normal mb-3 px-5">
           กลับ
         </Button>

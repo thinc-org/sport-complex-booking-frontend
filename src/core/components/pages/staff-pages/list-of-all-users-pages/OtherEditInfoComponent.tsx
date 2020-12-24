@@ -1,17 +1,15 @@
 import React from "react"
 import { useState, useEffect } from "react"
 import { Card, Form } from "react-bootstrap"
-import fetch from "../interfaces/axiosTemplate"
+import { client } from "../../../../../axiosConfig"
 import { convertDate } from "./UserInfo"
 import Info from "../interfaces/InfoInterface"
 
 export default function OtherEditInfoComponent({
-  jwt,
   temp_info,
   set_temp_info,
   _id,
 }: {
-  jwt: string
   temp_info: Info
   set_temp_info: React.Dispatch<React.SetStateAction<Info>>
   _id: string
@@ -45,12 +43,9 @@ export default function OtherEditInfoComponent({
     if (selectedFile) {
       formData.append(typename, selectedFile, selectedFile.name)
       // Request made to the backend api
-      fetch({
+      client({
         method: "POST",
         url: "/fs/admin/upload/" + _id,
-        headers: {
-          Authorization: "bearer " + jwt,
-        },
         data: formData,
       })
         .then(({ data }) => {

@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
 import { RouteComponentProps, Link } from "react-router-dom"
 import { Button, Card, Form, Alert } from "react-bootstrap"
-import fetch from "../interfaces/axiosTemplate"
+import { client } from "../../../../../axiosConfig"
 import OtherViewInfoComponent from "./OtherViewInfoComponent"
 import OtherEditInfoComponent from "./OtherEditInfoComponent"
 import ModalsComponent from "./OtherModalsComponent"
@@ -23,9 +23,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   // console.log(props)
   // page state //
   const [isEdit, setEdit] = useState<boolean>(false)
-  const [jwt, setJwt] = useState<string>(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODgzMzkxNX0.sp6jlYKkRhTIwzvR9MIRfcsjM2Z_AZ7lxsAUOBoMQAk"
-  )
+  // const [jwt, setJwt] = useState<string>(
+  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODgzMzkxNX0.sp6jlYKkRhTIwzvR9MIRfcsjM2Z_AZ7lxsAUOBoMQAk"
+  // )
   const [show_modal_info, set_show_modal_info] = useState<ModalUserInfo>({
     show_delete: false,
     show_com_delete: false,
@@ -100,7 +100,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
 
   useEffect(() => {
     fetchUserData()
-  }, [jwt])
+  }, [])
   // useEffect(() => {
   //   window.scroll({ top: 0, left: 0, behavior: "smooth" })
   //   window.scrollTo(0, 0)
@@ -108,12 +108,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
 
   // requests //
   const fetchUserData = async () => {
-    await fetch({
+    await client({
       method: "GET",
       url: "/list-all-user/findById/" + _id,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
     })
       .then(({ data }) => {
         console.log(data)
@@ -193,12 +190,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       relationship_verification_document,
     } = temp_info
     // console.log("saving...")
-    fetch({
+    client({
       method: "PATCH",
       url: "/list-all-user/" + _id,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
       data: {
         // info //
         personal_email: email,
@@ -272,12 +266,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
 
   const handleDeleteUser = () => {
     // console.log("YEET!!")
-    fetch({
+    client({
       method: "DELETE",
       url: "/list-all-user/User/" + _id,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
     })
       .then(({ data }) => {
         console.log(data)
@@ -435,9 +426,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const renderViewForm = () => {
     return (
       <div>
-        <OtherViewInfoComponent jwt={jwt} info={info} />
+        <OtherViewInfoComponent info={info} />
         <div className="mt-5">
-          <Link to="/listOfAllUsers">
+          <Link to="/staff/listOfAllUsers">
             <Button variant="outline-secondary" className="btn-normal btn-outline-pink">
               กลับ
             </Button>
@@ -463,7 +454,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const renderEditForm = () => {
     return (
       <div>
-        <OtherEditInfoComponent jwt={jwt} temp_info={temp_info} set_temp_info={set_temp_info} _id={_id} />
+        <OtherEditInfoComponent temp_info={temp_info} set_temp_info={set_temp_info} _id={_id} />
         <div className="mt-5">
           <Button
             variant="pink"
