@@ -81,6 +81,21 @@ html,
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
+.btn-outline-transparent{
+  background-color:transparent;
+  border: 1px solid black;
+  color: black;
+}
+.btn-outline-transparent:hover,
+.btn-outline-transparent:focus
+{
+  background-color: var(--pink-color);
+  border-color: transparent;
+  color: white;
+  transition: 0.3s;
+  box-shadow: 0 0 0 0;
+  outline: 0;
+}
 .btn-normal:hover {
   background-color: #ff2e7e;
   color: white;

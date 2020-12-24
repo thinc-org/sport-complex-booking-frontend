@@ -1,16 +1,6 @@
 
 import { useState, useEffect } from 'react';
-interface RowType {
-    courtNum: string,
-    sports: string,
-    startDate: Date,
-    endDate: Date,
-    id: string
-}
-interface Option {
-    sportType: string[],
-    courtNum: string[]
-}
+import { Option, RowType } from './disable-court-interface'
 export const useDate = (setError) => {
     const currentDate = new Date().setHours(0, 0, 0, 0)
     const [startDate, setStartDate] = useState(currentDate)
@@ -48,9 +38,39 @@ export const useOption = () => {
 }
 
 export const useTable = () => {
-    const [row, setRow] = useState<RowType>()
+    const [data, setData] = useState<RowType[]>();
+    const [page, setPage] = useState(0);
+    const formatDate = (date: Date): string => {
+        return `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`
+    }
+    const fetchData = async () => {
+        await setData([
+            {
+                courtNum: '1',
+                sports: 'Basketball',
+                startDate: formatDate(new Date()),
+                endDate: formatDate(new Date()),
+                id: '12345'
+            },
+            {
+                courtNum: '1',
+                sports: 'Basketball',
+                startDate: formatDate(new Date()),
+                endDate: formatDate(new Date()),
+                id: '12345'
+            },
+            {
+                courtNum: '1',
+                sports: 'Basketball',
+                startDate: formatDate(new Date()),
+                endDate: formatDate(new Date()),
+                id: '12345'
+            }
+        ])
+    }
     useEffect(() => {
-
-    }, [])
+        fetchData()
+    }, [page])
+    return { data, page }
 }
 

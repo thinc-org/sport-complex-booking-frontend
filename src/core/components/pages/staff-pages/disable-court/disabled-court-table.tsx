@@ -1,15 +1,9 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { Button, Pagination, Table } from 'react-bootstrap'
-interface RowType {
-    courtNum: string,
-    sports: string,
-    startDate: Date,
-    endDate: Date,
-    id: string
-}
-
-
+import { useTable } from './disable-court-hook'
+import { RowType } from './disable-court-interface'
+import { client } from '../../../../../axiosConfig'
 export const CourtRow = ({ courtNum, sports, startDate, endDate, id }: RowType) => {
     return (
         <tr>
@@ -20,40 +14,28 @@ export const CourtRow = ({ courtNum, sports, startDate, endDate, id }: RowType) 
                 {sports}
             </td>
             <td>
-                {startDate.toString()}
+                {startDate}
             </td>
-            <td className='d-flex flex-row justify-content-between'>
-                <div>
-                    bro
+            <td className='d-flex flex-row justify-content-between align-items-center'>
+                {endDate}
+                <div className='d-flex flex-row'>
+                    <Button variant='outline-transparent' className='mr-2' >
+                        ดูข้อมูล
+                    </Button>
+                    <Button variant='outline-transparent' style={{ color: 'red' }}>
+                        ลบ
+                    </Button>
                 </div>
-                <Button>
-                    ดูข้อมูล
-                </Button>
 
             </td>
         </tr>
     )
 }
 export const CourtTable = () => {
-    const [data, setData] = useState<RowType[]>();
-    const [page, setPage] = useState(0);
-    const fetchData = async () => {
-        await setData([
-            {
-                courtNum: '1',
-                sports: 'Basketball',
-                startDate: new Date(),
-                endDate: new Date(),
-                id: '12345'
-            }
-        ])
-    }
-    useEffect(() => {
-        fetchData()
-    }, [page])
+    const { data, page } = useTable();
     return (
         <>
-            <Table>
+            <Table className='disable-court-table'>
                 <thead>
                     <tr>
                         <th>
