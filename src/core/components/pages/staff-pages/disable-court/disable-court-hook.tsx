@@ -38,6 +38,7 @@ export const useOption = () => {
 }
 
 export const useTable = () => {
+    const [params, setParams] = useState()
     const [data, setData] = useState<RowType[]>();
     const [page, setPage] = useState(0);
     const formatDate = (date: Date): string => {
