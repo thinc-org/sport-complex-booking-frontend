@@ -3,7 +3,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom'
 import { useAuthContext } from '../../../controllers/authContext'
 import { setCookie } from '../../../contexts/cookieHandler'
 import { setIsFirstLogin } from '../../../../constant'
-import { is_first_login } from '../../../../constant'
+import { getIsFirstlogin } from '../../../../constant'
 import { client } from '../../../../axiosConfig'
 import Axios, { AxiosResponse } from 'axios'
 interface UserResponse {
@@ -69,6 +69,13 @@ export const useLogin = (setError) => {
     return { isLoading, onLogin }
 }
 
+export const usePreventUserFromSignIn = () => {
+    const history = useHistory()
+    const { isUser } = useAuthContext()
+    useEffect(() => {
+        if (isUser) history.push('/account')
+    }, [])
+}
 export const usePersonalInfo = () => {
     const { token } = useAuthContext()
     const history = useHistory()
@@ -91,7 +98,7 @@ export const usePersonalInfo = () => {
             .catch((err) => console.log(err))
     }
     useEffect(() => {
-        if (!is_first_login()) {
+        if (!getIsFirstlogin()) {
             history.push('/account')
         }
     }, [])

@@ -8,7 +8,6 @@ import { useAuthContext } from '../../controllers/authContext'
 import PersonalInfo from '../ui/login/personal-info-form';
 const FrontLoginPage = (props: any) => {
   const { url, path } = useRouteMatch()
-  const prevent = usePreventUserFromSignIn()
   return (
     <>
       <Switch>
@@ -20,11 +19,5 @@ const FrontLoginPage = (props: any) => {
   )
 }
 
-const usePreventUserFromSignIn = () => {
-  const history = useHistory()
-  const { isUser } = useAuthContext()
-  useEffect(() => {
-    if (isUser) history.push('/account')
-  }, [])
-}
+
 export default FrontLoginPage; 
