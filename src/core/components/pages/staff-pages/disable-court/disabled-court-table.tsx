@@ -31,7 +31,7 @@ export const CourtRow = ({ courtNum, sports, startDate, endDate, id }: RowType) 
         </tr>
     )
 }
-export const CourtTable = () => {
+export const CourtTable = ({ params }: any) => {
     const { data, page } = useTable();
     return (
         <>
@@ -75,4 +75,31 @@ export const CourtTable = () => {
         </>
     )
 
+}
+
+const seed = () => {
+    let arr: any[] = []
+    for (let i = 1; i < 30; i++) {
+        arr.push({
+            sport_id: '5fe45df25f8cc3264d3a8895',
+            court_num: 2,
+            starting_date: new Date(),
+            expired_date: new Date(),
+            description: 'hello',
+            disable_time: [
+                {
+                    day: 4,
+                    start_time: i,
+                    end_time: i + 1
+                }
+            ]
+
+        })
+    }
+    arr.forEach((val) => {
+        console.log(val)
+        client.post('/courts/disable-courts', val)
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+    })
 }
