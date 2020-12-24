@@ -4,19 +4,24 @@ import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"
-import {Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 import axios from "axios"
 import { UserContext } from "../../../contexts/UsersContext";
 import { getCookie } from '../../../contexts/cookieHandler'
 import withUserGuard from '../../../guards/user.guard'
 import { useAuthContext } from "../../../controllers/authContext";
+import { History, LocationState } from "history";
 
-function CreateWaitingRoom(props) {
+interface historyProps {
+ history: History<LocationState>;
+}
+
+function CreateWaitingRoom(props: historyProps) {
   // States
   const { register, handleSubmit, getValues, watch } = useForm()
   const [date, setDate] =useState<Date>(new Date());
   const [today] = useState<Date>(new Date());
-  const [is_thai_language] = useState<Boolean>(getCookie('is_thai_language') === "true")
+  const [is_thai_language] = useState(getCookie('is_thai_language') === "true")
   const [details, setDetails] = useState({sport_id: "", court_number: "", time_slot: {}});
   const [quota, setquota] = useState(60)
 

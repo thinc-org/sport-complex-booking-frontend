@@ -49,11 +49,11 @@ export default function MainRoute() {
 
         <Route exact path="/account" component={AccountPage} />
         
-        <Route path='/staff' component={StaffRoute} />
+        <Route exact path='/staff' component={StaffRoute} />
 
-        <Route path='/changePassword' component={ChangePassword} />
+        <Route exact path='/changePassword' component={ChangePassword} />
 
-        <Route path='/banned' component={WaitingRoomBan} />
+        <Route exact path='/banned' component={WaitingRoomBan} />
 
       </Switch>
     </>

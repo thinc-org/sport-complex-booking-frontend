@@ -1,20 +1,27 @@
-import React from "react"
+import React, { PropsWithChildren } from "react"
 import { Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { getCookie } from "../../../contexts/cookieHandler"
 import withUserGuard from "../../../guards/user.guard"
 import { useAuthContext } from "../../../controllers/authContext"
+import { History, LocationState } from "history";
 
-function WaitingRoomBan(props) {
+
+interface historyProps {
+ history: History<LocationState>;
+}
+
+function WaitingRoomBan(props: historyProps) {
 
   const [is_thai_language] = useState(getCookie('is_thai_langauge') === 'true')
-  const { msg } = (props.location && props.location.state) || {};
+  const { msg } = (props['location'] && props['location']['state']) || {};
   const {token} = useAuthContext()
   
   useEffect(()=> {
     fetchValidity(token)
-  })
+    console.log(props)
+  }, [])
 
   const fetchValidity = async (token: String |undefined) => {
 
@@ -46,7 +53,7 @@ function WaitingRoomBan(props) {
         <div className="default-mobile-wrapper mt-4">
           <h4>{msg}</h4>
           <p>{is_thai_language ? "คุณไม่ได้รับอนุญาตให้สร้างห้องรอ": "You do not have the permission to create a waiting room."}</p>
-
+          <p>{(JSON.stringify(props))}</p>
           <Link to={"/"}>
             <div className="button-group">
               <Button className="mt-3 mb-0" variant="darkpink">{is_thai_language ? "กลับสู่หน้าหลัก" : "Go back to home page"}</Button>

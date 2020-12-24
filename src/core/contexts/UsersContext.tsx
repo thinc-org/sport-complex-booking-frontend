@@ -1,4 +1,4 @@
-import React, { Component, createContext } from 'react';
+import React, { createContext } from 'react';
 import { useState } from "react"
 let defaultValue;
 export const UserContext = createContext(defaultValue);
