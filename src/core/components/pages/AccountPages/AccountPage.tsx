@@ -9,7 +9,7 @@ import {useAuthContext } from "../../../controllers/authContext"
 import { getCookie, setCookie } from "../../../contexts/cookieHandler"
 import withUserGuard from "../../../guards/user.guard"
 
-function AccountPage(props) {
+function AccountPage() {
   enum Account {
     CuStudent = "CuStudent",
     SatitAndCuPersonel = "SatitAndCuPersonel",
@@ -17,8 +17,12 @@ function AccountPage(props) {
   }
 
   const {token} = useAuthContext()
+  const { setCuStudent } = useContext(UserContext)
+  const { setSatit } = useContext(UserContext)
+  const { setOther } = useContext(UserContext)
+  const { setLanguage } = useContext(UserContext)
 
-  let [account_type, set_account_type] = useState();
+  let [account_type, setAccountType] = useState();
   let [penalizeStatus, setPenalizeStatus] = useState();
   const userContext = useContext(UserContext);
   const jwt = userContext.jwt
@@ -35,7 +39,6 @@ function AccountPage(props) {
         },
       })
       .then(({ data }) => {
-        //if (data.is_first_login) {props.history.push('/login/personal')} 
         data.jwt = jwt
         let newData = {...data}
         setPenalizeStatus(data.is_penalize)
@@ -48,18 +51,18 @@ function AccountPage(props) {
         )
 
         if (data.account_type === "CuStudent") {
-          userContext.setCuStudent(newData)
+          setCuStudent(newData)
         } else if (data.account_type === "SatitAndCuPersonel") {
-          userContext.setSatit(newData)
+          setSatit(newData)
         } else if (data.account_type === "Other") {
-          userContext.setOther(newData)
+          setOther(newData)
         }
-        userContext.setLanguage(getCookie("is_thai_language")==="true")
-        set_account_type(data.account_type)
+        setLanguage(getCookie("is_thai_language")==="true")
+        setAccountType(data.account_type)
       })
   }
 
-  const showPage = (account_type: any) => {
+  const showPage = (account_type: String | undefined) => {
     switch (account_type) {
       case Account.CuStudent: {
         return <ChulaAccount />
@@ -76,24 +79,21 @@ function AccountPage(props) {
     }
   } 
   
-  return (<UserContext.Consumer>{(context) => {   
-
-    const showPenalized = () => {
-      return (
-        <div className="alert alert-danger mx-3 mt-3" role="alert">
-          <h3>{penalizeStatus ? "คำเตือน" : "You are being penalized"}</h3>
-          <h6>{penalizeStatus ? "คุณจะไม่สามารถทำการจองได้จนกว่าระยะเวลาการลงโทษของคุณจะสิ้นสุดลง" : "You will not be able to make reservations until your penalized period is over"}</h6>
-        </div>
-      )
-    }
-    
+  const showPenalized = () => {
     return (
-      <>
-        {penalizeStatus ? showPenalized(): <></>}
-        {showPage(account_type)}
-      </>
+      <div className="alert alert-danger mx-3 mt-3" role="alert">
+        <h3>{penalizeStatus ? "คำเตือน" : "You are being penalized"}</h3>
+        <h6>{penalizeStatus ? "คุณจะไม่สามารถทำการจองได้จนกว่าระยะเวลาการลงโทษของคุณจะสิ้นสุดลง" : "You will not be able to make reservations until your penalized period is over"}</h6>
+      </div>
     )
-  }}</UserContext.Consumer>)
+  }
+
+  return (
+    <>
+      {penalizeStatus ? showPenalized(): <></>}
+      {showPage(account_type)}
+    </>
+  )
   
 }
 

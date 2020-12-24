@@ -6,7 +6,7 @@ import { getCookie } from '../../../contexts/cookieHandler'
 import withUserGuard from "../../../guards/user.guard"
 
 function ReserveNow() {  
-  const [is_thai_language] = useState<Boolean>(getCookie('is_thai_language') === "true")
+  const [is_thai_language] = useState(getCookie('is_thai_language') === "true")
 
   return (
     <div className="wrapper">
