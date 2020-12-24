@@ -3,14 +3,12 @@ import { Button } from "react-bootstrap"
 import { useState} from "react"
 import { useForm } from "react-hook-form"
 import {Link } from "react-router-dom"
+import { getCookie } from '../../../contexts/cookieHandler'
+import withUserGuard from "../../../guards/user.guard"
 
-export default function JoinWaitingRoom() {
+function JoinWaitingRoom() {
   const { register, handleSubmit, errors } = useForm()
-  let [showHelp, setShowHelp] = useState(false)
-
-  const toggleHelp = () => {
-    setShowHelp(!showHelp)
-  }
+  const [is_thai_language] = useState<Boolean>(getCookie('is_thai_language') === "true")
 
   const onSubmit = (data: any) => {
     console.log(JSON.parse(JSON.stringify(data)))
@@ -20,13 +18,14 @@ export default function JoinWaitingRoom() {
     <div className="wrapper">
       <div className="mx-auto col-md-6">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <h4 className="d-flex justify-content-center font-weight-bold  mt-3">Join a Waiting Room</h4>
+          <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{is_thai_language ? "เข้าห้องรอการจอง" : "Join a Waiting Room"}</h4>
           <div className="default-mobile-wrapper mt-4">
             <span className="row mt-3">
-              <h6 className="mx-3 mt-1">Waiting Room Access Code</h6>
-              <a onClick={toggleHelp}>Help</a>
+              <h6 className="mx-3 mt-1 font-weight-bold">{is_thai_language ? "รหัสห้องรอการจอง" : "Waiting Room Access Code"}</h6>
             </span>
-            {showHelp ? <p className="font-weight-light">The access code can by found when you create a waiting room.</p> : <></>}
+            <p className="font-weight-light">{is_thai_language 
+            ? "รหัสการเข้าห้องรอถึงสามารถพบได้เมื่อคุณสร้างห้องรอ" 
+            : "The access code can by found when you create a waiting room."}</p>
             <div className="mt-2">
               <input
                 name="access_code"
@@ -48,11 +47,11 @@ export default function JoinWaitingRoom() {
           <div className="button-group my-2">
             <Link to={"/reservenow"}>
               <Button className="btn-secondary">
-                Cancel
+                {is_thai_language ? "ยกเลิก" : "cancel"}
               </Button>
             </Link>
             <Button variant="pink" type="submit">
-              Join a Waiting Room
+              {is_thai_language ? "เข้าห้องรอการจอง" : "Join a Waiting Room"}
             </Button>
           </div>
         </form>
@@ -60,3 +59,5 @@ export default function JoinWaitingRoom() {
     </div>
   )
 }
+
+export default withUserGuard(JoinWaitingRoom)

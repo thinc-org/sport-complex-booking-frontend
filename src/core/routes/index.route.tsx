@@ -14,6 +14,8 @@ import ReserveNow from "../components/pages/Reservation/ReserveNow"
 import JoinWaitingRoom from "../components/pages/Reservation/JoinWaitingRoom"
 import CreateWaitingRoom from "../components/pages/Reservation/CreateWaitingRoom"
 import { getCookie } from "../contexts/cookieHandler"
+import ChangePassword from "../components/pages/AccountPages/AccountPageUI/ChangePassword"
+import WaitingRoomBan from "../components/pages/Reservation/WaitingRoomBan"
 
 
 export default function MainRoute() {
@@ -46,7 +48,12 @@ export default function MainRoute() {
         <Route exact path="/createwaitingroom" component={CreateWaitingRoom} />
 
         <Route exact path="/account" component={AccountPage} />
+        
         <Route path='/staff' component={StaffRoute} />
+
+        <Route path='/changePassword' component={ChangePassword} />
+
+        <Route path='/banned' component={WaitingRoomBan} />
 
       </Switch>
     </>

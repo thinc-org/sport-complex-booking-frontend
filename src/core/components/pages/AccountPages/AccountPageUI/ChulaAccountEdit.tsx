@@ -4,13 +4,14 @@ import { useForm } from "react-hook-form";
 import {  Button, Modal } from "react-bootstrap"
 import axios from "axios"
 import { UserContext } from "../../../../contexts/UsersContext"
+import { useAuthContext } from "../../../../controllers/authContext";
 
 
-export default function ChulaAccountEdit({  toggle_edit_button}) {
-  let [is_thai_language] = useState(false)
+export default function ChulaAccountEdit() {
   const [show, setShow] = useState(false);
   const [showErr, setShowErr] = useState(false);
 
+  const {token} = useAuthContext()
 
   // React Hook Forms
   const { register, handleSubmit, errors } = useForm();
@@ -27,15 +28,15 @@ export default function ChulaAccountEdit({  toggle_edit_button}) {
 
         const handleCancel = (e) => {
           e.preventDefault()
-          window.location.reload(false)
+          window.location.reload()
         }
 
         const showWarningMessage = (firstLogin: Boolean) => {
           if (firstLogin) {
             return (
               <div className="alert alert-danger mt-3" role="alert">
-                <h3>{is_thai_language ? "คำเตือน" : "Warning"}</h3>
-                <h6>{is_thai_language ? "กรุณาส่งข้อมูลการสมัคร" : "Please submit the registration form."}</h6>
+                <h3>{context.is_thai_language ? "คำเตือน" : "Warning"}</h3>
+                <h6>{context.is_thai_language ? "กรุณาส่งข้อมูลการสมัคร" : "Please submit the registration form."}</h6>
               </div>
             )
           } else {
@@ -47,13 +48,13 @@ export default function ChulaAccountEdit({  toggle_edit_button}) {
           console.log("send data to backend")
           data = {
             ...data,
-            is_thai_language: user.is_thai_language,
+            is_thai_language: context.is_thai_language,
           }
           console.log("data is" + JSON.parse(JSON.stringify(data)))
           await axios
             .put("http://localhost:3000/account_info/", data, {
               headers: {
-                Authorization: "bearer " + user.jwt,
+                Authorization: "bearer " + token,
               },
             })
             .then(({ data }) => {
@@ -79,12 +80,12 @@ export default function ChulaAccountEdit({  toggle_edit_button}) {
                 </div>
               </div>
               <div className="row">
-                <h6 className="mx-3">Chulalongkorn University Student</h6>
+                <h6 className="mx-3">{context.is_thai_language ? "นิสิตจุฬาลงกรณ์มหาวิทายาลัย" : "Chulalongkorn University Student"}</h6>
               </div>
               <hr className="mx-1" />
               <form onSubmit={handleSubmit(onSubmit)}>
 
-                  <label className="form-label mt-2">Mobile</label>
+                  <label className="form-label mt-2">{context.is_thai_language ? "เบอร์โทรศัพท์" : "Mobile"}</label>
                   <input name="phone" type="text" ref={register({
                     required: "Enter your phone number",
                     pattern: {
@@ -94,7 +95,7 @@ export default function ChulaAccountEdit({  toggle_edit_button}) {
                   })} placeholder="0xxxxxxxxx" defaultValue={user.phone} className="form-control"/>
                   {errors.mobile && <p id="input-error">{errors.mobile.message}</p>}
 
-                  <label className="form-label mt-2">Personal Email</label>
+                  <label className="form-label mt-2">{context.is_thai_language ? "อีเมลส่วนตัว" : "Personal Email"}</label>
                   <input name="personal_email" ref={register(
                     {
                       required: "Enter your e-mail",
@@ -116,32 +117,32 @@ export default function ChulaAccountEdit({  toggle_edit_button}) {
                   </div>
                   <div className="button-group col-md-12">
                     <Button variant="pink" className="btn-secondary" onClick={()=> setShow(true)}>
-                      {is_thai_language ? "บันทึกและส่ง" : "Save and Submit"}
+                      {context.is_thai_language ? "บันทึกและส่ง" : "Save and Submit"}
                     </Button>
                   </div>
                 </div>
 
                 {/* MODAL CONFIRM DIALOGUE */}
-                <Modal show={show} onHide={() => setShow(false)}>
+                <Modal  classname="modal" show={show} onHide={() => setShow(false)}>
                   <div className="modal-content">
                       <div className="modal-header">
                         <h5 className="modal-title" id="confirmModalLabel">
-                          {is_thai_language ? "ยืนยันการส่งใบสมัคร" : "Confirm submit"}
+                          {context.is_thai_language ? "ยืนยันการส่งใบสมัคร" : "Confirm submit"}
                         </h5>
                         <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
                       <div className="modal-body">
-                        {is_thai_language ? "คุณต้องการส่งใบสมัครหรือไม่" : "Do you want to submit the registration form?"}
+                        {context.is_thai_language ? "คุณต้องการส่งใบสมัครหรือไม่" : "Do you want to submit the registration form?"}
                       </div>
                       <div className="modal-footer">
 
                         <Button onClick={() => setShow(false)} type="button" variant="outline-secondary" className="btn-normal" data-dismiss="modal">
-                          {is_thai_language ? "ยกเลิก" : "Cancel"}
+                          {context.is_thai_language ? "ยกเลิก" : "Cancel"}
                         </Button>
                         <Button onClick={handleSubmit(onSubmit)} variant="pink" className="btn-normal">
-                          {is_thai_language ? "บันทึกและส่ง" : "Save and Submit"}
+                          {context.is_thai_language ? "บันทึกและส่ง" : "Save and Submit"}
                         </Button>
                       </div>
                     </div>
@@ -154,11 +155,12 @@ export default function ChulaAccountEdit({  toggle_edit_button}) {
                   }}
                   backdrop="static"
                   keyboard={false}
+                  classname="modal" 
                 >
                   <Modal.Header closeButton>
-                    <Modal.Title>{is_thai_language ? "เกิดข้อผิดพลาด" : "An error has occured"}</Modal.Title>
+                    <Modal.Title>{context.is_thai_language ? "เกิดข้อผิดพลาด" : "An error has occured"}</Modal.Title>
                   </Modal.Header>
-                  <Modal.Body style={{ fontWeight: "lighter" }}> {is_thai_language ? "ไม่แก้ไขข้อมูลผู้ใช้ได้ในขณะนี้" : "Cannot edit account information at the moment"} </Modal.Body>
+                  <Modal.Body style={{ fontWeight: "lighter" }}> {context.is_thai_language ? "ไม่แก้ไขข้อมูลผู้ใช้ได้ในขณะนี้" : "Cannot edit account information at the moment"} </Modal.Body>
                   <Modal.Footer>
                     <Button
                       variant="pink"

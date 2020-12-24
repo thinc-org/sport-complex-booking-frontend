@@ -24,6 +24,7 @@ export const useLogin = (setError) => {
         })
             .then((res: AxiosResponse<UserResponse>) => {
                 setLoading(false)
+                setCookie('is_thai_language', res.data.is_thai_language, 5)
                 setCookie('token', res.data.token, 1)
                 setToken(res.data.token)
                 setIsFirstLogin(false)
@@ -49,6 +50,7 @@ export const useLogin = (setError) => {
             )
                 .then((res: AxiosResponse<UserResponse>) => {
                     setLoading(false)
+                    setCookie('is_thai_language', res.data.is_thai_language, 5)
                     setCookie('token', res.data.token, 1)
                     setToken(res.data.token)
                     const first_time_login = res.data.is_first_login
