@@ -6,12 +6,13 @@ import fetch from "../interfaces/axiosTemplate"
 
 const AllReservation: FunctionComponent<RouteComponentProps> = (props) => {
   // Page state
-  let [jwt, set_jwt] = useState<String>("")
   let [page_no, set_page_no] = useState<number>(1)
   let [max_user, set_max_user] = useState<number>(1)
+  // Search state
   let [sport_type, set_sport_type] = useState<string>("")
   let [cord_no, set_cord_no] = useState<number>(1)
-  let [search_datetime, set_search_datetime] = useState<Date>(new Date(""))
+  let [search_date, set_search_date] = useState<Date>(new Date(""))
+  let [search_time, set_search_time] = useState<number>(1)
   // Reservation room state
   let [reserve_info, set_reserve_info] = useState<SuccessfulReservation[]>([])
 
@@ -63,15 +64,23 @@ const AllReservation: FunctionComponent<RouteComponentProps> = (props) => {
   }
 
   // renders //
-  const renderSportTypeFilter = () => {
+  const renderCourtNumberFilter = () => {
     if (sport_type !== "")
       return (
-        <Form.Control className="form-pink" as="select" defaultValue={0}>
+        <Form.Control
+          className="form-pink"
+          as="select"
+          defaultValue={0}
+          onChange={(e) => {
+            set_cord_no(parseInt(e.target.value))
+          }}
+        >
           <option value={0} disabled>
             เลขคอร์ด
           </option>
-          <option value={1}>1</option>
-          <option value={2}>2</option>
+          <option value={1}>ทั้งหมด</option>
+          <option value={2}>1</option>
+          <option value={3}>2</option>
         </Form.Control>
       )
     return (
@@ -83,23 +92,48 @@ const AllReservation: FunctionComponent<RouteComponentProps> = (props) => {
     )
   }
 
+  const renderTimeFilter = () => {
+    let timeList = [
+      <option value={-1} disabled>
+        เลือกเวลา
+      </option>,
+      <option value={0}>ทั้งหมด</option>,
+    ]
+    for (let i = 1; i <= 48; i++)
+      timeList.push(
+        <option value={i}>{i % 2 === 0 ? i / 2 - 1 + ":30 - " + i / 2 + ":00" : Math.floor(i / 2) + ":00 - " + Math.floor(i / 2) + ":30"}</option>
+      )
+    return (
+      <Form.Control className="form-pink" as="select" defaultValue={-1}>
+        {timeList}
+      </Form.Control>
+    )
+  }
+
   const renderFilterSection = () => {
     return (
       <Form.Row className="align-items-center mt-3">
         <Col>
-          <Form.Control className="form-pink" as="select" defaultValue={"ไม่มี"}>
+          <Form.Control
+            className="form-pink"
+            as="select"
+            defaultValue={"ไม่มี"}
+            onChange={(e) => {
+              set_sport_type(e.target.value)
+            }}
+          >
             <option value="ไม่มี" disabled>
               ประเภทกีฬา
             </option>
+            <option value="">ทั้งหมด</option>
+            <option value="แบตมินตัน">แบตมินตัน</option>
           </Form.Control>
         </Col>
-        <Col sm={2}>{renderSportTypeFilter()}</Col>
-        <Col sm={3}>
-          <Form.Control className="form-pink" type="date" />
+        <Col>{renderCourtNumberFilter()}</Col>
+        <Col>
+          <Form.Control className="form-pink" type="date" onChange={(e) => set_search_date(new Date(e.target.value))} />
         </Col>
-        <Col sm={2}>
-          <Form.Control className="form-pink" type="time" />
-        </Col>
+        <Col>{renderTimeFilter()}</Col>
       </Form.Row>
     )
   }
@@ -125,7 +159,7 @@ const AllReservation: FunctionComponent<RouteComponentProps> = (props) => {
   }
 
   return (
-    <div className="allReservation">
+    <div className="allReservation mr-4">
       {renderFilterSection()}
       <div className="mt-4">
         <Table responsive className="text-center" size="md">

@@ -20,7 +20,10 @@ const ReservationDetail: FunctionComponent<RouteComponentProps<{ _id: string }>>
   let [date, set_date] = useState<Date>(new Date())
   let [court_no, set_court_no] = useState<number>(1)
   let [time_slot, set_time_slot] = useState<number[]>([1, 9])
-  let [members, set_members] = useState<UserInfo[]>([])
+  let [members, set_members] = useState<UserInfo[]>([
+    { username: "1", phone: "191", personal_email: "mail1" },
+    { username: "1", phone: "191", personal_email: "mail1" },
+  ])
 
   // useEffects //
   useEffect(() => {
@@ -85,9 +88,9 @@ const ReservationDetail: FunctionComponent<RouteComponentProps<{ _id: string }>>
     let memberList = members.map((member) => {
       return (
         <tr key={index++} className="tr-normal">
-          <td className="py-4 text-center"> ผู้ใช้ </td>
-          <td className="text-center"> อีเมล </td>
-          <td className="text-center"> เบอร์โทร </td>
+          <td className="py-4 text-center"> {member.username} </td>
+          <td className="text-center"> {member.personal_email} </td>
+          <td className="text-center"> {member.phone} </td>
         </tr>
       )
     })
