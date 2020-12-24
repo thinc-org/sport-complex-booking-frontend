@@ -174,12 +174,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const requestDelete = () => {
     set_show_modals({ ...show_modals, show_del: false })
     setShowAlert(false)
-    fetch({
+    client({
       method: "DELETE",
       url: "/list-all-user/User/" + _id,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
     })
       .then(({ data }) => {
         // console.log(data)
@@ -191,12 +188,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       })
   }
   const requestChangePassword = () => {
-    fetch({
+    client({
       method: "PATCH",
       url: "/list-all-user/" + _id,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
       data: {
         password: new_password,
       },
@@ -256,12 +250,13 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
 
   // renders //
   const renderModals = () => {
+    const { username } = user
     if (show_modals.show_confirm)
       return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestUserChange }} props={props} />
     else if (show_modals.show_com)
       return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ completedChange }} props={props} />
     else if (show_modals.show_del)
-      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestDelete }} props={props} />
+      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestDelete, username }} props={props} />
     else if (show_modals.show_confirm_change)
       return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestChangePassword }} props={props} />
     else return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{}} props={props} />
