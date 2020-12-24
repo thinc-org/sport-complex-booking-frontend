@@ -10,3 +10,17 @@
   max-width: 150px;
   transition: 0.2s;
 }
+.disable-court-form select option{
+  background-color: var(--medium-pink-color);
+}
+.disable-court-table thead{
+  border: 0;
+  background-color: var(--medium-pink-color);
+}
+.disable-court-table tbody>tr{
+  border: 0;
+  background-color: white;
+}
+.disable-court-table tbody>tr{
+  border-bottom: 2px solid #ECEEEF
+}

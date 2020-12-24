@@ -37,7 +37,6 @@ export const useLogin = (setError) => {
                 setCookie('token', res.data.jwt, 1)
                 setToken(res.data.token)
                 setIsFirstLogin(false)
-                console.log(res)
                 if (res.data.is_first_login) history.push(`${path}/personal`)
                 else history.push('/account')
                 if (res.data.is_thai_language) changeLanguage('th')
