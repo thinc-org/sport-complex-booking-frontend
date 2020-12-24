@@ -15,7 +15,7 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
 
   const redirectBack = () => {
     props.history.push({
-      pathname: "/listOfAllUsers",
+      pathname: "/staff/listOfAllUsers",
     })
   }
 
