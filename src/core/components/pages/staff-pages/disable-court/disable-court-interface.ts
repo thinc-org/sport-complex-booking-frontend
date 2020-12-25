@@ -25,3 +25,7 @@ export interface Pagination {
     page: number,
     pagination: number[]
 }
+export interface Sport {
+    name: string,
+    id: string
+}

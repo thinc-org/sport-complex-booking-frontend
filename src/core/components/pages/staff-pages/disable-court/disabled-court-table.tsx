@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Link, useRouteMatch } from 'react-router-dom'
 import { Button, Pagination, Table } from 'react-bootstrap'
-import { useTable, seed } from './disable-court-hook'
 import { formatDate } from './disable-court-hook'
 import { RowType } from './disable-court-interface'
 export const CourtRow = ({ court_num, sport_id, starting_date, expired_date, _id }: RowType) => {
@@ -21,7 +20,7 @@ export const CourtRow = ({ court_num, sport_id, starting_date, expired_date, _id
                 {formatDate(new Date(expired_date))}
                 <div className='d-flex flex-row'>
                     <Button variant='outline-transparent' className='mr-2' >
-                        <Link to={`${path}/${_id}`}>ดูข้อมูล</Link>
+                        <Link className='disable-court-link' to={`${path}/${_id}`} style={{ color: 'black' }}>ดูข้อมูล</Link>
                     </Button>
                     <Button variant='outline-transparent' style={{ color: 'red' }}>
                         ลบ
@@ -53,7 +52,7 @@ export const CourtTable = ({ data }: any) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data?.map((val, indx) => (
+                    {data?.map((val) => (
                         <CourtRow
                             court_num={val.court_num}
                             sport_id={val.sport_id}

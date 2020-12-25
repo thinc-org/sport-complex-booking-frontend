@@ -1,21 +1,19 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
 import { Form, Modal, Button, Pagination } from 'react-bootstrap';
+import { Link, useRouteMatch } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
 import { useDate, useOption, seed } from './disable-court-hook'
 import { ErrorAlert } from './errorModal'
 import { CourtTable } from './disabled-court-table'
-import { QueryParams } from './disable-court-interface'
 import { useTable } from './disable-court-hook'
 const ListOfCourts = (props) => {
-    const { data, page, maxPage, setPage, jumpUp, jumpDown, setParams } = useTable()
+    const { path } = useRouteMatch()
+    const { data, maxPage, page, setPage, jumpUp, jumpDown, setParams, pageArr } = useTable()
     const { register, handleSubmit, setError, errors, watch, setValue } = useForm();
-    const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate(setError)
+    const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
     const watchSports = watch('sports', '')
     const { option } = useOption()
-    const nearestFiveFloor = (page % 5 == 0 && page != 1) ? page - 4 : (5 * Math.floor(page / 5)) + 1
-    const nearestFiveCeil = (5 * Math.ceil((page) / 5)) > maxPage ? maxPage : (5 * Math.ceil((page) / 5))
     const validateFilter = (event) => {
         if (event.target.value === 'ประเภทกีฬา' || !event.target.value) setValue('courtNum', 'เลขคอร์ด')
     }
@@ -57,27 +55,31 @@ const ListOfCourts = (props) => {
                                 <DatePicker className='form-control' selected={endDate} onChange={onEndDateChange} />
                             </div>
                         </div>
-                        <Button type='submit' variant='mediumPink' style={{ fontSize: '1.2rem', padding: '0.375rem 0.75rem', minWidth: '120px', borderRadius: '15px' }}>
+                        <Button className='disable-court-button' type='submit' variant='mediumPink'>
                             ค้นหา
-                    </Button>
+                        </Button>
                     </div>
                 </Form>
             </div>
             <CourtTable data={data} />
             <div className="d-flex flex-row justify-content-between align-content-center">
-                <Button variant='mediumPink'>เพิ่มการปิดคอร์ด</Button>
+                <Button variant='mediumPink' className='disable-court-button'>
+                    <Link to={`${path}/add`} className='disable-court-link'>
+                        เพิ่มการปิดคอร์ด
+                    </Link>
+                </Button>
                 <Pagination>
                     <Pagination.Prev onClick={() => { if (page > 1) setPage(prev => prev - 1) }} />
                     {
                         page <= 5 ? '' : <Pagination.Ellipsis onClick={jumpDown} />
                     }
                     {
-                        Array.from(Array(nearestFiveCeil + 1).keys()).slice(nearestFiveFloor, nearestFiveCeil + 1).map((val) => {
-                            return <Pagination.Item key={val} onClick={() => setPage(val)}>{val}</Pagination.Item>
+                        pageArr.map((val) => {
+                            return <Pagination.Item key={val} onClick={() => { setPage(val) }}>{val}</Pagination.Item>
                         })
                     }
                     {
-                        (page > (5 * Math.floor(maxPage))) || page === maxPage || maxPage <= 5 ? '' : <Pagination.Ellipsis onClick={jumpUp} />
+                        (page > Math.floor(maxPage / 5) * 5) || page === maxPage || maxPage <= 5 ? '' : <Pagination.Ellipsis onClick={jumpUp} />
                     }
                     <Pagination.Next onClick={() => { if (page < maxPage) setPage(prev => prev + 1) }} />
                 </Pagination>

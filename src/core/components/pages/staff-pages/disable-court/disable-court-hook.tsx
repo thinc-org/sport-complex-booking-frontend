@@ -1,8 +1,8 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { Option, RowType, Pagination, QueryParams } from './disable-court-interface'
 import { client } from '../../../../../axiosConfig'
-export const useDate = (setError) => {
+export const useDate = () => {
     let currentDate = new Date()
     currentDate.setHours(0, 0, 0, 0)
     const [startDate, setStartDate] = useState(currentDate)
@@ -24,6 +24,15 @@ export const useDate = (setError) => {
     return { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert }
 }
 
+export const handleDelete = (id: string) => {
+    client.delete('/courts/disable-courts', {
+        params: {
+            id: id
+        }
+    })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err))
+}
 
 export const useOption = () => {
     const [option, setOption] = useState<Option>()
@@ -54,6 +63,10 @@ export const useTable = () => {
     const [data, setData] = useState<RowType[]>();
     const [page, setPage] = useState(1);
     const [maxPage, setMaxPage] = useState(1);
+    const firstEffect = useRef(true);
+    const nearestFiveFloor = (page % 5 == 0 && page != 1) ? page - 4 : (5 * Math.floor(page / 5)) + 1
+    const nearestFiveCeil = (5 * Math.ceil((page) / 5)) > maxPage ? maxPage : (5 * Math.ceil((page) / 5))
+    const pageArr = Array.from(Array(nearestFiveCeil + 1).keys()).slice(nearestFiveFloor, nearestFiveCeil + 1)
     function jumpUp() {
         const currentPage = page ?? 0
         setPage(5 * Math.ceil(currentPage / 5) + 1)
@@ -64,18 +77,16 @@ export const useTable = () => {
         else setPage(5 * (Math.floor(currentPage / 5)))
     }
     const fetchData = async (parameter) => {
+        console.log('fetch')
         await client.post('/courts/disable-courts/search', parameter)
             .then(res => {
                 console.log(res.data.total_found)
                 setMaxPage(Math.ceil(res.data.total_found / 10))
                 setData(res.data.sliced_results)
-
-
             })
             .catch(err => console.log(err))
     }
     useEffect(() => {
-        console.log('change params')
         setParams(prev => {
             return {
                 ...prev,
@@ -85,15 +96,19 @@ export const useTable = () => {
         })
     }, [page])
     useEffect(() => {
-        console.log('fetch')
+        if (firstEffect.current) {
+            firstEffect.current = false;
+            return;
+        }
         fetchData(params)
     }, [params])
-    return { data, page, maxPage, setPage, jumpUp, jumpDown, setParams }
+    return { data, page, maxPage, setPage, jumpUp, jumpDown, setParams, pageArr }
 }
+
 
 export const seed = () => {
     const arr: any[] = []
-    for (let i = 1; i < 60; i++) {
+    for (let i = 1; i < 40; i++) {
         arr.push({
             sport_id: '5fe45df25f8cc3264d3a8895',
             court_num: i,
@@ -109,6 +124,23 @@ export const seed = () => {
 
         })
     }
+    for (let k = 1; k < 40; k++) {
+        arr.push({
+            sport_id: '5fe45df25f8cc3264d3a8895',
+            court_num: k + 40,
+            starting_date: new Date(),
+            expired_date: new Date(),
+            description: 'hello',
+            disable_time: [
+                {
+                    day: 3,
+                    time_slot: [k, k + 1]
+                }
+            ]
+
+        })
+    }
+
     arr.forEach((val) => {
         console.log(val)
         client.post('/courts/disable-courts', val)
