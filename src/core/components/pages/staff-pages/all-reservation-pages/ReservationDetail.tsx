@@ -5,9 +5,9 @@ import fetch from "../interfaces/axiosTemplate"
 import { DeleteModal, UserInfo } from "../interfaces/reservationSchemas"
 import DeleteModalComponent from "./DeleteModalComponent"
 
-const ReservationDetail: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
+const ReservationDetail: FunctionComponent<RouteComponentProps<{ pagename: string; _id: string }>> = (props) => {
   // Page state //
-  let [jwt, set_jwt] = useState<String>("")
+  let [pagename] = useState<String>(props.match.params.pagename)
   let [_id] = useState<String>(props.match.params._id)
   let [show_modal_info, set_show_modal_info] = useState<DeleteModal>({
     show_confirm_del: false,
@@ -27,20 +27,8 @@ const ReservationDetail: FunctionComponent<RouteComponentProps<{ _id: string }>>
 
   // useEffects //
   useEffect(() => {
-    fetch({
-      method: "GET",
-      url: "/....",
-      headers: {
-        Authorization: jwt,
-      },
-    })
-      .then(({ data }) => {
-        console.log(data)
-      })
-      .catch(({ response }) => {
-        console.log(response)
-      })
-  }, [])
+    console.log(pagename, _id)
+  }, [pagename, _id])
 
   // other functions //
   const getAllTime = (): string => {
@@ -111,7 +99,7 @@ const ReservationDetail: FunctionComponent<RouteComponentProps<{ _id: string }>>
       <Table>{renderMemberTable()}</Table>
       <Row className="mt-4">
         <Col>
-          <Link to="/allReservation">
+          <Link to={"/allReservation/" + pagename}>
             <Button variant="pink" className="btn-normal">
               กลับ
             </Button>
