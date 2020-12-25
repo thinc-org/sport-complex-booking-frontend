@@ -52,4 +52,8 @@ select {
   display: block;
   wixth: 100%;
 }
-
+.default-link,
+.default-link:hover {
+  text-decoration-line: none;
+  color: black;
+}

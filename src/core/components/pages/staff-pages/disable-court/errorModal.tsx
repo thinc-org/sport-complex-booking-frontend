@@ -5,9 +5,11 @@ interface Props {
     inProp: boolean,
     header: string,
     message: string,
-    handleClose: any
+    handleClose: any,
+    canCancel?: boolean
+    onCancel?: any
 }
-export const ErrorAlert = ({ inProp, header, message, handleClose }: Props) => {
+export const ErrorAlert = ({ inProp, header, message, handleClose, canCancel = false, onCancel }: Props) => {
     return (
         <>
             <Modal show={inProp} onHide={handleClose}>
@@ -19,6 +21,10 @@ export const ErrorAlert = ({ inProp, header, message, handleClose }: Props) => {
                     <Button variant="mediumPink" onClick={handleClose}>
                         ตกลง
                     </Button>
+                    {canCancel ?
+                        <Button onClick={onCancel}>
+                            ยกเลิก
+                </Button> : ''}
                 </Modal.Footer>
             </Modal>
         </>
