@@ -1,26 +1,27 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { Link, useRouteMatch } from 'react-router-dom'
 import { Button, Pagination, Table } from 'react-bootstrap'
-import { useTable } from './disable-court-hook'
+import { useTable, seed } from './disable-court-hook'
+import { formatDate } from './disable-court-hook'
 import { RowType } from './disable-court-interface'
-import { client } from '../../../../../axiosConfig'
-export const CourtRow = ({ courtNum, sports, startDate, endDate, id }: RowType) => {
+export const CourtRow = ({ court_num, sport_id, starting_date, expired_date, _id }: RowType) => {
+    const { url, path } = useRouteMatch()
     return (
         <tr>
             <td>
-                {courtNum}
+                {court_num}
             </td>
             <td>
-                {sports}
+                {sport_id}
             </td>
             <td>
-                {startDate}
+                {formatDate(new Date(starting_date))}
             </td>
             <td className='d-flex flex-row justify-content-between align-items-center'>
-                {endDate}
+                {formatDate(new Date(expired_date))}
                 <div className='d-flex flex-row'>
                     <Button variant='outline-transparent' className='mr-2' >
-                        ดูข้อมูล
+                        <Link to={`${path}/${_id}`}>ดูข้อมูล</Link>
                     </Button>
                     <Button variant='outline-transparent' style={{ color: 'red' }}>
                         ลบ
@@ -31,8 +32,7 @@ export const CourtRow = ({ courtNum, sports, startDate, endDate, id }: RowType) 
         </tr>
     )
 }
-export const CourtTable = ({ params }: any) => {
-    const { data, page } = useTable();
+export const CourtTable = ({ data }: any) => {
     return (
         <>
             <Table className='disable-court-table'>
@@ -53,53 +53,21 @@ export const CourtTable = ({ params }: any) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data?.map((val) => (
+                    {data?.map((val, indx) => (
                         <CourtRow
-                            courtNum={val.courtNum}
-                            sports={val.sports}
-                            startDate={val.startDate}
-                            endDate={val.endDate}
-                            id={val.id}
-                            key={val.id}
+                            court_num={val.court_num}
+                            sport_id={val.sport_id}
+                            starting_date={val.starting_date}
+                            expired_date={val.expired_date}
+                            _id={val._id}
+                            key={val._id}
                         />
+
                     ))}
 
                 </tbody>
             </Table>
-            <div className="d-flex flex-row justify-content-between align-content-center">
-                <Button variant='mediumPink'>เพิ่มการปิดคอร์ด</Button>
-                <Pagination>
-
-                </Pagination>
-            </div>
         </>
     )
 
-}
-
-const seed = () => {
-    let arr: any[] = []
-    for (let i = 1; i < 30; i++) {
-        arr.push({
-            sport_id: '5fe45df25f8cc3264d3a8895',
-            court_num: 2,
-            starting_date: new Date(),
-            expired_date: new Date(),
-            description: 'hello',
-            disable_time: [
-                {
-                    day: 4,
-                    start_time: i,
-                    end_time: i + 1
-                }
-            ]
-
-        })
-    }
-    arr.forEach((val) => {
-        console.log(val)
-        client.post('/courts/disable-courts', val)
-            .then(res => console.log(res))
-            .catch(err => console.log(err))
-    })
 }
