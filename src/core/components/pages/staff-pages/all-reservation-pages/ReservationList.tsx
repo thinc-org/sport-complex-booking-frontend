@@ -4,8 +4,9 @@ import { Row, Col, Form, Button, Table } from "react-bootstrap"
 import SuccessfulReservation from "../interfaces/reservationSchemas"
 import fetch from "../interfaces/axiosTemplate"
 
-const AllReservation: FunctionComponent<RouteComponentProps> = (props) => {
+const AllReservation: FunctionComponent<RouteComponentProps<{ pagename: string }>> = (props) => {
   // Page state
+  let [pagename] = useState<string>(props.match.params.pagename)
   let [page_no, set_page_no] = useState<number>(1)
   let [max_user, set_max_user] = useState<number>(1)
   // Search state
@@ -30,14 +31,14 @@ const AllReservation: FunctionComponent<RouteComponentProps> = (props) => {
         console.log(response)
       })
   }, [])
-  // useEffect(() => {
-  //   requestInfo()
-  // }, [jwt])
+  useEffect(() => {
+    console.log(pagename)
+  }, [pagename])
 
   // handles //
   const handleInfo = (e) => {
     props.history.push({
-      pathname: "/reservationDetail/" + e.target.id,
+      pathname: "/reservationDetail/" + pagename + "/" + e.target.id,
     })
   }
 
