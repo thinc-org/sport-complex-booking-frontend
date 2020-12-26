@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next'
 
 function JoinWaitingRoom() {
   const { register, handleSubmit, errors } = useForm()
-  const [is_thai_language] = useState<Boolean>(getCookie('is_thai_language') === "true")
   const {t} = useTranslation()
 
   const onSubmit = (data: any) => {
@@ -23,7 +22,7 @@ function JoinWaitingRoom() {
           <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{t("join_waiting_room")}</h4>
           <div className="default-mobile-wrapper mt-4">
             <span className="row mt-3">
-              <h6 className="mx-3 mt-1 font-weight-bold">{is_thai_language ? "รหัสห้องรอการจอง" : "Waiting Room Access Code"}</h6>
+              <h6 className="mx-3 mt-1 font-weight-bold">{t("waiting_room_password")}</h6>
             </span>
             <p className="font-weight-light">{t("waiting_room_help")}</p>
             <div className="mt-2">

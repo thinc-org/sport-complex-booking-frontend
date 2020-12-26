@@ -1,4 +1,5 @@
 {
+  "en": {
   "phone_label": "Mobile",
   "personal_email_label": "Personal Email",
   "chula_account_type": "Chulalongkorn University Student",
@@ -30,7 +31,7 @@
   "home_phone": "Home Phone Number *",
   "mobile_phone": "Mobile Phone Number *",
   "medical_condition": "Do you have any medical conditions? (If there are none, please leave this blank",
-  "emergency_contact": "Contact Person in Case of Emergency",
+  "emergency_contact": "Contact Person in Case of Emergency ",
   "contact_person_prefix": "Prefix *",
   "contact_person_name":  "First Name *",
   "contact_person_surname": "Last Name *",
@@ -97,5 +98,11 @@
   "want_to_create_waiting_room": "Do you want to create a reservation waiting room?",
   "reservation_details": "Reservation Details",
   "password_mismatch": "Passwords do not match",
-  "enter_again": "Please enter your new password again"  
+  "enter_again": "Please enter your new password again",  
+  "you_are_penalized": "You are being penalized",
+  "penalize_message": "You will not be able to make reservations until your penalized period is over",
+  "langauge": "Language",
+  "waiting_room_ban": "You do not have the permission to create a waiting room.",
+  "back_to_home": "Go back to home page."
+}
 }

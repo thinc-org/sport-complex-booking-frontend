@@ -180,10 +180,10 @@ export default function OtherAccountEdit() {
   return (
     /// THIS IS THE START OF THE EDITING VIEW
     <div className="mx-auto col-md-6">
-      <OtherWarningMessage show={user.verification_status !== ""} is_thai_language={is_thai_language} verification_status={user.verification_status} />            
+      <OtherWarningMessage show={user.verification_status !== ""} verification_status={user.verification_status} />            
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="default-mobile-wrapper my-3">
-          <h4 className="align-right mb-2">{is_thai_language ? "ถาษา" : "Language"}</h4>
+          <h4 className="align-right mb-2">{t("language")}</h4>
           <div className="row mt-2 mx-1">
             {!is_thai_language ? (
               <div>
@@ -192,12 +192,8 @@ export default function OtherAccountEdit() {
               </div>
             ) : (
               <div>
-                <Button variant="gray" className="btn-outline-dark mr-2" onClick={() => changeLanguage(false)}>
-                  EN
-                </Button>
-                <Button variant="pink" className="" onClick={() => changeLanguage(true)}>
-                  TH
-                </Button>
+                <Button variant="gray" className="btn-outline-dark mr-2" onClick={() => changeLanguage(false)}>EN</Button>
+                <Button variant="pink" className="" onClick={() => changeLanguage(true)}>TH</Button>
               </div>
             )}
           </div>

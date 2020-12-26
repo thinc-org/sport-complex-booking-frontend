@@ -253,3 +253,7 @@ p.link {
   width: 15px;
   height: 15px;
 }
+
+.input-error {
+  color: red;
+}

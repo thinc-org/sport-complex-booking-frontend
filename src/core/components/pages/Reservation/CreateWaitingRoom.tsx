@@ -41,7 +41,6 @@ function CreateWaitingRoom(props: CreateWaitingRoomProps) {
   const { register, handleSubmit, getValues, watch } = useForm()
   const [date, setDate] =useState(new Date());
   const [today] = useState(new Date());
-  const {is_thai_language} = useContext(UserContext)
   const [details, setDetails] = useState<WaitingRoomData>({sport_id: "", court_number: 0, time_slot: [], date});
   const [quota, setquota] = useState(60)
   const {t} = useTranslation()
@@ -293,7 +292,7 @@ const formatTime = (element: number) => {
             {t("create_waiting_room")}
           </Button>}
         </div>
-        <DetailsModal show={show} setShow={setShow} is_thai_language={is_thai_language} sportName={sportName} details={details} date={date} times={times} formatTime={formatTime} postDataToBackend={postDataToBackend} />
+        <DetailsModal show={show} setShow={setShow} sportName={sportName} details={details} date={date} times={times} formatTime={formatTime} postDataToBackend={postDataToBackend} />
       </form>
     </div>
   </div>
