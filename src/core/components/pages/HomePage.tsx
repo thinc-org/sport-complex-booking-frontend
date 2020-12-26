@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect, useContext } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { client } from '../../../axiosConfig';
 import { UserContext } from '../../contexts/UsersContext';
 
 const HomePage = () => {
@@ -39,11 +39,9 @@ const HomePage = () => {
     }, [cookieConsent])
 
     const fetchUserName = async () => {
-        axios
+        client
             .get('https://localhost:3000/account_info/', {
-                headers: {
-                    Authorization: 'bearer ' + jwt,
-                },
+
             })
             .then(res => {
                 setNameTh(res.data.name_th);

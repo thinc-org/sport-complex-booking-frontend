@@ -4,6 +4,7 @@ import ChulaAccount from "./ChulaAccount"
 import SatitAndCUPersonelAccount from "./SatitAndCUPersonelAccount"
 import OtherAccount from "./OtherAccount"
 import axios from "axios"
+import withUserGuard from '../../../guards/user.guard'
 import { NavHeader } from '../../ui/navbar/navbarSideEffect'
 import { UserContext } from "../../../contexts/UsersContext"
 
@@ -50,7 +51,7 @@ export default function AccountPage() {
         return <ChulaAccount />
       }
       case Account.SatitAndCuPersonel: {
-        return <SatitAndCUPersonelAccount/>
+        return <SatitAndCUPersonelAccount />
       }
       case Account.Other: {
         return <OtherAccount jwt={jwt} />
@@ -60,17 +61,17 @@ export default function AccountPage() {
       }
     }
   }
-  
+
   return (<UserContext.Consumer>{(context) => {
-    
+
     return (
       <>
         <NavHeader header="Account" />
-        { 
+        {
           showPage(account_type, jwt)
         }
       </>
     )
   }}</UserContext.Consumer>)
-  
+
 }

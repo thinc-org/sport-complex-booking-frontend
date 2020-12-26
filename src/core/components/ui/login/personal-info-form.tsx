@@ -1,44 +1,42 @@
 import * as React from 'react';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { Form, ToggleButton, Container, Button, ToggleButtonGroup } from 'react-bootstrap';
 import { NavHeader } from "../../ui/navbar/navbarSideEffect";
+import { useForm } from 'react-hook-form'
+import withUserGuard from '../../../guards/user.guard'
+import { usePersonalInfo } from './loginHooks'
 const PersonalInfo = (props: any) => {
-    let [lang, setLang] = useState('EN')
-    let [telnum, setTelnum] = useState('');
-    let [pemail, setPEmail] = useState('');
-    const onChangeTel = (e: any) => {
-        setTelnum(e.target.value)
-    }
-    const onChangeEmail = (e: any) => {
-        setPEmail(e.target.value)
-    }
+    const { onSubmit } = usePersonalInfo()
+    const { register, handleSubmit, errors } = useForm();
     return (
         <>
             <NavHeader header="Tell us about yourself" />
             <Container>
                 <div className="page-wrap">
-                    <Form>
+                    <Form onSubmit={handleSubmit(onSubmit)}>
                         <Form.Label>
                             Prefered Language
                     </Form.Label>
                         <div style={{ marginBottom: '24px' }}>
-                            <ToggleButtonGroup type="radio" name="lang" defaultValue={1}>
-                                <ToggleButton variant="toggle" value={1}>Thai</ToggleButton>
-                                <ToggleButton variant="toggle" value={2}>English</ToggleButton>
+                            <ToggleButtonGroup type="radio" name="is_thai_language" defaultValue={false}>
+                                <ToggleButton variant="toggle" inputRef={register} value={true}>Thai</ToggleButton>
+                                <ToggleButton variant="toggle" inputRef={register} value={false}>English</ToggleButton>
                             </ToggleButtonGroup>
                         </div>
                         <div style={{ marginBottom: "40px" }}>
-                            <Form.Group controlId="formBasicEmail">
+                            <Form.Group >
                                 <Form.Label>Personal Email</Form.Label>
-                                <Form.Control type="email" placeholder="Email" value={pemail} onChange={onChangeEmail} />
+                                <Form.Control type="email" name='personal_email' placeholder="Email" ref={register({ required: true })} />
+                                <Form.Text>{errors.personal_email && 'Email is required'}</Form.Text>
                             </Form.Group>
-                            <Form.Group controlId="formBasicTelNum">
+                            <Form.Group >
                                 <Form.Label>Mobile Phone Number</Form.Label>
-                                <Form.Control type="text" placeholder="Mobile Number" value={telnum} onChange={onChangeTel} />
+                                <Form.Control type="text" name='phone' placeholder="Mobile Number" ref={register({ required: true, minLength: 10, maxLength: 15 })} />
+                                <Form.Text>{errors.phone && 'Invalid Length'}</Form.Text>
                             </Form.Group>
                         </div>
                         <div className="button-group">
-                            <Button variant="pink">Continue</Button>
+                            <Button variant="pink" type='submit'>Continue</Button>
                         </div>
                     </Form>
                 </div>
@@ -46,4 +44,4 @@ const PersonalInfo = (props: any) => {
         </>
     )
 }
-export default PersonalInfo;
+export default withUserGuard(PersonalInfo);
