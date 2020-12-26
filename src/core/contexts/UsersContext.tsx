@@ -1,9 +1,85 @@
 import React, { createContext } from 'react';
 import { useState } from "react"
-let defaultValue;
-export const UserContext = createContext(defaultValue);
 
-export default function UserContextProvider(props: any) {
+interface UserConstruct {
+  jwt: string,
+  is_thai_language: boolean,
+  account_type: string,
+  CuStudent: {
+    account_type: string
+    is_thai_language: boolean
+    name_en: string,
+    surname_en: string,
+    name_th: string,
+    surname_th: string,
+    username: string, //username=student id
+    personal_email: string,
+    phone: string,
+    is_penalize: boolean,
+    expired_penalize_date: Date,
+    is_first_login: boolean,
+  },
+  SatitCuPersonel: {
+    account_type: string,
+    is_thai_language: boolean,
+    name_en: string,
+    surname_en: string,
+    name_th: string,
+    surname_th: string,
+    personal_email: string,
+    phone: string,
+    username: string,
+    password: string,
+    is_penalize: boolean,
+    expired_penalize_date: Date,
+  },
+  Other: {
+    account_type: string,
+    is_thai_language: boolean,
+    prefix: string, //(เพื่อแสดง นาย/นาง/นางสาว)
+    name_en: string,
+    surname_en: string,
+    name_th: string,
+    surname_th: string,
+    birthday: Date, //(use this for cal age)
+    national_id: string, //(also pasport no in foreign) 
+    gender: string,
+    marital_status: string,
+    address: string,
+    phone: string,
+    home_phone: string,
+    personal_email: string,
+    contact_person: {
+      contact_person_prefix: string,
+      contact_person_name: string,
+      contact_person_surname: string,
+      contact_person_home_phone: string,
+      contact_person_phone: string,
+    },
+    medical_condition: string,
+    membership_type: string,
+    username: string, //username=email (cannot change)
+    password: string, //pass=phone(editable)
+    is_penalize: boolean,
+    expired_penalize_date: Date,
+    verification_status: string,
+    rejected_info: string[],
+    account_expiration_date: Date,
+    user_photo: String, //(ของcollectionที่เก็บรูป)
+    medical_certificate: String,
+    national_id_photo: String, //also passport photo
+    house_registration_number: String,//with reference person
+    relationship_verification_document: String,
+  }
+  setCuStudent:Function
+  setSatit:Function
+  setOther:Function
+  setLanguage: Function
+}
+
+export const UserContext = createContext({} as UserConstruct)
+
+export default function UserContextProvider(props) {
   const accountSchemaType = { type: String, enum: ['CuStudent', 'SatitAndCuPersonel', 'Other'] };
   const verificationSchemaType = { type: String, enum: ['NotSubmitted', 'Submitted', 'Verified', 'Rejected'] };
 
@@ -96,9 +172,7 @@ export default function UserContextProvider(props: any) {
     setState({ ...state, is_thai_language: value })
     console.log("SET VALUE IS CALLED", state)
   }
-  return (
-    <UserContext.Provider value={{ ...state, setCuStudent: setCuStudent, setSatit: setSatit, setOther: setOther, setLanguage: setLanguage }}>
-      {props.children}
-    </UserContext.Provider>
-  );
+  const value = { ...state, setState, setLanguage, setCuStudent, setSatit, setOther }
+  return <UserContext.Provider value={value} {...props}/>
+
 }

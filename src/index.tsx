@@ -5,5 +5,12 @@ import 'bootstrap/dist/css/bootstrap.css';
 import "./index.css"
 import './App.css';
 import AppModule from "./core/modules/app.module"
+import './core/i18n/i18n'
+import { Suspense } from "react"
 
-ReactDOM.render(<AppModule />, document.getElementById("root"))
+ReactDOM.render(
+  <Suspense fallback={<div>Loading ...</div>}>
+    <AppModule />
+  </Suspense>
+, 
+document.getElementById("root"))

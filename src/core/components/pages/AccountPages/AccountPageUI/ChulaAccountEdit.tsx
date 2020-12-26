@@ -5,6 +5,9 @@ import {  Button, Modal } from "react-bootstrap"
 import axios from "axios"
 import { UserContext } from "../../../../contexts/UsersContext"
 import { useAuthContext } from "../../../../controllers/authContext";
+import { useTranslation } from 'react-i18next'
+import { ConfirmModal, ErrorModal } from "../../../ui/Modals/AccountPageModals";
+
 
 interface EdittedData {
   personal_email: String,
@@ -15,7 +18,7 @@ interface EdittedData {
 export default function ChulaAccountEdit() {
   const [show, setShow] = useState(false);
   const [showErr, setShowErr] = useState(false);
-  
+  const {t} = useTranslation()
   const {token} = useAuthContext()
   const { is_thai_language } = useContext(UserContext)
   const { CuStudent } = useContext(UserContext)
@@ -37,8 +40,8 @@ export default function ChulaAccountEdit() {
     if (firstLogin) {
       return (
         <div className="alert alert-danger mt-3" role="alert">
-          <h3>{is_thai_language ? "คำเตือน" : "Warning"}</h3>
-          <h6>{is_thai_language ? "กรุณาส่งข้อมูลการสมัคร" : "Please submit the registration form."}</h6>
+          <h3>{t("warning")}</h3>
+          <h6>{t("please_submit_regis_form")}</h6>
         </div>
       )
     } else {
@@ -79,28 +82,28 @@ export default function ChulaAccountEdit() {
           </div>
         </div>
         <div className="row">
-          <h6 className="mx-3">{is_thai_language ? "นิสิตจุฬาลงกรณ์มหาวิทายาลัย" : "Chulalongkorn University Student"}</h6>
+          <h6 className="mx-3">{t("chula_account_type")}</h6>
         </div>
         <hr className="mx-1" />
         <form onSubmit={handleSubmit(onSubmit)}>
 
-            <label className="form-label mt-2">{is_thai_language ? "เบอร์โทรศัพท์" : "Mobile"}</label>
+            <label className="form-label mt-2">{t("phone_label")}</label>
             <input name="phone" type="number" ref={register({
-              required: "Enter your phone number",
+              required:  t("phone_error_message").toString(),
               pattern: {
                 value: /^[A-Z0-9._%+-]/i,
-                message: "Enter a valid phone number",
+                message: t("phone_error_message"),
               },
             })} placeholder="0xxxxxxxxx" defaultValue={user.phone} className="form-control"/>
-            {errors.mobile && <p id="input-error">{errors.mobile.message}</p>}
+            {errors.phone && <p id="input-error">{errors.phone.message}</p>}
 
-            <label className="form-label mt-2">{is_thai_language ? "อีเมลส่วนตัว" : "Personal Email"}</label>
+            <label className="form-label mt-2">{t("personal_email_label")}</label>
             <input name="personal_email" ref={register(
               {
-                required: "Enter your e-mail",
+                required: t("email_error_message").toString(),
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                  message: "Enter a valid e-mail address",
+                  message: t("email_error_message"),
                 },
               }
             )} placeholder="example@email.com" defaultValue={user.personal_email} className="form-control"/>
@@ -111,67 +114,20 @@ export default function ChulaAccountEdit() {
           <div className="row">
             <div className="button-group col-md-12">
               <Button variant="gray" className="btn-secondary" onClick={handleCancel}>
-                Cancel
+                {t("cancel")}
               </Button>
             </div>
             <div className="button-group col-md-12">
               <Button variant="pink" className="btn-secondary" onClick={()=> setShow(true)}>
-                {is_thai_language ? "บันทึกและส่ง" : "Save and Submit"}
+                {t("save_and_submit")}
               </Button>
             </div>
           </div>
 
           {/* MODAL CONFIRM DIALOGUE */}
-          <Modal  classname="modal" show={show} onHide={() => setShow(false)}>
-            <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title" id="confirmModalLabel">
-                    {is_thai_language ? "ยืนยันการส่งใบสมัคร" : "Confirm submit"}
-                  </h5>
-                  <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div className="modal-body">
-                  {is_thai_language ? "คุณต้องการส่งใบสมัครหรือไม่" : "Do you want to submit the registration form?"}
-                </div>
-                <div className="modal-footer">
-
-                  <Button onClick={() => setShow(false)} type="button" variant="outline-secondary" className="btn-normal" data-dismiss="modal">
-                    {is_thai_language ? "ยกเลิก" : "Cancel"}
-                  </Button>
-                  <Button onClick={handleSubmit(onSubmit)} variant="pink" className="btn-normal">
-                    {is_thai_language ? "บันทึกและส่ง" : "Save and Submit"}
-                  </Button>
-                </div>
-              </div>
-          </Modal>
+          <ConfirmModal show={show} setShow={setShow} handleSubmit={handleSubmit} onSubmit={onSubmit}/>
           {/* MODAL ERROR */}
-          <Modal
-            show={showErr}
-            onHide={() => {
-              setShowErr(false)
-            }}
-            backdrop="static"
-            keyboard={false}
-            classname="modal" 
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>{is_thai_language ? "เกิดข้อผิดพลาด" : "An error has occured"}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body style={{ fontWeight: "lighter" }}> {is_thai_language ? "ไม่แก้ไขข้อมูลผู้ใช้ได้ในขณะนี้" : "Cannot edit account information at the moment"} </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="pink"
-                className="btn-normal"
-                onClick={() => {
-                  setShowErr(false)
-                }}
-              >
-                ตกลง
-              </Button>
-            </Modal.Footer>
-          </Modal>
+          <ErrorModal showErr={showErr} setShowErr={setShowErr}/>
         </form>
       </div>
       <br />
