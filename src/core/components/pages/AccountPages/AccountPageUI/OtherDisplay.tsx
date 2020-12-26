@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 export default function OtherAaccountDisplay() {
 
   const {token} = useAuthContext()
-  const { Other, is_thai_language } = useContext(UserContext)
+  const { Other } = useContext(UserContext)
   const user = Other
   const {t} = useTranslation()
 
@@ -33,7 +33,7 @@ export default function OtherAaccountDisplay() {
 
   return (
     <div className="mx-auto col-md-6">
-      <OtherWarningMessage show={user.verification_status !== ""} is_thai_language={is_thai_language} verification_status={user.verification_status} />            
+      <OtherWarningMessage show={user.verification_status !== ""} is_thai_language={user.is_thai_language} verification_status={user.verification_status} />            
       <div className="default-mobile-wrapper">
         <div className="">
           {/* START OF THE FORM */}

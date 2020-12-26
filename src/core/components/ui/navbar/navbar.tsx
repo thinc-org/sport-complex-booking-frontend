@@ -9,7 +9,7 @@ import { CSSTransition } from 'react-transition-group';
 import Exit from '../../../assets/images/icons/exit.svg'
 import { data } from './sidebarData';
 import { NavHeader, useNavHeader } from './navbarSideEffect'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
 
 

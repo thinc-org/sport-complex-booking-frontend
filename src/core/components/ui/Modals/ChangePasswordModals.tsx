@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Modal } from "react-bootstrap"
+import { useTranslation } from "react-i18next"
 
 export interface PasswordData {
   oldPassword: String,
@@ -15,7 +16,8 @@ interface ConfirmationModalProps {
 }
 
 export const ConfirmationModal:React.FC<ConfirmationModalProps> = ({show, is_thai_language, setShow, postDataToBackend, passwordData}) => {
-   if(!show) return null
+  const { t } = useTranslation() 
+  if(!show) return null
    return (
       <Modal
         show={show}
@@ -27,15 +29,15 @@ export const ConfirmationModal:React.FC<ConfirmationModalProps> = ({show, is_tha
         className="modal"  
       >
         <Modal.Header closeButton>
-          <Modal.Title>{is_thai_language ? "ยืนยัน" : "Confirmation"}</Modal.Title>
+          <Modal.Title>{t("confirm")}</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ fontWeight: "lighter" }}> {is_thai_language ? "ต้องการยืนยันหารเปลี่ยนรหัสหรือไม่" : "Do you want to confirm password change?"} </Modal.Body>
+        <Modal.Body style={{ fontWeight: "lighter" }}> {t("confirm_password_change")} </Modal.Body>
         <Modal.Footer>
           <Button className="btn-normal btn-secondary" onClick={() => {setShow(false)}}>
-            {is_thai_language? "ยกเลิก" : "Cancel"}
+            {t("cancel")}
           </Button>
           <Button variant="pink" className="btn-normal" onClick={()=> postDataToBackend(passwordData!)}>
-            {is_thai_language? "ส่ง" : "Submit"}
+            {t("submit")}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -49,7 +51,8 @@ export interface PasswordMismatchModalProps {
 }
 
 export const PasswordMismatchModal:React.FC<PasswordMismatchModalProps> = ({show, is_thai_language, setShowPasswordMismatch}) => {
-   if(!show) return null
+  const { t } = useTranslation()  
+  if(!show) return null
    return (
       <Modal
         className="modal"
@@ -62,12 +65,12 @@ export const PasswordMismatchModal:React.FC<PasswordMismatchModalProps> = ({show
 
       >
         <Modal.Header closeButton>
-          <Modal.Title>{is_thai_language ? "รหัสผ่านไม่ตรงกัน" : "Passwords do not match"}</Modal.Title>
+          <Modal.Title>{t("password_mismatch")}</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ fontWeight: "lighter" }}> {is_thai_language ? "กรุณากรอกรหัสผ่านใหม่" : "Please enter your new password again"} </Modal.Body>
+        <Modal.Body style={{ fontWeight: "lighter" }}> {t("enter_again")} </Modal.Body>
         <Modal.Footer>
           <Button variant="pink" className="btn-normal btn-secondary" onClick={() => {setShowPasswordMismatch(false)}}>
-            {is_thai_language? "โอเค" : "Okay"}
+            {t("ok")}
           </Button>
         </Modal.Footer>
       </Modal>

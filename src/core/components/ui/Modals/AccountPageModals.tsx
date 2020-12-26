@@ -115,35 +115,33 @@ export const OtherWarningMessage:React.FC<OtherWarningMessageProps> = ({show, is
     case "NotSubmitted": {
       return (
         <div className="alert alert-danger mt-3" role="alert">
-          <h3>{is_thai_language ? "คำเตือน" : "Warning"}</h3>
-          <h6>{is_thai_language ? "กรุณาส่งข้อมูลการสมัคร" : "Please submit the registration form."}</h6>
+          <h3>{t("warning")}</h3>
+          <h6>{t("not_submitted_message")}</h6>
         </div>
       )
     }
     case "Rejected": {
       return (
         <div className="alert alert-danger mt-3" role="alert">
-          <h3>{is_thai_language ? "ข้อมูลการสมัครไม่ถูกต้อง" : "Incorrect Information"}</h3>
-          <h6>{is_thai_language ? "กรุณาส่งข้อมูลการสมัครอีกครั้ง" : "Please resubmit the form."}</h6>
+          <h3>{t("rejected_title")}</h3>
+          <h6>{t("rejected_message")}</h6>
         </div>
       )
     }
     case "Submitted": {
       return (
         <div className="alert alert-info  mt-3" role="alert">
-          <h3>{is_thai_language ? "ข้อมูลการสมัครถูกส่งแล้ว" : "Registration form submitted."}</h3>
-          <h6>{is_thai_language ? "โปรดรอการยืนยัน" : "Please wait for approval."}</h6>
+          <h3>{t("submitted_title")}</h3>
+          <h6>{t("submitted_message")}</h6>
         </div>
       )
     }
     case "Approved": {
       return (
         <div className="alert alert-info mt-3" role="alert">
-          <h3>{is_thai_language ? "ข้อมูลการสมัครถูกส่งแล้ว" : "Registration form approved."}</h3>
+          <h3>{t("approved_title")}</h3>
           <h6>
-            {is_thai_language
-              ? "หากต้องการแก้ไขข้อทูลกรณาติดต่อเจ้าหน้าทีสปอรต์เซ็นเตอร์โดยตรงที่สนาม"
-              : "To edit your personal information, please contact CU Sports Complex."}
+            {t("approved_message")}
           </h6>
         </div>
       )

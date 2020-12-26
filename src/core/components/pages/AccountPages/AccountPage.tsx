@@ -8,6 +8,7 @@ import { UserContext } from "../../../contexts/UsersContext"
 import {useAuthContext } from "../../../controllers/authContext"
 import { getCookie } from "../../../contexts/cookieHandler"
 import withUserGuard from "../../../guards/user.guard"
+import { useTranslation } from 'react-i18next'
 
 function AccountPage() {
   enum Account {
@@ -20,6 +21,7 @@ function AccountPage() {
   const { setCuStudent, setSatit, setOther, setLanguage, is_thai_language } = useContext(UserContext)
   const [account_type, setAccountType] = useState();
   const [penalizeStatus, setPenalizeStatus] = useState();  
+  const {i18n} = useTranslation()
 
   useEffect(() => {
     fetch_account_type()
@@ -52,6 +54,8 @@ function AccountPage() {
           setOther(newData)
         }
         setLanguage(getCookie("is_thai_language")==="true")
+        if (getCookie("is_thai_language")==="true") i18n.changeLanguage('th');
+        else i18n.changeLanguage('en')
         setAccountType(data.account_type)
       })
   }
