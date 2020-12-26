@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import withUserGuard from "../../../../guards/user.guard";
 import { ConfirmationModal, PasswordMismatchModal } from "../../../ui/Modals/ChangePasswordModals";
 import { useTranslation } from 'react-i18next'
+import { Redirect } from "react-router-dom";
 
 interface PasswordData {
   oldPassword: String
@@ -18,7 +19,7 @@ function ChangePassword() {
   const [show, setShow] = useState(false);
   const [passwordData, setPasswordData] = useState<PasswordData>();
   const [showPasswordMismatch, setShowPasswordMismatch] = useState(false);
-  const {is_thai_language} = useContext(UserContext)
+  const {is_thai_language, CuStudent} = useContext(UserContext)
   const {t} = useTranslation()
   const onSubmit = (data: PasswordData) => {
     if (data.oldPassword !== data.newPassword ) {
@@ -39,6 +40,7 @@ function ChangePassword() {
     
   return (
     <div className="mx-auto col-md-6">
+      {CuStudent.account_type !== "CuStudent" ? <Redirect to="/account" /> : null}
       <div className="default-mobile-wrapper">
         <div className="row mt-2">
           <div className="col-8">
