@@ -131,6 +131,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       setShowModals({ ...showModals, showConfirm: true })
     else setShowAlert(true)
   }
+
   const handleChangePassword = () => {
     if (temp_user.password !== user.password || new_password !== confirm_password) set_show_modals({ ...show_modals, show_password_err: true })
     else set_show_modals({ ...show_modals, show_confirm_change: true })
@@ -171,6 +172,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         setShowModals({ ...showModals, showConfirm: false, showErr: true })
       })
   }
+
   const requestDelete = () => {
     set_show_modals({ ...show_modals, show_del: false })
     setShowAlert(false)
@@ -179,7 +181,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       url: "/list-all-user/User/" + _id,
     })
       .then(({ data }) => {
-        // console.log(data)
         set_show_modals({ ...show_modals, show_com_delete: true })
       })
       .catch(({ response }) => {
@@ -187,6 +188,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         set_show_modals({ ...show_modals, show_err: true })
       })
   }
+
   const requestChangePassword = () => {
     client({
       method: "PATCH",
@@ -196,9 +198,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       },
     })
       .then(({ data }) => {
-        console.log(data)
         setUser({ ...user, password: data.password })
-        set_show_modals({ ...show_modals, show_change_password: false, show_confirm_change: false })
+        set_show_modals({ ...show_modals, show_confirm_change: false })
+        set_show_change_password(false)
       })
       .catch((err) => {
         console.log(err)
