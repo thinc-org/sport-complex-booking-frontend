@@ -95,30 +95,7 @@ const VeritificationApproval: FunctionComponent = () => {
     )
   }
 
-  // const loadPagination = () => {
-  //   return (
-  //     <Pagination className="justify-content-md-end">
-  //       <Pagination.Prev
-  //         onClick={() => {
-  //           handlePagination(page_no - 1)
-  //         }}
-  //       />
-  //       <Pagination.Item active={true}>{page_no}</Pagination.Item>
-  //       <Pagination.Next
-  //         onClick={() => {
-  //           handlePagination(page_no + 1)
-  //         }}
-  //       />
-  //     </Pagination>
-  //   )
-  // }
-
   // handles //
-  // const handlePagination = (next_page: number) => {
-  //   if ((page_no > next_page && next_page >= 1) || (page_no < next_page && users.length === max_user_per_page)) {
-  //     set_page_no(next_page)
-  //   }
-  // }
   const handlePagination = (next_page: number) => {
     let max_page: number = Math.floor((maxUser + maxUserPerPage - 1) / maxUserPerPage)
     if (next_page >= 1 && next_page <= max_page) {
