@@ -29,6 +29,7 @@ export default interface Info {
   medical_condition: string
   contact_person: ContactPerson
   membership_type: string
+  password: string
   // object id //
   user_photo: string
   medical_certificate: string
@@ -53,7 +54,7 @@ export interface CuAndSatitInfo {
   password: string
 }
 
-export interface CuPagePasswordToggle {
+export interface PasswordToggle {
   old_password: boolean
   new_password: boolean
   confirm_password: boolean
@@ -157,7 +158,6 @@ export interface ModalCuAndSatit {
   show_com_delete: boolean
   show_err: boolean
   show_password_err: boolean
-  show_change_password: boolean
   show_confirm_change: boolean
 }
 
@@ -177,4 +177,6 @@ export interface ModalUserInfo {
   show_save: boolean
   show_com_save: boolean
   show_err: boolean
+  show_password_err: boolean
+  show_confirm_change: boolean
 }

@@ -1,12 +1,12 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
 import { RouteComponentProps, Link } from "react-router-dom"
-import { Button, Card, Form, Alert } from "react-bootstrap"
+import { Button, Card, Form } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import OtherViewInfoComponent from "./OtherViewInfoComponent"
 import OtherEditInfoComponent from "./OtherEditInfoComponent"
 import ModalsComponent from "./OtherModalsComponent"
-import Info, { Account, ThaiLangAccount, ContactPerson } from "../interfaces/InfoInterface"
-import { ModalUserInfo } from "../interfaces/InfoInterface"
+import Info, { Account, ThaiLangAccount, ModalUserInfo } from "../interfaces/InfoInterface"
+import PasswordChangeModal from "./PasswordChangeModal"
 
 export const convertDate = (date: Date) => {
   if (date < new Date()) {
@@ -20,36 +20,29 @@ export const convertDate = (date: Date) => {
 }
 
 const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
-  // console.log(props)
   // page state //
   const [isEdit, setEdit] = useState<boolean>(false)
-  // const [jwt, setJwt] = useState<string>(
-  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODgzMzkxNX0.sp6jlYKkRhTIwzvR9MIRfcsjM2Z_AZ7lxsAUOBoMQAk"
-  // )
+  const [new_password, set_new_password] = useState<string>("")
+  const [confirm_password, set_confirm_password] = useState<string>("")
+  const [show_change_password, set_show_change_password] = useState<boolean>(false)
   const [show_modal_info, set_show_modal_info] = useState<ModalUserInfo>({
     show_delete: false,
     show_com_delete: false,
     show_save: false,
     show_com_save: false,
     show_err: false,
+    show_password_err: false,
+    show_confirm_change: false,
   })
 
   // Non CU state //
   const [_id] = useState<string>(props.match.params._id)
   const [username, set_username] = useState<string>("")
-  const [password, set_password] = useState<string>("")
   const [account_type, set_account_type] = useState<string>("")
   const [membership_type, set_membership_type] = useState<string>("")
   const [is_penalize, set_penalize] = useState<boolean>(false)
   const [expired_penalize_date, set_expired_penalize_date] = useState<Date>(new Date())
   const [account_expired_date, set_account_expired_date] = useState<Date>(new Date())
-  // const [contact, setContact] = useState<ContactPerson>({
-  // contact_person_prefix: "",
-  // contact_person_name: "",
-  // contact_person_surname: "",
-  // contact_person_home_phone: "",
-  // contact_person_phone: "",
-  // })
   const [info, setInfo] = useState<Info>({
     prefix: "",
     name_th: "",
@@ -73,6 +66,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       contact_person_phone: "",
     },
     membership_type: membership_type,
+    password: "",
     // object id //
     user_photo: "",
     medical_certificate: "",
@@ -82,29 +76,15 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   })
   // temp data
   const [temp_username, set_temp_username] = useState<string>("")
-  const [temp_password, set_temp_password] = useState<string>("")
   const [temp_membership_type, set_temp_membership_type] = useState<string>("")
   const [temp_is_penalize, set_temp_penalize] = useState<boolean>(false)
   const [temp_expired_penalize_date, set_temp_expired_penalize_date] = useState<Date>(new Date())
   const [temp_account_expired_date, set_temp_account_expired_date] = useState<Date>(new Date())
   const [temp_info, set_temp_info] = useState<Info>(info)
 
-  // useEffect(() => {
-  //   fetch({
-  //     method: "GET",
-  //     url: "/account_info/testing/adminToken",
-  //   }).then(({ data }) => {
-  //     setJwt(data.token.token)
-  //   })
-  // }, [])
-
   useEffect(() => {
     fetchUserData()
   }, [])
-  // useEffect(() => {
-  //   window.scroll({ top: 0, left: 0, behavior: "smooth" })
-  //   window.scrollTo(0, 0)
-  // }, [show_password_alert])
 
   // requests //
   const fetchUserData = async () => {
@@ -113,18 +93,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       url: "/list-all-user/findById/" + _id,
     })
       .then(({ data }) => {
-        console.log(data)
-        // if (data.contact_person) {
-        //   setContact({
-        //     contact_person_prefix: data.contact_person.contact_person_prefix,
-        //     contact_person_name: data.contact_person.contact_person_name,
-        //     contact_person_surname: data.contact_person.contact_person_surname,
-        //     contact_person_home_phone: data.contact_person.contact_person_home_phone,
-        //     contact_person_phone: data.contact_person.contact_person_phone,
-        //   })
-        // }
         set_username(data.username)
-        set_password(data.password)
         set_account_type(data.account_type)
         set_membership_type(data.membership_type)
         set_penalize(data.is_penalize)
@@ -145,14 +114,17 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
           phone: data.phone,
           home_phone: data.home_phone,
           medical_condition: data.medical_condition,
-          contact_person: {
-            contact_person_prefix: data.contact_person.contact_person_prefix,
-            contact_person_name: data.contact_person.contact_person_name,
-            contact_person_surname: data.contact_person.contact_person_surname,
-            contact_person_home_phone: data.contact_person.contact_person_home_phone,
-            contact_person_phone: data.contact_person.contact_person_phone,
-          },
+          contact_person: data.contact_person
+            ? data.contact_person
+            : {
+                contact_person_prefix: "",
+                contact_person_name: "",
+                contact_person_surname: "",
+                contact_person_home_phone: "",
+                contact_person_phone: "",
+              },
           membership_type: data.membership_type,
+          password: data.password,
           // Files(Object id) //
           user_photo: data.user_photo,
           medical_certificate: data.medical_certificate,
@@ -183,6 +155,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       home_phone,
       contact_person,
       medical_condition,
+      password,
       user_photo,
       medical_certificate,
       national_id_photo,
@@ -196,42 +169,40 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       data: {
         // info //
         personal_email: email,
-        phone: phone,
+        phone,
         is_thai_language: true,
-        prefix: prefix,
-        name_th: name_th,
-        surname_th: surname_th,
-        name_en: name_en,
-        surname_en: surname_en,
-        birthday: birthday,
-        national_id: national_id,
-        gender: gender,
-        marital_status: marital_status,
-        address: address,
-        home_phone: home_phone,
-        contact_person: contact_person,
-        medical_condition: medical_condition,
+        prefix,
+        name_th,
+        surname_th,
+        name_en,
+        surname_en,
+        birthday,
+        national_id,
+        gender,
+        marital_status,
+        address,
+        home_phone,
+        contact_person,
+        medical_condition,
         // top section //
         username: temp_username,
-        password: temp_password,
+        password,
         membership_type: temp_membership_type,
         account_expiration_date: temp_account_expired_date,
         is_penalize: temp_is_penalize,
         expired_penalize_date: temp_expired_penalize_date,
         // files //
-        user_photo: user_photo,
-        medical_certificate: medical_certificate,
-        national_id_photo: national_id_photo,
-        house_registration_number: house_registration_number,
-        relationship_verification_document: relationship_verification_document,
+        user_photo,
+        medical_certificate,
+        national_id_photo,
+        house_registration_number,
+        relationship_verification_document,
       },
     })
       .then(({ data }) => {
         // console.log("Update completed")
-        console.log(data)
         // set temp to data
         set_username(temp_username)
-        set_password(temp_password)
         set_membership_type(temp_membership_type)
         set_penalize(temp_is_penalize)
         set_expired_penalize_date(temp_expired_penalize_date)
@@ -248,11 +219,34 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       })
   }
 
+  const requestChangePassword = () => {
+    client({
+      method: "PATCH",
+      url: "/list-all-user/" + _id,
+      data: {
+        password: new_password,
+      },
+    })
+      .then(({ data }) => {
+        console.log(data)
+        setInfo({ ...info, password: data.password })
+        set_show_change_password(false)
+        set_show_modal_info({ ...show_modal_info, show_confirm_change: false })
+      })
+      .catch((err) => {
+        console.log(err)
+        set_show_modal_info({ ...show_modal_info, show_err: true })
+      })
+  }
+
   // handles //
+  const handleChange = (e) => {
+    set_temp_info({ ...temp_info, [e.target.id]: e.target.value })
+  }
+
   const handleEdit = () => {
     set_temp_info(info)
     set_temp_username(username)
-    set_temp_password(password)
     set_temp_membership_type(membership_type)
     set_temp_penalize(is_penalize)
     set_temp_expired_penalize_date(expired_penalize_date)
@@ -260,7 +254,13 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     setEdit(true)
   }
 
-  const handleSave = (e) => {
+  const handleChangePassword = () => {
+    if (temp_info.password !== info.password || new_password !== confirm_password)
+      set_show_modal_info({ ...show_modal_info, show_password_err: true })
+    else set_show_modal_info({ ...show_modal_info, show_confirm_change: true })
+  }
+
+  const handleSave = () => {
     set_show_modal_info({ ...show_modal_info, show_save: true })
   }
 
@@ -271,7 +271,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       url: "/list-all-user/User/" + _id,
     })
       .then(({ data }) => {
-        console.log(data)
         set_show_modal_info({ ...show_modal_info, show_delete: false, show_com_delete: true })
       })
       .catch((err) => {
@@ -305,22 +304,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
               />
             ) : (
               <p className="font-weight-bold">{username}</p>
-            )}
-          </div>
-          <div className="col">
-            <label className="mt-2">รหัสผ่าน</label>
-            {isEdit ? (
-              <Form.Control
-                className="border"
-                style={{ backgroundColor: "white" }}
-                type="text"
-                defaultValue={password}
-                onChange={(e) => {
-                  set_temp_password(e.target.value)
-                }}
-              />
-            ) : (
-              <p className="font-weight-bold">{password}</p>
             )}
           </div>
         </div>
@@ -458,11 +441,17 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         <div className="mt-5">
           <Button
             variant="pink"
-            className="float-right btn-normal"
-            onClick={(e) => {
-              handleSave(e)
+            className="btn-normal"
+            onClick={() => {
+              set_temp_info({ ...temp_info, password: "" })
+              set_new_password("")
+              set_confirm_password("")
+              set_show_change_password(true)
             }}
           >
+            เปลี่ยนรหัสผ่าน
+          </Button>
+          <Button variant="pink" className="float-right btn-normal" onClick={handleSave}>
             บันทึก
           </Button>
           <Button
@@ -493,14 +482,27 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       return <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ username }} props={props} />
     else if (show_modal_info.show_save)
       return <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ requestSave }} props={props} />
-    else if (show_modal_info.show_err || show_modal_info.show_com_save) {
-      return <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{}} props={props} />
-    }
+    else if (show_change_password)
+      return (
+        <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ requestChangePassword }} props={props} />
+      )
+    else return <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{}} props={props} />
   }
+
+  const renderPasswordChangeModal = () => (
+    <PasswordChangeModal
+      show_change={show_change_password}
+      set_show_change={set_show_change_password}
+      set_new_password={set_new_password}
+      set_confirm_password={set_confirm_password}
+      info={{ handleChange, handleChangePassword }}
+    />
+  )
 
   return (
     <div className="UserInfo mt-4">
       {renderModal()}
+      {renderPasswordChangeModal()}
       {/* Info start here */}
       <Card body className="mb-5 mr-4">
         {renderTopSection()}
