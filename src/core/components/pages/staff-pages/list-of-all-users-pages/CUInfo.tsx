@@ -2,18 +2,18 @@ import React, { useState, useEffect, FunctionComponent } from "react"
 import { Row, Col, Button, Form, Card, Modal, Alert, InputGroup } from "react-bootstrap"
 import { Link, RouteComponentProps } from "react-router-dom"
 import { client } from "../../../../../axiosConfig"
-import { CuAndSatitInfo, CuPagePasswordToggle, ThaiLangAccount, Account, ModalCuAndSatit } from "../interfaces/InfoInterface"
+import { CuAndSatitInfo, ThaiLangAccount, Account, ModalCuAndSatit } from "../interfaces/InfoInterface"
+import PasswordChangeModal from "./PasswordChangeModal"
 import CuAndSatitModals from "./CuAndSatitModals"
 
 const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
   // page states
   const [is_editing, set_editing] = useState<boolean>(false)
-  const [show_password, set_show_password] = useState<CuPagePasswordToggle>({
-    old_password: false,
-    new_password: false,
-    confirm_password: false,
-  })
+  const [new_password, set_new_password] = useState<string>("")
+  const [confirm_password, set_confirm_password] = useState<string>("")
+
   // Modals & Alert //
+  const [show_change_password, set_show_change_password] = useState<boolean>(false)
   const [show_modals, set_show_modals] = useState<ModalCuAndSatit>({
     show_confirm: false,
     show_com: false,
@@ -21,20 +21,13 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     show_com_delete: false,
     show_err: false,
     show_password_err: false,
-    show_change_password: false,
     show_confirm_change: false,
   })
   // Alert //
   const [showAlert, setShowAlert] = useState<boolean>(false)
 
-  // const [jwt, setJwt] = useState<string>(
-  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
-  // )
-
   // user states
   const [_id] = useState<string>(props.match.params._id)
-  const [new_password, set_new_password] = useState<string>("")
-  const [confirm_password, set_confirm_password] = useState<string>("")
   const [user, setUser] = useState<CuAndSatitInfo>({
     account_type: Account.CuStudent,
     is_thai_language: true,
@@ -56,9 +49,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   useEffect(() => {
     getInfo()
   }, [])
-  // useEffect(() => {
-  //   console.log(user)
-  // }, [user])
 
   const getInfo = () => {
     client({
@@ -66,7 +56,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       url: "/list-all-user/findById/" + _id,
     })
       .then(({ data }) => {
-        console.log(data)
         setUser(data)
       })
       .catch((err) => {
@@ -82,111 +71,11 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       </Alert>
     )
   }
-  const renderChangePasswordModal = () => {
-    return (
-      <Modal
-        show={show_modals.show_change_password}
-        onHide={() => {
-          set_show_modals({ ...show_modals, show_change_password: false })
-        }}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton />
-        <Modal.Body style={{ fontWeight: "lighter" }}>
-          <Form>
-            <Form.Group>
-              <Form.Label>รหัสผ่านเก่า</Form.Label>
-              <InputGroup>
-                <Form.Control
-                  id="password"
-                  type={show_password.old_password ? "text" : "password"}
-                  onChange={handleChange}
-                  defaultValue={temp_user.password}
-                />
-                <InputGroup.Append>
-                  <Button
-                    className="btn-normal btn-outline-black"
-                    variant="secondary"
-                    onClick={() => {
-                      set_show_password({ ...show_password, old_password: !show_password.old_password })
-                    }}
-                  >
-                    {show_password.old_password ? "Hide" : "Show"}
-                  </Button>
-                </InputGroup.Append>
-              </InputGroup>
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>รหัสผ่านใหม่</Form.Label>
-              <InputGroup>
-                <Form.Control
-                  type={show_password.new_password ? "text" : "password"}
-                  onChange={(e) => {
-                    set_new_password(e.target.value)
-                  }}
-                  defaultValue={new_password}
-                />
-                <InputGroup.Append>
-                  <Button
-                    className="btn-normal btn-outline-black"
-                    variant="secondary"
-                    onClick={() => {
-                      set_show_password({ ...show_password, new_password: !show_password.new_password })
-                    }}
-                  >
-                    {show_password.new_password ? "Hide" : "Show"}
-                  </Button>
-                </InputGroup.Append>
-              </InputGroup>
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>กรอกรหัสผ่านใหม่อีกครั้ง</Form.Label>
-              <InputGroup>
-                <Form.Control
-                  type={show_password.confirm_password ? "text" : "password"}
-                  onChange={(e) => {
-                    set_confirm_password(e.target.value)
-                  }}
-                  defaultValue={confirm_password}
-                />
-                <InputGroup.Append>
-                  <Button
-                    className="btn-normal btn-outline-black"
-                    variant="secondary"
-                    onClick={() => {
-                      set_show_password({ ...show_password, confirm_password: !show_password.confirm_password })
-                    }}
-                  >
-                    {show_password.confirm_password ? "Hide" : "Show"}
-                  </Button>
-                </InputGroup.Append>
-              </InputGroup>
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="outline-secondary"
-            className="btn-normal btn-outline-pink"
-            onClick={() => {
-              set_show_modals({ ...show_modals, show_change_password: false })
-            }}
-          >
-            ยกเลิก
-          </Button>
-          <Button variant="pink" className="btn-normal" onClick={handleChangePassword}>
-            ตกลง
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    )
-  }
 
   // handles //
   const handleChange = (e) => {
     if (e.target.id === "is_penalize") {
-      if (e.target.value === 1) set_temp_user({ ...temp_user, [e.target.id]: true })
+      if (e.target.value === "1") set_temp_user({ ...temp_user, [e.target.id]: true })
       else set_temp_user({ ...temp_user, [e.target.id]: false })
     } else if (e.target.id === "expired_penalize_date") {
       let date: Date = new Date(e.target.value)
@@ -196,17 +85,18 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       set_temp_user({ ...temp_user, [e.target.id]: e.target.value })
     }
   }
+
   const handleEdit = () => {
     set_editing(true)
     set_temp_user({ ...user })
-    // set_new_password("")
-    // set_confirm_password("")
   }
+
   const handleCancelChange = () => {
     // need to undo changes
     set_editing(false)
     setShowAlert(false)
   }
+
   const handleConfirmChange = () => {
     // if some input is blank -> alert //
     // else -> try change //
@@ -215,6 +105,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       set_show_modals({ ...show_modals, show_confirm: true })
     else setShowAlert(true)
   }
+
   const handleChangePassword = () => {
     if (temp_user.password !== user.password || new_password !== confirm_password) set_show_modals({ ...show_modals, show_password_err: true })
     else set_show_modals({ ...show_modals, show_confirm_change: true })
@@ -242,7 +133,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       },
     })
       .then(({ data }) => {
-        console.log(data)
         setUser(temp_user)
         set_show_modals({ ...show_modals, show_confirm: false, show_com: true })
       })
@@ -251,6 +141,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         set_show_modals({ ...show_modals, show_confirm: false, show_err: true })
       })
   }
+
   const requestDelete = () => {
     set_show_modals({ ...show_modals, show_del: false })
     setShowAlert(false)
@@ -259,7 +150,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       url: "/list-all-user/User/" + _id,
     })
       .then(({ data }) => {
-        // console.log(data)
         set_show_modals({ ...show_modals, show_com_delete: true })
       })
       .catch(({ response }) => {
@@ -267,6 +157,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         set_show_modals({ ...show_modals, show_err: true })
       })
   }
+
   const requestChangePassword = () => {
     client({
       method: "PATCH",
@@ -276,9 +167,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       },
     })
       .then(({ data }) => {
-        console.log(data)
         setUser({ ...user, password: data.password })
-        set_show_modals({ ...show_modals, show_change_password: false, show_confirm_change: false })
+        set_show_modals({ ...show_modals, show_confirm_change: false })
+        set_show_change_password(false)
       })
       .catch((err) => {
         console.log(err)
@@ -307,19 +198,15 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     else return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{}} props={props} />
   }
 
-  // renders //
-  const renderModals = () => {
-    const { username } = user
-    if (show_modals.show_confirm)
-      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestUserChange }} props={props} />
-    else if (show_modals.show_com)
-      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ completedChange }} props={props} />
-    else if (show_modals.show_del)
-      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestDelete, username }} props={props} />
-    else if (show_modals.show_confirm_change)
-      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestChangePassword }} props={props} />
-    else return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{}} props={props} />
-  }
+  const renderPasswordChangeModal = () => (
+    <PasswordChangeModal
+      show_change={show_change_password}
+      set_show_change={set_show_change_password}
+      set_new_password={set_new_password}
+      set_confirm_password={set_confirm_password}
+      info={{ handleChange, handleChangePassword }}
+    />
+  )
 
   const renderForm = () => {
     let date: Date = new Date(user.expired_penalize_date)
@@ -495,7 +382,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
                   set_temp_user({ ...temp_user, password: "" })
                   set_new_password("")
                   set_confirm_password("")
-                  set_show_modals({ ...show_modals, show_change_password: true })
+                  set_show_change_password(true)
                 }}
               >
                 เปลี่ยนรหัสผ่าน
@@ -524,7 +411,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         {renderAlert()}
       </Card>
       {renderModals()}
-      {renderChangePasswordModal()}
+      {renderPasswordChangeModal()}
     </div>
   )
 }

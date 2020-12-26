@@ -6,9 +6,6 @@ import { OtherInfo } from "../interfaces/InfoInterface"
 
 const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) => {
   // page state
-  // const [jwt, setJwt] = useState<string>(
-  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
-  // )
   const [page_no, set_page_no] = useState<number>(1)
   const [max_user_per_page] = useState<number>(10) // > 1
   const [max_user, set_max_user] = useState<number>(1)
@@ -16,30 +13,12 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
   const [show_no_user, set_show_no_user] = useState<boolean>(false)
   const [users, setUsers] = useState<OtherInfo[]>([])
 
-  /// functions ///
-  // useEffect(() => {
-  //   // request token
-  //   fetch({
-  //     method: "GET",
-  //     url: "/account_info/testing/adminToken",
-  //   })
-  //     .then(({ data }) => {
-  //       setJwt(data.token.token)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //     })
-  // }, [])
-
-  // useEffect(() => {
-  //   console.log("users: ")
-  //   console.log(users)
-  // }, [users])
-
+  /// useEffects ///
   useEffect(() => {
     requestUsers()
   }, [page_no])
 
+  // other functions //
   const requestUsers = () => {
     //  request users from server  //
     let params = {
@@ -114,30 +93,7 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
     )
   }
 
-  // const loadPagination = () => {
-  //   return (
-  //     <Pagination className="justify-content-md-end">
-  //       <Pagination.Prev
-  //         onClick={() => {
-  //           handlePagination(page_no - 1)
-  //         }}
-  //       />
-  //       <Pagination.Item active={true}>{page_no}</Pagination.Item>
-  //       <Pagination.Next
-  //         onClick={() => {
-  //           handlePagination(page_no + 1)
-  //         }}
-  //       />
-  //     </Pagination>
-  //   )
-  // }
-
   // handles //
-  // const handlePagination = (next_page: number) => {
-  //   if ((page_no > next_page && next_page >= 1) || (page_no < next_page && users.length === max_user_per_page)) {
-  //     set_page_no(next_page)
-  //   }
-  // }
   const handlePagination = (next_page: number) => {
     let max_page: number = Math.floor((max_user + max_user_per_page - 1) / max_user_per_page)
     if (next_page >= 1 && next_page <= max_page) {

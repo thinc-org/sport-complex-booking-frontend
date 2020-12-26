@@ -21,19 +21,7 @@ export default function OtherEditInfoComponent({
   const [house_registration_number_file, set_house_registration_number_file] = useState<File>()
   const [relationship_verification_document_file, set_relationship_verification_document_file] = useState<File>()
 
-  // const [pdf_token, set_pdf_token] = useState<string>("")
-
   // functions //
-  // useEffect(() => {
-  //   console.log("changing state")
-  //   // console.log(temp_info)
-  //   console.log("useseffect " + user_photo_file)
-  //   // fetchUserData()
-  // }, [medical_certificate_file])
-
-  // useEffect(() => {
-  //   console.log(temp_info)
-  // }, [temp_info])
 
   // handles //
   const handleUpload = (typename, file) => {
@@ -49,14 +37,13 @@ export default function OtherEditInfoComponent({
         data: formData,
       })
         .then(({ data }) => {
-          console.log(data)
           set_temp_info({
             ...temp_info,
             [Object.keys(data)[0]]: data[Object.keys(data)[0]],
           })
         })
-        .catch((err) => {
-          console.log(err)
+        .catch(({ response }) => {
+          console.log(response)
         })
     }
   }
@@ -395,9 +382,7 @@ export default function OtherEditInfoComponent({
               custom
               onChange={(e) => {
                 if (e.target.files[0]) {
-                  // console.log(e.target.files[0])
                   set_user_photo_file(e.target.files[0])
-                  // console.log("nice " + user_photo_file)
                   handleUpload(e.target.id, e.target.files[0])
                 }
               }}
@@ -458,6 +443,7 @@ export default function OtherEditInfoComponent({
               onChange={(e) => {
                 if (e.target.files[0]) {
                   set_relationship_verification_document_file(e.target.files[0])
+                  console.log(e.target.files[0])
                   handleUpload(e.target.id, e.target.files[0])
                 }
               }}

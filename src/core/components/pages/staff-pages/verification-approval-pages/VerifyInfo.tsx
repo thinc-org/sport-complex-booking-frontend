@@ -11,9 +11,6 @@ import { RejectInfo, ModalVerify, RejectInfoLabel } from "../interfaces/InfoInte
 /// start of main function ///
 const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
   // page state //
-  // const [jwt, setJwt] = useState<string>(
-  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
-  // )
   const [show_reject, set_show_reject] = useState<boolean>(false)
   const [account_expired_date, set_account_expired_date] = useState<Date>()
   const [show_modal_info, set_show_modal_info] = useState<ModalVerify>({
@@ -58,15 +55,8 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   // Non CU state //
   const [_id] = useState<string>(props.match.params._id)
   const [username, set_username] = useState<string>("")
-  const [account_type, set_account_type] = useState<string>("")
+  // const [account_type, set_account_type] = useState<string>("")
   const [membership_type, set_membership_type] = useState<string>("")
-  // const [contact, setContact] = useState<ContactPerson>({
-  // contact_person_prefix: "",
-  // contact_person_name: "",
-  // contact_person_surname: "",
-  // contact_person_home_phone: "",
-  // contact_person_phone: "",
-  // })
   const [info, setInfo] = useState<Info>({
     prefix: "",
     name_th: "",
@@ -89,6 +79,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
       contact_person_home_phone: "",
       contact_person_phone: "",
     },
+    password: "",
     membership_type: membership_type,
     // object id //
     user_photo: "",
@@ -109,17 +100,8 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
       url: "/approval/" + _id,
     })
       .then(({ data }) => {
-        // if (data.contact_person) {
-        //   setContact({
-        //     contact_person_prefix: data.contact_person.contact_person_prefix,
-        //     contact_person_name: data.contact_person.contact_person_name,
-        //     contact_person_surname: data.contact_person.contact_person_surname,
-        //     contact_person_home_phone: data.contact_person.contact_person_home_phone,
-        //     contact_person_phone: data.contact_person.contact_person_phone,
-        //   })
-        // }
         set_username(data.username)
-        set_account_type(data.account_type)
+        // set_account_type(data.account_type)
         set_membership_type(data.membership_type)
         set_account_expired_date(new Date(data.account_expiration_date))
         setInfo({
@@ -137,13 +119,16 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
           phone: data.phone,
           home_phone: data.home_phone,
           medical_condition: data.medical_condition,
-          contact_person: {
-            contact_person_prefix: data.contact_person.contact_person_prefix,
-            contact_person_name: data.contact_person.contact_person_name,
-            contact_person_surname: data.contact_person.contact_person_surname,
-            contact_person_home_phone: data.contact_person.contact_person_home_phone,
-            contact_person_phone: data.contact_person.contact_person_phone,
-          },
+          password: "",
+          contact_person: data.contact_person
+            ? data.contact_person
+            : {
+                contact_person_prefix: "",
+                contact_person_name: "",
+                contact_person_surname: "",
+                contact_person_home_phone: "",
+                contact_person_phone: "",
+              },
           // Files //
           membership_type: data.membership_type,
           user_photo: data.user_photo,
@@ -177,7 +162,6 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     for (const name in reject_info) {
       if (reject_info[name]) rejectList.push(name)
     }
-    console.log(rejectList)
     // send request //
     client({
       method: "PATCH",
@@ -188,7 +172,6 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
       },
     })
       .then((res) => {
-        console.log(res)
         set_show_modal_info({ ...show_modal_info, show_confirm_reject: false, show_complete_reject: true })
       })
       .catch((err) => {
@@ -209,7 +192,6 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
       },
     })
       .then(({ data }) => {
-        console.log(data)
         set_show_modal_info({ ...show_modal_info, show_confirm_accept: false, show_complete_accept: true })
       })
       .catch((err) => {
@@ -226,9 +208,6 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   }
 
   const handleAccept = () => {
-    // console.log("acccoocascasc")
-    // console.log(account_expired_date)
-    // console.log(account_expired_date ? 1 : 0)
     if (account_expired_date && !isNaN(account_expired_date.getDate())) {
       set_show_modal_info({ ...show_modal_info, show_confirm_accept: true })
     } else set_show_modal_info({ ...show_modal_info, show_uncom_accept: true })
@@ -236,7 +215,6 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
 
   // renders //
   const renderTopSection = () => {
-    // console.log(account_expired_date)
     return (
       <div className="topSection px-4 pt-2">
         <div className="row">

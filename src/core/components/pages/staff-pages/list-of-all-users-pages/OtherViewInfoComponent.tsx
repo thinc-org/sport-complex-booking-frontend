@@ -13,7 +13,7 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
   // handles //
   const handlePDF = (e) => {
     let fileId = e.target.id
-    console.log(fileId)
+    // console.log(fileId)
     // console.log("trying to open pdf: " + fileId)
     client({
       method: "GET",
@@ -47,9 +47,6 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
     contact_person,
   } = info
   let { contact_person_prefix, contact_person_name, contact_person_surname, contact_person_home_phone, contact_person_phone } = contact_person
-  // console.log(birthday)
-  // console.log(new Date(birthday))
-  // console.log("DATEEEEE " + birthday.getDate)
 
   return (
     <div className="row mr-4 mt-5">
