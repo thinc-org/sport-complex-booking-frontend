@@ -47,6 +47,9 @@ export default function MainRoute() {
         <Route exact path="/createwaitingroom" component={CreateWaitingRoom} />
 
         <Route exact path="/account" component={AccountPage} />
+
+        <Route exact path='/home' component={HomePage} />
+
         <Route path='/staff' component={StaffRoute} />
 
       </Switch>
