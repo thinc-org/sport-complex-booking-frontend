@@ -83,14 +83,14 @@ const HomePage = () => {
     const clickableLink = () => {
         return (
             <>
-                <Link to='/myreservation' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent' }}>
+                <Link to='/myreservation' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
                     <div>
                         <img src={reservation} style={{ float: 'right', padding: '12px 0 12px 17px', borderLeft: '1px solid rgba(204, 204, 204, 1)' }} />
                         <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> My Reservations </div>
                         <div style={{ fontWeight: 200, fontSize: '14px', lineHeight: '17px', color: 'darkgrey' }}> View my successful reservations </div>
                     </div>
                 </Link>
-                <Link to='/waitingroom' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent' }}>
+                <Link to='/waitingroom' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
                     <div>
                         <img src={waitingroom} style={{ float: 'right', padding: '16px 0 16px 15px', borderLeft: '1px solid rgba(204, 204, 204, 1)' }} />
                         <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> My Waiting Room </div>
@@ -112,14 +112,14 @@ const HomePage = () => {
     const unclickableLink = () => {
         return (
             <>
-                <Link to='/home' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent' }}>
+                <Link to='/home' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
                     <div>
                         <img src={reservation} style={{ float: 'right', padding: '12px 0 12px 17px', borderLeft: '1px solid rgba(204, 204, 204, 1)' }} />
                         <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> My Reservations </div>
                         <div style={{ fontWeight: 200, fontSize: '14px', lineHeight: '17px', color: 'darkgrey' }}> View my successful reservations </div>
                     </div>
                 </Link>
-                <Link to='/home' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent' }}>
+                <Link to='/home' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
                     <div>
                         <img src={waitingroom} style={{ float: 'right', padding: '16px 0 16px 15px', borderLeft: '1px solid rgba(204, 204, 204, 1)' }} />
                         <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> My Waiting Room </div>
@@ -144,7 +144,7 @@ const HomePage = () => {
                 <div className='col-12'>
                     <div style={{ fontSize: '24px', marginBottom: '30px', fontWeight: 400, lineHeight: '17px', textAlign: 'center' }}> {isThaiLanguage ? 'ยินดีต้อนรับ' + nameTh : 'Welcome, ' + nameEn} </div>
                     {nameTh ? null : warningMessage()}
-                    <Link to='/account' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent' }}>
+                    <Link to='/account' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
                         <div>
                             <img src={account} style={{ float: 'right', padding: '12px 0 12px 11px', borderLeft: '1px solid rgba(204, 204, 204, 1)' }} />
                             <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> Account </div>
