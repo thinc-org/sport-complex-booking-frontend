@@ -11,7 +11,7 @@ interface propsTemplate {
 }
 
 const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: propsTemplate) => {
-  let { show_delete, show_com_delete, show_save, show_com_save, show_err } = show_modal_info
+  let { show_delete, show_com_delete, show_save, show_com_save, show_err, show_password_err, show_confirm_change } = show_modal_info
 
   const redirectBack = () => {
     props.history.push({
@@ -141,7 +141,6 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              console.log("click com save")
               set_show_modal_info({ ...show_modal_info, show_com_save: false })
             }}
           >
@@ -182,6 +181,67 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
     )
   }
 
+  const renderPasswordErrModal = () => {
+    return (
+      <Modal
+        show={show_password_err}
+        onHide={() => {
+          set_show_modal_info({ ...show_modal_info, show_password_err: false })
+        }}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>เกิดข้อผิดพลาด</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ fontWeight: "lighter" }}> รหัสผ่านเก่าไม่ถูกต้อง หรือรหัสผ่านใหม่ไม่ตรงกัน </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="pink"
+            className="btn-normal"
+            onClick={() => {
+              set_show_modal_info({ ...show_modal_info, show_password_err: false })
+            }}
+          >
+            ตกลง
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    )
+  }
+
+  const renderConfirmChangePasswordModal = (info: { requestChangePassword: () => void }) => {
+    return (
+      <Modal
+        show={show_confirm_change}
+        onHide={() => {
+          set_show_modal_info({ ...show_modal_info, show_confirm_change: false })
+        }}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>คำเตือน</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ fontWeight: "lighter" }}> ต้องการเปลี่ยนรหัสผ่านหรือไม่ </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="outline-secondary"
+            className="btn-normal btn-outline-pink"
+            onClick={() => {
+              set_show_modal_info({ ...show_modal_info, show_confirm_change: false })
+            }}
+          >
+            ยกเลิก
+          </Button>
+          <Button variant="pink" className="btn-normal" onClick={info.requestChangePassword}>
+            ยืนยัน
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    )
+  }
+
   return (
     <div className="Modals">
       {renderDelete(info)}
@@ -189,6 +249,8 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
       {renderSave(info)}
       {renderCompleteSave()}
       {renderErrModal()}
+      {renderConfirmChangePasswordModal(info)}
+      {renderPasswordErrModal()}
     </div>
   )
 }

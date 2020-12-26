@@ -167,6 +167,7 @@ const UserInfo = () => {
                 contact_person_phone: "",
               },
           membership_type: data.membership_type,
+          password: data.password,
           // Files(Object id) //
           user_photo: data.user_photo,
           medical_certificate: data.medical_certificate,
@@ -198,6 +199,7 @@ const UserInfo = () => {
       home_phone,
       contact_person,
       medical_condition,
+      password,
       user_photo,
       medical_certificate,
       national_id_photo,
@@ -537,6 +539,16 @@ const UserInfo = () => {
       </div>
     )
   }
+
+  const renderPasswordChangeModal = () => (
+    <PasswordChangeModal
+      show_change={show_change_password}
+      set_show_change={set_show_change_password}
+      set_new_password={set_new_password}
+      set_confirm_password={set_confirm_password}
+      info={{ handleChange, handleChangePassword }}
+    />
+  )
 
   return (
     <div className="UserInfo mt-4">
