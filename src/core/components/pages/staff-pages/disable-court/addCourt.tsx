@@ -6,3 +6,7 @@ const AddCourt = () => {
         <div>hegllo</div>
     )
 }
+
+
+
+export default AddCourt

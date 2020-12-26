@@ -1,7 +1,24 @@
 
 import { useState, useEffect, useLayoutEffect, useRef } from 'react';
-import { Option, RowType, Pagination, QueryParams } from './disable-court-interface'
+import { Option, RowProps, Pagination, QueryParams, ViewResponse } from './disable-court-interface'
 import { client } from '../../../../../axiosConfig'
+import { AxiosResponse } from 'axios';
+
+
+export const useDeleteCourt = (id) => {
+    const [show, setShow] = useState(false);
+    const onDelete = () => {
+        client.delete('/courts/disable-courts', {
+            params: {
+                id: id
+            }
+        })
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err))
+    }
+    return { show, setShow, onDelete }
+}
+
 export const useDate = () => {
     let currentDate = new Date()
     currentDate.setHours(0, 0, 0, 0)
@@ -51,6 +68,25 @@ export const useOption = () => {
 export const formatDate = (date: Date): string => {
     return `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`
 }
+
+export const useViewTable = (params) => {
+    const [data, setData] = useState<ViewResponse>()
+    async function fetchViewData() {
+        await client.get<ViewResponse>(`/courts/disable-courts/${params}`,)
+            .then((res) => {
+                console.log(res)
+                setData(res.data)
+
+            })
+            .catch(err => console.log(err))
+    }
+    useEffect(() => {
+        fetchViewData()
+    }, [])
+    return { data }
+
+}
+
 export const useTable = () => {
     const [params, setParams] = useState<QueryParams>({
         sport_id: undefined,
@@ -60,7 +96,7 @@ export const useTable = () => {
         start: 0,
         end: 9
     })
-    const [data, setData] = useState<RowType[]>();
+    const [data, setData] = useState<RowProps[]>();
     const [page, setPage] = useState(1);
     const [maxPage, setMaxPage] = useState(1);
     const firstEffect = useRef(true);

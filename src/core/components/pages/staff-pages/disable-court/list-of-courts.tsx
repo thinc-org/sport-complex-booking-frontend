@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
 import { useDate, useOption, seed } from './disable-court-hook'
 import { ErrorAlert } from './errorModal'
-import { CourtTable } from './disabled-court-table'
+import { CourtTable, CourtRow } from './disabled-court-table'
+import { RowProps } from './disable-court-interface'
 import { useTable } from './disable-court-hook'
 const ListOfCourts = (props) => {
     const { path } = useRouteMatch()
@@ -61,13 +62,18 @@ const ListOfCourts = (props) => {
                     </div>
                 </Form>
             </div>
-            <CourtTable data={data} />
+            {CourtTable<RowProps>({
+                Row: CourtRow,
+                data: data,
+                header: ['เลขคอร์ด', 'ประเภทกีฬา', 'วันที่เริ่มปิด', 'วันสิ้นสุดการปิด']
+            })}
             <div className="d-flex flex-row justify-content-between align-content-center">
                 <Button variant='mediumPink' className='disable-court-button'>
                     <Link to={`${path}/add`} className='disable-court-link'>
                         เพิ่มการปิดคอร์ด
                     </Link>
                 </Button>
+                <Button onClick={seed}>Seed</Button>
                 <Pagination>
                     <Pagination.Prev onClick={() => { if (page > 1) setPage(prev => prev - 1) }} />
                     {

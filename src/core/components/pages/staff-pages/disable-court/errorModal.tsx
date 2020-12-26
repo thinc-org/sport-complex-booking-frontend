@@ -12,7 +12,7 @@ interface Props {
 export const ErrorAlert = ({ inProp, header, message, handleClose, canCancel = false, onCancel }: Props) => {
     return (
         <>
-            <Modal show={inProp} onHide={handleClose}>
+            <Modal show={inProp} onHide={onCancel}>
                 <Modal.Header closeButton>
                     <Modal.Title>{header}</Modal.Title>
                 </Modal.Header>
@@ -22,7 +22,7 @@ export const ErrorAlert = ({ inProp, header, message, handleClose, canCancel = f
                         ตกลง
                     </Button>
                     {canCancel ?
-                        <Button onClick={onCancel}>
+                        <Button onClick={onCancel} variant='mediumPink'>
                             ยกเลิก
                 </Button> : ''}
                 </Modal.Footer>

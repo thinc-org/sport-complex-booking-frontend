@@ -1,4 +1,6 @@
-export interface RowType {
+import { ComponentType } from 'react'
+import { Interface } from 'readline';
+export interface RowProps {
     starting_date: Date,
     expired_date: Date,
     sport_id: string,
@@ -28,4 +30,27 @@ export interface Pagination {
 export interface Sport {
     name: string,
     id: string
+}
+export interface disable_time {
+    day: number,
+    time_slot: number[]
+}
+export interface ViewRowProps {
+    indx: number
+    day: number,
+    time_slot: number[],
+}
+
+export interface ViewResponse {
+    sport_id: string,
+    court_num: number,
+    starting_date: Date,
+    expired_date: Date,
+    disable_time: disable_time[],
+    description?: string
+}
+export interface TableProps<T> {
+    data: any,
+    header: string[],
+    Row: React.FC<T> //
 }
