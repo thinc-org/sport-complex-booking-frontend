@@ -2,8 +2,11 @@ import React from "react"
 import { Button } from "react-bootstrap"
 import {Link } from "react-router-dom"
 import withUserGuard from "../../../guards/user.guard"
+import { useTranslation } from 'react-i18next'
 
 function Hooray() {
+
+  const {t} = useTranslation()
 
   return (
     <div className="wrapper">
@@ -15,13 +18,13 @@ function Hooray() {
             </svg>  
           </div>
           <div className="default-mobile-wrapper mt-4 pb-0">
-            <h4 className="text-center">HOORAY!</h4>
-            <p className="text-center">Your reservation has successfully been made.</p>
+            <h4 className="text-center">{t("hooray")},</h4>
+            <p className="text-center">{t("reservation_success")}</p>
             <br/>
             <div className="button-group">
               <Link to={"/waiting_room"}>
                 <Button variant="pink">
-                  View Waiting Room
+                  {t("view_waiting_room")}
                 </Button>
               </Link>
           </div>

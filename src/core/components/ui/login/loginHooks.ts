@@ -6,6 +6,8 @@ import { setIsFirstLogin } from '../../../../constant'
 import { getIsFirstlogin } from '../../../../constant'
 import { client } from '../../../../axiosConfig'
 import Axios, { AxiosResponse } from 'axios'
+import { useTranslation } from 'react-i18next'
+
 interface UserResponse {
     token: string,
     is_first_login: boolean
@@ -16,6 +18,10 @@ export const useLogin = (setError) => {
     const history = useHistory()
     const { url, path } = useRouteMatch()
     const [isLoading, setLoading] = useState(false)
+    const {i18n} = useTranslation()
+    const changeLanguage = (language) => {
+        i18n.changeLanguage(language);
+    }
     const onLogin = async (data) => {
         setLoading(true)
         await client.post<UserResponse>(`/users/login`, {
@@ -30,6 +36,8 @@ export const useLogin = (setError) => {
                 setIsFirstLogin(false)
                 if (res.data.is_first_login) history.push(`${path}/personal`)
                 else history.push('/account')
+                if (res.data.is_thai_language) changeLanguage('th')
+                else changeLanguage('e')
             })
             .catch((err) => {
                 setLoading(false)
@@ -57,6 +65,8 @@ export const useLogin = (setError) => {
                     setIsFirstLogin(first_time_login)
                     if (res.data.is_first_login) history.push(`${path}/personal`)
                     else history.push('/account')
+                    if (res.data.is_thai_language) changeLanguage('th')
+                    else changeLanguage('e')
                 })
                 .catch((err) => {
                     setLoading(false)

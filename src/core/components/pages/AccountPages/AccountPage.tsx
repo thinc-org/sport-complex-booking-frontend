@@ -6,7 +6,7 @@ import OtherAccount from "./OtherAccount"
 import axios from "axios"
 import { UserContext } from "../../../contexts/UsersContext"
 import {useAuthContext } from "../../../controllers/authContext"
-import { getCookie, setCookie } from "../../../contexts/cookieHandler"
+import { getCookie } from "../../../contexts/cookieHandler"
 import withUserGuard from "../../../guards/user.guard"
 
 function AccountPage() {
@@ -17,15 +17,9 @@ function AccountPage() {
   }
 
   const {token} = useAuthContext()
-  const { setCuStudent } = useContext(UserContext)
-  const { setSatit } = useContext(UserContext)
-  const { setOther } = useContext(UserContext)
-  const { setLanguage } = useContext(UserContext)
-
-  let [account_type, setAccountType] = useState();
-  let [penalizeStatus, setPenalizeStatus] = useState();
-  const userContext = useContext(UserContext);
-  const jwt = userContext.jwt
+  const { setCuStudent, setSatit, setOther, setLanguage, is_thai_language } = useContext(UserContext)
+  const [account_type, setAccountType] = useState();
+  const [penalizeStatus, setPenalizeStatus] = useState();  
 
   useEffect(() => {
     fetch_account_type()
@@ -39,8 +33,8 @@ function AccountPage() {
         },
       })
       .then(({ data }) => {
-        data.jwt = jwt
-        let newData = {...data}
+        data.jwt = token
+        const newData = {...data}
         setPenalizeStatus(data.is_penalize)
         data.rejected_info ? (
           data.rejected_info.forEach((field)=> {
@@ -78,19 +72,10 @@ function AccountPage() {
       }
     }
   } 
-  
-  const showPenalized = () => {
-    return (
-      <div className="alert alert-danger mx-3 mt-3" role="alert">
-        <h3>{penalizeStatus ? "คำเตือน" : "You are being penalized"}</h3>
-        <h6>{penalizeStatus ? "คุณจะไม่สามารถทำการจองได้จนกว่าระยะเวลาการลงโทษของคุณจะสิ้นสุดลง" : "You will not be able to make reservations until your penalized period is over"}</h6>
-      </div>
-    )
-  }
 
   return (
     <>
-      {penalizeStatus ? showPenalized(): <></>}
+      <PenalizeMessage show={penalizeStatus} is_thai_language={is_thai_language}/>
       {showPage(account_type)}
     </>
   )
@@ -98,3 +83,19 @@ function AccountPage() {
 }
 
 export default withUserGuard(AccountPage)
+
+
+interface PenalizeMessageProps {
+  show?: boolean,
+  is_thai_language: boolean
+}
+
+const PenalizeMessage:React.FC<PenalizeMessageProps> = ({show, is_thai_language}) => {
+   if(!show) return null
+   return (
+      <div className="alert alert-danger mx-3 mt-3" role="alert">
+        <h3>{is_thai_language ? "คำเตือน" : "You are being penalized"}</h3>
+        <h6>{is_thai_language ? "คุณจะไม่สามารถทำการจองได้จนกว่าระยะเวลาการลงโทษของคุณจะสิ้นสุดลง" : "You will not be able to make reservations until your penalized period is over"}</h6>
+      </div>
+   )
+}

@@ -20,7 +20,6 @@ function WaitingRoomBan(props: historyProps) {
   
   useEffect(()=> {
     fetchValidity(token)
-    console.log(props)
   }, [])
 
   const fetchValidity = async (token: String |undefined) => {
@@ -53,7 +52,6 @@ function WaitingRoomBan(props: historyProps) {
         <div className="default-mobile-wrapper mt-4">
           <h4>{msg}</h4>
           <p>{is_thai_language ? "คุณไม่ได้รับอนุญาตให้สร้างห้องรอ": "You do not have the permission to create a waiting room."}</p>
-          <p>{(JSON.stringify(props))}</p>
           <Link to={"/"}>
             <div className="button-group">
               <Button className="mt-3 mb-0" variant="darkpink">{is_thai_language ? "กลับสู่หน้าหลัก" : "Go back to home page"}</Button>

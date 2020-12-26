@@ -238,3 +238,18 @@ p.link {
 .form-label {
   font-weight: bold;
 }
+
+.custom-checkbox {
+  margin-top: 4px;
+  width: 15px;
+  height: 15px;
+}
+
+.custom-select {
+  background-color: #ffadc8;
+}
+
+.time-checkbox {
+  width: 15px;
+  height: 15px;
+}
