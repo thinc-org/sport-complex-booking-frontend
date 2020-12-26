@@ -1,72 +1,95 @@
 import * as React from 'react';
 import { Link, useRouteMatch } from 'react-router-dom'
 import { Button, Pagination, Table } from 'react-bootstrap'
-import { formatDate } from './disable-court-hook'
-import { RowType } from './disable-court-interface'
-export const CourtRow = ({ court_num, sport_id, starting_date, expired_date, _id }: RowType) => {
+import { formatDate, useDeleteCourt } from './disable-court-hook'
+import { getMinute, getTime } from './mapTime'
+import { RowProps, TableProps, ViewRowProps } from './disable-court-interface'
+import { ErrorAlert } from './errorModal'
+import { dayArr } from './mapTime'
+export const CourtRow = ({ court_num, sport_id, starting_date, expired_date, _id }: RowProps) => {
     const { url, path } = useRouteMatch()
+    const { show, setShow, onDelete } = useDeleteCourt(_id)
+    return (
+        <>
+            <ErrorAlert
+                inProp={show}
+                header='คำเตือน'
+                message='ท่านต้องการยืนยันการลบการปิดคอร์ดนี้หรือไม่'
+                canCancel={true}
+                handleClose={onDelete}
+                onCancel={() => setShow(false)}
+            />
+            <tr>
+                <td>
+                    {court_num}
+                </td>
+                <td>
+                    {sport_id}
+                </td>
+                <td>
+                    {formatDate(new Date(starting_date))}
+                </td>
+                <td className='d-flex flex-row justify-content-between align-items-center'>
+                    {formatDate(new Date(expired_date))}
+                    <div className='d-flex flex-row'>
+                        <Button variant='outline-transparent' className='mr-2' >
+                            <Link className='disable-court-link' to={`${path}/${_id}`} style={{ color: 'black' }}>ดูข้อมูล</Link>
+                        </Button>
+                        <Button variant='outline-transparent' style={{ color: 'red' }} onClick={() => setShow(true)}>
+                            ลบ
+                    </Button>
+                    </div>
+
+                </td>
+            </tr>
+        </>
+    )
+}
+
+export const ViewRow = (props: ViewRowProps) => {
+    const minute = getMinute(props.time_slot)
     return (
         <tr>
             <td>
-                {court_num}
+                {props.indx}
             </td>
             <td>
-                {sport_id}
+                {dayArr[props.day]}
             </td>
             <td>
-                {formatDate(new Date(starting_date))}
+                {getTime(minute.startTime)}
             </td>
-            <td className='d-flex flex-row justify-content-between align-items-center'>
-                {formatDate(new Date(expired_date))}
-                <div className='d-flex flex-row'>
-                    <Button variant='outline-transparent' className='mr-2' >
-                        <Link className='disable-court-link' to={`${path}/${_id}`} style={{ color: 'black' }}>ดูข้อมูล</Link>
-                    </Button>
-                    <Button variant='outline-transparent' style={{ color: 'red' }}>
-                        ลบ
-                    </Button>
-                </div>
-
+            <td>
+                {getTime(minute.endTime)}
             </td>
         </tr>
     )
 }
-export const CourtTable = ({ data }: any) => {
+
+
+
+export function CourtTable<T>({ data, header, Row }: TableProps<T>) {
     return (
-        <>
-            <Table className='disable-court-table'>
-                <thead>
-                    <tr>
-                        <th>
-                            เลขคอร์ด
-                    </th>
-                        <th>
-                            ประเภทกีฬา
-                    </th>
-                        <th>
-                            วันที่เริ่มปิด
-                    </th>
-                        <th>
-                            วันที่สิ้นสุดการปิด
-                    </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data?.map((val) => (
-                        <CourtRow
-                            court_num={val.court_num}
-                            sport_id={val.sport_id}
-                            starting_date={val.starting_date}
-                            expired_date={val.expired_date}
-                            _id={val._id}
-                            key={val._id}
-                        />
+        <Table className='disable-court-table'>
+            <thead>
+                <tr>
+                    {header.map((val) => <th key={val}>{val}</th>)}
+                </tr>
+            </thead>
+            <tbody>
+                {data?.map((val, indx) => {
+                    return (<Row
+                        {...val}
+                        indx={indx}
+                        key={val._id}
+                    />)
 
-                    ))}
+                })}
 
-                </tbody>
-            </Table>
-        </>
+            </tbody>
+        </Table>
+
     )
 
 }
+
