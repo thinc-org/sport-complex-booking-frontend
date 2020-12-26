@@ -10,6 +10,8 @@ import Sidebar from "../components/ui/navbar/navbar"
 import StaffProfile from "../components/pages/staff-pages/staff-profile"
 import StaffNavbar from "../components/ui/navbar/staff-navbar"
 import AccountPage from "../components/pages/AccountPages/AccountPage"
+import StaffManagement from "../components/pages/staff-pages/staff-management/StaffManagement"
+import Settings from "../components/pages/staff-pages/settings/Settings"
 
 import ListOfAllUsers from "../components/pages/staff-pages/list-of-all-users-pages/ListOfAllUsers"
 import AddUser from "../components/pages/staff-pages/list-of-all-users-pages/AddUser"
@@ -79,12 +81,16 @@ export default function MainRoute() {
         />
 
         <Route
-          path="/จัดการสตาฟ"
+          path="/staffmanagement"
           render={() => {
-            return (
-              // add pages here staff(page)
-              <div>under maintainance</div>
-            )
+            return staff(<StaffManagement />, "รายชื่อสตาฟ")
+          }}
+        />
+
+        <Route
+          path="/settings"
+          render={() => {
+            return staff(<Settings />, "การตั้งค่า")
           }}
         />
 

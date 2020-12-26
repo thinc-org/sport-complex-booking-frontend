@@ -7,7 +7,7 @@ export const data = [
   {
     icon: "",
     name: "จัดการสตาฟ",
-    path: "/จัดการสตาฟ",
+    path: "/staffmanagement",
   },
   {
     icon: "",
@@ -39,6 +39,6 @@ export const data = [
   {
     icon: "",
     name: "การตั้งค่า",
-    path: "/การตั้งค่า",
+    path: "/settings",
   },
 ]
