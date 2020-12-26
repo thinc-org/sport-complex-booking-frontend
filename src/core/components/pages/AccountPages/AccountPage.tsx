@@ -18,7 +18,7 @@ function AccountPage() {
   }
 
   const {token} = useAuthContext()
-  const { setCuStudent, setSatit, setOther, setLanguage, is_thai_language } = useContext(UserContext)
+  const { setCuStudent, setSatit, setOther, setLanguage } = useContext(UserContext)
   const [account_type, setAccountType] = useState();
   const [penalizeStatus, setPenalizeStatus] = useState();  
   const {i18n} = useTranslation()
@@ -79,7 +79,7 @@ function AccountPage() {
 
   return (
     <>
-      <PenalizeMessage show={penalizeStatus} is_thai_language={is_thai_language}/>
+      <PenalizeMessage show={penalizeStatus}/>
       {showPage(account_type)}
     </>
   )
@@ -91,15 +91,15 @@ export default withUserGuard(AccountPage)
 
 interface PenalizeMessageProps {
   show?: boolean,
-  is_thai_language: boolean
 }
 
-const PenalizeMessage:React.FC<PenalizeMessageProps> = ({show, is_thai_language}) => {
-   if(!show) return null
-   return (
-      <div className="alert alert-danger mx-3 mt-3" role="alert">
-        <h3>{is_thai_language ? "คำเตือน" : "You are being penalized"}</h3>
-        <h6>{is_thai_language ? "คุณจะไม่สามารถทำการจองได้จนกว่าระยะเวลาการลงโทษของคุณจะสิ้นสุดลง" : "You will not be able to make reservations until your penalized period is over"}</h6>
-      </div>
-   )
+const PenalizeMessage:React.FC<PenalizeMessageProps> = ({show}) => {
+  const {t} = useTranslation()
+  if(!show) return null
+  return (
+    <div className="alert alert-danger mx-3 mt-3" role="alert">
+      <h3>{t("you_are_penalied")}</h3>
+      <h6>{t("penalzie_message")}</h6>
+    </div>
+  )
 }

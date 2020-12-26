@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next"
 export interface DetailsModalProps {
   show: Boolean,
   setShow(show: boolean): void,
-  is_thai_language: Boolean,
   sportName?: String, 
   details: WaitingRoomData,
   date: Date,
@@ -22,7 +21,7 @@ export interface WaitingRoomData {
 }
 
 
-export const DetailsModal: React.FC<DetailsModalProps> = ({ show, setShow, is_thai_language, sportName, details, date, times, formatTime, postDataToBackend }) => {
+export const DetailsModal: React.FC<DetailsModalProps> = ({ show, setShow, sportName, details, date, times, formatTime, postDataToBackend }) => {
   const { t } = useTranslation()
   if (!show) return null
   return (

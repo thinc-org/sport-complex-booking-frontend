@@ -33,7 +33,7 @@ export default function OtherAaccountDisplay() {
 
   return (
     <div className="mx-auto col-md-6">
-      <OtherWarningMessage show={user.verification_status !== ""} is_thai_language={user.is_thai_language} verification_status={user.verification_status} />            
+      <OtherWarningMessage show={user.verification_status !== ""} verification_status={user.verification_status} />            
       <div className="default-mobile-wrapper">
         <div className="">
           {/* START OF THE FORM */}

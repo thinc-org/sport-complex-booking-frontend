@@ -1,11 +1,11 @@
-import React, { PropsWithChildren } from "react"
+import React from "react"
 import { Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
-import { useState, useEffect } from "react"
-import { getCookie } from "../../../contexts/cookieHandler"
+import { useEffect } from "react"
 import withUserGuard from "../../../guards/user.guard"
 import { useAuthContext } from "../../../controllers/authContext"
 import { History, LocationState } from "history";
+import { useTranslation } from 'react-i18next'
 
 
 interface historyProps {
@@ -14,9 +14,9 @@ interface historyProps {
 
 function WaitingRoomBan(props: historyProps) {
 
-  const [is_thai_language] = useState(getCookie('is_thai_langauge') === 'true')
   const { msg } = (props['location'] && props['location']['state']) || {};
   const {token} = useAuthContext()
+  const {t} = useTranslation()
   
   useEffect(()=> {
     fetchValidity(token)
@@ -51,10 +51,10 @@ function WaitingRoomBan(props: historyProps) {
       <div className="mx-auto col-md-6">
         <div className="default-mobile-wrapper mt-4">
           <h4>{msg}</h4>
-          <p>{is_thai_language ? "คุณไม่ได้รับอนุญาตให้สร้างห้องรอ": "You do not have the permission to create a waiting room."}</p>
+          <p>{t("waiting_room_ban")}</p>
           <Link to={"/"}>
             <div className="button-group">
-              <Button className="mt-3 mb-0" variant="darkpink">{is_thai_language ? "กลับสู่หน้าหลัก" : "Go back to home page"}</Button>
+              <Button className="mt-3 mb-0" variant="darkpink">{t("back_to_home")}</Button>
             </div>
           </Link>
         </div>

@@ -91,7 +91,7 @@ interface WarningMessageProps {
   is_thai_language: boolean
 }
 
-export const WarningMessage:React.FC<WarningMessageProps> = ({show, is_thai_language}) => {
+export const WarningMessage:React.FC<WarningMessageProps> = ({show}) => {
   const {t} = useTranslation() 
   if(!show) return null
    return (
@@ -105,12 +105,12 @@ export const WarningMessage:React.FC<WarningMessageProps> = ({show, is_thai_lang
 
 export interface OtherWarningMessageProps {
   show: boolean,
-  is_thai_language: boolean,
   verification_status: string
 }
 
-export const OtherWarningMessage:React.FC<OtherWarningMessageProps> = ({show, is_thai_language, verification_status}) => {
+export const OtherWarningMessage:React.FC<OtherWarningMessageProps> = ({show, verification_status}) => {
   const {t} = useTranslation() 
+  if(!show) return null
   switch (verification_status) {
     case "NotSubmitted": {
       return (

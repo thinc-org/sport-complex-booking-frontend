@@ -19,10 +19,12 @@ function ChangePassword() {
   const [show, setShow] = useState(false);
   const [passwordData, setPasswordData] = useState<PasswordData>();
   const [showPasswordMismatch, setShowPasswordMismatch] = useState(false);
-  const {is_thai_language, CuStudent} = useContext(UserContext)
+  const [repeatedPasswordError, setRepeatedPassword] =useState(false)
+  const {CuStudent} = useContext(UserContext)
   const {t} = useTranslation()
   const onSubmit = (data: PasswordData) => {
     if (data.oldPassword !== data.newPassword ) {
+      setRepeatedPassword(false)
       if (data.newPassword !== data.repeatNewPassword!) {
         setShowPasswordMismatch(true);
       } else {
@@ -30,7 +32,9 @@ function ChangePassword() {
         setPasswordData({...data})
         setShow(true)
       } 
-    }      
+    } else {
+      setRepeatedPassword(true)
+    }
   };
 
   const postDataToBackend = (data: PasswordData) => {
@@ -40,7 +44,7 @@ function ChangePassword() {
     
   return (
     <div className="mx-auto col-md-6">
-      {CuStudent.account_type !== "CuStudent" ? <Redirect to="/account" /> : null}
+      {CuStudent.account_type === "CuStudent" ? <Redirect to="/account" /> : null}
       <div className="default-mobile-wrapper">
         <div className="row mt-2">
           <div className="col-8">
@@ -66,19 +70,21 @@ function ChangePassword() {
           required: "Enter your new password.",
         })} placeholder="Repeat New Password" className="form-control"/>
         {errors.repeatNewPassword && <p id="input-error">{errors.repeatNewPassword.message}</p>}
+        {repeatedPasswordError ? (<p className="input-error mt-2">New password cannot be the same as the old password.</p>):(null)}
         <hr/>
         <div className="button-group mt-4">
           <Button variant="pink" className="btn-secondary" onClick={handleSubmit(onSubmit)}>
-          {is_thai_language ? "บันทึกและส่ง" : "Save and Submit"}
+          {t("save_and_submit")}
         </Button>
         </div>
         
       </div>
       <br />
       {/* Confirmation Dialog */}
-      <ConfirmationModal show={show} is_thai_language={is_thai_language} setShow={setShow} postDataToBackend={postDataToBackend} passwordData={passwordData}/>
+      <ConfirmationModal show={show} setShow={setShow} postDataToBackend={postDataToBackend} passwordData={passwordData}/>
       {/* Password mismatch error modal */}
-      <PasswordMismatchModal show={showPasswordMismatch} is_thai_language={is_thai_language} setShowPasswordMismatch={setShowPasswordMismatch} />
+      <PasswordMismatchModal show={showPasswordMismatch} setShowPasswordMismatch={setShowPasswordMismatch} />
+      
     </div>
   )
 }

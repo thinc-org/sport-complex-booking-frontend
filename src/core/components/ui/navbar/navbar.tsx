@@ -73,7 +73,7 @@ const Sidebar = (props: any) => {
 
   const {i18n} = useTranslation()
 
-  const changeLanguage = (language) => {
+  const changeLanguage = (language:string) => {
     setCookie('is_thai_language', language === "th", 999)
     i18n.changeLanguage(language);
   }
