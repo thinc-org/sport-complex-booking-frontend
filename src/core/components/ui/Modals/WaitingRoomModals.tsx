@@ -30,29 +30,29 @@ export const DetailsModal: React.FC<DetailsModalProps> = ({ show, setShow, is_th
       <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="confirmModalLabel">
-              {is_thai_language ? "คุณต้องการสร้างห้องรอการจองหรือไม่" : "Do you want to create a reservation waiting room?"}
+              {t("want_to_create_waiting_room")}
             </h5>
             <button type="button" className="close" onClick={() => setShow(false)}>
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div className="modal-body">
-            <h4>Reservation Details</h4>
+            <h4>{t("reservation_details")}</h4>
             <ul>
-              <li>{is_thai_language ? "กีฬา" : "Sport"}: {sportName}</li>
-              <li>{is_thai_language ? "หมายเลขสนาม" : "Court"}: {details.court_number}</li>
-              <li>{is_thai_language ? "วันที่" : "Date"}: {date.toString().substring(0,10)}</li>
-              <li>{is_thai_language ? "เวลา" : "Time"}: <ul>{times.map(element => {
+              <li>{t("sport")}: {sportName}</li>
+              <li>{t("court")}: {details.court_number}</li>
+              <li>{t("booking_date")}: {date.toString().substring(0,10)}</li>
+              <li>{t("booking_time")}: <ul>{times.map(element => {
                 return (<li key={element.toString()}>{formatTime(element)}</li>)
               })}</ul></li>
             </ul> 
           </div>
           <div className="modal-footer">
             <Button onClick={() => setShow(false)} type="button" variant="outline-secondary" className="btn-normal">
-              {is_thai_language ? "ยกเลิก" : "Cancel"}
+              {t("cancel")}
             </Button>
             <Button onClick={()=> postDataToBackend(details)} variant="pink" className="btn-normal">
-              {is_thai_language ? "สร้าง" : "Create"}
+              {t("create")}
             </Button>
           </div>
         </div>

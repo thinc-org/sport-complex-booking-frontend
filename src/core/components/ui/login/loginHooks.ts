@@ -12,6 +12,7 @@ interface UserResponse {
     token: string,
     is_first_login: boolean
     is_thai_language: boolean
+    jwt: string
 }
 export const useLogin = (setError) => {
     const { setToken } = useAuthContext()
@@ -32,12 +33,15 @@ export const useLogin = (setError) => {
                 setLoading(false)
                 setCookie('is_thai_language', res.data.is_thai_language, 5)
                 setCookie('token', res.data.token, 1)
+                setCookie('token', res.data.jwt, 1)
                 setToken(res.data.token)
                 setIsFirstLogin(false)
+                console.log(res)
                 if (res.data.is_first_login) history.push(`${path}/personal`)
                 else history.push('/account')
                 if (res.data.is_thai_language) changeLanguage('th')
                 else changeLanguage('e')
+                window.location.reload()
             })
             .catch((err) => {
                 setLoading(false)

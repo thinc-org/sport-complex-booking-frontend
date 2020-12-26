@@ -78,10 +78,24 @@
   "remaining_quota": "Reservation Quota Remaining",
   "used_up_quota": "You have used up all your quota",
   "mins_remaining": "mins remaining",
-  "time_slot_selection": "Time Slot Selection"
-
-
-
-
-
+  "time_slot_selection": "Time Slot Selection",
+  "not_submitted_message": "Please submit the registration form.",
+  "rejected_title": "Incorrect Information",
+  "rejected_message": "Please resubmit the form.",
+  "submitted_title": "Registration form submitted.",
+  "submitted_message": "Please wait for approval.",
+  "approved_title": "Registration form approved.",
+  "approved_message": "To edit your personal information, please contact CU Sports Complex.",
+  "create": "Create",
+  "sport": "Sport", 
+  "court": "Court",
+  "booking_date": "Date",
+  "booking_time": "Time",
+  "confirm": "Confirmation",
+  "confirm_password_change": "Do you want to confirm password change",
+  "submit": "Submit",
+  "want_to_create_waiting_room": "Do you want to create a reservation waiting room?",
+  "reservation_details": "Reservation Details",
+  "password_mismatch": "Passwords do not match",
+  "enter_again": "Please enter your new password again"  
 }
