@@ -1,17 +1,17 @@
 import React from "react"
 import { Button, Modal } from "react-bootstrap"
-import { useState, useEffect, useContext } from "react"
+import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"
 import { Link } from "react-router-dom"
-import axios from "axios"
-import { UserContext } from "../../../contexts/UsersContext";
+import axios, { AxiosResponse } from "axios"
 import withUserGuard from '../../../guards/user.guard'
 import { useAuthContext } from "../../../controllers/authContext";
 import { History, LocationState } from "history";
 import { DetailsModal } from "../../ui/Modals/WaitingRoomModals";
 import { useTranslation } from 'react-i18next'
+import { client } from "../../../../axiosConfig";
 
 export interface CreateWaitingRoomProps {
  history: History<LocationState>;
@@ -47,7 +47,7 @@ function CreateWaitingRoom(props: CreateWaitingRoomProps) {
 
   // Sport States
   const [sport, setSport] = useState([])
-  const [sportName, setSportName] = useState<String>()
+  const [sportName, setSportName] = useState<string>()
 
   // Court States
   const [courts, setCourts] = useState([])
@@ -68,7 +68,7 @@ function CreateWaitingRoom(props: CreateWaitingRoomProps) {
 
 
   useEffect(() => {
-    fetchValidity(token)
+    fetchValidity()
     fetchCourts()
   }, [])
 
@@ -89,18 +89,10 @@ const validDate = (date1, date2) => {
   }
 }
 // [0] check account validity
-const fetchValidity = async (token: String | undefined ) => {
-
-  let axios = require('axios');
-  let config = {
-    method: 'post',
-    url: 'http://localhost:3000/reservation/checkvalidity',
-    headers: { 
-      'Authorization': 'bearer ' + token
-    }
-  };
-  await axios(config)
-  .then((response:SportsResponse[]) => {
+const fetchValidity = async () => {
+  await client
+  .post('/reservation/joinwaitingroom')
+  .then((response:AxiosResponse<SportsResponse[]>) => {
     console.log(response)
     let resMsg = response['data']['message']
     if (resMsg !== "valid user") {
@@ -195,13 +187,13 @@ const formatTime = (element: number) => {
     <div className="mx-auto col-md-6">
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{t("create_waiting_room")}</h4>
+        <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{t("createWaitingRoom")}</h4>
         <div className="mx">
           <hr/>
         </div>
         <div className="default-mobile-wrapper mt-4">
           <span className="row mt">
-            <label className="form-label mt-2 ml-3">{t("date_selection")}</label>
+            <label className="form-label mt-2 ml-3">{t("dateSelection")}</label>
           </span>
           <div className="d-flex react-datepicker-wrapper">
             <DatePicker
@@ -218,9 +210,9 @@ const formatTime = (element: number) => {
               }}
             />
           </div>
-          {showDateWarning ? <p className="font-weight-light text-danger">{t("seven_days")}</p> : <></>}
+          {showDateWarning ? <p className="font-weight-light text-danger">{t("sevenDays")}</p> : <></>}
           <div className="mt-2">
-            <label className="form-label mt-2">{t("sport_selection")}</label>
+            <label className="form-label mt-2">{t("sportSelection")}</label>
             <div>
               <select name="sport_id" ref={register} onChange={() => {
                 if (getValues("sport_id") !== "") {
@@ -234,13 +226,13 @@ const formatTime = (element: number) => {
                   setShowCourt(true)
                 }
               }}>
-              <option className="dropdown-item" value="">{t("sport_selection")}</option>
+              <option className="dropdown-item" value="">{t("sportSelection")}</option>
               {sport.map((item, i) => (<option key={i} value={item['_id']}>{item['sport_name_en']}</option>))}
             </select>
             </div>
             {showCourt ? (
               <div>
-                <label className="form-label mt-2">{t("court_selection")}</label>
+                <label className="form-label mt-2">{t("courtSelection")}</label>
                 <div>
                   <select name="court_number" ref={register} onChange={()=> {
                     if (getValues("court_number") !== "") {
@@ -250,7 +242,7 @@ const formatTime = (element: number) => {
                       setShowTime(false)
                     }
                   }}>
-                  <option className="dropdown-item" value="">{t("sport_selection")}</option>
+                  <option className="dropdown-item" value="">{t("sportSelection")}</option>
                   {courts.map((item, i) => (<option key={i} value={item['court_num']}>{"Court" + item['court_num']}</option>))}
                 </select>
                 </div>
@@ -260,13 +252,13 @@ const formatTime = (element: number) => {
               <div>
                 <div className="mt-3">
                   <hr />
-                  <h6>{t("remaining_quota")}</h6>
+                  <h6>{t("remainingQuota")}</h6>
                   {quota - checkedCount * 30 < 30 
-                  ? (<h4>{t("used_up_quota")}</h4>) 
-                  : (<h4>{quota - checkedCount * 30} {t("mins_remaining")}</h4>)}       
+                  ? (<h4>{t("usedUpQuota")}</h4>) 
+                  : (<h4>{quota - checkedCount * 30} {t("minsRemaining")}</h4>)}       
                 </div>
                   <hr/> 
-                <label className="form-label mt-2">{t("time_slot_selection")}</label>
+                <label className="form-label mt-2">{t("timeSlotSelection")}</label>
                 <div>
                     {time.map((item, i) => (
                     <div className="my-0" key={i}>
@@ -289,7 +281,7 @@ const formatTime = (element: number) => {
           {showDateWarning 
           ? null 
           : <Button type="submit" variant="pink" onClick={() => {setShow(true)}}>
-            {t("create_waiting_room")}
+            {t("createWaitingRoom")}
           </Button>}
         </div>
         <DetailsModal show={show} setShow={setShow} sportName={sportName} details={details} date={date} times={times} formatTime={formatTime} postDataToBackend={postDataToBackend} />

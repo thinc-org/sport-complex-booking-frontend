@@ -18,7 +18,7 @@ function AccountPage() {
   }
 
   const {token} = useAuthContext()
-  const { setCuStudent, setSatit, setOther, setLanguage } = useContext(UserContext)
+  const { setCuStudent, setSatitCuPersonel, setOther } = useContext(UserContext)
   const [account_type, setAccountType] = useState();
   const [penalizeStatus, setPenalizeStatus] = useState();  
   const {i18n} = useTranslation()
@@ -49,18 +49,18 @@ function AccountPage() {
         if (data.account_type === "CuStudent") {
           setCuStudent(newData)
         } else if (data.account_type === "SatitAndCuPersonel") {
-          setSatit(newData)
+          setSatitCuPersonel(newData)
         } else if (data.account_type === "Other") {
           setOther(newData)
         }
-        setLanguage(getCookie("is_thai_language")==="true")
+        //setLanguage(getCookie("is_thai_language")==="true")
         if (getCookie("is_thai_language")==="true") i18n.changeLanguage('th');
         else i18n.changeLanguage('en')
         setAccountType(data.account_type)
       })
   }
 
-  const showPage = (account_type: String | undefined) => {
+  const showPage = (account_type: string | undefined) => {
     switch (account_type) {
       case Account.CuStudent: {
         return <ChulaAccount />

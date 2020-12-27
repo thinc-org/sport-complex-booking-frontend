@@ -3,13 +3,13 @@ import { Button, Modal } from "react-bootstrap"
 import { useTranslation } from "react-i18next"
 
 export interface DetailsModalProps {
-  show: Boolean,
+  show: boolean,
   setShow(show: boolean): void,
-  sportName?: String, 
+  sportName?: string, 
   details: WaitingRoomData,
   date: Date,
-  times: Number[],
-  formatTime(time: Number): String,
+  times: number[],
+  formatTime(time: number): string,
   postDataToBackend(data: WaitingRoomData): void
 }
 
@@ -29,7 +29,7 @@ export const DetailsModal: React.FC<DetailsModalProps> = ({ show, setShow, sport
       <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="confirmModalLabel">
-              {t("want_to_create_waiting_room")}
+              {t("wantToCreateWaitingRoom")}
             </h5>
             <button type="button" className="close" onClick={() => setShow(false)}>
               <span aria-hidden="true">&times;</span>
@@ -40,8 +40,8 @@ export const DetailsModal: React.FC<DetailsModalProps> = ({ show, setShow, sport
             <ul>
               <li>{t("sport")}: {sportName}</li>
               <li>{t("court")}: {details.court_number}</li>
-              <li>{t("booking_date")}: {date.toString().substring(0,10)}</li>
-              <li>{t("booking_time")}: <ul>{times.map(element => {
+              <li>{t("bookingDate")}: {date.toString().substring(0,10)}</li>
+              <li>{t("bookingTime")}: <ul>{times.map(element => {
                 return (<li key={element.toString()}>{formatTime(element)}</li>)
               })}</ul></li>
             </ul> 
