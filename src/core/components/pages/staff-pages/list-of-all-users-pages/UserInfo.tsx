@@ -6,18 +6,8 @@ import OtherViewInfoComponent from "./OtherViewInfoComponent"
 import OtherEditInfoComponent from "./OtherEditInfoComponent"
 import ModalsComponent from "./OtherModalsComponent"
 import Info, { Account, ThaiLangAccount, ModalUserInfo } from "../interfaces/InfoInterface"
+import { convertDate, convertTime } from "./ConvertFunctions"
 import PasswordChangeModal from "./PasswordChangeModal"
-
-export const convertDate = (date: Date) => {
-  if (date < new Date()) {
-    date = new Date()
-  }
-  let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate()
-  let month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1
-  let year = date.getFullYear()
-  let format_date = year + "-" + month + "-" + day
-  return format_date
-}
 
 const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
   // page state //
@@ -365,41 +355,93 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         <div className="row">
           <div className="col">
             <label className="mt-2">สิ้นสุดการแบน</label>
-            <Form.Control
-              type="date"
-              disabled={!isEdit}
-              value={
-                isEdit
-                  ? temp_expired_penalize_date && temp_is_penalize
-                    ? convertDate(new Date(temp_expired_penalize_date))
-                    : ""
-                  : is_penalize
-                  ? convertDate(new Date(expired_penalize_date))
-                  : ""
-              }
-              onChange={(e) => {
-                set_temp_expired_penalize_date(new Date(e.target.value))
-              }}
-            />
+            <div className="row">
+              <div className="col pr-0" style={{ width: "60%" }}>
+                <Form.Control
+                  type="date"
+                  disabled={!isEdit || !temp_is_penalize}
+                  value={
+                    isEdit
+                      ? temp_expired_penalize_date && temp_is_penalize
+                        ? convertDate(new Date(temp_expired_penalize_date))
+                        : ""
+                      : is_penalize
+                      ? convertDate(new Date(expired_penalize_date))
+                      : ""
+                  }
+                  onChange={(e) => {
+                    let incom: Date = new Date(e.target.value)
+                    let old: Date = temp_expired_penalize_date ? new Date(temp_expired_penalize_date) : new Date()
+                    set_temp_expired_penalize_date(new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), old.getHours(), old.getMinutes()))
+                  }}
+                />
+              </div>
+              <div className="col" style={{ width: "40%" }}>
+                <Form.Control
+                  type="time"
+                  disabled={!isEdit || !temp_is_penalize}
+                  value={
+                    isEdit
+                      ? temp_expired_penalize_date && temp_is_penalize
+                        ? convertTime(new Date(temp_expired_penalize_date).getHours(), new Date(temp_expired_penalize_date).getMinutes())
+                        : ""
+                      : is_penalize
+                      ? convertTime(new Date(expired_penalize_date).getHours(), new Date(expired_penalize_date).getMinutes())
+                      : ""
+                  }
+                  onChange={(e) => {
+                    let date: Date = temp_expired_penalize_date ? new Date(temp_expired_penalize_date) : new Date()
+                    let hour: number = parseInt(e.target.value.slice(0, 2))
+                    let minute: number = parseInt(e.target.value.slice(3, 5))
+                    set_temp_expired_penalize_date(new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, 0))
+                  }}
+                />
+              </div>
+            </div>
           </div>
           <div className="col">
             <label className="mt-2">วันหมดอายุสมาชิก</label>
-            <Form.Control
-              type="date"
-              disabled={!isEdit}
-              value={
-                isEdit
-                  ? temp_account_expired_date
-                    ? convertDate(new Date(temp_account_expired_date))
-                    : ""
-                  : temp_account_expired_date
-                  ? convertDate(new Date(account_expired_date))
-                  : ""
-              }
-              onChange={(e) => {
-                set_temp_account_expired_date(new Date(e.target.value))
-              }}
-            />
+            <div className="row">
+              <div className="col pr-0" style={{ width: "60%" }}>
+                <Form.Control
+                  type="date"
+                  disabled={!isEdit}
+                  value={
+                    isEdit
+                      ? temp_account_expired_date
+                        ? convertDate(new Date(temp_account_expired_date))
+                        : ""
+                      : account_expired_date
+                      ? convertDate(new Date(account_expired_date))
+                      : ""
+                  }
+                  onChange={(e) => {
+                    set_temp_account_expired_date(new Date(e.target.value))
+                  }}
+                />
+              </div>
+              <div className="col" style={{ width: "40%" }}>
+                <Form.Control
+                  type="time"
+                  disabled={!isEdit}
+                  value={
+                    isEdit
+                      ? temp_account_expired_date
+                        ? convertTime(new Date(temp_account_expired_date).getHours(), new Date(temp_account_expired_date).getMinutes())
+                        : ""
+                      : account_expired_date
+                      ? convertTime(new Date(account_expired_date).getHours(), new Date(account_expired_date).getMinutes())
+                      : ""
+                  }
+                  onChange={(e) => {
+                    let date: Date = temp_expired_penalize_date ? new Date(temp_account_expired_date) : new Date()
+                    let hour: number = parseInt(e.target.value.slice(0, 2))
+                    let minute: number = parseInt(e.target.value.slice(3, 5))
+                    set_temp_account_expired_date(new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, 0))
+                  }}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

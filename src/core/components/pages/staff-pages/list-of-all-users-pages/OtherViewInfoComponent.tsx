@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Button, Card } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
-import { convertDate } from "./UserInfo"
+import { convertDate } from "./ConvertFunctions"
 import Info from "../interfaces/InfoInterface"
 
 export default function OtherViewInfoComponent({ info }: { info: Info }) {
