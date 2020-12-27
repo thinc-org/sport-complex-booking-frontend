@@ -6,6 +6,7 @@ import OtherViewInfoComponent from "./OtherViewInfoComponent"
 import OtherEditInfoComponent from "./OtherEditInfoComponent"
 import ModalsComponent from "./OtherModalsComponent"
 import Info, { Account, ThaiLangAccount, ModalUserInfo } from "../interfaces/InfoInterface"
+import { convertDate, convertTime } from "./ConvertFunctions"
 import PasswordChangeModal from "./PasswordChangeModal"
 import format from "date-fns/format"
 
