@@ -1,5 +1,4 @@
 {
-  "en": {
   "phone_label": "Mobile",
   "personal_email_label": "Personal Email",
   "chula_account_type": "Chulalongkorn University Student",
@@ -104,5 +103,4 @@
   "langauge": "Language",
   "waiting_room_ban": "You do not have the permission to create a waiting room.",
   "back_to_home": "Go back to home page."
-}
 }
