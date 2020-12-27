@@ -166,7 +166,7 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
         <Modal.Header closeButton>
           <Modal.Title>คำเตือน</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ fontWeight: "lighter" }}>กรุณาระบุสถานะ/วันหมดอายุสมาชิกก่อนกดยอมรับ</Modal.Body>
+        <Modal.Body style={{ fontWeight: "lighter" }}>กรุณาระบุวันหมดอายุสมาชิกก่อนกดยอมรับ</Modal.Body>
         <Modal.Footer>
           <Button
             variant="pink"
@@ -188,6 +188,7 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
         show={show_complete_accept}
         onHide={() => {
           set_show_modal_info({ ...show_modal_info, show_complete_accept: false })
+          redirectBack()
         }}
         backdrop="static"
         keyboard={false}

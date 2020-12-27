@@ -2,7 +2,7 @@ import React from "react"
 import { useState, useEffect } from "react"
 import { Card, Form } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
-import { convertDate } from "./UserInfo"
+import { convertDate } from "./ConvertFunctions"
 import Info from "../interfaces/InfoInterface"
 
 export default function OtherEditInfoComponent({

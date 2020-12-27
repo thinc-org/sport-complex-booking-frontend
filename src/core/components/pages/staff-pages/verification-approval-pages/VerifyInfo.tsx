@@ -4,7 +4,7 @@ import { Button, Card, Form, Collapse } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import OtherViewInfoComponent from "../list-of-all-users-pages/OtherViewInfoComponent"
 import VerifyModals from "./VerifyModalsComopnent"
-import { convertDate } from "../list-of-all-users-pages/UserInfo"
+import { convertDate } from "../list-of-all-users-pages/ConvertFunctions"
 import Info from "../interfaces/InfoInterface"
 import { RejectInfo, ModalVerify, RejectInfoLabel } from "../interfaces/InfoInterface"
 
@@ -55,7 +55,6 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   // Non CU state //
   const [_id] = useState<string>(props.match.params._id)
   const [username, set_username] = useState<string>("")
-  // const [account_type, set_account_type] = useState<string>("")
   const [membership_type, set_membership_type] = useState<string>("")
   const [info, setInfo] = useState<Info>({
     prefix: "",
@@ -101,9 +100,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     })
       .then(({ data }) => {
         set_username(data.username)
-        // set_account_type(data.account_type)
         set_membership_type(data.membership_type)
-        set_account_expired_date(new Date(data.account_expiration_date))
         setInfo({
           prefix: data.prefix,
           name_th: data.name_th,
@@ -181,14 +178,16 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   }
 
   const requestAccept = () => {
-    // console.log("request accepted!!!")
+    let date = account_expired_date
+    // utc+0: 17.00, utc+7: 0.00
+    let utc7Time = new Date(Date.UTC(date!.getFullYear(), date!.getMonth(), date!.getDate() - 1, 17, 0, 0, 0))
     // send request //
     client({
       method: "PATCH",
       url: "/approval/approve",
       data: {
         id: _id,
-        newExpiredDate: account_expired_date,
+        newExpiredDate: utc7Time,
       },
     })
       .then(({ data }) => {
