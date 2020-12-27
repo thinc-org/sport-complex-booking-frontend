@@ -17,15 +17,16 @@ function StaffProfile() {
         })
 
     return (
-        <div className='container' style={{ paddingLeft: '0' }}>
-            <div className='box-container btn' style={{ width: '60%', marginTop: '25px' }}>
+        <div className='container pl-0'>
+            <div className='box-container btn col-6 mt-4'>
                 <div>
                     <div style={{ fontWeight: 300, fontSize: '16px', lineHeight: '24px', marginBottom: '10px' }}> ชื่อ-นามสกุล </div>
                     <div style={{ fontWeight: 700, fontSize: '24px', lineHeight: '24px' }}> {name} </div>
 
                 </div>
             </div>
-            <div className='box-container btn' style={{ width: '60%', marginTop: '' }}>
+            <br />
+            <div className='box-container btn col-6'>
                 <div>
                     <div style={{ fontWeight: 300, fontSize: '16px', lineHeight: '24px', marginBottom: '10px' }}> ประเภทบัญชี </div>
                     <div style={{ fontWeight: 700, fontSize: '24px', lineHeight: '24px' }}> {accountType} </div>
