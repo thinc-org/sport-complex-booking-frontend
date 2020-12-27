@@ -1,7 +1,7 @@
 .disable-court-wrapper {
   background-color: transparent
 }
-.disable-court-form select, .disable-court-form input {
+.disable-court-filter select, .disable-court-filter input {
   background-color: var(--medium-pink-color);
   height: 2.5rem;
   height: 50px;
@@ -10,7 +10,7 @@
   max-width: 150px;
   transition: 0.2s;
 }
-.disable-court-form select option{
+.disable-court-filter select option{
   background-color: var(--medium-pink-color);
 }
 .disable-court-table thead{
@@ -40,4 +40,8 @@
 .list-data .col h5 {
     font-weight: 700;
     font-size: 1.1rem;
+}
+
+.disable-court-form select, .disable-court-form input {
+  border-radius: 4px;
 }

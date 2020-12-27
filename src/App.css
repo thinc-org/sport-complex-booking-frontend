@@ -44,11 +44,12 @@ html,
 }
 .btn-mediumPink {
   background-color: var(--medium-pink-color);
-  color:black;
+  color:white;
 }
 .btn-pink {
   background-color: var(--pink-color);
   color: white;
+  border-radius: 15px;
 }
 .btn-toggle {
   font-size: 16px;
@@ -108,11 +109,18 @@ html,
 .btn-outline-pink {
   color: var(--pink-color);
   border-color: var(--pink-color);
+  border-radius: 15px;
 }
 .btn-outline-pink:hover {
   background-color: var(--pink-color);
   color: white;
   border-color: white;
+}
+.btn-outline-pink:focus {
+  background-color: var(--pink-color);
+  color: white;
+  border-color: white;
+  box-shadow: 0 0 0 0.2rem rgba(255, 128, 171, 0.25);;
 }
 .btn-outline-red:hover {
   background-color: var(--red-color);
@@ -278,4 +286,15 @@ p.link {
 
 .input-error {
   color: red;
+}
+.floating-label{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+  height: 50px;
+  position: fixed;
+  top: 270px;
+  z-index: 5;
+  transition:0.3s;
 }

@@ -1,20 +1,21 @@
 import * as React from 'react';
 import { useViewTable } from './disable-court-hook'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import { ViewRow, CourtTable } from './disabled-court-table'
 import { ViewRowProps } from './disable-court-interface'
 import { formatDate } from './disable-court-hook'
-import { Row, Col, Container } from 'react-bootstrap'
-import { domainToASCII } from 'url';
+import { Row, Col, Container, Button } from 'react-bootstrap'
+
 interface Params {
     id: string
 }
 const ViewCourt = () => {
+    const history = useHistory()
     const params = useParams<Params>()
     const { data } = useViewTable(params.id)
     return (
         <Container fluid>
-            <div className='default-wrapper' style={{ boxShadow: '0 0 0 0', paddingTop: '30px' }}>
+            <div className='default-wrapper pt-3 pb-4' style={{ boxShadow: '0 0 0 0' }}>
                 <h4 style={{ paddingBottom: '15px' }}>
                     ฟิลเตอร์
                 </h4>
@@ -73,6 +74,14 @@ const ViewCourt = () => {
                         header: ['Index', 'วัน', 'เวลาที่เริ่มปิด', 'เวลาสิ้นสุดการปิด'],
                         Row: ViewRow
                     })}
+                </div>
+                <div className='d-flex flex-row justify-content-end'>
+                    <Button variant='outline-pink' className='mr-2' onClick={() => history.goBack()} style={{ fontSize: '20px' }}>
+                        กลับ
+                    </Button>
+                    <Button variant='pink'>
+                        แก้ไข
+                    </Button>
                 </div>
             </div>
         </Container>

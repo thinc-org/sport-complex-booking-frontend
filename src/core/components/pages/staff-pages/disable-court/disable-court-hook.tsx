@@ -1,10 +1,16 @@
 
 import { useState, useEffect, useLayoutEffect, useRef } from 'react';
-import { Option, RowProps, Pagination, QueryParams, ViewResponse } from './disable-court-interface'
+import { Option, RowProps, Pagination, QueryParams, ViewResponse, DisableFormData } from './disable-court-interface'
 import { client } from '../../../../../axiosConfig'
 import { AxiosResponse } from 'axios';
+import { useHistory } from 'react-router';
+export const useTimeOption = () => {
 
+}
+export const useAddCourt = () => {
+    const [data, setData] = useState<DisableFormData>()
 
+}
 export const useDeleteCourt = (id) => {
     const [show, setShow] = useState(false);
     const onDelete = () => {
@@ -22,7 +28,7 @@ export const useDeleteCourt = (id) => {
 export const useDate = () => {
     let currentDate = new Date()
     currentDate.setHours(0, 0, 0, 0)
-    const [startDate, setStartDate] = useState(currentDate)
+    const [startDate, setStartDate] = useState<Date>()
     const [endDate, setEndDate] = useState<Date>()
     const [show, setShow] = useState(false);
     const handleAlert = () => setShow(false)
@@ -35,7 +41,7 @@ export const useDate = () => {
     }
     const onEndDateChange = (date) => {
         date.setHours(0, 0, 0, 0)
-        if (date < startDate) setShow(true)
+        if (startDate && date < startDate) setShow(true)
         else setEndDate(date)
     }
     return { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert }
@@ -90,7 +96,7 @@ export const useViewTable = (params) => {
 export const useTable = () => {
     const [params, setParams] = useState<QueryParams>({
         sport_id: undefined,
-        starting_date: new Date(),
+        starting_date: undefined,
         expired_date: undefined,
         court_num: undefined,
         start: 0,
@@ -184,3 +190,5 @@ export const seed = () => {
             .catch(err => console.log(err))
     })
 }
+
+
