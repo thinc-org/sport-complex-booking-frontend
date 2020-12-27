@@ -45,3 +45,7 @@
 .disable-court-form select, .disable-court-form input {
   border-radius: 4px;
 }
+.small-table{
+  max-height: 350px;
+  overflow: auto;
+}
