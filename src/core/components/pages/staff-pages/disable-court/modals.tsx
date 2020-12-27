@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import { Modal, Button } from 'react-bootstrap'
+import { Modal, Button, Form } from 'react-bootstrap'
+import { useForm } from 'react-hook-form'
 interface Props {
     inProp: boolean,
     header: string,
@@ -29,4 +29,29 @@ export const ErrorAlert = ({ inProp, header, message, handleClose, canCancel = f
             </Modal>
         </>
     );
+}
+
+export const FormAlert = ({ inProp, handleClose, onSubmit }) => {
+    const { register, handleSubmit } = useForm()
+    return (
+        <Modal show={inProp} onHide={handleClose}>
+            <Modal.Header closeButton>
+                <Modal.Title>เลือกช่วงเวลา</Modal.Title>
+            </Modal.Header>
+            <Form onSubmit={handleSubmit(onSubmit)}>
+                <Modal.Body>
+
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button type='submit' variant="mediumPink" >
+                        เพิ่มการปิดคอร์ดใหม่
+                </Button>
+                    <Button onClick={handleClose} variant='mediumPink'>
+                        ยกเลิก
+                </Button>
+                </Modal.Footer>
+            </Form>
+
+        </Modal>
+    )
 }

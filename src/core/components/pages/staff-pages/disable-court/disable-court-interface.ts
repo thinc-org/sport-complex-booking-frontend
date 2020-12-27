@@ -14,7 +14,7 @@ export interface Option {
     courtNum: number[]
 }
 export interface QueryParams {
-    starting_date: Date,
+    starting_date: Date | undefined,
     expired_date: Date | undefined,
     sport_id: string | undefined,
     court_num: number | undefined,
@@ -22,7 +22,14 @@ export interface QueryParams {
     start: number,
     end: number
 }
-
+export interface DisableFormData {
+    starting_date: Date,
+    expired_date: Date,
+    sport_id: string,
+    court_num: number,
+    description?: string,
+    disable_time: disable_time[]
+}
 export interface Pagination {
     page: number,
     pagination: number[]
@@ -52,5 +59,5 @@ export interface ViewResponse {
 export interface TableProps<T> {
     data: any,
     header: string[],
-    Row: React.FC<T> //
+    Row: React.FC<T>
 }
