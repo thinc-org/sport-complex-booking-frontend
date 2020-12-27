@@ -3,6 +3,7 @@ import { Row, Col, Button, Form, Card, Modal, Alert, InputGroup } from "react-bo
 import { Link, RouteComponentProps } from "react-router-dom"
 import { client } from "../../../../../axiosConfig"
 import { CuAndSatitInfo, ThaiLangAccount, Account, ModalCuAndSatit } from "../interfaces/InfoInterface"
+import { convertDate, convertTime } from "./ConvertFunctions"
 import PasswordChangeModal from "./PasswordChangeModal"
 import CuAndSatitModals from "./CuAndSatitModals"
 
@@ -78,12 +79,17 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       if (e.target.value === "1") set_temp_user({ ...temp_user, [e.target.id]: true })
       else set_temp_user({ ...temp_user, [e.target.id]: false })
     } else if (e.target.id === "expired_penalize_date") {
-      let date: Date = new Date(e.target.value)
+      let incom: Date = new Date(e.target.value)
+      let old: Date = new Date(temp_user.expired_penalize_date)
+      let date: Date = new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), old.getHours(), old.getMinutes())
       if (date < new Date()) date = new Date()
       set_temp_user({ ...temp_user, expired_penalize_date: date })
-    } else {
-      set_temp_user({ ...temp_user, [e.target.id]: e.target.value })
-    }
+    } else if (e.target.id === "expired_penalize_time") {
+      let date: Date = new Date(temp_user.expired_penalize_date)
+      let hour: number = parseInt(e.target.value.slice(0, 2))
+      let minute: number = parseInt(e.target.value.slice(3, 5))
+      set_temp_user({ ...temp_user, expired_penalize_date: new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, 0) })
+    } else set_temp_user({ ...temp_user, [e.target.id]: e.target.value })
   }
 
   const handleEdit = () => {
@@ -210,11 +216,10 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
 
   const renderForm = () => {
     let date: Date = new Date(user.expired_penalize_date)
-    let expired_date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
     return (
       <div className="userInformation">
-        <Row>
-          <Col className="py-3">
+        <Row className="py-3">
+          <Col>
             <p>ประเภท</p>
             <p className="font-weight-bold mb-0">{ThaiLangAccount[Account[user.account_type]]}</p>
           </Col>
@@ -239,34 +244,46 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
             <p className="font-weight-bold mb-0">{user.surname_th}</p>
           </Col>
         </Row>
-        <Row>
-          <Col className="py-3">
+        <Row className="py-3">
+          <Col>
             <p>ชื่อผู้ใช้</p>
             <p className="font-weight-bold mb-0">{user.username}</p>
           </Col>
         </Row>
-        <Row>
-          <Col className="py-3">
+        <Row className="py-3">
+          <Col>
             <p>อีเมลส่วนตัว</p>
             <p className="font-weight-bold mb-0">{user.personal_email}</p>
           </Col>
         </Row>
-        <Row>
-          <Col className="py-3">
+        <Row className="py-3">
+          <Col>
             <p>เบอร์โทร</p>
             <p className="font-weight-bold mb-0">{user.phone}</p>
           </Col>
         </Row>
-        <Row>
-          <Col className="py-3">
+        <Row className="py-3">
+          <Col>
             <p>สถานะการแบน</p>
             <p className="font-weight-bold mb-0">{user.is_penalize ? "โดนแบน" : "ปกติ"}</p>
           </Col>
         </Row>
-        <Row>
-          <Col className="py-3">
+        <Row className="py-3">
+          <Col>
             <Form.Label>สิ้นสุดการแบน</Form.Label>
-            <Form.Control style={{ width: "40%" }} disabled type="date" value={user.is_penalize ? expired_date : ""} />
+            <Row>
+              <Col sm={4}>
+                <Form.Control disabled type="date" value={user.is_penalize ? convertDate(date) : ""} />
+              </Col>
+              <Col>
+                <Form.Control
+                  style={{ width: "25%" }}
+                  disabled
+                  type="time"
+                  value={user.is_penalize ? convertTime(date.getHours(), date.getMinutes()) : ""}
+                />
+              </Col>
+            </Row>
           </Col>
         </Row>
         <Row className="mt-4">
@@ -298,12 +315,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
 
   const renderEditingForm = () => {
     let date: Date = new Date(temp_user.expired_penalize_date)
-    let expired_date: string =
-      String(date.getFullYear()) +
-      "-" +
-      String(date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) +
-      "-" +
-      String(date.getDate() < 10 ? "0" + date.getDate() : date.getDate())
     return (
       <div className="userInformation">
         <Row>
@@ -362,14 +373,27 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         <Row className="py-3">
           <Col>
             <Form.Label>สิ้นสุดการแบน</Form.Label>
-            <Form.Control
-              style={{ width: "40%" }}
-              disabled={temp_user.is_penalize ? false : true}
-              id="expired_penalize_date"
-              type="date"
-              onChange={handleChange}
-              value={temp_user.is_penalize ? expired_date : ""}
-            />
+            <Row>
+              <Col sm={4}>
+                <Form.Control
+                  disabled={temp_user.is_penalize ? false : true}
+                  id="expired_penalize_date"
+                  type="date"
+                  onChange={handleChange}
+                  value={temp_user.is_penalize ? convertDate(date) : ""}
+                />
+              </Col>
+              <Col>
+                <Form.Control
+                  style={{ width: "25%" }}
+                  disabled={temp_user.is_penalize ? false : true}
+                  id="expired_penalize_time"
+                  type="time"
+                  onChange={handleChange}
+                  value={user.is_penalize ? convertTime(date.getHours(), date.getMinutes()) : ""}
+                />
+              </Col>
+            </Row>
           </Col>
         </Row>
         <Row className="mt-5">
