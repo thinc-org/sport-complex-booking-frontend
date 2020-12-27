@@ -13,16 +13,16 @@ function ReserveNow() {
       <div className="mx-auto col-md-6">  
         <div className="default-mobile-wrapper mt-4">
           <span className="row my-3">
-            <h6 className="mx-3">{t("choose_reserve")} </h6>
+            <h6 className="mx-3">{t("chooseReserve")} </h6>
           </span>
           <Link to={"/createwaitingroom"}>
             <div className="button-group">
-            <Button variant="pink">{t("create_waiting_room")}</Button>
+            <Button variant="pink">{t("createWaitingRoom")}</Button>
           </div>
           </Link>
           <Link to={"/joinwaitingroom"}>
             <div className="button-group">
-              <Button variant="darkpink">{t("join_waiting_room")}</Button>
+              <Button variant="darkpink">{t("joinWaitingRoom")}</Button>
             </div>
           </Link>
         </div>

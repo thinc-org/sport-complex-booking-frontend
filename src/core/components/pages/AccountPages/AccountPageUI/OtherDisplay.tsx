@@ -11,11 +11,10 @@ import { useTranslation } from 'react-i18next'
 export default function OtherAaccountDisplay() {
 
   const {token} = useAuthContext()
-  const { Other } = useContext(UserContext)
-  const user = Other
+  const { Other: user } = useContext(UserContext)
   const {t} = useTranslation()
 
-  const viewFile = async (fileID: String)=> {
+  const viewFile = async (fileID: string)=> {
     await axios
     .get("http://localhost:3000/fs/viewFileToken/" + fileID, {
       headers: {
@@ -33,36 +32,36 @@ export default function OtherAaccountDisplay() {
 
   return (
     <div className="mx-auto col-md-6">
-      <OtherWarningMessage show={user.verification_status !== ""} verification_status={user.verification_status} />            
+      <OtherWarningMessage show={user!.verification_status !== ""} verification_status={user!.verification_status} />            
       <div className="default-mobile-wrapper">
         <div className="">
           {/* START OF THE FORM */}
-          <h4>{t("member_information")}</h4>
+          <h4>{t("memberInformation")}</h4>
           <div className="row">
             <div className="col-md-4">
               <label className="form-label mt-2">{t("prefix")}</label>
-              <p>{user.prefix}</p>
+              <p>{user?.prefix}</p>
             </div>
             <div className="col-md-4">
               <label className="form-label mt-2">{t("gender")}</label>
-              <p>{user.gender}</p>
+              <p>{user?.gender}</p>
             </div>
           </div>
           <hr />
           <label className="form-label mt-2">{t("name_th")}</label>
-          <p>{user.name_th}</p>
+          <p>{user?.name_th}</p>
           <div className="valid-feedback"></div>
           <hr />
           <label className="form-label mt-2">{t("surname_th")}</label>
-          <p>{user.surname_th}</p>
+          <p>{user?.surname_th}</p>
           <div className="valid-feedback"></div>
           <hr />
           <label className="form-label mt-2">{t("name_en")}</label>
-          <p>{user.name_en}</p>
+          <p>{user?.name_en}</p>
           <div className="valid-feedback"></div>
           <hr />
           <label className="form-label mt-2">{t("surname_en")}</label>
-          <p>{user.surname_en}</p>
+          <p>{user?.surname_en}</p>
           <div className="valid-feedback"></div>
           <hr />
           <label className="form-label mt-2">{t("birthday")}</label>
@@ -74,33 +73,33 @@ export default function OtherAaccountDisplay() {
           </div>
 
           <label className="form-label mt-2">{t("national_id")}</label>
-          <p>{user.national_id}</p>
+          <p>{user?.national_id}</p>
           <div className="valid-feedback"></div>
           <hr />
           <label className="form-label mt-2">{t("marital_status")}</label>
-          <p>{user.marital_status}</p>
+          <p>{user?.marital_status}</p>
           <div className="valid-feedback"></div>
           <hr />
           <label className="form-label mt-2">{t("address")}</label>
-          <p>{user.address}</p>
+          <p>{user?.address}</p>
           <div className="valid-feedback"></div>
           <hr />
           <label className="form-label mt-2">{t("email")}</label>
-          <p>{user.personal_email}</p>
+          <p>{user?.personal_email}</p>
           <div className="valid-feedback"></div>
           <hr />
           <label className="form-label mt-2">{t("home_phone")}</label>
-          <p>{user.home_phone}</p>
+          <p>{user?.home_phone}</p>
           <div className="valid-feedback"></div>
           <hr />
           <label className="form-label mt-2">{t("mobile_phone")}</label>
-          <p>{user.phone}</p>
+          <p>{user?.phone}</p>
           <div className="valid-feedback"></div>
           <hr />
           <label className="form-label mt-2">
             {t("medical_condition")}
           </label>
-          <p>{user.medical_condition}</p>
+          <p>{user?.medical_condition}</p>
           <div className="valid-feedback"></div>
         </div>
       </div>
@@ -109,23 +108,23 @@ export default function OtherAaccountDisplay() {
         <h4>{t("emergency_contact")}</h4>
 
         <label className="form-label mt-2">{t("contact_person_prefix")}</label>
-        <p>{user.contact_person.contact_person_prefix}</p>
+        <p>{user?.contact_person.contact_person_prefix}</p>
         <hr />
 
         <label className="form-label mt-2">{t("contact_person_name")}</label>
-        <p>{user.contact_person.contact_person_name}</p>
+        <p>{user?.contact_person.contact_person_name}</p>
         <div className="valid-feedback"></div>
         <hr />
         <label className="form-label mt-2">{t("contact_person_surname")}</label>
-        <p>{user.contact_person.contact_person_surname}</p>
+        <p>{user?.contact_person.contact_person_surname}</p>
         <div className="valid-feedback"></div>
         <hr />
         <label className="form-label mt-2">{t("contact_person_home_phone")}</label>
-        <p>{user.contact_person.contact_person_home_phone}</p>
+        <p>{user?.contact_person.contact_person_home_phone}</p>
         <div className="valid-feedback"></div>
         <hr />
         <label className="form-label mt-2">{t("contact_person_phone")}</label>
-        <p>{user.contact_person.contact_person_phone}</p>
+        <p>{user?.contact_person.contact_person_phone}</p>
         <div className="valid-feedback"></div>
       </div>
       <br />
@@ -133,28 +132,28 @@ export default function OtherAaccountDisplay() {
         <h4>Membership</h4>
         <label className="form-label my-2">{t("user_photo")}</label>
         <div className="form-file">
-          {user.user_photo ? (
-            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user.user_photo)}>{t("view_file")}</Button>
+          {user?.user_photo ? (
+            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.user_photo)}>{t("viewFile")}</Button>
           ) : (
-            <p>{t("no_file")}</p>
+            <p>{t("noFile")}</p>
           )} 
         </div>
         <hr />
         <label className="form-label my-2">{t("national_id_photo")}</label>
         <div className="form-file">
-          {user.national_id_photo ? (
-            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user.national_id_photo)}>{t("view_file")}</Button>
+          {user?.national_id_photo ? (
+            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.national_id_photo)}>{t("view_file")}</Button>
           ) : (
-            <p>{t("no_file")}</p>
+            <p>{t("noFile")}</p>
           )} 
         </div>
         <hr />
         <label className="form-label my-2">{t("medical_certificate")}</label>
         <div className="form-file">
-          {user.medical_certificate ? (
-            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user.medical_certificate)}>{t("view_file")}</Button>
+          {user?.medical_certificate ? (
+            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.medical_certificate)}>{t("view_file")}</Button>
           ) : (
-            <p>{t("no_file")}</p>
+            <p>{t("noFile")}</p>
           )} 
         </div>
         <hr />
@@ -162,19 +161,19 @@ export default function OtherAaccountDisplay() {
           {t("house_registration_document")}
         </label>
         <div className="form-file">
-          {user.house_registration_number ? (
-            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user.house_registration_number)}>{t("view_file")}</Button>
+          {user?.house_registration_number ? (
+            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.house_registration_number)}>{t("view_file")}</Button>
           ) : (
-            <p>{t("no_file")}</p>
+            <p>{t("noFile")}</p>
           )} 
         </div>
         <hr />
-        <label className="form-label my-2">{t("relationsihp_verification_document")}</label>
+        <label className="form-label my-2">{t("relationship_verification_document")}</label>
         <div className="form-file">
-          {user.relationship_verification_document ? (
-            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user.relationship_verification_document)}>{t("view_file")}</Button>
+          {user?.relationship_verification_document ? (
+            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.relationship_verification_document)}>{t("view_file")}</Button>
           ) : (
-            <p>{t("no_file")}</p>
+            <p>{t("noFile")}</p>
           )} 
         </div>
       </div>
@@ -182,7 +181,7 @@ export default function OtherAaccountDisplay() {
       <div className="button-group col-md-12 mt-4">
         <Link to={"/changePassword"}>
         <button className="btn-normal btn-outline-black">
-          {t("change_password")}
+          {t("changePassword")}
         </button>
       </Link>
       </div>

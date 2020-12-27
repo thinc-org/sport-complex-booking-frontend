@@ -6,7 +6,7 @@ import th from '../../locales/th/translation.json'
 
 i18n.use(LanguageDetector).use(initReactI18next).init({
   fallbackLng: 'en',
-  debug: true,
+  debug: process.env.NODE_ENV === "development",
   resources: {
     th: {common:th},
     en: {common:en},

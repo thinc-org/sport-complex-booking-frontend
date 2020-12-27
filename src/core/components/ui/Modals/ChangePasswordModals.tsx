@@ -3,8 +3,9 @@ import { Button, Modal } from "react-bootstrap"
 import { useTranslation } from "react-i18next"
 
 export interface PasswordData {
-  oldPassword: String,
-  newPassword: String
+  oldPassword: string,
+  newPassword: string,
+  repeatNewPassword?: string
 }
 
 interface ConfirmationModalProps {
@@ -30,7 +31,7 @@ export const ConfirmationModal:React.FC<ConfirmationModalProps> = ({show, setSho
         <Modal.Header closeButton>
           <Modal.Title>{t("confirm")}</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ fontWeight: "lighter" }}> {t("confirm_password_change")} </Modal.Body>
+        <Modal.Body style={{ fontWeight: "lighter" }}> {t("confirmPasswordChange")} </Modal.Body>
         <Modal.Footer>
           <Button className="btn-normal btn-secondary" onClick={() => {setShow(false)}}>
             {t("cancel")}
@@ -63,9 +64,9 @@ export const PasswordMismatchModal:React.FC<PasswordMismatchModalProps> = ({show
 
       >
         <Modal.Header closeButton>
-          <Modal.Title>{t("password_mismatch")}</Modal.Title>
+          <Modal.Title>{t("passwordMismatch")}</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ fontWeight: "lighter" }}> {t("enter_again")} </Modal.Body>
+        <Modal.Body style={{ fontWeight: "lighter" }}> {t("enterAgain")} </Modal.Body>
         <Modal.Footer>
           <Button variant="pink" className="btn-normal btn-secondary" onClick={() => {setShowPasswordMismatch(false)}}>
             {t("ok")}

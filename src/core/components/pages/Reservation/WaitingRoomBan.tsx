@@ -1,6 +1,6 @@
 import React from "react"
 import { Button } from "react-bootstrap"
-import { Link } from "react-router-dom"
+import { Link, useHistory, useLocation } from "react-router-dom"
 import { useEffect } from "react"
 import withUserGuard from "../../../guards/user.guard"
 import { useAuthContext } from "../../../controllers/authContext"
@@ -17,6 +17,7 @@ function WaitingRoomBan(props: historyProps) {
   const { msg } = (props['location'] && props['location']['state']) || {};
   const {token} = useAuthContext()
   const {t} = useTranslation()
+  const history = useHistory<LocationState | unknown>()
   
   useEffect(()=> {
     fetchValidity(token)
@@ -36,12 +37,12 @@ function WaitingRoomBan(props: historyProps) {
     .then((response:Object) => {
       let resMsg = response['data']['message']
       if (resMsg === "valid user") {
-        props.history.push({pathname: '/home'});
+        //history.push({pathname: '/home'});
       }
     })
     .catch((error: Object) => {
       console.log(error)
-      props.history.push({pathname: '/login'});
+      history.push({pathname: '/login'});
     });
 
   }
