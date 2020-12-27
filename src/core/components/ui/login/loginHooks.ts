@@ -6,16 +6,23 @@ import { setIsFirstLogin } from '../../../../constant'
 import { getIsFirstlogin } from '../../../../constant'
 import { client } from '../../../../axiosConfig'
 import Axios, { AxiosResponse } from 'axios'
+import { useTranslation } from 'react-i18next'
+
 interface UserResponse {
     token: string,
     is_first_login: boolean
     is_thai_language: boolean
+    jwt: string
 }
 export const useLogin = (setError) => {
     const { setToken } = useAuthContext()
     const history = useHistory()
     const { url, path } = useRouteMatch()
     const [isLoading, setLoading] = useState(false)
+    const {i18n} = useTranslation()
+    const changeLanguage = (language) => {
+        i18n.changeLanguage(language);
+    }
     const onLogin = async (data) => {
         setLoading(true)
         await client.post<UserResponse>(`/users/login`, {
@@ -24,11 +31,17 @@ export const useLogin = (setError) => {
         })
             .then((res: AxiosResponse<UserResponse>) => {
                 setLoading(false)
+                setCookie('is_thai_language', res.data.is_thai_language, 5)
                 setCookie('token', res.data.token, 1)
+                setCookie('token', res.data.jwt, 1)
                 setToken(res.data.token)
                 setIsFirstLogin(false)
+                console.log(res)
                 if (res.data.is_first_login) history.push(`${path}/personal`)
                 else history.push('/account')
+                if (res.data.is_thai_language) changeLanguage('th')
+                else changeLanguage('e')
+                window.location.reload()
             })
             .catch((err) => {
                 setLoading(false)
@@ -49,12 +62,15 @@ export const useLogin = (setError) => {
             )
                 .then((res: AxiosResponse<UserResponse>) => {
                     setLoading(false)
+                    setCookie('is_thai_language', res.data.is_thai_language, 5)
                     setCookie('token', res.data.token, 1)
                     setToken(res.data.token)
                     const first_time_login = res.data.is_first_login
                     setIsFirstLogin(first_time_login)
                     if (res.data.is_first_login) history.push(`${path}/personal`)
                     else history.push('/account')
+                    if (res.data.is_thai_language) changeLanguage('th')
+                    else changeLanguage('e')
                 })
                 .catch((err) => {
                     setLoading(false)

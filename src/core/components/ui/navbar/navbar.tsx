@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useState, useEffect, useContext } from "react"
-import { Navbar, Container, Nav } from "react-bootstrap"
+import { Navbar, Container, Nav, Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import { useAuthContext } from '../../../controllers/authContext'
 import { getCookie, setCookie } from '../../../contexts/cookieHandler'
@@ -9,6 +9,11 @@ import { CSSTransition } from 'react-transition-group';
 import Exit from '../../../assets/images/icons/exit.svg'
 import { data } from './sidebarData';
 import { NavHeader, useNavHeader } from './navbarSideEffect'
+import { useTranslation } from 'react-i18next'
+
+
+
+
 
 const NavigationBar = (props: any) => {
   return (
@@ -65,6 +70,14 @@ const Sidebar = (props: any) => {
     setCookie('token', null, 0)
     setInProp(false)
   }
+
+  const {i18n} = useTranslation()
+
+  const changeLanguage = (language:string) => {
+    setCookie('is_thai_language', language === "th", 999)
+    i18n.changeLanguage(language);
+  }
+
   return (
     <div style={{ display: isOnStaffPage ? 'none' : '' }}>
       <div className="sidebar-toggler d-flex flex-row justify-content-center">
@@ -86,7 +99,9 @@ const Sidebar = (props: any) => {
                 {listItems}
               </div>
               <div>
-                <li>Language</li>
+                <li className="m-0 p-0">Language</li>
+                    <Button variant="pink" size="sm" className="btn" onClick={()=> changeLanguage('en')}>en</Button>
+                    <Button variant="pink" size="sm" className="btn" onClick={()=> changeLanguage('th')}>th</Button>
                 <li>
                   {!isUser ?
                     <Link to="/login" className="styled-link" onClick={() => setInProp(false)}>

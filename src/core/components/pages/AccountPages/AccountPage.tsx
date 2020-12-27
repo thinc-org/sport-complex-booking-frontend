@@ -4,21 +4,24 @@ import ChulaAccount from "./ChulaAccount"
 import SatitAndCUPersonelAccount from "./SatitAndCUPersonelAccount"
 import OtherAccount from "./OtherAccount"
 import axios from "axios"
-import withUserGuard from '../../../guards/user.guard'
-import { NavHeader } from '../../ui/navbar/navbarSideEffect'
 import { UserContext } from "../../../contexts/UsersContext"
+import {useAuthContext } from "../../../controllers/authContext"
+import { getCookie } from "../../../contexts/cookieHandler"
+import withUserGuard from "../../../guards/user.guard"
+import { useTranslation } from 'react-i18next'
 
-
-export default function AccountPage() {
+function AccountPage() {
   enum Account {
     CuStudent = "CuStudent",
     SatitAndCuPersonel = "SatitAndCuPersonel",
     Other = "Other",
   }
 
-  let [account_type, set_account_type] = useState();
-  const userContext = useContext(UserContext);
-  const jwt = userContext.jwt
+  const {token} = useAuthContext()
+  const { setCuStudent, setSatit, setOther, setLanguage } = useContext(UserContext)
+  const [account_type, setAccountType] = useState();
+  const [penalizeStatus, setPenalizeStatus] = useState();  
+  const {i18n} = useTranslation()
 
   useEffect(() => {
     fetch_account_type()
@@ -28,50 +31,75 @@ export default function AccountPage() {
     await axios
       .get("http://localhost:3000/account_info/", {
         headers: {
-          Authorization: "bearer " + jwt,
+          Authorization: "bearer " + token,
         },
       })
       .then(({ data }) => {
-        data.jwt = jwt
-        if (data.account_type === "CuStudent") {
-          userContext.setCuStudent(data)
-        } else if (data.account_type === "SatitAndCuPersonel") {
-          userContext.setSatit(data)
-        } else if (data.account_type === "Other") {
-          userContext.setOther(data)
-        }
-        set_account_type(data.account_type)
+        data.jwt = token
+        const newData = {...data}
+        setPenalizeStatus(data.is_penalize)
+        data.rejected_info ? (
+          data.rejected_info.forEach((field)=> {
+            newData[field] = ""
+          })
+        ) : (
+          console.log("No rejected info")
+        )
 
+        if (data.account_type === "CuStudent") {
+          setCuStudent(newData)
+        } else if (data.account_type === "SatitAndCuPersonel") {
+          setSatit(newData)
+        } else if (data.account_type === "Other") {
+          setOther(newData)
+        }
+        setLanguage(getCookie("is_thai_language")==="true")
+        if (getCookie("is_thai_language")==="true") i18n.changeLanguage('th');
+        else i18n.changeLanguage('en')
+        setAccountType(data.account_type)
       })
   }
 
-  const showPage = (account_type: any, jwt: String) => {
+  const showPage = (account_type: String | undefined) => {
     switch (account_type) {
       case Account.CuStudent: {
         return <ChulaAccount />
       }
       case Account.SatitAndCuPersonel: {
-        return <SatitAndCUPersonelAccount />
+        return <SatitAndCUPersonelAccount/>
       }
       case Account.Other: {
-        return <OtherAccount jwt={jwt} />
+        return <OtherAccount/>
       }
       default: {
-        return <div className="wrapper mx-auto">Loading...</div>
+        return <div className="wrapper mx-auto text-center mt-5">Loading...</div>
       }
     }
-  }
+  } 
 
-  return (<UserContext.Consumer>{(context) => {
+  return (
+    <>
+      <PenalizeMessage show={penalizeStatus}/>
+      {showPage(account_type)}
+    </>
+  )
+  
+}
 
-    return (
-      <>
-        <NavHeader header="Account" />
-        {
-          showPage(account_type, jwt)
-        }
-      </>
-    )
-  }}</UserContext.Consumer>)
+export default withUserGuard(AccountPage)
 
+
+interface PenalizeMessageProps {
+  show?: boolean,
+}
+
+const PenalizeMessage:React.FC<PenalizeMessageProps> = ({show}) => {
+  const {t} = useTranslation()
+  if(!show) return null
+  return (
+    <div className="alert alert-danger mx-3 mt-3" role="alert">
+      <h3>{t("you_are_penalied")}</h3>
+      <h6>{t("penalzie_message")}</h6>
+    </div>
+  )
 }

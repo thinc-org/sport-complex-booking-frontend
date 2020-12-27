@@ -8,6 +8,8 @@ import account from '../../assets/images/icons/account.png';
 import reservation from '../../assets/images/icons/reservation.png';
 import waitingroom from '../../assets/images/icons/waitingroom.png';
 import reservenow from '../../assets/images/icons/reservenow.png';
+import { useTranslation } from 'react-i18next'
+import { CookieModal } from '../ui/Modals/CookieModal'
 
 const HomePage = () => {
 
@@ -17,12 +19,12 @@ const HomePage = () => {
     const [nameEn, setNameEn] = useState('');
     const [disable, setDisable] = useState(true);
     const userContext = useContext(UserContext);
-    const jwt = userContext.jwt
+    const { t } = useTranslation();
 
 
     useEffect(() => {
         fetchUserName()
-        console.log('local storage: ' + localStorage)
+        console.log('local storage: ' + localStorage.getItem('Cookie Allowance'))
         console.log('cookieConsent: ' + cookieConsent)
         if (localStorage.getItem('Cookie Allowance') == 'true') {
             setCookieConsent(true)
@@ -71,188 +73,50 @@ const HomePage = () => {
     const warningMessage = () => {
         return (
             <>
-                <div style={{ fontWeight: 400, fontSize: '16px', lineHeight: '17px', color: 'red', margin: '0px 10px 5px 10px' }} > Warning: </div>
-                <div style={{ fontWeight: 400, fontSize: '14px', lineHeight: '17px', color: 'red', margin: '0px 10px 20px 10px' }} > Please fill in your information in the account to activate the other features </div>
+                <div className='homepage-warning-head'> {t('warning')}: </div>
+                <div className='homepage-warning-body' > {t('fill_account')} </div>
             </>
         )
-    }
-
-    const clickableLink = () => {
-        if (isThaiLanguage) {
-            return (
-                <>
-                    <Link to='/myreservation' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
-                        <div>
-                            <img src={reservation} style={{ float: 'right', padding: '12px 0 12px 17px', borderLeft: '1px solid rgba(204, 204, 204, 1)' }} />
-                            <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> การจองของฉัน </div>
-                            <div style={{ fontWeight: 200, fontSize: '14px', lineHeight: '17px', color: 'darkgrey' }}> ดูการจองที่สำเร็จ </div>
-                        </div>
-                    </Link>
-                    <Link to='/waitingroom' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
-                        <div>
-                            <img src={waitingroom} style={{ float: 'right', padding: '16px 0 16px 15px', borderLeft: '1px solid rgba(204, 204, 204, 1)' }} />
-                            <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> ห้องรอของฉัน </div>
-                            <div style={{ fontWeight: 200, fontSize: '14px', lineHeight: '17px', color: 'darkgrey' }}> ดูห้องรอของฉันในขณะนี้ </div>
-                        </div>
-                    </Link>
-                    <Link to='/reservenow' className='box-container btn btn-pink-pink' style={{ width: '100%', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
-                        <div>
-                            <img src={reservenow} style={{ float: 'right', padding: '13px 0 13px 23px', borderLeft: '1px solid white' }} />
-                            <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> จองห้อง </div>
-                            <div style={{ fontWeight: 200, fontSize: '14px' }}> จองห้อง </div>
-                        </div>
-                    </Link>
-                </>
-
-            )
-
-        } else {
-            return (
-                <>
-                    <Link to='/myreservation' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
-                        <div>
-                            <img src={reservation} style={{ float: 'right', padding: '12px 0 12px 17px', borderLeft: '1px solid rgba(204, 204, 204, 1)' }} />
-                            <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> My Reservations </div>
-                            <div style={{ fontWeight: 200, fontSize: '14px', lineHeight: '17px', color: 'darkgrey' }}> View my successful reservations </div>
-                        </div>
-                    </Link>
-                    <Link to='/waitingroom' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
-                        <div>
-                            <img src={waitingroom} style={{ float: 'right', padding: '16px 0 16px 15px', borderLeft: '1px solid rgba(204, 204, 204, 1)' }} />
-                            <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> My Waiting Room </div>
-                            <div style={{ fontWeight: 200, fontSize: '14px', lineHeight: '17px', color: 'darkgrey' }}> View my current waiting room </div>
-                        </div>
-                    </Link>
-                    <Link to='/reservenow' className='box-container btn btn-pink-pink' style={{ width: '100%', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
-                        <div>
-                            <img src={reservenow} style={{ float: 'right', padding: '13px 0 13px 23px', borderLeft: '1px solid white' }} />
-                            <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> Reserve Now </div>
-                            <div style={{ fontWeight: 200, fontSize: '14px' }}> Reserve a room </div>
-                        </div>
-                    </Link>
-                </>
-
-            )
-        }
-
-    }
-
-    const unclickableLink = () => {
-        if (isThaiLanguage) {
-            return (
-                <>
-                    <Link to='/home' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
-                        <div>
-                            <img src={reservation} style={{ float: 'right', padding: '12px 0 12px 17px', borderLeft: '1px solid rgba(204, 204, 204, 1)' }} />
-                            <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> การจองของฉัน </div>
-                            <div style={{ fontWeight: 200, fontSize: '14px', lineHeight: '17px', color: 'darkgrey' }}> ดูการจองที่สำเร็จ </div>
-                        </div>
-                    </Link>
-                    <Link to='/home' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
-                        <div>
-                            <img src={waitingroom} style={{ float: 'right', padding: '16px 0 16px 15px', borderLeft: '1px solid rgba(204, 204, 204, 1)' }} />
-                            <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> ห้องรอของฉัน </div>
-                            <div style={{ fontWeight: 200, fontSize: '14px', lineHeight: '17px', color: 'darkgrey' }}> ดูห้องรอของฉันในขณะนี้ </div>
-                        </div>
-                    </Link>
-                    <Link to='/home' className='box-container btn btn-pink-pink' style={{ width: '100%', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
-                        <div>
-                            <img src={reservenow} style={{ float: 'right', padding: '13px 0 13px 23px', borderLeft: '1px solid white' }} />
-                            <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> จองห้อง </div>
-                            <div style={{ fontWeight: 200, fontSize: '14px' }}> จองห้อง </div>
-                        </div>
-                    </Link>
-                </>
-            )
-        } else {
-            return (
-                <>
-                    <Link to='/home' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
-                        <div>
-                            <img src={reservation} style={{ float: 'right', padding: '12px 0 12px 17px', borderLeft: '1px solid rgba(204, 204, 204, 1)' }} />
-                            <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> My Reservations </div>
-                            <div style={{ fontWeight: 200, fontSize: '14px', lineHeight: '17px', color: 'darkgrey' }}> View my successful reservations </div>
-                        </div>
-                    </Link>
-                    <Link to='/home' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
-                        <div>
-                            <img src={waitingroom} style={{ float: 'right', padding: '16px 0 16px 15px', borderLeft: '1px solid rgba(204, 204, 204, 1)' }} />
-                            <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> My Waiting Room </div>
-                            <div style={{ fontWeight: 200, fontSize: '14px', lineHeight: '17px', color: 'darkgrey' }}> View my current waiting room </div>
-                        </div>
-                    </Link>
-                    <Link to='/home' className='box-container btn btn-pink-pink' style={{ width: '100%', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
-                        <div>
-                            <img src={reservenow} style={{ float: 'right', padding: '13px 0 13px 23px', borderLeft: '1px solid white' }} />
-                            <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> Reserve Now </div>
-                            <div style={{ fontWeight: 200, fontSize: '14px' }}> Reserve a room </div>
-                        </div>
-                    </Link>
-                </>
-            )
-        }
-
-
-    }
-
-    const ModalComponent = () => {
-        if (isThaiLanguage) {
-            return (
-                <Modal show={!cookieConsent} className="modal" id="exampleModalCenter" tabIndex={-1} role="dialog" aria-labelledby="contained-modal-title-vcenter" centered aria-hidden="true">
-                    <div className="modal-dialog modal-dialog-centered" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header pb-0">
-                                <h5 className="modal-title"> เว็บไซต์นี้ใช้คุกกี้ </h5>
-                            </div>
-                            <div className="modal-body pt-1 pb-0" style={{ fontSize: '14px', fontWeight: 300, lineHeight: '17px' }}>
-                                เว็บไซต์นี้ใช้คุกกี้ โปรดกดยอมรับเพื่อประสิทธิภาพสูงสุด
-                                </div>
-                            <div className="modal-footer pt-3 pb-0 pr-0">
-                                <Button variant='pink' onClick={handleClick} className="btn pt-1 pb-1" data-dismiss="modal" style={{ fontSize: '14px', fontWeight: 400 }}> ยแมรับ </Button>
-                            </div>
-                        </div>
-                    </div>
-                </Modal>
-            )
-        } else {
-            return (
-                <Modal show={!cookieConsent} className="modal" id="exampleModalCenter" tabIndex={-1} role="dialog" aria-labelledby="contained-modal-title-vcenter" centered aria-hidden="true">
-                    <div className="modal-dialog modal-dialog-centered" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header pb-0">
-                                <h5 className="modal-title"> This website uses cookie. </h5>
-                            </div>
-                            <div className="modal-body pt-1 pb-0" style={{ fontSize: '14px', fontWeight: 300, lineHeight: '17px' }}>
-                                This website uses cookie. Please click allow to ensure the beset experience.
-                                    </div>
-                            <div className="modal-footer pt-3 pb-0 pr-0">
-                                <Button variant='pink' onClick={handleClick} className="btn pt-1 pb-1" data-dismiss="modal" style={{ fontSize: '14px', fontWeight: 400 }}> Allow </Button>
-                            </div>
-                        </div>
-                    </div>
-                </Modal>
-            )
-        }
-
     }
 
     return (
         <div className='container'>
             <div className='row justify-content-center mt-5'>
                 <div className='col-12'>
-                    <div style={{ fontSize: '24px', marginBottom: '30px', fontWeight: 400, lineHeight: '17px', textAlign: 'center' }}> {isThaiLanguage ? 'ยินดีต้อนรับ' + nameTh : 'Welcome, ' + nameEn} </div>
+                    <div style={{ fontSize: '24px', marginBottom: '30px', fontWeight: 400, lineHeight: '17px', textAlign: 'center' }}> {t('welcome')}, {isThaiLanguage ? nameTh : nameEn} </div>
                     {nameTh ? null : warningMessage()}
-                    <Link to='/account' className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent', position: 'relative', zIndex: 1 }}>
+                    <Link to='/account' className='box-container btn link'>
                         <div>
-                            <img src={account} style={{ float: 'right', padding: '12px 0 12px 11px', borderLeft: '1px solid rgba(204, 204, 204, 1)' }} />
-                            <div style={{ fontWeight: 400, fontSize: '20px', lineHeight: '19px', marginBottom: '10px', marginTop: '5px' }}> {isThaiLanguage ? 'บัญชีผู้ใช้' : 'Account'} </div>
-                            <div style={{ fontWeight: 200, fontSize: '14px', lineHeight: '17px', color: 'darkgray' }}> {isThaiLanguage ? 'ดูแลและแก้ไขบัญชีของคุณ' : 'View and make changes to your account'} </div>
+                            <img src={account} className='homepage-icon darkgrey' style={{ padding: '12px 0 12px 11px' }} />
+                            <div className='linkhead'> {t('account')} </div>
+                            <div className='linkbody darkgrey' > {t('account_description')} </div>
                         </div>
                     </Link>
 
-                    {disable ? unclickableLink() : clickableLink()}
+                    <Link to={disable ? '/home' : '/myreservation'} className='box-container btn link'>
+                        <div>
+                            <img src={reservation} className='homepage-icon darkgrey' style={{ padding: '12px 0 12px 17px' }} />
+                            <div className='linkhead'> {t('my_reservation')} </div>
+                            <div className='linkbody darkgrey'> {t('my_reservation_description')} </div>
+                        </div>
+                    </Link>
+                    <Link to={disable ? '/home' : '/waitingroom'} className='box-container btn link'>
+                        <div>
+                            <img src={waitingroom} className='homepage-icon darkgrey' style={{ padding: '16px 0 16px 15px' }} />
+                            <div className='linkhead'> {t('my_waiting_room')} </div>
+                            <div className='linkbody darkgrey'> {t('my_waiting_room_description')} </div>
+                        </div>
+                    </Link>
+                    <Link to={disable ? '/home' : '/reservenow'} className='box-container btn btn-pink-pink link'>
+                        <div>
+                            <img src={reservenow} className='homepage-icon' style={{ padding: '13px 4px 13px 19px' }} />
+                            <div className='linkhead'> {t('reserve_now')} </div>
+                            <div className='linkbody'> {t('reserve_now_description')} </div>
+                        </div>
+                    </Link>
 
-                    {ModalComponent()}
+                    <CookieModal show={!cookieConsent} handleClick={handleClick} />
+
 
                 </div>
                 <svg width="100%" height="48%" viewBox="0 0 400 60" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: 'fixed', bottom: 0, zIndex: 0 }}>
@@ -260,7 +124,7 @@ const HomePage = () => {
                     <path d="M634.114 160.976C840.654 140.635 705.327 461.656 419.5 469.078C314.172 469.078 170 324.506 170 233.578C170 142.65 314.172 27.0781 419.5 27.0781C524.829 27.0781 391.33 184.887 634.114 160.976Z" fill="#FF92C6" fill-opacity="0.28" />
                 </svg>
             </div>
-        </div>
+        </div >
     )
 }
 

@@ -270,3 +270,67 @@ p.link {
   background: rgba(255, 178, 221, 1);
   color: black;
 }
+.custom-checkbox {
+  margin-top: 4px;
+  width: 15px;
+  height: 15px;
+}
+
+.custom-select {
+  background-color: #ffadc8;
+}
+
+.time-checkbox {
+  width: 15px;
+  height: 15px;
+}
+
+.input-error {
+  color: red;
+}
+
+.link {
+  width: 100%;
+  border-color: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+.linkhead {
+  font-size: 20px;
+  margin-bottom: 10px;
+  line-height: 19px;
+  font-weight: 400;
+  margin-top: 5px;
+}
+
+.linkbody {
+  font-size: 14px;
+  font-weight: 200;
+  line-height: 17px;
+}
+
+.homepage-icon {
+  float: right;
+  border-left: 1px solid;
+}
+
+.darkgrey {
+  color: darkgrey;
+}
+
+.homepage-warning-head {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 17px;
+  color: red;
+  margin: 0px 10px 5px 10px;
+}
+
+.homepage-warning-body {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: red;
+  margin: 0px 10px 20px 10px;
+}
