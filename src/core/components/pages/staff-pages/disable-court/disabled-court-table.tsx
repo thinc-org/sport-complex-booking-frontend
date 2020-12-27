@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react'
 import { useRouteMatch, useHistory } from 'react-router-dom'
 import { Button, Table } from 'react-bootstrap'
 import { formatDate, useDeleteCourt } from './disable-court-hook'
@@ -48,29 +49,31 @@ export const CourtRow = ({ court_num, sport_id, starting_date, expired_date, _id
     )
 }
 
-export const ViewRow = (props: ViewRowProps) => {
-    const minute = getMinute(props.time_slot)
+export const ViewRow = ({ time_slot, indx, day, button }: ViewRowProps) => {
+    const minute = getMinute(time_slot)
     return (
         <tr>
             <td>
-                {props.indx}
+                {indx}
             </td>
             <td>
-                {dayArr[props.day]}
+                {dayArr[day]}
             </td>
             <td>
                 {getTime(minute.startTime)}
             </td>
-            <td>
+            <td className='d-flex flex-row justify-content-end align-items-center'>
                 {getTime(minute.endTime)}
+                {button}
             </td>
+
         </tr>
     )
 }
 
 
 
-export function CourtTable<T>({ data, header, Row }: TableProps<T>) {
+export function CourtTable<T>({ data, header, Row, Button }: TableProps<T>) {
     return (
         <Table className='disable-court-table'>
             <thead>
@@ -83,7 +86,8 @@ export function CourtTable<T>({ data, header, Row }: TableProps<T>) {
                     return (<Row
                         {...val}
                         indx={indx}
-                        key={val._id}
+                        key={val._id ?? indx}
+                        button={Button ? <Button indx={indx} /> : false}
                     />)
 
                 })}

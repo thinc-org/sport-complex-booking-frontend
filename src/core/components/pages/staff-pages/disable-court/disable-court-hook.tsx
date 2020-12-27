@@ -1,15 +1,37 @@
 
-import { useState, useEffect, useLayoutEffect, useRef } from 'react';
-import { Option, RowProps, Pagination, QueryParams, ViewResponse, DisableFormData } from './disable-court-interface'
+import * as React from 'react'
+import { useState, useEffect, useLayoutEffect, useRef, ComponentType } from 'react';
+import { Option, RowProps, Pagination, QueryParams, ViewResponse, DisableFormData, ViewRowProps } from './disable-court-interface'
+import { useHistory, useRouteMatch } from 'react-router-dom'
 import { client } from '../../../../../axiosConfig'
 import { AxiosResponse } from 'axios';
-import { useHistory } from 'react-router';
-export const useTimeOption = () => {
 
-}
-export const useAddCourt = () => {
-    const [data, setData] = useState<DisableFormData>()
 
+export const useRow = () => {
+    const [inProp, setInProp] = useState(false)
+    const [rowData, setRowData] = useState<ViewRowProps[]>([])
+    const onAddRow = (f) => {
+        setRowData(prev => {
+            const timeSlot: number[] = []
+            for (let i = parseInt(f.timeSlotStart); i <= f.timeSlotEnd; i++) {
+                timeSlot.push(i)
+            }
+            const newRow = { indx: prev?.length, day: f.day, time_slot: timeSlot }
+            console.log(newRow)
+            return [...prev, newRow]
+        })
+        setInProp(false)
+    }
+    const onDeleteRow = (e) => {
+        const i = e.target.dataset.indx
+        setRowData(prev => {
+            const arr = [...prev]
+            const found = arr.findIndex(element => element['indx'] == i)
+            if (found > -1) arr.splice(found, 1)
+            return arr;
+        })
+    }
+    return { inProp, rowData, onAddRow, onDeleteRow, setInProp }
 }
 export const useDeleteCourt = (id) => {
     const [show, setShow] = useState(false);
@@ -19,12 +41,16 @@ export const useDeleteCourt = (id) => {
                 id: id
             }
         })
-            .then((res) => console.log(res))
+            .then((res) => {
+                console.log(res)
+                setShow(false)
+
+
+            })
             .catch((err) => console.log(err))
     }
     return { show, setShow, onDelete }
 }
-
 export const useDate = () => {
     let currentDate = new Date()
     currentDate.setHours(0, 0, 0, 0)
@@ -191,4 +217,11 @@ export const seed = () => {
     })
 }
 
+export function withDeletable<P>(Component: ComponentType<P>, F: any): React.FC<P> {
+    return function WithDeletable(props: P) {
+        return (
+            <Component {...props} onClick={F} />
+        )
+    }
+}
 

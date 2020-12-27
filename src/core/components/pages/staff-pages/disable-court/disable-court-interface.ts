@@ -46,7 +46,9 @@ export interface ViewRowProps {
     indx: number
     day: number,
     time_slot: number[],
+    button?: JSX.Element
 }
+
 
 export interface ViewResponse {
     sport_id: string,
@@ -59,5 +61,6 @@ export interface ViewResponse {
 export interface TableProps<T> {
     data: any,
     header: string[],
-    Row: React.FC<T>
+    Row: React.FC<T>,
+    Button?: Function
 }
