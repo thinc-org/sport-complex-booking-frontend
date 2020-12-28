@@ -17,6 +17,9 @@ import QRScannerPage from "../components/pages/staff-pages/staff-qrcode"
 import StaffManagement from "../components/pages/staff-pages/staff-management/StaffManagement"
 import Settings from "../components/pages/staff-pages/settings/Settings"
 
+import AllReservation from "../components/pages/staff-pages/all-reservation-pages/ReservationList"
+import ReservationDetail from "../components/pages/staff-pages/all-reservation-pages/ReservationDetail"
+
 const StaffRoute = (props) => {
   const { path } = useRouteMatch()
   const location = useLocation()
@@ -89,5 +92,19 @@ const StaffRoute = (props) => {
       </Switch>
     </>
   )
+        <Route
+          exact
+          path={`${path}/allReservation/:pagename`}
+          render={(props) => {
+            return staff(<AllReservation {...props} />, "การจองทั้งหมด")
+          }}
+        />
+        <Route
+          exact
+          path={`${path}/reservationDetail/:pagename/:_id`}
+          render={(props) => {
+            return staff(<ReservationDetail {...props} />, "")
+          }}
+        />
 }
 export default StaffRoute

@@ -1,39 +1,58 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
 import { RouteComponentProps, Link } from "react-router-dom"
 import { Row, Col, Form, Button, Table } from "react-bootstrap"
-import SuccessfulReservation from "../interfaces/reservationSchemas"
-import fetch from "../interfaces/axiosTemplate"
+import SuccessfulReservation, { Sport, Court } from "../interfaces/reservationSchemas"
+// import {convertDate} from "../list-of-all-users-pages/"
+import { client } from "../../../../../axiosConfig"
 
 const AllReservation: FunctionComponent<RouteComponentProps<{ pagename: string }>> = (props) => {
   // Page state
   let [pagename] = useState<string>(props.match.params.pagename)
-  let [page_no, set_page_no] = useState<number>(1)
-  let [max_user, set_max_user] = useState<number>(1)
+  let [pageNo, setPageNo] = useState<number>(1)
+  let [maxUser, setMaxUser] = useState<number>(1)
   // Search state
-  let [sport_type, set_sport_type] = useState<string>("")
-  let [cord_no, set_cord_no] = useState<number>(1)
-  let [search_date, set_search_date] = useState<Date>(new Date(""))
-  let [search_time, set_search_time] = useState<number>(1)
+  let [sportType, setSportType] = useState<string>("") // id
+  let [sportIdx, setSportIdx] = useState<number>(-2)
+  let [courtNo, setCourtNo] = useState<number>(-2) // -2 is default
+  let [searchDate, setSearchDate] = useState<Date>(new Date())
+  let [searchTime, setSearchTime] = useState<number>(1)
   // Reservation room state
-  let [reserve_info, set_reserve_info] = useState<SuccessfulReservation[]>([])
+  let [reserveInfo, setReserveInfo] = useState<SuccessfulReservation[]>([])
+  let [allSports, setAllSports] = useState<Sport[]>([])
 
   // useEffects //
   useEffect(() => {
-    fetch({
+    client({
       method: "GET",
-      url: "/......",
+      url: "/court-manager/",
     })
       .then(({ data }) => {
         console.log(data)
-        // set_reserve_info(data)
+        setAllSports(data.sport_list)
       })
       .catch(({ response }) => {
         console.log(response)
       })
   }, [])
+
   useEffect(() => {
-    console.log(pagename)
-  }, [pagename])
+    requestInfo()
+  }, [sportIdx, courtNo, searchDate, searchTime])
+
+  useEffect(() => {
+    if (allSports.length !== 0 && sportIdx >= 0) {
+      setSportType(allSports[sportIdx]._id)
+    }
+    setCourtNo(-2)
+  }, [sportIdx])
+
+  // useEffect(() => {
+  //   console.log(courtNo + " ubub")
+  // }, [courtNo])
+
+  useEffect(() => {
+    console.log(searchDate)
+  }, [searchDate])
 
   // handles //
   const handleInfo = (e) => {
@@ -64,29 +83,54 @@ const AllReservation: FunctionComponent<RouteComponentProps<{ pagename: string }
     return name
   }
 
+  // handles //
+
   // renders //
+  const renderSportTypeFilter = () => {
+    let i = 0
+    let sportList = allSports.map((info) => <option value={i++}>{info.sport_name_th}</option>)
+    return (
+      <Form.Control
+        className="form-pink"
+        as="select"
+        value={sportIdx}
+        onChange={(e) => {
+          setSportIdx(parseInt(e.target.value))
+        }}
+      >
+        <option value={-2} disabled>
+          ประเภทกีฬา
+        </option>
+        <option value={-1}>ทั้งหมด</option>
+        {sportList}
+      </Form.Control>
+    )
+  }
+
   const renderCourtNumberFilter = () => {
-    if (sport_type !== "")
+    if (sportType !== "" && sportIdx >= 0) {
+      let allCourts: Court[] = allSports[sportIdx].list_court
+      let courtList = allCourts.map((info) => <option value={info.court_num}>{info.court_num}</option>)
       return (
         <Form.Control
           className="form-pink"
           as="select"
-          defaultValue={0}
+          value={courtNo}
           onChange={(e) => {
-            set_cord_no(parseInt(e.target.value))
+            setCourtNo(parseInt(e.target.value))
           }}
         >
-          <option value={0} disabled>
+          <option value={-2} disabled>
             เลขคอร์ด
           </option>
-          <option value={1}>ทั้งหมด</option>
-          <option value={2}>1</option>
-          <option value={3}>2</option>
+          <option value={-1}>ทั้งหมด</option>
+          {courtList}
         </Form.Control>
       )
+    }
     return (
-      <Form.Control className="form-pink" as="select" defaultValue={0}>
-        <option value={0} disabled>
+      <Form.Control className="form-pink" as="select" onChange={() => {}} value={courtNo}>
+        <option disabled value={-2}>
           กรุณาเลือกประเภทกีฬาก่อน
         </option>
       </Form.Control>
@@ -114,25 +158,22 @@ const AllReservation: FunctionComponent<RouteComponentProps<{ pagename: string }
   const renderFilterSection = () => {
     return (
       <Form.Row className="align-items-center mt-3">
+        <Col>{renderSportTypeFilter()}</Col>
+        <Col>{renderCourtNumberFilter()}</Col>
         <Col>
           <Form.Control
             className="form-pink"
-            as="select"
-            defaultValue={"ไม่มี"}
+            type="date"
+            // value={convertDate(searchDate)}
+            value={searchDate.getFullYear() + "-" + searchDate.getMonth() + "-" + searchDate.getDate()}
             onChange={(e) => {
-              set_sport_type(e.target.value)
+              let today = new Date()
+              let incom = new Date(e.target.value)
+              // console.log(today, incom)
+              // console.log(incom < today)
+              setSearchDate(incom < today ? today : incom)
             }}
-          >
-            <option value="ไม่มี" disabled>
-              ประเภทกีฬา
-            </option>
-            <option value="">ทั้งหมด</option>
-            <option value="แบตมินตัน">แบตมินตัน</option>
-          </Form.Control>
-        </Col>
-        <Col>{renderCourtNumberFilter()}</Col>
-        <Col>
-          <Form.Control className="form-pink" type="date" onChange={(e) => set_search_date(new Date(e.target.value))} />
+          />
         </Col>
         <Col>{renderTimeFilter()}</Col>
       </Form.Row>
@@ -140,8 +181,8 @@ const AllReservation: FunctionComponent<RouteComponentProps<{ pagename: string }
   }
 
   const renderTable = () => {
-    let index = (page_no - 1) * 10 + 1
-    let usersList = reserve_info.map((info) => {
+    let index = (pageNo - 1) * 10 + 1
+    let usersList = reserveInfo.map((info) => {
       return (
         <tr key={index++} className="tr-normal">
           <td>{sportIdToName(info.sport_id)}</td>

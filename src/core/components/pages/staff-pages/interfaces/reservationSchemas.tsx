@@ -24,6 +24,21 @@ export interface BookingTime {
   end_time: number
 }
 
+export interface Sport {
+  _id: string
+  sport_name_th: string
+  sport_name_en: string
+  required_user: number
+  quota: number
+  list_court: [Court]
+}
+
+export interface Court {
+  court_num: number
+  open_time: number
+  close_time: number
+}
+
 export interface UserInfo {
   username: string
   personal_email: string
