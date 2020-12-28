@@ -8,8 +8,9 @@ import account from '../../assets/images/icons/account.png';
 import reservation from '../../assets/images/icons/reservation.png';
 import waitingroom from '../../assets/images/icons/waitingroom.png';
 import reservenow from '../../assets/images/icons/reservenow.png';
-import { useTranslation } from 'react-i18next'
-import { CookieModal } from '../ui/Modals/CookieModal'
+import { useTranslation } from 'react-i18next';
+import { CookieModal } from '../ui/Modals/CookieModal';
+import { PersonCircle, Calendar, PeopleFill, BookmarkFill } from 'react-bootstrap-icons';
 
 const HomePage = () => {
 
@@ -87,7 +88,7 @@ const HomePage = () => {
                     {nameTh ? null : warningMessage()}
                     <Link to='/account' className='box-container btn link'>
                         <div>
-                            <img src={account} className='homepage-icon darkgrey' style={{ padding: '12px 0 12px 11px' }} />
+                            < PersonCircle className='homepage-icon darkgrey pl-3 pt-2 pb-2' color='black' size={40} />
                             <div className='linkhead'> {t('account')} </div>
                             <div className='linkbody darkgrey' > {t('account_description')} </div>
                         </div>
@@ -95,21 +96,21 @@ const HomePage = () => {
 
                     <Link to={disable ? '/home' : '/myreservation'} className='box-container btn link'>
                         <div>
-                            <img src={reservation} className='homepage-icon darkgrey' style={{ padding: '12px 0 12px 17px' }} />
+                            < Calendar className='homepage-icon darkgrey pl-3 pt-2 pb-2' color='black' size={40} />
                             <div className='linkhead'> {t('my_reservation')} </div>
                             <div className='linkbody darkgrey'> {t('my_reservation_description')} </div>
                         </div>
                     </Link>
                     <Link to={disable ? '/home' : '/waitingroom'} className='box-container btn link'>
                         <div>
-                            <img src={waitingroom} className='homepage-icon darkgrey' style={{ padding: '16px 0 16px 15px' }} />
+                            < PeopleFill className='homepage-icon darkgrey pl-3 pt-2 pb-2' color='black' size={40} />
                             <div className='linkhead'> {t('my_waiting_room')} </div>
                             <div className='linkbody darkgrey'> {t('my_waiting_room_description')} </div>
                         </div>
                     </Link>
                     <Link to={disable ? '/home' : '/reservenow'} className='box-container btn btn-pink-pink link'>
                         <div>
-                            <img src={reservenow} className='homepage-icon' style={{ padding: '13px 4px 13px 19px' }} />
+                            < BookmarkFill className='homepage-icon pl-3 pt-2 pb-2' color='white' size={40} />
                             <div className='linkhead'> {t('reserve_now')} </div>
                             <div className='linkbody'> {t('reserve_now_description')} </div>
                         </div>
