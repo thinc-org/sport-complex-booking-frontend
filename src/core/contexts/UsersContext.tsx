@@ -24,7 +24,6 @@ interface CuStudent extends DefaultAccount {
 
 interface SatitCuPersonel extends DefaultAccount {
   account_type: "SatitCuPersonel"
-  password: string
 }
 
 interface Other extends DefaultAccount {
@@ -45,7 +44,6 @@ interface Other extends DefaultAccount {
   },
   medical_condition: string,
   membership_type: string,
-  password: string, //pass=phone(editable)
   verification_status: string,
   rejected_info: string[],
   account_expiration_date: Date,
@@ -57,20 +55,20 @@ interface Other extends DefaultAccount {
 }
 
 interface UserConstruct {
-  CuStudent: CuStudent | undefined,
-  SatitCuPersonel: SatitCuPersonel| undefined,
-  Other: Other| undefined
-  setCuStudent: (CuStudent: CuStudent)=>void
-  setSatitCuPersonel:(SatitCuPersonel: SatitCuPersonel)=>void
-  setOther: (Other: Other)=>void
+  cuStudentAccount: CuStudent | undefined,
+  satitCuPersonelAccount: SatitCuPersonel| undefined,
+  otherAccount: Other| undefined
+  setCuStudentAccount: (CuStudent: CuStudent)=>void
+  setSatitCuPersonelAccount:(SatitCuPersonel: SatitCuPersonel)=>void
+  setOtherAccount: (Other: Other)=>void
 }
 
 export const UserContext = createContext({} as UserConstruct)
 
-export default function UserContextProvider({...props}) {
-  const [CuStudent, setCuStudent] = useState<CuStudent>()
-  const [SatitCuPersonel, setSatitCuPersonel] = useState<SatitCuPersonel>()
-  const [Other, setOther] = useState<Other>()
-  const value = { CuStudent, SatitCuPersonel, Other, setCuStudent, setSatitCuPersonel, setOther }
+export default function UserContextProvider(props) {
+  const [cuStudentAccount, setCuStudentAccount] = useState<CuStudent>()
+  const [satitCuPersonelAccount, setSatitCuPersonelAccount] = useState<SatitCuPersonel>()
+  const [otherAccount, setOtherAccount] = useState<Other>()
+  const value = { cuStudentAccount, satitCuPersonelAccount, otherAccount, setCuStudentAccount, setSatitCuPersonelAccount, setOtherAccount }
   return <UserContext.Provider value={value} {...props}/>
 }

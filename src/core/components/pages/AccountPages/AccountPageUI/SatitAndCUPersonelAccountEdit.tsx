@@ -7,12 +7,12 @@ import { ConfirmModal, ErrorModal, EdittedData } from "../../../ui/Modals/Accoun
 import { useTranslation } from 'react-i18next'
 import { client } from "../../../../../axiosConfig";
 
-export default function SatitAndCUPersonelAccountEdit({  toggle_edit_button}) {
+export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
   const [show, setShow] = useState(false);
   const [showErr, setShowErr] = useState(false);
   const [formData, setFormData] = useState<EdittedData>();
 
-  const { SatitCuPersonel:user } = useContext(UserContext)
+  const { satitCuPersonelAccount:user } = useContext(UserContext)
   const {t} = useTranslation()
   
   // React Hook Forms
@@ -26,7 +26,7 @@ export default function SatitAndCUPersonelAccountEdit({  toggle_edit_button}) {
 
   const handleCancel = (e) => {
     e.preventDefault()
-    toggle_edit_button()
+    toggleEditButton()
   }
 
   const postDataToBackend = async (data: EdittedData) => {

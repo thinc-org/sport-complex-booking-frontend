@@ -16,7 +16,7 @@ function ChangePassword() {
   const [passwordData, setPasswordData] = useState<PasswordData>();
   const [showPasswordMismatch, setShowPasswordMismatch] = useState(false);
   const [repeatedPasswordError, setRepeatedPassword] =useState(false)
-  const {CuStudent} = useContext(UserContext)
+  const {cuStudentAccount} = useContext(UserContext)
   const {t} = useTranslation()
   const onSubmit = (data: PasswordData) => {
     if (data.oldPassword !== data.newPassword ) {
@@ -47,7 +47,7 @@ function ChangePassword() {
     
   return (
     <div className="mx-auto col-md-6">
-      {CuStudent?.account_type === "CuStudent" ? <Redirect to="/account" /> : null}
+      {cuStudentAccount?.account_type === "CuStudent" ? <Redirect to="/account" /> : null}
       <div className="default-mobile-wrapper">
         <div className="row mt-2">
           <div className="col-8">

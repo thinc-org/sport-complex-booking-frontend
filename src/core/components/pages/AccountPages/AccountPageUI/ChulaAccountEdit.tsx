@@ -6,12 +6,12 @@ import { useTranslation } from 'react-i18next'
 import { ConfirmModal, ErrorModal, EdittedData, WarningMessage } from "../../../ui/Modals/AccountPageModals";
 import { client } from "../../../../../axiosConfig";
 
-export default function ChulaAccountEdit({ toggle_edit_button }) {
+export default function ChulaAccountEdit({ toggleEditButton }) {
   const [show, setShow] = useState(false);
   const [showErr, setShowErr] = useState(false);
   const [formData, setFormData] = useState<EdittedData>()
   const {t} = useTranslation()
-  const { CuStudent: user } = useContext(UserContext)
+  const { cuStudentAccount: user } = useContext(UserContext)
 
   // React Hook Forms
   const { register, handleSubmit, errors } = useForm();
@@ -24,7 +24,7 @@ export default function ChulaAccountEdit({ toggle_edit_button }) {
 
   const handleCancel = (e) => {
     e.preventDefault()
-    toggle_edit_button()
+    toggleEditButton()
   }
 
   const postDataToBackend = async (data: EdittedData) => {

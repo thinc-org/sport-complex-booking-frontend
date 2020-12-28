@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { UserContext } from "../../../../contexts/UsersContext"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"
-import { useAuthContext } from "../../../../controllers/authContext";
 import { ConfirmModal, ErrorModal, OtherWarningMessage } from "../../../ui/Modals/AccountPageModals";
 import { useTranslation } from 'react-i18next'
 import { setCookie } from "../../../../contexts/cookieHandler";
@@ -25,7 +24,7 @@ export default function OtherAccountEdit() {
   const [date, setDate] =useState<Date>(new Date());
   const [show, setShow] = useState(false);
   const [showErr, setShowErr] = useState(false);
-  const { Other: user } = useContext(UserContext)
+  const { otherAccount: user } = useContext(UserContext)
   const {t, i18n} = useTranslation()
   const [formData, setFormData] = useState();
 
@@ -90,43 +89,43 @@ export default function OtherAccountEdit() {
   }
 
   const handleAllFilesUpload = async (
-    user_photo_input: any,
-    national_id_input: any,
-    medical_certificate_input: any,
-    house_registration_number_input: any,
-    relationship_verification_document_input: any
+    userPhotoInput: any,
+    nationalIdInput: any,
+    medicalCertificateInput: any,
+    houseRegistrationNumberInput: any,
+    relationshipVerificationDocumentInput: any
   ) => {
-    await user_photo_input ? upload_user_photo(user_photo_input): console.log("no file selected")
-    await national_id_input ? upload_national_id(national_id_input): console.log("no file selected")
-    await medical_certificate_input ? upload_medical_certificate(medical_certificate_input): console.log("no file selected")
-    await house_registration_number_input ? upload_house_registration_number(house_registration_number_input): console.log("no file selected")
-    await relationship_verification_document_input ? upload_relationship_verification_document(relationship_verification_document_input): console.log("no file selected")
+    await userPhotoInput ? uploadUserPhoto(userPhotoInput): console.log("no file selected")
+    await nationalIdInput ? uploadNationalId(nationalIdInput): console.log("no file selected")
+    await medicalCertificateInput ? uploadMedicalCertificate(medicalCertificateInput): console.log("no file selected")
+    await houseRegistrationNumberInput ? uploadHouseRegistrationNumber(houseRegistrationNumberInput): console.log("no file selected")
+    await relationshipVerificationDocumentInput ? uploadRelationshipVerificationDocument(relationshipVerificationDocumentInput): console.log("no file selected")
   }
-  const upload_user_photo = (file: any) => {
+  const uploadUserPhoto = (file: any) => {
     console.log(file)
     let formData = new FormData()
     formData.append("user_photo", file? file: file, file?.name)
     handleFileUpload(formData)
   }
-  const upload_national_id = (file: any) => {
+  const uploadNationalId = (file: any) => {
     console.log(file)
     let formData = new FormData()
     formData.append("national_id_photo",  file? file: file, file?.name)
     handleFileUpload(formData)
   }
-  const upload_medical_certificate = (file: any) => {
+  const uploadMedicalCertificate = (file: any) => {
     console.log(file)
     let formData = new FormData()
     formData.append("medical_certificate",  file? file: file, file?.name)
     handleFileUpload(formData)
   }
-  const upload_house_registration_number = (file: any) => {
+  const uploadHouseRegistrationNumber = (file: any) => {
     console.log(file)
     let formData = new FormData()
     formData.append("house_registration_number",  file? file: file, file?.name)
     handleFileUpload(formData)
   }
-  const upload_relationship_verification_document = (file: any) => {
+  const uploadRelationshipVerificationDocument = (file: any) => {
     console.log(file)
     let formData = new FormData()
     formData.append("relationship_verification_document", file, file.name)
@@ -134,23 +133,23 @@ export default function OtherAccountEdit() {
   }
 
   // These functions save the input file to the states
-  const assign_user_photo = (file: any) => {
+  const assignUserPhoto = (file: any) => {
     console.log(file)
     set_user_photo(file[0])
   }
-  const assign_national_id = (file: any) => {
+  const assignNationalIdPhoto = (file: any) => {
     console.log(file)
     set_national_id_scan(file[0])
   }
-  const assign_medical_certificate = (file: any) => {
+  const assignMedicalCertificate = (file: any) => {
     console.log(file)
     set_medical_certificate(file[0])
   }
-  const assign_house_registration_number = (file: any) => {
+  const assignHouseRegistrationNumber = (file: any) => {
     console.log(file)
     set_house_registration_number(file[0])
   }
-  const assign_relationship_verification_document = (file: any) => {
+  const assignRelationshipVerificationDocument = (file: any) => {
     console.log(file)
     set_relationship_verification_document(file[0])
   }
@@ -431,7 +430,7 @@ export default function OtherAccountEdit() {
             <p>{user_photo ? "File Uploaded. Choose a new file?" : ""}</p>
             <input type="file" className="form-file-input form-control" id="user_photo"  
             disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('user_photo')} 
-            onChange={(e) => assign_user_photo(e.target.files)} />
+            onChange={(e) => assignUserPhoto(e.target.files)} />
           </div>
           {user?.rejected_info.includes('user_photo') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
           <hr />
@@ -442,7 +441,7 @@ export default function OtherAccountEdit() {
             <p>{national_id_scan ? "File Uploaded. Choose a new file?" : ""}</p>
             <input type="file" className="form-file-input  form-control" id="nationID/passport"
             disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('national_id_photo')} 
-            onChange={(e) => assign_national_id(e.target.files)} />
+            onChange={(e) => assignNationalIdPhoto(e.target.files)} />
           </div>
           {user?.rejected_info.includes('national_id_photo') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
           <hr />
@@ -452,7 +451,7 @@ export default function OtherAccountEdit() {
             <input
               type="file" className="form-file-input  form-control" id="medical_certificate"
               disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('medical_certificate')} 
-              onChange={(e) => assign_medical_certificate(e.target.files)}
+              onChange={(e) => assignMedicalCertificate(e.target.files)}
             />
           </div>
           {user?.rejected_info.includes('medical_certificate') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
@@ -465,7 +464,7 @@ export default function OtherAccountEdit() {
             <input
               type="file" className="form-file-input  form-control" id="house_registration_number"
               disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('house_registration_number')} 
-              onChange={(e) => assign_house_registration_number(e.target.files)}
+              onChange={(e) => assignHouseRegistrationNumber(e.target.files)}
             />
           </div>
           {user?.rejected_info.includes('house_registration_number') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
@@ -478,7 +477,7 @@ export default function OtherAccountEdit() {
             <input
               type="file" className="form-file-input  form-control" id="relationship_verification_document"
               disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('relationship_verification_document')} 
-              onChange={(e) => assign_relationship_verification_document(e.target.files)}
+              onChange={(e) => assignRelationshipVerificationDocument(e.target.files)}
             />
           </div>
           {user?.rejected_info.includes('relationship_verification_document') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
