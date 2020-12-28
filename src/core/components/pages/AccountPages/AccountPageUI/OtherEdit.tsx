@@ -40,7 +40,7 @@ export default function OtherAccountEdit() {
         if (data.verification_status === "Submitted") {
           handleAllFilesUpload(user_photo, national_id_scan, medical_certificate, house_registration_number, relationship_verification_document)
         }
-        //window.location.reload()
+        window.location.reload()
       })
       .catch(function (error) {
         if (error.response) {
@@ -147,8 +147,6 @@ export default function OtherAccountEdit() {
     set_medical_certificate(file[0])
   }
   const assignHouseRegistrationNumber = (file: FileList) => {
-    console.log("TYPE")
-    console.log(typeof(file))
     console.log(file)
     set_house_registration_number(file[0])
   }
