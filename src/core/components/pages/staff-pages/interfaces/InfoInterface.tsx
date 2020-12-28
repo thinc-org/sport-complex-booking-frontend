@@ -68,6 +68,8 @@ export interface OtherInfo {
   username: string
   name_en: string
   surname_en: string
+  personal_email: string,
+  phone: string
 }
 
 export interface ContactPerson {
