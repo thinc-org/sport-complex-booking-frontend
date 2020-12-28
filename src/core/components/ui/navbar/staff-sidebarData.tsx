@@ -12,23 +12,21 @@ name: "จัดการสตาฟ",
   {
     icon: "",
     name: "ผู้ใช้ทั้งหมด",
-    // path: '/ผู้ใช้ทั้งหมด'
     path: "/staff/listOfAllUsers",
   },
   {
     icon: "",
     name: "การจองทั้งหมด",
-    path: "/staff/allReservation",
+    path: "/staff/allReservation/success",
   },
   {
     icon: "",
     name: "ห้องรอการจองทั้งหมด",
-    path: "/allWaiting",
+    path: "/staff/allReservation/waiting",
   },
   {
     icon: "",
     name: "รับรองการลงทะเบียน",
-    // path: '/รับรองการลงทะเบียน'
     path: "/staff/verifyApprove",
   },
   {

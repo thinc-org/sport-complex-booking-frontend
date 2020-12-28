@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
 import { RouteComponentProps, Link } from "react-router-dom"
 import { ListGroup, Table, Row, Col, Button, Card } from "react-bootstrap"
-import fetch from "../interfaces/axiosTemplate"
+import { client } from "../../../../../axiosConfig"
 import { DeleteModal, UserInfo } from "../interfaces/reservationSchemas"
 import DeleteModalComponent from "./DeleteModalComponent"
 
