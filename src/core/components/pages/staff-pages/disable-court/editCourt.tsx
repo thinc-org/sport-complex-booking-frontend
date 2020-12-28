@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import { useLocation, useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { Container, Row, Col, Button, Form } from 'react-bootstrap'
 import { useOption, useDate, withDeletable, useRow } from './disable-court-hook'
@@ -10,12 +10,13 @@ import { ViewRowProps } from './disable-court-interface'
 import { CourtTable, ViewRow } from './disabled-court-table'
 import { client } from '../../../../../axiosConfig';
 import { DeleteButton } from './button'
-const AddCourt = () => {
+
+const EditCourt = () => {
+    const location = useLocation()
     const { inProp, rowData, onAddRow, onDeleteRow, setInProp } = useRow()
     const { register, handleSubmit, setError, errors } = useForm()
     const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
-    const { option } = useOption()
-    const onSubmit = async (data) => {
+    const onSubmit = (data) => {
         const formData = {
             ...data,
             sport_id: '5fe885d31c594a2084f7d3a4', //for testing purpose since there's no sport_id on the backend yet
@@ -24,10 +25,11 @@ const AddCourt = () => {
             expired_date: endDate
         }
         console.log(formData)
-        await client.post('/courts/disable-courts', formData)
+        client.post('/courts/disable-courts', formData)
             .then((res) => console.log(res))
             .catch(err => console.log(err))
     }
+    React.useEffect(() => { console.log(location) }, [])
     return (
         <Container fluid>
             <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} />
@@ -40,21 +42,12 @@ const AddCourt = () => {
                     <Row>
                         <Col>
                             <Form.Label>ประเภทกีฬา</Form.Label>
-                            <Form.Control name='sport_id' as='select' ref={register}>
-                                {option ? option['sportType'].map((val) => (
-                                    <option value={val} key={val}>{val}</option>
-                                )) : <option value={''}>ประเภทกีฬา</option>}
-                            </Form.Control>
                         </Col>
                     </Row>
                     <Row>
                         <Col>
                             <Form.Label>เลขคอร์ด</Form.Label>
-                            <Form.Control name='court_num' as='select' ref={register}>
-                                {option ? option['courtNum'].map((val) => (
-                                    <option value={val} key={val}>{val}</option>
-                                )) : <option>เลขคอร์ด</option>}
-                            </Form.Control>
+
                         </Col>
                     </Row>
                     <Row>
@@ -93,4 +86,5 @@ const AddCourt = () => {
         </Container>
     )
 }
-export default AddCourt
+
+export default EditCourt

@@ -62,7 +62,7 @@ export const FormAlert = ({ inProp, handleClose, onSubmit }) => {
                         </Form.Control>
                     </div>
                     <div>
-                        <Form.Label>เวลาสิ้นสุดการปิดปิด</Form.Label>
+                        <Form.Label>เวลาสิ้นสุดการปิด</Form.Label>
                         <Form.Control name='timeSlotEnd' as='select' ref={register({ required: true, validate: (value) => validateTime(value) })} >
                             {timeArr.map((val, indx) =>
                                 <option value={indx} key={val}>{val}</option>
