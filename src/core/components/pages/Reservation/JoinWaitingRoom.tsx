@@ -32,7 +32,7 @@ function JoinWaitingRoom() {
             <p className="font-weight-light">{t("waitingRoomHelp")}</p>
             <div className="mt-2">
               <input
-                name="access_code"
+                name="accessCode"
                 type="text"
                 ref={register({
                   required: t("enter_code")!,
@@ -44,7 +44,7 @@ function JoinWaitingRoom() {
                 placeholder="xxxxxx"
                 className="form-control"
               />
-              {errors.access_code && <p id="input-error">{errors.access_code.message}</p>}
+              {errors.accessCode && <p id="input-error">{errors.accessCode.message}</p>}
             </div>
           </div>
           <br />

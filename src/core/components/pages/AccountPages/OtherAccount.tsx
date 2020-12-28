@@ -8,8 +8,7 @@ export default function OtherAccount() {
   return (
     <UserContext.Consumer>
       {(context) => {
-        const { Other } = context
-        const user = Other
+        const { otherAccount: user } = context
 
         /// JSX Begins here
         return (

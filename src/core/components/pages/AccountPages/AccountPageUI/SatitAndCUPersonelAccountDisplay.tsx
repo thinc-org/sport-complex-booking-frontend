@@ -5,11 +5,11 @@ import { UserContext } from "../../../../contexts/UsersContext"
 import {Link } from "react-router-dom"
 import { useTranslation } from 'react-i18next'
 
-export default function SatitAndCUPersonelAccountDisplay({  toggle_edit_button }) {  
+export default function SatitAndCUPersonelAccountDisplay({  toggleEditButton }) {  
 
-  const { SatitCuPersonel: user } = useContext(UserContext)
+  const { satitCuPersonelAccount: user } = useContext(UserContext)
   const {t, i18n} = useTranslation()
-  const language = () => i18n.language
+  const {language} = i18n
 
   return (
     <div className="mx-auto col-md-6">
@@ -17,13 +17,13 @@ export default function SatitAndCUPersonelAccountDisplay({  toggle_edit_button }
         <div className="row mt-2">
           <div className="col-8">
             <h4 className="align-right">
-              {(language() === 'th') 
+              {(language === 'th') 
               ? (user?.name_th + " " + user?.surname_th) 
               : (user?.name_en + " " + user?.surname_en)}
             </h4>
           </div>
           <div className="col-4">
-            <Button className="btn-secondary float-right" onClick={toggle_edit_button}>
+            <Button className="btn-secondary float-right" onClick={toggleEditButton}>
               {t("edit")}
             </Button>
           </div>

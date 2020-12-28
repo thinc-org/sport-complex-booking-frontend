@@ -18,7 +18,7 @@ function AccountPage() {
   }
 
   const {token} = useAuthContext()
-  const { setCuStudent, setSatitCuPersonel, setOther } = useContext(UserContext)
+  const { setCuStudentAccount, setSatitCuPersonelAccount, setOtherAccount } = useContext(UserContext)
   const [account_type, setAccountType] = useState();
   const [penalizeStatus, setPenalizeStatus] = useState();  
   const {i18n} = useTranslation()
@@ -47,11 +47,11 @@ function AccountPage() {
         )
 
         if (data.account_type === "CuStudent") {
-          setCuStudent(newData)
+          setCuStudentAccount(newData)
         } else if (data.account_type === "SatitAndCuPersonel") {
-          setSatitCuPersonel(newData)
+          setSatitCuPersonelAccount(newData)
         } else if (data.account_type === "Other") {
-          setOther(newData)
+          setOtherAccount(newData)
         }
         //setLanguage(getCookie("is_thai_language")==="true")
         if (getCookie("is_thai_language")==="true") i18n.changeLanguage('th');

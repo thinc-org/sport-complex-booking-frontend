@@ -5,19 +5,19 @@ import ChulaAccountEdit from "./AccountPageUI/ChulaAccountEdit"
 import ChulaAccountDisplay from "./AccountPageUI/ChulaAccountDisplay"
 
 export default function ChulaAccount() {
-  let [is_editting, set_is_editting] = useState(false)
+  let [isEditting, setIsEditting] = useState(false)
 
   const toggleEditButton = () => {
-    if (is_editting) {
-      set_is_editting(false)
+    if (isEditting) {
+      setIsEditting(false)
     } else {
-      set_is_editting(true)
+      setIsEditting(true)
     }
   }
 
   return (
     <div>
-      {!is_editting ? <ChulaAccountDisplay toggle_edit_button={toggleEditButton} /> : <ChulaAccountEdit toggle_edit_button={toggleEditButton} />}
+      {!isEditting ? <ChulaAccountDisplay toggleEditButton={toggleEditButton} /> : <ChulaAccountEdit toggleEditButton={toggleEditButton} />}
     </div>
   )
 }

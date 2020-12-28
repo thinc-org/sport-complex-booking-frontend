@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 export default function OtherAaccountDisplay() {
 
   const {token} = useAuthContext()
-  const { Other: user } = useContext(UserContext)
+  const { otherAccount: user } = useContext(UserContext)
   const {t} = useTranslation()
 
   const viewFile = async (fileID: string)=> {
@@ -142,7 +142,7 @@ export default function OtherAaccountDisplay() {
         <label className="form-label my-2">{t("national_id_photo")}</label>
         <div className="form-file">
           {user?.national_id_photo ? (
-            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.national_id_photo)}>{t("view_file")}</Button>
+            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.national_id_photo)}>{t("viewFile")}</Button>
           ) : (
             <p>{t("noFile")}</p>
           )} 
@@ -151,7 +151,7 @@ export default function OtherAaccountDisplay() {
         <label className="form-label my-2">{t("medical_certificate")}</label>
         <div className="form-file">
           {user?.medical_certificate ? (
-            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.medical_certificate)}>{t("view_file")}</Button>
+            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.medical_certificate)}>{t("viewFile")}</Button>
           ) : (
             <p>{t("noFile")}</p>
           )} 
@@ -162,7 +162,7 @@ export default function OtherAaccountDisplay() {
         </label>
         <div className="form-file">
           {user?.house_registration_number ? (
-            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.house_registration_number)}>{t("view_file")}</Button>
+            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.house_registration_number)}>{t("viewFile")}</Button>
           ) : (
             <p>{t("noFile")}</p>
           )} 
@@ -171,7 +171,7 @@ export default function OtherAaccountDisplay() {
         <label className="form-label my-2">{t("relationship_verification_document")}</label>
         <div className="form-file">
           {user?.relationship_verification_document ? (
-            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.relationship_verification_document)}>{t("view_file")}</Button>
+            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.relationship_verification_document)}>{t("viewFile")}</Button>
           ) : (
             <p>{t("noFile")}</p>
           )} 
