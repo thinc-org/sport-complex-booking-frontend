@@ -40,7 +40,7 @@
   "noFile": "ไม่พบเอกสาร",
   "user_photo": "รูปภาพของคุณ",
   "national_id_photo": "หมายเลขบัตรประชาชน / พาสปอร์ต (.pdf เท่านั้น)",
-  "medical_certificate": "หมายเลขบัตรประชาชน / พาสปอร์ต (.pdf เท่านั้น)",
+  "medical_certificate": "เอกสารใบรับรองแพทย์ (.pdf เท่านั้น)",
   "house_registration_number":  "ไม่บังคับ: สำเนาทะเบียนบ้านที่มีหน้านิสิต (.pdf only)",
   "relationship_verification_document": "ไม่บังคับ: เอกสารยืนยันตัวตน (.pdf only)",
   "memberInformation": "ข้อมูลผู้ใช้",

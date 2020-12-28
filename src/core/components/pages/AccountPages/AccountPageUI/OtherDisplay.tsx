@@ -158,7 +158,7 @@ export default function OtherAaccountDisplay() {
         </div>
         <hr />
         <label className="form-label my-2">
-          {t("house_registration_document")}
+          {t("house_registration_number")}
         </label>
         <div className="form-file">
           {user?.house_registration_number ? (
