@@ -240,7 +240,7 @@ export default function TimeSettings() {
           <Modal.Header closeButton>
             <Modal.Title>สําเร็จ</Modal.Title>
           </Modal.Header>
-          <Modal.Body style={{ fontWeight: "lighter" }}>ระบบได้ทําการเพิ่มกีฬาใหม่เข้าไปเรียบร้อยแล้ว</Modal.Body>
+          <Modal.Body style={{ fontWeight: "lighter" }}>ระบบได้ทําการเปลี่ยนเวลารียบร้อยแล้ว</Modal.Body>
           <Modal.Footer>
             <Button
               variant="pink"

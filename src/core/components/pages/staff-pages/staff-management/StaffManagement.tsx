@@ -33,16 +33,16 @@ function StaffManagement() {
 
   const [users, setUsers] = useState([
     {
-      staff_name: "Donald",
-      staff_surname: "Trump",
-      staff_username: "Chaina",
-      account_type: "สตาฟ"
+      name: "Donald",
+      surname: "Trump",
+      username: "Chaina",
+      is_admin: false,
     },
     {
-      staff_name: "Joe",
-      staff_surname: "Biden",
-      staff_username: "SleepyJoe",
-      account_type: "แอดมิน"
+      name: "Joe",
+      surname: "Biden",
+      username: "SleepyJoe",
+      is_admin: false,
     },
   ])
 
@@ -112,40 +112,77 @@ function StaffManagement() {
   const renderUsersTable = () => {
     let index = (page_no - 1) * 10 + 1
     let usersList = users.map((user) => {
-      return (
-        <tr key={index} className="tr-normal">
-          <td className="font-weight-bold"> {index++} </td>
-          <td> {user.staff_name} </td>
-          <td> {user.staff_surname} </td>
-          <td> {user.staff_username}</td>
-          {/* <td> {user.account_type} </td> */}
-          <td><div>
-            <Form>
-              <Form.Group controlId="exampleForm.ControlSelect1" >
-                <Form.Control
-                  as="select"
-                  custom
-                  defaultValue={user.account_type} onChange={(e) => sendHandleChangeStatus(e.target.value)}
-                >
-                  <option value="สตาฟ">สตาฟ</option>
-                  <option value="แอดมิน">แอดมิน</option>
-                </Form.Control>
-              </Form.Group>
-            </Form>
-          </div>
-          </td>
-          <td><Button
-            className="btn-normal btn-outline-black"
-            variant="outline-danger"
-            onClick={() => {
-              set_show_delete_staff(true)
-              deleteStaff()
-            }}
-          >
-            ลบเจ้าหน้าที่
+      console.log(user.is_admin)
+      if (user.is_admin = false) {
+        return (
+          <tr key={index} className="tr-normal">
+            <td className="font-weight-bold"> {index++} </td>
+            <td> {user.name} </td>
+            <td> {user.surname} </td>
+            <td> {user.username}</td>
+            {/* <td> {user.account_type} </td> */}
+            <td><div>
+              <Form>
+                <Form.Group controlId="exampleForm.ControlSelect1" >
+                  <Form.Control
+                    as="select"
+                    custom
+                    defaultValue={0} onChange={(e) => sendHandleChangeStatus(e.target.value)}
+                  >
+                    <option value="สตาฟ">สตาฟ</option>
+                    <option value="แอดมิน">แอดมิน</option>
+                  </Form.Control>
+                </Form.Group>
+              </Form>
+            </div>
+            </td>
+            <td><Button
+              className="btn-normal btn-outline-black"
+              variant="outline-danger"
+              onClick={() => {
+                set_show_delete_staff(true)
+                deleteStaff()
+              }}
+            >
+              ลบเจ้าหน้าที่
           </Button></td>
-        </tr>
-      )
+          </tr>
+        )
+      } else {
+        return (
+          <tr key={index} className="tr-normal">
+            <td className="font-weight-bold"> {index++} </td>
+            <td> {user.name} </td>
+            <td> {user.surname} </td>
+            <td> {user.username}</td>
+            {/* <td> {user.account_type} </td> */}
+            <td><div>
+              <Form>
+                <Form.Group controlId="exampleForm.ControlSelect1" >
+                  <Form.Control
+                    as="select"
+                    custom
+                    defaultValue={0} onChange={(e) => sendHandleChangeStatus(e.target.value)}
+                  >
+                    <option value="สตาฟ">แอดมิน</option>
+                    <option value="แอดมิน">สตาฟ</option>
+                  </Form.Control>
+                </Form.Group>
+              </Form>
+            </div>
+            </td>
+            <td><Button
+              className="btn-normal btn-outline-black"
+              variant="outline-danger"
+              onClick={() => {
+                set_show_delete_staff(true)
+                deleteStaff()
+              }}
+            >
+              ลบเจ้าหน้าที่
+          </Button></td>
+          </tr>
+          )}
 
     })
     return usersList
