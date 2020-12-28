@@ -6,6 +6,7 @@ import { formatDate, useDeleteCourt } from './disable-court-hook'
 import { getMinute, getTime } from './mapTime'
 import { RowProps, TableProps, ViewRowProps } from './disable-court-interface'
 import { ErrorAlert } from './modals'
+import { DeleteButton } from './button'
 import { dayArr } from './mapTime'
 export const CourtRow = ({ court_num, sport_id, starting_date, expired_date, _id }: RowProps) => {
     const { url, path } = useRouteMatch()
@@ -40,7 +41,7 @@ export const CourtRow = ({ court_num, sport_id, starting_date, expired_date, _id
                         </Button>
                         <Button variant='outline-transparent' style={{ color: 'red' }} onClick={() => setShow(true)}>
                             ลบ
-                    </Button>
+                        </Button>
                     </div>
 
                 </td>
@@ -62,7 +63,7 @@ export const ViewRow = ({ time_slot, indx, day, button }: ViewRowProps) => {
             <td>
                 {getTime(minute.startTime)}
             </td>
-            <td className='d-flex flex-row justify-content-end align-items-center'>
+            <td className={button ? 'd-flex flex-row justify-content-end align-items-center' : ''}>
                 {getTime(minute.endTime)}
                 {button}
             </td>
@@ -87,7 +88,7 @@ export function CourtTable<T>({ data, header, Row, Button }: TableProps<T>) {
                         {...val}
                         indx={indx}
                         key={val._id ?? indx}
-                        button={Button ? <Button indx={indx} /> : false}
+                        button={Button ? <Button indx={indx} /> : null}
                     />)
 
                 })}

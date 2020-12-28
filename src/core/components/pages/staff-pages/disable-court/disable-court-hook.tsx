@@ -1,38 +1,56 @@
 
 import * as React from 'react'
 import { useState, useEffect, useLayoutEffect, useRef, ComponentType } from 'react';
-import { Option, RowProps, Pagination, QueryParams, ViewResponse, DisableFormData, ViewRowProps } from './disable-court-interface'
+import { Option, RowProps, Pagination, QueryParams, ViewResponse, DisableFormData, ViewRowProps, disable_time, View } from './disable-court-interface'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { client } from '../../../../../axiosConfig'
 import { AxiosResponse } from 'axios';
 
-
-export const useRow = () => {
+export const toViewRowProps = (data: disable_time[] | undefined): ViewRowProps[] => {
+    const result: ViewRowProps[] = []
+    data?.forEach((element, indx) => {
+        result.push({
+            indx: indx,
+            day: element.day,
+            time_slot: element.time_slot
+        })
+    })
+    return result
+}
+export const useRow = (initial: ViewRowProps[] = []) => {
     const [inProp, setInProp] = useState(false)
-    const [rowData, setRowData] = useState<ViewRowProps[]>([])
+    const [rowData, setRowData] = useState<ViewRowProps[]>(initial)
+
     const onAddRow = (f) => {
         setRowData(prev => {
             const timeSlot: number[] = []
             for (let i = parseInt(f.timeSlotStart); i <= f.timeSlotEnd; i++) {
                 timeSlot.push(i)
             }
-            const newRow = { indx: prev?.length, day: f.day, time_slot: timeSlot }
+            const newRow = { indx: prev?.length, day: parseInt(f.day), time_slot: timeSlot }
             console.log(newRow)
             return [...prev, newRow]
         })
         setInProp(false)
     }
-    const onDeleteRow = (e) => {
-        const i = e.target.dataset.indx
+    const onDeleteRow = (indx) => {
+
         setRowData(prev => {
             const arr = [...prev]
-            const found = arr.findIndex(element => element['indx'] == i)
+            const found = arr.findIndex(element => element['indx'] == indx)
             if (found > -1) arr.splice(found, 1)
             return arr;
         })
     }
-    return { inProp, rowData, onAddRow, onDeleteRow, setInProp }
+    return { inProp, rowData, onAddRow, onDeleteRow, setInProp, toViewRowProps, setRowData }
 }
+
+export const useEditCourt = () => {
+    const [isEdit, setIsEdit] = useState(false);
+    return { isEdit, setIsEdit }
+
+}
+
 export const useDeleteCourt = (id) => {
     const [show, setShow] = useState(false);
     const onDelete = () => {
@@ -44,18 +62,16 @@ export const useDeleteCourt = (id) => {
             .then((res) => {
                 console.log(res)
                 setShow(false)
-
-
             })
             .catch((err) => console.log(err))
     }
     return { show, setShow, onDelete }
 }
-export const useDate = () => {
+export const useDate = (initialStartDate: Date | undefined = undefined, initialEndDate: Date | undefined = undefined) => {
     let currentDate = new Date()
     currentDate.setHours(0, 0, 0, 0)
-    const [startDate, setStartDate] = useState<Date>()
-    const [endDate, setEndDate] = useState<Date>()
+    const [startDate, setStartDate] = useState<Date | undefined>(initialStartDate)
+    const [endDate, setEndDate] = useState<Date | undefined>(initialEndDate)
     const [show, setShow] = useState(false);
     const handleAlert = () => setShow(false)
     const onStartDateChange = (date) => {
@@ -70,7 +86,7 @@ export const useDate = () => {
         if (startDate && date < startDate) setShow(true)
         else setEndDate(date)
     }
-    return { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert }
+    return { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, setStartDate, setEndDate }
 }
 
 export const handleDelete = (id: string) => {
@@ -102,20 +118,22 @@ export const formatDate = (date: Date): string => {
 }
 
 export const useViewTable = (params) => {
-    const [data, setData] = useState<ViewResponse>()
+    const [viewData, setViewData] = useState<View>()
+    const { inProp, rowData, onAddRow, onDeleteRow, setInProp, setRowData } = useRow()
     async function fetchViewData() {
         await client.get<ViewResponse>(`/courts/disable-courts/${params}`,)
             .then((res) => {
                 console.log(res)
-                setData(res.data)
-
+                setViewData(res.data)
+                setRowData(toViewRowProps(res.data.disable_time))
             })
             .catch(err => console.log(err))
     }
     useEffect(() => {
+        console.log('fetch')
         fetchViewData()
     }, [])
-    return { data }
+    return { viewData, inProp, rowData, onAddRow, onDeleteRow, setInProp }
 
 }
 

@@ -49,12 +49,18 @@ export interface ViewRowProps {
     button?: JSX.Element
 }
 
-
+export interface View {
+    sport_id: string,
+    court_num: number,
+    starting_date: string,
+    expired_date: string,
+    description?: string
+}
 export interface ViewResponse {
     sport_id: string,
     court_num: number,
-    starting_date: Date,
-    expired_date: Date,
+    starting_date: string,
+    expired_date: string,
     disable_time: disable_time[],
     description?: string
 }
