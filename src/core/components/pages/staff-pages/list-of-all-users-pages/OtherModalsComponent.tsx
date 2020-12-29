@@ -1,31 +1,30 @@
 import React from "react"
-import { RouteComponentProps } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { Modal, Button } from "react-bootstrap"
 import { ModalUserInfo } from "../interfaces/InfoInterface"
 
 interface propsTemplate {
-  show_modal_info: ModalUserInfo
-  set_show_modal_info: React.Dispatch<React.SetStateAction<ModalUserInfo>>
+  showModalInfo: ModalUserInfo
+  setShowModalInfo: React.Dispatch<React.SetStateAction<ModalUserInfo>>
   info: any
-  props: RouteComponentProps
 }
 
-const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: propsTemplate) => {
-  let { show_delete, show_com_delete, show_save, show_com_save, show_err, show_password_err, show_confirm_change } = show_modal_info
+const ModalsComponent = ({ showModalInfo, setShowModalInfo, info }: propsTemplate) => {
+  const { showDelete, showComDelete, showSave, showComSave, showErr, showPasswordErr, showConfirmChange } = showModalInfo
+
+  const history = useHistory()
 
   const redirectBack = () => {
-    props.history.push({
-      pathname: "/staff/listOfAllUsers",
-    })
+    history.push("/staff/listOfAllUsers")
   }
 
   // Delete Modal //
   const renderDelete = (info: { username: string; handleDeleteUser: () => void }) => {
     return (
       <Modal
-        show={show_delete}
+        show={showDelete}
         onHide={() => {
-          set_show_modal_info({ ...show_modal_info, show_delete: false })
+          setShowModalInfo({ ...showModalInfo, showDelete: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -43,7 +42,7 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
             variant="outline-secondary"
             className="btn-normal btn-outline-pink"
             onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_delete: false })
+              setShowModalInfo({ ...showModalInfo, showDelete: false })
             }}
           >
             ยกเลิก
@@ -59,9 +58,9 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
   const renderCompleteDelete = (info: { username: string }) => {
     return (
       <Modal
-        show={show_com_delete}
+        show={showComDelete}
         onHide={() => {
-          set_show_modal_info({ ...show_modal_info, show_com_delete: false })
+          setShowModalInfo({ ...showModalInfo, showComDelete: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -76,7 +75,7 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_com_delete: false })
+              setShowModalInfo({ ...showModalInfo, showComDelete: false })
               redirectBack()
             }}
           >
@@ -91,9 +90,9 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
   const renderSave = (info: { requestSave: () => void }) => {
     return (
       <Modal
-        show={show_save}
+        show={showSave}
         onHide={() => {
-          set_show_modal_info({ ...show_modal_info, show_save: false })
+          setShowModalInfo({ ...showModalInfo, showSave: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -108,7 +107,7 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
             variant="outline-secondary"
             className="btn-normal btn-outline-pink"
             onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_save: false })
+              setShowModalInfo({ ...showModalInfo, showSave: false })
             }}
           >
             ยกเลิก
@@ -124,9 +123,9 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
   const renderCompleteSave = () => {
     return (
       <Modal
-        show={show_com_save}
+        show={showComSave}
         onHide={() => {
-          set_show_modal_info({ ...show_modal_info, show_com_save: false })
+          setShowModalInfo({ ...showModalInfo, showComSave: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -141,7 +140,7 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_com_save: false })
+              setShowModalInfo({ ...showModalInfo, showComSave: false })
             }}
           >
             ตกลง
@@ -155,9 +154,9 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
   const renderErrModal = () => {
     return (
       <Modal
-        show={show_err}
+        show={showErr}
         onHide={() => {
-          set_show_modal_info({ ...show_modal_info, show_err: false })
+          setShowModalInfo({ ...showModalInfo, showErr: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -171,7 +170,7 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_err: false })
+              setShowModalInfo({ ...showModalInfo, showErr: false })
             }}
           >
             ตกลง
@@ -184,9 +183,9 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
   const renderPasswordErrModal = () => {
     return (
       <Modal
-        show={show_password_err}
+        show={showPasswordErr}
         onHide={() => {
-          set_show_modal_info({ ...show_modal_info, show_password_err: false })
+          setShowModalInfo({ ...showModalInfo, showPasswordErr: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -200,7 +199,7 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_password_err: false })
+              setShowModalInfo({ ...showModalInfo, showPasswordErr: false })
             }}
           >
             ตกลง
@@ -213,9 +212,9 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
   const renderConfirmChangePasswordModal = (info: { requestChangePassword: () => void }) => {
     return (
       <Modal
-        show={show_confirm_change}
+        show={showConfirmChange}
         onHide={() => {
-          set_show_modal_info({ ...show_modal_info, show_confirm_change: false })
+          setShowModalInfo({ ...showModalInfo, showConfirmChange: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -229,7 +228,7 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
             variant="outline-secondary"
             className="btn-normal btn-outline-pink"
             onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_confirm_change: false })
+              setShowModalInfo({ ...showModalInfo, showConfirmChange: false })
             }}
           >
             ยกเลิก

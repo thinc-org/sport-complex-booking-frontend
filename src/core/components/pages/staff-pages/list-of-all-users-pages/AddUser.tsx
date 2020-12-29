@@ -9,9 +9,6 @@ import { AddModal, ComModal, ErrModal, UsernameErrModal, AlertUncom, AlertErrorP
 
 const AddUser: FunctionComponent = () => {
   // Page states //
-  // const [jwt, setJwt] = useState<string>(
-  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
-  // )
   const [selectingSatit, setSelectingSatit] = useState<boolean>(false)
   // Modals & Alerts //
   const [showModals, setShowModals] = useState<ModalAddUser>({
