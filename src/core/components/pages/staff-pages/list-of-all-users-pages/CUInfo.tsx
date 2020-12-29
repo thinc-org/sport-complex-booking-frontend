@@ -133,8 +133,8 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   }
 
   const handleChangePassword = () => {
-    if (temp_user.password !== user.password || new_password !== confirm_password) set_show_modals({ ...show_modals, show_password_err: true })
-    else set_show_modals({ ...show_modals, show_confirm_change: true })
+    if (tempUser.password !== user.password || newPassword !== confirmPassword) setShowModals({ ...showModals, showPasswordErr: true })
+    else setShowModals({ ...showModals, showConfirmChange: true })
   }
 
   const handleChangePassword = () => {
@@ -174,18 +174,18 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   }
 
   const requestDelete = () => {
-    set_show_modals({ ...show_modals, show_del: false })
+    setShowModals({ ...showModals, showDel: false })
     setShowAlert(false)
     client({
       method: "DELETE",
       url: "/list-all-user/User/" + _id,
     })
       .then(({ data }) => {
-        set_show_modals({ ...show_modals, show_com_delete: true })
+        setShowModals({ ...showModals, showComDelete: true })
       })
       .catch(({ response }) => {
         console.log(response)
-        set_show_modals({ ...show_modals, show_err: true })
+        setShowModals({ ...showModals, showErr: true })
       })
   }
 
@@ -194,17 +194,17 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       method: "PATCH",
       url: "/list-all-user/" + _id,
       data: {
-        password: new_password,
+        password: newPassword,
       },
     })
       .then(({ data }) => {
         setUser({ ...user, password: data.password })
-        set_show_modals({ ...show_modals, show_confirm_change: false })
-        set_show_change_password(false)
+        setShowModals({ ...showModals, showConfirmChange: false })
+        setShowChangePassword(false)
       })
       .catch((err) => {
         console.log(err)
-        set_show_modals({ ...show_modals, show_err: true })
+        setShowModals({ ...showModals, showErr: true })
       })
   }
 
@@ -253,15 +253,12 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   // renders //
   const renderModals = () => {
     const { username } = user
-    if (show_modals.show_confirm)
-      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestUserChange }} props={props} />
-    else if (show_modals.show_com)
-      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ completedChange }} props={props} />
-    else if (show_modals.show_del)
-      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestDelete, username }} props={props} />
-    else if (show_modals.show_confirm_change)
-      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestChangePassword }} props={props} />
-    else return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{}} props={props} />
+    if (showModals.showConfirm) return <CuAndSatitModals showModals={showModals} setShowModals={setShowModals} info={{ requestUserChange }} />
+    else if (showModals.showCom) return <CuAndSatitModals showModals={showModals} setShowModals={setShowModals} info={{ completedChange }} />
+    else if (showModals.showDel) return <CuAndSatitModals showModals={showModals} setShowModals={setShowModals} info={{ requestDelete, username }} />
+    else if (showModals.showConfirmChange)
+      return <CuAndSatitModals showModals={showModals} setShowModals={setShowModals} info={{ requestChangePassword }} />
+    else return <CuAndSatitModals showModals={showModals} setShowModals={setShowModals} info={{}} />
   }
 
   // renders //
