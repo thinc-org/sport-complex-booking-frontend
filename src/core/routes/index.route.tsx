@@ -50,7 +50,7 @@ export default function MainRoute() {
 
         <Route exact path="/account" component={AccountPage} />
 
-        <Route exact path='/staff' component={StaffRoute} />
+        <Route path='/staff' component={StaffRoute} />
 
         <Route exact path='/changePassword' component={ChangePassword} />
 
