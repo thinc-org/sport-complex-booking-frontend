@@ -59,10 +59,11 @@ const Sidebar = (props: any) => {
   const [inProp, setInProp] = useState(false);
   const { header, isOnStaffPage } = useNavHeader()
   const { isUser, setToken } = useAuthContext()
+  const { t } = useTranslation()
   const listItems = data.map((item, index) => (
     <li key={index}>
       <Link className="styled-link" to={item.path} onClick={() => setInProp(false)}>
-        {item.name}
+        {t(item.name)}
       </Link>
     </li>));
   const onLogOut = async () => {
@@ -71,9 +72,9 @@ const Sidebar = (props: any) => {
     setInProp(false)
   }
 
-  const {i18n} = useTranslation()
+  const { i18n } = useTranslation()
 
-  const changeLanguage = (language:string) => {
+  const changeLanguage = (language: string) => {
     setCookie('is_thai_language', language === "th", 999)
     i18n.changeLanguage(language);
   }
@@ -83,7 +84,7 @@ const Sidebar = (props: any) => {
       <div className="sidebar-toggler d-flex flex-row justify-content-center">
         <img src={Toggler} onClick={() => setInProp(true)} />
         <h1 className="d-flex flex-row justify-content-center w-100">
-          {header ? header : 'CU Sports Complex'}
+          {header ? header : t("cuSportCenter")}
         </h1>
       </div>
       <CSSTransition in={inProp} timeout={300} classNames='fade'>
@@ -99,17 +100,17 @@ const Sidebar = (props: any) => {
                 {listItems}
               </div>
               <div>
-                <li className="m-0 p-0">Language</li>
-                    <Button variant="pink" size="sm" className="btn" onClick={()=> changeLanguage('en')}>en</Button>
-                    <Button variant="pink" size="sm" className="btn" onClick={()=> changeLanguage('th')}>th</Button>
+                <li className="m-0 p-0">{t("language")}</li>
+                <Button variant="pink" size="sm" className="btn" onClick={() => changeLanguage('en')}>en</Button>
+                <Button variant="pink" size="sm" className="btn" onClick={() => changeLanguage('th')}>th</Button>
                 <li>
                   {!isUser ?
                     <Link to="/login" className="styled-link" onClick={() => setInProp(false)}>
-                      Sign In
-                  </Link> :
+                      {t("signIn")}
+                    </Link> :
                     <Link to='/' className='styled-link' onClick={onLogOut}>
-                      Sign Out
-                  </Link>}
+                      {t("signOut")}
+                    </Link>}
                 </li>
               </div>
             </ul>
