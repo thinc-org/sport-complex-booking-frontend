@@ -1,31 +1,29 @@
 import React from "react"
-import { RouteComponentProps } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { Modal, Button } from "react-bootstrap"
 import { ModalCuAndSatit } from "../interfaces/InfoInterface"
 
 interface propsTemplate {
-  show_modals: ModalCuAndSatit
-  set_show_modals: React.Dispatch<React.SetStateAction<ModalCuAndSatit>>
+  showModals: ModalCuAndSatit
+  setShowModals: React.Dispatch<React.SetStateAction<ModalCuAndSatit>>
   info: any
-  props: RouteComponentProps
 }
 
-const CuAndSatitModals = ({ show_modals, set_show_modals, info, props }: propsTemplate) => {
-  let { show_com, show_com_delete, show_confirm, show_del, show_err, show_password_err, show_confirm_change } = show_modals
+const CuAndSatitModals = ({ showModals, setShowModals, info }: propsTemplate) => {
+  const { showCom, showComDelete, showConfirm, showDel, showErr, showPasswordErr, showConfirmChange } = showModals
+  const history = useHistory()
 
   const redirectBack = () => {
-    props.history.push({
-      pathname: "/staff/listOfAllUsers",
-    })
+    history.push("/staff/listOfAllUsers")
   }
 
   // Modals //
   const renderConfirmModal = (info: { requestUserChange: () => void }) => {
     return (
       <Modal
-        show={show_confirm}
+        show={showConfirm}
         onHide={() => {
-          set_show_modals({ ...show_modals, show_confirm: false })
+          setShowModals({ ...showModals, showConfirm: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -39,7 +37,7 @@ const CuAndSatitModals = ({ show_modals, set_show_modals, info, props }: propsTe
             variant="outline-secondary"
             className="btn-normal btn-outline-pink"
             onClick={() => {
-              set_show_modals({ ...show_modals, show_confirm: false })
+              setShowModals({ ...showModals, showConfirm: false })
             }}
           >
             ยกเลิก
@@ -55,9 +53,9 @@ const CuAndSatitModals = ({ show_modals, set_show_modals, info, props }: propsTe
   const renderComModal = (info: { completedChange: () => void }) => {
     return (
       <Modal
-        show={show_com}
+        show={showCom}
         onHide={() => {
-          set_show_modals({ ...show_modals, show_com: false })
+          setShowModals({ ...showModals, showCom: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -78,9 +76,9 @@ const CuAndSatitModals = ({ show_modals, set_show_modals, info, props }: propsTe
   const renderDelModal = (info: { requestDelete: () => void; username: string }) => {
     return (
       <Modal
-        show={show_del}
+        show={showDel}
         onHide={() => {
-          set_show_modals({ ...show_modals, show_del: false })
+          setShowModals({ ...showModals, showDel: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -94,7 +92,7 @@ const CuAndSatitModals = ({ show_modals, set_show_modals, info, props }: propsTe
             variant="outline-secondary"
             className="btn-normal btn-outline-pink"
             onClick={() => {
-              set_show_modals({ ...show_modals, show_del: false })
+              setShowModals({ ...showModals, showDel: false })
             }}
           >
             ยกเลิก
@@ -110,9 +108,9 @@ const CuAndSatitModals = ({ show_modals, set_show_modals, info, props }: propsTe
   const renderComDelModal = () => {
     return (
       <Modal
-        show={show_com_delete}
+        show={showComDelete}
         onHide={() => {
-          set_show_modals({ ...show_modals, show_com_delete: false })
+          setShowModals({ ...showModals, showComDelete: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -133,9 +131,9 @@ const CuAndSatitModals = ({ show_modals, set_show_modals, info, props }: propsTe
   const renderErrModal = () => {
     return (
       <Modal
-        show={show_err}
+        show={showErr}
         onHide={() => {
-          set_show_modals({ ...show_modals, show_err: false })
+          setShowModals({ ...showModals, showErr: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -149,7 +147,7 @@ const CuAndSatitModals = ({ show_modals, set_show_modals, info, props }: propsTe
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              set_show_modals({ ...show_modals, show_err: false })
+              setShowModals({ ...showModals, showErr: false })
             }}
           >
             ตกลง
@@ -162,9 +160,9 @@ const CuAndSatitModals = ({ show_modals, set_show_modals, info, props }: propsTe
   const renderPasswordErrModal = () => {
     return (
       <Modal
-        show={show_password_err}
+        show={showPasswordErr}
         onHide={() => {
-          set_show_modals({ ...show_modals, show_password_err: false })
+          setShowModals({ ...showModals, showPasswordErr: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -178,7 +176,7 @@ const CuAndSatitModals = ({ show_modals, set_show_modals, info, props }: propsTe
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              set_show_modals({ ...show_modals, show_password_err: false })
+              setShowModals({ ...showModals, showPasswordErr: false })
             }}
           >
             ตกลง
@@ -191,9 +189,9 @@ const CuAndSatitModals = ({ show_modals, set_show_modals, info, props }: propsTe
   const renderConfirmChangePasswordModal = (info: { requestChangePassword: () => void }) => {
     return (
       <Modal
-        show={show_confirm_change}
+        show={showConfirmChange}
         onHide={() => {
-          set_show_modals({ ...show_modals, show_confirm_change: false })
+          setShowModals({ ...showModals, showConfirmChange: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -207,7 +205,7 @@ const CuAndSatitModals = ({ show_modals, set_show_modals, info, props }: propsTe
             variant="outline-secondary"
             className="btn-normal btn-outline-pink"
             onClick={() => {
-              set_show_modals({ ...show_modals, show_confirm_change: false })
+              setShowModals({ ...showModals, showConfirmChange: false })
             }}
           >
             ยกเลิก

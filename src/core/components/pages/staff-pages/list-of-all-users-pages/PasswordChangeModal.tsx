@@ -3,29 +3,29 @@ import { Modal, Form, InputGroup, Button } from "react-bootstrap"
 import { PasswordToggle } from "../interfaces/InfoInterface"
 
 interface propsInterface {
-  show_change: boolean
-  set_show_change: React.Dispatch<React.SetStateAction<boolean>>
-  set_new_password: React.Dispatch<React.SetStateAction<string>>
-  set_confirm_password: React.Dispatch<React.SetStateAction<string>>
+  showChange: boolean
+  setShowChange: React.Dispatch<React.SetStateAction<boolean>>
+  setNewPassword: React.Dispatch<React.SetStateAction<string>>
+  setConfirmPassword: React.Dispatch<React.SetStateAction<string>>
   info: {
     handleChangePassword: () => void
     handleChange: (e) => void
   }
 }
 
-const PasswordChangeModal: FunctionComponent<propsInterface> = ({ show_change, set_show_change, set_new_password, set_confirm_password, info }) => {
+const PasswordChangeModal: FunctionComponent<propsInterface> = ({ showChange, setShowChange, setNewPassword, setConfirmPassword, info }) => {
   // page state
-  const [show_password, set_show_password] = useState<PasswordToggle>({
-    old_password: false,
-    new_password: false,
-    confirm_password: false,
+  const [showPassword, setShowPassword] = useState<PasswordToggle>({
+    oldPassword: false,
+    newPassword: false,
+    confirmPassword: false,
   })
 
   return (
     <Modal
-      show={show_change}
+      show={showChange}
       onHide={() => {
-        set_show_change(false)
+        setShowChange(false)
       }}
       backdrop="static"
       keyboard={false}
@@ -36,16 +36,16 @@ const PasswordChangeModal: FunctionComponent<propsInterface> = ({ show_change, s
           <Form.Group>
             <Form.Label>รหัสผ่านเก่า</Form.Label>
             <InputGroup>
-              <Form.Control id="password" type={show_password.old_password ? "text" : "password"} onChange={info.handleChange} />
+              <Form.Control id="password" type={showPassword.oldPassword ? "text" : "password"} onChange={info.handleChange} />
               <InputGroup.Append>
                 <Button
                   className="btn-normal btn-outline-black"
                   variant="secondary"
                   onClick={() => {
-                    set_show_password({ ...show_password, old_password: !show_password.old_password })
+                    setShowPassword({ ...showPassword, oldPassword: !showPassword.oldPassword })
                   }}
                 >
-                  {show_password.old_password ? "Hide" : "Show"}
+                  {showPassword.oldPassword ? "Hide" : "Show"}
                 </Button>
               </InputGroup.Append>
             </InputGroup>
@@ -54,9 +54,9 @@ const PasswordChangeModal: FunctionComponent<propsInterface> = ({ show_change, s
             <Form.Label>รหัสผ่านใหม่</Form.Label>
             <InputGroup>
               <Form.Control
-                type={show_password.new_password ? "text" : "password"}
+                type={showPassword.newPassword ? "text" : "password"}
                 onChange={(e) => {
-                  set_new_password(e.target.value)
+                  setNewPassword(e.target.value)
                 }}
               />
               <InputGroup.Append>
@@ -64,10 +64,10 @@ const PasswordChangeModal: FunctionComponent<propsInterface> = ({ show_change, s
                   className="btn-normal btn-outline-black"
                   variant="secondary"
                   onClick={() => {
-                    set_show_password({ ...show_password, new_password: !show_password.new_password })
+                    setShowPassword({ ...showPassword, newPassword: !showPassword.newPassword })
                   }}
                 >
-                  {show_password.new_password ? "Hide" : "Show"}
+                  {showPassword.newPassword ? "Hide" : "Show"}
                 </Button>
               </InputGroup.Append>
             </InputGroup>
@@ -76,9 +76,9 @@ const PasswordChangeModal: FunctionComponent<propsInterface> = ({ show_change, s
             <Form.Label>กรอกรหัสผ่านใหม่อีกครั้ง</Form.Label>
             <InputGroup>
               <Form.Control
-                type={show_password.confirm_password ? "text" : "password"}
+                type={showPassword.confirmPassword ? "text" : "password"}
                 onChange={(e) => {
-                  set_confirm_password(e.target.value)
+                  setConfirmPassword(e.target.value)
                 }}
               />
               <InputGroup.Append>
@@ -86,10 +86,10 @@ const PasswordChangeModal: FunctionComponent<propsInterface> = ({ show_change, s
                   className="btn-normal btn-outline-black"
                   variant="secondary"
                   onClick={() => {
-                    set_show_password({ ...show_password, confirm_password: !show_password.confirm_password })
+                    setShowPassword({ ...showPassword, confirmPassword: !showPassword.confirmPassword })
                   }}
                 >
-                  {show_password.confirm_password ? "Hide" : "Show"}
+                  {showPassword.confirmPassword ? "Hide" : "Show"}
                 </Button>
               </InputGroup.Append>
             </InputGroup>
@@ -101,7 +101,7 @@ const PasswordChangeModal: FunctionComponent<propsInterface> = ({ show_change, s
           variant="outline-secondary"
           className="btn-normal btn-outline-pink"
           onClick={() => {
-            set_show_change(false)
+            setShowChange(false)
           }}
         >
           ยกเลิก

@@ -1,25 +1,25 @@
 import React from "react"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Card, Form } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
-import { convertDate } from "./ConvertFunctions"
 import Info from "../interfaces/InfoInterface"
+import format from "date-fns/format"
 
 export default function OtherEditInfoComponent({
-  temp_info,
-  set_temp_info,
+  tempInfo,
+  setTempInfo,
   _id,
 }: {
-  temp_info: Info
-  set_temp_info: React.Dispatch<React.SetStateAction<Info>>
+  tempInfo: Info
+  setTempInfo: React.Dispatch<React.SetStateAction<Info>>
   _id: string
 }) {
   // Page state //
-  const [user_photo_file, set_user_photo_file] = useState<File>()
-  const [medical_certificate_file, set_medical_certificate_file] = useState<File>()
-  const [national_id_photo_file, set_national_id_photo_file] = useState<File>()
-  const [house_registration_number_file, set_house_registration_number_file] = useState<File>()
-  const [relationship_verification_document_file, set_relationship_verification_document_file] = useState<File>()
+  const [userPhotoFile, setUserPhotoFile] = useState<File>()
+  const [medicalCertificateFile, setMedicalCertificateFile] = useState<File>()
+  const [nationalIdPhotoFile, setNationalIdPhotoFile] = useState<File>()
+  const [houseRegistrationNumberFile, setHouseRegistrationNumberFile] = useState<File>()
+  const [relationshipVerificationDocumentFile, setRelationshipVerificationDocumentFile] = useState<File>()
 
   // functions //
 
@@ -37,8 +37,8 @@ export default function OtherEditInfoComponent({
         data: formData,
       })
         .then(({ data }) => {
-          set_temp_info({
-            ...temp_info,
+          setTempInfo({
+            ...tempInfo,
             [Object.keys(data)[0]]: data[Object.keys(data)[0]],
           })
         })
@@ -66,14 +66,14 @@ export default function OtherEditInfoComponent({
     contact_person,
     medical_condition,
     membership_type,
-  } = temp_info
+  } = tempInfo
   let {
     contact_person_prefix,
     contact_person_name,
     contact_person_surname,
     contact_person_home_phone,
     contact_person_phone,
-  } = temp_info.contact_person
+  } = tempInfo.contact_person
 
   return (
     <div className="row mr-4 mt-5">
@@ -90,7 +90,7 @@ export default function OtherEditInfoComponent({
                 as="select"
                 defaultValue={prefix ? prefix : "ไม่มี"}
                 onChange={(e) => {
-                  set_temp_info({ ...temp_info, prefix: e.target.value })
+                  setTempInfo({ ...tempInfo, prefix: e.target.value })
                 }}
               >
                 <option disabled value="ไม่มี">
@@ -109,7 +109,7 @@ export default function OtherEditInfoComponent({
                 as="select"
                 defaultValue={gender === "ชาย" || gender === "หญิง" ? gender : "ไม่มี"}
                 onChange={(e) => {
-                  set_temp_info({ ...temp_info, gender: e.target.value })
+                  setTempInfo({ ...tempInfo, gender: e.target.value })
                 }}
               >
                 <option value="ไม่มี" disabled>
@@ -129,7 +129,7 @@ export default function OtherEditInfoComponent({
                 type="text"
                 defaultValue={name_th}
                 onChange={(e) => {
-                  set_temp_info({ ...temp_info, name_th: e.target.value })
+                  setTempInfo({ ...tempInfo, name_th: e.target.value })
                 }}
               />
             </div>
@@ -141,7 +141,7 @@ export default function OtherEditInfoComponent({
                 type="text"
                 defaultValue={surname_th}
                 onChange={(e) => {
-                  set_temp_info({ ...temp_info, surname_th: e.target.value })
+                  setTempInfo({ ...tempInfo, surname_th: e.target.value })
                 }}
               />
             </div>
@@ -155,7 +155,7 @@ export default function OtherEditInfoComponent({
                 type="text"
                 defaultValue={name_en}
                 onChange={(e) => {
-                  set_temp_info({ ...temp_info, name_en: e.target.value })
+                  setTempInfo({ ...tempInfo, name_en: e.target.value })
                 }}
               />
             </div>
@@ -167,7 +167,7 @@ export default function OtherEditInfoComponent({
                 type="text"
                 defaultValue={surname_en}
                 onChange={(e) => {
-                  set_temp_info({ ...temp_info, surname_en: e.target.value })
+                  setTempInfo({ ...tempInfo, surname_en: e.target.value })
                 }}
               />
             </div>
@@ -180,9 +180,9 @@ export default function OtherEditInfoComponent({
                 className="border"
                 style={{ backgroundColor: "white" }}
                 type="date"
-                defaultValue={birthday ? convertDate(new Date(birthday)) : ""}
+                defaultValue={birthday ? format(new Date(birthday), "yyyy-MM-dd") : ""}
                 onChange={(e) => {
-                  set_temp_info({ ...temp_info, birthday: new Date(e.target.value) })
+                  setTempInfo({ ...tempInfo, birthday: new Date(e.target.value) })
                 }}
               />
             </div>
@@ -195,7 +195,7 @@ export default function OtherEditInfoComponent({
             type="text"
             defaultValue={national_id}
             onChange={(e) => {
-              set_temp_info({ ...temp_info, national_id: e.target.value })
+              setTempInfo({ ...tempInfo, national_id: e.target.value })
             }}
           />
           <hr />
@@ -207,7 +207,7 @@ export default function OtherEditInfoComponent({
               type="radio"
               value="Single"
               onChange={(e) => {
-                set_temp_info({ ...temp_info, marital_status: e.target.value })
+                setTempInfo({ ...tempInfo, marital_status: e.target.value })
               }}
               checked={marital_status === "Single" ? true : false}
             />
@@ -217,7 +217,7 @@ export default function OtherEditInfoComponent({
               type="radio"
               value="Married"
               onChange={(e) => {
-                set_temp_info({ ...temp_info, marital_status: e.target.value })
+                setTempInfo({ ...tempInfo, marital_status: e.target.value })
               }}
               checked={marital_status === "Married" ? true : false}
             />
@@ -227,7 +227,7 @@ export default function OtherEditInfoComponent({
               type="radio"
               value=""
               onChange={(e) => {
-                set_temp_info({ ...temp_info, marital_status: e.target.value })
+                setTempInfo({ ...tempInfo, marital_status: e.target.value })
               }}
               checked={marital_status !== "Single" && marital_status !== "Married" ? true : false}
             />
@@ -237,7 +237,7 @@ export default function OtherEditInfoComponent({
               type="text"
               value={marital_status !== "Single" && marital_status !== "Married" ? marital_status : ""}
               onChange={(e) => {
-                set_temp_info({ ...temp_info, marital_status: e.target.value })
+                setTempInfo({ ...tempInfo, marital_status: e.target.value })
               }}
             />
           </Form.Group>
@@ -250,7 +250,7 @@ export default function OtherEditInfoComponent({
             type="text"
             defaultValue={address}
             onChange={(e) => {
-              set_temp_info({ ...temp_info, address: e.target.value })
+              setTempInfo({ ...tempInfo, address: e.target.value })
             }}
           />
           <hr />
@@ -261,7 +261,7 @@ export default function OtherEditInfoComponent({
             type="text"
             defaultValue={email}
             onChange={(e) => {
-              set_temp_info({ ...temp_info, email: e.target.value })
+              setTempInfo({ ...tempInfo, email: e.target.value })
             }}
           />
           <hr />
@@ -272,7 +272,7 @@ export default function OtherEditInfoComponent({
             type="text"
             defaultValue={home_phone}
             onChange={(e) => {
-              set_temp_info({ ...temp_info, home_phone: e.target.value })
+              setTempInfo({ ...tempInfo, home_phone: e.target.value })
             }}
           />
           <hr />
@@ -283,7 +283,7 @@ export default function OtherEditInfoComponent({
             type="text"
             defaultValue={phone}
             onChange={(e) => {
-              set_temp_info({ ...temp_info, phone: e.target.value })
+              setTempInfo({ ...tempInfo, phone: e.target.value })
             }}
           />
           <hr />
@@ -294,7 +294,7 @@ export default function OtherEditInfoComponent({
             type="text"
             defaultValue={medical_condition}
             onChange={(e) => {
-              set_temp_info({ ...temp_info, medical_condition: e.target.value })
+              setTempInfo({ ...tempInfo, medical_condition: e.target.value })
             }}
           />
         </Card>
@@ -312,7 +312,7 @@ export default function OtherEditInfoComponent({
                 as="select"
                 defaultValue={contact_person_prefix ? contact_person_prefix : "ไม่มี"}
                 onChange={(e) => {
-                  set_temp_info({ ...temp_info, contact_person: { ...contact_person, contact_person_prefix: e.target.value } })
+                  setTempInfo({ ...tempInfo, contact_person: { ...contact_person, contact_person_prefix: e.target.value } })
                 }}
               >
                 <option disabled value="ไม่มี">
@@ -331,7 +331,7 @@ export default function OtherEditInfoComponent({
                 type="text"
                 defaultValue={contact_person_name}
                 onChange={(e) => {
-                  set_temp_info({ ...temp_info, contact_person: { ...contact_person, contact_person_name: e.target.value } })
+                  setTempInfo({ ...tempInfo, contact_person: { ...contact_person, contact_person_name: e.target.value } })
                 }}
               />
             </div>
@@ -344,7 +344,7 @@ export default function OtherEditInfoComponent({
             type="text"
             defaultValue={contact_person_surname}
             onChange={(e) => {
-              set_temp_info({ ...temp_info, contact_person: { ...contact_person, contact_person_surname: e.target.value } })
+              setTempInfo({ ...tempInfo, contact_person: { ...contact_person, contact_person_surname: e.target.value } })
             }}
           />
           <hr />
@@ -355,7 +355,7 @@ export default function OtherEditInfoComponent({
             type="text"
             defaultValue={contact_person_home_phone}
             onChange={(e) => {
-              set_temp_info({ ...temp_info, contact_person: { ...contact_person, contact_person_home_phone: e.target.value } })
+              setTempInfo({ ...tempInfo, contact_person: { ...contact_person, contact_person_home_phone: e.target.value } })
             }}
           />
           <hr />
@@ -366,7 +366,7 @@ export default function OtherEditInfoComponent({
             type="text"
             defaultValue={contact_person_phone}
             onChange={(e) => {
-              set_temp_info({ ...temp_info, contact_person: { ...contact_person, contact_person_phone: e.target.value } })
+              setTempInfo({ ...tempInfo, contact_person: { ...contact_person, contact_person_phone: e.target.value } })
             }}
           />
         </Card>
@@ -377,12 +377,12 @@ export default function OtherEditInfoComponent({
           <label className="form-label my-2">รูปภาพของคุณ (ไฟล์ภาพ)</label>
           <div className="form-file">
             <Form.File
-              label={user_photo_file ? (user_photo_file! as File).name : "Choose File"}
+              label={userPhotoFile ? (userPhotoFile! as File).name : "Choose File"}
               id="user_photo"
               custom
               onChange={(e) => {
                 if (e.target.files[0]) {
-                  set_user_photo_file(e.target.files[0])
+                  setUserPhotoFile(e.target.files[0])
                   handleUpload(e.target.id, e.target.files[0])
                 }
               }}
@@ -392,12 +392,12 @@ export default function OtherEditInfoComponent({
           <label className="form-label my-2">เลขประจำตัวประชาชน / หนังสือเดินทาง (.pdf เท่านั้น)</label>
           <div className="form-file">
             <Form.File
-              label={national_id_photo_file ? (national_id_photo_file! as File).name : "Choose File"}
+              label={nationalIdPhotoFile ? (nationalIdPhotoFile! as File).name : "Choose File"}
               id="national_id_photo"
               custom
               onChange={(e) => {
                 if (e.target.files[0]) {
-                  set_national_id_photo_file(e.target.files[0])
+                  setNationalIdPhotoFile(e.target.files[0])
                   handleUpload(e.target.id, e.target.files[0])
                 }
               }}
@@ -407,12 +407,12 @@ export default function OtherEditInfoComponent({
           <label className="form-label my-2">ใบรับรองแพทย์ (.pdf เท่านั้น)</label>
           <div className="form-file">
             <Form.File
-              label={medical_certificate_file ? (medical_certificate_file! as File).name : "Choose File"}
+              label={medicalCertificateFile ? (medicalCertificateFile! as File).name : "Choose File"}
               id="medical_certificate"
               custom
               onChange={(e) => {
                 if (e.target.files[0]) {
-                  set_medical_certificate_file(e.target.files[0])
+                  setMedicalCertificateFile(e.target.files[0])
                   handleUpload(e.target.id, e.target.files[0])
                 }
               }}
@@ -422,12 +422,12 @@ export default function OtherEditInfoComponent({
           <label className="form-label my-2">ไม่บังคับ: ทะเบียนบ้านที่มีหน้าของคุณ (.pdf เท่านั้น)</label>
           <div className="form-file">
             <Form.File
-              label={house_registration_number_file ? (house_registration_number_file! as File).name : "Choose File"}
+              label={houseRegistrationNumberFile ? (houseRegistrationNumberFile! as File).name : "Choose File"}
               id="house_registration_number"
               custom
               onChange={(e) => {
                 if (e.target.files[0]) {
-                  set_house_registration_number_file(e.target.files[0])
+                  setHouseRegistrationNumberFile(e.target.files[0])
                   handleUpload(e.target.id, e.target.files[0])
                 }
               }}
@@ -437,12 +437,12 @@ export default function OtherEditInfoComponent({
           <label className="form-label my-2">ไม่บังคับ: เอกสารยืนยันตัวตน (.pdf เท่านั้น)</label>
           <div className="form-file">
             <Form.File
-              label={relationship_verification_document_file ? (relationship_verification_document_file! as File).name : "Choose File"}
+              label={relationshipVerificationDocumentFile ? (relationshipVerificationDocumentFile! as File).name : "Choose File"}
               id="relationship_verification_document"
               custom
               onChange={(e) => {
                 if (e.target.files[0]) {
-                  set_relationship_verification_document_file(e.target.files[0])
+                  setRelationshipVerificationDocumentFile(e.target.files[0])
                   console.log(e.target.files[0])
                   handleUpload(e.target.id, e.target.files[0])
                 }

@@ -1,24 +1,11 @@
-import React, { FunctionComponent, useState, useEffect } from "react"
+import React, { FunctionComponent, useState } from "react"
 import { Form, InputGroup, Card, Row, Col, Button, Modal, Alert } from "react-bootstrap"
-import { RouteComponentProps, Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import { AddInfo } from "../interfaces/InfoInterface"
 import { client } from "../../../../../axiosConfig"
 
-const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
+const AddUser: FunctionComponent = () => {
   // Page states //
-<<<<<<< HEAD
-  const [jwt, setJwt] = useState<string>(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmRjYTMxNjZhNDMwOTQyOWM5MmI4MjkiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDg3MzYxMTEsImV4cCI6MTYwOTM0MDkxMX0.NxmksdEUKg_2EU8ukKcO-vjisYY79a4TrJRGAibPvVQ"
-  )
-||||||| constructed merge base
-  const [jwt, setJwt] = useState<string>(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
-  )
-=======
-  // const [jwt, setJwt] = useState<string>(
-  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
-  // )
->>>>>>> route bug fix, minor bugs fix, improve pagination
   const [selectingSatit, setSelectingSatit] = useState<boolean>(false)
   // Modals & Alerts //
   const [showAdd, setShowAdd] = useState<boolean>(false)
@@ -46,11 +33,11 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
     phone: "",
   })
 
+  const history = useHistory()
+
   // functions //
   const backToListPage = () => {
-    props.history.push({
-      pathname: "/staff/listOfAllUsers",
-    })
+    history.push("/staff/listOfAllUsers")
   }
 
   const validCheck = (s: string) => {
