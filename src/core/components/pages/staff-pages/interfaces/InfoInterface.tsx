@@ -72,9 +72,9 @@ export interface CuAndSatitInfo {
 }
 
 export interface PasswordToggle {
-  old_password: boolean
-  new_password: boolean
-  confirm_password: boolean
+  oldPassword: boolean
+  newPassword: boolean
+  confirmPassword: boolean
 }
 
 export interface CuSatitComponentInfo {
