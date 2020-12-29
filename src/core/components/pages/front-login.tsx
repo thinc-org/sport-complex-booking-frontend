@@ -14,7 +14,6 @@ const FrontLoginPage = (props: any) => {
         <Route path={`${path}/personal`} component={PersonalInfo} />
         <Route exact path={path} component={FrontLoginMain} />
       </Switch>
-      <Footer />
     </>
   )
 }

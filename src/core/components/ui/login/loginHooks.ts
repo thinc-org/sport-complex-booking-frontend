@@ -19,7 +19,7 @@ export const useLogin = (setError) => {
     const history = useHistory()
     const { url, path } = useRouteMatch()
     const [isLoading, setLoading] = useState(false)
-    const { i18n } = useTranslation()
+    const { i18n, t } = useTranslation()
     const changeLanguage = (language) => {
         i18n.changeLanguage(language);
     }
@@ -47,7 +47,7 @@ export const useLogin = (setError) => {
                 setLoading(false)
                 setError('invalid', {
                     type: 'async',
-                    message: 'Invalid Username or Password'
+                    message: t("invalidInput")
                 })
             })
     }
@@ -75,7 +75,7 @@ export const useLogin = (setError) => {
                     setLoading(false)
                     setError('invalid', {
                         type: 'async',
-                        message: 'Something bad happened, please try again'
+                        message: t('badResponse')
                     })
                 })
         }
