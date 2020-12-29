@@ -101,16 +101,18 @@ export const handleDelete = (id: string) => {
 
 export const useOption = () => {
     const [option, setOption] = useState<Option>()
+    const [currentSport, setCurrentSport] = useState<string>()
     const fetchOption = async () => {
-        await setOption({
-            sportType: ['แบดมินตัน', 'บาสเกตบอล', 'วอลเลย์บอล'],
-            courtNum: [1, 2, 3]
-        })
+        await client.get('/court-manager')
+            .then((res) => {
+                setOption(res.data)
+
+            })
     }
     useEffect(() => {
         fetchOption()
     }, [])
-    return { option }
+    return { option, currentSport, setCurrentSport }
 }
 
 export const formatDate = (date: Date): string => {

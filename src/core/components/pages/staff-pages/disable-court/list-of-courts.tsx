@@ -15,7 +15,7 @@ const ListOfCourts = () => {
     const endDateRef = useRef<DatePicker>()
     const { path } = useRouteMatch()
     const { data, maxPage, page, setPage, jumpUp, jumpDown, setParams, pageArr } = useTable()
-    const { register, handleSubmit, setError, errors, watch, setValue } = useForm();
+    const { register, handleSubmit, setError, errors, watch, setValue, getValues } = useForm();
     const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
     const watchSports = watch('sports', '')
     const { option } = useOption()
@@ -25,7 +25,7 @@ const ListOfCourts = () => {
     const onSelectEndDate = () => {
         endDateRef.current?.setOpen(true)
     }
-    const validateFilter = (event) => {
+    const validateFilter = async (event) => {
         if (event.target.value === 'ประเภทกีฬา' || !event.target.value) setValue('courtNum', 'เลขคอร์ด')
     }
     const onSubmit = (form) => {
@@ -45,19 +45,20 @@ const ListOfCourts = () => {
             <div className="disable-court-wrapper px-1 py-2 mt-3">
                 <Form className='disable-court-filter' onSubmit={handleSubmit(onSubmit)}>
                     <div className="d-flex flex-row align-items-center justify-content-between">
-                        <div className="d-flex flex-row align-items-center">
+                        <div className="d-flex flex-row align-items-center w-100">
                             <Form.Label srOnly={true}>ประเภทกีฬา</Form.Label>
                             <Form.Control name='sports' as='select' ref={register} onChange={validateFilter}>
                                 <option value={''}>ประเภทกีฬา</option>
-                                {option ? option['sportType'].map((val) => (
-                                    <option value={val} key={val}>{val}</option>
+                                {option ? option['sport_list'].map((sport) => (
+                                    <option value={sport._id} key={sport._id}>{sport.sport_name_th}</option>
                                 )) : <option value={''}>ประเภทกีฬา</option>}
                             </Form.Control>
                             <Form.Control name='courtNum' as='select' ref={register} disabled={watchSports === 'ประเภทกีฬา' ? true : false}>
-                                <option value={''}>เลขคอร์ด</option>
-                                {option ? option['courtNum'].map((val) => (
-                                    <option value={val} key={val}>{val}</option>
-                                )) : <option>เลขคอร์ด</option>}
+                                {getValues('sports') && option ? option['sport_list']
+                                    .find(sport => sport._id == getValues('sports')).list_court
+                                    .map((court) => {
+                                        return <option value={court._id} key={court._id}>{court.court_num}</option>
+                                    }) : <option>เลขคอร์ด</option>}
                             </Form.Control>
                             <div style={{ marginRight: '5px' }}>
                                 <label

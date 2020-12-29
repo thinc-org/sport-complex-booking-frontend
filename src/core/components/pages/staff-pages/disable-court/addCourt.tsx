@@ -1,7 +1,7 @@
 import * as React from 'react';
-
 import { useForm } from 'react-hook-form'
 import { Container, Row, Col, Button, Form } from 'react-bootstrap'
+import { useHistory } from 'react-router-dom'
 import { useOption, useDate, withDeletable, useRow } from './disable-court-hook'
 import { ErrorAlert } from './modals'
 import DatePicker from 'react-datepicker'
@@ -11,14 +11,16 @@ import { CourtTable, ViewRow } from './disabled-court-table'
 import { client } from '../../../../../axiosConfig';
 import { DeleteButton } from './button'
 const AddCourt = () => {
+    const history = useHistory()
     const { inProp, rowData, onAddRow, onDeleteRow, setInProp } = useRow()
-    const { register, handleSubmit, setError, errors } = useForm()
+    const { register, handleSubmit, setError, errors, getValues, setValue, watch } = useForm()
     const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
     const { option } = useOption()
+    const watchSports = watch('sport_id', '')
     const onSubmit = async (data) => {
         const formData = {
             ...data,
-            sport_id: '5fe885d31c594a2084f7d3a4', //for testing purpose since there's no sport_id on the backend yet
+            court_num: parseInt(data.court_num),
             disable_time: rowData,
             starting_date: startDate,
             expired_date: endDate
@@ -28,6 +30,7 @@ const AddCourt = () => {
             .then((res) => console.log(res))
             .catch(err => console.log(err))
     }
+
     return (
         <Container fluid>
             <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} />
@@ -40,20 +43,23 @@ const AddCourt = () => {
                     <Row>
                         <Col>
                             <Form.Label>ประเภทกีฬา</Form.Label>
-                            <Form.Control name='sport_id' as='select' ref={register}>
-                                {option ? option['sportType'].map((val) => (
-                                    <option value={val} key={val}>{val}</option>
-                                )) : <option value={''}>ประเภทกีฬา</option>}
+                            <Form.Control name='sport_id' as='select' ref={register({ required: true })}>
+                                {option ? option['sport_list'].map((sport) => {
+                                    return <option value={sport._id} key={sport._id}>{sport.sport_name_th}</option>
+                                }) : <option value={''}>ประเภทกีฬา</option>
+                                }
                             </Form.Control>
                         </Col>
                     </Row>
                     <Row>
                         <Col>
                             <Form.Label>เลขคอร์ด</Form.Label>
-                            <Form.Control name='court_num' as='select' ref={register}>
-                                {option ? option['courtNum'].map((val) => (
-                                    <option value={val} key={val}>{val}</option>
-                                )) : <option>เลขคอร์ด</option>}
+                            <Form.Control name='court_num' as='select' ref={register({ required: true })}>
+                                {getValues('sport_id') && option ? option['sport_list']
+                                    .find(sport => sport._id == getValues('sport_id')).list_court
+                                    .map((court) => {
+                                        return <option value={court.court_num} key={court._id}>{court.court_num}</option>
+                                    }) : <option>เลขคอร์ด</option>}
                             </Form.Control>
                         </Col>
                     </Row>
@@ -84,7 +90,7 @@ const AddCourt = () => {
                     <Button className='w-100 ' variant='pink' onClick={() => setInProp(true)}>เพิ่มการปิดคอร์ดใหม่</Button>
                     <div className='d-flex flex-row justify-content-end w-100 mt-3'>
                         <Button variant='pink' className='mr-3' type='submit'>บันทึก</Button>
-                        <Button variant='outline-pink'>ยกเลิก</Button>
+                        <Button variant='outline-pink' onClick={() => history.goBack()}>ยกเลิก</Button>
                     </div>
                 </Form>
 
