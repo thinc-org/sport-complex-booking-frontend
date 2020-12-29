@@ -25,7 +25,6 @@ const AddCourt = () => {
             starting_date: startDate,
             expired_date: endDate
         }
-        console.log(formData)
         await client.post('/courts/disable-courts', formData)
             .then((res) => console.log(res))
             .catch(err => console.log(err))

@@ -8,11 +8,11 @@ import { RowProps, TableProps, ViewRowProps } from './disable-court-interface'
 import { ErrorAlert } from './modals'
 import { DeleteButton } from './button'
 import { dayArr } from './mapTime'
-export const CourtRow = ({ court_num, sport_id, starting_date, expired_date, _id }: RowProps) => {
+export const CourtRow = (props: RowProps) => {
     const { url, path } = useRouteMatch()
     const history = useHistory()
-    const { show, setShow, onDelete } = useDeleteCourt(_id)
-    const onNavigate = () => history.push(`${path}/${_id}`)
+    const { show, setShow, onDelete } = useDeleteCourt(props._id)
+    const onNavigate = () => history.push(`${path}/${props._id}`)
     return (
         <>
             <ErrorAlert
@@ -23,29 +23,35 @@ export const CourtRow = ({ court_num, sport_id, starting_date, expired_date, _id
                 handleClose={onDelete}
                 onCancel={() => setShow(false)}
             />
-            <tr>
-                <td>
-                    {court_num}
-                </td>
-                <td>
-                    {sport_id}
-                </td>
-                <td>
-                    {formatDate(new Date(starting_date))}
-                </td>
-                <td className='d-flex flex-row justify-content-between align-items-center'>
-                    {formatDate(new Date(expired_date))}
-                    <div className='d-flex flex-row'>
-                        <Button variant='outline-transparent' className='mr-2' onClick={onNavigate} >
-                            ดูข้อมูล
+            { props._id && props.court_num ?
+                <tr>
+                    <td>
+                        {props.court_num}
+                    </td>
+                    <td>
+                        {props.sport_id}
+                    </td>
+                    <td>
+                        {formatDate(new Date(props.starting_date))}
+                    </td>
+                    <td className='d-flex flex-row justify-content-between align-items-center'>
+                        {formatDate(new Date(props.expired_date))}
+                        <div className='d-flex flex-row'>
+                            <Button variant='outline-transparent' className='mr-2' onClick={onNavigate} >
+                                ดูข้อมูล
                         </Button>
-                        <Button variant='outline-transparent' style={{ color: 'red' }} onClick={() => setShow(true)}>
-                            ลบ
+                            <Button variant='outline-transparent' style={{ color: 'red' }} onClick={() => setShow(true)}>
+                                ลบ
                         </Button>
-                    </div>
+                        </div>
 
-                </td>
+                    </td>
+                </tr>
+                :
+                <tr>
+                    ข้อมูลถูกลบไปแล้ว
             </tr>
+            }
         </>
     )
 }
