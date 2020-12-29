@@ -302,3 +302,36 @@ p.link {
 .input-error {
   color: red;
 }
+
+.modal {
+  z-index: 2100;
+}
+
+.time-slot-container {
+  max-height: 400px;
+  overflow-y: scroll;
+}
+.time-container {
+  min-width: 100%;
+}
+
+.react-datepicker-wrapper,
+.react-datepicker__input-container {
+  display: block !important;
+  width: 100%;
+}
+
+.select-drop-down {
+  background-color: #ff80ab;
+  color: white;
+}
+
+.select-drop-down option {
+  background-color: #ffffff !important;
+  border-radius: 10px;
+  color: black;
+}
+
+.select-drop-down option:hover {
+  background-color: #ffffff;
+}

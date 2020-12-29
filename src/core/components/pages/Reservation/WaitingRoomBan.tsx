@@ -36,13 +36,13 @@ function WaitingRoomBan(props: historyProps) {
     await axios(config)
     .then((response:Object) => {
       let resMsg = response['data']['message']
-      if (resMsg === "valid user") {
-        //history.push({pathname: '/home'});
+      if (resMsg === "Valid user") {
+        history.push({pathname: '/home'});
       }
     })
     .catch((error: Object) => {
       console.log(error)
-      history.push({pathname: '/login'});
+      //history.push({pathname: '/login'});
     });
 
   }
@@ -52,10 +52,10 @@ function WaitingRoomBan(props: historyProps) {
       <div className="mx-auto col-md-6">
         <div className="default-mobile-wrapper mt-4">
           <h4>{msg}</h4>
-          <p>{t("waiting_room_ban")}</p>
+          <p>{t("penalizeMessage")}</p>
           <Link to={"/"}>
             <div className="button-group">
-              <Button className="mt-3 mb-0" variant="darkpink">{t("back_to_home")}</Button>
+              <Button className="mt-3 mb-0" variant="darkpink">{t("backToHome")}</Button>
             </div>
           </Link>
         </div>

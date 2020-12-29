@@ -9,7 +9,7 @@ export default function ChulaAccountDisplay({ toggleEditButton }) {
 
   const { cuStudentAccount:user } = useContext(UserContext);
   const {t, i18n} = useTranslation()
-  const {language} = i18n
+  const {language} = i18n 
 
   return (
     <div className="mx-auto col-md-6">

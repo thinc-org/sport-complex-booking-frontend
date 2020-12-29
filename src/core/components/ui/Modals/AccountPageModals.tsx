@@ -134,7 +134,7 @@ export const OtherWarningMessage:React.FC<OtherWarningMessageProps> = ({show, ve
         </div>
       )
     }
-    case "Approved": {
+    case "Verified": {
       return (
         <div className="alert alert-info mt-3" role="alert">
           <h3>{t("approvedTitle")}</h3>

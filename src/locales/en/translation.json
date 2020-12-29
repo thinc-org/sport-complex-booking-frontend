@@ -81,7 +81,7 @@
   "waitingRoomHelp": "The access code can by found when you create a waiting room.",
   "enterCode": "Enter a waiting room access code",
   "dateSelection": "Date Selection",
-  "sevenDays": "You an only reserve at least 7 days in advance.",
+  "sevenDays": "You can only reserve at most 7 days in advance.",
   "sportSelection": "Sport Selection",
   "courtSelection": "Court Selection",
   "remainingQuota": "Reservation Quota Remaining",
@@ -120,5 +120,15 @@
   "continue": "Continue",
   "home": "Home",
   "account": "Account",
-  "myWaitingRoom": "My Waiting Room"
+  "myWaitingRoom": "My Waiting Room",
+  "success": "Success",
+  "passwordChanged": "Your password has successfully been changed.",
+  "wrongAccessCode": "Cannot join a waiting room.",
+  "wrongAccessCodeMsg": "Make sure your waiting room access code is valid and you do not have a waiting room created yet.",
+  "requiredUserMsg": "To reserve for this sport you will need:",
+  "users": " users",
+  "pleaseSelectTime": "Please select your reservation time.",
+  "createWaitingRoomUnsuccessful": "Unsuccessful",
+  "createWaitingRoomUnsuccessfulMsg": "The waiting room cannot be created at the moment.",
+  "timeSlotErrorMsg": "You can only book for consecutive time slots."
 }

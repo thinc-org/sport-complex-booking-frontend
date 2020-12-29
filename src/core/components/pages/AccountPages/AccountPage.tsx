@@ -98,8 +98,8 @@ const PenalizeMessage:React.FC<PenalizeMessageProps> = ({show}) => {
   if(!show) return null
   return (
     <div className="alert alert-danger mx-3 mt-3" role="alert">
-      <h3>{t("you_are_penalied")}</h3>
-      <h6>{t("penalzie_message")}</h6>
+      <h3>{t("youArePenalized")}</h3>
+      <h6>{t("penalizeMessage")}</h6>
     </div>
   )
 }
