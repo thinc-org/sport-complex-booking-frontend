@@ -1,29 +1,31 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
 import { Table, Form, Col, Button, Pagination, Modal } from "react-bootstrap"
-import { RouteComponentProps } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { client } from "../../../../../axiosConfig"
 import { OtherInfo } from "../interfaces/InfoInterface"
 
-const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) => {
+const VeritificationApproval: FunctionComponent = () => {
   // page state
-  const [page_no, set_page_no] = useState<number>(1)
-  const [max_user_per_page] = useState<number>(10) // > 1
-  const [max_user, set_max_user] = useState<number>(1)
+  const [pageNo, setPageNo] = useState<number>(1)
+  const [maxUserPerPage] = useState<number>(10) // > 1
+  const [maxUser, setMaxUser] = useState<number>(1)
   const [searchName, setSearchName] = useState<string>("")
-  const [show_no_user, set_show_no_user] = useState<boolean>(false)
+  const [showNoUser, setShowNoUser] = useState<boolean>(false)
   const [users, setUsers] = useState<OtherInfo[]>([])
+
+  const history = useHistory()
 
   /// useEffects ///
   useEffect(() => {
     requestUsers()
-  }, [page_no])
+  }, [pageNo])
 
   // other functions //
   const requestUsers = () => {
     //  request users from server  //
     let params = {
-      start: (page_no - 1) * max_user_per_page,
-      end: page_no * max_user_per_page,
+      start: (pageNo - 1) * maxUserPerPage,
+      end: pageNo * maxUserPerPage,
     }
     if (searchName !== "") params["name"] = searchName
     client({
@@ -38,7 +40,7 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
           newUserList = [...newUserList, user]
         }
         setUsers(newUserList)
-        set_max_user(data[0])
+        setMaxUser(data[0])
       })
       .catch((err) => {
         console.log(err)
@@ -46,19 +48,19 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
   }
 
   const loadPagination = () => {
-    let max_page: number = Math.floor((max_user + max_user_per_page - 1) / max_user_per_page)
+    let max_page: number = Math.floor((maxUser + maxUserPerPage - 1) / maxUserPerPage)
     let numList: Array<number> = []
     let haveMore = true
     let i = 0
     while (numList.length < 5) {
-      let page = page_no + i - 2
+      let page = pageNo + i - 2
       if (page >= max_page) haveMore = false
       if (page >= 1 && page <= max_page) numList.push(page)
       else if (page > max_page) break
       i++
     }
     let elementList = numList.map((num) => {
-      if (num === page_no)
+      if (num === pageNo)
         return (
           <Pagination.Item key={num} active={true}>
             {num}
@@ -80,13 +82,13 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
       <Pagination className="justify-content-md-end">
         <Pagination.Prev
           onClick={() => {
-            handlePagination(page_no - 1)
+            handlePagination(pageNo - 1)
           }}
         />
         {elementList}
         <Pagination.Next
           onClick={() => {
-            handlePagination(page_no + 1)
+            handlePagination(pageNo + 1)
           }}
         />
       </Pagination>
@@ -95,9 +97,9 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
 
   // handles //
   const handlePagination = (next_page: number) => {
-    let max_page: number = Math.floor((max_user + max_user_per_page - 1) / max_user_per_page)
+    let max_page: number = Math.floor((maxUser + maxUserPerPage - 1) / maxUserPerPage)
     if (next_page >= 1 && next_page <= max_page) {
-      set_page_no(next_page)
+      setPageNo(next_page)
     }
   }
 
@@ -105,7 +107,7 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
     // send jwt and get //
     // if no user -> "user not found"
     e.preventDefault()
-    if (page_no !== 1) set_page_no(1)
+    if (pageNo !== 1) setPageNo(1)
     else requestUsers()
   }
 
@@ -118,13 +120,11 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
       url: "/approval/" + _id,
     })
       .then(({ data }) => {
-        props.history.push({
-          pathname: "/staff/verifyInfo/" + _id,
-        })
+        history.push("/staff/verifyInfo/" + _id)
       })
       .catch(({ response }) => {
         if (response.data.message === "User not found") {
-          set_show_no_user(true)
+          setShowNoUser(true)
         } else {
           console.log(response)
         }
@@ -135,9 +135,9 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
   const renderNoUserModal = () => {
     return (
       <Modal
-        show={show_no_user}
+        show={showNoUser}
         onHide={() => {
-          set_show_no_user(false)
+          setShowNoUser(false)
         }}
         backdrop="static"
         keyboard={false}
@@ -151,7 +151,7 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              set_show_no_user(false)
+              setShowNoUser(false)
             }}
           >
             ตกลง

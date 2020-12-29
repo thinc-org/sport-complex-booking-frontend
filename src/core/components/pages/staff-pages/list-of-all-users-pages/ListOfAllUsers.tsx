@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
 import { Table, Form, Row, Col, Button, Pagination, Modal } from "react-bootstrap"
-import { Link, RouteComponentProps } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import { client } from "../../../../../axiosConfig"
 
 interface CUTemplate {
@@ -55,16 +55,16 @@ enum Account {
   Other,
 }
 
-const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
+const ListOfAllUsers: FunctionComponent = () => {
   // page state
-  const [page_no, set_page_no] = useState<number>(1)
-  const [max_user, set_max_user] = useState<number>(1)
+  const [pageNo, setPageNo] = useState<number>(1)
+  const [maxUser, setMaxUser] = useState<number>(1)
   const [searchName, setSearchName] = useState<string>("")
-  const [status, set_status] = useState<number>(allStatus.All)
+  const [status, setStatus] = useState<number>(allStatus.All)
   // const [jwt, set_jwt] = useState<string>(
   //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
   // )
-  const [show_no_user, set_show_no_user] = useState<boolean>(false)
+  const [showNoUser, setShowNoUser] = useState<boolean>(false)
   const [users, setUsers] = useState<Users>([
     {
       account_type: Account.CuStudent,
@@ -80,16 +80,17 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
     },
   ])
 
+  const history = useHistory()
+
   useEffect(() => {
     requestUsers()
-  }, [page_no])
+  }, [pageNo])
 
   const requestUsers = () => {
-    // Send JWT //
     // get params for request //
     let param_data = {
-      begin: (page_no - 1) * 10,
-      end: page_no * 10,
+      begin: (pageNo - 1) * 10,
+      end: pageNo * 10,
     }
     if (searchName !== "") param_data["name"] = searchName
     if (status !== allStatus.All) param_data["penalize"] = allStatus.Banned === status
@@ -105,7 +106,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
           else if (user.account_type === "SatitAndCuPersonel") return { ...user, account_type: Account.SatitAndCuPersonel }
           return { ...user, account_type: Account.Other }
         })
-        set_max_user(data[0])
+        setMaxUser(data[0])
         setUsers(userList)
       })
       .catch(({ response }) => {
@@ -115,17 +116,15 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
 
   // handles //
   const handleSearch = (e) => {
-    // send jwt and get //
-    // if no user -> "user not found"
     e.preventDefault()
-    if (page_no !== 1) set_page_no(1)
+    if (pageNo !== 1) setPageNo(1)
     else requestUsers()
   }
 
   const handleInfo = (e) => {
-    //send jwt and username
+    //send username
     // if no data of that user -> show pop up
-    let index = parseInt(e.target.id) - (page_no - 1) * 10 - 1
+    let index = parseInt(e.target.id) - (pageNo - 1) * 10 - 1
     let _id: String = users[index]._id
     client({
       method: "GET",
@@ -135,16 +134,12 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
         if (data) {
           let account_type: Account = users[index].account_type
           if (account_type !== Account.Other) {
-            props.history.push({
-              pathname: "/staff/cuInfo/" + _id,
-            })
+            history.push("/staff/cuInfo/" + _id)
           } else {
-            props.history.push({
-              pathname: "/staff/userInfo/" + _id,
-            })
+            history.push("/staff/userInfo/" + _id)
           }
         } else {
-          set_show_no_user(true)
+          setShowNoUser(true)
         }
       })
       .catch((err) => {
@@ -153,26 +148,26 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
   }
 
   const handlePagination = (next_page: number) => {
-    let max_page: number = Math.floor((max_user + 9) / 10)
+    let max_page: number = Math.floor((maxUser + 9) / 10)
     if (next_page >= 1 && next_page <= max_page) {
-      set_page_no(next_page)
+      setPageNo(next_page)
     }
   }
 
   const loadPagination = () => {
-    let max_page: number = Math.floor((max_user + 9) / 10)
+    let max_page: number = Math.floor((maxUser + 9) / 10)
     let numList: Array<number> = []
     let haveMore: boolean = true
     let i = 0
     while (numList.length < 5) {
-      let page = page_no + i - 2
+      let page = pageNo + i - 2
       if (page >= max_page) haveMore = false
       if (page >= 1 && page <= max_page) numList.push(page)
       else if (page > max_page) break
       i++
     }
     let elementList = numList.map((num) => {
-      if (num === page_no)
+      if (num === pageNo)
         return (
           <Pagination.Item key={num} active={true}>
             {num}
@@ -194,13 +189,13 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
       <Pagination className="justify-content-md-end">
         <Pagination.Prev
           onClick={() => {
-            handlePagination(page_no - 1)
+            handlePagination(pageNo - 1)
           }}
         />
         {elementList}
         <Pagination.Next
           onClick={() => {
-            handlePagination(page_no + 1)
+            handlePagination(pageNo + 1)
           }}
         />
       </Pagination>
@@ -210,9 +205,9 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
   const renderNoUserModal = () => {
     return (
       <Modal
-        show={show_no_user}
+        show={showNoUser}
         onHide={() => {
-          set_show_no_user(false)
+          setShowNoUser(false)
         }}
         backdrop="static"
         keyboard={false}
@@ -226,7 +221,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              set_show_no_user(false)
+              setShowNoUser(false)
             }}
           >
             ตกลง
@@ -237,7 +232,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
   }
 
   const renderUsersTable = () => {
-    let index = (page_no - 1) * 10 + 1
+    let index = (pageNo - 1) * 10 + 1
     // let user
     let usersList = users.map((user) => {
       return (
@@ -280,7 +275,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
           <Col sm="auto">
             <Form.Control
               onChange={(e) => {
-                set_status(parseInt(e.target.value))
+                setStatus(parseInt(e.target.value))
               }}
               as="select"
               custom

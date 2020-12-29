@@ -55,9 +55,9 @@ export interface CuAndSatitInfo {
 }
 
 export interface PasswordToggle {
-  old_password: boolean
-  new_password: boolean
-  confirm_password: boolean
+  oldPassword: boolean
+  newPassword: boolean
+  confirmPassword: boolean
 }
 
 export interface AddInfo {
@@ -152,31 +152,31 @@ export const RejectInfoLabel = {
 
 // Interface for Modals //
 export interface ModalCuAndSatit {
-  show_confirm: boolean
-  show_com: boolean
-  show_del: boolean
-  show_com_delete: boolean
-  show_err: boolean
-  show_password_err: boolean
-  show_confirm_change: boolean
+  showConfirm: boolean
+  showCom: boolean
+  showDel: boolean
+  showComDelete: boolean
+  showErr: boolean
+  showPasswordErr: boolean
+  showConfirmChange: boolean
 }
 
 export interface ModalVerify {
-  show_confirm_accept: boolean
-  show_uncom_accept: boolean
-  show_complete_accept: boolean
-  show_uncom_reject: boolean
-  show_confirm_reject: boolean
-  show_complete_reject: boolean
-  show_err: boolean
+  showConfirmAccept: boolean
+  showUncomAccept: boolean
+  showCompleteAccept: boolean
+  showUncomReject: boolean
+  showConfirmReject: boolean
+  showCompleteReject: boolean
+  showErr: boolean
 }
 
 export interface ModalUserInfo {
-  show_delete: boolean
-  show_com_delete: boolean
-  show_save: boolean
-  show_com_save: boolean
-  show_err: boolean
-  show_password_err: boolean
-  show_confirm_change: boolean
+  showDelete: boolean
+  showComDelete: boolean
+  showSave: boolean
+  showComSave: boolean
+  showErr: boolean
+  showPasswordErr: boolean
+  showConfirmChange: boolean
 }

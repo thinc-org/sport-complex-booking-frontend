@@ -6,33 +6,33 @@ import OtherViewInfoComponent from "./OtherViewInfoComponent"
 import OtherEditInfoComponent from "./OtherEditInfoComponent"
 import ModalsComponent from "./OtherModalsComponent"
 import Info, { Account, ThaiLangAccount, ModalUserInfo } from "../interfaces/InfoInterface"
-import { convertDate, convertTime } from "./ConvertFunctions"
 import PasswordChangeModal from "./PasswordChangeModal"
+import format from "date-fns/format"
 
 const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
   // page state //
   const [isEdit, setEdit] = useState<boolean>(false)
-  const [new_password, set_new_password] = useState<string>("")
-  const [confirm_password, set_confirm_password] = useState<string>("")
-  const [show_change_password, set_show_change_password] = useState<boolean>(false)
-  const [show_modal_info, set_show_modal_info] = useState<ModalUserInfo>({
-    show_delete: false,
-    show_com_delete: false,
-    show_save: false,
-    show_com_save: false,
-    show_err: false,
-    show_password_err: false,
-    show_confirm_change: false,
+  const [newPassword, setNewPassword] = useState<string>("")
+  const [confirmPassword, setConfirmPassword] = useState<string>("")
+  const [showChangePassword, setShowChangePassword] = useState<boolean>(false)
+  const [showModalInfo, setShowModalInfo] = useState<ModalUserInfo>({
+    showDelete: false,
+    showComDelete: false,
+    showSave: false,
+    showComSave: false,
+    showErr: false,
+    showPasswordErr: false,
+    showConfirmChange: false,
   })
 
   // Non CU state //
   const [_id] = useState<string>(props.match.params._id)
-  const [username, set_username] = useState<string>("")
-  const [account_type, set_account_type] = useState<string>("")
-  const [membership_type, set_membership_type] = useState<string>("")
-  const [is_penalize, set_penalize] = useState<boolean>(false)
-  const [expired_penalize_date, set_expired_penalize_date] = useState<Date>(new Date())
-  const [account_expired_date, set_account_expired_date] = useState<Date>(new Date())
+  const [username, setUsername] = useState<string>("")
+  const [accountType, setAccountType] = useState<string>("")
+  const [membershipType, setMembershipType] = useState<string>("")
+  const [isPenalize, setPenalize] = useState<boolean>(false)
+  const [expiredPenalizeDate, setExpiredPenalizeDate] = useState<Date>(new Date())
+  const [accountExpiredDate, setAccountExpiredDate] = useState<Date>(new Date())
   const [info, setInfo] = useState<Info>({
     prefix: "",
     name_th: "",
@@ -55,7 +55,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       contact_person_home_phone: "",
       contact_person_phone: "",
     },
-    membership_type: membership_type,
+    membership_type: membershipType,
     password: "",
     // object id //
     user_photo: "",
@@ -65,12 +65,12 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     relationship_verification_document: "",
   })
   // temp data
-  const [temp_username, set_temp_username] = useState<string>("")
-  const [temp_membership_type, set_temp_membership_type] = useState<string>("")
-  const [temp_is_penalize, set_temp_penalize] = useState<boolean>(false)
-  const [temp_expired_penalize_date, set_temp_expired_penalize_date] = useState<Date>(new Date())
-  const [temp_account_expired_date, set_temp_account_expired_date] = useState<Date>(new Date())
-  const [temp_info, set_temp_info] = useState<Info>(info)
+  const [tempUsername, setTempUsername] = useState<string>("")
+  const [tempMembershipType, setTempMembershipType] = useState<string>("")
+  const [tempIsPenalize, setTempPenalize] = useState<boolean>(false)
+  const [tempExpiredPenalizeDate, setTempExpiredPenalizeDate] = useState<Date>(new Date())
+  const [tempAccountExpiredDate, setTempAccountExpiredDate] = useState<Date>(new Date())
+  const [tempInfo, setTempInfo] = useState<Info>(info)
 
   useEffect(() => {
     fetchUserData()
@@ -83,12 +83,12 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       url: "/list-all-user/findById/" + _id,
     })
       .then(({ data }) => {
-        set_username(data.username)
-        set_account_type(data.account_type)
-        set_membership_type(data.membership_type)
-        set_penalize(data.is_penalize)
-        set_expired_penalize_date(data.expired_penalize_date)
-        set_account_expired_date(data.account_expiration_date)
+        setUsername(data.username)
+        setAccountType(data.accountType)
+        setMembershipType(data.membershipType)
+        setPenalize(data.isPenalize)
+        setExpiredPenalizeDate(data.expiredPenalizeDate)
+        setAccountExpiredDate(data.account_expiration_date)
         setInfo({
           prefix: data.prefix,
           name_th: data.name_th,
@@ -113,7 +113,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
                 contact_person_home_phone: "",
                 contact_person_phone: "",
               },
-          membership_type: data.membership_type,
+          membership_type: data.membershipType,
           password: data.password,
           // Files(Object id) //
           user_photo: data.user_photo,
@@ -151,7 +151,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       national_id_photo,
       house_registration_number,
       relationship_verification_document,
-    } = temp_info
+    } = tempInfo
     // console.log("saving...")
     client({
       method: "PATCH",
@@ -175,12 +175,12 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         contact_person,
         medical_condition,
         // top section //
-        username: temp_username,
+        username: tempUsername,
         password,
-        membership_type: temp_membership_type,
-        account_expiration_date: temp_account_expired_date,
-        is_penalize: temp_is_penalize,
-        expired_penalize_date: temp_expired_penalize_date,
+        membershipType: tempMembershipType,
+        account_expiration_date: tempAccountExpiredDate,
+        isPenalize: tempIsPenalize,
+        expiredPenalizeDate: tempExpiredPenalizeDate,
         // files //
         user_photo,
         medical_certificate,
@@ -192,20 +192,20 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       .then(({ data }) => {
         // console.log("Update completed")
         // set temp to data
-        set_username(temp_username)
-        set_membership_type(temp_membership_type)
-        set_penalize(temp_is_penalize)
-        set_expired_penalize_date(temp_expired_penalize_date)
-        set_account_expired_date(temp_account_expired_date)
-        setInfo(temp_info)
+        setUsername(tempUsername)
+        setMembershipType(tempMembershipType)
+        setPenalize(tempIsPenalize)
+        setExpiredPenalizeDate(tempExpiredPenalizeDate)
+        setAccountExpiredDate(tempAccountExpiredDate)
+        setInfo(tempInfo)
         // show save complete modal
-        set_show_modal_info({ ...show_modal_info, show_save: false, show_com_save: true })
+        setShowModalInfo({ ...showModalInfo, showSave: false, showComSave: true })
         // back to view form
         setEdit(false)
       })
       .catch((err) => {
         console.log(err)
-        set_show_modal_info({ ...show_modal_info, show_save: false, show_err: true })
+        setShowModalInfo({ ...showModalInfo, showSave: false, showErr: true })
       })
   }
 
@@ -214,44 +214,43 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       method: "PATCH",
       url: "/list-all-user/" + _id,
       data: {
-        password: new_password,
+        password: newPassword,
       },
     })
       .then(({ data }) => {
         console.log(data)
         setInfo({ ...info, password: data.password })
-        set_show_change_password(false)
-        set_show_modal_info({ ...show_modal_info, show_confirm_change: false })
+        setShowChangePassword(false)
+        setShowModalInfo({ ...showModalInfo, showConfirmChange: false })
       })
       .catch((err) => {
         console.log(err)
-        set_show_modal_info({ ...show_modal_info, show_err: true })
+        setShowModalInfo({ ...showModalInfo, showErr: true })
       })
   }
 
   // handles //
   const handleChange = (e) => {
-    set_temp_info({ ...temp_info, [e.target.id]: e.target.value })
+    setTempInfo({ ...tempInfo, [e.target.id]: e.target.value })
   }
 
   const handleEdit = () => {
-    set_temp_info(info)
-    set_temp_username(username)
-    set_temp_membership_type(membership_type)
-    set_temp_penalize(is_penalize)
-    set_temp_expired_penalize_date(expired_penalize_date)
-    set_temp_account_expired_date(account_expired_date)
+    setTempInfo(info)
+    setTempUsername(username)
+    setTempMembershipType(membershipType)
+    setTempPenalize(isPenalize)
+    setTempExpiredPenalizeDate(expiredPenalizeDate)
+    setTempAccountExpiredDate(accountExpiredDate)
     setEdit(true)
   }
 
   const handleChangePassword = () => {
-    if (temp_info.password !== info.password || new_password !== confirm_password)
-      set_show_modal_info({ ...show_modal_info, show_password_err: true })
-    else set_show_modal_info({ ...show_modal_info, show_confirm_change: true })
+    if (tempInfo.password !== info.password || newPassword !== confirmPassword) setShowModalInfo({ ...showModalInfo, showPasswordErr: true })
+    else setShowModalInfo({ ...showModalInfo, showConfirmChange: true })
   }
 
   const handleSave = () => {
-    set_show_modal_info({ ...show_modal_info, show_save: true })
+    setShowModalInfo({ ...showModalInfo, showSave: true })
   }
 
   const handleDeleteUser = () => {
@@ -261,11 +260,11 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       url: "/list-all-user/User/" + _id,
     })
       .then(({ data }) => {
-        set_show_modal_info({ ...show_modal_info, show_delete: false, show_com_delete: true })
+        setShowModalInfo({ ...showModalInfo, showDelete: false, showComDelete: true })
       })
       .catch((err) => {
         console.log(err)
-        set_show_modal_info({ ...show_modal_info, show_delete: false, show_err: true })
+        setShowModalInfo({ ...showModalInfo, showDelete: false, showErr: true })
       })
   }
 
@@ -276,7 +275,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         <div className="row">
           <div className="col">
             <label className="mt-2">ประเภท</label>
-            <p className="font-weight-bold">{ThaiLangAccount[Account[account_type]]}</p>
+            <p className="font-weight-bold">{ThaiLangAccount[Account[accountType]]}</p>
           </div>
         </div>
         <div className="row pb-2">
@@ -289,7 +288,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
                 type="text"
                 defaultValue={username}
                 onChange={(e) => {
-                  set_temp_username(e.target.value)
+                  setTempUsername(e.target.value)
                 }}
               />
             ) : (
@@ -305,9 +304,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
                 <Form.Control
                   as="select"
                   className="m-0"
-                  defaultValue={temp_membership_type !== "" ? temp_membership_type : "ไม่มี"}
+                  defaultValue={tempMembershipType !== "" ? tempMembershipType : "ไม่มี"}
                   onChange={(e) => {
-                    set_temp_membership_type(e.target.value)
+                    setTempMembershipType(e.target.value)
                   }}
                 >
                   <option disabled value="ไม่มี">
@@ -326,7 +325,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
               </div>
             ) : (
               <div>
-                <p className="font-weight-bold">{membership_type}</p>
+                <p className="font-weight-bold">{membershipType}</p>
               </div>
             )}
           </div>
@@ -339,16 +338,16 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
                 className="border m-0"
                 style={{ backgroundColor: "white" }}
                 as="select"
-                defaultValue={is_penalize ? 1 : 0}
+                defaultValue={isPenalize ? 1 : 0}
                 onChange={(e) => {
-                  set_temp_penalize(e.target.value !== "0" ? true : false)
+                  setTempPenalize(e.target.value !== "0" ? true : false)
                 }}
               >
                 <option value={0}>ปกติ</option>
                 <option value={1}>โดนแบน</option>
               </Form.Control>
             ) : (
-              <p className="font-weight-bold">{is_penalize ? "โดนแบน" : "ปกติ"}</p>
+              <p className="font-weight-bold">{isPenalize ? "โดนแบน" : "ปกติ"}</p>
             )}
           </div>
         </div>
@@ -359,41 +358,41 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
               <div className="col pr-0" style={{ width: "60%" }}>
                 <Form.Control
                   type="date"
-                  disabled={!isEdit || !temp_is_penalize}
+                  disabled={!isEdit || !tempIsPenalize}
                   value={
                     isEdit
-                      ? temp_expired_penalize_date && temp_is_penalize
-                        ? convertDate(new Date(temp_expired_penalize_date))
+                      ? tempExpiredPenalizeDate && tempIsPenalize
+                        ? format(new Date(tempExpiredPenalizeDate), "yyyy-MM-dd")
                         : ""
-                      : is_penalize
-                      ? convertDate(new Date(expired_penalize_date))
+                      : isPenalize
+                      ? format(new Date(expiredPenalizeDate), "yyyy-MM-dd")
                       : ""
                   }
                   onChange={(e) => {
                     let incom: Date = new Date(e.target.value)
-                    let old: Date = temp_expired_penalize_date ? new Date(temp_expired_penalize_date) : new Date()
-                    set_temp_expired_penalize_date(new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), old.getHours(), old.getMinutes()))
+                    let old: Date = tempExpiredPenalizeDate ? new Date(tempExpiredPenalizeDate) : new Date()
+                    setTempExpiredPenalizeDate(new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), old.getHours(), old.getMinutes()))
                   }}
                 />
               </div>
               <div className="col" style={{ width: "40%" }}>
                 <Form.Control
                   type="time"
-                  disabled={!isEdit || !temp_is_penalize}
+                  disabled={!isEdit || !tempIsPenalize}
                   value={
                     isEdit
-                      ? temp_expired_penalize_date && temp_is_penalize
-                        ? convertTime(new Date(temp_expired_penalize_date).getHours(), new Date(temp_expired_penalize_date).getMinutes())
+                      ? tempExpiredPenalizeDate && tempIsPenalize
+                        ? format(new Date(tempExpiredPenalizeDate), "HH:mm")
                         : ""
-                      : is_penalize
-                      ? convertTime(new Date(expired_penalize_date).getHours(), new Date(expired_penalize_date).getMinutes())
+                      : isPenalize
+                      ? format(new Date(expiredPenalizeDate), "HH:mm")
                       : ""
                   }
                   onChange={(e) => {
-                    let date: Date = temp_expired_penalize_date ? new Date(temp_expired_penalize_date) : new Date()
+                    let date: Date = tempExpiredPenalizeDate ? new Date(tempExpiredPenalizeDate) : new Date()
                     let hour: number = parseInt(e.target.value.slice(0, 2))
                     let minute: number = parseInt(e.target.value.slice(3, 5))
-                    set_temp_expired_penalize_date(new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, 0))
+                    setTempExpiredPenalizeDate(new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, 0))
                   }}
                 />
               </div>
@@ -408,15 +407,15 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
                   disabled={!isEdit}
                   value={
                     isEdit
-                      ? temp_account_expired_date
-                        ? convertDate(new Date(temp_account_expired_date))
+                      ? tempAccountExpiredDate
+                        ? format(new Date(tempAccountExpiredDate), "yyyy-MM-dd")
                         : ""
-                      : account_expired_date
-                      ? convertDate(new Date(account_expired_date))
+                      : accountExpiredDate
+                      ? format(new Date(accountExpiredDate), "yyyy-MM-dd")
                       : ""
                   }
                   onChange={(e) => {
-                    set_temp_account_expired_date(new Date(e.target.value))
+                    setTempAccountExpiredDate(new Date(e.target.value))
                   }}
                 />
               </div>
@@ -426,18 +425,18 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
                   disabled={!isEdit}
                   value={
                     isEdit
-                      ? temp_account_expired_date
-                        ? convertTime(new Date(temp_account_expired_date).getHours(), new Date(temp_account_expired_date).getMinutes())
+                      ? tempAccountExpiredDate
+                        ? format(new Date(tempAccountExpiredDate), "HH:mm")
                         : ""
-                      : account_expired_date
-                      ? convertTime(new Date(account_expired_date).getHours(), new Date(account_expired_date).getMinutes())
+                      : accountExpiredDate
+                      ? format(new Date(accountExpiredDate), "HH:mm")
                       : ""
                   }
                   onChange={(e) => {
-                    let date: Date = temp_expired_penalize_date ? new Date(temp_account_expired_date) : new Date()
+                    let date: Date = tempExpiredPenalizeDate ? new Date(tempAccountExpiredDate) : new Date()
                     let hour: number = parseInt(e.target.value.slice(0, 2))
                     let minute: number = parseInt(e.target.value.slice(3, 5))
-                    set_temp_account_expired_date(new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, 0))
+                    setTempAccountExpiredDate(new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, 0))
                   }}
                 />
               </div>
@@ -466,7 +465,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
             variant="outline-danger"
             className="float-right btn-normal btn-outline-red mr-3"
             onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_delete: true })
+              setShowModalInfo({ ...showModalInfo, showDelete: true })
             }}
           >
             ลบผู้ใช้
@@ -479,16 +478,16 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const renderEditForm = () => {
     return (
       <div>
-        <OtherEditInfoComponent temp_info={temp_info} set_temp_info={set_temp_info} _id={_id} />
+        <OtherEditInfoComponent tempInfo={tempInfo} setTempInfo={setTempInfo} _id={_id} />
         <div className="mt-5">
           <Button
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              set_temp_info({ ...temp_info, password: "" })
-              set_new_password("")
-              set_confirm_password("")
-              set_show_change_password(true)
+              setTempInfo({ ...tempInfo, password: "" })
+              setNewPassword("")
+              setConfirmPassword("")
+              setShowChangePassword(true)
             }}
           >
             เปลี่ยนรหัสผ่าน
@@ -511,32 +510,23 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   }
 
   const renderModal = () => {
-    if (show_modal_info.show_delete)
-      return (
-        <ModalsComponent
-          show_modal_info={show_modal_info}
-          set_show_modal_info={set_show_modal_info}
-          info={{ username, handleDeleteUser }}
-          props={props}
-        />
-      )
-    else if (show_modal_info.show_com_delete)
-      return <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ username }} props={props} />
-    else if (show_modal_info.show_save)
-      return <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ requestSave }} props={props} />
-    else if (show_change_password)
-      return (
-        <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ requestChangePassword }} props={props} />
-      )
-    else return <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{}} props={props} />
+    if (showModalInfo.showDelete)
+      return <ModalsComponent showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ username, handleDeleteUser }} />
+    else if (showModalInfo.showComDelete)
+      return <ModalsComponent showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ username }} />
+    else if (showModalInfo.showSave)
+      return <ModalsComponent showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ requestSave }} />
+    else if (showChangePassword)
+      return <ModalsComponent showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ requestChangePassword }} />
+    else return <ModalsComponent showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{}} />
   }
 
   const renderPasswordChangeModal = () => (
     <PasswordChangeModal
-      show_change={show_change_password}
-      set_show_change={set_show_change_password}
-      set_new_password={set_new_password}
-      set_confirm_password={set_confirm_password}
+      showChange={showChangePassword}
+      setShowChange={setShowChangePassword}
+      setNewPassword={setNewPassword}
+      setConfirmPassword={setConfirmPassword}
       info={{ handleChange, handleChangePassword }}
     />
   )

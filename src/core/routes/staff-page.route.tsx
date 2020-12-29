@@ -43,14 +43,7 @@ const StaffRoute = (props) => {
       <NavHeader isOnStaffPage={true} />
       <Switch>
         <Route exact path={path} component={StaffLogin} />
-        <Route
-          path={`${path}/staffProfile`}
-          render={() => {
-            return staff(<StaffProfile />, "ยินดีต้อนรับ")
-            // example
-            // add pages here staff(page)
-          }}
-        />
+        <Route path={`${path}/staffProfile`} component={() => staff(<StaffProfile />, "ยินดีต้อนรับ")} />
         <Route
           path={`${path}/staffManagement`}
           render={() => {
@@ -60,48 +53,12 @@ const StaffRoute = (props) => {
             )
           }}
         />
-        <Route
-          exact
-          path={`${path}/listOfAllUsers`}
-          render={(props) => {
-            return staff(<ListOfAllUsers {...props} />, "รายชื่อผู้ใช้")
-          }}
-        />
-        <Route
-          exact
-          path={`${path}/addUser`}
-          render={(props) => {
-            return staff(<AddUser {...props} />, "เพิ่มผู้ใช้")
-          }}
-        />
-        <Route
-          exact
-          path={`${path}/cuInfo/:_id`}
-          render={(props) => {
-            return staff(<CUInfo {...props} />, "ข้อมูลผู้ใช้")
-          }}
-        />
-        <Route
-          exact
-          path={`${path}/userInfo/:_id`}
-          render={(props) => {
-            return staff(<UserInfo {...props} />, "ข้อมูลผู้ใช้")
-          }}
-        />
-        <Route
-          exact
-          path={`${path}/verifyApprove`}
-          render={(props) => {
-            return staff(<VeritificationApproval {...props} />, "รับรองการลงทะเบียน")
-          }}
-        />
-        <Route
-          exact
-          path={`${path}/verifyInfo/:_id`}
-          render={(props) => {
-            return staff(<VerifyInfo {...props} />, "รับรองการลงทะเบียนรายบุคคล")
-          }}
-        />
+        <Route exact path={`${path}/listOfAllUsers`} component={() => staff(<ListOfAllUsers />, "รายชื่อผู้ใช้")} />
+        <Route exact path={`${path}/addUser`} component={() => staff(<AddUser />, "เพิ่มผู้ใช้")} />
+        <Route exact path={`${path}/cuInfo/:_id`} component={(props) => staff(<CUInfo {...props} />, "ข้อมูลผู้ใช้")} />
+        <Route exact path={`${path}/userInfo/:_id`} component={(props) => staff(<UserInfo {...props} />, "ข้อมูลผู้ใช้")} />
+        <Route exact path={`${path}/verifyApprove`} component={() => staff(<VeritificationApproval />, "รับรองการลงทะเบียน")} />
+        <Route exact path={`${path}/verifyInfo/:_id`} component={(props) => staff(<VerifyInfo {...props} />, "รับรองการลงทะเบียนรายบุคคล")} />
       </Switch>
     </>
   )

@@ -1,39 +1,30 @@
 import React from "react"
-import { RouteComponentProps } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { Modal, Button } from "react-bootstrap"
 import { ModalVerify } from "../interfaces/InfoInterface"
 
 interface propsTemplate {
-  show_modal_info: ModalVerify
-  set_show_modal_info: React.Dispatch<React.SetStateAction<ModalVerify>>
+  showModalInfo: ModalVerify
+  setShowModalInfo: React.Dispatch<React.SetStateAction<ModalVerify>>
   info: any
-  props: RouteComponentProps
 }
 
-const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: propsTemplate) => {
-  let {
-    show_confirm_accept,
-    show_uncom_accept,
-    show_complete_accept,
-    show_confirm_reject,
-    show_uncom_reject,
-    show_complete_reject,
-    show_err,
-  } = show_modal_info
+const VerifyModalsComponent = ({ showModalInfo, setShowModalInfo, info }: propsTemplate) => {
+  const { showConfirmAccept, showUncomAccept, showCompleteAccept, showConfirmReject, showUncomReject, showCompleteReject, showErr } = showModalInfo
+
+  const history = useHistory()
 
   const redirectBack = () => {
-    props.history.push({
-      pathname: "/staff/verifyApprove",
-    })
+    history.push("/staff/verifyApprove")
   }
 
   // Reject Modal //
   const renderConfirmReject = (info: { requestReject: () => void }) => {
     return (
       <Modal
-        show={show_confirm_reject}
+        show={showConfirmReject}
         onHide={() => {
-          set_show_modal_info({ ...show_modal_info, show_confirm_reject: false })
+          setShowModalInfo({ ...showModalInfo, showConfirmReject: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -48,7 +39,7 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
             variant="outline-secondary"
             className="btn-normal btn-outline-pink"
             onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_confirm_reject: false })
+              setShowModalInfo({ ...showModalInfo, showConfirmReject: false })
             }}
           >
             ยกเลิก
@@ -64,9 +55,9 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
   const renderUncomReject = () => {
     return (
       <Modal
-        show={show_uncom_reject}
+        show={showUncomReject}
         onHide={() => {
-          set_show_modal_info({ ...show_modal_info, show_uncom_reject: false })
+          setShowModalInfo({ ...showModalInfo, showUncomReject: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -80,7 +71,7 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_uncom_reject: false })
+              setShowModalInfo({ ...showModalInfo, showUncomReject: false })
             }}
           >
             ยืนยัน
@@ -93,9 +84,9 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
   const renderCompleteReject = (info: { username: string }) => {
     return (
       <Modal
-        show={show_complete_reject}
+        show={showCompleteReject}
         onHide={() => {
-          set_show_modal_info({ ...show_modal_info, show_complete_reject: false })
+          setShowModalInfo({ ...showModalInfo, showCompleteReject: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -109,7 +100,7 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_complete_reject: false })
+              setShowModalInfo({ ...showModalInfo, showCompleteReject: false })
               redirectBack()
             }}
           >
@@ -124,9 +115,9 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
   const renderConfirmAccept = (info: { requestAccept: () => void }) => {
     return (
       <Modal
-        show={show_confirm_accept}
+        show={showConfirmAccept}
         onHide={() => {
-          set_show_modal_info({ ...show_modal_info, show_confirm_accept: false })
+          setShowModalInfo({ ...showModalInfo, showConfirmAccept: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -140,7 +131,7 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
             variant="outline-secondary"
             className="btn-normal btn-outline-pink"
             onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_confirm_accept: false })
+              setShowModalInfo({ ...showModalInfo, showConfirmAccept: false })
             }}
           >
             ยกเลิก
@@ -156,9 +147,9 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
   const renderUncomAccept = () => {
     return (
       <Modal
-        show={show_uncom_accept}
+        show={showUncomAccept}
         onHide={() => {
-          set_show_modal_info({ ...show_modal_info, show_uncom_accept: false })
+          setShowModalInfo({ ...showModalInfo, showUncomAccept: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -172,7 +163,7 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_uncom_accept: false })
+              setShowModalInfo({ ...showModalInfo, showUncomAccept: false })
             }}
           >
             ยืนยัน
@@ -185,9 +176,9 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
   const renderCompleteAccept = (info: { username: string }) => {
     return (
       <Modal
-        show={show_complete_accept}
+        show={showCompleteAccept}
         onHide={() => {
-          set_show_modal_info({ ...show_modal_info, show_complete_accept: false })
+          setShowModalInfo({ ...showModalInfo, showCompleteAccept: false })
           redirectBack()
         }}
         backdrop="static"
@@ -202,7 +193,7 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_complete_accept: false })
+              setShowModalInfo({ ...showModalInfo, showCompleteAccept: false })
               redirectBack()
             }}
           >
@@ -217,9 +208,9 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
   const renderError = () => {
     return (
       <Modal
-        show={show_err}
+        show={showErr}
         onHide={() => {
-          set_show_modal_info({ ...show_modal_info, show_err: false })
+          setShowModalInfo({ ...showModalInfo, showErr: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -233,7 +224,7 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_err: false })
+              setShowModalInfo({ ...showModalInfo, showErr: false })
             }}
           >
             ตกลง
