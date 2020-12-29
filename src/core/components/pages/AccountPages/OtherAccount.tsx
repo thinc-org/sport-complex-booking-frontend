@@ -14,7 +14,7 @@ export default function OtherAccount() {
         return (
           <div>
             {
-              user?.verification_status === "Submitted" || user?.verification_status === "Approved" ? (
+              user?.verification_status === "Submitted" || user?.verification_status === "Verified" ? (
                 <OtherAaccountDisplay/>
               ) : (
                 <OtherAccountEdit/>

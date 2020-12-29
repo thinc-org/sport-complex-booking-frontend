@@ -19,7 +19,6 @@ export default function ChulaAccountEdit({ toggleEditButton }) {
   const onSubmit = (data: EdittedData) => {
     setShow(true)
     setFormData(data)
-    //postDataToBackend(data)
   };
 
   const handleCancel = (e) => {

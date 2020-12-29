@@ -269,7 +269,7 @@ export default function OtherAccountEdit() {
             <label className="form-label mt-2">{t("birthday")}</label>
             <div>
               <DatePicker
-              className="form-control"
+              className="form-control date-picker"
               selected={date}
               onChange={(date: Date) => {
                 setDate(date)      

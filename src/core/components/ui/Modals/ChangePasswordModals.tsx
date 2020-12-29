@@ -76,6 +76,35 @@ export const PasswordMismatchModal:React.FC<PasswordMismatchModalProps> = ({show
    )
 }
 
+interface PasswordChangeSuccessProps {
+  show: boolean
+  setShowChangeSuccess: (value: boolean)=> void
+  returnToAccountPage: ()=>void
+}
+
+export const PasswordChangeSuccess:React.FC<PasswordChangeSuccessProps> = ({show, setShowChangeSuccess, returnToAccountPage}) => {
+  const { t } = useTranslation()  
+  if(!show) return null
+   return (
+      <Modal
+        className="modal"
+        show={show}
+        onHide={()=>returnToAccountPage()}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>{t("success")}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ fontWeight: "lighter" }}> {t("passwordChanged")} </Modal.Body>
+        <Modal.Footer>
+          <Button variant="pink" className="btn-normal btn-secondary" onClick={()=>returnToAccountPage()}>
+            {t("ok")}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+   )
+}
 
 
 
