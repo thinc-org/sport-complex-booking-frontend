@@ -2,9 +2,7 @@
 import * as React from 'react'
 import { useState, useEffect, useLayoutEffect, useRef, ComponentType } from 'react';
 import { Option, RowProps, Pagination, QueryParams, ViewResponse, DisableFormData, ViewRowProps, disable_time, View, ReactLocation } from './disable-court-interface'
-import { useHistory, useRouteMatch, useLocation } from 'react-router-dom'
 import { client } from '../../../../../axiosConfig'
-import { AxiosResponse } from 'axios';
 
 export const toViewRowProps = (data: disable_time[] | undefined): ViewRowProps[] => {
     const result: ViewRowProps[] = []
@@ -53,18 +51,7 @@ export const useEditCourt = () => {
 
 }
 
-export const useDeleteCourt = (id) => {
-    const [show, setShow] = useState(false);
-    const onDelete = () => {
-        client.delete(`/courts/disable-courts/${id}`)
-            .then((res) => {
-                console.log(res)
-                setShow(false)
-            })
-            .catch((err) => console.log(err))
-    }
-    return { show, setShow, onDelete }
-}
+
 export const useDate = (initialStartDate: Date | undefined = undefined, initialEndDate: Date | undefined = undefined) => {
     let currentDate = new Date()
     currentDate.setHours(0, 0, 0, 0)
@@ -125,6 +112,7 @@ export const incrementDate = (date: Date): Date => {
 
 export const useViewTable = (params) => {
     const [viewData, setViewData] = useState<View>()
+    const [error, setError] = useState<string>()
     const { inProp, rowData, onAddRow, onDeleteRow, setInProp, setRowData } = useRow()
     async function fetchViewData() {
         await client.get<ViewResponse>(`/courts/disable-courts/${params}`,)
@@ -133,7 +121,7 @@ export const useViewTable = (params) => {
                 setViewData(res.data)
                 setRowData(toViewRowProps(res.data.disable_time))
             })
-            .catch(err => console.log(err))
+            .catch(err => setError(err.response.message))
     }
     useEffect(() => {
         console.log('fetch')
@@ -172,7 +160,7 @@ export const useTable = () => {
                 })
 
             })
-            .catch((err) => console.log(err))
+            .catch((err) => alert('ไม่สามารถลบได้ กรุณาลองใหม่อีกครั้ง'))
     }
     function jumpUp() {
         const currentPage = page ?? 0

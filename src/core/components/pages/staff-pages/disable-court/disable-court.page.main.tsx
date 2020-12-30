@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+
 import { Switch, Route, useRouteMatch } from 'react-router-dom'
 import ListOfCourts from './list-of-courts'
 import ViewCourt from './viewCourt'
 import AddCourt from './addCourt'
-import EditCourt from './editCourt'
+
 const DisableCourt = () => {
     const { path, url } = useRouteMatch()
     return (
