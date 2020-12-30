@@ -6,7 +6,8 @@ export interface RowProps {
     sport_id: string,
     court_num: number,
     description?: string | undefined,
-    _id: string
+    _id: string,
+    button?: JSX.Element
 }
 
 export interface Option {
@@ -20,6 +21,7 @@ export interface QueryParams {
     court_num: number | undefined,
     description?: string | undefined,
     start: number,
+    shouldChange?: boolean
     end: number
 }
 export interface DisableFormData {
@@ -69,4 +71,17 @@ export interface TableProps<T> {
     header: string[],
     Row: React.FC<T>,
     Button?: Function
+}
+
+export interface ReactLocation {
+    key: string | null,
+    pathname: string
+    search: string | null,
+    hash: string | null,
+    state: LocState
+    page?: number | null
+}
+
+export type LocState = {
+    page: number | null
 }

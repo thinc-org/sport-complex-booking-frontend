@@ -31,7 +31,13 @@ const AddCourt = () => {
                 console.log(res)
                 history.goBack()
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err.response)
+                setError('request', {
+                    type: 'manual',
+                    message: err.response.status == 409 ? 'วันหรือเวลาของการปิดคอร์ดนี้ซ้ำกับการปิดคอร์ดที่มีอยู่แล้ว' : 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง'
+                })
+            })
     }
 
 
@@ -85,7 +91,12 @@ const AddCourt = () => {
                         </Col>
                     </Row>
                     <Row>
-                        {(errors.required || startDate || endDate) && 'กรุณากรอกข้อมูลให้ครบ'}
+                        <Col >
+                            <div style={{ color: 'red' }}>
+                                {(errors.required || !startDate || !endDate || !rowData) && 'กรุณากรอกข้อมูลให้ครบ'}
+                                {errors.request && errors.request.message}
+                            </div>
+                        </Col>
                     </Row>
                     <div className='mt-3 small-table'>
                         {CourtTable<ViewRowProps>({

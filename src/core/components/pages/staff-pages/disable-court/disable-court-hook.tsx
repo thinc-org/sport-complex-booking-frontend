@@ -1,8 +1,8 @@
 
 import * as React from 'react'
 import { useState, useEffect, useLayoutEffect, useRef, ComponentType } from 'react';
-import { Option, RowProps, Pagination, QueryParams, ViewResponse, DisableFormData, ViewRowProps, disable_time, View } from './disable-court-interface'
-import { useHistory, useRouteMatch } from 'react-router-dom'
+import { Option, RowProps, Pagination, QueryParams, ViewResponse, DisableFormData, ViewRowProps, disable_time, View, ReactLocation } from './disable-court-interface'
+import { useHistory, useRouteMatch, useLocation } from 'react-router-dom'
 import { client } from '../../../../../axiosConfig'
 import { AxiosResponse } from 'axios';
 
@@ -46,8 +46,10 @@ export const useRow = (initial: ViewRowProps[] = []) => {
 }
 
 export const useEditCourt = () => {
+    const [error, setError] = useState<string>()
     const [isEdit, setIsEdit] = useState(false);
-    return { isEdit, setIsEdit }
+
+    return { isEdit, setIsEdit, error, setError }
 
 }
 
@@ -157,6 +159,21 @@ export const useTable = () => {
     const nearestFiveFloor = (page % 5 == 0 && page != 1) ? page - 4 : (5 * Math.floor(page / 5)) + 1
     const nearestFiveCeil = (5 * Math.ceil((page) / 5)) > maxPage ? maxPage : (5 * Math.ceil((page) / 5))
     const pageArr = Array.from(Array(nearestFiveCeil + 1).keys()).slice(nearestFiveFloor, nearestFiveCeil + 1)
+    const onDelete = (id: string) => {
+        client.delete(`/courts/disable-courts/${id}`)
+            .then((res) => {
+                setParams(prev => {
+                    return {
+                        ...prev,
+                        start: ((10 * page) - 9) - 1,
+                        end: (10 * page) - 1,
+                        shouldChange: prev.shouldChange ? !prev.shouldChange : true
+                    }
+                })
+
+            })
+            .catch((err) => console.log(err))
+    }
     function jumpUp() {
         const currentPage = page ?? 0
         setPage(5 * Math.ceil(currentPage / 5) + 1)
@@ -180,7 +197,7 @@ export const useTable = () => {
         setParams(prev => {
             return {
                 ...prev,
-                start: ((10 * page) - 9) - 1, // page could actually be calculated from params state
+                start: ((10 * page) - 9) - 1,
                 end: (10 * page) - 1
             }
         })
@@ -192,7 +209,7 @@ export const useTable = () => {
         }
         fetchData(params)
     }, [params])
-    return { data, page, maxPage, setPage, jumpUp, jumpDown, setParams, pageArr }
+    return { data, page, maxPage, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete }
 }
 
 

@@ -19,10 +19,9 @@ const ViewCourt = () => {
     const params = useParams<Params>()
     const { viewData, inProp, rowData, onAddRow, onDeleteRow, setInProp } = useViewTable(params.id)
     const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
-    const { isEdit, setIsEdit } = useEditCourt()
+    const { isEdit, setIsEdit, error, setError } = useEditCourt()
 
     const onSubmit = (e) => {
-        e.preventDefault()
         const formData = {
             sport_id: viewData?.sport_id,
             disable_time: rowData,
@@ -32,7 +31,10 @@ const ViewCourt = () => {
         console.log(formData)
         client.put(`/courts/disable-courts/${params.id}`, formData)
             .then((res) => { history.goBack() })
-            .catch((err) => console.log(err))
+            .catch((err) => {
+                console.log(err)
+                setError(err.response.message)
+            })
     }
     return (
         <Container fluid>
@@ -135,6 +137,7 @@ const ViewCourt = () => {
                             </Button>
                         </>
                     }
+                    {error}
                 </div>
             </Form>
         </Container>

@@ -50,7 +50,7 @@ select {
 .react-datepicker-wrapper,
 .react-datepicker__input-container {
   display: block;
-  wixth: 100%;
+  width: 100%;
 }
 .default-link,
 .default-link:hover {
