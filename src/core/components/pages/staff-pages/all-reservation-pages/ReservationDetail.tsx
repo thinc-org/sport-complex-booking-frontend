@@ -1,9 +1,32 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
 import { RouteComponentProps, Link } from "react-router-dom"
-import { ListGroup, Table, Row, Col, Button, Card } from "react-bootstrap"
+import { Table, Row, Col, Button, Card } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import { DeleteModal, UserInfo } from "../interfaces/reservationSchemas"
 import DeleteModalComponent from "./DeleteModalComponent"
+
+export const convertSlotToTime = (slot: number): string => {
+  if (slot % 2 === 0) return String(slot / 2 - 1) + ":30-" + String(slot / 2) + ":00"
+  return String(Math.floor(slot / 2)) + ":00-" + String(Math.floor(slot / 2)) + ":30"
+}
+
+export const getTimeText = (timeSlot: number[]): string => {
+  let text = ""
+  let i = 0
+  while (i < timeSlot.length) {
+    let temp = convertSlotToTime(timeSlot[i])
+    if (
+      (i === 0 && i !== timeSlot.length - 1) ||
+      (0 < i && i < timeSlot.length - 1 && timeSlot[i + 1] === timeSlot[i] + 1 && timeSlot[i - 1] !== timeSlot[i] - 1)
+    )
+      text += temp.slice(0, temp.indexOf("-"))
+    else if (i > 0 && timeSlot[i - 1] === timeSlot[i] - 1 && (i === timeSlot.length - 1 || timeSlot[i + 1] !== timeSlot[i] + 1))
+      text += temp.slice(temp.indexOf("-"), 11) + (i === timeSlot.length - 1 ? "" : ",")
+    else if (i === timeSlot.length - 1 || timeSlot[i - 1] !== timeSlot[i] - 1) text += temp + (i === timeSlot.length - 1 ? "" : ",")
+    i++
+  }
+  return text
+}
 
 const ReservationDetail: FunctionComponent<RouteComponentProps<{ pagename: string; _id: string }>> = (props) => {
   // Page state //
@@ -35,11 +58,6 @@ const ReservationDetail: FunctionComponent<RouteComponentProps<{ pagename: strin
     let time: string = ""
     for (let idx = 0; idx < time_slot.length; idx++) time += convertSlotToTime(time_slot[idx]) + (idx !== time_slot.length - 1 ? "," : "")
     return time
-  }
-
-  const convertSlotToTime = (slot: number): string => {
-    if (slot % 2 === 0) return String(slot / 2) + ":00-" + String(slot / 2 - 1) + ":30"
-    return String(Math.floor(slot / 2)) + ":30-" + String(Math.floor(slot / 2)) + ":00"
   }
 
   // request //
@@ -99,7 +117,7 @@ const ReservationDetail: FunctionComponent<RouteComponentProps<{ pagename: strin
       <Table>{renderMemberTable()}</Table>
       <Row className="mt-4">
         <Col>
-          <Link to={"/allReservation/" + pagename}>
+          <Link to={"/staff/allReservation/" + pagename}>
             <Button variant="pink" className="btn-normal">
               กลับ
             </Button>

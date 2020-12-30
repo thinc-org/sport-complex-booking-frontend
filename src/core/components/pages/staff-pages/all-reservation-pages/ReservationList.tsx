@@ -1,29 +1,36 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
-import { RouteComponentProps, Link } from "react-router-dom"
-import { Row, Col, Form, Button, Table } from "react-bootstrap"
+import { RouteComponentProps } from "react-router-dom"
+import { Col, Form, Button, Table } from "react-bootstrap"
 import SuccessfulReservation, { Sport, Court } from "../interfaces/reservationSchemas"
-// import {convertDate} from "../list-of-all-users-pages/"
+import format from "date-fns/format"
+import { convertSlotToTime, getTimeText } from "./ReservationDetail"
 import { client } from "../../../../../axiosConfig"
 
 const AllReservation: FunctionComponent<RouteComponentProps<{ pagename: string }>> = (props) => {
   // Page state
-  let [pagename] = useState<string>(props.match.params.pagename)
+  let [pagename, setPagename] = useState<string>(props.match.params.pagename)
   let [pageNo, setPageNo] = useState<number>(1)
   let [maxUser, setMaxUser] = useState<number>(1)
   // Search state
   let [sportType, setSportType] = useState<string>("") // id
   let [sportIdx, setSportIdx] = useState<number>(-2)
   let [courtNo, setCourtNo] = useState<number>(-2) // -2 is default
+  let [chooseDate, setChooseDate] = useState<boolean>(false)
   let [searchDate, setSearchDate] = useState<Date>(new Date())
-  let [searchTime, setSearchTime] = useState<number>(1)
+  let [searchTime, setSearchTime] = useState<number>(-1)
   // Reservation room state
   let [reserveInfo, setReserveInfo] = useState<SuccessfulReservation[]>([])
   let [allSports, setAllSports] = useState<Sport[]>([])
 
   // useEffects //
   useEffect(() => {
+    setPagename(props.match.params.pagename)
+  }, [props.match.params.pagename])
+
+  useEffect(() => {
     client({
       method: "GET",
+      // court-manager/getSports
       url: "/court-manager/",
     })
       .then(({ data }) => {
@@ -33,71 +40,79 @@ const AllReservation: FunctionComponent<RouteComponentProps<{ pagename: string }
       .catch(({ response }) => {
         console.log(response)
       })
-  }, [])
+  }, [pagename])
 
   useEffect(() => {
     requestInfo()
-  }, [sportIdx, courtNo, searchDate, searchTime])
-
-  useEffect(() => {
-    if (allSports.length !== 0 && sportIdx >= 0) {
-      setSportType(allSports[sportIdx]._id)
-    }
-    setCourtNo(-2)
-  }, [sportIdx])
+  }, [sportType, courtNo, searchDate, searchTime, pagename])
 
   // useEffect(() => {
-  //   console.log(courtNo + " ubub")
-  // }, [courtNo])
-
-  useEffect(() => {
-    console.log(searchDate)
-  }, [searchDate])
+  //   console.log(searchDate)
+  // }, [searchDate])
 
   // handles //
   const handleInfo = (e) => {
     props.history.push({
-      pathname: "/reservationDetail/" + pagename + "/" + e.target.id,
+      pathname: "/staff/reservationDetail/" + pagename + "/" + e.target.id,
     })
+  }
+
+  const handleChangeSport = (e) => {
+    let idx: number = parseInt(e.target.value)
+    if (allSports.length !== 0 && idx >= 0) setSportType(allSports[idx]._id)
+    else setSportType("")
+    setCourtNo(-2)
+    setSportIdx(idx)
+  }
+
+  const handleChangeDate = (e) => {
+    setChooseDate(true)
+    let today = new Date()
+    let incom = new Date(e.target.value)
+    setSearchDate(incom < today ? today : incom)
   }
 
   // requests //
   const requestInfo = () => {
     // request reservation_info //
-    // fetch({
-    //   method: "GET",
-    //   url: "/account_info/testing/adminToken",
-    // })
-    //   .then(({ data }) => {
-    //     set_jwt(data.token.token)
-    //   })
-    //   .catch(({ response }) => {
-    //     console.log(response)
-    //   })
+    let url: string = pagename === "success" ? "/all-reservation" : "/all-waiting-room"
+    let data = {}
+    if (sportType !== "") data["sportId"] = sportType
+    if (courtNo >= 0) data["courtNumber"] = courtNo
+    if (chooseDate) data["date"] = searchDate
+    if (searchTime !== -1) data["timeSlot"] = searchTime
+    client({
+      method: "POST",
+      url,
+      data,
+    })
+      .then(({ data }) => {
+        console.log(data)
+        setReserveInfo(data[1])
+        setMaxUser(data[0])
+      })
+      .catch(({ response }) => {
+        console.log(response)
+      })
   }
 
   // other functions //
-  const sportIdToName = (id: string) => {
+  const sportIdToName = (id: string): string => {
     // convert sport id to sport name //
-    let name = "123"
-    return name
+    for (let sport of allSports) if (sport._id === id) return sport.sport_name_th
+    return ""
   }
-
-  // handles //
 
   // renders //
   const renderSportTypeFilter = () => {
     let i = 0
-    let sportList = allSports.map((info) => <option value={i++}>{info.sport_name_th}</option>)
+    let sportList = allSports.map((info) => (
+      <option key={i} value={i++}>
+        {info.sport_name_th}
+      </option>
+    ))
     return (
-      <Form.Control
-        className="form-pink"
-        as="select"
-        value={sportIdx}
-        onChange={(e) => {
-          setSportIdx(parseInt(e.target.value))
-        }}
-      >
+      <Form.Control className="form-pink" as="select" value={sportIdx} onChange={handleChangeSport}>
         <option value={-2} disabled>
           ประเภทกีฬา
         </option>
@@ -110,7 +125,11 @@ const AllReservation: FunctionComponent<RouteComponentProps<{ pagename: string }
   const renderCourtNumberFilter = () => {
     if (sportType !== "" && sportIdx >= 0) {
       let allCourts: Court[] = allSports[sportIdx].list_court
-      let courtList = allCourts.map((info) => <option value={info.court_num}>{info.court_num}</option>)
+      let courtList = allCourts.map((info) => (
+        <option key={info.court_num} value={info.court_num}>
+          {info.court_num}
+        </option>
+      ))
       return (
         <Form.Control
           className="form-pink"
@@ -144,12 +163,16 @@ const AllReservation: FunctionComponent<RouteComponentProps<{ pagename: string }
       </option>,
       <option value={0}>ทั้งหมด</option>,
     ]
-    for (let i = 1; i <= 48; i++)
-      timeList.push(
-        <option value={i}>{i % 2 === 0 ? i / 2 - 1 + ":30 - " + i / 2 + ":00" : Math.floor(i / 2) + ":00 - " + Math.floor(i / 2) + ":30"}</option>
-      )
+    for (let i = 1; i <= 48; i++) timeList.push(<option value={i}>{convertSlotToTime(i)}</option>)
     return (
-      <Form.Control className="form-pink" as="select" defaultValue={-1}>
+      <Form.Control
+        className="form-pink"
+        as="select"
+        defaultValue={-1}
+        onChange={(e) => {
+          setSearchTime(parseInt(e.target.value))
+        }}
+      >
         {timeList}
       </Form.Control>
     )
@@ -161,19 +184,7 @@ const AllReservation: FunctionComponent<RouteComponentProps<{ pagename: string }
         <Col>{renderSportTypeFilter()}</Col>
         <Col>{renderCourtNumberFilter()}</Col>
         <Col>
-          <Form.Control
-            className="form-pink"
-            type="date"
-            // value={convertDate(searchDate)}
-            value={searchDate.getFullYear() + "-" + searchDate.getMonth() + "-" + searchDate.getDate()}
-            onChange={(e) => {
-              let today = new Date()
-              let incom = new Date(e.target.value)
-              // console.log(today, incom)
-              // console.log(incom < today)
-              setSearchDate(incom < today ? today : incom)
-            }}
-          />
+          <Form.Control className="form-pink" type="date" value={chooseDate ? format(searchDate, "yyyy-MM-dd") : ""} onChange={handleChangeDate} />
         </Col>
         <Col>{renderTimeFilter()}</Col>
       </Form.Row>
@@ -181,14 +192,14 @@ const AllReservation: FunctionComponent<RouteComponentProps<{ pagename: string }
   }
 
   const renderTable = () => {
-    let index = (pageNo - 1) * 10 + 1
     let usersList = reserveInfo.map((info) => {
+      const { sport_id, court_number, date, time_slot } = info
       return (
-        <tr key={index++} className="tr-normal">
-          <td>{sportIdToName(info.sport_id)}</td>
-          <td>{info.court_num}</td>
-          <td>{info.date.getDate()}</td>
-          <td>{info.time_slot[0].start_time + " - " + info.time_slot[info.time_slot.length - 1].end_time}</td>
+        <tr key={info._id} className="tr-normal">
+          <td>{sportIdToName(sport_id)}</td>
+          <td>{court_number}</td>
+          <td>{date ? format(new Date(date), "dd-MM-yyyy") : ""}</td>
+          <td>{getTimeText(time_slot)}</td>
           <td>
             <Button className="btn-normal btn-outline-black" variant="outline-secondary" id={info._id} onClick={handleInfo}>
               ดูข้อมูล
