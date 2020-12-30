@@ -1,33 +1,38 @@
 import React from "react"
 import { Button } from "react-bootstrap"
-import { useState} from "react"
 import { useForm } from "react-hook-form"
-import {Link } from "react-router-dom"
-import { getCookie } from '../../../contexts/cookieHandler'
+import { Link } from "react-router-dom"
 import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from 'react-i18next'
+import { client } from "../../../../axiosConfig"
 
 function JoinWaitingRoom() {
   const { register, handleSubmit, errors } = useForm()
-  const {t} = useTranslation()
+  const { t } = useTranslation()
 
-  const onSubmit = (data: any) => {
-    console.log(JSON.parse(JSON.stringify(data)))
+  const onSubmit = async (data: any) => {
+    await client.put('/reservation/joinwaitingroom', data)
+      .then(() => {
+        // need to connect endpoint
+      })
+      .catch(() => {
+        // need to connect endpoint
+      })
   }
 
   return (
     <div className="wrapper">
       <div className="mx-auto col-md-6">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{t("join_waiting_room")}</h4>
+          <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{t("joinWaitingRoom")}</h4>
           <div className="default-mobile-wrapper mt-4">
             <span className="row mt-3">
-              <h6 className="mx-3 mt-1 font-weight-bold">{t("waiting_room_password")}</h6>
+              <h6 className="mx-3 mt-1 font-weight-bold">{t("waitingRoomPassword")}</h6>
             </span>
-            <p className="font-weight-light">{t("waiting_room_help")}</p>
+            <p className="font-weight-light">{t("waitingRoomHelp")}</p>
             <div className="mt-2">
               <input
-                name="access_code"
+                name="accessCode"
                 type="text"
                 ref={register({
                   required: t("enter_code")!,
@@ -39,7 +44,7 @@ function JoinWaitingRoom() {
                 placeholder="xxxxxx"
                 className="form-control"
               />
-              {errors.access_code && <p id="input-error">{errors.access_code.message}</p>}
+              {errors.accessCode && <p id="input-error">{errors.accessCode.message}</p>}
             </div>
           </div>
           <br />
@@ -50,7 +55,7 @@ function JoinWaitingRoom() {
               </Button>
             </Link>
             <Button variant="pink" type="submit">
-              {t("join_waiting_room")}
+              {t("joinWaitingRoom")}
             </Button>
           </div>
         </form>

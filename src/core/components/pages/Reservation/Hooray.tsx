@@ -1,34 +1,32 @@
 import React from "react"
 import { Button } from "react-bootstrap"
-import {Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from 'react-i18next'
+import hooray from "../../../assets/images/hooray.svg"
 
 function Hooray() {
 
-  const {t} = useTranslation()
+  const { t } = useTranslation()
 
   return (
     <div className="wrapper">
-      <div className="mx-auto col-md-6">      
-          <div className="text-center mt-5"  >
-            <svg width="164" height="164" viewBox="0 0 164 164" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="82" cy="82" r="82" fill="#FF80AB"/>
-            <path d="M68.7497 100.418L50.3322 82.0003L44.0605 88.2278L68.7497 112.917L121.75 59.917L115.522 53.6895L68.7497 100.418Z" fill="#FAFAFA"/>
-            </svg>  
+      <div className="mx-auto col-md-6">
+        <div className="text-center mt-5"  >
+          <img alt="hooray" src={hooray} />
+        </div>
+        <div className="default-mobile-wrapper mt-4 pb-0">
+          <h4 className="text-center">{t("hooray")},</h4>
+          <p className="text-center">{t("reservationSuccess")}</p>
+          <br />
+          <div className="button-group">
+            <Link to={"/waiting_room"}>
+              <Button variant="pink">
+                {t("viewWaitingRoom")}
+              </Button>
+            </Link>
           </div>
-          <div className="default-mobile-wrapper mt-4 pb-0">
-            <h4 className="text-center">{t("hooray")},</h4>
-            <p className="text-center">{t("reservation_success")}</p>
-            <br/>
-            <div className="button-group">
-              <Link to={"/waiting_room"}>
-                <Button variant="pink">
-                  {t("view_waiting_room")}
-                </Button>
-              </Link>
-          </div>
-          </div>
+        </div>
       </div>
     </div>
   )

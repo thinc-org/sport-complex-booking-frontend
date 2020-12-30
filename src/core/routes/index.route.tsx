@@ -17,6 +17,7 @@ import HomePage from '../components/pages/HomePage';
 import { getCookie } from "../contexts/cookieHandler"
 import ChangePassword from "../components/pages/AccountPages/AccountPageUI/ChangePassword"
 import WaitingRoomBan from "../components/pages/Reservation/WaitingRoomBan"
+import Hooray from "../components/pages/Reservation/Hooray"
 
 
 export default function MainRoute() {
@@ -52,9 +53,13 @@ export default function MainRoute() {
 
         <Route exact path='/home' component={HomePage} />
 
-        <Route path='/staff' component={StaffRoute} />
-
         <Route exact path='/staff' component={StaffRoute} />
+
+        <Route exact path='/changePassword' component={ChangePassword} />
+
+        <Route exact path='/banned' component={WaitingRoomBan} />
+
+        <Route exact path='/hooray' component={Hooray} />
 
         <Route exact path='/changePassword' component={ChangePassword} />
 

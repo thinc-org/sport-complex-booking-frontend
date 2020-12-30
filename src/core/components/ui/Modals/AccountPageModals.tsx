@@ -7,17 +7,16 @@ import { useTranslation } from 'react-i18next'
 export interface ConfirmModalProps {
   show?: boolean,
   setShow(show: boolean): void,
-  handleSubmit(onSubmit: (data: EdittedData) => void),
-  onSubmit(data: EdittedData): void
+  postDataToBackend: (data) => void,
+  formData?: EdittedData
 }
 
-interface EdittedData {
-  personal_email: String,
-  phone: String,
-  is_thai_language: boolean
+export interface EdittedData {
+  personal_email: string,
+  phone: string,
 }
 
-export const ConfirmModal: React.FC<ConfirmModalProps> = ({ show, setShow, handleSubmit, onSubmit }) => {
+export const ConfirmModal: React.FC<ConfirmModalProps> = ({ show, setShow, postDataToBackend, formData }) => {
   const { t } = useTranslation()
   if (!show) return null
   return (
@@ -25,22 +24,22 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({ show, setShow, handl
       <div className="modal-content">
         <div className="modal-header">
           <h5 className="modal-title" id="confirmModalLabel">
-            {t("confirm_submit")}
+            {t("confirmSubmit")}
           </h5>
           <button type="button" className="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div className="modal-body">
-          {t("confirm_submit_msg")}
+          {t("confirmSubmitMsg")}
         </div>
         <div className="modal-footer">
 
           <Button onClick={() => setShow(false)} type="button" variant="outline-secondary" className="btn-normal" data-dismiss="modal">
             {t("cancel")}
           </Button>
-          <Button onClick={handleSubmit(onSubmit)} variant="pink" className="btn-normal">
-            {t("save_and_submit")}
+          <Button onClick={() => postDataToBackend(formData)} variant="pink" className="btn-normal">
+            {t("saveAndSubmit")}
           </Button>
         </div>
       </div>
@@ -68,9 +67,9 @@ export const ErrorModal: React.FC<ErrorModalProps> = ({ showErr, setShowErr }) =
       classname="modal"
     >
       <Modal.Header closeButton>
-        <Modal.Title>{t("error_occured")}</Modal.Title>
+        <Modal.Title>{t("errorOccured")}</Modal.Title>
       </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}> {t("cannot_edit_info")} </Modal.Body>
+      <Modal.Body style={{ fontWeight: "lighter" }}> {t("cannotEditInfo")} </Modal.Body>
       <Modal.Footer>
         <Button
           variant="pink"
@@ -87,8 +86,7 @@ export const ErrorModal: React.FC<ErrorModalProps> = ({ showErr, setShowErr }) =
 }
 
 interface WarningMessageProps {
-  show: boolean,
-  is_thai_language: boolean
+  show: boolean
 }
 
 export const WarningMessage: React.FC<WarningMessageProps> = ({ show }) => {
@@ -97,7 +95,7 @@ export const WarningMessage: React.FC<WarningMessageProps> = ({ show }) => {
   return (
     <div className="alert alert-danger  mt-3" role="alert">
       <h3>{t("warning")}</h3>
-      <h6>{t("please_submit_regis_form")}</h6>
+      <h6>{t("pleaseSubmitRegisForm")}</h6>
     </div>
   )
 }
@@ -116,38 +114,38 @@ export const OtherWarningMessage: React.FC<OtherWarningMessageProps> = ({ show, 
       return (
         <div className="alert alert-danger mt-3" role="alert">
           <h3>{t("warning")}</h3>
-          <h6>{t("not_submitted_message")}</h6>
+          <h6>{t("notSubmittedMessage")}</h6>
         </div>
       )
     }
     case "Rejected": {
       return (
         <div className="alert alert-danger mt-3" role="alert">
-          <h3>{t("rejected_title")}</h3>
-          <h6>{t("rejected_message")}</h6>
+          <h3>{t("rejectedTitle")}</h3>
+          <h6>{t("rejectedMessage")}</h6>
         </div>
       )
     }
     case "Submitted": {
       return (
         <div className="alert alert-info  mt-3" role="alert">
-          <h3>{t("submitted_title")}</h3>
-          <h6>{t("submitted_message")}</h6>
+          <h3>{t("submittedTitle")}</h3>
+          <h6>{t("submittedMessage")}</h6>
         </div>
       )
     }
     case "Approved": {
       return (
         <div className="alert alert-info mt-3" role="alert">
-          <h3>{t("approved_title")}</h3>
+          <h3>{t("approvedTitle")}</h3>
           <h6>
-            {t("approved_message")}
+            {t("approvedMessage")}
           </h6>
         </div>
       )
     }
     default: {
-      return <div></div>
+      return null
     }
   }
 }

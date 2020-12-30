@@ -5,7 +5,7 @@ import SatitAndCUPersonelAccount from "./SatitAndCUPersonelAccount"
 import OtherAccount from "./OtherAccount"
 import axios from "axios"
 import { UserContext } from "../../../contexts/UsersContext"
-import {useAuthContext } from "../../../controllers/authContext"
+import { useAuthContext } from "../../../controllers/authContext"
 import { getCookie } from "../../../contexts/cookieHandler"
 import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from 'react-i18next'
@@ -17,11 +17,11 @@ function AccountPage() {
     Other = "Other",
   }
 
-  const {token} = useAuthContext()
-  const { setCuStudent, setSatit, setOther, setLanguage } = useContext(UserContext)
+  const { token } = useAuthContext()
+  const { setCuStudentAccount, setSatitCuPersonelAccount, setOtherAccount } = useContext(UserContext)
   const [account_type, setAccountType] = useState();
-  const [penalizeStatus, setPenalizeStatus] = useState();  
-  const {i18n} = useTranslation()
+  const [penalizeStatus, setPenalizeStatus] = useState();
+  const { i18n } = useTranslation()
 
   useEffect(() => {
     fetch_account_type()
@@ -36,54 +36,54 @@ function AccountPage() {
       })
       .then(({ data }) => {
         data.jwt = token
-        const newData = {...data}
+        const newData = { ...data }
         setPenalizeStatus(data.is_penalize)
         data.rejected_info ? (
-          data.rejected_info.forEach((field)=> {
+          data.rejected_info.forEach((field) => {
             newData[field] = ""
           })
         ) : (
-          console.log("No rejected info")
-        )
+            console.log("No rejected info")
+          )
 
         if (data.account_type === "CuStudent") {
-          setCuStudent(newData)
+          setCuStudentAccount(newData)
         } else if (data.account_type === "SatitAndCuPersonel") {
-          setSatit(newData)
+          setSatitCuPersonelAccount(newData)
         } else if (data.account_type === "Other") {
-          setOther(newData)
+          setOtherAccount(newData)
         }
-        setLanguage(getCookie("is_thai_language")==="true")
-        if (getCookie("is_thai_language")==="true") i18n.changeLanguage('th');
+        //setLanguage(getCookie("is_thai_language")==="true")
+        if (getCookie("is_thai_language") === "true") i18n.changeLanguage('th');
         else i18n.changeLanguage('en')
         setAccountType(data.account_type)
       })
   }
 
-  const showPage = (account_type: String | undefined) => {
+  const showPage = (account_type: string | undefined) => {
     switch (account_type) {
       case Account.CuStudent: {
         return <ChulaAccount />
       }
       case Account.SatitAndCuPersonel: {
-        return <SatitAndCUPersonelAccount/>
+        return <SatitAndCUPersonelAccount />
       }
       case Account.Other: {
-        return <OtherAccount/>
+        return <OtherAccount />
       }
       default: {
         return <div className="wrapper mx-auto text-center mt-5">Loading...</div>
       }
     }
-  } 
+  }
 
   return (
     <>
-      <PenalizeMessage show={penalizeStatus}/>
+      <PenalizeMessage show={penalizeStatus} />
       {showPage(account_type)}
     </>
   )
-  
+
 }
 
 export default withUserGuard(AccountPage)
@@ -93,9 +93,9 @@ interface PenalizeMessageProps {
   show?: boolean,
 }
 
-const PenalizeMessage:React.FC<PenalizeMessageProps> = ({show}) => {
-  const {t} = useTranslation()
-  if(!show) return null
+const PenalizeMessage: React.FC<PenalizeMessageProps> = ({ show }) => {
+  const { t } = useTranslation()
+  if (!show) return null
   return (
     <div className="alert alert-danger mx-3 mt-3" role="alert">
       <h3>{t("you_are_penalied")}</h3>

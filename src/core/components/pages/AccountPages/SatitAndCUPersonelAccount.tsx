@@ -4,23 +4,23 @@ import React from "react"
 import { useState } from "react"
 
 export default function SatitAndCuPersonel() {
-  let [is_editting, set_is_editting] = useState(false)
+  let [isEditting, setIsEditting] = useState(false)
 
   const toggleEditButton = () => {
-    if (is_editting) {
-      set_is_editting(false)
+    if (isEditting) {
+      setIsEditting(false)
     } else {
-      set_is_editting(true)
+      setIsEditting(true)
     }
   }
 
   return (
     <div>
       {
-        !is_editting ? (
-          <SatitAndCUPersonelAccountDisplay toggle_edit_button={toggleEditButton} />
+        !isEditting ? (
+          <SatitAndCUPersonelAccountDisplay toggleEditButton={toggleEditButton} />
         ) : (
-          <SatitAndCUPersonelAccountEdit toggle_edit_button={toggleEditButton} />
+          <SatitAndCUPersonelAccountEdit toggleEditButton={toggleEditButton} />
         )
       }
     </div>
