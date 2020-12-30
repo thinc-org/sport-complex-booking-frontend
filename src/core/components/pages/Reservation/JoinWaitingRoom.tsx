@@ -14,14 +14,15 @@ function JoinWaitingRoom() {
   const [showWrongAccessCodeModal, setShowWrongAccessCodeModal] = useState(false)
 
   const onSubmit = async (data: any) => {
-    console.log(data)
     await client.post('/reservation/joinwaitingroom', data)
-      .then(() => {
-        history.push('/waitingroom')
+      .then((data) => {
+        if (data['data']['isReservationCreated']) {
+          history.push('/hooray')
+        } else {
+          history.push('/waitingroom')
+        }
       })
-      .catch(() => {
-        setShowWrongAccessCodeModal(true)
-      })
+      .catch(() => {setShowWrongAccessCodeModal(true)})
   }
 
   return (
@@ -29,7 +30,7 @@ function JoinWaitingRoom() {
       <div className="mx-auto col-md-6">
         <form onSubmit={handleSubmit(onSubmit)}>
           <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{t("joinWaitingRoom")}</h4>
-          <div className="default-mobile-wrapper mt-4">
+          <div className="default-mobile-wrapper mt-4 animated-card">
             <span className="row mt-3">
               <h6 className="mx-3 mt-1 font-weight-bold">{t("waitingRoomPassword")}</h6>
             </span>

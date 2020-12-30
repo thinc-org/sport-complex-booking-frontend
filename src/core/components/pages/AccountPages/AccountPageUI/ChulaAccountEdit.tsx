@@ -5,20 +5,31 @@ import { UserContext } from "../../../../contexts/UsersContext"
 import { useTranslation } from 'react-i18next'
 import { ConfirmModal, ErrorModal, EdittedData, WarningMessage } from "../../../ui/Modals/AccountPageModals";
 import { client } from "../../../../../axiosConfig";
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup';
 
 export default function ChulaAccountEdit({ toggleEditButton }) {
+  const {t} = useTranslation()
+  const schema = yup.object().shape({
+    phone: yup.string().required(t("phoneErrorMessage")),
+    personal_email: yup.string().required(t("emailErrorMessage")).email(t("emailErrorMessage")),
+  })
+
   const [show, setShow] = useState(false);
   const [showErr, setShowErr] = useState(false);
   const [formData, setFormData] = useState<EdittedData>()
-  const {t} = useTranslation()
+  
   const { cuStudentAccount: user } = useContext(UserContext)
 
   // React Hook Forms
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit, errors } = useForm({resolver: yupResolver(schema)});
 
-  const onSubmit = (data: EdittedData) => {
-    setShow(true)
-    setFormData(data)
+  const onSubmit = async (data: EdittedData) => {
+    const valid = await schema.isValid(data)
+    if (valid) {
+      setShow(true)
+      setFormData(data)
+    }
   };
 
   const handleCancel = (e) => {
@@ -31,8 +42,7 @@ export default function ChulaAccountEdit({ toggleEditButton }) {
       .then(() => {
           window.location.reload()
       })
-      .catch((err) => {
-          console.log(err);
+      .catch(() => {
           setShowErr(true);
       })
   }
@@ -40,7 +50,7 @@ export default function ChulaAccountEdit({ toggleEditButton }) {
   return (
     <div className="mx-auto col-md-6">
       <WarningMessage show={user!.is_first_login}/>
-      <div className="default-mobile-wrapper">
+      <div className="default-mobile-wrapper animated-card">
         <div className="row mt-2">
           <div className="col-8">
             <h4 className="align-right">
@@ -55,26 +65,11 @@ export default function ChulaAccountEdit({ toggleEditButton }) {
         <form onSubmit={handleSubmit(onSubmit)}>
 
             <label className="form-label mt-2">{t("phoneLabel")}</label>
-            <input name="phone" type="number" ref={register({
-              required:  t("phone_error_message").toString(),
-              pattern: {
-                value: /^[A-Z0-9._%+-]/i,
-                message: t("phone_error_message"),
-              },
-            })} placeholder="0xxxxxxxxx" defaultValue={user?.phone} className="form-control"/>
+            <input name="phone" type="number" ref={register} placeholder="0xxxxxxxxx" defaultValue={user?.phone} className="form-control"/>
             {errors.phone && <p id="input-error">{errors.phone.message}</p>}
 
             <label className="form-label mt-2">{t("personalEmailLabel")}</label>
-            <input name="personal_email" ref={register(
-              {
-                required: t("email_error_message").toString(),
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                  message: t("email_error_message"),
-                },
-              }
-            )} placeholder="example@email.com" defaultValue={user?.personal_email} className="form-control"/>
-
+            <input name="personal_email" ref={register} placeholder="example@email.com" defaultValue={user?.personal_email} className="form-control"/>
             {errors.personal_email && <p id="input-error">{errors.personal_email.message}</p>}
 
           <hr/>
@@ -85,7 +80,7 @@ export default function ChulaAccountEdit({ toggleEditButton }) {
               </Button>
             </div>
             <div className="button-group col-md-12">
-              <Button variant="pink" className="btn-secondary" type="submit" onClick={()=> setShow(true)}>
+              <Button variant="pink" className="btn-secondary" type="submit">
                 {t("saveAndSubmit")}
               </Button>
             </div>

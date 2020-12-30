@@ -9,6 +9,8 @@ import {useAuthContext } from "../../../controllers/authContext"
 import { getCookie } from "../../../contexts/cookieHandler"
 import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from 'react-i18next'
+import { Loading } from "../../ui/loading/loading"
+import { client } from "../../../../axiosConfig";
 
 function AccountPage() {
   enum Account {
@@ -28,23 +30,17 @@ function AccountPage() {
   }, [])
 
   const fetch_account_type = async () => {
-    await axios
-      .get("http://localhost:3000/account_info/", {
-        headers: {
-          Authorization: "bearer " + token,
-        },
-      })
+    await client
+      .get("/account_info/")
       .then(({ data }) => {
         data.jwt = token
         const newData = {...data}
         setPenalizeStatus(data.is_penalize)
         data.rejected_info ? (
-          data.rejected_info.forEach((field)=> {
+          data.rejected_info.forEach((field: string)=> {
             newData[field] = ""
           })
-        ) : (
-          console.log("No rejected info")
-        )
+        ) : ( console.log("No rejected info"))
 
         if (data.account_type === "CuStudent") {
           setCuStudentAccount(newData)
@@ -53,7 +49,6 @@ function AccountPage() {
         } else if (data.account_type === "Other") {
           setOtherAccount(newData)
         }
-        //setLanguage(getCookie("is_thai_language")==="true")
         if (getCookie("is_thai_language")==="true") i18n.changeLanguage('th');
         else i18n.changeLanguage('en')
         setAccountType(data.account_type)
@@ -72,7 +67,7 @@ function AccountPage() {
         return <OtherAccount/>
       }
       default: {
-        return <div className="wrapper mx-auto text-center mt-5">Loading...</div>
+        return <div className="wrapper mx-auto text-center mt-5"><Loading /></div>
       }
     }
   } 

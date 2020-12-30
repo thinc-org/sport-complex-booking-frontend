@@ -1,11 +1,12 @@
 import React from "react"
 import { Button } from "react-bootstrap"
-import { Link, useHistory, useLocation } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import { useEffect } from "react"
 import withUserGuard from "../../../guards/user.guard"
 import { useAuthContext } from "../../../controllers/authContext"
 import { History, LocationState } from "history";
 import { useTranslation } from 'react-i18next'
+import { client } from "../../../../axiosConfig"
 
 
 interface historyProps {
@@ -24,16 +25,7 @@ function WaitingRoomBan(props: historyProps) {
   }, [])
 
   const fetchValidity = async (token: String |undefined) => {
-
-    let axios = require('axios');
-    let config = {
-      method: 'post',
-      url: 'http://localhost:3000/reservation/checkvalidity',
-      headers: { 
-        'Authorization': 'bearer ' + token
-      }
-    };
-    await axios(config)
+    await client.post("/reservation/checkvalidity")
     .then((response:Object) => {
       let resMsg = response['data']['message']
       if (resMsg === "Valid user") {
@@ -42,7 +34,6 @@ function WaitingRoomBan(props: historyProps) {
     })
     .catch((error: Object) => {
       console.log(error)
-      //history.push({pathname: '/login'});
     });
 
   }

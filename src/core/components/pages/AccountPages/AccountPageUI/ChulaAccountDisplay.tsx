@@ -14,7 +14,7 @@ export default function ChulaAccountDisplay({ toggleEditButton }) {
   return (
     <div className="mx-auto col-md-6">
       <WarningMessage show={user!.is_first_login}/>
-      <div className="default-mobile-wrapper">
+      <div className="default-mobile-wrapper animated-card">
         <div className="row mt-2">
           <div className="col-8">
             <h4 className="align-right">
@@ -26,7 +26,7 @@ export default function ChulaAccountDisplay({ toggleEditButton }) {
             </h4>
           </div>
           <div className="col-4">
-            <Button className="btn-secondary float-right" onClick={toggleEditButton}>
+            <Button className="btn-secondary btn-sm float-right" onClick={toggleEditButton}>
               {t("edit")}
             </Button>
           </div>
