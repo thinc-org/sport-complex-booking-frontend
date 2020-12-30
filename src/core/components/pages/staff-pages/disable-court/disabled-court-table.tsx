@@ -11,21 +11,12 @@ import { dayArr } from './mapTime'
 export const CourtRow = (props: RowProps) => {
     const { url, path } = useRouteMatch()
     const history = useHistory()
-    const { show, setShow, onDelete } = useDeleteCourt(props._id)
     const onNavigate = () => history.push(`${path}/${props._id}`)
     const startingDate = new Date(props.starting_date)
     const expiredDate = new Date(props.expired_date)
     startingDate.setDate(startingDate.getDate() + 1);
     return (
         <>
-            <ErrorAlert
-                inProp={show}
-                header='คำเตือน'
-                message='ท่านต้องการยืนยันการลบการปิดคอร์ดนี้หรือไม่'
-                canCancel={true}
-                handleClose={onDelete}
-                onCancel={() => setShow(false)}
-            />
             { props._id && props.court_num ?
                 <tr>
                     <td>
@@ -43,9 +34,7 @@ export const CourtRow = (props: RowProps) => {
                             <Button variant='outline-transparent' className='mr-2' onClick={onNavigate} >
                                 ดูข้อมูล
                             </Button>
-                            <Button variant='outline-transparent' style={{ color: 'red' }} onClick={() => setShow(true)}>
-                                ลบ
-                            </Button>
+                            {props.button}
                         </div>
 
                     </td>
@@ -97,7 +86,7 @@ export function CourtTable<T>({ data, header, Row, Button }: TableProps<T>) {
                         {...val}
                         indx={indx}
                         key={val._id ?? indx}
-                        button={Button ? <Button indx={indx} /> : null}
+                        button={Button ? <Button indx={val._id ?? indx} /> : null}
                     />)
 
                 })}

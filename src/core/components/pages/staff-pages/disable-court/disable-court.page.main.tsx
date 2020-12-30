@@ -10,7 +10,6 @@ const DisableCourt = () => {
     return (
         <Switch>
             <Route path={`${path}/add`} component={AddCourt} />
-            <Route path={`${path}/edit`} component={EditCourt} />
             <Route path={`${path}/:id`} component={ViewCourt} />
             <Route path={path} component={ListOfCourts} exact />
         </Switch>

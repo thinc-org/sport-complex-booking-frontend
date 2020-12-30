@@ -6,15 +6,16 @@ import { useForm } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
 import { useDate, useOption, seed } from './disable-court-hook'
 import { ErrorAlert } from './modals'
+import { DeleteButton } from './button'
 import { CourtTable, CourtRow } from './disabled-court-table'
 import { RowProps } from './disable-court-interface'
-import { useTable } from './disable-court-hook'
+import { useTable, withDeletable } from './disable-court-hook'
 const ListOfCourts = () => {
     const history = useHistory()
     const startDateRef = useRef<DatePicker>()
     const endDateRef = useRef<DatePicker>()
     const { path } = useRouteMatch()
-    const { data, maxPage, page, setPage, jumpUp, jumpDown, setParams, pageArr } = useTable()
+    const { data, maxPage, page, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete } = useTable()
     const { register, handleSubmit, setError, errors, watch, setValue, getValues } = useForm();
     const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
     const watchSports = watch('sports', '')
@@ -61,7 +62,7 @@ const ListOfCourts = () => {
                                         return <option value={court.court_num} key={court._id}>{court.court_num}</option>
                                     }) : ''}
                             </Form.Control>
-                            <div style={{ marginRight: '5px' }}>
+                            <div >
                                 <label
                                     className='floating-label'
                                     onClick={onSelectStartDate}
@@ -70,7 +71,7 @@ const ListOfCourts = () => {
                                 </label>
                                 <DatePicker className='form-control' selected={startDate} onChange={onStartDateChange} ref={startDateRef} />
                             </div>
-                            <div style={{ marginRight: '5px' }}>
+                            <div>
                                 <label
                                     className='floating-label'
                                     onClick={onSelectEndDate}
@@ -89,7 +90,8 @@ const ListOfCourts = () => {
             {CourtTable<RowProps>({
                 Row: CourtRow,
                 data: data,
-                header: ['เลขคอร์ด', 'ประเภทกีฬา', 'วันที่เริ่มปิด', 'วันสิ้นสุดการปิด']
+                header: ['เลขคอร์ด', 'ประเภทกีฬา', 'วันที่เริ่มปิด', 'วันสิ้นสุดการปิด'],
+                Button: withDeletable(DeleteButton, onDelete)
             })}
             <div className="d-flex flex-row justify-content-between align-content-center">
                 <Button variant='pink' className='disable-court-button' onClick={onAdd}>
@@ -111,6 +113,7 @@ const ListOfCourts = () => {
                     }
                     <Pagination.Next onClick={() => { if (page < maxPage) setPage(prev => prev + 1) }} />
                 </Pagination>
+
             </div>
         </>
 

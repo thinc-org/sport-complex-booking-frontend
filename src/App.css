@@ -120,7 +120,7 @@ html,
   background-color: var(--pink-color);
   color: white;
   border-color: white;
-  box-shadow: 0 0 0 0.2rem rgba(255, 128, 171, 0.25);;
+  box-shadow: 0 0 0 0.2rem rgba(255, 128, 171, 0.25);
 }
 .btn-outline-red:hover {
   background-color: var(--red-color);
@@ -244,6 +244,10 @@ p.link {
 .page-link:hover {
   background: #df609f;
   color: white;
+}
+.page-link:focus{ 
+  background: #df609f;
+  box-shadow: 0 0 0 0.2rem rgba(255, 128, 171, 0.25);
 }
 .page-item.active .page-link {
   border-color: white;
