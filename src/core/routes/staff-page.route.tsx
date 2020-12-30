@@ -96,7 +96,7 @@ const StaffRoute = (props) => {
           exact
           path={`${path}/allReservation/:pagename`}
           render={(props) => {
-            return staff(<AllReservation {...props} />, "การจองทั้งหมด")
+            return staff(<AllReservation {...props} />, props.match.params.pagename === "success" ? "การจองทั้งหมด" : "การรอการจองทั้งหมด")
           }}
         />
         <Route

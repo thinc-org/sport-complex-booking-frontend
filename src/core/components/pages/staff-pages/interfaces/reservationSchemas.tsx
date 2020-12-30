@@ -1,9 +1,9 @@
 export default interface SuccessfulReservation {
   _id: string
   sport_id: string
-  court_num: number
+  court_number: number
   date: Date
-  time_slot: BookingTime[]
+  time_slot: number[]
   list_member: { member_object_id: string }[]
   is_check: boolean
 }
@@ -13,15 +13,10 @@ export interface WaitingRoom {
   sport_id: string
   court_num: number
   date: Date
-  time_slot: BookingTime[]
+  time_slot: number[]
   list_member: { member_object_id: string }[]
   access_code: string
   expired_time: Date
-}
-
-export interface BookingTime {
-  start_time: number
-  end_time: number
 }
 
 export interface Sport {
