@@ -1,12 +1,10 @@
 import * as React from 'react';
-import { useState } from 'react'
 import { useRouteMatch, useHistory } from 'react-router-dom'
 import { Button, Table } from 'react-bootstrap'
-import { formatDate, useDeleteCourt } from './disable-court-hook'
+import { formatDate } from './disable-court-hook'
 import { getMinute, getTime } from './mapTime'
 import { RowProps, TableProps, ViewRowProps } from './disable-court-interface'
-import { ErrorAlert } from './modals'
-import { DeleteButton } from './button'
+
 import { dayArr } from './mapTime'
 export const CourtRow = (props: RowProps) => {
     const { url, path } = useRouteMatch()
