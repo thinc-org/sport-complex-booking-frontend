@@ -4,7 +4,7 @@ import { useParams, useHistory, useRouteMatch } from 'react-router-dom'
 import { ViewRow, CourtTable } from './disabled-court-table'
 import { ViewRowProps } from './disable-court-interface'
 import { DeleteButton } from './button'
-import { formatDate, useDate, useRow, toViewRowProps, useEditCourt, withDeletable } from './disable-court-hook'
+import { formatDate, useDate, useRow, toViewRowProps, useEditCourt, withDeletable, incrementDate } from './disable-court-hook'
 import { FormAlert, ErrorAlert } from './modals'
 import { Row, Col, Container, Button, Form } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
@@ -20,7 +20,9 @@ const ViewCourt = () => {
     const { viewData, inProp, rowData, onAddRow, onDeleteRow, setInProp } = useViewTable(params.id)
     const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
     const { isEdit, setIsEdit } = useEditCourt()
-    const onSubmit = () => {
+
+    const onSubmit = (e) => {
+        e.preventDefault()
         const formData = {
             sport_id: viewData?.sport_id,
             disable_time: rowData,
@@ -28,15 +30,15 @@ const ViewCourt = () => {
             expired_date: endDate
         }
         console.log(formData)
-        client.put(`/courts/disable-courts/${viewData?.sport_id}`, formData)
-            .then((res) => console.log(res))
+        client.put(`/courts/disable-courts/${params.id}`, formData)
+            .then((res) => { history.goBack() })
             .catch((err) => console.log(err))
     }
     return (
         <Container fluid>
             <ErrorAlert inProp={show} handleClose={handleAlert} header={'วันที่ไม่ถูกต้อง'} message={'วันที่ไม่ถูกต้อง'} />
             <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} />
-            <div className='default-wrapper pt-3 pb-4' style={{ boxShadow: '0 0 0 0' }}>
+            <Form className='default-wrapper pt-3 pb-4' style={{ boxShadow: '0 0 0 0' }}>
                 <h4 style={{ paddingBottom: '15px' }}>
                     ฟิลเตอร์
                 </h4>
@@ -66,7 +68,7 @@ const ViewCourt = () => {
                                     วันเริ่มต้นการปิด
                             </h5>
                                 <p>
-                                    {viewData?.starting_date ? formatDate(new Date(viewData?.starting_date)) : ''}
+                                    {viewData?.starting_date ? formatDate(incrementDate(new Date(viewData?.starting_date))) : ''}
                                 </p>
                             </Col>
                             <Col>
@@ -88,7 +90,9 @@ const ViewCourt = () => {
                                     <Form.Label>วันสิ้นสุดการปิด</Form.Label>
                                     <DatePicker className='form-control' selected={endDate} onChange={onEndDateChange} required />
                                 </Col>
-                            </>}
+                            </>
+                        }
+
                     </Row>
                     <Row className='list-data'>
                         <Col>
@@ -126,13 +130,13 @@ const ViewCourt = () => {
                             <Button variant='outline-pink mr-2' onClick={() => setIsEdit(false)}>
                                 ยกเลิก
                             </Button>
-                            <Button variant='pink' onClick={onSubmit} >
+                            <Button variant='pink' type='submit' onClick={onSubmit} >
                                 บันทึก
                             </Button>
                         </>
                     }
                 </div>
-            </div>
+            </Form>
         </Container>
 
     )

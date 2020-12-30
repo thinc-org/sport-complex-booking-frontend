@@ -54,11 +54,7 @@ export const useEditCourt = () => {
 export const useDeleteCourt = (id) => {
     const [show, setShow] = useState(false);
     const onDelete = () => {
-        client.delete('/courts/disable-courts', {
-            params: {
-                id: id
-            }
-        })
+        client.delete(`/courts/disable-courts/${id}`)
             .then((res) => {
                 console.log(res)
                 setShow(false)
@@ -80,11 +76,13 @@ export const useDate = (initialStartDate: Date | undefined = undefined, initialE
             setShow(true)
         }
         else setStartDate(date)
+        console.log(date)
     }
     const onEndDateChange = (date) => {
         date.setHours(0, 0, 0, 0)
         if (startDate && date < startDate) setShow(true)
         else setEndDate(date)
+        console.log(date)
     }
     return { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, setStartDate, setEndDate }
 }
@@ -116,7 +114,11 @@ export const useOption = () => {
 }
 
 export const formatDate = (date: Date): string => {
-    return `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`
+    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
+}
+export const incrementDate = (date: Date): Date => {
+    date.setDate(date.getDate() + 1);
+    return date;
 }
 
 export const useViewTable = (params) => {
@@ -168,7 +170,7 @@ export const useTable = () => {
         console.log('fetch')
         await client.post('/courts/disable-courts/search', parameter)
             .then(res => {
-                console.log(res.data.total_found)
+                console.log(res.data)
                 setMaxPage(Math.ceil(res.data.total_found / 10))
                 setData(res.data.sliced_results)
             })

@@ -54,11 +54,12 @@ const ListOfCourts = () => {
                                 )) : <option value={''}>ประเภทกีฬา</option>}
                             </Form.Control>
                             <Form.Control name='courtNum' as='select' ref={register} disabled={watchSports === 'ประเภทกีฬา' ? true : false}>
+                                <option value={''}>เลขคอร์ด</option>
                                 {getValues('sports') && option ? option['sport_list']
                                     .find(sport => sport._id == getValues('sports')).list_court
                                     .map((court) => {
-                                        return <option value={court._id} key={court._id}>{court.court_num}</option>
-                                    }) : <option>เลขคอร์ด</option>}
+                                        return <option value={court.court_num} key={court._id}>{court.court_num}</option>
+                                    }) : ''}
                             </Form.Control>
                             <div style={{ marginRight: '5px' }}>
                                 <label

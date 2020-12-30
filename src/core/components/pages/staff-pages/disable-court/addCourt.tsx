@@ -22,13 +22,19 @@ const AddCourt = () => {
             ...data,
             court_num: parseInt(data.court_num),
             disable_time: rowData,
-            starting_date: startDate,
-            expired_date: endDate
+            starting_date: startDate?.toUTCString(),
+            expired_date: endDate?.toUTCString()
         }
+        console.log(formData)
         await client.post('/courts/disable-courts', formData)
-            .then((res) => console.log(res))
+            .then((res) => {
+                console.log(res)
+                history.goBack()
+            })
             .catch(err => console.log(err))
     }
+
+
 
     return (
         <Container fluid>
@@ -75,8 +81,11 @@ const AddCourt = () => {
                     <Row>
                         <Col>
                             <Form.Label>คำอธิบาย</Form.Label>
-                            <Form.Control ref={register} name='description' type='text'></Form.Control>
+                            <Form.Control ref={register({ required: true })} name='description' type='text'></Form.Control>
                         </Col>
+                    </Row>
+                    <Row>
+                        {(errors.required || startDate || endDate) && 'กรุณากรอกข้อมูลให้ครบ'}
                     </Row>
                     <div className='mt-3 small-table'>
                         {CourtTable<ViewRowProps>({
@@ -98,4 +107,5 @@ const AddCourt = () => {
         </Container>
     )
 }
+
 export default AddCourt
