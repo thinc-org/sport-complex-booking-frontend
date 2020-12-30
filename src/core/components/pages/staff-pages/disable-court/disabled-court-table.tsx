@@ -13,6 +13,9 @@ export const CourtRow = (props: RowProps) => {
     const history = useHistory()
     const { show, setShow, onDelete } = useDeleteCourt(props._id)
     const onNavigate = () => history.push(`${path}/${props._id}`)
+    const startingDate = new Date(props.starting_date)
+    const expiredDate = new Date(props.expired_date)
+    startingDate.setDate(startingDate.getDate() + 1);
     return (
         <>
             <ErrorAlert
@@ -32,17 +35,17 @@ export const CourtRow = (props: RowProps) => {
                         {props.sport_id}
                     </td>
                     <td>
-                        {formatDate(new Date(props.starting_date))}
+                        {formatDate(startingDate)}
                     </td>
                     <td className='d-flex flex-row justify-content-between align-items-center'>
-                        {formatDate(new Date(props.expired_date))}
+                        {formatDate(expiredDate)}
                         <div className='d-flex flex-row'>
                             <Button variant='outline-transparent' className='mr-2' onClick={onNavigate} >
                                 ดูข้อมูล
-                        </Button>
+                            </Button>
                             <Button variant='outline-transparent' style={{ color: 'red' }} onClick={() => setShow(true)}>
                                 ลบ
-                        </Button>
+                            </Button>
                         </div>
 
                     </td>
@@ -50,7 +53,7 @@ export const CourtRow = (props: RowProps) => {
                 :
                 <tr>
                     ข้อมูลถูกลบไปแล้ว
-            </tr>
+                </tr>
             }
         </>
     )
