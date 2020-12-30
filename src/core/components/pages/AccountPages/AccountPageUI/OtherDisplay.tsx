@@ -1,28 +1,22 @@
 import React from "react"
 import { useContext } from "react"
 import { UserContext } from "../../../../contexts/UsersContext"
-import axios from "axios"
 import {  Button } from "react-bootstrap"
 import {Link } from "react-router-dom"
-import { useAuthContext } from "../../../../controllers/authContext"
 import { OtherWarningMessage } from '../../../ui/Modals/AccountPageModals'
 import { useTranslation } from 'react-i18next'
+import { client } from "../../../../../axiosConfig";
+import { Loading } from "../../../ui/loading/loading"
 
 export default function OtherAaccountDisplay() {
 
-  const {token} = useAuthContext()
   const { otherAccount: user } = useContext(UserContext)
   const {t} = useTranslation()
 
   const viewFile = async (fileID: string)=> {
-    await axios
-    .get("http://localhost:3000/fs/viewFileToken/" + fileID, {
-      headers: {
-        Authorization: "bearer " + token,
-      },
-    })
+    await client
+    .get("/fs/viewFileToken/" + fileID)
     .then(({ data }) => {
-      console.log(data)   
       let url = "http://localhost:3000/fs/view?token=" + data.token
       let win = window.open(url, '_blank');
       win? win.focus(): console.log("Wrong token");        
@@ -33,16 +27,16 @@ export default function OtherAaccountDisplay() {
   return (
     <div className="mx-auto col-md-6">
       <OtherWarningMessage show={user!.verification_status !== ""} verification_status={user!.verification_status} />            
-      <div className="default-mobile-wrapper">
+      <div className="default-mobile-wrapper animated-card">
         <div className="">
           {/* START OF THE FORM */}
           <h4>{t("memberInformation")}</h4>
           <div className="row">
-            <div className="col-md-4">
+            <div className="col-md-6">
               <label className="form-label mt-2">{t("prefix")}</label>
               <p>{user?.prefix}</p>
             </div>
-            <div className="col-md-4">
+            <div className="col-md-6">
               <label className="form-label mt-2">{t("gender")}</label>
               <p>{user?.gender}</p>
             </div>
@@ -129,7 +123,7 @@ export default function OtherAaccountDisplay() {
       </div>
       <br />
       <div className="default-mobile-wrapper">
-        <h4>Membership</h4>
+        <h4>{t("memberDocuments")}</h4>
         <label className="form-label my-2">{t("user_photo")}</label>
         <div className="form-file">
           {user?.user_photo ? (

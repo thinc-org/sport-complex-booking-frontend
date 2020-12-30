@@ -106,6 +106,36 @@ export const PasswordChangeSuccess:React.FC<PasswordChangeSuccessProps> = ({show
    )
 }
 
+interface PasswordChangeErrorProps {
+  show: boolean
+  setShowChangeError: (value:boolean)=>void
+}
+
+export const PasswordChangeError:React.FC<PasswordChangeErrorProps> = ({show, setShowChangeError}) => {
+  const { t } = useTranslation()  
+  if(!show) return null
+   return (
+      <Modal
+        className="modal"
+        show={show}
+        onHide={()=>setShowChangeError(false)}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>{t("errorOccured")}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ fontWeight: "lighter" }}> {t("passwordChanged")} </Modal.Body>
+        <Modal.Footer>
+          <Button variant="pink" className="btn-normal btn-secondary" onClick={()=>setShowChangeError(false)}>
+            {t("ok")}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+   )
+}
+
+
 
 
 

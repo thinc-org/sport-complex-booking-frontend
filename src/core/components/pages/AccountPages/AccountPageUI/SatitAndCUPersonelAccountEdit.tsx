@@ -6,22 +6,30 @@ import { UserContext } from "../../../../contexts/UsersContext"
 import { ConfirmModal, ErrorModal, EdittedData } from "../../../ui/Modals/AccountPageModals";
 import { useTranslation } from 'react-i18next'
 import { client } from "../../../../../axiosConfig";
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup';
 
 export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
+  const {t} = useTranslation()
+  const schema = yup.object().shape({
+    phone: yup.string().required(t("phoneErrorMessage")),
+    personal_email: yup.string().required(t("emailErrorMessage")).email(t("emailErrorMessage")),
+  })
   const [show, setShow] = useState(false);
   const [showErr, setShowErr] = useState(false);
   const [formData, setFormData] = useState<EdittedData>();
-
   const { satitCuPersonelAccount:user } = useContext(UserContext)
-  const {t} = useTranslation()
+
   
   // React Hook Forms
-  const { register, handleSubmit, errors  } = useForm();
+  const { register, handleSubmit, errors  } = useForm({resolver: yupResolver(schema)});
 
-  const onSubmit = (data: EdittedData) => {
-    setShow(true)
-    setFormData(data)
-    //postDataToBackend(data)
+  const onSubmit = async (data: EdittedData) => {
+    const valid = await schema.isValid(data)
+    if (valid) {
+      setShow(true)
+      setFormData(data)
+    }
   };
 
   const handleCancel = (e) => {
@@ -35,14 +43,13 @@ export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
           window.location.reload()
       })
       .catch((err) => {
-          console.log(err);
           setShowErr(true);
       })
   }
 
   return (
     <div className="mx-auto col-md-6">
-      <div className="default-mobile-wrapper">
+      <div className="default-mobile-wrapper animated-card">
         <div className="row mt-2">
           <div className="col-8">
             <h4 className="align-right">
@@ -57,29 +64,12 @@ export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="">
             <label className="form-label mt-2">{t("phoneLabel")}</label>
-            <input name="phone" type="number" ref={register({
-                required: "Enter your phone number",
-                pattern: {
-                  value: /^[A-Z0-9._%+-]/i,
-                  message: "Enter a valid phone number",
-                },
-              })} placeholder="0xxxxxxxxx" defaultValue={user?.phone} className="form-control"/>
+            <input name="phone" type="number" ref={register} placeholder="0xxxxxxxxx" defaultValue={user?.phone} className="form-control"/>
             {errors.mobile && <p id="input-error">{errors.mobile.message}</p>}
 
             <label className="form-label mt-2">{t("personalEmailLabel")}</label>
             <input
-              name="personal_email"
-              ref={register({
-                required: "Enter your e-mail",
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                  message: "Enter a valid e-mail address",
-                },
-              })}
-              placeholder="example@email.com"
-              defaultValue={user?.personal_email}
-              className="form-control"
-            />
+              name="personal_email" ref={register} placeholder="example@email.com" defaultValue={user?.personal_email} className="form-control"/>
             {errors.personal_email && <p id="input-error">{errors.personal_email.message}</p>}
           </div>
           <hr/>

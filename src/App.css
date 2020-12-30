@@ -4,6 +4,7 @@
 @import "./core/components/ui/navbar/staff-sidebar.css";
 @import "./core/components/pages/landing.css";
 @import "./core/components/pages/staff-pages/disable-court/disable-court.css";
+@import "./core/components/ui/loading/loading.css";
 
 :root {
   --lightpink-color: #ffeced;
@@ -311,19 +312,32 @@ p.link {
   max-height: 400px;
   overflow-y: scroll;
 }
+
+.time-slot-container-hidden {
+  height: 0px;
+}
+
 .time-container {
-  min-width: 100%;
+  width: 100% !important;
 }
 
 .react-datepicker-wrapper,
 .react-datepicker__input-container {
   display: block !important;
-  width: 100%;
+  width: 100% !important;
 }
 
 .select-drop-down {
+  border-radius: 15px;
   background-color: #ff80ab;
   color: white;
+  transition: 0.3s;
+}
+
+.select-drop-down:hover {
+  border-radius: 2px;
+  border-color: #c94f7c;
+  transition: 0.3s;
 }
 
 .select-drop-down option {
@@ -332,6 +346,63 @@ p.link {
   color: black;
 }
 
-.select-drop-down option:hover {
+.drop-down-item:hover {
   background-color: #ffffff;
+  color: #c94f7c;
+  transition: 1s;
+}
+.glass {
+  min-width: 100%;
+  height: 160px;
+  position: relative;
+  align-self: center;
+  align-content: center;
+  background: linear-gradient(186.99deg, #ffe4ed -11.75%, rgba(255, 255, 255, 0) 157.69%), rgba(231, 231, 231, 0.28);
+  border: 2px solid rgba(244, 244, 244, 0.41);
+  box-sizing: border-box;
+  /* Note: backdrop-filter has minimal browser support */
+
+  border-radius: 15px;
+}
+
+.glass img {
+  width: 100%;
+  height: 200px;
+}
+.glass-contents {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+}
+
+@keyframes slideInFromBottom {
+  0% {
+    transform: translateY(50%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.animated-card {
+  animation: 0.4s ease 0s 1 slideInFromBottom;
+}
+
+.blob-container {
+  width: 100%;
+  position: relative;
+  object-fit: fill;
+  align-content: center;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.blob-container img {
+  position: relative;
+  top: 200px;
+  align-self: center;
+  flex-shrink: 0;
 }

@@ -13,7 +13,7 @@ export default function SatitAndCUPersonelAccountDisplay({  toggleEditButton }) 
 
   return (
     <div className="mx-auto col-md-6">
-      <div className="default-mobile-wrapper">
+      <div className="default-mobile-wrapper animated-card">
         <div className="row mt-2">
           <div className="col-8">
             <h4 className="align-right">

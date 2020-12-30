@@ -11,16 +11,16 @@ function Hooray() {
 
   return (
     <div className="wrapper">
-      <div className="mx-auto col-md-6">      
+      <div className="mx-auto col-md-6 animated-card">      
           <div className="text-center mt-5"  >
             <img alt="hooray" src={hooray} />
           </div>
           <div className="default-mobile-wrapper mt-4 pb-0">
-            <h4 className="text-center">{t("hooray")},</h4>
+            <h4 className="text-center">{t("hooray")}</h4>
             <p className="text-center">{t("reservationSuccess")}</p>
             <br/>
             <div className="button-group">
-              <Link to={"/waiting_room"}>
+              <Link to={"/waitingroom"}>
                 <Button variant="pink">
                   {t("viewWaitingRoom")}
                 </Button>

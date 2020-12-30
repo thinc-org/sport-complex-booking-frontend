@@ -10,11 +10,37 @@ import { useTranslation } from 'react-i18next'
 import { setCookie } from "../../../../contexts/cookieHandler";
 import { client } from "../../../../../axiosConfig";
 import { OtherInfo } from "../../staff-pages/interfaces/InfoInterface";
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup';
 
 export default function OtherAccountEdit() {
 
   // React Hook Forms
-  const { register, handleSubmit, errors  } = useForm();
+  const {t, i18n} = useTranslation()
+  const schema = yup.object().shape({
+    prefix: yup.string().required(t("fieldIsRequired")),
+    gender: yup.string().required(t("fieldIsRequired")),
+    name_th: yup.string().required(t("fieldIsRequired")),
+    surname_th: yup.string().required(t("fieldIsRequired")),
+    name_en: yup.string().required(t("fieldIsRequired")),
+    surname_en: yup.string().required(t("fieldIsRequired")),
+    national_id: yup.string().required(t("fieldIsRequired")),
+    marital_status: yup.string().required(t("fieldIsRequired")),
+    address: yup.string().required(t("fieldIsRequired")),
+    personal_email: yup.string().required(t("fieldIsRequired")).email(t("emailErrorMessage")),
+    home_phone: yup.string().required(t("fieldIsRequired")),
+    phone: yup.string().required(t("fieldIsRequired")),
+    medical_condition: yup.string(),
+    contact_person: yup.object({
+      contact_person_prefix: yup.string().required(t("fieldIsRequired")),
+      contact_person_name: yup.string().required(t("fieldIsRequired")),
+      contact_person_surname: yup.string().required(t("fieldIsRequired")),
+      contact_person_home_phone: yup.string().required(t("fieldIsRequired")),
+      contact_person_phone: yup.string().required(t("fieldIsRequired")),
+    })
+    
+  })
+  const { register, handleSubmit, errors  } = useForm({resolver: yupResolver(schema)});
 
   let [is_thai_language, set_is_thai_language] = useState(false)
   let [user_photo, set_user_photo] = useState<File>()
@@ -26,17 +52,14 @@ export default function OtherAccountEdit() {
   const [show, setShow] = useState(false);
   const [showErr, setShowErr] = useState(false);
   const { otherAccount: user } = useContext(UserContext)
-  const {t, i18n} = useTranslation()
   const [formData, setFormData] = useState<OtherInfo>();
+
 
   /// JSX Begins here
   const postDataToBackend = async (data: OtherInfo) => {
-    console.log("send data to backend")
-    console.log(data)
     await client
       .put("http://localhost:3000/account_info/", data)
       .then(({ data }) => {
-        console.log(data)
         if (data.verification_status === "Submitted") {
           handleAllFilesUpload(user_photo, national_id_scan, medical_certificate, house_registration_number, relationship_verification_document)
         }
@@ -44,48 +67,30 @@ export default function OtherAccountEdit() {
       })
       .catch(function (error) {
         if (error.response) {
-          console.log("POST Error")
-          console.log(error.response.data)
-          console.log(error.response.status)
-          console.log(error.response.headers)
           setShow(false);
           setShowErr(true);
         }
       })
   }
 
-  const onSubmit = (data: OtherInfo) => {
-    //console.log(JSON.parse(JSON.stringify(data)))
-    //let newData = formatDate(data)
+  const onSubmit = (data) => {
     setShow(true)
-    setFormData(data)
+    const valid = schema.isValid(data)
+    if (valid) {
+      setShow(true)
+      setFormData(data)
+    }
   }
 
-  // const formatDate = (data: Other) => {
-  //   data = {
-  //     ...data,
-  //     birthday: date
-  //   }
-    
-  //   delete data.birthday_day;
-  //   delete data.birthday_month;
-  //   delete data.birthday_year;
-  //   return data
-  // }
-
   // Handlers
-  const handleFileUpload = async (formData) => {
+  const handleFileUpload = async (formData: FormData) => {
     await client
       .post("http://localhost:3000/fs/upload", formData)
       .then(({ data }) => {
         console.log(data)
       })
-      .catch(function (error) {
-        if (error.response) {
-          console.log(error.response.data)
-          console.log(error.response.status)
-          console.log(error.response.headers)
-        }
+      .catch(() =>{
+        setShowErr(true)
       })
   }
 
@@ -96,38 +101,33 @@ export default function OtherAccountEdit() {
     houseRegistrationNumberInput:File|undefined,
     relationshipVerificationDocumentInput:File|undefined
   ) => {
-    userPhotoInput ? uploadUserPhoto(userPhotoInput): console.log("no file selected")
-    nationalIdInput ? uploadNationalId(nationalIdInput): console.log("no file selected")
-    medicalCertificateInput ? uploadMedicalCertificate(medicalCertificateInput): console.log("no file selected")
-    houseRegistrationNumberInput ? uploadHouseRegistrationNumber(houseRegistrationNumberInput): console.log("no file selected")
-    relationshipVerificationDocumentInput ? uploadRelationshipVerificationDocument(relationshipVerificationDocumentInput): console.log("no file selected")
+    if (userPhotoInput) uploadUserPhoto(userPhotoInput)
+    if (nationalIdInput) uploadNationalId(nationalIdInput)
+    if (medicalCertificateInput) uploadMedicalCertificate(medicalCertificateInput)
+    if (houseRegistrationNumberInput) uploadHouseRegistrationNumber(houseRegistrationNumberInput)
+    if (relationshipVerificationDocumentInput) uploadRelationshipVerificationDocument(relationshipVerificationDocumentInput)
   }
   const uploadUserPhoto = (file: File) => {
-    console.log(file)
     let formData = new FormData()
     formData.append("user_photo", file? file: file, file?.name)
     handleFileUpload(formData)
   }
   const uploadNationalId = (file: File) => {
-    console.log(file)
     let formData = new FormData()
     formData.append("national_id_photo",  file? file: file, file?.name)
     handleFileUpload(formData)
   }
   const uploadMedicalCertificate = (file: File) => {
-    console.log(file)
     let formData = new FormData()
     formData.append("medical_certificate",  file? file: file, file?.name)
     handleFileUpload(formData)
   }
   const uploadHouseRegistrationNumber = (file: File) => {
-    console.log(file)
     let formData = new FormData()
     formData.append("house_registration_number",  file? file: file, file?.name)
     handleFileUpload(formData)
   }
   const uploadRelationshipVerificationDocument = (file: File) => {
-    console.log(file)
     let formData = new FormData()
     formData.append("relationship_verification_document", file, file.name)
     handleFileUpload(formData)
@@ -135,23 +135,18 @@ export default function OtherAccountEdit() {
 
   // These functions save the input file to the states
   const assignUserPhoto = (file: FileList) => {
-    console.log("file")
     set_user_photo(file[0])
   }
   const assignNationalIdPhoto = (file: FileList) => {
-    console.log(file)
     set_national_id_scan(file[0])
   }
   const assignMedicalCertificate = (file: FileList) => {
-    console.log(file)
     set_medical_certificate(file[0])
   }
   const assignHouseRegistrationNumber = (file: FileList) => {
-    console.log(file)
     set_house_registration_number(file[0])
   }
   const assignRelationshipVerificationDocument = (file: FileList) => {
-    console.log(file)
     set_relationship_verification_document(file[0])
   }
 
@@ -190,7 +185,7 @@ export default function OtherAccountEdit() {
           </div>
         </div>
 
-        <div className="default-mobile-wrapper">
+        <div className="default-mobile-wrapper animated-card">
           <div className="">
             {/* START OF THE FORM */}
             <h4>{t("memberInformation")}</h4>
@@ -220,50 +215,26 @@ export default function OtherAccountEdit() {
             <hr />
             <label className="form-label mt-2">{t("name_th")}</label>
             <h6 className="font-weight-light">{t("noThaiName")}</h6>
-            <input name="name_th" type="text" ref={register({
-                required: t("fieldIsRequired")!,
-                pattern: {
-                  value: /^[A-Z0-9ก-ฮ._%+-]/i,
-                  message: t("invalidMessage")!,
-                },
-              })} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('name_th')} placeholder="ชื่อจริง" defaultValue={user?.name_th} className="form-control"/>
+            <input name="name_th" type="text" ref={register} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('name_th')} placeholder="ชื่อจริง" defaultValue={user?.name_th} className="form-control"/>
             {user?.rejected_info.includes('name_th') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.name_th && <p id="input-error">{errors.name_th.message}</p>}
 
             <hr />
             <label className="form-label mt-2">{t("surname_th")}</label>
             <h6 className="font-weight-light">{t("noThaiSurname")}</h6>
-            <input name="surname_th" type="text" ref={register({
-                required:  t("fieldIsRequired")!,
-                pattern: {
-                  value: /^[A-Z0-9ก-ฮ._%+-]/i,
-                  message: t("invalidMessage")!,
-                },
-              })} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('surname_th')} placeholder="นามสกุล" defaultValue={user?.surname_th} className="form-control"/>
+            <input name="surname_th" type="text" ref={register} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('surname_th')} placeholder="นามสกุล" defaultValue={user?.surname_th} className="form-control"/>
             {user?.rejected_info.includes('surname_th') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.surname_th && <p id="input-error">{errors.surname_th.message}</p>}
             
             <hr />
             <label className="form-label mt-2">{t("name_en")}</label>
-            <input name="name_en" type="text" ref={register({
-                required:  t("fieldIsRequired")!,
-                pattern: {
-                  value: /^[A-Z0-9._%+-]/i,
-                  message: t("invalidMessage")!,
-                },
-              })} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('name_en')} placeholder="Firstname" defaultValue={user?.name_en} className="form-control"/>
+            <input name="name_en" type="text" ref={register} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('name_en')} placeholder="Firstname" defaultValue={user?.name_en} className="form-control"/>
             {user?.rejected_info.includes('name_en') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}  
             {errors.name_en && <p id="input-error">{errors.name_en.message}</p>}
             
             <hr />
             <label className="form-label mt-2">{t("surname_en")}</label>
-            <input name="surname_en" type="text" ref={register({
-                required:  t("fieldIsRequired")!,
-                pattern: {
-                  value: /^[A-Z0-9._%+-]/i,
-                  message: t("invalidMessage")!,
-                },
-              })} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('surname_en')} placeholder="Surname" defaultValue={user?.surname_en} className="form-control"/>
+            <input name="surname_en" type="text" ref={register} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('surname_en')} placeholder="Surname" defaultValue={user?.surname_en} className="form-control"/>
             {user?.rejected_info.includes('surname_en') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}  
             {errors.surname_en && <p id="input-error">{errors.surname_en.message}</p>}
             <label className="form-label mt-2">{t("birthday")}</label>
@@ -282,73 +253,37 @@ export default function OtherAccountEdit() {
             </div>
             <hr />
             <label className="form-label mt-2">{t("national_id")}</label>
-            <input name="national_id" type="text" ref={register({
-                required:  t("fieldIsRequired")!,
-                pattern: {
-                  value: /^[A-Z0-9._%+-]/i,
-                  message: t("invalidMessage")!,
-                },
-              })} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('national_id')} placeholder="xxxxxxxxxxxxx" defaultValue={user?.national_id} className="form-control"/>
+            <input name="national_id" type="text" ref={register} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('national_id')} placeholder="xxxxxxxxxxxxx" defaultValue={user?.national_id} className="form-control"/>
             {user?.rejected_info.includes('national_id') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.national_id && <p id="input-error">{errors.national_id.message}</p>}
             
             <hr />
             <label className="form-label mt-2">{t("marital_status")}</label>
-            <input name="marital_status" type="text" ref={register({
-                required:  t("fieldIsRequired")!,
-                pattern: {
-                  value: /^[A-Z0-9._%+-]/i,
-                  message: t("invalidMessage")!,
-                },
-              })} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('marital_status')} placeholder="Ex: married" defaultValue={user?.marital_status} className="form-control"/>
+            <input name="marital_status" type="text" ref={register} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('marital_status')} placeholder="Ex: married" defaultValue={user?.marital_status} className="form-control"/>
             {user?.rejected_info.includes('marital_status') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.marital_status && <p id="input-error">{errors.marital_status.message}</p>}
             
             <hr />
             <label className="form-label mt-2">{t("address")}</label>
-            <input name="address" type="text" ref={register({
-                required:  t("fieldIsRequired")!,
-                pattern: {
-                  value: /^[A-Z0-9._%+-]/i,
-                  message: t("invalidMessage")!,
-                },
-              })} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('address')} placeholder="Address" defaultValue={user?.address} className="form-control"/>
+            <input name="address" type="text" ref={register} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('address')} placeholder="Address" defaultValue={user?.address} className="form-control"/>
             {user?.rejected_info.includes('address') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.address && <p id="input-error">{errors.address.message}</p>}
             
             <hr />
             <label className="form-label mt-2">{t("email")}</label>
-            <input name="personal_email" type="text" ref={register({
-                required:  t("fieldIsRequired")!,
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                  message: t("invalid_email")!,
-                },
-              })} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('personal_email')} placeholder="example@email.com" defaultValue={user?.personal_email} className="form-control"/>
+            <input name="personal_email" type="text" ref={register} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('personal_email')} placeholder="example@email.com" defaultValue={user?.personal_email} className="form-control"/>
             {user?.rejected_info.includes('personal_email') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.personal_email && <p id="input-error">{errors.personal_email.message}</p>}
             
             <hr />
             <label className="form-label mt-2">{t("home_phone")}</label>
-            <input name="home_phone" type="number" ref={register({
-                required:  t("fieldIsRequired")!,
-                pattern: {
-                  value: /^[A-Z0-9._%+-]/i,
-                  message: t("invalidMessage")!,
-                },
-              })} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('home_phone')} placeholder="02xxxxxxx" defaultValue={user?.home_phone} className="form-control"/>
+            <input name="home_phone" type="number" ref={register} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('home_phone')} placeholder="02xxxxxxx" defaultValue={user?.home_phone} className="form-control"/>
             {user?.rejected_info.includes('home_phone') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.home_phone && <p id="input-error">{errors.home_phone.message}</p>}
             
             <hr />
             <label className="form-label mt-2">{t("mobile_phone")}</label>
-            <input name="phone" type="number" ref={register({
-                required:  t("fieldIsRequired")!,
-                pattern: {
-                  value: /^[A-Z0-9._%+-]/i,
-                  message: t("invalidMessage")!,
-                },
-              })} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('phone')} placeholder="0xxxxxxxxx" defaultValue={user?.phone} className="form-control"/>
+            <input name="phone" type="number" ref={register} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('phone')} placeholder="0xxxxxxxxx" defaultValue={user?.phone} className="form-control"/>
             {user?.rejected_info.includes('phone') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.phone && <p id="input-error">{errors.phone.message}</p>}
             
@@ -376,50 +311,26 @@ export default function OtherAccountEdit() {
           
           <hr />
           <label className="form-label mt-2">{t("contact_person_name")}</label>
-          <input name="contact_person.contact_person_name" type="text" ref={register({
-                required: t("fieldIsRequired")!,
-                pattern: {
-                  value: /^[A-Z0-9._%+-]/i,
-                  message: t("invalidMessage")!,
-                },
-              })} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('contact_person_name')} placeholder="Name" defaultValue={user?.contact_person?.contact_person_name} className="form-control"/>
+          <input name="contact_person.contact_person_name" type="text" ref={register} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('contact_person_name')} placeholder="Name" defaultValue={user?.contact_person?.contact_person_name} className="form-control"/>
             {user?.rejected_info.includes('contact_person_name') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
-            {errors.contact_person_name && <p id="input-error">{errors.contact_person_name.message}</p>}
+            {errors.contact_person?.contact_person_name && <p id="input-error">{errors.contact_person.contact_person_name.message}</p>}
           
           <hr />
           <label className="form-label mt-2">{t("contact_person_surname")}</label>
-          <input name="contact_person.contact_person_surname" type="text" ref={register({
-                required: t("fieldIsRequired")!,
-                pattern: {
-                  value: /^[A-Z0-9._%+-]/i,
-                  message: t("invalidMessage")!,
-                },
-              })} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('contact_person_surname')} placeholder="Surname" defaultValue={user?.contact_person?.contact_person_surname} className="form-control"/>
+          <input name="contact_person.contact_person_surname" type="text" ref={register} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('contact_person_surname')} placeholder="Surname" defaultValue={user?.contact_person?.contact_person_surname} className="form-control"/>
             {user?.rejected_info.includes('contact_person_name') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
-            {errors.contact_person_surname && <p id="input-error">{errors.contact_person_surname.message}</p>}
+            {errors.contact_person?.contact_person_surname && <p id="input-error">{errors.contact_person.contact_person_surname.message}</p>}
           
           <hr />
           <label className="form-label mt-2">{t("contact_person_home_phone")}</label>
-          <input name="contact_person.contact_person_home_phone" type="number" ref={register({
-                required: t("fieldIsRequired")!,
-                pattern: {
-                  value: /^[A-Z0-9._%+-]/i,
-                  message: t("invalidMessage")!,
-                },
-              })} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('contact_person_home_phone')} placeholder="xxxxxxxxx" defaultValue={user?.contact_person?.contact_person_home_phone} className="form-control"/>
+          <input name="contact_person.contact_person_home_phone" type="number" ref={register} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('contact_person_home_phone')} placeholder="xxxxxxxxx" defaultValue={user?.contact_person?.contact_person_home_phone} className="form-control"/>
             {user?.rejected_info.includes('contact_person_home_phone') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
-            {errors.contact_person_home_phone && <p id="input-error">{errors.contact_person_home_phone.message}</p>}
+            {errors.contact_person?.contact_person_home_phone && <p id="input-error">{errors.contact_person.contact_person_home_phone.message}</p>}
           <hr />
           <label className="form-label mt-2">{t("contact_person_phone")}</label>
-          <input name="contact_person.contact_person_phone" type="number" ref={register({
-                required: t("fieldIsRequired")!,
-                pattern: {
-                  value: /^[A-Z0-9._%+-]/i,
-                  message: t("invalidMessage")!,
-                },
-              })} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('contact_person_phone')} placeholder="xxxxxxxxxx" defaultValue={user?.contact_person?.contact_person_phone} className="form-control"/>
+          <input name="contact_person.contact_person_phone" type="number" ref={register} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('contact_person_phone')} placeholder="xxxxxxxxxx" defaultValue={user?.contact_person?.contact_person_phone} className="form-control"/>
             {user?.rejected_info.includes('contact_person_phone') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
-            {errors.contact_person_phone && <p id="input-error">{errors.contact_person_phone.message}</p>}
+            {errors.contact_person?.contact_person_phone && <p id="input-error">{errors.contact_person.contact_person_phone.message}</p>}
           
         </div>
         <br />
@@ -485,7 +396,7 @@ export default function OtherAccountEdit() {
         </div>
         <br />
         <div className="button-group col-md-12">
-          <Button variant="pink" className="btn-secondary" type="submit" onClick={()=> setShow(true)}>
+          <Button variant="pink" className="btn-secondary" type="submit">
             {t("saveAndSubmit")}
           </Button>
         </div>

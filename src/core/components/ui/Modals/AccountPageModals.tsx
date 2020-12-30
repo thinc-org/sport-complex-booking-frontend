@@ -113,7 +113,7 @@ export const OtherWarningMessage:React.FC<OtherWarningMessageProps> = ({show, ve
     case "NotSubmitted": {
       return (
         <div className="alert alert-danger mt-3" role="alert">
-          <h3>{t("warning")}</h3>
+          <h4>{t("warning")}</h4>
           <h6>{t("notSubmittedMessage")}</h6>
         </div>
       )
@@ -121,7 +121,7 @@ export const OtherWarningMessage:React.FC<OtherWarningMessageProps> = ({show, ve
     case "Rejected": {
       return (
         <div className="alert alert-danger mt-3" role="alert">
-          <h3>{t("rejectedTitle")}</h3>
+          <h4>{t("rejectedTitle")}</h4>
           <h6>{t("rejectedMessage")}</h6>
         </div>
       )
@@ -129,7 +129,7 @@ export const OtherWarningMessage:React.FC<OtherWarningMessageProps> = ({show, ve
     case "Submitted": {
       return (
         <div className="alert alert-info  mt-3" role="alert">
-          <h3>{t("submittedTitle")}</h3>
+          <h4>{t("submittedTitle")}</h4>
           <h6>{t("submittedMessage")}</h6>
         </div>
       )
@@ -137,7 +137,7 @@ export const OtherWarningMessage:React.FC<OtherWarningMessageProps> = ({show, ve
     case "Verified": {
       return (
         <div className="alert alert-info mt-3" role="alert">
-          <h3>{t("approvedTitle")}</h3>
+          <h4>{t("approvedTitle")}</h4>
           <h6>
             {t("approvedMessage")}
           </h6>
