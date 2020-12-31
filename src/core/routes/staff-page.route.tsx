@@ -11,6 +11,8 @@ import CUInfo from "../components/pages/staff-pages/list-of-all-users-pages/CUIn
 import UserInfo from "../components/pages/staff-pages/list-of-all-users-pages/UserInfo"
 import VeritificationApproval from "../components/pages/staff-pages/verification-approval-pages/VerificationApproval"
 import VerifyInfo from "../components/pages/staff-pages/verification-approval-pages/VerifyInfo"
+import StaffManagement from "../components/pages/staff-pages/staff-management/StaffManagement"
+import Settings from "../components/pages/staff-pages/settings/Settings"
 
 const StaffRoute = (props) => {
     const { path, url } = useRouteMatch()
@@ -54,10 +56,7 @@ const StaffRoute = (props) => {
                 <Route
                     path={`${path}/staffManagement`}
                     render={() => {
-                        return (
-                            // add pages here staff(page)
-                            <div>under maintainance</div>
-                        )
+                        return staff(<StaffManagement />, "รายชื่อสตาฟ")
                     }}
                 />
                 <Route
@@ -100,6 +99,12 @@ const StaffRoute = (props) => {
                     path={`${path}/verifyInfo/:username`}
                     render={(props) => {
                         return staff(<VerifyInfo {...props} />, "รับรองการลงทะเบียนรายบุคคล")
+                    }}
+                />
+                <Route
+                    path={`${path}/settings`}
+                    render={() => {
+                        return staff(<Settings />, "การตั้งค่า")
                     }}
                 />
             </Switch>
