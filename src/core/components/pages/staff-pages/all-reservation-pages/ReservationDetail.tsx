@@ -6,7 +6,7 @@ import { DeleteModal, UserInfo } from "../interfaces/reservationSchemas"
 import DeleteModalComponent from "./DeleteModalComponent"
 
 export const convertSlotToTime = (slot: number): string => {
-  if (slot % 2 === 0) return String(slot / 2 - 1) + ":30-" + String(slot / 2) + ":00"
+  if (slot % 2 === 0) return String(slot / 2 - 1) + ":30-" + (slot / 2 !== 24 ? String(slot / 2) : "0") + ":00"
   return String(Math.floor(slot / 2)) + ":00-" + String(Math.floor(slot / 2)) + ":30"
 }
 
@@ -31,36 +31,58 @@ export const getTimeText = (timeSlot: number[]): string => {
 const ReservationDetail: FunctionComponent<RouteComponentProps<{ pagename: string; _id: string }>> = (props) => {
   // Page state //
   let [pagename] = useState<String>(props.match.params.pagename)
-  let [_id] = useState<String>(props.match.params._id)
-  let [show_modal_info, set_show_modal_info] = useState<DeleteModal>({
-    show_confirm_del: false,
-    show_com_del: false,
-    show_err: false,
+  let [sportId] = useState<String>(props.match.params._id)
+  let [showModalInfo, setShowModalInfo] = useState<DeleteModal>({
+    showConfirmDel: false,
+    showComDel: false,
+    showErr: false,
   })
 
   // reservation detail state
-  let [sport_name, set_sport_name] = useState<string>("แบตมินตัน")
-  let [date, set_date] = useState<Date>(new Date())
-  let [court_no, set_court_no] = useState<number>(1)
-  let [time_slot, set_time_slot] = useState<number[]>([1, 9])
-  let [members, set_members] = useState<UserInfo[]>([
-    { username: "1", phone: "191", personal_email: "mail1" },
-    { username: "1", phone: "191", personal_email: "mail1" },
-  ])
+  let [sportName, setSportName] = useState<string>("แบตมินตัน")
+  let [date, setDate] = useState<Date>(new Date())
+  let [courtNo, setCourtNo] = useState<number>(0)
+  let [timeSlot, setTimeSlot] = useState<number[]>([])
+  let [members, setMembers] = useState<UserInfo[]>([])
 
   // useEffects //
   useEffect(() => {
-    console.log(pagename, _id)
-  }, [pagename, _id])
+    client({
+      method: "GET",
+      url: "/court-manager",
+    })
+      .then(({ data }) => {
+        console.log(data)
+      })
+      .catch(({ response }) => {
+        console.log(response)
+      })
+  }, [])
+
+  useEffect(() => {
+    console.log(pagename, sportId)
+  }, [pagename, sportId])
 
   // other functions //
-  const getAllTime = (): string => {
-    let time: string = ""
-    for (let idx = 0; idx < time_slot.length; idx++) time += convertSlotToTime(time_slot[idx]) + (idx !== time_slot.length - 1 ? "," : "")
-    return time
-  }
 
   // request //
+  const requestInfo = () => {
+    let url: string = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + "/" + sportId
+    client({
+      method: "GET",
+      url,
+    })
+      .then(({ data }) => {
+        console.log(data)
+        setCourtNo(data.court_number)
+        setDate(new Date(data.date))
+        setMembers(data.list_member)
+        setTimeSlot(data.time_slot)
+      })
+      .catch(({ response }) => {
+        console.log(response)
+      })
+  }
   const requestDelete = () => {}
 
   // renders //
@@ -70,19 +92,19 @@ const ReservationDetail: FunctionComponent<RouteComponentProps<{ pagename: strin
         <Row>
           <Col className="px-0 pt-4 text-center" style={{ whiteSpace: "pre-wrap" }}>
             ชื่อกีฬา {"\n"}
-            <label>{sport_name}</label>
+            <label>{sportName}</label>
           </Col>
           <hr style={{ height: "60px", width: "0px", borderWidth: "1px", borderStyle: "ridge" }} />
           <Col className="px-0 pt-3 text-center" style={{ whiteSpace: "pre-wrap" }}>
             วันที่ / เวลา {"\n"}
             <label style={{ whiteSpace: "pre-wrap" }}>
-              {date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + "\n" + getAllTime()}
+              {date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + "\n" + getTimeText(timeSlot)}
             </label>
           </Col>
           <hr style={{ height: "60px", width: "0px", borderWidth: "1px", borderStyle: "ridge" }} />
           <Col className="px-0 pt-4 text-center" style={{ whiteSpace: "pre-wrap" }}>
             เลขคอร์ด {"\n"}
-            <label>{court_no}</label>
+            <label>{courtNo}</label>
           </Col>
         </Row>
       </Card>
@@ -106,7 +128,7 @@ const ReservationDetail: FunctionComponent<RouteComponentProps<{ pagename: strin
   const renderModals = () => {
     return (
       <div>
-        <DeleteModalComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={requestDelete} />
+        <DeleteModalComponent showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={requestDelete} />
       </div>
     )
   }
@@ -128,7 +150,7 @@ const ReservationDetail: FunctionComponent<RouteComponentProps<{ pagename: strin
             variant="danger"
             className="float-right btn-normal btn-outline-red"
             onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_confirm_del: true })
+              setShowModalInfo({ ...showModalInfo, showConfirmDel: true })
             }}
           >
             ลบการจอง
