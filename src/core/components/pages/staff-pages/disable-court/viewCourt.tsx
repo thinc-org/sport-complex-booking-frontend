@@ -23,7 +23,7 @@ const ViewCourt = () => {
 
     const onSubmit = (e) => {
         const formData = {
-            sport_id: viewData?.sport_id,
+            sport_id: viewData?.sport_id._id,
             disable_time: rowData,
             starting_date: startDate,
             expired_date: endDate
@@ -51,7 +51,7 @@ const ViewCourt = () => {
                                 ชื่อกีฬา
                             </h5>
                             <p>
-                                {viewData?.sport_id}
+                                {viewData?.sport_id.sport_name_th}
                             </p>
                         </Col>
                         <Col>
@@ -120,7 +120,7 @@ const ViewCourt = () => {
                 <div className='d-flex flex-row justify-content-end'>
                     {!isEdit ?
                         <>
-                            <Button variant='outline-pink' className='mr-2' onClick={() => history.goBack()} style={{ fontSize: '20px' }}>
+                            <Button variant='outline-pink' className='mr-2' onClick={() => history.push('/staff/disableCourt')} style={{ fontSize: '20px' }}>
                                 กลับ
                     </Button>
                             <Button variant='pink' onClick={() => setIsEdit(true)}>

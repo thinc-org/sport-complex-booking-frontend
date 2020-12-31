@@ -26,7 +26,6 @@ export const useRow = (initial: ViewRowProps[] = []) => {
                 timeSlot.push(i)
             }
             const newRow = { indx: prev?.length, day: parseInt(f.day), time_slot: timeSlot }
-            console.log(newRow)
             return [...prev, newRow]
         })
         setInProp(false)
@@ -65,13 +64,11 @@ export const useDate = (initialStartDate: Date | undefined = undefined, initialE
             setShow(true)
         }
         else setStartDate(date)
-        console.log(date)
     }
     const onEndDateChange = (date) => {
         date.setHours(0, 0, 0, 0)
         if (startDate && date < startDate) setShow(true)
         else setEndDate(date)
-        console.log(date)
     }
     return { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, setStartDate, setEndDate }
 }
@@ -95,6 +92,7 @@ export const useOption = () => {
                 setOption(res.data)
 
             })
+            .catch(err => console.log(err))
     }
     useEffect(() => {
         fetchOption()
@@ -117,14 +115,12 @@ export const useViewTable = (params) => {
     async function fetchViewData() {
         await client.get<ViewResponse>(`/courts/disable-courts/${params}`,)
             .then((res) => {
-                console.log(res)
                 setViewData(res.data)
                 setRowData(toViewRowProps(res.data.disable_time))
             })
             .catch(err => setError(err.response.message))
     }
     useEffect(() => {
-        console.log('fetch')
         fetchViewData()
     }, [])
     return { viewData, inProp, rowData, onAddRow, onDeleteRow, setInProp }
@@ -172,12 +168,11 @@ export const useTable = () => {
         else setPage(5 * (Math.floor(currentPage / 5)))
     }
     const fetchData = async (parameter) => {
-        console.log('fetch')
         await client.post('/courts/disable-courts/search', parameter)
             .then(res => {
-                console.log(res.data)
+                const result = res.data.sliced_results
                 setMaxPage(Math.ceil(res.data.total_found / 10))
-                setData(res.data.sliced_results)
+                setData(result)
             })
             .catch(err => console.log(err))
     }

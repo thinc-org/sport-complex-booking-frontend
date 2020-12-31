@@ -13,7 +13,7 @@ import { DeleteButton } from './button'
 const AddCourt = () => {
     const history = useHistory()
     const { inProp, rowData, onAddRow, onDeleteRow, setInProp } = useRow()
-    const { register, handleSubmit, setError, errors, getValues, setValue, watch } = useForm()
+    const { register, handleSubmit, setError, errors, watch } = useForm()
     const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
     const { option } = useOption()
     const watchSports = watch('sport_id', '')
@@ -65,9 +65,9 @@ const AddCourt = () => {
                     <Row>
                         <Col>
                             <Form.Label>เลขคอร์ด</Form.Label>
-                            <Form.Control name='court_num' as='select' ref={register({ required: true })}>
-                                {getValues('sport_id') && option ? option['sport_list']
-                                    .find(sport => sport._id == getValues('sport_id')).list_court
+                            <Form.Control name='court_num' as='select' ref={register({ required: true, validate: val => val != 'เลขคอร์ด' })}>
+                                {watchSports && option ? option['sport_list']
+                                    .find(sport => sport._id == watchSports).list_court
                                     .map((court) => {
                                         return <option value={court.court_num} key={court._id}>{court.court_num}</option>
                                     }) : <option>เลขคอร์ด</option>}
@@ -93,7 +93,8 @@ const AddCourt = () => {
                     <Row>
                         <Col >
                             <div style={{ color: 'red' }}>
-                                {(errors.required || !startDate || !endDate || !rowData) && 'กรุณากรอกข้อมูลให้ครบ'}
+                                {errors.validate && 'เลขคอร์ดผิด'}
+                                {(errors.required || !startDate || !endDate || !rowData || errors.validate) && 'กรุณากรอกข้อมูลให้ครบ'}
                                 {errors.request && errors.request.message}
                             </div>
                         </Col>
