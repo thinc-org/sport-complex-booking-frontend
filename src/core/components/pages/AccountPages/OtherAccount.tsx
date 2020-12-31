@@ -15,10 +15,10 @@ export default function OtherAccount() {
           <div>
             {
               user?.verification_status === "Submitted" || user?.verification_status === "Approved" ? (
-                <OtherAaccountDisplay/>
+                <OtherAaccountDisplay />
               ) : (
-                <OtherAccountEdit/>
-              )
+                  <OtherAccountEdit />
+                )
             }
           </div>
         )

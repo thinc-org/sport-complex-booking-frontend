@@ -15,6 +15,16 @@ import { useTranslation } from 'react-i18next'
 
 
 
+const handleLanguageChange = () => {
+  if (getCookie("is_thai_language") === 'true') {
+    setCookie('is_thai_language', false, 999)
+    window.location.reload()
+  } else {
+    setCookie('is_thai_language', true, 999)
+    window.location.reload()
+  }
+}
+
 const NavigationBar = (props: any) => {
   return (
     <Navbar expand="lg" style={{ background: "var(--bg-color)", paddingTop: '60px' }}>

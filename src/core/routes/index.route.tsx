@@ -50,13 +50,17 @@ export default function MainRoute() {
 
         <Route exact path="/account" component={AccountPage} />
 
-        <Route exact path='/staff' component={StaffRoute} />
+        <Route path='/staff' component={StaffRoute} />
 
         <Route exact path='/changePassword' component={ChangePassword} />
 
         <Route exact path='/banned' component={WaitingRoomBan} />
 
         <Route exact path='/hooray' component={Hooray} />
+
+        <Route path='/changePassword' component={ChangePassword} />
+
+        <Route path='/banned' component={WaitingRoomBan} />
 
       </Switch>
     </>

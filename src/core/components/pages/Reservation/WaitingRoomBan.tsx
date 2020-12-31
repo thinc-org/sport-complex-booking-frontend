@@ -9,41 +9,41 @@ import { useTranslation } from 'react-i18next'
 
 
 interface historyProps {
- history: History<LocationState>;
+  history: History<LocationState>;
 }
 
 function WaitingRoomBan(props: historyProps) {
 
   const { msg } = (props['location'] && props['location']['state']) || {};
-  const {token} = useAuthContext()
-  const {t} = useTranslation()
+  const { token } = useAuthContext()
+  const { t } = useTranslation()
   const history = useHistory<LocationState | unknown>()
-  
-  useEffect(()=> {
+
+  useEffect(() => {
     fetchValidity(token)
   }, [])
 
-  const fetchValidity = async (token: String |undefined) => {
+  const fetchValidity = async (token: String | undefined) => {
 
     let axios = require('axios');
     let config = {
       method: 'post',
       url: 'http://localhost:3000/reservation/checkvalidity',
-      headers: { 
+      headers: {
         'Authorization': 'bearer ' + token
       }
     };
     await axios(config)
-    .then((response:Object) => {
-      let resMsg = response['data']['message']
-      if (resMsg === "valid user") {
-        //history.push({pathname: '/home'});
-      }
-    })
-    .catch((error: Object) => {
-      console.log(error)
-      history.push({pathname: '/login'});
-    });
+      .then((response: Object) => {
+        let resMsg = response['data']['message']
+        if (resMsg === "valid user") {
+          //history.push({pathname: '/home'});
+        }
+      })
+      .catch((error: Object) => {
+        console.log(error)
+        history.push({ pathname: '/login' });
+      });
 
   }
 

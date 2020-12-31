@@ -7,22 +7,22 @@ import { WarningMessage } from "../../../ui/Modals/AccountPageModals"
 
 export default function ChulaAccountDisplay({ toggleEditButton }) {
 
-  const { cuStudentAccount:user } = useContext(UserContext);
-  const {t, i18n} = useTranslation()
-  const {language} = i18n
+  const { cuStudentAccount: user } = useContext(UserContext);
+  const { t, i18n } = useTranslation()
+  const { language } = i18n
 
   return (
     <div className="mx-auto col-md-6">
-      <WarningMessage show={user!.is_first_login}/>
+      <WarningMessage show={user!.is_first_login} />
       <div className="default-mobile-wrapper">
         <div className="row mt-2">
           <div className="col-8">
             <h4 className="align-right">
 
-              {(language === 'th') 
-              ? (user?.name_th + " " + user?.surname_th) 
-              : (user?.name_en + " " + user?.surname_en)}
-              
+              {(language === 'th')
+                ? (user?.name_th + " " + user?.surname_th)
+                : (user?.name_en + " " + user?.surname_en)}
+
             </h4>
           </div>
           <div className="col-4">

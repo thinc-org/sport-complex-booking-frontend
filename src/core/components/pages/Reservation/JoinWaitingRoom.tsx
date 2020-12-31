@@ -1,14 +1,14 @@
 import React from "react"
 import { Button } from "react-bootstrap"
 import { useForm } from "react-hook-form"
-import {Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from 'react-i18next'
 import { client } from "../../../../axiosConfig"
 
 function JoinWaitingRoom() {
   const { register, handleSubmit, errors } = useForm()
-  const {t} = useTranslation()
+  const { t } = useTranslation()
 
   const onSubmit = async (data: any) => {
     await client.put('/reservation/joinwaitingroom', data)
