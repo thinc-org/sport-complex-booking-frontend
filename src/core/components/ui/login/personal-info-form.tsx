@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import withUserGuard from '../../../guards/user.guard'
 import { usePersonalInfo } from './loginHooks'
 import { useTranslation } from 'react-i18next'
-const PersonalInfo = (props: any) => {
+const PersonalInfo = () => {
     const { t } = useTranslation()
     const { onSubmit } = usePersonalInfo()
     const { register, handleSubmit, errors } = useForm();

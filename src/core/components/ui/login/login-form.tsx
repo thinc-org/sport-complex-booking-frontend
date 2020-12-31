@@ -4,16 +4,16 @@ import { useForm } from 'react-hook-form'
 import { useLogin } from './loginHooks'
 import { useTranslation } from 'react-i18next'
 
-export const LoginForm = (props: any) => {
+export const LoginForm = () => {
   const { t } = useTranslation()
   const { register, handleSubmit, setError, errors } = useForm();
   const { isLoading, onLogin } = useLogin(setError)
-  const SSOLogin = async () => {
+  const SSOLogin = () => {
     window.location.href = `https://account.it.chula.ac.th/html/login.html?service=${process.env.REACT_APP_URL}/login`
   }
   return (
     <div className="default-wrapper">
-      <h1 className="login-header">{t("SIGNIN")}</h1>
+      <h1 className="login-header" style={{ textTransform: 'uppercase' }}>{t("signIn")}</h1>
       <Form onSubmit={handleSubmit(onLogin)}>
         <div style={{ display: isLoading ? "none" : "block" }}>
           <div style={{ marginBottom: "40px" }}>

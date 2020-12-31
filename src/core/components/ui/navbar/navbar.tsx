@@ -55,7 +55,7 @@ const NavigationBar = (props: any) => {
 }
 
 
-const Sidebar = (props: any) => {
+const Sidebar = () => {
   const [inProp, setInProp] = useState(false);
   const { header, isOnStaffPage } = useNavHeader()
   const { isUser, setToken } = useAuthContext()
@@ -66,7 +66,7 @@ const Sidebar = (props: any) => {
         {t(item.name)}
       </Link>
     </li>));
-  const onLogOut = async () => {
+  const onLogOut = () => {
     setToken('');
     setCookie('token', null, 0)
     setInProp(false)
