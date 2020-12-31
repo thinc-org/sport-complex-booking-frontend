@@ -1,23 +1,29 @@
 export const data = [
     {
         icon: '',
-        name: 'Home',
-        path: '/home'
+        name: 'home',
+        path: '/'
     },
     {
         icon: '',
-        name: 'Account',
+        name: 'account',
         path: '/account',
     },
     {
         icon: '',
-        name: 'My Waiting Room',
-        path: '/'
+        name: 'myWaitingRoom',
+        path: '/waitingroom'
 
     },
     {
         icon: '',
-        name: 'Reserve Now',
+        name: 'myReservation',
+        path: '/myreservation'
+
+    },
+    {
+        icon: '',
+        name: 'reserveNow',
         path: '/reservenow'
 
     },
