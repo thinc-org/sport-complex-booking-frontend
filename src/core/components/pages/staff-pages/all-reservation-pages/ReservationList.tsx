@@ -158,12 +158,19 @@ const AllReservation: FunctionComponent<RouteComponentProps<{ pagename: string }
 
   const renderTimeFilter = () => {
     let timeList = [
-      <option value={-1} disabled>
+      <option key={-1} value={-1} disabled>
         เลือกเวลา
       </option>,
-      <option value={0}>ทั้งหมด</option>,
+      <option key={0} value={0}>
+        ทั้งหมด
+      </option>,
     ]
-    for (let i = 1; i <= 48; i++) timeList.push(<option value={i}>{convertSlotToTime(i)}</option>)
+    for (let i = 1; i <= 48; i++)
+      timeList.push(
+        <option key={i} value={i}>
+          {convertSlotToTime(i)}
+        </option>
+      )
     return (
       <Form.Control
         className="form-pink"

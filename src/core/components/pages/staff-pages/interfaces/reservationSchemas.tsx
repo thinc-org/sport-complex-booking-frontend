@@ -11,7 +11,7 @@ export default interface SuccessfulReservation {
 export interface WaitingRoom {
   _id: string
   sport_id: string
-  court_num: number
+  court_number: number
   date: Date
   time_slot: number[]
   list_member: { member_object_id: string }[]
@@ -42,7 +42,7 @@ export interface UserInfo {
 
 // Modals //
 export interface DeleteModal {
-  show_confirm_del: boolean
-  show_com_del: boolean
-  show_err: boolean
+  showConfirmDel: boolean
+  showComDel: boolean
+  showErr: boolean
 }

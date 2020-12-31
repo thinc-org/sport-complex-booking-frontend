@@ -3,21 +3,21 @@ import { Modal, Button } from "react-bootstrap"
 import { DeleteModal } from "../interfaces/reservationSchemas"
 
 interface ModalInterface {
-  show_modal_info: DeleteModal
-  set_show_modal_info: React.Dispatch<React.SetStateAction<DeleteModal>>
+  showModalInfo: DeleteModal
+  setShowModalInfo: React.Dispatch<React.SetStateAction<DeleteModal>>
   info: any
 }
 
-const DeleteModalComponent = ({ show_modal_info, set_show_modal_info, info }: ModalInterface) => {
-  const { show_confirm_del, show_com_del, show_err } = show_modal_info
+const DeleteModalComponent = ({ showModalInfo, setShowModalInfo, info }: ModalInterface) => {
+  const { showConfirmDel, showComDel, showErr } = showModalInfo
 
   // renders //
   const renderConfirmDel = (info: { requestDelete: () => void }) => {
     return (
       <Modal
-        show={show_confirm_del}
+        show={showConfirmDel}
         onHide={() => {
-          set_show_modal_info({ ...show_modal_info, show_confirm_del: false })
+          setShowModalInfo({ ...showModalInfo, showConfirmDel: false })
         }}
         backdrop="static"
         keyboard={false}
@@ -33,7 +33,7 @@ const DeleteModalComponent = ({ show_modal_info, set_show_modal_info, info }: Mo
             variant="outline-secondary"
             className="btn-normal btn-outline-pink"
             onClick={() => {
-              set_show_modal_info({ ...show_modal_info, show_confirm_del: false })
+              setShowModalInfo({ ...showModalInfo, showConfirmDel: false })
             }}
           >
             ยกเลิก
