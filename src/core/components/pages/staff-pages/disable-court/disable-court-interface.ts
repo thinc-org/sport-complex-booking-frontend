@@ -1,15 +1,12 @@
-import { ComponentType } from 'react'
-import { Interface } from 'readline';
 export interface RowProps {
     starting_date: Date,
     expired_date: Date,
-    sport_id: string,
+    sport_id: any,
     court_num: number,
     description?: string | undefined,
     _id: string,
     button?: JSX.Element
 }
-
 export interface Option {
     sportType: string[],
     courtNum: number[]
@@ -17,7 +14,7 @@ export interface Option {
 export interface QueryParams {
     starting_date: Date | undefined,
     expired_date: Date | undefined,
-    sport_id: string | undefined,
+    sport_id: any,
     court_num: number | undefined,
     description?: string | undefined,
     start: number,
@@ -27,18 +24,10 @@ export interface QueryParams {
 export interface DisableFormData {
     starting_date: Date,
     expired_date: Date,
-    sport_id: string,
+    sport_id: any,
     court_num: number,
     description?: string,
     disable_time: disable_time[]
-}
-export interface Pagination {
-    page: number,
-    pagination: number[]
-}
-export interface Sport {
-    name: string,
-    id: string
 }
 export interface disable_time {
     day: number,
@@ -50,21 +39,15 @@ export interface ViewRowProps {
     time_slot: number[],
     button?: JSX.Element
 }
-
 export interface View {
-    sport_id: string,
+    sport_id: any,
     court_num: number,
     starting_date: string,
     expired_date: string,
     description?: string
 }
-export interface ViewResponse {
-    sport_id: string,
-    court_num: number,
-    starting_date: string,
-    expired_date: string,
+export interface ViewResponse extends View {
     disable_time: disable_time[],
-    description?: string
 }
 export interface TableProps<T> {
     data: any,
@@ -73,15 +56,3 @@ export interface TableProps<T> {
     Button?: Function
 }
 
-export interface ReactLocation {
-    key: string | null,
-    pathname: string
-    search: string | null,
-    hash: string | null,
-    state: LocState
-    page?: number | null
-}
-
-export type LocState = {
-    page: number | null
-}

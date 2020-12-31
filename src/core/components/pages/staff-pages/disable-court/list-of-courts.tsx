@@ -16,7 +16,7 @@ const ListOfCourts = () => {
     const endDateRef = useRef<DatePicker>()
     const { path } = useRouteMatch()
     const { data, maxPage, page, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete } = useTable()
-    const { register, handleSubmit, setError, errors, watch, setValue, getValues } = useForm();
+    const { register, handleSubmit, setError, errors, watch, setValue } = useForm();
     const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
     const watchSports = watch('sports', '')
     const { option } = useOption()
@@ -56,8 +56,8 @@ const ListOfCourts = () => {
                             </Form.Control>
                             <Form.Control name='courtNum' as='select' ref={register} disabled={watchSports === 'ประเภทกีฬา' ? true : false}>
                                 <option value={''}>เลขคอร์ด</option>
-                                {getValues('sports') && option ? option['sport_list']
-                                    .find(sport => sport._id == getValues('sports')).list_court
+                                {watchSports && option ? option['sport_list']
+                                    .find(sport => sport._id == watchSports).list_court
                                     .map((court) => {
                                         return <option value={court.court_num} key={court._id}>{court.court_num}</option>
                                     }) : ''}
@@ -97,7 +97,6 @@ const ListOfCourts = () => {
                 <Button variant='pink' className='disable-court-button' onClick={onAdd}>
                     เพิ่มการปิดคอร์ด
                 </Button>
-                <Button onClick={seed}>Seed</Button>
                 <Pagination>
                     <Pagination.Prev onClick={() => { if (page > 1) setPage(prev => prev - 1) }} />
                     {

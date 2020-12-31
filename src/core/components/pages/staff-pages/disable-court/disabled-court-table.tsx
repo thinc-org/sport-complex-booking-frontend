@@ -21,7 +21,7 @@ export const CourtRow = (props: RowProps) => {
                         {props.court_num}
                     </td>
                     <td>
-                        {props.sport_id}
+                        {props.sport_id.sport_name_th}
                     </td>
                     <td>
                         {formatDate(startingDate)}
