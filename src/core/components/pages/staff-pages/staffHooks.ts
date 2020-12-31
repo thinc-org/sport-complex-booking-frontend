@@ -17,7 +17,7 @@ export const useStaffLogin = (setError) => {
             .then((res: AxiosResponse<StaffResponse>) => {
                 setCookie('token', res.data.jwt, 1)
                 setToken(res.data.jwt)
-                history.push('/staff/staffprofile')
+                history.push('/staff/profile')
             })
             .catch((err) => {
                 setError('invalid', { type: 'async', message: 'Username หรือ Password ไม่ถูกต้อง' })

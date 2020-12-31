@@ -4,17 +4,31 @@ import { client } from '../../../../axiosConfig';
 
 function StaffProfile() {
 
-    const [name, setName] = useState('ชื่อจริง-นามสกุล')
-    const [accountType, setAccountType] = useState('Adminsister')
+    const [name, setName] = useState('')
+    const [surname, setSurname] = useState('')
+    const [accountType, setAccountType] = useState('')
 
-    client
-        .get('http://localhost:3000/staffs/', {
+    useEffect(() => {
+        fetchData()
+    }, [])
 
-        })
-        .then(res => {
-            setName(res.data.name)
-            setAccountType(res.data.account_type)
-        })
+    const fetchData = async () => {
+        await client
+            .get('http://localhost:3000/staffs/profile', {
+
+            })
+            .then(res => {
+                setName(res.data.name)
+                setSurname(res.data.surname)
+                if (res.data.is_admin) {
+                    setAccountType('Administration')
+                } else {
+                    setAccountType('Staff')
+                }
+            })
+    }
+
+
 
     return (
         <div className='container pl-0'>
