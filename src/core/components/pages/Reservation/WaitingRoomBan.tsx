@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react"
+import React from "react"
 import { Button } from "react-bootstrap"
 import { Link, useHistory, useLocation } from "react-router-dom"
 import { useEffect } from "react"
