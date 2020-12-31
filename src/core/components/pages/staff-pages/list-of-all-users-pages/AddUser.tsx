@@ -6,7 +6,7 @@ import { AddInfo } from "../interfaces/InfoInterface"
 
 const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
   // Page states //
-  const [jwt, setJwt] = useState<string>("")
+  const [jwt, setJwt] = useState<string>("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmUyMjI0YTVhMDAwN2NiOWExNDUxMGYiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDg2NTU1NDIsImV4cCI6MTYwOTI2MDM0Mn0.jNfgpjdgH9TyiU5_CZnFXhuWC_Qvaq3rlZqgjInduKQ")
   const [selectingSatit, setSelectingSatit] = useState<boolean>(false)
   const [showAdd, setShowAdd] = useState<boolean>(false)
   const [showCom, setShowCom] = useState<boolean>(false)
