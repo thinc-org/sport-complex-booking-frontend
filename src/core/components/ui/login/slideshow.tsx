@@ -1,8 +1,7 @@
 import * as React from "react"
-import { useState, useEffect } from "react"
 import { Carousel } from "react-bootstrap"
 import Logo from "../../../assets/images/logo.jpg"
-const Slide = (props: any) => {
+const Slide = () => {
   return (
     <div className="default-wrapper w-100">
       <Carousel className="h-100 w-100">
