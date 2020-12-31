@@ -10,7 +10,7 @@ import { getCookie } from "../../../contexts/cookieHandler"
 import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from 'react-i18next'
 import { Loading } from "../../ui/loading/loading"
-import { client } from "../../../../axiosConfig";
+import { client } from "../../../../axiosConfig"
 
 function AccountPage() {
   enum Account {
@@ -21,8 +21,8 @@ function AccountPage() {
 
   const {token} = useAuthContext()
   const { setCuStudentAccount, setSatitCuPersonelAccount, setOtherAccount } = useContext(UserContext)
-  const [account_type, setAccountType] = useState();
-  const [penalizeStatus, setPenalizeStatus] = useState();  
+  const [account_type, setAccountType] = useState()
+  const [penalizeStatus, setPenalizeStatus] = useState()
   const {i18n} = useTranslation()
 
   useEffect(() => {
@@ -49,7 +49,7 @@ function AccountPage() {
         } else if (data.account_type === "Other") {
           setOtherAccount(newData)
         }
-        if (getCookie("is_thai_language")==="true") i18n.changeLanguage('th');
+        if (getCookie("is_thai_language")==="true") i18n.changeLanguage('th')
         else i18n.changeLanguage('en')
         setAccountType(data.account_type)
       })

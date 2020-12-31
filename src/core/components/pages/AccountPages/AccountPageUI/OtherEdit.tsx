@@ -1,17 +1,17 @@
 import React from "react"
 import { useState,useContext } from "react"
 import {  Button } from "react-bootstrap"
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form"
 import { UserContext } from "../../../../contexts/UsersContext"
-import DatePicker from "react-datepicker";
+import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
-import { ConfirmModal, ErrorModal, OtherWarningMessage } from "../../../ui/Modals/AccountPageModals";
+import { ConfirmModal, ErrorModal, OtherWarningMessage } from "../../../ui/Modals/AccountPageModals"
 import { useTranslation } from 'react-i18next'
-import { setCookie } from "../../../../contexts/cookieHandler";
-import { client } from "../../../../../axiosConfig";
-import { OtherInfo } from "../../staff-pages/interfaces/InfoInterface";
+import { setCookie } from "../../../../contexts/cookieHandler"
+import { client } from "../../../../../axiosConfig"
+import { OtherInfo } from "../../staff-pages/interfaces/InfoInterface"
 import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup'
 
 export default function OtherAccountEdit() {
 
@@ -40,7 +40,7 @@ export default function OtherAccountEdit() {
     })
     
   })
-  const { register, handleSubmit, errors  } = useForm({resolver: yupResolver(schema)});
+  const { register, handleSubmit, errors  } = useForm({resolver: yupResolver(schema)})
 
   let [is_thai_language, set_is_thai_language] = useState(false)
   let [user_photo, set_user_photo] = useState<File>()
@@ -48,11 +48,11 @@ export default function OtherAccountEdit() {
   let [medical_certificate, set_medical_certificate] = useState<File>()
   let [house_registration_number, set_house_registration_number] = useState<File>()
   let [relationship_verification_document, set_relationship_verification_document] = useState<File>()
-  const [date, setDate] =useState<Date>(new Date());
-  const [show, setShow] = useState(false);
-  const [showErr, setShowErr] = useState(false);
+  const [date, setDate] =useState<Date>(new Date())
+  const [show, setShow] = useState(false)
+  const [showErr, setShowErr] = useState(false)
   const { otherAccount: user } = useContext(UserContext)
-  const [formData, setFormData] = useState<OtherInfo>();
+  const [formData, setFormData] = useState<OtherInfo>()
 
 
   /// JSX Begins here
@@ -67,13 +67,13 @@ export default function OtherAccountEdit() {
       })
       .catch(function (error) {
         if (error.response) {
-          setShow(false);
-          setShowErr(true);
+          setShow(false)
+          setShowErr(true)
         }
       })
   }
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: OtherInfo) => {
     setShow(true)
     const valid = schema.isValid(data)
     if (valid) {
@@ -153,11 +153,11 @@ export default function OtherAccountEdit() {
   const changeLanguage = (is_thai_language) => {
     if (is_thai_language){
       setCookie('is_thai_language', true, 999)
-      i18n.changeLanguage('th');
+      i18n.changeLanguage('th')
       set_is_thai_language(true)
     } else {
       setCookie('is_thai_language', false, 999)
-      i18n.changeLanguage('en');
+      i18n.changeLanguage('en')
       set_is_thai_language(false)
     }
     

@@ -1,13 +1,13 @@
 import React from "react"
 import { useState, useContext } from "react"
 import {  Button } from "react-bootstrap"
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form"
 import { UserContext } from "../../../../contexts/UsersContext"
-import { ConfirmModal, ErrorModal, EdittedData } from "../../../ui/Modals/AccountPageModals";
+import { ConfirmModal, ErrorModal, EdittedData } from "../../../ui/Modals/AccountPageModals"
 import { useTranslation } from 'react-i18next'
-import { client } from "../../../../../axiosConfig";
+import { client } from "../../../../../axiosConfig"
 import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup'
 
 export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
   const {t} = useTranslation()
@@ -15,14 +15,14 @@ export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
     phone: yup.string().required(t("phoneErrorMessage")),
     personal_email: yup.string().required(t("emailErrorMessage")).email(t("emailErrorMessage")),
   })
-  const [show, setShow] = useState(false);
-  const [showErr, setShowErr] = useState(false);
-  const [formData, setFormData] = useState<EdittedData>();
+  const [show, setShow] = useState(false)
+  const [showErr, setShowErr] = useState(false)
+  const [formData, setFormData] = useState<EdittedData>()
   const { satitCuPersonelAccount:user } = useContext(UserContext)
 
   
   // React Hook Forms
-  const { register, handleSubmit, errors  } = useForm({resolver: yupResolver(schema)});
+  const { register, handleSubmit, errors  } = useForm({resolver: yupResolver(schema)})
 
   const onSubmit = async (data: EdittedData) => {
     const valid = await schema.isValid(data)
@@ -30,7 +30,7 @@ export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
       setShow(true)
       setFormData(data)
     }
-  };
+  }
 
   const handleCancel = (e) => {
     e.preventDefault()
@@ -43,7 +43,7 @@ export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
           window.location.reload()
       })
       .catch((err) => {
-          setShowErr(true);
+          setShowErr(true)
       })
   }
 

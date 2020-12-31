@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Button } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import {Link, useHistory } from "react-router-dom"
@@ -6,6 +6,7 @@ import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from 'react-i18next'
 import { client } from "../../../../axiosConfig"
 import { WrongAccessCode } from "../../ui/Modals/WaitingRoomModals"
+import { WaitingRoomAccessCode } from './ReservationInterfaces'
 
 function JoinWaitingRoom() {
   const { register, handleSubmit, errors } = useForm()
@@ -13,17 +14,36 @@ function JoinWaitingRoom() {
   const history = useHistory()
   const [showWrongAccessCodeModal, setShowWrongAccessCodeModal] = useState(false)
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: WaitingRoomAccessCode) => {
     await client.post('/reservation/joinwaitingroom', data)
       .then((data) => {
         if (data['data']['isReservationCreated']) {
-          history.push('/hooray')
+          history.push({pathname:'/hooray', state: { fromJoinWaitingRoom: true }})
         } else {
           history.push('/waitingroom')
         }
       })
       .catch(() => {setShowWrongAccessCodeModal(true)})
   }
+
+  const fetchValidity = async () => {
+    await client.post('/reservation/checkvalidity')
+      .then((res) => {
+          const resMsg = res['data']['message']
+          if (resMsg !== "Valid user") {
+            const state = {msg: resMsg}
+            history.push({pathname: '/banned',state})
+          }
+      })
+      .catch(() => {
+          const state = {msg: t("youArePenalized")}
+          history.push({pathname: '/banned',state})
+      })
+  }
+
+  useEffect(()=>{
+    fetchValidity()
+  },[])
 
   return (
     <div className="wrapper">

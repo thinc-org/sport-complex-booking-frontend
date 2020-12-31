@@ -1,44 +1,21 @@
 import React, { useState, useEffect } from "react"
 import { Button, Row} from "react-bootstrap"
 import { useForm } from "react-hook-form"
-import DatePicker from "react-datepicker";
+import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { Link, useHistory } from "react-router-dom"
 import withUserGuard from '../../../guards/user.guard'
-import { History, LocationState } from "history";
-import { DetailsModal, CantCreateWaitingRoom } from "../../ui/Modals/WaitingRoomModals";
+import { DetailsModal, CantCreateWaitingRoom } from "../../ui/Modals/WaitingRoomModals"
 import { useTranslation } from 'react-i18next'
-import { client } from "../../../../axiosConfig";
+import { client } from "../../../../axiosConfig"
+import {WaitingRoomData, HistoryProps} from './ReservationInterfaces'
 
-export interface CreateWaitingRoomProps {
- history: History<LocationState>;
-}
-
-export interface WaitingRoomData {
-  sport_id: string,
-  court_number: number,
-  time_slot: number[],
-  date:Date
-}
-
-export interface SportsResponse {
-  quota: number,
-  required_user: number,
-  sport_name_en: string,
-  sport_name_th: string,
-}
-
-export interface ErrorMessage {
-  statusCode: number,
-  message: string
-}
-
-function CreateWaitingRoom(props: CreateWaitingRoomProps) {
+function CreateWaitingRoom(props: HistoryProps) {
   // States
   const { register, handleSubmit, getValues, watch, setValue } = useForm()
-  const [date, setDate] =useState(new Date());
-  const [today] = useState(new Date());
-  const [details, setDetails] = useState<WaitingRoomData>({sport_id: "", court_number: 0, time_slot: [], date});
+  const [date, setDate] =useState(new Date())
+  const [today] = useState(new Date())
+  const [details, setDetails] = useState<WaitingRoomData>({sport_id: "", court_number: 0, time_slot: [], date})
   const [quota, setquota] = useState(0)
   const {t, i18n} = useTranslation()
   const {language} = i18n
@@ -51,14 +28,14 @@ function CreateWaitingRoom(props: CreateWaitingRoomProps) {
   const [courts, setCourts] = useState([])
   // Time States
   const [time, setTime] = useState([1, 2, 3])
-  const times = watch('time_slot', []);
-  const checkedCount = times.filter(Boolean).length;
+  const times = watch('time_slot', [])
+  const checkedCount = times.filter(Boolean).length
   // Selection
   let [showCourt, setShowCourt] = useState(false)
   let [showTime, setShowTime] = useState(false)
   // Modal
-  const [show, setShow] = useState(false);
-  const [showDateWarning, setShowDateWarning] = useState(true);
+  const [show, setShow] = useState(false)
+  const [showDateWarning, setShowDateWarning] = useState(true)
   const [selectTimeWarning, setSelectTimeWarning] = useState(false)
   const [showCantCreateWaitingRoomModal, setShowCantCreateWaitingRoomModal] = useState(false)
   const [showTimeSlotError, setShowTimeSlotError] = useState(false)
@@ -79,8 +56,8 @@ function CreateWaitingRoom(props: CreateWaitingRoomProps) {
   }
   // Date difference > 7
   const validDate = (date1, date2) => {
-    const diffTime = date2 - date1;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    const diffTime = date2 - date1
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
     if (diffDays <= 7 && diffDays >0) {
       return true
     } else {
@@ -91,15 +68,15 @@ function CreateWaitingRoom(props: CreateWaitingRoomProps) {
   const fetchValidity = async () => {
     await client.post('/reservation/checkvalidity')
       .then((res) => {
-          let resMsg = res['data']['message']
+          const resMsg = res['data']['message']
           if (resMsg !== "Valid user") {
             const state = {msg: resMsg}
-            props.history.push({pathname: '/banned',state});
+            props.history.push({pathname: '/banned',state})
           }
       })
       .catch(() => {
           const state = {msg: t("youArePenalized")}
-          props.history.push({pathname: '/banned',state});
+          props.history.push({pathname: '/banned',state})
       })
   }
   // [1] Fetch Courts
@@ -143,7 +120,7 @@ function CreateWaitingRoom(props: CreateWaitingRoomProps) {
       time_slot: formattedTimeSlot.slice(1)
     }
     await client.post('/reservation/createwaitingroom', newData)
-    .then(()=> {history.push({pathname: '/waitingroom'});})
+    .then(()=> {history.push({pathname: '/waitingroom'})})
     .catch(()=> {setShowCantCreateWaitingRoomModal(true)})
   }
 
@@ -200,8 +177,8 @@ function CreateWaitingRoom(props: CreateWaitingRoomProps) {
               onChange={(date: Date) => {
                 const fixedDate = new Date(date.setHours(0,0,0,0))
                 setDate(fixedDate)
-                if (validDate(today, date)) setShowDateWarning(false); 
-                else setShowDateWarning(true);    
+                if (validDate(today, date)) setShowDateWarning(false)
+                else setShowDateWarning(true)  
               }}
             />
           </div>

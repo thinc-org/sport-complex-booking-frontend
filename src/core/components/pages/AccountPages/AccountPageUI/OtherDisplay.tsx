@@ -5,8 +5,7 @@ import {  Button } from "react-bootstrap"
 import {Link } from "react-router-dom"
 import { OtherWarningMessage } from '../../../ui/Modals/AccountPageModals'
 import { useTranslation } from 'react-i18next'
-import { client } from "../../../../../axiosConfig";
-import { Loading } from "../../../ui/loading/loading"
+import { client } from "../../../../../axiosConfig"
 
 export default function OtherAaccountDisplay() {
 
@@ -18,8 +17,8 @@ export default function OtherAaccountDisplay() {
     .get("/fs/viewFileToken/" + fileID)
     .then(({ data }) => {
       let url = "http://localhost:3000/fs/view?token=" + data.token
-      let win = window.open(url, '_blank');
-      win? win.focus(): console.log("Wrong token");        
+      let win = window.open(url, '_blank')
+      win? win.focus(): console.log("Wrong token")       
     })
     .catch (({err})=> {console.log(err)})
   }
