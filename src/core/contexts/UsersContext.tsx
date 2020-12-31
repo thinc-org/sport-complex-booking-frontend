@@ -56,11 +56,11 @@ interface Other extends DefaultAccount {
 
 interface UserConstruct {
   cuStudentAccount: CuStudent | undefined,
-  satitCuPersonelAccount: SatitCuPersonel| undefined,
-  otherAccount: Other| undefined
-  setCuStudentAccount: (CuStudent: CuStudent)=>void
-  setSatitCuPersonelAccount:(SatitCuPersonel: SatitCuPersonel)=>void
-  setOtherAccount: (Other: Other)=>void
+  satitCuPersonelAccount: SatitCuPersonel | undefined,
+  otherAccount: Other | undefined
+  setCuStudentAccount: (CuStudent: CuStudent) => void
+  setSatitCuPersonelAccount: (SatitCuPersonel: SatitCuPersonel) => void
+  setOtherAccount: (Other: Other) => void
 }
 
 export const UserContext = createContext({} as UserConstruct)
@@ -70,5 +70,5 @@ export default function UserContextProvider(props) {
   const [satitCuPersonelAccount, setSatitCuPersonelAccount] = useState<SatitCuPersonel>()
   const [otherAccount, setOtherAccount] = useState<Other>()
   const value = { cuStudentAccount, satitCuPersonelAccount, otherAccount, setCuStudentAccount, setSatitCuPersonelAccount, setOtherAccount }
-  return <UserContext.Provider value={value} {...props}/>
+  return <UserContext.Provider value={value} {...props} />
 }

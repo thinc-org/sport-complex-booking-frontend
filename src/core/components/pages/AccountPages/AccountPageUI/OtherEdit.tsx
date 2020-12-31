@@ -165,7 +165,6 @@ export default function OtherAccountEdit() {
       i18n.changeLanguage('en');
       set_is_thai_language(false)
     }
-
   }
 
   return (

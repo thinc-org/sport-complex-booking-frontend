@@ -182,6 +182,12 @@ function CreateWaitingRoom(props: CreateWaitingRoomProps) {
     )
   }
 
+  const formatTime = (element: number) => {
+    return (
+      Math.floor((element - 1) / 2) + ":" + (((element - 1) * 30 % 60).toString() + "0").substring(0, 2) + "-" + Math.floor((element) / 2) + ":" + (((element) * 30 % 60).toString() + "0").substring(0, 2)
+    )
+  }
+
   return (
     <div className="Orange">
       <div className="mx-auto col-md-6">
