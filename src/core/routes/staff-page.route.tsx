@@ -44,7 +44,8 @@ const StaffRoute = (props) => {
             <Switch>
                 <Route exact path={path} component={StaffLogin} />
                 <Route
-                    path={`${path}/staffProfile`}
+                    exact
+                    path={`${path}/profile`}
                     render={() => {
                         return staff(<StaffProfile />, "ยินดีต้อนรับ")
                         // example

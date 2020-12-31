@@ -1,17 +1,15 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { client } from '../../../../axiosConfig';
 
 function StaffProfile() {
 
     const [name, setName] = useState('ชื่อจริง-นามสกุล')
     const [accountType, setAccountType] = useState('Adminsister')
 
-    axios
+    client
         .get('http://localhost:3000/staffs/', {
-            headers: {
-                Authorization: 'bearer',
-            },
+
         })
         .then(res => {
             setName(res.data.name)
