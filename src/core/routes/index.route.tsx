@@ -21,9 +21,6 @@ import Hooray from "../components/pages/Reservation/Hooray"
 
 export default function MainRoute() {
   const { isUser, setToken } = useAuthContext()
-  useEffect(() => {
-    if (getCookie('token')) setToken(getCookie('token'))
-  }, [isUser])
   return (
     <>
       <Sidebar></Sidebar>
@@ -40,8 +37,6 @@ export default function MainRoute() {
         <Route exact path="/profile" render={() => {
           return <div>Under maintenance</div>
         }} />
-
-
         <Route exact path="/reservenow" component={ReserveNow} />
 
         <Route exact path="/joinwaitingroom" component={JoinWaitingRoom} />

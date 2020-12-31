@@ -73,15 +73,7 @@ export const useDate = (initialStartDate: Date | undefined = undefined, initialE
     return { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, setStartDate, setEndDate }
 }
 
-export const handleDelete = (id: string) => {
-    client.delete('/courts/disable-courts', {
-        params: {
-            id: id
-        }
-    })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err))
-}
+
 
 export const useOption = () => {
     const [option, setOption] = useState<Option>()
@@ -123,7 +115,7 @@ export const useViewTable = (params) => {
     useEffect(() => {
         fetchViewData()
     }, [])
-    return { viewData, inProp, rowData, onAddRow, onDeleteRow, setInProp }
+    return { viewData, inProp, rowData, onAddRow, onDeleteRow, setInProp, error }
 
 }
 
