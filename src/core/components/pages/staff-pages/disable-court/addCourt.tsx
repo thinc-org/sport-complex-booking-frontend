@@ -93,7 +93,6 @@ const AddCourt = () => {
                     <Row>
                         <Col >
                             <div style={{ color: 'red' }}>
-                                {errors.validate && 'เลขคอร์ดผิด'}
                                 {(errors.required || !startDate || !endDate || !rowData || errors.validate) && 'กรุณากรอกข้อมูลให้ครบ'}
                                 {errors.request && errors.request.message}
                             </div>
@@ -113,8 +112,6 @@ const AddCourt = () => {
                         <Button variant='outline-pink' onClick={() => history.goBack()}>ยกเลิก</Button>
                     </div>
                 </Form>
-
-
             </div>
         </Container>
     )
