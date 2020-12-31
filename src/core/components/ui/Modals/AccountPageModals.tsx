@@ -112,7 +112,7 @@ export const OtherWarningMessage:React.FC<OtherWarningMessageProps> = ({show, ve
   switch (verification_status) {
     case "NotSubmitted": {
       return (
-        <div className="alert alert-danger mt-3" role="alert">
+        <div className="alert alert-warning mt-3" role="alert">
           <h4>{t("warning")}</h4>
           <h6>{t("notSubmittedMessage")}</h6>
         </div>
@@ -136,7 +136,7 @@ export const OtherWarningMessage:React.FC<OtherWarningMessageProps> = ({show, ve
     }
     case "Verified": {
       return (
-        <div className="alert alert-info mt-3" role="alert">
+        <div className="alert alert-success mt-3" role="alert">
           <h4>{t("approvedTitle")}</h4>
           <h6>
             {t("approvedMessage")}

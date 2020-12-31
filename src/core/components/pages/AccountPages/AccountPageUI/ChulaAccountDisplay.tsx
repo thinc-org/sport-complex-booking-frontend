@@ -7,7 +7,7 @@ import { WarningMessage } from "../../../ui/Modals/AccountPageModals"
 
 export default function ChulaAccountDisplay({ toggleEditButton }) {
 
-  const { cuStudentAccount:user } = useContext(UserContext);
+  const { cuStudentAccount:user } = useContext(UserContext)
   const {t, i18n} = useTranslation()
   const {language} = i18n 
 

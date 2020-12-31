@@ -2,14 +2,14 @@ import React from "react"
 import { useState, useContext } from "react"
 import { Button } from "react-bootstrap"
 import { UserContext } from "../../../../contexts/UsersContext"
-import { useForm } from "react-hook-form";
-import withUserGuard from "../../../../guards/user.guard";
-import { ConfirmationModal, PasswordMismatchModal, PasswordData, PasswordChangeSuccess, PasswordChangeError } from "../../../ui/Modals/ChangePasswordModals";
+import { useForm } from "react-hook-form"
+import withUserGuard from "../../../../guards/user.guard"
+import { ConfirmationModal, PasswordMismatchModal, PasswordData, PasswordChangeSuccess, PasswordChangeError } from "../../../ui/Modals/ChangePasswordModals"
 import { useTranslation } from 'react-i18next'
-import { Redirect, useHistory } from "react-router-dom";
-import { client } from "../../../../../axiosConfig";
+import { Redirect, useHistory } from "react-router-dom"
+import { client } from "../../../../../axiosConfig"
 import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup'
 
 function ChangePassword() {
   const {t} = useTranslation()
@@ -20,21 +20,21 @@ function ChangePassword() {
     repeatNewPassword: yup.string().required(t("enterNewPass")).min(6, t("containMoreThan6")).oneOf([yup.ref('newPassword'), null], t("passMustMatch"))
   })
 
-  const { register, handleSubmit, errors } = useForm({resolver: yupResolver(schema)});  
-  const [show, setShow] = useState(false);
-  const [passwordData, setPasswordData] = useState<PasswordData>();
-  const [showPasswordMismatch, setShowPasswordMismatch] = useState(false);
+  const { register, handleSubmit, errors } = useForm({resolver: yupResolver(schema)})
+  const [show, setShow] = useState(false)
+  const [passwordData, setPasswordData] = useState<PasswordData>()
+  const [showPasswordMismatch, setShowPasswordMismatch] = useState(false)
   const [repeatedPasswordError, setRepeatedPassword] =useState(false)
   const {cuStudentAccount} = useContext(UserContext)
   const [showChangeSuccess, setShowChangeSuccess] = useState(false)
   const [showChangeError, setShowChangeError] = useState(false)
-  const history = useHistory();
+  const history = useHistory()
   
   const onSubmit = (data: PasswordData) => {
     if (data.oldPassword !== data.newPassword ) {
       setRepeatedPassword(false)
       if (data.newPassword !== data.repeatNewPassword!) {
-        setShowPasswordMismatch(true);
+        setShowPasswordMismatch(true)
       } else {
         delete data.repeatNewPassword
         setPasswordData({...data})
@@ -43,7 +43,7 @@ function ChangePassword() {
     } else {
       setRepeatedPassword(true)
     }
-  };
+  }
 
   const returnToAccountPage = () => {
     history.push('/account')
@@ -55,7 +55,7 @@ function ChangePassword() {
           setShowChangeSuccess(true)
       })
       .catch((err) => {
-          console.log(err);
+          console.log(err)
       })
     setShow(false)
   }

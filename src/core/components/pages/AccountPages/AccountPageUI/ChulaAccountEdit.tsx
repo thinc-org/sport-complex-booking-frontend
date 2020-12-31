@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react"
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form"
 import {  Button } from "react-bootstrap"
 import { UserContext } from "../../../../contexts/UsersContext"
 import { useTranslation } from 'react-i18next'
-import { ConfirmModal, ErrorModal, EdittedData, WarningMessage } from "../../../ui/Modals/AccountPageModals";
-import { client } from "../../../../../axiosConfig";
+import { ConfirmModal, ErrorModal, EdittedData, WarningMessage } from "../../../ui/Modals/AccountPageModals"
+import { client } from "../../../../../axiosConfig"
 import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup'
 
 export default function ChulaAccountEdit({ toggleEditButton }) {
   const {t} = useTranslation()
@@ -15,14 +15,14 @@ export default function ChulaAccountEdit({ toggleEditButton }) {
     personal_email: yup.string().required(t("emailErrorMessage")).email(t("emailErrorMessage")),
   })
 
-  const [show, setShow] = useState(false);
-  const [showErr, setShowErr] = useState(false);
+  const [show, setShow] = useState(false)
+  const [showErr, setShowErr] = useState(false)
   const [formData, setFormData] = useState<EdittedData>()
   
   const { cuStudentAccount: user } = useContext(UserContext)
 
   // React Hook Forms
-  const { register, handleSubmit, errors } = useForm({resolver: yupResolver(schema)});
+  const { register, handleSubmit, errors } = useForm({resolver: yupResolver(schema)})
 
   const onSubmit = async (data: EdittedData) => {
     const valid = await schema.isValid(data)
@@ -30,7 +30,7 @@ export default function ChulaAccountEdit({ toggleEditButton }) {
       setShow(true)
       setFormData(data)
     }
-  };
+  }
 
   const handleCancel = (e) => {
     e.preventDefault()
@@ -43,7 +43,7 @@ export default function ChulaAccountEdit({ toggleEditButton }) {
           window.location.reload()
       })
       .catch(() => {
-          setShowErr(true);
+          setShowErr(true)
       })
   }
 
