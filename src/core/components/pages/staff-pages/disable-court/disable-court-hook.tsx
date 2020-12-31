@@ -1,7 +1,7 @@
 
 import * as React from 'react'
-import { useState, useEffect, useLayoutEffect, useRef, ComponentType } from 'react';
-import { Option, RowProps, Pagination, QueryParams, ViewResponse, DisableFormData, ViewRowProps, disable_time, View, ReactLocation } from './disable-court-interface'
+import { useState, useEffect, useRef, ComponentType } from 'react';
+import { Option, RowProps, QueryParams, ViewResponse, ViewRowProps, disable_time, View } from './disable-court-interface'
 import { client } from '../../../../../axiosConfig'
 
 export const toViewRowProps = (data: disable_time[] | undefined): ViewRowProps[] => {
