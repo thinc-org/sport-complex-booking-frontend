@@ -239,7 +239,6 @@ p.link {
   font-weight: bold;
 }
 
-<<<<<<< HEAD
 .custom-checkbox {
   margin-top: 4px;
   width: 15px;
@@ -258,7 +257,6 @@ p.link {
 .input-error {
   color: red;
 }
-=======
 .box-container {
   background-color: white;
   border-radius: 15px;
@@ -290,4 +288,3 @@ p.link {
   background: rgba(255, 178, 221, 1);
   color: black;
 }
->>>>>>> first commit

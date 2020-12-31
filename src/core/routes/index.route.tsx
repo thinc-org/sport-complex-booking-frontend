@@ -60,7 +60,7 @@ export default function MainRoute() {
 
         <Route path='/changePassword' component={ChangePassword} />
 
-        <Route path='/banned' component={WaitingRoomBan} />
+        <Route exact path='/banned' component={WaitingRoomBan} />
 
       </Switch>
     </>
