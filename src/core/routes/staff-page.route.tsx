@@ -1,5 +1,6 @@
 import * as React from "react"
-import { Route, Switch, useRouteMatch, useLocation } from "react-router-dom"
+import { Route, Switch, useRouteMatch, useLocation, useParams } from "react-router-dom"
+import useSWR from "swr"
 
 import StaffLogin from "../components/pages/staff-pages/staff-login"
 import StaffSidebar from "../components/ui/navbar/staff-sidebar"
