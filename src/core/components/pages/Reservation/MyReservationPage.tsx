@@ -3,6 +3,7 @@ import { Route, useHistory, Switch, useRouteMatch } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import ReservationPage from '../Reservation/Reservation';
 import ReservationDetail from '../Reservation/ReservationDetail';
+import withUserGuard from '../../../guards/user.guard';
 
 const MyReservationPage = (props: any) => {
     const history = useHistory();
@@ -22,4 +23,4 @@ const MyReservationPage = (props: any) => {
     )
 }
 
-export default MyReservationPage;
+export default withUserGuard(MyReservationPage);
