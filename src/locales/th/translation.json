@@ -80,13 +80,8 @@
   "waitingRoomPassword": "รหัสเข้าห้องรอการจอง",
   "waitingRoomHelp": "คุณจะได้รหัสหลังการสร้างห้องรอการจอง",
   "enterCode": "กรุณากรอกรหัสเข้าห้องรอกาจอง",
-<<<<<<< HEAD
   "dateSelection": "เลือกวันที่",
   "sevenDays": "คุณสามารถจองล่วงหน้ามากสุด 7 วัน และไม่สามารถจองวันที่ในอดีตได้",
-=======
-  "dateDelection": "เลือกวันที่",
-  "sevenDays": "คุณสามารถจองล่วงหน้าอย่างน้อย 7 วัน",
->>>>>>> add my reservation page
   "sportSelection": "เลือกกีฬา",
   "courtSelection": "เลือกสนาม",
   "remainingQuota": "คุณสามารถจองได้อีก:",
@@ -115,7 +110,6 @@
   "youArePenalized": "คุณอยู่ในสถานะหมดสิทธิ์การจอง",
   "penalizeMessage": "คุณจะไม่สามารถทำการจองได้จนกว่าระยะเวลาการลงโทษของคุณจะสิ้นสุดลง",
   "langauge": "ภาษา",
-<<<<<<< HEAD
   "websiteUseCookie": "เว็บไซต์นี้ใช้คุกกี้",
   "cookieDescription": "เว็บไซต์นี้ใช้คุกกี้ โปรดเลือกยอมรับเพื่อประสิทธิภาพสูงสุด",
   "allow": "ยอมรับ",
@@ -127,18 +121,6 @@
   "myWaitingRoomDescription": "ดูห้องรอของฉันในขณะนี้",
   "reserveNowDescription": "จองห้อง",
   "fillAccount": "กรุณากรอกข้อมูลในหน้าบัญชีผู้ใช้เพื่อเข้าใช้งานฟีเจอร์ต่างๆ",
-=======
-  "checked_in": "เช็คอินแล้ว",
-  "members": "สมาชิก",
-  "show_qr_to_staff": "กรุณาแสดงคิวอาร์โค้ดนี้ให้เจ้าหน้าที่",
-  "cancel_reservation": "ยกเลิกการจอง",
-  "cancel_reservation_question": "คุณต้องการยกเลิกการจองใช่หรือไม่?",
-  "cancel_reservation_condition_1": "1. ถ้าทำการยกเลิกการจองภายใน 5 วัน คุณและสมาชิกในการจองจะถูกแบนเป็นเวลา 30 วัน",
-  "cancel_reservation_condition_2": "2. ถ้าทำการยกเลิกการจองภายใน 2 วัน คุณและสมาชิกในการจองจะถูกแบนเป็นเวลา 2 เดือน",
-  "sure": "ตกลง",
-  "no": "ไม่",
-  "you_have_checked_in": "เช็ดอินแล้ว!",
->>>>>>> add my reservation page
   "waitingRoomBan": "คุณไม่ได้รับอนุญาตให้สร้างห้องรอ",
   "backToHome": "กลับสู่หน้าหลัก",
   "success": "สำเร็จ",
@@ -211,13 +193,7 @@
   "continue": "ต่อไป",
   "home": "หน้าแรก",
   "account": "บัญชีผู้ใช้",
-<<<<<<< HEAD
   "waitingRoom": "ห้องรอคอย",
   "noWaitingRoom": "คุณไม่มีห้องรอในขณะนี้",
   "checkOutMyReservation": "ไปที่หน้าการจองของฉันเพื่อดูการจองที่สำเร็จ"
 }
-=======
-  "myWaitingRoom": "ห้องรอของฉัน",
-  "myReservation": "การจองของฉัน"
-}
->>>>>>> add my reservation page

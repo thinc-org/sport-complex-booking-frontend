@@ -16,8 +16,8 @@ const MyReservationPage = (props: any) => {
 
     return (
         <Switch>
-            <Route exact path={path} component={ReservationPage} />
             <Route exact path={`${path}/reservationdetail`} component={ReservationDetail} />
+            <Route path={path} component={ReservationPage} />
         </Switch>
 
     )
