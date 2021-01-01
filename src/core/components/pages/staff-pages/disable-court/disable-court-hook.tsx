@@ -119,7 +119,7 @@ export const useViewTable = (params) => {
 
 }
 
-export const useTable = () => {
+export const useTableWithPagination = () => {
     const [params, setParams] = useState<QueryParams>({
         sport_id: undefined,
         starting_date: undefined,
