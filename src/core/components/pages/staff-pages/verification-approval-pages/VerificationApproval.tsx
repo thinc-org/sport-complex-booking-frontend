@@ -1,8 +1,9 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
-import { Table, Form, Col, Button, Pagination, Modal } from "react-bootstrap"
+import { Table, Form, Col, Button, Modal } from "react-bootstrap"
 import { useHistory } from "react-router-dom"
 import { client } from "../../../../../axiosConfig"
 import { OtherInfo } from "../interfaces/InfoInterface"
+import PaginationComponent from "../list-of-all-users-pages/PaginationComponent"
 
 const VeritificationApproval: FunctionComponent = () => {
   // page state
@@ -45,62 +46,6 @@ const VeritificationApproval: FunctionComponent = () => {
       .catch((err) => {
         console.log(err)
       })
-  }
-
-  const loadPagination = () => {
-    let max_page: number = Math.floor((maxUser + maxUserPerPage - 1) / maxUserPerPage)
-    let numList: Array<number> = []
-    let haveMore = true
-    let i = 0
-    while (numList.length < 5) {
-      let page = pageNo + i - 2
-      if (page >= max_page) haveMore = false
-      if (page >= 1 && page <= max_page) numList.push(page)
-      else if (page > max_page) break
-      i++
-    }
-    let elementList = numList.map((num) => {
-      if (num === pageNo)
-        return (
-          <Pagination.Item key={num} active={true}>
-            {num}
-          </Pagination.Item>
-        )
-      return (
-        <Pagination.Item
-          key={num}
-          onClick={() => {
-            handlePagination(num)
-          }}
-        >
-          {num}
-        </Pagination.Item>
-      )
-    })
-    if (haveMore) elementList.push(<Pagination.Ellipsis key={max_page + 1} />)
-    return (
-      <Pagination className="justify-content-md-end">
-        <Pagination.Prev
-          onClick={() => {
-            handlePagination(pageNo - 1)
-          }}
-        />
-        {elementList}
-        <Pagination.Next
-          onClick={() => {
-            handlePagination(pageNo + 1)
-          }}
-        />
-      </Pagination>
-    )
-  }
-
-  // handles //
-  const handlePagination = (next_page: number) => {
-    let max_page: number = Math.floor((maxUser + maxUserPerPage - 1) / maxUserPerPage)
-    if (next_page >= 1 && next_page <= max_page) {
-      setPageNo(next_page)
-    }
   }
 
   const handleSearch = (e) => {
@@ -220,7 +165,9 @@ const VeritificationApproval: FunctionComponent = () => {
           {renderNoUserModal()}
         </tbody>
       </Table>
-      <div className="text-right">{loadPagination()}</div>
+      <div className="text-right">
+        <PaginationComponent pageNo={pageNo} setPageNo={setPageNo} maxUser={maxUser} maxUserPerPage={maxUserPerPage} />
+      </div>
     </div>
   )
 }
