@@ -152,6 +152,7 @@ export const RejectInfoLabel = {
   relationship_verification_document: "Relation verification photo",
 }
 
+// Modals //
 export interface ModalVerify {
   showConfirmAccept: boolean
   showUncomAccept: boolean
@@ -170,4 +171,18 @@ export interface ModalUserInfo {
   showErr: boolean
   showPasswordErr: boolean
   showConfirmChange: boolean
+}
+
+export interface ModalAddUser {
+  showAdd: boolean
+  showCom: boolean
+  showErr: boolean
+  showUsernameErr: boolean
+}
+
+// Alerts //
+export interface AlertAddUser {
+  showAlertUncom: boolean
+  showAlertUsername: boolean
+  showAlertPassword: boolean
 }
