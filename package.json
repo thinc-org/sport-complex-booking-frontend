@@ -17,11 +17,16 @@
     "@types/react-transition-group": "^4.4.0",
     "axios": "^0.20.0",
     "bootstrap": "^4.5.2",
+<<<<<<< HEAD
     "date-fns": "^2.16.1",
+||||||| constructed merge base
+=======
+    "date-fns": "^2.16.1",
+    "i18n": "^0.13.2",
+>>>>>>> combine otherInfo & cuSatitInfo
     "i18next": "^19.8.4",
     "i18next-browser-languagedetector": "^6.0.1",
     "i18next-http-backend": "^1.0.21",
-    "date-fns": "^2.16.1",
     "jquery": "^3.5.1",
     "jwt-decode": "^3.1.2",
     "popper.js": "^1.16.1",

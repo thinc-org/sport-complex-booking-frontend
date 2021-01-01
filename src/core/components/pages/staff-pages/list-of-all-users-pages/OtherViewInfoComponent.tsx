@@ -11,8 +11,6 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
   // handles //
   const handlePDF = (e) => {
     let fileId = e.target.id
-    // console.log(fileId)
-    // console.log("trying to open pdf: " + fileId)
     client({
       method: "GET",
       url: "/fs/viewFileToken/" + fileId,
@@ -68,18 +66,28 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
               <p>{prefix}</p>
             </div>
             <div className="col">
-              <label className="form-label mt-2">{isThai ? "ชื่อ *" : "First Name *"}</label>
-              <p>{isThai ? name_th : name_en}</p>
+              <label className="form-label mt-2">{isThai ? "เพศ *" : "Gender *"}</label>
+              <p>{gender}</p>
             </div>
           </div>
           <div className="row">
             <div className="col">
-              <label className="form-label mt-2">{isThai ? "นามสกุล *" : "Last Name *"}</label>
-              <p>{isThai ? surname_th : surname_en}</p>
+              <label className="form-label mt-2">{isThai ? "ชื่อ(ภาษาไทย) *" : "Name(Thai) *"}</label>
+              <p>{name_th}</p>
             </div>
             <div className="col">
-              <label className="form-label mt-2">{isThai ? "เพศ *" : "Gender *"}</label>
-              <p>{gender}</p>
+              <label className="form-label mt-2">{isThai ? "นามสกุล(ภาษาไทย) *" : "Surname(Thai) *"}</label>
+              <p>{surname_th}</p>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <label className="form-label mt-2">{isThai ? "ชื่อ(ภาษาอังกฤษ) *" : "Name(English) *"}</label>
+              <p>{name_en}</p>
+            </div>
+            <div className="col">
+              <label className="form-label mt-2">{isThai ? "นามสกุล(ภาษาอังกฤษ) *" : "Surname(English) *"}</label>
+              <p>{surname_en}</p>
             </div>
           </div>
           <label className="form-label mt-2">{isThai ? "วันเกิด *" : "Birthdate *"}</label>

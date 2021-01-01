@@ -97,7 +97,7 @@ const ListOfAllUsers: FunctionComponent = () => {
     //  request users from server  //
     client({
       method: "GET",
-      url: "/list-all-user/getUser",
+      url: "/list-all-user/filter",
       params: param_data,
     })
       .then(({ data }) => {
@@ -128,7 +128,7 @@ const ListOfAllUsers: FunctionComponent = () => {
     let _id: String = users[index]._id
     client({
       method: "GET",
-      url: "/list-all-user/findById/" + _id,
+      url: "/list-all-user/id/" + _id,
     })
       .then(({ data }) => {
         if (data) {

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Route, Switch, useRouteMatch } from "react-router-dom"
+import { Route, Switch, useRouteMatch, useLocation } from "react-router-dom"
 
 import StaffLogin from "../components/pages/staff-pages/staff-login"
 import StaffSidebar from "../components/ui/navbar/staff-sidebar"
@@ -13,8 +13,20 @@ import VeritificationApproval from "../components/pages/staff-pages/verification
 import VerifyInfo from "../components/pages/staff-pages/verification-approval-pages/VerifyInfo"
 import DisableCourt from "../components/pages/staff-pages/disable-court/disable-court.page.main"
 const StaffRoute = (props) => {
-  const { path, url } = useRouteMatch()
-  function staff(page, header) {
+  const { path } = useRouteMatch()
+  const location = useLocation()
+  let headerMap: Map<string, string> = new Map([
+    ["/staffProfile", "ยินดีต้อนรับ"],
+    ["/staffManagement", "การจัดการสตาฟ"], // เปลี่ยนเอา
+    ["/listOfAllUsers", "รายชื่อผู้ใช้"],
+    ["/addUser", "เพิ่มผู้ใช้"],
+    ["/cuInfo", "ข้อมูลผู้ใช้"],
+    ["/userInfo", "ข้อมูลผู้ใช้"],
+    ["/verifyApprove", "รับรองการลงทะเบียน"],
+    ["/verifyInfo", "รับรองการลงทะเบียนรายบุคคล"],
+  ])
+
+  const StaffRoute = () => {
     return (
       <div className="staff background d-block" style={{ backgroundColor: "white", minHeight: "80vh" }}>
         <div className="container d-block">
@@ -28,8 +40,34 @@ const StaffRoute = (props) => {
                   <StaffSidebar />
                 </div>
                 <div className="col-9 mt-5" style={{ minHeight: "600px" }}>
-                  <h1> {header} </h1>
-                  {page}
+                  <h1>
+                    {headerMap.get(
+                      location.pathname.slice(
+                        path.length,
+                        location.pathname.indexOf("/", path.length + 1) !== -1
+                          ? location.pathname.indexOf("/", path.length + 1)
+                          : location.pathname.length
+                      )
+                    )}{" "}
+                  </h1>
+                  <Switch>
+                    <Route path={`${path}/staffProfile`} component={StaffProfile} />
+                    <Route
+                      path={`${path}/staffManagement`}
+                      render={() => {
+                        return (
+                          // add pages here staff(page)
+                          <div>under maintainance</div>
+                        )
+                      }}
+                    />
+                    <Route exact path={`${path}/listOfAllUsers`} component={ListOfAllUsers} />
+                    <Route exact path={`${path}/addUser`} component={AddUser} />
+                    <Route exact path={`${path}/cuInfo/:_id`} component={CUInfo} />
+                    <Route exact path={`${path}/userInfo/:_id`} component={UserInfo} />
+                    <Route exact path={`${path}/verifyApprove`} component={VeritificationApproval} />
+                    <Route exact path={`${path}/verifyInfo/:_id`} component={VerifyInfo} />
+                  </Switch>
                 </div>
               </div>
             </div>
@@ -43,22 +81,7 @@ const StaffRoute = (props) => {
       <NavHeader isOnStaffPage={true} />
       <Switch>
         <Route exact path={path} component={StaffLogin} />
-        <Route path={`${path}/staffProfile`} component={() => staff(<StaffProfile />, "ยินดีต้อนรับ")} />
-        <Route
-          path={`${path}/staffManagement`}
-          render={() => {
-            return (
-              // add pages here staff(page)
-              <div>under maintainance</div>
-            )
-          }}
-        />
-        <Route exact path={`${path}/listOfAllUsers`} component={() => staff(<ListOfAllUsers />, "รายชื่อผู้ใช้")} />
-        <Route exact path={`${path}/addUser`} component={() => staff(<AddUser />, "เพิ่มผู้ใช้")} />
-        <Route exact path={`${path}/cuInfo/:_id`} component={(props) => staff(<CUInfo {...props} />, "ข้อมูลผู้ใช้")} />
-        <Route exact path={`${path}/userInfo/:_id`} component={(props) => staff(<UserInfo {...props} />, "ข้อมูลผู้ใช้")} />
-        <Route exact path={`${path}/verifyApprove`} component={() => staff(<VeritificationApproval />, "รับรองการลงทะเบียน")} />
-        <Route exact path={`${path}/verifyInfo/:_id`} component={(props) => staff(<VerifyInfo {...props} />, "รับรองการลงทะเบียนรายบุคคล")} />
+        <StaffRoute />
       </Switch>
     </>
   )

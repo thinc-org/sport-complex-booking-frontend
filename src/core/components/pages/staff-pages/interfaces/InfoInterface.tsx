@@ -78,6 +78,10 @@ export interface OtherInfo {
   username: string
   name_th: string
   surname_th: string
+  name_en: string
+  surname_en: string
+  phone: string
+  personal_email: string
 }
 
 export interface ContactPerson {
@@ -149,15 +153,15 @@ export const RejectInfoLabel = {
 }
 
 // Interface for Modals //
-export interface ModalCuAndSatit {
-  showConfirm: boolean
-  showCom: boolean
-  showDel: boolean
-  showComDelete: boolean
-  showErr: boolean
-  showPasswordErr: boolean
-  showConfirmChange: boolean
-}
+// export interface ModalCuAndSatit {
+//   showSave: boolean
+//   showCom: boolean
+//   showDel: boolean
+//   showComDelete: boolean
+//   showErr: boolean
+//   showPasswordErr: boolean
+//   showConfirmChange: boolean
+// }
 
 export interface ModalVerify {
   showConfirmAccept: boolean
