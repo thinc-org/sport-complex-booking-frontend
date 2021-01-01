@@ -25,7 +25,7 @@ const ReservationDetail = () => {
     const [sportEn, setSportEn] = useState('')
     const [courtNum, setCourtNum] = useState('')
     const [date, setDate] = useState<Date>()
-    const [timeList, setTimeList] = useState([1, 2, 3])
+    const [timeList, setTimeList] = useState<number[]>([1, 2, 3])
     const [memberNameList, setMemberNameList] = useState<String[]>([])
     const [memberIdList, setMemberIdList] = useState<any>([])
     const [isCheck, setIsCheck] = useState<Boolean>(false)
@@ -54,15 +54,14 @@ const ReservationDetail = () => {
 
             })
             .then(res => {
-                const data = res.data.MyReservationDto
-                setSportTh(data.firstClass.sport_name_th)
-                setSportEn(data.firstClass.sport_name_en)
-                setCourtNum(data.firstClass.court_num)
-                setDate(data.firstClass.date.toLocaleDateString())
-                setTimeList(data.firstClass.time_slot)
-                setMemberNameList(data.secondClass.list_member)
-                setMemberIdList(data.secondClass.list_member_id)
-                setIsCheck(data.firstClass.is_check)
+                const data = res.data.MyReservation
+                setSportTh(data.sport_name_th)
+                setSportEn(data.sport_name_en)
+                setCourtNum(data.court_num)
+                setDate(data.date.toLocaleDateString())
+                setTimeList(data.time_slot)
+                setMemberNameList(data.list_member)
+                setIsCheck(data.is_check)
             })
     }
 
@@ -113,7 +112,7 @@ const ReservationDetail = () => {
                     <div className='box-container btn w-100 mb-5' style={{ textAlign: 'center' }}>
                         <QRCode className='m-4'
                             value={{
-                                'objectId': '',
+                                'ReservationId': { id },
                             }}
                             renderAs="svg"
                             size='128'

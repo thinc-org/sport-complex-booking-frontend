@@ -3,11 +3,12 @@ import { Button } from 'react-bootstrap';
 import { useRouteMatch, useHistory } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 import { client } from '../../../../axiosConfig';
-import { UserContext } from '../../../contexts/UsersContext';
+import { getCookie } from '../../../contexts/cookieHandler';
 import { timeConversion } from '../Reservation/timeConversion';
 import { AxiosResponse } from 'axios';
 import { NavHeader } from '../../ui/navbar/navbarSideEffect'
 import { useTranslation } from 'react-i18next';
+import { get } from 'http';
 
 interface ReservationResponse {
     is_check: boolean,
@@ -26,11 +27,11 @@ const ReservationPage = (props: any) => {
     const [isThaiLanguage, setIsThaiLanguage] = useState(true)
 
     var { url, path } = useRouteMatch();
-    const userContext = useContext(UserContext);
     const { t } = useTranslation()
 
 
     useEffect(() => {
+        setLanguage()
         fetchData()
         console.log('fetch data')
     }, [])
@@ -48,6 +49,14 @@ const ReservationPage = (props: any) => {
             .catch((err) => {
 
             })
+    }
+
+    const setLanguage = () => {
+        if (getCookie('is_thai_langugae') == 'true') {
+            setIsThaiLanguage(true)
+        } else if (getCookie('is_thai_language') == 'false') {
+            setIsThaiLanguage(false)
+        }
     }
 
     const handleClick = (id: any) => {
@@ -72,7 +81,7 @@ const ReservationPage = (props: any) => {
                 <div className='container'>
                     <div className='row justify-content-center mt-5'>
                         <div className='col-12'>
-                            <Button variant='pink' onClick={() => handleClick('list.sport')} className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent' }}>
+                            <Button variant='pink' onClick={() => handleClick('list._id')} className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent' }}>
                                 <div>
                                     <h5 style={{ color: 'lightgreen', float: 'right' }}> {true ? t('checked_in') : ''} </h5>
                                     <h5 className='mb-2'> Badminton </h5>
