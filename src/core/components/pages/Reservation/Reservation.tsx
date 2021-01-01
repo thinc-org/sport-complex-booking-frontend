@@ -9,11 +9,20 @@ import { AxiosResponse } from 'axios';
 import { NavHeader } from '../../ui/navbar/navbarSideEffect'
 import { useTranslation } from 'react-i18next';
 
+interface ReservationResponse {
+    is_check: boolean,
+    sport_name_th: string,
+    sport_name_en: string,
+    court_num: number,
+    date: Date,
+    time_slot: number[]
+}
+
 const ReservationPage = (props: any) => {
 
     const history = useHistory();
 
-    const [lists, setLists] = useState<any>([]);
+    const [lists, setLists] = useState<Array<ReservationResponse>>([]);
     const [isThaiLanguage, setIsThaiLanguage] = useState(true)
 
     var { url, path } = useRouteMatch();
@@ -56,7 +65,7 @@ const ReservationPage = (props: any) => {
     }
 
     // display only when there is any reservation
-    if (true) {
+    if (lists && lists.length) {
         return (
             <>
                 <NavHeader header='My Reservation' />
@@ -68,8 +77,8 @@ const ReservationPage = (props: any) => {
                                     <h5 style={{ color: 'lightgreen', float: 'right' }}> {true ? t('checked_in') : ''} </h5>
                                     <h5 className='mb-2'> Badminton </h5>
                                     <h6 className='mb-0'> {t('court')}: </h6>
-                                    <h6 className='mb-0'> {t('booking_date')}: </h6>
-                                    <h6 className='mb-0'> {t('booking_time')}: </h6>
+                                    <h6 className='mb-0'> {t('bookingDate')}: </h6>
+                                    <h6 className='mb-0'> {t('bookingTime')}: </h6>
                                 </div>
                             </Button>
 
@@ -80,8 +89,8 @@ const ReservationPage = (props: any) => {
                                             <h5 style={{ color: 'lightgreen', float: 'right' }}> {list.is_check ? t('checked_in') : ''} </h5>
                                             <h5 className='mb-2'> {isThaiLanguage ? list.sport_name_th : list.sport_name_en} </h5>
                                             <h6 className='mb-0'> {t('court')}: {list.court_num} </h6>
-                                            <h6 className='mb-0'> {t('booking_date')}: {list.date} </h6>
-                                            <h6 className='mb-0'> {t('booking_time')}: {list.time_slot.map(eachTimeSlot => timeConversion(eachTimeSlot))} </h6>
+                                            <h6 className='mb-0'> {t('bookingDate')}: {list.date} </h6>
+                                            <h6 className='mb-0'> {t('bookingTime')}: {list.time_slot.map(eachTimeSlot => timeConversion(eachTimeSlot))} </h6>
                                         </div>
                                     </Button>
                                 )

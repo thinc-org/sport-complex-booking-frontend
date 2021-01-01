@@ -50,7 +50,7 @@ const ReservationDetail = () => {
 
     const fetchData = () => {
         client
-            .get(`'http://localhost:3000/myreservation/cancel/:${id}'`, {
+            .get(`'http://localhost:3000/myreservation/:${id}'`, {
 
             })
             .then(res => {
@@ -149,8 +149,8 @@ const ReservationDetail = () => {
                             <div>
                                 <h4 className='mb-2'> {isThaiLanguage ? sportTh : sportEn} </h4>
                                 <h6 className='mb-0'> {t('court')}: {courtNum} </h6>
-                                <h6 className='mb-0'> {t('booking_date')}: {date} </h6>
-                                <h6 className='mb-0'> {t('booking_time')}: {} {timeConversion(1)} </h6>
+                                <h6 className='mb-0'> {t('bookingDate')}: {date} </h6>
+                                <h6 className='mb-0'> {t('bookingTime')}: {} {timeConversion(1)} </h6>
                             </div>
                             <hr />
                             <div>
@@ -164,8 +164,8 @@ const ReservationDetail = () => {
                             {/* <div>
                                 <h4 className='mb-2'> Badminton </h4>
                                 <h6 className='mb-0'> {t('court')}: </h6>
-                                <h6 className='mb-0'> {t('booking_date')}: </h6>
-                                <h6 className='mb-0'> {t('booking_time')}: {timeList.map(time => timeConversion(time))} </h6>
+                                <h6 className='mb-0'> {t('bookingDate')}: </h6>
+                                <h6 className='mb-0'> {t('bookingTime')}: {timeList.map(time => timeConversion(time))} </h6>
                             </div>
                             <hr />
                             <div>
