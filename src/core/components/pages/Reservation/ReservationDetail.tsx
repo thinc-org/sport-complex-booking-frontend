@@ -12,15 +12,18 @@ import { useTranslation } from 'react-i18next';
 import { ReservationCancellationModal } from '../../ui/Modals/ReservationCancelModal';
 import { getCookie } from '../../../../core/contexts/cookieHandler';
 
+interface LocationResponse {
+    id: string | number,
+    path: string
+}
+
 const ReservationDetail = () => {
 
     const userContext = useContext(UserContext);
     const location = useLocation();
     const history = useHistory();
     const { t } = useTranslation();
-
-    const [id, setId] = useState((location.state as any).id)
-
+    const [id, setId] = useState<number | string>()
     const [sportTh, setSportTh] = useState('')
     const [sportEn, setSportEn] = useState('')
     const [courtNum, setCourtNum] = useState('')
@@ -33,6 +36,7 @@ const ReservationDetail = () => {
     const [isThaiLanguage, setIsThaiLanguage] = useState(true)
 
     useEffect(() => {
+        fetchId()
         fetchData()
         countDown()
         console.log('reservation detail')
@@ -43,6 +47,14 @@ const ReservationDetail = () => {
         countDown()
         console.log(counter)
     }, [counter])
+
+    const fetchId = () => {
+        if (location.state) {
+            setId((location.state as LocationResponse).id)
+        } else {
+            history.push('/myreservation')
+        }
+    }
 
     const handleClick = () => {
         triggerModal()
@@ -65,7 +77,7 @@ const ReservationDetail = () => {
             })
             .catch(err => {
                 console.log(err)
-                history.push((location.state as any).path)
+                //history.push((location.state as any).path)
             })
     }
 
@@ -111,14 +123,12 @@ const ReservationDetail = () => {
     }
 
     const qrCode = () => {
-        if (isCheck == false) {
+        if (isCheck == false && id != null) {
             return (
                 <>
                     <div className='box-container btn w-100 mb-5' style={{ textAlign: 'center' }}>
                         <QRCode className='m-4'
-                            value={{
-                                'ReservationId': { id },
-                            }}
+                            value={id}
                             renderAs="svg"
                             size='128'
                             fgColor="#333"

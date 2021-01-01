@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { get } from 'http';
 
 interface ReservationResponse {
+    _id: number | string
     is_check: boolean,
     sport_name_th: string,
     sport_name_en: string,
@@ -59,7 +60,7 @@ const ReservationPage = (props: any) => {
         }
     }
 
-    const handleClick = (id: any) => {
+    const handleClick = (id: string | number) => {
         console.log('button clicked')
         return (
 
@@ -74,7 +75,7 @@ const ReservationPage = (props: any) => {
     }
 
     // display only when there is any reservation
-    if (lists && lists.length) {
+    if (true) {
         return (
             <>
                 <NavHeader header='My Reservation' />
@@ -93,7 +94,7 @@ const ReservationPage = (props: any) => {
 
                             {lists.map(list => {
                                 return (
-                                    <Button variant='pink' onClick={() => handleClick('list._id')} className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent' }}>
+                                    <Button variant='pink' onClick={() => handleClick(list._id)} className='box-container btn' style={{ width: '100%', color: 'black', borderColor: 'transparent' }}>
                                         <div>
                                             <h5 style={{ color: 'lightgreen', float: 'right' }}> {list.is_check ? t('checked_in') : ''} </h5>
                                             <h5 className='mb-2'> {isThaiLanguage ? list.sport_name_th : list.sport_name_en} </h5>

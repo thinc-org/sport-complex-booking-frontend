@@ -102,7 +102,6 @@
   "confirm": "Confirm",
   "confirmPasswordChange": "Do you want to confirm password change",
   "submit": "Submit",
-<<<<<<< HEAD
   "websiteUseCookie": "This website uses cookie.",
   "cookieDescription": "This website uses cookie. Please click allow to ensure the best experience",
   "allow": "Allow",
@@ -115,18 +114,6 @@
   "reserveNow": "Reserve Now",
   "reserveNowDescription": "Reserve a room",
   "fillAccount": "Please fill in your information in the account to activate other features",
-=======
-  "checked_in": "CHECKED IN",
-  "members": "Members",
-  "show_qr_to_staff": "Please show this QR code to the sport center staff",
-  "cancel_reservation": "Cancel Reservation",
-  "cancel_reservation_question": "Are you sure to cancel this reservation?",
-  "cancel_reservation_condition_1": "1. If you cancel within 5 days of reservation, you and the waiting room members will be banned for 30 days.",
-  "cancel_reservation_condition_2": "2. If you cancel within 2 days of reservation, you and the waiting room members will be banned for 2 months.",
-  "sure": "Sure",
-  "no": "No",
-  "you_have_checked_in": "You have checked in!",
->>>>>>> add my reservation page
   "wantToCreateWaitingRoom": "Do you want to create a reservation waiting room?",
   "reservationDetails": "Reservation Details",
   "passwordMismatch": "Passwords do not match",
@@ -205,13 +192,7 @@
   "continue": "Continue",
   "home": "Home",
   "account": "Account",
-<<<<<<< HEAD
   "waitingRoom": "Waiting Room",
   "noWaitingRoom": "You have no waiting room at this moment.",
   "checkOutMyReservation": "Check out My Reservation page to see your successful reservations."
 }
-=======
-  "myWaitingRoom": "My Waiting Room",
-  "myReservation": "My Reservation"
-}
->>>>>>> add my reservation page
