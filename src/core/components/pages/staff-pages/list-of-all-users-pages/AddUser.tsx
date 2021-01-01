@@ -1,25 +1,29 @@
 import React, { FunctionComponent, useState } from "react"
-import { Form, InputGroup, Card, Row, Col, Button, Modal, Alert } from "react-bootstrap"
-import { Link, useHistory } from "react-router-dom"
-import { AddInfo } from "../interfaces/InfoInterface"
+import { Form, Card, Row, Col, Button, Modal, Alert } from "react-bootstrap"
+import { Link } from "react-router-dom"
+import { AddInfo, ModalAddUser, AlertAddUser } from "../interfaces/InfoInterface"
 import { client } from "../../../../../axiosConfig"
+import ChangePasswordComponent from "./AddUserPasswordComponent"
+import { AddModal, ComModal, ErrModal, UsernameErrModal } from "./AddUserModal"
 
 const AddUser: FunctionComponent = () => {
   // Page states //
   const [selectingSatit, setSelectingSatit] = useState<boolean>(false)
   // Modals & Alerts //
-  const [showAdd, setShowAdd] = useState<boolean>(false)
-  const [showCom, setShowCom] = useState<boolean>(false)
-  const [showErr, setShowErr] = useState<boolean>(false)
-  const [showUsernameErr, setShowUsernameErr] = useState<boolean>(false)
-  const [showAlert, setShowAlert] = useState<boolean>(false)
-  const [showAlertUsername, setShowAlertUsername] = useState<boolean>(false)
-  const [showAlertPassword, setShowAlertPassword] = useState<boolean>(false)
+  const [showModals, setShowModals] = useState<ModalAddUser>({
+    showAdd: false,
+    showCom: false,
+    showErr: false,
+    showUsernameErr: false,
+  })
+  const [showAlerts, setShowAlerts] = useState<AlertAddUser>({
+    showAlertUncom: false,
+    showAlertUsername: false,
+    showAlertPassword: false,
+  })
 
-  const [showPassword, setShowPassword] = useState<boolean>(false)
-  const [showConPassword, setShowConPassword] = useState<boolean>(false)
+  const [confirmPassword, setConfirmPassword] = useState<string>("")
   // User states //
-  const [confirm_password, set_confirm_password] = useState<string>("")
   const [user, setUser] = useState<AddInfo>({
     membership_type: "",
     is_thai_language: true,
@@ -33,12 +37,7 @@ const AddUser: FunctionComponent = () => {
     phone: "",
   })
 
-  const history = useHistory()
-
   // functions //
-  const backToListPage = () => {
-    history.push("/staff/listOfAllUsers")
-  }
 
   const validCheck = (s: string) => {
     return s.match(/.*([A-z])+.*/g)
@@ -65,57 +64,6 @@ const AddUser: FunctionComponent = () => {
           <option>นักเรียนสาธิตจุฬา / บุคลากรจุฬา</option>
         </Form.Control>
       </Form.Group>
-    )
-  }
-
-  const renderPasswordSection = () => {
-    return (
-      <Row>
-        <Col>
-          <Form.Group>
-            <Form.Label>{selectingSatit ? "รหัสผ่าน" : "รหัสผ่าน (เบอร์โทรศัพท์)"}</Form.Label>
-            <InputGroup>
-              <Form.Control id="password" type={showPassword ? "text" : "password"} onChange={handleChange} value={user.password} />
-              <InputGroup.Append>
-                <Button
-                  className="btn-normal btn-outline-black"
-                  variant="secondary"
-                  onClick={() => {
-                    setShowPassword(!showPassword)
-                  }}
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </Button>
-              </InputGroup.Append>
-            </InputGroup>
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group>
-            <Form.Label>กรอกรหัสผ่านอีกครั้ง</Form.Label>
-            <InputGroup>
-              <Form.Control
-                onChange={(e) => {
-                  set_confirm_password(e.target.value)
-                }}
-                value={confirm_password}
-                type={showConPassword ? "text" : "password"}
-              />
-              <InputGroup.Append>
-                <Button
-                  className="btn-normal btn-outline-black"
-                  variant="secondary"
-                  onClick={() => {
-                    setShowConPassword(!showConPassword)
-                  }}
-                >
-                  {showConPassword ? "Hide" : "Show"}
-                </Button>
-              </InputGroup.Append>
-            </InputGroup>
-          </Form.Group>
-        </Col>
-      </Row>
     )
   }
 
@@ -195,129 +143,31 @@ const AddUser: FunctionComponent = () => {
     )
   }
 
-  const renderAddModal = () => {
+  const renderPasswordSection = () => {
     return (
-      <Modal
-        show={showAdd}
-        onHide={() => {
-          setShowAdd(false)
-        }}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>คำเตือน</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ fontWeight: "lighter" }}> ต้องการเพิ่มผู้ใช้หรือไม่ </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="outline-secondary"
-            className="btn-normal btn-outline-pink"
-            onClick={() => {
-              setShowAdd(false)
-            }}
-          >
-            ยกเลิก
-          </Button>
-          <Button variant="pink" className="btn-normal" onClick={requestAdd}>
-            ยืนยัน
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <ChangePasswordComponent
+        selectingSatit={selectingSatit}
+        newPass={user.password}
+        conPass={confirmPassword}
+        info={{ handleChange, setConfirmPassword }}
+      />
     )
   }
 
-  const renderComModal = () => {
+  const renderModals = () => {
     return (
-      <Modal
-        show={showCom}
-        onHide={() => {
-          setShowCom(false)
-        }}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>เสร็จสิ้น</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ fontWeight: "lighter" }}> การเพิ่มผู้ใช้เสร็จสมบูรณ์ </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="pink"
-            className="btn-normal"
-            onClick={() => {
-              setShowCom(false)
-              backToListPage()
-            }}
-          >
-            ตกลง
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    )
-  }
-
-  const renderErrModal = () => {
-    return (
-      <Modal
-        show={showErr}
-        onHide={() => {
-          setShowErr(false)
-        }}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>เกิดข้อผิดพลาด</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ fontWeight: "lighter" }}> ไม่สามารถเพิ่มผู้ใช้ได้ในขณะนี้ </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="pink"
-            className="btn-normal"
-            onClick={() => {
-              setShowErr(false)
-            }}
-          >
-            ตกลง
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    )
-  }
-
-  const renderUsernameErrModal = () => {
-    return (
-      <Modal
-        show={showUsernameErr}
-        onHide={() => {
-          setShowUsernameErr(false)
-        }}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>เกิดข้อผิดพลาด</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ fontWeight: "lighter" }}> {"ชื่อผู้ใช้หรืออีเมลนี้ถูกใช้ไปแล้ว"} </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="pink"
-            className="btn-normal"
-            onClick={() => {
-              setShowUsernameErr(false)
-            }}
-          >
-            ตกลง
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <div>
+        <AddModal show={showModals} setShow={setShowModals} requestAdd={requestAdd} />
+        <ComModal show={showModals} setShow={setShowModals} />
+        <ErrModal show={showModals} setShow={setShowModals} />
+        <UsernameErrModal show={showModals} setShow={setShowModals} />
+      </div>
     )
   }
 
   const renderAlert = () => {
     return (
-      <Alert show={showAlert} variant="danger" style={{ fontWeight: "lighter" }}>
+      <Alert show={showAlerts.showAlertUncom} variant="danger" style={{ fontWeight: "lighter" }}>
         กรุณากรอกรายละเอียดให้ครบ
       </Alert>
     )
@@ -325,7 +175,7 @@ const AddUser: FunctionComponent = () => {
 
   const renderAlertInvalidUsername = () => {
     return (
-      <Alert show={showAlertUsername} variant="danger" style={{ fontWeight: "lighter" }}>
+      <Alert show={showAlerts.showAlertUsername} variant="danger" style={{ fontWeight: "lighter" }}>
         ชื่อผู้ใช้ (Username) ต้องมีตัวอักษรอย่างน้อย 1 ตัว
       </Alert>
     )
@@ -333,7 +183,7 @@ const AddUser: FunctionComponent = () => {
 
   const renderAlertErrorPassword = () => {
     return (
-      <Alert show={showAlertPassword} variant="danger" style={{ fontWeight: "lighter" }}>
+      <Alert show={showAlerts.showAlertPassword} variant="danger" style={{ fontWeight: "lighter" }}>
         รหัสผ่านไม่ตรงกัน
       </Alert>
     )
@@ -352,13 +202,12 @@ const AddUser: FunctionComponent = () => {
 
   const handleAdd = (e) => {
     // if form has been completed -> request add //
-    setShowAlert(false)
-    setShowAlertUsername(false)
-    setShowAlertPassword(false)
+    setShowAlerts({ showAlertPassword: false, showAlertUncom: false, showAlertUsername: false })
     let { membership_type, username, password, name_th, surname_th, name_en, surname_en, personal_email, phone } = user
-    if (!validCheck(username)) setShowAlertUsername(true)
-    else if (password !== confirm_password) setShowAlertPassword(true)
-    else if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && membership_type !== "" && username !== "" && password !== "") setShowAdd(true)
+    if (!validCheck(username)) setShowAlerts({ ...showAlerts, showAlertUsername: true })
+    else if (password !== confirmPassword) setShowAlerts({ ...showAlerts, showAlertPassword: true })
+    else if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && membership_type !== "" && username !== "" && password !== "")
+      setShowModals({ ...showModals, showAdd: true })
     else if (
       username !== "" &&
       password !== "" &&
@@ -369,13 +218,13 @@ const AddUser: FunctionComponent = () => {
       personal_email !== "" &&
       phone !== ""
     )
-      setShowAdd(true)
-    else setShowAlert(true)
+      setShowModals({ ...showModals, showAdd: true })
+    else setShowAlerts({ ...showAlerts, showAlertUncom: true })
   }
 
   // requests //
   const requestAdd = () => {
-    setShowAdd(false)
+    setShowModals({ ...showModals, showAdd: false })
     let url = "/list-all-user/"
     let data = {}
     let { membership_type, username, password } = user
@@ -399,12 +248,12 @@ const AddUser: FunctionComponent = () => {
         // if complete -> pop up "complete" //
         // else -> pop up "incomplete" //
         // go back to list-of-all-users page
-        setShowCom(true)
+        setShowModals({ ...showModals, showCom: true })
       })
       .catch(({ response }) => {
         console.log(response)
-        if (response.data.statusCode === 400) setShowUsernameErr(true)
-        else setShowErr(true)
+        if (response.data.statusCode === 400) setShowModals({ ...showModals, showUsernameErr: true })
+        else setShowModals({ ...showModals, showErr: true })
       })
   }
 
@@ -426,10 +275,7 @@ const AddUser: FunctionComponent = () => {
           </Col>
         </Row>
       </Card>
-      {renderAddModal()}
-      {renderComModal()}
-      {renderErrModal()}
-      {renderUsernameErrModal()}
+      {renderModals()}
     </div>
   )
 }
