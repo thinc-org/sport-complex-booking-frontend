@@ -1,5 +1,6 @@
 import * as React from "react"
-import { Route, Switch, useRouteMatch, useLocation } from "react-router-dom"
+import { Route, Switch, useRouteMatch, useLocation, useParams } from "react-router-dom"
+import useSWR from "swr"
 
 import StaffLogin from "../components/pages/staff-pages/staff-login"
 import StaffSidebar from "../components/ui/navbar/staff-sidebar"
@@ -7,15 +8,16 @@ import StaffProfile from "../components/pages/staff-pages/staff-profile"
 import { NavHeader } from "../components/ui/navbar/navbarSideEffect"
 import ListOfAllUsers from "../components/pages/staff-pages/list-of-all-users-pages/ListOfAllUsers"
 import AddUser from "../components/pages/staff-pages/list-of-all-users-pages/AddUser"
-import CUInfo from "../components/pages/staff-pages/list-of-all-users-pages/CUInfo"
+import CUInfo from "../components/pages/staff-pages/list-of-all-users-pages/CuSatitInfo"
 import UserInfo from "../components/pages/staff-pages/list-of-all-users-pages/UserInfo"
+import FileOpener from "../components/pages/staff-pages/list-of-all-users-pages/FileOpener"
 import VeritificationApproval from "../components/pages/staff-pages/verification-approval-pages/VerificationApproval"
 import VerifyInfo from "../components/pages/staff-pages/verification-approval-pages/VerifyInfo"
 import DisableCourt from "../components/pages/staff-pages/disable-court/disable-court.page.main"
 const StaffRoute = (props) => {
   const { path } = useRouteMatch()
   const location = useLocation()
-  let headerMap: Map<string, string> = new Map([
+  const headerMap: Map<string, string> = new Map([
     ["/staffProfile", "ยินดีต้อนรับ"],
     ["/staffManagement", "การจัดการสตาฟ"], // เปลี่ยนเอา
     ["/listOfAllUsers", "รายชื่อผู้ใช้"],
@@ -26,7 +28,20 @@ const StaffRoute = (props) => {
     ["/verifyInfo", "รับรองการลงทะเบียนรายบุคคล"],
   ])
 
-  const StaffRoute = () => {
+  // const FileOpener = () => {
+  //   const { fileId } = useParams()
+  //   // swr is just an example. you can retrieve the token using any method you like
+  //   const { data: token, error, isValidating } = useSWR(`/fs/viewFileToken/${fileId}`)
+  //   if (isValidating) {
+  //     return "Opening file..."
+  //   }
+  //   if (error) {
+  //     return "Error while opening file"
+  //   }
+  //   window.location.href = `${path}/fs/view?token=${token}`
+  // }
+
+  const StaffRouteWithHeader = () => {
     return (
       <div className="staff background d-block" style={{ backgroundColor: "white", minHeight: "80vh" }}>
         <div className="container d-block">
@@ -76,12 +91,14 @@ const StaffRoute = (props) => {
       </div>
     )
   }
+
   return (
     <>
       <NavHeader isOnStaffPage={true} />
       <Switch>
         <Route exact path={path} component={StaffLogin} />
-        <StaffRoute />
+        <Route exact path={`${path}/openFile/:fileId`} component={FileOpener} />
+        <StaffRouteWithHeader />
       </Switch>
     </>
   )

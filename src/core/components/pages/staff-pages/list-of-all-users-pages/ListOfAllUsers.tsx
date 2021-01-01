@@ -1,7 +1,8 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
-import { Table, Form, Row, Col, Button, Pagination, Modal } from "react-bootstrap"
+import { Table, Form, Row, Col, Button, Modal } from "react-bootstrap"
 import { Link, useHistory } from "react-router-dom"
 import { client } from "../../../../../axiosConfig"
+import PaginationComponent from "./PaginationComponent"
 
 interface CUTemplate {
   account_type: Account
@@ -59,6 +60,7 @@ const ListOfAllUsers: FunctionComponent = () => {
   // page state
   const [pageNo, setPageNo] = useState<number>(1)
   const [maxUser, setMaxUser] = useState<number>(1)
+  const [maxUserPerPage] = useState<number>(10) // > 1
   const [searchName, setSearchName] = useState<string>("")
   const [status, setStatus] = useState<number>(allStatus.All)
   // const [jwt, set_jwt] = useState<string>(
@@ -89,8 +91,8 @@ const ListOfAllUsers: FunctionComponent = () => {
   const requestUsers = () => {
     // get params for request //
     let param_data = {
-      begin: (pageNo - 1) * 10,
-      end: pageNo * 10,
+      begin: (pageNo - 1) * maxUserPerPage,
+      end: pageNo * maxUserPerPage,
     }
     if (searchName !== "") param_data["name"] = searchName
     if (status !== allStatus.All) param_data["penalize"] = allStatus.Banned === status
@@ -147,61 +149,7 @@ const ListOfAllUsers: FunctionComponent = () => {
       })
   }
 
-  const handlePagination = (next_page: number) => {
-    let max_page: number = Math.floor((maxUser + 9) / 10)
-    if (next_page >= 1 && next_page <= max_page) {
-      setPageNo(next_page)
-    }
-  }
-
-  const loadPagination = () => {
-    let max_page: number = Math.floor((maxUser + 9) / 10)
-    let numList: Array<number> = []
-    let haveMore: boolean = true
-    let i = 0
-    while (numList.length < 5) {
-      let page = pageNo + i - 2
-      if (page >= max_page) haveMore = false
-      if (page >= 1 && page <= max_page) numList.push(page)
-      else if (page > max_page) break
-      i++
-    }
-    let elementList = numList.map((num) => {
-      if (num === pageNo)
-        return (
-          <Pagination.Item key={num} active={true}>
-            {num}
-          </Pagination.Item>
-        )
-      return (
-        <Pagination.Item
-          key={num}
-          onClick={() => {
-            handlePagination(num)
-          }}
-        >
-          {num}
-        </Pagination.Item>
-      )
-    })
-    if (haveMore) elementList.push(<Pagination.Ellipsis key={max_page + 1} />)
-    return (
-      <Pagination className="justify-content-md-end">
-        <Pagination.Prev
-          onClick={() => {
-            handlePagination(pageNo - 1)
-          }}
-        />
-        {elementList}
-        <Pagination.Next
-          onClick={() => {
-            handlePagination(pageNo + 1)
-          }}
-        />
-      </Pagination>
-    )
-  }
-
+  // renders //
   const renderNoUserModal = () => {
     return (
       <Modal
@@ -318,7 +266,9 @@ const ListOfAllUsers: FunctionComponent = () => {
             </Button>
           </Link>
         </Col>
-        <Col>{loadPagination()}</Col>
+        <Col>
+          <PaginationComponent pageNo={pageNo} setPageNo={setPageNo} maxUser={maxUser} maxUserPerPage={maxUserPerPage} />
+        </Col>
       </Row>
     </div>
   )

@@ -11,17 +11,18 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
   // handles //
   const handlePDF = (e) => {
     let fileId = e.target.id
-    client({
-      method: "GET",
-      url: "/fs/viewFileToken/" + fileId,
-    })
-      .then(({ data }) => {
-        // data is token //
-        window.open(client.defaults.baseURL + "/fs/view?token=" + data.token, "_blank")
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    window.open(`/staff/openFile/${fileId}`, "_blank")
+    // client({
+    //   method: "GET",
+    //   url: "/fs/viewFileToken/" + fileId,
+    // })
+    //   .then(({ data }) => {
+    //     // data is token //
+    //     window.open(client.defaults.baseURL + "/fs/view?token=" + data.token, "_blank")
+    //   })
+    //   .catch((err) => {
+    //     console.log(err)
+    //   })
   }
 
   /// JSX Begins here

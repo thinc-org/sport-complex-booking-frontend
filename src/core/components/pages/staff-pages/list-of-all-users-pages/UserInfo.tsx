@@ -536,15 +536,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         />
       </div>
     )
-    // if (showModalInfo.showDelete)
-    //   return <ModalsComponent showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ username, handleDeleteUser }} />
-    // else if (showModalInfo.showComDelete)
-    //   return <ModalsComponent showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ username }} />
-    // else if (showModalInfo.showSave)
-    //   return <ModalsComponent showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ requestSave }} />
-    // else if (showChangePassword)
-    //   return <ModalsComponent showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ requestChangePassword }} />
-    // else return <ModalsComponent showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{}} />
   }
 
   return (
