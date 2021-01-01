@@ -295,6 +295,29 @@ p.link {
   border-color: transparent;
 }
 
+.box-container {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0px 10px 30px 5px rgba(204, 204, 204, 0.4);
+  margin-bottom: 20px;
+  text-align: start;
+}
+
+.modal {
+  display: block;
+}
+
+.modal-content {
+  display: block !important;
+  border-color: transparent !important;
+  border-radius: 15px !important;
+}
+
+.modal-footer,
+.modal-header {
+  border-color: transparent;
+}
+
 .btn-pink-pink {
   background-color: var(--pink-color);
   color: white;
@@ -501,4 +524,13 @@ p.link {
 .btn-lightpink-lightpink {
   background: rgba(255, 178, 221, 1);
   color: black;
+}
+td {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 34px;
+}
+
+.grey {
+  color: grey;
 }
