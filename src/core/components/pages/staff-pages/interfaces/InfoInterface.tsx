@@ -152,17 +152,6 @@ export const RejectInfoLabel = {
   relationship_verification_document: "Relation verification photo",
 }
 
-// Interface for Modals //
-// export interface ModalCuAndSatit {
-//   showSave: boolean
-//   showCom: boolean
-//   showDel: boolean
-//   showComDelete: boolean
-//   showErr: boolean
-//   showPasswordErr: boolean
-//   showConfirmChange: boolean
-// }
-
 export interface ModalVerify {
   showConfirmAccept: boolean
   showUncomAccept: boolean
