@@ -3,7 +3,15 @@ import { RouteComponentProps, Link } from "react-router-dom"
 import { Button, Card, Form, Collapse } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import OtherViewInfoComponent from "../list-of-all-users-pages/OtherViewInfoComponent"
-import VerifyModals from "./VerifyModalsComopnent"
+import {
+  ConfirmRejectModal,
+  UncomRejectModal,
+  CompleteRejectModal,
+  ConfirmAcceptModal,
+  UncomAcceptModal,
+  CompleteAcceptModal,
+  ErrorModal,
+} from "./VerifyModalsComopnent"
 import format from "date-fns/format"
 import Info from "../interfaces/InfoInterface"
 import { RejectInfo, ModalVerify, RejectInfoLabel } from "../interfaces/InfoInterface"
@@ -309,14 +317,17 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   }
 
   const renderModal = () => {
-    if (showModalInfo["showConfirmReject"])
-      return <VerifyModals showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ requestReject }} />
-    else if (showModalInfo["showConfirmAccept"])
-      return <VerifyModals showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ requestAccept }} />
-    else if (showModalInfo["showUncomAccept"] || showModalInfo["showUncomReject"] || showModalInfo["showErr"])
-      return <VerifyModals showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{}} />
-    else if (showModalInfo["showCompleteAccept"] || showModalInfo["showCompleteReject"])
-      return <VerifyModals showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ username }} />
+    return (
+      <div>
+        <ConfirmRejectModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ requestReject }} />
+        <ConfirmAcceptModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ requestAccept }} />
+        <UncomAcceptModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
+        <UncomRejectModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
+        <ErrorModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
+        <CompleteAcceptModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ username }} />
+        <CompleteRejectModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ username }} />
+      </div>
+    )
   }
 
   return (
