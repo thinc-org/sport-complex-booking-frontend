@@ -18,6 +18,7 @@ import { getCookie } from "../contexts/cookieHandler"
 import ChangePassword from "../components/pages/AccountPages/AccountPageUI/ChangePassword"
 import WaitingRoomBan from "../components/pages/Reservation/WaitingRoomBan"
 import Hooray from "../components/pages/Reservation/Hooray"
+import WaitingRoom from "../components/pages/Reservation/WaitingRoom"
 
 export default function MainRoute() {
   return (
@@ -54,6 +55,8 @@ export default function MainRoute() {
         <Route exact path="/banned" component={WaitingRoomBan} />
 
         <Route exact path="/hooray" component={Hooray} />
+
+        <Route exact path="/waitingroom" component={WaitingRoom} />
       </Switch>
     </>
   )
