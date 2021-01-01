@@ -2,10 +2,18 @@ import React, { useState, useEffect, FunctionComponent } from "react"
 import { Row, Col, Button, Form, Card, Modal, Alert, InputGroup } from "react-bootstrap"
 import { Link, RouteComponentProps } from "react-router-dom"
 import { client } from "../../../../../axiosConfig"
-import { CuAndSatitInfo, ThaiLangAccount, Account, ModalCuAndSatit } from "../interfaces/InfoInterface"
+import { CuAndSatitInfo, ThaiLangAccount, Account, ModalUserInfo } from "../interfaces/InfoInterface"
 import format from "date-fns/format"
 import PasswordChangeModal from "./PasswordChangeModal"
-import CuAndSatitModals from "./CuAndSatitModals"
+import {
+  DeleteModal,
+  SaveModal,
+  CompleteDeleteModal,
+  CompleteSaveModal,
+  ErrModal,
+  PasswordErrModal,
+  ConfirmChangePasswordModal,
+} from "./ListOfAllUserModals"
 import { isValid } from "date-fns"
 
 const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
@@ -16,10 +24,10 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
 
   // Modals & Alert //
   const [showChangePassword, setShowChangePassword] = useState<boolean>(false)
-  const [showModals, setShowModals] = useState<ModalCuAndSatit>({
-    showConfirm: false,
-    showCom: false,
-    showDel: false,
+  const [showModals, setShowModals] = useState<ModalUserInfo>({
+    showSave: false,
+    showComSave: false,
+    showDelete: false,
     showComDelete: false,
     showErr: false,
     showPasswordErr: false,
@@ -55,7 +63,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const getInfo = () => {
     client({
       method: "GET",
-      url: "/list-all-user/findById/" + _id,
+      url: "/list-all-user/id/" + _id,
     })
       .then(({ data }) => {
         setUser({
@@ -71,7 +79,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
           is_penalize: data.is_penalize,
           expired_penalize_date: data.expired_penalize_date ? data.expired_penalize_date : new Date(),
           is_first_login: data.is_first_login,
-          password: "",
+          password: data.password,
         })
       })
       .catch((err) => {
@@ -128,7 +136,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     // else -> try change //
     let { name_th, surname_th, name_en, surname_en, personal_email, phone } = tempUser
     if (name_th !== "" && surname_th !== "" && name_en !== "" && surname_en !== "" && personal_email !== "" && phone !== "")
-      setShowModals({ ...showModals, showConfirm: true })
+      setShowModals({ ...showModals, showSave: true })
     else setShowAlert(true)
   }
 
@@ -143,14 +151,14 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   }
 
   // requests //
-  const requestUserChange = () => {
+  const requestSave = () => {
     // if change complete -> pop up "ok" //
     // if change error -> pop up "not complete" -> back to old data //
     const { name_th, surname_th, name_en, surname_en, personal_email, phone, is_penalize, expired_penalize_date } = tempUser
-    setShowModals({ ...showModals, showConfirm: false })
+    setShowModals({ ...showModals, showSave: false })
     setShowAlert(false)
     client({
-      method: "PATCH",
+      method: "PUT",
       url: "/list-all-user/" + _id,
       data: {
         name_th,
@@ -165,20 +173,21 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     })
       .then(({ data }) => {
         setUser(tempUser)
-        setShowModals({ ...showModals, showConfirm: false, showCom: true })
+        setShowModals({ ...showModals, showSave: false, showComSave: true })
+        setEditing(false)
       })
       .catch((err) => {
         console.log(err)
-        setShowModals({ ...showModals, showConfirm: false, showErr: true })
+        setShowModals({ ...showModals, showSave: false, showErr: true })
       })
   }
 
   const requestDelete = () => {
-    setShowModals({ ...showModals, showDel: false })
+    setShowModals({ ...showModals, showDelete: false })
     setShowAlert(false)
     client({
       method: "DELETE",
-      url: "/list-all-user/User/" + _id,
+      url: "/list-all-user/" + _id,
     })
       .then(({ data }) => {
         setShowModals({ ...showModals, showComDelete: true })
@@ -191,7 +200,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
 
   const requestChangePassword = () => {
     client({
-      method: "PATCH",
+      method: "PUT",
       url: "/list-all-user/" + _id,
       data: {
         password: newPassword,
@@ -208,93 +217,28 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       })
   }
 
-  const requestDelete = () => {
-    setShowModals({ ...showModals, showDel: false })
-    setShowAlert(false)
-    client({
-      method: "DELETE",
-      url: "/list-all-user/User/" + _id,
-    })
-      .then(({ data }) => {
-        setShowModals({ ...showModals, showComDelete: true })
-      })
-      .catch(({ response }) => {
-        console.log(response)
-        setShowModals({ ...showModals, showErr: true })
-      })
-  }
-
-  const requestChangePassword = () => {
-    client({
-      method: "PATCH",
-      url: "/list-all-user/" + _id,
-      data: {
-        password: newPassword,
-      },
-    })
-      .then(({ data }) => {
-        setUser({ ...user, password: data.password })
-        setShowModals({ ...showModals, showConfirmChange: false })
-        setShowChangePassword(false)
-      })
-      .catch((err) => {
-        console.log(err)
-        setShowModals({ ...showModals, showErr: true })
-      })
-  }
-
-  // other functions //
-  const completedChange = () => {
-    // run after pop up "complete"
-    setEditing(false)
-    setShowModals({ ...showModals, showCom: false })
-  }
-
   // renders //
   const renderModals = () => {
     const { username } = user
-    if (showModals.showConfirm) return <CuAndSatitModals showModals={showModals} setShowModals={setShowModals} info={{ requestUserChange }} />
-    else if (showModals.showCom) return <CuAndSatitModals showModals={showModals} setShowModals={setShowModals} info={{ completedChange }} />
-    else if (showModals.showDel) return <CuAndSatitModals showModals={showModals} setShowModals={setShowModals} info={{ requestDelete, username }} />
-    else if (showModals.showConfirmChange)
-      return <CuAndSatitModals showModals={showModals} setShowModals={setShowModals} info={{ requestChangePassword }} />
-    else return <CuAndSatitModals showModals={showModals} setShowModals={setShowModals} info={{}} />
+    return (
+      <div>
+        <DeleteModal showModalInfo={showModals} setShowModalInfo={setShowModals} info={{ requestDelete, username }} />
+        <CompleteDeleteModal showModalInfo={showModals} setShowModalInfo={setShowModals} info={{ username }} />
+        <SaveModal showModalInfo={showModals} setShowModalInfo={setShowModals} info={{ requestSave }} />
+        <CompleteSaveModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
+        <ErrModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
+        <PasswordErrModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
+        <ConfirmChangePasswordModal showModalInfo={showModals} setShowModalInfo={setShowModals} info={{ requestChangePassword }} />
+        <PasswordChangeModal
+          showChange={showChangePassword}
+          setShowChange={setShowChangePassword}
+          setNewPassword={setNewPassword}
+          setConfirmPassword={setConfirmPassword}
+          info={{ handleChange, handleChangePassword }}
+        />
+      </div>
+    )
   }
-
-  // renders //
-  const renderModals = () => {
-    const { username } = user
-    if (show_modals.show_confirm)
-      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestUserChange }} props={props} />
-    else if (show_modals.show_com)
-      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ completedChange }} props={props} />
-    else if (show_modals.show_del)
-      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestDelete, username }} props={props} />
-    else if (show_modals.show_confirm_change)
-      return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{ requestChangePassword }} props={props} />
-    else return <CuAndSatitModals show_modals={show_modals} set_show_modals={set_show_modals} info={{}} props={props} />
-  }
-
-  // renders //
-  const renderModals = () => {
-    const { username } = user
-    if (showModals.showConfirm) return <CuAndSatitModals showModals={showModals} setShowModals={setShowModals} info={{ requestUserChange }} />
-    else if (showModals.showCom) return <CuAndSatitModals showModals={showModals} setShowModals={setShowModals} info={{ completedChange }} />
-    else if (showModals.showDel) return <CuAndSatitModals showModals={showModals} setShowModals={setShowModals} info={{ requestDelete, username }} />
-    else if (showModals.showConfirmChange)
-      return <CuAndSatitModals showModals={showModals} setShowModals={setShowModals} info={{ requestChangePassword }} />
-    else return <CuAndSatitModals showModals={showModals} setShowModals={setShowModals} info={{}} />
-  }
-
-  const renderPasswordChangeModal = () => (
-    <PasswordChangeModal
-      showChange={showChangePassword}
-      setShowChange={setShowChangePassword}
-      setNewPassword={setNewPassword}
-      setConfirmPassword={setConfirmPassword}
-      info={{ handleChange, handleChangePassword }}
-    />
-  )
 
   const renderForm = () => {
     let date: Date = new Date(user.expired_penalize_date)
@@ -376,7 +320,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
               variant="outline-danger"
               className="btn-normal btn-outline-red mr-3"
               onClick={() => {
-                setShowModals({ ...showModals, showDel: true })
+                setShowModals({ ...showModals, showDelete: true })
               }}
             >
               ลบผู้ใช้
@@ -512,7 +456,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         {renderAlert()}
       </Card>
       {renderModals()}
-      {renderPasswordChangeModal()}
     </div>
   )
 }

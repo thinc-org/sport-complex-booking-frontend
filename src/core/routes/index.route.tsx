@@ -19,10 +19,6 @@ import WaitingRoomBan from "../components/pages/Reservation/WaitingRoomBan"
 import Hooray from "../components/pages/Reservation/Hooray"
 
 export default function MainRoute() {
-  const { isUser, setToken } = useAuthContext()
-  useEffect(() => {
-    if (getCookie("token")) setToken(getCookie("token"))
-  }, [isUser])
   return (
     <>
       <Sidebar></Sidebar>
@@ -56,11 +52,8 @@ export default function MainRoute() {
         <Route exact path="/account" component={AccountPage} />
 
         <Route path="/staff" component={StaffRoute} />
-
         <Route exact path="/changePassword" component={ChangePassword} />
-
         <Route exact path="/banned" component={WaitingRoomBan} />
-
         <Route exact path="/hooray" component={Hooray} />
       </Switch>
     </>
