@@ -75,7 +75,7 @@ const ReservationPage = (props: any) => {
     }
 
     // display only when there is any reservation
-    if (true) {
+    if (lists && lists.length) {
         return (
             <>
                 <NavHeader header='My Reservation' />
