@@ -24,7 +24,6 @@ const AddUser: FunctionComponent = () => {
   })
 
   // User states //
-  const [confirm_password, set_confirm_password] = useState<string>("")
   const [user, setUser] = useState<AddInfo>({
     membership_type: "",
     is_thai_language: true,
@@ -67,57 +66,6 @@ const AddUser: FunctionComponent = () => {
           <option>นักเรียนสาธิตจุฬา / บุคลากรจุฬา</option>
         </Form.Control>
       </Form.Group>
-    )
-  }
-
-  const renderPasswordSection = () => {
-    return (
-      <Row>
-        <Col>
-          <Form.Group>
-            <Form.Label>{selectingSatit ? "รหัสผ่าน" : "รหัสผ่าน (เบอร์โทรศัพท์)"}</Form.Label>
-            <InputGroup>
-              <Form.Control id="password" type={showPassword ? "text" : "password"} onChange={handleChange} value={user.password} />
-              <InputGroup.Append>
-                <Button
-                  className="btn-normal btn-outline-black"
-                  variant="secondary"
-                  onClick={() => {
-                    setShowPassword(!showPassword)
-                  }}
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </Button>
-              </InputGroup.Append>
-            </InputGroup>
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group>
-            <Form.Label>กรอกรหัสผ่านอีกครั้ง</Form.Label>
-            <InputGroup>
-              <Form.Control
-                onChange={(e) => {
-                  set_confirm_password(e.target.value)
-                }}
-                value={confirm_password}
-                type={showConPassword ? "text" : "password"}
-              />
-              <InputGroup.Append>
-                <Button
-                  className="btn-normal btn-outline-black"
-                  variant="secondary"
-                  onClick={() => {
-                    setShowConPassword(!showConPassword)
-                  }}
-                >
-                  {showConPassword ? "Hide" : "Show"}
-                </Button>
-              </InputGroup.Append>
-            </InputGroup>
-          </Form.Group>
-        </Col>
-      </Row>
     )
   }
 

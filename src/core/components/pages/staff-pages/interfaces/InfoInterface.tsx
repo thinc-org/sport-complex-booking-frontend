@@ -226,3 +226,17 @@ export interface AlertAddUser {
   showAlertUsername: boolean
   showAlertPassword: boolean
 }
+
+export interface ModalAddUser {
+  showAdd: boolean
+  showCom: boolean
+  showErr: boolean
+  showUsernameErr: boolean
+}
+
+// Alerts //
+export interface AlertAddUser {
+  showAlertUncom: boolean
+  showAlertUsername: boolean
+  showAlertPassword: boolean
+}
