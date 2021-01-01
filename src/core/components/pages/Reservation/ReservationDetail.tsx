@@ -48,8 +48,8 @@ const ReservationDetail = () => {
         triggerModal()
     }
 
-    const fetchData = () => {
-        client
+    const fetchData = async () => {
+        await client
             .get(`'http://localhost:3000/myreservation/:${id}'`, {
 
             })
@@ -62,6 +62,10 @@ const ReservationDetail = () => {
                 setTimeList(data.time_slot)
                 setMemberNameList(data.list_member)
                 setIsCheck(data.is_check)
+            })
+            .catch(err => {
+                console.log(err)
+                history.push((location.state as any).path)
             })
     }
 
@@ -84,9 +88,10 @@ const ReservationDetail = () => {
                 history.push((location.state as any).path)
                 //history.push('/myreservation')
             })
-        return (
-            <div></div>
-        )
+            .catch(err => {
+                console.log(err)
+                triggerModal()
+            })
     }
 
     const countDown = () => {
