@@ -9,13 +9,13 @@ import { ErrorAlert } from './modals'
 import { DeleteButton } from './button'
 import { CourtTable, CourtRow } from './disabled-court-table'
 import { RowProps } from './disable-court-interface'
-import { useTable, withDeletable } from './disable-court-hook'
+import { useTableWithPagination, withDeletable } from './disable-court-hook'
 const ListOfCourts = () => {
     const history = useHistory()
     const startDateRef = useRef<DatePicker>()
     const endDateRef = useRef<DatePicker>()
     const { path } = useRouteMatch()
-    const { data, maxPage, page, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete } = useTable()
+    const { data, maxPage, page, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete } = useTableWithPagination()
     const { register, handleSubmit, setError, errors, watch, setValue } = useForm();
     const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
     const watchSports = watch('sports', '')
