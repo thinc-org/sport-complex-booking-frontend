@@ -9,6 +9,7 @@ import { timeConversion } from '../Reservation/timeConversion';
 import { ConfirmModal } from '../../ui/Modals/CurrentWaitingRoomModal';
 import { TimeOutModal } from '../../ui/Modals/CurrentWaitingRoomModal';
 import { useTranslation } from 'react-i18next'
+import withUserGuard from '../../../guards/user.guard';
 
 const WaitingRoomPage = () => {
 
@@ -26,7 +27,7 @@ const WaitingRoomPage = () => {
     const [isThaiLanguage, setIsThaiLanguage] = useState(true)
     const [modalConfirmOpen, setModalConfirmOpen] = useState(false);
     const [modalTimeOutOpen, setModalTimeOutOpen] = useState(false);
-    const [waitingRoomExist, setWaitingRoomExist] = useState(true);
+    const [waitingRoomExist, setWaitingRoomExist] = useState<boolean>();
     const [requiredUserNumber, setRequiredUserNumber] = useState<Number>();
     const [currentUserNumber, setCurrentUserNumber] = useState<Number>();
     const { t } = useTranslation()
@@ -36,7 +37,7 @@ const WaitingRoomPage = () => {
 
     useEffect(() => {
         fetchWaitingRoom()
-        setEndTime(timeShift(new Date("Dec 31, 2020 02:12:00").getTime(), 7))
+        setEndTime(timeShift(new Date("Jan 01, 2021 08:47:40").getTime(), 7))
         console.log(timeConversion(48))
         let list = [1, 2, 48]
         setTimeList(list)
@@ -96,11 +97,12 @@ const WaitingRoomPage = () => {
     }
 
     const fetchWaitingRoom = async () => {
-        client
+        await client
             .get('http://localhost:3000/mywaitingroom', {
 
             })
             .then(res => {
+                setWaitingRoomExist(true)
                 setListMember(res.data.list_member)
                 setEndTime(timeShift(new Date(res.data.date).getTime(), 7))
                 setSport(res.data.sport)
@@ -109,7 +111,10 @@ const WaitingRoomPage = () => {
                 setTimeList(res.data.time_slot)
                 setRequiredUserNumber(res.data.required_user)
                 setCurrentUserNumber(res.data.listmember.length)
-
+            })
+            .catch(err => {
+                console.log(err)
+                setWaitingRoomExist(false)
             })
     }
 
@@ -257,4 +262,4 @@ const WaitingRoomPage = () => {
 
 }
 
-export default WaitingRoomPage;
+export default withUserGuard(WaitingRoomPage);
