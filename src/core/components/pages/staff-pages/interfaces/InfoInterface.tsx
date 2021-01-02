@@ -71,6 +71,15 @@ export interface CuAndSatitInfo {
   password: string
 }
 
+export interface CuSatitComponentInfo {
+  name_th: string
+  surname_th: string
+  name_en: string
+  surname_en: string
+  personal_email: string
+  phone: string
+}
+
 export interface PasswordToggle {
   oldPassword: boolean
   newPassword: boolean

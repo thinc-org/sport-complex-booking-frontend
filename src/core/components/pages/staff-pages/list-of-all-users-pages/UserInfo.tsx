@@ -199,7 +199,6 @@ const UserInfo = () => {
       home_phone,
       contact_person,
       medical_condition,
-      password,
       user_photo,
       medical_certificate,
       national_id_photo,
@@ -291,6 +290,10 @@ const UserInfo = () => {
         console.log(err)
         setShowModalInfo({ ...showModalInfo, showDelete: false, showErr: true })
       })
+  }
+
+  const onSubmit = (data: { username: string }) => {
+    setTempUsername(data.username)
   }
 
   // renders //
@@ -510,7 +513,6 @@ const UserInfo = () => {
           >
             เปลี่ยนรหัสผ่าน
           </Button>
-
           <Button
             variant="outline-danger"
             className="float-right btn-normal btn-outline-pink mr-3"
