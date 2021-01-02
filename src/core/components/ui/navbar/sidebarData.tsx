@@ -2,11 +2,7 @@ export const data = [
   {
     icon: "",
     name: "home",
-<<<<<<< HEAD
     path: "/home",
-=======
-    path: "/",
->>>>>>> bug fix and pull update from dev
   },
   {
     icon: "",
@@ -15,11 +11,7 @@ export const data = [
   },
   {
     icon: "",
-<<<<<<< HEAD
-    name: "myWaitingRoom",
-=======
     name: "waitingRoom",
->>>>>>> bug fix and pull update from dev
     path: "/waitingroom",
   },
   {
