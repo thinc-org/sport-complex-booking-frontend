@@ -30,7 +30,6 @@ export default function OtherEditInfoComponent({
   const [houseRegistrationNumberFile, setHouseRegistrationNumberFile] = useState<File>()
   const [relationshipVerificationDocumentFile, setRelationshipVerificationDocumentFile] = useState<File>()
 
-  const { register, handleSubmit } = useForm()
   // handles //
   const handleUpload = (typename, file) => {
     const formData = new FormData()

@@ -4,7 +4,7 @@ import { Link, RouteComponentProps, useHistory } from "react-router-dom"
 import format from "date-fns/format"
 import { useForm } from "react-hook-form"
 import { client } from "../../../../../axiosConfig"
-import { CuAndSatitInfo, CuSatitComponentInfo, ThaiLangAccount, Account, ModalUserInfo } from "../interfaces/InfoInterface"
+import { CuAndSatitInfo, CuSatitComponentInfo, Account, ModalUserInfo } from "../interfaces/InfoInterface"
 import PasswordChangeModal from "./PasswordChangeModal"
 import {
   DeleteModal,
@@ -16,6 +16,7 @@ import {
   ConfirmChangePasswordModal,
 } from "./ListOfAllUserModals"
 import { isValid } from "date-fns"
+import { useTranslation } from "react-i18next"
 
 const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
   // page states
@@ -54,7 +55,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   })
   const [tempUser, setTempUser] = useState<CuAndSatitInfo>(user)
 
-  const { register, handleSubmit, getValues } = useForm()
   // react router dom //
   const { register, handleSubmit } = useForm()
   const history = useHistory()
@@ -63,6 +63,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   // useEffects //
   useEffect(() => {
     getInfo()
+    i18n.changeLanguage("th")
   }, [])
 
   const getInfo = () => {
@@ -88,7 +89,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       })
       .catch(({ response }) => {
         console.log(response)
-        if (response.data.statusCode === 401) history.push("/staff")
+        if (response && response.data.statusCode === 401) history.push("/staff")
       })
   }
 
@@ -234,7 +235,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         <Row className="py-3">
           <Col>
             <p>ประเภท</p>
-            <p className="font-weight-bold mb-0">{ThaiLangAccount[Account[user.account_type]]}</p>
+            <p className="font-weight-bold mb-0">{t(user.account_type.toString())}</p>
           </Col>
         </Row>
         <Row>
@@ -329,7 +330,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
           <Row>
             <Col className="py-3">
               <p>ประเภทบัญชี</p>
-              <Form.Label className="font-weight-bold">{ThaiLangAccount[Account[user.account_type]]}</Form.Label>
               <Form.Label className="font-weight-bold">{t(user.account_type.toString())}</Form.Label>
             </Col>
           </Row>

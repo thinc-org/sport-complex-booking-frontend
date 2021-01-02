@@ -14,7 +14,7 @@ import {
   PasswordErrModal,
   ConfirmChangePasswordModal,
 } from "./ListOfAllUserModals"
-import Info, { Account, ThaiLangAccount, ModalUserInfo } from "../interfaces/InfoInterface"
+import Info, { ModalUserInfo } from "../interfaces/InfoInterface"
 import format from "date-fns/format"
 import { useForm } from "react-hook-form"
 
@@ -149,7 +149,7 @@ const UserInfo = () => {
       })
       .catch(({ response }) => {
         console.log(response)
-        if (response.data.statusCode === 401) history.push("/staff")
+        if (response && response.data.statusCode === 401) history.push("/staff")
       })
   }
 
@@ -271,7 +271,7 @@ const UserInfo = () => {
           <div className="row">
             <div className="col">
               <label className="mt-2">ประเภท</label>
-              <p className="font-weight-bold">{ThaiLangAccount[Account[accountType]]}</p>
+              <p className="font-weight-bold">อื่นๆ</p>
             </div>
           </div>
           <div className="row pb-2">
