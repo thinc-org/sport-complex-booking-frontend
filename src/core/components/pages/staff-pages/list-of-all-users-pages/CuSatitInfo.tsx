@@ -179,18 +179,17 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   }
 
   const requestDelete = () => {
-    setShowModals({ ...showModals, showDelete: false })
     setShowAlert(false)
     client({
       method: "DELETE",
       url: "/list-all-user/" + _id,
     })
       .then(({ data }) => {
-        setShowModals({ ...showModals, showComDelete: true })
+        setShowModals({ ...showModals, showDelete: false, showComDelete: true })
       })
       .catch(({ response }) => {
         console.log(response)
-        setShowModals({ ...showModals, showErr: true })
+        setShowModals({ ...showModals, showDelete: false, showErr: true })
       })
   }
 

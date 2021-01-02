@@ -4,7 +4,7 @@ import { Button, Card, Form } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import Info, { EditComponentInfo } from "../interfaces/InfoInterface"
 import format from "date-fns/format"
-import { useForm } from "react-hook-form"
+import isValid from "date-fns/isValid"
 
 export default function OtherEditInfoComponent({
   tempInfo,
@@ -215,7 +215,7 @@ export default function OtherEditInfoComponent({
                   className="border"
                   style={{ backgroundColor: "white" }}
                   type="date"
-                  defaultValue={birthday ? format(new Date(birthday), "yyyy-MM-dd") : ""}
+                  defaultValue={isValid(new Date(birthday)) ? format(new Date(birthday), "yyyy-MM-dd") : ""}
                 />
               </div>
             </div>

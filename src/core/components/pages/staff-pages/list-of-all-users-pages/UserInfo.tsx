@@ -252,7 +252,7 @@ const UserInfo = () => {
     // console.log("YEET!!")
     client({
       method: "DELETE",
-      url: "/list-all-user/User/" + _id,
+      url: "/list-all-user/" + _id,
     })
       .then(({ data }) => {
         setShowModalInfo({ ...showModalInfo, showDelete: false, showComDelete: true })
