@@ -19,7 +19,7 @@ const AddCourt = () => {
     const watchSports = useWatch({ control, name: 'sport_id', defaultValue: '' })
     const onSubmit = async (data: AddCourtForm) => {
         const formData = {
-            ...data,
+            sport_id: data.sportObjId,
             court_num: parseInt(data.court_num),
             disable_time: rowData,
             starting_date: startDate?.toUTCString(),
