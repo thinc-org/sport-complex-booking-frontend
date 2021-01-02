@@ -3,15 +3,21 @@ import { RouteComponentProps } from "react-router-dom"
 import { Modal, Button } from "react-bootstrap"
 import { ModalUserInfo } from "../interfaces/InfoInterface"
 
+interface InfoProps {
+  username?: string
+  handleDeleteUser?: () => void
+  handleSave?: () => void
+}
+
 interface propsTemplate {
   show_modal_info: ModalUserInfo
   set_show_modal_info: React.Dispatch<React.SetStateAction<ModalUserInfo>>
-  info: any
+  info: InfoProps
   props: RouteComponentProps
 }
 
 const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: propsTemplate) => {
-  let { show_delete, show_com_delete, show_save, show_com_save, show_err } = show_modal_info
+  const { show_delete, show_com_delete, show_save, show_com_save, show_err } = show_modal_info
 
   const redirectBack = () => {
     props.history.push({
@@ -20,7 +26,7 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
   }
 
   // Delete Modal //
-  const renderDelete = (info: { username: string; handleDeleteUser: () => void }) => {
+  const renderDelete = (info: InfoProps) => {
     return (
       <Modal
         show={show_delete}
@@ -56,7 +62,7 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
     )
   }
 
-  const renderCompleteDelete = (info: { username: string }) => {
+  const renderCompleteDelete = (info: InfoProps) => {
     return (
       <Modal
         show={show_com_delete}
@@ -88,7 +94,7 @@ const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: 
   }
 
   // Save Modal //
-  const renderSave = (info: { handleSave: () => void }) => {
+  const renderSave = (info: InfoProps) => {
     return (
       <Modal
         show={show_save}

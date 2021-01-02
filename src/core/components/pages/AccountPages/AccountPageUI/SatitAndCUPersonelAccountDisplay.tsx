@@ -2,25 +2,20 @@ import React from "react"
 import { useContext } from "react"
 import { Button } from "react-bootstrap"
 import { UserContext } from "../../../../contexts/UsersContext"
-import {Link } from "react-router-dom"
-import { useTranslation } from 'react-i18next'
+import { Link } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 
-export default function SatitAndCUPersonelAccountDisplay({  toggleEditButton }) {  
-
+export default function SatitAndCUPersonelAccountDisplay({ toggleEditButton }) {
   const { satitCuPersonelAccount: user } = useContext(UserContext)
-  const {t, i18n} = useTranslation()
-  const {language} = i18n
+  const { t, i18n } = useTranslation()
+  const { language } = i18n
 
   return (
     <div className="mx-auto col-md-6">
       <div className="default-mobile-wrapper">
         <div className="row mt-2">
           <div className="col-8">
-            <h4 className="align-right">
-              {(language === 'th') 
-              ? (user?.name_th + " " + user?.surname_th) 
-              : (user?.name_en + " " + user?.surname_en)}
-            </h4>
+            <h4 className="align-right">{language === "th" ? user?.name_th + " " + user?.surname_th : user?.name_en + " " + user?.surname_en}</h4>
           </div>
           <div className="col-4">
             <Button className="btn-secondary float-right" onClick={toggleEditButton}>
@@ -42,17 +37,14 @@ export default function SatitAndCUPersonelAccountDisplay({  toggleEditButton }) 
           <div className="valid-feedback"></div>
         </div>
       </div>
-      
+
       <div className="button-group col-md-12 mt-4">
         <Link to={"/changePassword"}>
-        <button className="btn-normal btn-outline-black">
-          {t("changePassword")}
-        </button>
-      </Link>
+          <button className="btn-normal btn-outline-black">{t("changePassword")}</button>
+        </Link>
       </div>
-      
+
       <br />
     </div>
   )
 }
-

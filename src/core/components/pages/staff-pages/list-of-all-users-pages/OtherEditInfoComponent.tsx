@@ -1,5 +1,5 @@
 import React from "react"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Card, Form } from "react-bootstrap"
 import fetch from "../interfaces/axiosTemplate"
 import { convertDate } from "./UserInfo"
@@ -40,7 +40,7 @@ export default function OtherEditInfoComponent({
   // handles //
   const handleUpload = (typename, file) => {
     const formData = new FormData()
-    let selectedFile = file
+    const selectedFile = file
     // Update the formData object
     if (selectedFile) {
       formData.append(typename, selectedFile, selectedFile.name)
@@ -67,7 +67,7 @@ export default function OtherEditInfoComponent({
   }
 
   /// JSX Begins here
-  let {
+  const {
     prefix,
     gender,
     name_th,
@@ -85,7 +85,7 @@ export default function OtherEditInfoComponent({
     medical_condition,
     membership_type,
   } = temp_info
-  let {
+  const {
     contact_person_prefix,
     contact_person_name,
     contact_person_surname,
@@ -224,7 +224,8 @@ export default function OtherEditInfoComponent({
               type="radio"
               value="Single"
               onChange={(e) => {
-                set_temp_info({ ...temp_info, marital_status: e.target.value })
+                const target = e.target as HTMLInputElement
+                set_temp_info({ ...temp_info, marital_status: target.value })
               }}
               checked={marital_status === "Single" ? true : false}
             />
@@ -234,7 +235,8 @@ export default function OtherEditInfoComponent({
               type="radio"
               value="Married"
               onChange={(e) => {
-                set_temp_info({ ...temp_info, marital_status: e.target.value })
+                const target = e.target as HTMLInputElement
+                set_temp_info({ ...temp_info, marital_status: target.value })
               }}
               checked={marital_status === "Married" ? true : false}
             />
@@ -244,7 +246,8 @@ export default function OtherEditInfoComponent({
               type="radio"
               value=""
               onChange={(e) => {
-                set_temp_info({ ...temp_info, marital_status: e.target.value })
+                const target = e.target as HTMLInputElement
+                set_temp_info({ ...temp_info, marital_status: target.value })
               }}
               checked={marital_status !== "Single" && marital_status !== "Married" ? true : false}
             />
@@ -394,7 +397,7 @@ export default function OtherEditInfoComponent({
           <label className="form-label my-2">รูปภาพของคุณ (ไฟล์ภาพ)</label>
           <div className="form-file">
             <Form.File
-              label={user_photo_file ? (user_photo_file! as File).name : "Choose File"}
+              label={user_photo_file ? (user_photo_file as File).name : "Choose File"}
               id="user_photo"
               custom
               onChange={(e) => {
@@ -411,7 +414,7 @@ export default function OtherEditInfoComponent({
           <label className="form-label my-2">เลขประจำตัวประชาชน / หนังสือเดินทาง (.pdf เท่านั้น)</label>
           <div className="form-file">
             <Form.File
-              label={national_id_photo_file ? (national_id_photo_file! as File).name : "Choose File"}
+              label={national_id_photo_file ? (national_id_photo_file as File).name : "Choose File"}
               id="national_id_photo"
               custom
               onChange={(e) => {
@@ -426,7 +429,7 @@ export default function OtherEditInfoComponent({
           <label className="form-label my-2">ใบรับรองแพทย์ (.pdf เท่านั้น)</label>
           <div className="form-file">
             <Form.File
-              label={medical_certificate_file ? (medical_certificate_file! as File).name : "Choose File"}
+              label={medical_certificate_file ? (medical_certificate_file as File).name : "Choose File"}
               id="medical_certificate"
               custom
               onChange={(e) => {
@@ -441,7 +444,7 @@ export default function OtherEditInfoComponent({
           <label className="form-label my-2">ไม่บังคับ: ทะเบียนบ้านที่มีหน้าของคุณ (.pdf เท่านั้น)</label>
           <div className="form-file">
             <Form.File
-              label={house_registration_number_file ? (house_registration_number_file! as File).name : "Choose File"}
+              label={house_registration_number_file ? (house_registration_number_file as File).name : "Choose File"}
               id="house_registration_number"
               custom
               onChange={(e) => {
@@ -456,7 +459,7 @@ export default function OtherEditInfoComponent({
           <label className="form-label my-2">ไม่บังคับ: เอกสารยืนยันตัวตน (.pdf เท่านั้น)</label>
           <div className="form-file">
             <Form.File
-              label={relationship_verification_document_file ? (relationship_verification_document_file! as File).name : "Choose File"}
+              label={relationship_verification_document_file ? (relationship_verification_document_file as File).name : "Choose File"}
               id="relationship_verification_document"
               custom
               onChange={(e) => {

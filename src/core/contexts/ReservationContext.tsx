@@ -1,30 +1,35 @@
-import React, { Component, createContext } from 'react';
+import React, { Component, createContext } from "react"
 
-let defaultValue: any;
-export const UserContext = createContext(defaultValue);
+interface UserConstruct {
+  WaitingRoom: {
+    date: Date
+    sports: string
+    court: string
+    time: string
+  }
+  setWaitingRoomDetails: (value: string) => void
+}
+
+export const UserContext = createContext({} as UserConstruct)
 
 class ReservationContextProvider extends Component {
-
   state = {
     WaitingRoom: {
-      date: Date,
-      sports: String,
-      court: String,
-      time: String,      
-    }
+      date: new Date(),
+      sports: "",
+      court: "",
+      time: "",
+    },
   }
-  
-  setWaitingRoomDetails = (value: String) => {
-    this.setState({ WaitingRoom: value});
+
+  setWaitingRoomDetails = (value: string) => {
+    this.setState({ WaitingRoom: value })
     console.log("SET WAITINGROOM CONTEXT IS CALLED")
   }
-  render() { 
-    return (
-      <UserContext.Provider value={{...this.state, setWaitingRoomDetails: this.setWaitingRoomDetails}}>
-        {this.props.children}
-      </UserContext.Provider>
-    );
+  render() {
+    const value = { ...this.state, setWaitingRoomDetails: this.setWaitingRoomDetails }
+    return <UserContext.Provider value={value}>{this.props.children}</UserContext.Provider>
   }
 }
- 
-export default ReservationContextProvider;
+
+export default ReservationContextProvider

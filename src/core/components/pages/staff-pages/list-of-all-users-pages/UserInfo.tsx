@@ -1,21 +1,21 @@
-import React, { FunctionComponent, useState, useEffect } from "react"
+import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
 import { RouteComponentProps, Link } from "react-router-dom"
 import { Button, Card, Form } from "react-bootstrap"
 import fetch from "../interfaces/axiosTemplate"
 import OtherViewInfoComponent from "./OtherViewInfoComponent"
 import OtherEditInfoComponent from "./OtherEditInfoComponent"
 import ModalsComponent from "./OtherModalsComponent"
-import Info, { Account, ThaiLangAccount, ContactPerson } from "../interfaces/InfoInterface"
+import Info, { Account, ThaiLangAccount } from "../interfaces/InfoInterface"
 import { ModalUserInfo } from "../interfaces/InfoInterface"
 
 export const convertDate = (date: Date) => {
   if (date < new Date()) {
     date = new Date()
   }
-  let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate()
-  let month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1
-  let year = date.getFullYear()
-  let format_date = year + "-" + month + "-" + day
+  const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate()
+  const month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1
+  const year = date.getFullYear()
+  const format_date = year + "-" + month + "-" + day
   return format_date
 }
 
@@ -94,15 +94,11 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     })
   }, [])
 
-  useEffect(() => {
-    fetchUserData()
-  }, [jwt])
-
   // useEffect(() => {
   //   setInfo({ ...info, contact_person: contact })
   // }, [contact])
 
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     await fetch({
       method: "GET",
       url: "/list-all-user/findById/" + _id,
@@ -161,7 +157,11 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       .catch((err) => {
         console.log(err)
       })
-  }
+  }, [_id, jwt])
+
+  useEffect(() => {
+    fetchUserData()
+  }, [fetchUserData])
 
   // handles //
   const handleEdit = () => {

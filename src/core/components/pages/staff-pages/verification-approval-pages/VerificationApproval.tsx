@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from "react"
+import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
 import { Table, Form, Col, Button, Pagination, Modal } from "react-bootstrap"
 import { RouteComponentProps } from "react-router-dom"
 import fetch from "../interfaces/axiosTemplate"
@@ -28,20 +28,11 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
       })
   }, [])
 
-  // useEffect(() => {
-  //   console.log("users: ")
-  //   console.log(users)
-  // }, [users])
-
-  useEffect(() => {
-    requestUsers()
-  }, [jwt, page_no])
-
-  const requestUsers = () => {
+  const requestUsers = useCallback(() => {
     //  request users from server  //
-    let begin = (page_no - 1) * max_user_per_page
-    let end = page_no * max_user_per_page
-    let additional_url = searchName === "" ? begin + "/" + end : searchName + "/" + begin + "/" + end
+    const begin = (page_no - 1) * max_user_per_page
+    const end = page_no * max_user_per_page
+    const additional_url = searchName === "" ? begin + "/" + end : searchName + "/" + begin + "/" + end
     fetch({
       method: "get",
       url: "/approval/" + additional_url,
@@ -50,9 +41,9 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
       },
     })
       .then(({ data }) => {
-        let userList: OtherInfo[] = data
+        const userList: OtherInfo[] = data
         let newUserList: OtherInfo[] = []
-        for (let user of userList) {
+        for (const user of userList) {
           newUserList = [...newUserList, user]
         }
         setUsers(newUserList)
@@ -60,7 +51,11 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
       .catch((err) => {
         console.log(err)
       })
-  }
+  }, [jwt, max_user_per_page, page_no, searchName])
+
+  useEffect(() => {
+    requestUsers()
+  }, [requestUsers])
 
   const loadPagination = () => {
     return (
@@ -97,7 +92,7 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
   const handleInfo = (e) => {
     //send jwt and username
     // if no data of that user -> show pop up
-    let username = e.target.id
+    const username = e.target.id
     fetch({
       method: "GET",
       url: "/approval/" + username,
@@ -105,7 +100,7 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
         Authorization: "bearer " + jwt,
       },
     })
-      .then(({ data }) => {
+      .then(() => {
         props.history.push({
           pathname: "/verifyInfo/" + username,
         })
@@ -150,11 +145,10 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
   }
 
   const renderUsersTable = () => {
-    let id = 1
-    let usersList = users.map((user) => {
+    const usersList = users.map((user, index) => {
       return (
-        <tr key={id} className="tr-normal">
-          <td className="font-weight-bold"> {id++} </td>
+        <tr key={index} className="tr-normal">
+          <td className="font-weight-bold"> {index + 1} </td>
           <td> {user.name_en} </td>
           <td> {user.surname_en} </td>
           <td> {user.username} </td>

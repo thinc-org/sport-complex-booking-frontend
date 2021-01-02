@@ -3,15 +3,21 @@ import { RouteComponentProps } from "react-router-dom"
 import { Modal, Button } from "react-bootstrap"
 import { ModalVerify } from "../interfaces/InfoInterface"
 
+interface InfoProps {
+  requestReject?: () => void
+  requestAccept?: () => void
+  username?: string
+}
+
 interface propsTemplate {
   show_modal_info: ModalVerify
   set_show_modal_info: React.Dispatch<React.SetStateAction<ModalVerify>>
-  info: any
+  info: InfoProps
   props: RouteComponentProps
 }
 
 const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: propsTemplate) => {
-  let {
+  const {
     show_confirm_accept,
     show_uncom_accept,
     show_complete_accept,
@@ -29,7 +35,7 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
   }
 
   // Reject Modal //
-  const renderConfirmReject = (info: { requestReject: () => void }) => {
+  const renderConfirmReject = (info: InfoProps) => {
     return (
       <Modal
         show={show_confirm_reject}
@@ -91,7 +97,7 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
     )
   }
 
-  const renderCompleteReject = (info: { username: string }) => {
+  const renderCompleteReject = (info: InfoProps) => {
     return (
       <Modal
         show={show_complete_reject}
@@ -122,7 +128,7 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
   }
 
   // Accept Modal //
-  const renderConfirmAccept = (info: { requestAccept: () => void }) => {
+  const renderConfirmAccept = (info: InfoProps) => {
     return (
       <Modal
         show={show_confirm_accept}
@@ -183,7 +189,7 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
     )
   }
 
-  const renderCompleteAccept = (info: { username: string }) => {
+  const renderCompleteAccept = (info: InfoProps) => {
     return (
       <Modal
         show={show_complete_accept}

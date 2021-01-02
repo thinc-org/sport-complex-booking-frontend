@@ -67,7 +67,7 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
   }
 
   const renderNormalForm = () => {
-    let { username, password } = user
+    const { username, password } = user
     return (
       <Form>
         {renderSelector(0)}
@@ -84,7 +84,7 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
   }
 
   const renderSatitForm = () => {
-    let { name_th, surname_th, name_en, surname_en, personal_email, phone, username, password, is_thai_language } = user
+    const { name_th, surname_th, name_en, surname_en, personal_email, phone, username, password, is_thai_language } = user
     return (
       <Form>
         {renderSelector(9)}
@@ -271,9 +271,9 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
     // })
   }
 
-  const handleAdd = (e) => {
+  const handleAdd = () => {
     // if form has been completed -> request add //
-    let { membership_type, username, password, name_th, surname_th, name_en, surname_en, personal_email, phone } = user
+    const { membership_type, username, password, name_th, surname_th, name_en, surname_en, personal_email, phone } = user
     if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && username !== "" && password !== "") {
       setShowAdd(true)
     } else if (
@@ -296,7 +296,7 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
     setShowAdd(false)
     let url = "/list-all-user/"
     let data = {}
-    let { membership_type, username, password } = user
+    const { membership_type, username, password } = user
     if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา") {
       url += "OtherUser"
       data = {
@@ -316,7 +316,7 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
       },
       data,
     })
-      .then(({ data }) => {
+      .then(() => {
         // if complete -> pop up "complete" //
         // else -> pop up "incomplete" //
         // go back to list-of-all-users page

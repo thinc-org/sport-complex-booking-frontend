@@ -1,28 +1,28 @@
 import React from "react"
 import { useState, useContext } from "react"
-import {  Button } from "react-bootstrap"
-import { useForm } from "react-hook-form";
+import { Button } from "react-bootstrap"
+import { useForm } from "react-hook-form"
 import { UserContext } from "../../../../contexts/UsersContext"
-import { ConfirmModal, ErrorModal, EdittedData } from "../../../ui/Modals/AccountPageModals";
-import { useTranslation } from 'react-i18next'
-import { client } from "../../../../../axiosConfig";
+import { ConfirmModal, ErrorModal, EdittedData } from "../../../ui/Modals/AccountPageModals"
+import { useTranslation } from "react-i18next"
+import { client } from "../../../../../axiosConfig"
 
-export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
-  const [show, setShow] = useState(false);
-  const [showErr, setShowErr] = useState(false);
-  const [formData, setFormData] = useState<EdittedData>();
+export default function SatitAndCUPersonelAccountEdit({ toggleEditButton }) {
+  const [show, setShow] = useState(false)
+  const [showErr, setShowErr] = useState(false)
+  const [formData, setFormData] = useState<EdittedData>()
 
-  const { satitCuPersonelAccount:user } = useContext(UserContext)
-  const {t} = useTranslation()
-  
+  const { satitCuPersonelAccount: user } = useContext(UserContext)
+  const { t } = useTranslation()
+
   // React Hook Forms
-  const { register, handleSubmit, errors  } = useForm();
+  const { register, handleSubmit, errors } = useForm()
 
   const onSubmit = (data: EdittedData) => {
     setShow(true)
     setFormData(data)
     //postDataToBackend(data)
-  };
+  }
 
   const handleCancel = (e) => {
     e.preventDefault()
@@ -30,13 +30,14 @@ export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
   }
 
   const postDataToBackend = async (data: EdittedData) => {
-    await client.put('/account_info', data)
+    await client
+      .put("/account_info", data)
       .then(() => {
-          window.location.reload()
+        window.location.reload()
       })
       .catch((err) => {
-          console.log(err);
-          setShowErr(true);
+        console.log(err)
+        setShowErr(true)
       })
   }
 
@@ -57,13 +58,20 @@ export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="">
             <label className="form-label mt-2">{t("phoneLabel")}</label>
-            <input name="phone" type="number" ref={register({
+            <input
+              name="phone"
+              type="number"
+              ref={register({
                 required: "Enter your phone number",
                 pattern: {
                   value: /^[A-Z0-9._%+-]/i,
                   message: "Enter a valid phone number",
                 },
-              })} placeholder="0xxxxxxxxx" defaultValue={user?.phone} className="form-control"/>
+              })}
+              placeholder="0xxxxxxxxx"
+              defaultValue={user?.phone}
+              className="form-control"
+            />
             {errors.mobile && <p id="input-error">{errors.mobile.message}</p>}
 
             <label className="form-label mt-2">{t("personalEmailLabel")}</label>
@@ -82,22 +90,22 @@ export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
             />
             {errors.personal_email && <p id="input-error">{errors.personal_email.message}</p>}
           </div>
-          <hr/>
+          <hr />
           <div className="row mt-3">
             <div className="button-group col-md-12">
               <Button variant="gray" className="btn-secondary" onClick={handleCancel}>
                 {t("cancel")}
               </Button>
-              <Button variant="pink" className="btn-secondary" type="submit" onClick={()=> setShow(true)}>
+              <Button variant="pink" className="btn-secondary" type="submit" onClick={() => setShow(true)}>
                 {t("saveAndSubmit")}
               </Button>
             </div>
           </div>
 
           {/* MODAL CONFIRM DIALOGUE */}
-          <ConfirmModal show={show} setShow={setShow} postDataToBackend={postDataToBackend} formData={formData}/>
+          <ConfirmModal show={show} setShow={setShow} postDataToBackend={postDataToBackend} formData={formData} />
           {/* MODAL ERROR */}
-          <ErrorModal showErr={showErr} setShowErr={setShowErr}/>
+          <ErrorModal showErr={showErr} setShowErr={setShowErr} />
         </form>
       </div>
       <br />

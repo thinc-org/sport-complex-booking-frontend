@@ -1,13 +1,10 @@
 import React from "react"
-import { useEffect, useContext } from 'react'
-import { Switch, Route, useRouteMatch, useHistory } from 'react-router-dom';
-import { getCookie } from '../../contexts/cookieHandler'
-import FrontLoginMain from '../ui/login/login-main'
-import Footer from '../ui/footer/footer'
-import { useAuthContext } from '../../controllers/authContext'
-import PersonalInfo from '../ui/login/personal-info-form';
-const FrontLoginPage = (props: any) => {
-  const { url, path } = useRouteMatch()
+import { Switch, Route, useRouteMatch } from "react-router-dom"
+import FrontLoginMain from "../ui/login/login-main"
+import PersonalInfo from "../ui/login/personal-info-form"
+
+const FrontLoginPage = () => {
+  const { path } = useRouteMatch()
   return (
     <>
       <Switch>
@@ -18,5 +15,4 @@ const FrontLoginPage = (props: any) => {
   )
 }
 
-
-export default FrontLoginPage; 
+export default FrontLoginPage

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from "react"
+import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
 import { RouteComponentProps, Link } from "react-router-dom"
 import { Button, Card, Form, Collapse } from "react-bootstrap"
 import fetch from "../interfaces/axiosTemplate"
@@ -34,7 +34,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
   })
 
   // Non CU state //
-  const [username, setUsername] = useState<string>(props.match.params.username)
+  const [username] = useState<string>(props.match.params.username)
   const [account_type, set_account_type] = useState<string>("asdada")
   const [membership_type, set_membership_type] = useState<string>("dasdada")
   const [contact, setContact] = useState<ContactPerson>({
@@ -83,19 +83,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
       })
   }, [])
 
-  useEffect(() => {
-    console.log(reject_info)
-  }, [reject_info])
-
-  useEffect(() => {
-    console.log(info)
-  }, [info])
-
-  useEffect(() => {
-    fetchUserData()
-  }, [jwt])
-
-  const fetchUserData = () => {
+  const fetchUserData = useCallback(() => {
     fetch({
       method: "GET",
       url: "/approval/" + username,
@@ -145,11 +133,15 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
       .catch((err) => {
         console.log(err)
       })
-  }
+  }, [contact, jwt, username])
+
+  useEffect(() => {
+    fetchUserData()
+  }, [fetchUserData])
 
   const confirmReject = () => {
     // check if at least one condition is checked
-    let checked: boolean = false
+    let checked = false
     for (const key in reject_info) {
       if (reject_info[key] === true) {
         checked = true
@@ -162,7 +154,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
 
   const requestReject = () => {
     // console.log("request rejected!!!")
-    let rejectList: string[] = []
+    const rejectList: string[] = []
     for (const name in reject_info) {
       if (reject_info[name]) rejectList.push(name)
     }
@@ -212,16 +204,9 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
       })
   }
 
-  const redirectBack = () => {
-    console.log(props)
-    // props.history.push({
-    //   pathname: "/verifyApprove",
-    // })
-  }
-
   // handles //
   const handleChangeExpire = (e) => {
-    let date = e.target.value
+    const date = e.target.value
     if (new Date(date) < new Date()) set_account_expired_date(new Date())
     else set_account_expired_date(new Date(date))
   }
@@ -300,7 +285,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
   }
 
   const renderRejectionInfo = () => {
-    let infoList = Object.keys(reject_info).map((name, index) => {
+    const infoList = Object.keys(reject_info).map((name, index) => {
       return (
         <Form.Check
           key={index}
@@ -309,14 +294,16 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
           type="checkbox"
           defaultChecked={reject_info[name]}
           onChange={(e) => {
+            const target = e.target as HTMLInputElement
             set_reject_info({
               ...reject_info,
-              [e.target.id]: e.target.checked,
+              [target.id]: target.checked,
             })
           }}
         />
       )
     })
+
     return (
       <Collapse in={show_reject} className="mt-3 mx-5">
         <div className="rejection-info">

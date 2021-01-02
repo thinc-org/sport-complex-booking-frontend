@@ -2,37 +2,38 @@ import React from "react"
 import { useContext } from "react"
 import { UserContext } from "../../../../contexts/UsersContext"
 import axios from "axios"
-import {  Button } from "react-bootstrap"
-import {Link } from "react-router-dom"
+import { Button } from "react-bootstrap"
+import { Link } from "react-router-dom"
 import { useAuthContext } from "../../../../controllers/authContext"
-import { OtherWarningMessage } from '../../../ui/Modals/AccountPageModals'
-import { useTranslation } from 'react-i18next'
+import { OtherWarningMessage } from "../../../ui/Modals/AccountPageModals"
+import { useTranslation } from "react-i18next"
 
 export default function OtherAaccountDisplay() {
-
-  const {token} = useAuthContext()
+  const { token } = useAuthContext()
   const { otherAccount: user } = useContext(UserContext)
-  const {t} = useTranslation()
+  const { t } = useTranslation()
 
-  const viewFile = async (fileID: string)=> {
+  const viewFile = async (fileID: string) => {
     await axios
-    .get("http://localhost:3000/fs/viewFileToken/" + fileID, {
-      headers: {
-        Authorization: "bearer " + token,
-      },
-    })
-    .then(({ data }) => {
-      console.log(data)   
-      let url = "http://localhost:3000/fs/view?token=" + data.token
-      let win = window.open(url, '_blank');
-      win? win.focus(): console.log("Wrong token");        
-    })
-    .catch (({err})=> {console.log(err)})
+      .get("http://localhost:3000/fs/viewFileToken/" + fileID, {
+        headers: {
+          Authorization: "bearer " + token,
+        },
+      })
+      .then(({ data }) => {
+        console.log(data)
+        const url = "http://localhost:3000/fs/view?token=" + data.token
+        const win = window.open(url, "_blank")
+        win ? win.focus() : console.log("Wrong token")
+      })
+      .catch(({ err }) => {
+        console.log(err)
+      })
   }
 
   return (
     <div className="mx-auto col-md-6">
-      <OtherWarningMessage show={user!.verification_status !== ""} verification_status={user!.verification_status} />            
+      <OtherWarningMessage show={user!.verification_status !== ""} verification_status={user!.verification_status} />
       <div className="default-mobile-wrapper">
         <div className="">
           {/* START OF THE FORM */}
@@ -67,7 +68,7 @@ export default function OtherAaccountDisplay() {
           <label className="form-label mt-2">{t("birthday")}</label>
           <div className="row">
             <div className="col-sm-4">
-              <p>{user?.birthday.toString().substring(0,10)}</p>
+              <p>{user?.birthday.toString().substring(0, 10)}</p>
               <div className="valid-feedback"></div>
             </div>
           </div>
@@ -96,9 +97,7 @@ export default function OtherAaccountDisplay() {
           <p>{user?.phone}</p>
           <div className="valid-feedback"></div>
           <hr />
-          <label className="form-label mt-2">
-            {t("medical_condition")}
-          </label>
+          <label className="form-label mt-2">{t("medical_condition")}</label>
           <p>{user?.medical_condition}</p>
           <div className="valid-feedback"></div>
         </div>
@@ -133,57 +132,63 @@ export default function OtherAaccountDisplay() {
         <label className="form-label my-2">{t("user_photo")}</label>
         <div className="form-file">
           {user?.user_photo ? (
-            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.user_photo)}>{t("viewFile")}</Button>
+            <Button className="btn-normal btn-secondary" onClick={() => viewFile(user?.user_photo)}>
+              {t("viewFile")}
+            </Button>
           ) : (
             <p>{t("noFile")}</p>
-          )} 
+          )}
         </div>
         <hr />
         <label className="form-label my-2">{t("national_id_photo")}</label>
         <div className="form-file">
           {user?.national_id_photo ? (
-            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.national_id_photo)}>{t("viewFile")}</Button>
+            <Button className="btn-normal btn-secondary" onClick={() => viewFile(user?.national_id_photo)}>
+              {t("viewFile")}
+            </Button>
           ) : (
             <p>{t("noFile")}</p>
-          )} 
+          )}
         </div>
         <hr />
         <label className="form-label my-2">{t("medical_certificate")}</label>
         <div className="form-file">
           {user?.medical_certificate ? (
-            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.medical_certificate)}>{t("viewFile")}</Button>
+            <Button className="btn-normal btn-secondary" onClick={() => viewFile(user?.medical_certificate)}>
+              {t("viewFile")}
+            </Button>
           ) : (
             <p>{t("noFile")}</p>
-          )} 
+          )}
         </div>
         <hr />
-        <label className="form-label my-2">
-          {t("house_registration_number")}
-        </label>
+        <label className="form-label my-2">{t("house_registration_number")}</label>
         <div className="form-file">
           {user?.house_registration_number ? (
-            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.house_registration_number)}>{t("viewFile")}</Button>
+            <Button className="btn-normal btn-secondary" onClick={() => viewFile(user?.house_registration_number)}>
+              {t("viewFile")}
+            </Button>
           ) : (
             <p>{t("noFile")}</p>
-          )} 
+          )}
         </div>
         <hr />
         <label className="form-label my-2">{t("relationship_verification_document")}</label>
         <div className="form-file">
           {user?.relationship_verification_document ? (
-            <Button className="btn-normal btn-secondary" onClick={()=> viewFile(user?.relationship_verification_document)}>{t("viewFile")}</Button>
+            <Button className="btn-normal btn-secondary" onClick={() => viewFile(user?.relationship_verification_document)}>
+              {t("viewFile")}
+            </Button>
           ) : (
             <p>{t("noFile")}</p>
-          )} 
+          )}
         </div>
       </div>
       {/* END OF FORM */}
       <div className="button-group col-md-12 mt-4">
         <Link to={"/changePassword"}>
-        <button className="btn-normal btn-outline-black">
-          {t("changePassword")}
-        </button>
-      </Link>
+          <button className="btn-normal btn-outline-black">{t("changePassword")}</button>
+        </Link>
       </div>
       <br />
       <br />

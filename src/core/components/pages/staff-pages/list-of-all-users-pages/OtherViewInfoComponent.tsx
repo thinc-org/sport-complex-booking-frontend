@@ -15,7 +15,7 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
 
   // handles //
   const handlePDF = (e) => {
-    let fileId = e.target.id
+    const fileId = e.target.id
     console.log(fileId)
     // console.log("trying to open pdf: " + fileId)
     fetch({
@@ -35,7 +35,7 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
   }
 
   /// JSX Begins here
-  let {
+  const {
     prefix,
     gender,
     name_th,
@@ -52,7 +52,7 @@ export default function OtherViewInfoComponent({ jwt, info }: { jwt: string; inf
     medical_condition,
     contact_person,
   } = info
-  let { contact_person_prefix, contact_person_name, contact_person_surname, contact_person_home_phone, contact_person_phone } = contact_person
+  const { contact_person_prefix, contact_person_name, contact_person_surname, contact_person_home_phone, contact_person_phone } = contact_person
   // console.log(birthday)
   // console.log(new Date(birthday))
   // console.log("DATEEEEE " + birthday.getDate)

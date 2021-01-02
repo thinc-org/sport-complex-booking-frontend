@@ -1,51 +1,39 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { Button } from "react-bootstrap"
-import { Link, useHistory, useLocation } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import { useEffect } from "react"
 import withUserGuard from "../../../guards/user.guard"
-import { useAuthContext } from "../../../controllers/authContext"
-import { History, LocationState } from "history";
-import { useTranslation } from 'react-i18next'
-
+import { History, LocationState } from "history"
+import { useTranslation } from "react-i18next"
+import { client } from "../../../../axiosConfig"
 
 interface historyProps {
- history: History<LocationState>;
+  history: History<LocationState>
 }
 
 function WaitingRoomBan(props: historyProps) {
-
-  const { msg } = (props['location'] && props['location']['state']) || {};
-  const {token} = useAuthContext()
-  const {t} = useTranslation()
+  const { msg } = (props["location"] && props["location"]["state"]) || {}
+  const { t } = useTranslation()
   const history = useHistory<LocationState | unknown>()
-  
-  useEffect(()=> {
-    fetchValidity(token)
-  }, [])
 
-  const fetchValidity = async (token: String |undefined) => {
+  const fetchValidity = useCallback(async () => {
+    await client
+      .post("/reservation/checkvalidity")
+      .then((response) => {
+        const resMsg = response["data"]["message"]
+        if (resMsg === "valid user") {
+          //history.push({pathname: '/home'});
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+        history.push({ pathname: "/login" })
+      })
+  }, [history])
 
-    let axios = require('axios');
-    let config = {
-      method: 'post',
-      url: 'http://localhost:3000/reservation/checkvalidity',
-      headers: { 
-        'Authorization': 'bearer ' + token
-      }
-    };
-    await axios(config)
-    .then((response:Object) => {
-      let resMsg = response['data']['message']
-      if (resMsg === "valid user") {
-        //history.push({pathname: '/home'});
-      }
-    })
-    .catch((error: Object) => {
-      console.log(error)
-      history.push({pathname: '/login'});
-    });
-
-  }
+  useEffect(() => {
+    fetchValidity()
+  }, [fetchValidity])
 
   return (
     <div className="wrapper">
@@ -55,7 +43,9 @@ function WaitingRoomBan(props: historyProps) {
           <p>{t("waiting_room_ban")}</p>
           <Link to={"/"}>
             <div className="button-group">
-              <Button className="mt-3 mb-0" variant="darkpink">{t("back_to_home")}</Button>
+              <Button className="mt-3 mb-0" variant="darkpink">
+                {t("back_to_home")}
+              </Button>
             </div>
           </Link>
         </div>

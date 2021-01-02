@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from "react"
+import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
 import { Table, Form, Row, Col, Button, Pagination, Modal } from "react-bootstrap"
 import { Link, RouteComponentProps } from "react-router-dom"
 import fetch from "../interfaces/axiosTemplate"
@@ -93,19 +93,10 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
       })
   }, [])
 
-  useEffect(() => {
-    requestUsers()
-  }, [jwt, page_no])
-
-  // useEffect(() => {
-  //   console.log("user ::")
-  //   console.log(users)
-  // }, [users, status])
-
-  const requestUsers = () => {
+  const requestUsers = useCallback(() => {
     // Send JWT //
     // get params for request //
-    let param_data = {
+    const param_data = {
       begin: (page_no - 1) * 10,
       end: page_no * 10,
     }
@@ -121,7 +112,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
       params: param_data,
     })
       .then(({ data }) => {
-        let userList = data[1].map((user) => {
+        const userList = data[1].map((user) => {
           if (user.account_type === "CuStudent") return { ...user, account_type: Account.CuStudent }
           else if (user.account_type === "SatitAndCuPersonel") return { ...user, account_type: Account.SatitAndCuPersonel }
           return { ...user, account_type: Account.Other }
@@ -132,7 +123,11 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
       .catch(({ response }) => {
         console.log(response)
       })
-  }
+  }, [jwt, page_no, searchName, status])
+
+  useEffect(() => {
+    requestUsers()
+  }, [requestUsers])
 
   // handles //
   const handleSearch = (e) => {
@@ -145,8 +140,8 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
   const handleInfo = (e) => {
     //send jwt and username
     // if no data of that user -> show pop up
-    let index = parseInt(e.target.id) - 1
-    let _id: String = users[index]._id
+    const index = parseInt(e.target.id) - 1
+    const _id: string = users[index]._id
     fetch({
       method: "GET",
       url: "/list-all-user/findById/" + _id,
@@ -156,7 +151,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
     })
       .then(({ data }) => {
         if (data) {
-          let account_type: Account = users[index].account_type
+          const account_type: Account = users[index].account_type
           if (account_type === Account.CuStudent) {
             props.history.push({
               pathname: "/cuInfo/" + _id,
@@ -176,18 +171,18 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
   }
 
   const handlePagination = (next_page: number) => {
-    let max_page: number = Math.floor((max_user + 9) / 10)
+    const max_page: number = Math.floor((max_user + 9) / 10)
     if (next_page >= 1 && next_page <= max_page) {
       set_page_no(next_page)
     }
   }
 
   const loadPagination = () => {
-    let max_page: number = Math.floor((max_user + 9) / 10)
-    let numList: Array<number> = []
+    const max_page: number = Math.floor((max_user + 9) / 10)
+    const numList: Array<number> = []
     let i = 0
     while (numList.length < 5) {
-      let page = page_no + i - 2
+      const page = page_no + i - 2
       if (page >= 1 && page <= max_page) {
         numList.push(page)
       } else if (page > max_page) {
@@ -195,7 +190,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
       }
       i++
     }
-    let elementList = numList.map((num) => {
+    const elementList = numList.map((num) => {
       if (num === page_no)
         return (
           <Pagination.Item key={num} active={true}>
@@ -262,7 +257,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
   const renderUsersTable = () => {
     let index = (page_no - 1) * 10 + 1
     // let user
-    let usersList = users.map((user) => {
+    const usersList = users.map((user) => {
       // if (current_user.account_type === Account.CuStudent) {
       //   user = current_user as CUTemplate
       // } else if (current_user.account_type === Account.Other) {

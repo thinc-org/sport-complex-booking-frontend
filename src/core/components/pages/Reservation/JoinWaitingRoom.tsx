@@ -1,17 +1,18 @@
 import React from "react"
 import { Button } from "react-bootstrap"
 import { useForm } from "react-hook-form"
-import {Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 import withUserGuard from "../../../guards/user.guard"
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from "react-i18next"
 import { client } from "../../../../axiosConfig"
 
 function JoinWaitingRoom() {
   const { register, handleSubmit, errors } = useForm()
-  const {t} = useTranslation()
+  const { t } = useTranslation()
 
-  const onSubmit = async (data: any) => {
-    await client.put('/reservation/joinwaitingroom', data)
+  const onSubmit = async (data) => {
+    await client
+      .put("/reservation/joinwaitingroom", data)
       .then(() => {
         // need to connect endpoint
       })
@@ -35,10 +36,10 @@ function JoinWaitingRoom() {
                 name="accessCode"
                 type="text"
                 ref={register({
-                  required: t("enter_code")!,
+                  required: t("enter_code") as string,
                   pattern: {
                     value: /^[A-Z0-9._%+-]/i,
-                    message: t("enter_code")!,
+                    message: t("enter_code") ?? "",
                   },
                 })}
                 placeholder="xxxxxx"
@@ -50,9 +51,7 @@ function JoinWaitingRoom() {
           <br />
           <div className="button-group my-2">
             <Link to={"/reservenow"}>
-              <Button className="btn-secondary">
-                {t("cancel")}
-              </Button>
+              <Button className="btn-secondary">{t("cancel")}</Button>
             </Link>
             <Button variant="pink" type="submit">
               {t("joinWaitingRoom")}

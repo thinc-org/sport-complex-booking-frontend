@@ -1,6 +1,7 @@
 import React from "react"
 import { Carousel } from "react-bootstrap"
 import Logo from "../../../assets/images/logo.jpg"
+
 const Slide = () => {
   return (
     <div className="default-wrapper w-100">

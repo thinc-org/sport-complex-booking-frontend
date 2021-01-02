@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent } from "react"
+import React, { useState, useEffect, FunctionComponent, useCallback } from "react"
 import { Row, Col, Button, Form, Card, Modal, Alert } from "react-bootstrap"
 import { Link, RouteComponentProps } from "react-router-dom"
 import fetch from "../interfaces/axiosTemplate"
@@ -41,12 +41,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     }).then(({ data }) => {
       setJwt(data.token.token)
     })
-  }, [])
-  useEffect(() => {
-    getInfo()
   }, [jwt])
 
-  const getInfo = () => {
+  const getInfo = useCallback(() => {
     fetch({
       method: "GET",
       url: "/list-all-user/findById/" + _id,
@@ -61,7 +58,11 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       .catch((err) => {
         console.log(err)
       })
-  }
+  }, [_id, jwt])
+
+  useEffect(() => {
+    getInfo()
+  }, [getInfo])
 
   // Modals & Alert //
   const renderConfirmModal = () => {
@@ -155,7 +156,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
 
   // handles //
   const handleChange = (e) => {
-    let new_user: CuInfo = { ...temp_user }
+    const new_user: CuInfo = { ...temp_user }
     if (e.target.id === "is_penalize") {
       if (e.target.value === "OK") new_user[e.target.id] = false
       else new_user[e.target.id] = true
@@ -180,7 +181,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const handleConfirmChange = () => {
     // if some input is blank -> alert //
     // else -> try change //
-    let { name_th, surname_th, name_en, surname_en, personal_email, phone } = temp_user
+    const { name_th, surname_th, name_en, surname_en, personal_email, phone } = temp_user
     if (name_th !== "" && surname_th !== "" && name_en !== "" && surname_en !== "" && personal_email !== "" && phone !== "") setShowConfirm(true)
     else setShowAlert(true)
   }
@@ -226,8 +227,8 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   }
 
   const renderForm = () => {
-    let date: Date = new Date(user.expired_penalize_date)
-    let expired_date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+    const date: Date = new Date(user.expired_penalize_date)
+    const expired_date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
     return (
       <div className="userInformation">
         <Row>
@@ -305,8 +306,8 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   }
 
   const renderEditingForm = () => {
-    let date: Date = new Date(temp_user.expired_penalize_date)
-    let expired_date: string =
+    const date: Date = new Date(temp_user.expired_penalize_date)
+    const expired_date: string =
       String(date.getFullYear()) +
       "-" +
       String(date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) +

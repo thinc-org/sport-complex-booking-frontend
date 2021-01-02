@@ -68,7 +68,7 @@ export interface OtherInfo {
   username: string
   name_en: string
   surname_en: string
-  personal_email: string,
+  personal_email: string
   phone: string
 }
 
@@ -107,5 +107,3 @@ export interface ModalUserInfo {
   show_com_save: boolean
   show_err: boolean
 }
-
-
