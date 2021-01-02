@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react"
 import { Form, Card, Row, Col, Button } from "react-bootstrap"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { AddInfo, ModalAddUser, AlertAddUser, AddUserComponentInfo } from "../interfaces/InfoInterface"
 import { client } from "../../../../../axiosConfig"
@@ -38,6 +38,7 @@ const AddUser: FunctionComponent = () => {
   })
 
   const { register, handleSubmit } = useForm()
+  const history = useHistory()
 
   // functions //
   const validCheck = (s: string) => {
@@ -217,6 +218,7 @@ const AddUser: FunctionComponent = () => {
       .catch(({ response }) => {
         console.log(response)
         if (response.data.statusCode === 400) setShowModals({ ...showModals, showAdd: false, showUsernameErr: true })
+        else if (response.data.statusCode === 401) history.push("/staff")
         else setShowModals({ ...showModals, showAdd: false, showErr: true })
       })
   }

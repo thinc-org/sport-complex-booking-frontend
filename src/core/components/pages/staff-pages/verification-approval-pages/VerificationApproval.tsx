@@ -43,8 +43,9 @@ const VeritificationApproval: FunctionComponent = () => {
         setUsers(newUserList)
         setMaxUser(data[0])
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(({ response }) => {
+        console.log(response)
+        if (response.data.statusCode === 401) history.push("/staff")
       })
   }
 

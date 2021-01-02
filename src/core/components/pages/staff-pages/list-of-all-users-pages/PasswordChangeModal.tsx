@@ -2,26 +2,28 @@ import React, { FunctionComponent, useState } from "react"
 import { Modal, Form, InputGroup, Button } from "react-bootstrap"
 // import {useParams} from "react-router-dom"
 import { useForm } from "react-hook-form"
-import { PasswordToggle, ModalUserInfo } from "../interfaces/InfoInterface"
+import { ModalUserInfo } from "../interfaces/InfoInterface"
 // import {client} from "../../../../../axiosConfig"
 
 interface propsInterface {
   showModals: ModalUserInfo
   setShowModals: React.Dispatch<React.SetStateAction<ModalUserInfo>>
-  oldPassword: string
   setNewPassword: React.Dispatch<React.SetStateAction<string>>
 }
 
 interface passwordFormInfo {
-  password: string
   newPassword: string
   confirmPassword: string
 }
 
-const PasswordChangeModal: FunctionComponent<propsInterface> = ({ showModals, setShowModals, oldPassword, setNewPassword }) => {
+interface PasswordToggle {
+  newPassword: boolean
+  confirmPassword: boolean
+}
+
+const PasswordChangeModal: FunctionComponent<propsInterface> = ({ showModals, setShowModals, setNewPassword }) => {
   // page state
   const [showPassword, setShowPassword] = useState<PasswordToggle>({
-    oldPassword: false,
     newPassword: false,
     confirmPassword: false,
   })
@@ -31,8 +33,8 @@ const PasswordChangeModal: FunctionComponent<propsInterface> = ({ showModals, se
   // handle //
   const handleChangePassword = (data: passwordFormInfo) => {
     console.log(data)
-    const { password, newPassword, confirmPassword } = data
-    if (password !== oldPassword || newPassword !== confirmPassword) setShowModals({ ...showModals, showPasswordErr: true })
+    const { newPassword, confirmPassword } = data
+    if (newPassword !== confirmPassword) setShowModals({ ...showModals, showPasswordErr: true })
     else {
       setNewPassword(data.newPassword)
       setShowModals({ ...showModals, showConfirmChange: true })
@@ -51,23 +53,6 @@ const PasswordChangeModal: FunctionComponent<propsInterface> = ({ showModals, se
       >
         <Modal.Header closeButton />
         <Modal.Body style={{ fontWeight: "lighter" }}>
-          <Form.Group>
-            <Form.Label>รหัสผ่านเก่า</Form.Label>
-            <InputGroup>
-              <Form.Control ref={register} name="password" type={showPassword.oldPassword ? "text" : "password"} defaultValue="" />
-              <InputGroup.Append>
-                <Button
-                  className="btn-normal btn-outline-black"
-                  variant="secondary"
-                  onClick={() => {
-                    setShowPassword({ ...showPassword, oldPassword: !showPassword.oldPassword })
-                  }}
-                >
-                  {showPassword.oldPassword ? "Hide" : "Show"}
-                </Button>
-              </InputGroup.Append>
-            </InputGroup>
-          </Form.Group>
           <Form.Group>
             <Form.Label>รหัสผ่านใหม่</Form.Label>
             <InputGroup>

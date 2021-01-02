@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FunctionComponent } from "react"
-import { Row, Col, Button, Form, Card, Modal, Alert, InputGroup } from "react-bootstrap"
-import { Link, RouteComponentProps } from "react-router-dom"
+import { Row, Col, Button, Form, Card, Alert } from "react-bootstrap"
+import { Link, RouteComponentProps, useHistory } from "react-router-dom"
 import format from "date-fns/format"
 import { useForm } from "react-hook-form"
 import { client } from "../../../../../axiosConfig"
@@ -51,11 +51,14 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     is_penalize: false,
     expired_penalize_date: new Date(),
     is_first_login: true,
-    password: "",
   })
   const [tempUser, setTempUser] = useState<CuAndSatitInfo>(user)
 
   const { register, handleSubmit, getValues } = useForm()
+  // react router dom //
+  const { register, handleSubmit } = useForm()
+  const history = useHistory()
+  const { i18n, t } = useTranslation()
 
   // useEffects //
   useEffect(() => {
@@ -81,11 +84,11 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
           is_penalize: data.is_penalize,
           expired_penalize_date: data.expired_penalize_date ? data.expired_penalize_date : new Date(),
           is_first_login: data.is_first_login,
-          password: data.password,
         })
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(({ response }) => {
+        console.log(response)
+        if (response.data.statusCode === 401) history.push("/staff")
       })
   }
 
@@ -192,7 +195,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   }
 
   const requestChangePassword = () => {
-    console.log(newPassword)
     client({
       method: "PATCH",
       url: "/list-all-user/password/" + _id,
@@ -201,7 +203,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       },
     })
       .then(({ data }) => {
-        setUser({ ...user, password: data.password })
         setShowModals({ ...showModals, showConfirmChange: false, showChangePassword: false })
       })
       .catch((err) => {
@@ -222,7 +223,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         <ErrModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
         <PasswordErrModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
         <ConfirmChangePasswordModal showModalInfo={showModals} setShowModalInfo={setShowModals} info={{ requestChangePassword }} />
-        <PasswordChangeModal showModals={showModals} setShowModals={setShowModals} oldPassword={user.password} setNewPassword={setNewPassword} />
+        <PasswordChangeModal showModals={showModals} setShowModals={setShowModals} setNewPassword={setNewPassword} />
       </div>
     )
   }
@@ -283,7 +284,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         </Row>
         <Row className="py-3">
           <Col>
-            <Form.Label>สิ้นสุดการแบน</Form.Label>
+            <p>สิ้นสุดการแบน</p>
             <Row>
               <Col sm={4}>
                 <Form.Control disabled type="date" value={user.is_penalize && isValid(date) ? format(date, "yyyy-MM-dd") : ""} />
@@ -330,6 +331,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
             <Col className="py-3">
               <p>ประเภทบัญชี</p>
               <Form.Label className="font-weight-bold">{ThaiLangAccount[Account[user.account_type]]}</Form.Label>
+              <Form.Label className="font-weight-bold">{t(user.account_type.toString())}</Form.Label>
             </Col>
           </Row>
           <Row>
@@ -372,7 +374,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
           </Row>
           <Row className="py-3">
             <Col>
-              <Form.Label>สถานะการแบน</Form.Label>
+              <p>สถานะการแบน</p>
               <Form.Control className="m-0" as="select" id="is_penalize" onChange={handleChange} value={tempUser.is_penalize ? 1 : 0}>
                 <option value={0}>ปกติ</option>
                 <option value={1}>โดนแบน</option>
@@ -381,7 +383,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
           </Row>
           <Row className="py-3">
             <Col>
-              <Form.Label>สิ้นสุดการแบน</Form.Label>
+              <p>สิ้นสุดการแบน</p>
               <Row>
                 <Col sm={4}>
                   <Form.Control

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Link, useParams } from "react-router-dom"
+import { Link, useParams, useHistory } from "react-router-dom"
 import { Button, Card, Form } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import OtherViewInfoComponent from "./OtherViewInfoComponent"
@@ -35,7 +35,6 @@ const UserInfo = () => {
 
   // Non CU state //
   const [username, setUsername] = useState<string>("")
-  const [accountType, setAccountType] = useState<string>("")
   const [membershipType, setMembershipType] = useState<string>("")
   const [isPenalize, setPenalize] = useState<boolean>(false)
   const [expiredPenalizeDate, setExpiredPenalizeDate] = useState<Date>(new Date())
@@ -63,7 +62,6 @@ const UserInfo = () => {
       contact_person_phone: "",
     },
     membership_type: membershipType,
-    password: "",
     // object id //
     user_photo: "",
     medical_certificate: "",
@@ -79,8 +77,10 @@ const UserInfo = () => {
   const [tempAccountExpiredDate, setTempAccountExpiredDate] = useState<Date>(new Date())
   const [tempInfo, setTempInfo] = useState<Info>(info)
 
+  // react router dom
   const { _id } = useParams<{ _id: string }>()
   const { register, handleSubmit } = useForm()
+  const history = useHistory()
 
   useEffect(() => {
     fetchUserData()
@@ -108,9 +108,8 @@ const UserInfo = () => {
       url: "/list-all-user/id/" + _id,
     })
       .then(({ data }) => {
-        console.log(data)
+        // console.log(data)
         setUsername(data.username)
-        setAccountType(data.account_type)
         setMembershipType(data.membership_type)
         setPenalize(data.is_penalize)
         setExpiredPenalizeDate(data.expired_penalize_date)
@@ -140,7 +139,6 @@ const UserInfo = () => {
                 contact_person_phone: "",
               },
           membership_type: data.membership_type,
-          password: data.password,
           // Files(Object id) //
           user_photo: data.user_photo,
           medical_certificate: data.medical_certificate,
@@ -149,8 +147,9 @@ const UserInfo = () => {
           relationship_verification_document: data.relationship_verification_document,
         })
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(({ response }) => {
+        console.log(response)
+        if (response.data.statusCode === 401) history.push("/staff")
       })
   }
 
@@ -241,7 +240,6 @@ const UserInfo = () => {
       },
     })
       .then(({ data }) => {
-        setInfo({ ...info, password: data.password })
         setShowModalInfo({ ...showModalInfo, showChangePassword: false, showConfirmChange: false })
       })
       .catch((err) => {
@@ -265,15 +263,11 @@ const UserInfo = () => {
       })
   }
 
-  const onSubmit = (data: { username: string }) => {
-    setTempUsername(data.username)
-  }
-
   // renders //
   const renderTopSection = () => {
     return (
       <div className="topSection px-4 pt-2">
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form>
           <div className="row">
             <div className="col">
               <label className="mt-2">ประเภท</label>
@@ -285,7 +279,7 @@ const UserInfo = () => {
               <label className="mt-2">ชื่อผู้ใช้</label>
               {isEdit ? (
                 <Form.Control
-                  ref={register}
+                  ref={register({ pattern: /.*([A-z])+.*/g })}
                   name="username"
                   className="border"
                   style={{ backgroundColor: "white" }}
@@ -480,7 +474,14 @@ const UserInfo = () => {
   const renderEditForm = () => {
     return (
       <div>
-        <OtherEditInfoComponent tempInfo={tempInfo} setTempInfo={setTempInfo} handleSave={handleSave} />
+        <OtherEditInfoComponent
+          tempInfo={tempInfo}
+          setTempInfo={setTempInfo}
+          handleSubmit={handleSubmit}
+          register={register}
+          setTempUsername={setTempUsername}
+          handleSave={handleSave}
+        />
         <div className="mt-5">
           <Button
             variant="pink"
@@ -491,9 +492,7 @@ const UserInfo = () => {
           >
             เปลี่ยนรหัสผ่าน
           </Button>
-          <Button variant="pink" type="submit" className="float-right btn-normal" onClick={handleSubmit(onSubmit)}>
-            บันทึก
-          </Button>
+
           <Button
             variant="outline-danger"
             className="float-right btn-normal btn-outline-pink mr-3"
@@ -518,12 +517,7 @@ const UserInfo = () => {
         <ErrModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
         <PasswordErrModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
         <ConfirmChangePasswordModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ requestChangePassword }} />
-        <PasswordChangeModal
-          showModals={showModalInfo}
-          setShowModals={setShowModalInfo}
-          oldPassword={info.password}
-          setNewPassword={setNewPassword}
-        />
+        <PasswordChangeModal showModals={showModalInfo} setShowModals={setShowModalInfo} setNewPassword={setNewPassword} />
       </div>
     )
   }

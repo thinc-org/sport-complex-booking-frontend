@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
-import { RouteComponentProps, Link } from "react-router-dom"
+import { RouteComponentProps, Link, useHistory } from "react-router-dom"
 import { Button, Card, Form, Collapse } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import OtherViewInfoComponent from "../list-of-all-users-pages/OtherViewInfoComponent"
@@ -86,7 +86,6 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
       contact_person_home_phone: "",
       contact_person_phone: "",
     },
-    password: "",
     membership_type: membershipType,
     // object id //
     user_photo: "",
@@ -95,6 +94,8 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     house_registration_number: "",
     relationship_verification_document: "",
   })
+
+  const history = useHistory()
 
   // useEffects //
   useEffect(() => {
@@ -124,7 +125,6 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
           phone: data.phone,
           home_phone: data.home_phone,
           medical_condition: data.medical_condition,
-          password: "",
           contact_person: data.contact_person
             ? data.contact_person
             : {
@@ -143,8 +143,9 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
           relationship_verification_document: data.relationship_verification_document,
         })
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(({ response }) => {
+        console.log(response)
+        if (response.data.statusCode === 401) history.push("/staff")
       })
   }
 
