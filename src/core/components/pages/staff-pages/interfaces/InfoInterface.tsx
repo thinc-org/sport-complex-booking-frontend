@@ -38,6 +38,28 @@ export default interface Info {
   relationship_verification_document: string
 }
 
+export interface EditComponentInfo {
+  prefix: string
+  name_th: string
+  surname_th: string
+  name_en: string
+  surname_en: string
+  gender: string
+  birthday: Date
+  national_id: string
+  marital_status_text: string
+  address: string
+  email: string
+  phone: string
+  home_phone: string
+  medical_condition: string
+  contact_person_prefix: string
+  contact_person_name: string
+  contact_person_surname: string
+  contact_person_home_phone: string
+  contact_person_phone: string
+}
+
 export interface CuAndSatitInfo {
   account_type: Account
   is_thai_language: boolean
@@ -52,6 +74,15 @@ export interface CuAndSatitInfo {
   expired_penalize_date: Date
   is_first_login: boolean
   password: string
+}
+
+export interface CuSatitComponentInfo {
+  name_th: string
+  surname_th: string
+  name_en: string
+  surname_en: string
+  personal_email: string
+  phone: string
 }
 
 export interface PasswordToggle {
@@ -71,6 +102,19 @@ export interface AddInfo {
   password: string
   personal_email: string
   phone: string
+}
+
+export interface AddUserComponentInfo {
+  is_thai_language: boolean
+  name_th: string
+  surname_th: string
+  name_en: string
+  surname_en: string
+  username: string
+  personal_email: string
+  phone: string
+  password: string
+  confirmPassword: string
 }
 
 export interface OtherInfo {
@@ -171,6 +215,7 @@ export interface ModalUserInfo {
   showErr: boolean
   showPasswordErr: boolean
   showConfirmChange: boolean
+  showChangePassword: boolean
 }
 
 export interface ModalAddUser {
