@@ -223,12 +223,13 @@ const ListOfAllUsers: FunctionComponent = () => {
           </Col>
           <Col sm="auto">
             <Form.Control
-              onChange={(e) => {
-                setStatus(parseInt(e.target.value))
-              }}
               as="select"
               custom
               defaultValue={0}
+              style={{ backgroundColor: "white" }}
+              onChange={(e) => {
+                setStatus(parseInt(e.target.value))
+              }}
             >
               <option disabled value={allStatus.All}>
                 สถานะ

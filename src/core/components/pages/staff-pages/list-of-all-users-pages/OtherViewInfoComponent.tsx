@@ -3,6 +3,8 @@ import { Button, Card } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import Info from "../interfaces/InfoInterface"
 import format from "date-fns/format"
+import isValid from "date-fns/isValid"
+import { useTranslation } from "react-i18next"
 
 export default function OtherViewInfoComponent({ info }: { info: Info }) {
   /// Page states
@@ -12,17 +14,6 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
   const handlePDF = (e) => {
     let fileId = e.target.id
     window.open(`/staff/openFile/${fileId}`, "_blank")
-    // client({
-    //   method: "GET",
-    //   url: "/fs/viewFileToken/" + fileId,
-    // })
-    //   .then(({ data }) => {
-    //     // data is token //
-    //     window.open(client.defaults.baseURL + "/fs/view?token=" + data.token, "_blank")
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //   })
   }
 
   /// JSX Begins here
@@ -94,7 +85,7 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
           <label className="form-label mt-2">{isThai ? "วันเกิด *" : "Birthdate *"}</label>
           <div className="row">
             <div className="col">
-              <p>{birthday ? format(new Date(birthday), "yyyy-MM-dd") : ""}</p>
+              <p>{isValid(new Date(birthday)) ? format(new Date(birthday), "yyyy-MM-dd") : ""}</p>
             </div>
           </div>
           <label className="form-label mt-2">{isThai ? "เลขประจำตัวประชาชน / หนังสือเดินทาง *" : "National ID / Passport *"}</label>
