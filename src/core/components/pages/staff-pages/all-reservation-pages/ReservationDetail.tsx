@@ -1,9 +1,9 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
-import { RouteComponentProps, Link } from "react-router-dom"
+import { Link, useParams, useHistory } from "react-router-dom"
 import { Table, Row, Col, Button, Card } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import { DeleteModal, UserInfo } from "../interfaces/reservationSchemas"
-import DeleteModalComponent from "./DeleteModalComponent"
+import { ConfirmDelModal } from "./DeleteModalComponent"
 
 export const convertSlotToTime = (slot: number): string => {
   if (slot % 2 === 0) return String(slot / 2 - 1) + ":30-" + (slot / 2 !== 24 ? String(slot / 2) : "0") + ":00"
@@ -28,10 +28,8 @@ export const getTimeText = (timeSlot: number[]): string => {
   return text
 }
 
-const ReservationDetail: FunctionComponent<RouteComponentProps<{ pagename: string; _id: string }>> = (props) => {
+const ReservationDetail: FunctionComponent = () => {
   // Page state //
-  let [pagename] = useState<String>(props.match.params.pagename)
-  let [sportId] = useState<String>(props.match.params._id)
   let [showModalInfo, setShowModalInfo] = useState<DeleteModal>({
     showConfirmDel: false,
     showComDel: false,
@@ -45,29 +43,34 @@ const ReservationDetail: FunctionComponent<RouteComponentProps<{ pagename: strin
   let [timeSlot, setTimeSlot] = useState<number[]>([])
   let [members, setMembers] = useState<UserInfo[]>([])
 
+  const history = useHistory()
+  const { pagename, _id } = useParams<{ pagename: string; _id: string }>()
+
   // useEffects //
   useEffect(() => {
     client({
       method: "GET",
-      url: "/court-manager",
+      url: "/court-manager/sports",
     })
       .then(({ data }) => {
         console.log(data)
       })
       .catch(({ response }) => {
         console.log(response)
+        if (response.data.status === 401) history.push("/staff")
       })
+    requestInfo()
   }, [])
 
   useEffect(() => {
-    console.log(pagename, sportId)
-  }, [pagename, sportId])
+    console.log(pagename, _id)
+  }, [pagename, _id])
 
   // other functions //
 
   // request //
   const requestInfo = () => {
-    let url: string = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + "/" + sportId
+    let url: string = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + "/" + _id
     client({
       method: "GET",
       url,
@@ -128,7 +131,7 @@ const ReservationDetail: FunctionComponent<RouteComponentProps<{ pagename: strin
   const renderModals = () => {
     return (
       <div>
-        <DeleteModalComponent showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={requestDelete} />
+        <ConfirmDelModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ members, requestDelete }} />
       </div>
     )
   }

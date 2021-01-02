@@ -95,16 +95,11 @@ const StaffRoute = (props) => {
         <Route
           exact
           path={`${path}/allReservation/:pagename`}
-          render={(props) => {
-            return staff(<AllReservation {...props} />, props.match.params.pagename === "success" ? "การจองทั้งหมด" : "การรอการจองทั้งหมด")
-          }}
+          component={() => staff(<AllReservation {...props} />, props.match.params.pagename === "success" ? "การจองทั้งหมด" : "การรอการจองทั้งหมด")}
         />
-        <Route
-          exact
-          path={`${path}/reservationDetail/:pagename/:_id`}
-          render={(props) => {
-            return staff(<ReservationDetail {...props} />, "")
-          }}
-        />
+        <Route exact path={`${path}/reservationDetail/:pagename/:_id`} component={() => staff(<ReservationDetail {...props} />, "")} />
+      </Switch>
+    </>
+  )
 }
 export default StaffRoute
