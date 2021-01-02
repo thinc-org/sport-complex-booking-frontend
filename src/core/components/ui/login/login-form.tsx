@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 import { Form, Button } from "react-bootstrap"
 import { useForm } from 'react-hook-form'
 import { useLogin } from './loginHooks'

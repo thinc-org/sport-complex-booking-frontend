@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import { getTimeArr, dayArr } from './mapTime'

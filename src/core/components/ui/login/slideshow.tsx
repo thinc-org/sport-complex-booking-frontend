@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 import { Carousel } from "react-bootstrap"
 import Logo from "../../../assets/images/logo.jpg"
 const Slide = () => {
