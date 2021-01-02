@@ -1,6 +1,5 @@
 import * as React from "react"
-import { Route, Switch, useRouteMatch, useLocation, useParams } from "react-router-dom"
-import useSWR from "swr"
+import { Route, Switch, useRouteMatch, useLocation } from "react-router-dom"
 
 import StaffLogin from "../components/pages/staff-pages/staff-login"
 import StaffSidebar from "../components/ui/navbar/staff-sidebar"
@@ -8,7 +7,7 @@ import StaffProfile from "../components/pages/staff-pages/staff-profile"
 import { NavHeader } from "../components/ui/navbar/navbarSideEffect"
 import ListOfAllUsers from "../components/pages/staff-pages/list-of-all-users-pages/ListOfAllUsers"
 import AddUser from "../components/pages/staff-pages/list-of-all-users-pages/AddUser"
-import CUInfo from "../components/pages/staff-pages/list-of-all-users-pages/CuSatitInfo"
+import CuSatitInfo from "../components/pages/staff-pages/list-of-all-users-pages/CuSatitInfo"
 import UserInfo from "../components/pages/staff-pages/list-of-all-users-pages/UserInfo"
 import FileOpener from "../components/pages/staff-pages/list-of-all-users-pages/FileOpener"
 import VeritificationApproval from "../components/pages/staff-pages/verification-approval-pages/VerificationApproval"
@@ -27,19 +26,6 @@ const StaffRoute = (props) => {
     ["/verifyApprove", "รับรองการลงทะเบียน"],
     ["/verifyInfo", "รับรองการลงทะเบียนรายบุคคล"],
   ])
-
-  // const FileOpener = () => {
-  //   const { fileId } = useParams()
-  //   // swr is just an example. you can retrieve the token using any method you like
-  //   const { data: token, error, isValidating } = useSWR(`/fs/viewFileToken/${fileId}`)
-  //   if (isValidating) {
-  //     return "Opening file..."
-  //   }
-  //   if (error) {
-  //     return "Error while opening file"
-  //   }
-  //   window.location.href = `${path}/fs/view?token=${token}`
-  // }
 
   const StaffRouteWithHeader = () => {
     return (
@@ -78,7 +64,7 @@ const StaffRoute = (props) => {
                     />
                     <Route exact path={`${path}/listOfAllUsers`} component={ListOfAllUsers} />
                     <Route exact path={`${path}/addUser`} component={AddUser} />
-                    <Route exact path={`${path}/cuInfo/:_id`} component={CUInfo} />
+                    <Route exact path={`${path}/cuInfo/:_id`} component={CuSatitInfo} />
                     <Route exact path={`${path}/userInfo/:_id`} component={UserInfo} />
                     <Route exact path={`${path}/verifyApprove`} component={VeritificationApproval} />
                     <Route exact path={`${path}/verifyInfo/:_id`} component={VerifyInfo} />

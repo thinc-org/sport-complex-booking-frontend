@@ -63,7 +63,7 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
           </div>
           <div className="row">
             <div className="col">
-              <label className="form-label mt-2">{isThai ? "คำนำหน้าชื่อ *" : "Prefix *"}</label>
+              <label className="form-label mt-2">{t("prefix")}</label>
               <p>{prefix}</p>
             </div>
             <div className="col">
@@ -110,11 +110,7 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
           <p>{home_phone}</p>
           <label className="form-label mt-2">{isThai ? "เบอร์โทรศัพท์มือถือ" : "Mobile Phone Number"}</label>
           <p>{phone}</p>
-          <label className="form-label mt-2">
-            {isThai
-              ? "คุณมีโรคประจำตัวหรือไม่ (ถ้าไม่มี โปรดเว้นว่างเอาไว้)"
-              : "Do you have any medical conditions? (If there are none, please leave this blank)"}
-          </label>
+          <label className="form-label mt-2">{t("medical_condition")}</label>
           <p>{medical_condition}</p>
         </Card>
       </div>

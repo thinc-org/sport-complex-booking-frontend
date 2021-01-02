@@ -9,10 +9,16 @@ import { useForm } from "react-hook-form"
 export default function OtherEditInfoComponent({
   tempInfo,
   setTempInfo,
+  register,
+  handleSubmit,
+  setTempUsername,
   handleSave,
 }: {
   tempInfo: Info
   setTempInfo: React.Dispatch<React.SetStateAction<Info>>
+  register: any
+  handleSubmit: any
+  setTempUsername: React.Dispatch<React.SetStateAction<string>>
   handleSave: () => void
 }) {
   // Page state //
@@ -76,6 +82,7 @@ export default function OtherEditInfoComponent({
         contact_person_phone: data.contact_person_phone,
       },
     })
+    setTempUsername(data.username)
     handleSave()
   }
 
@@ -444,6 +451,11 @@ export default function OtherEditInfoComponent({
             </div>
           </Card>
         </div>
+      </div>
+      <div className="mt-5">
+        <Button variant="pink" type="submit" className="float-right btn-normal" onClick={handleSubmit(onSubmit)}>
+          บันทึก
+        </Button>
       </div>
     </Form>
   )
