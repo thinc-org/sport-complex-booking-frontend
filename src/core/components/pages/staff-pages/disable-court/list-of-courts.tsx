@@ -31,7 +31,7 @@ const ListOfCourts = () => {
     }
     const onSubmit = (form) => {
         setParams({
-            sport_id: form.sports ? form.sports : undefined,
+            sportObjId: form.sports ? form.sports : undefined,
             starting_date: startDate ?? undefined,
             expired_date: endDate ?? undefined,
             court_num: form.courtNum ? parseInt(form.courtNum) : undefined,
