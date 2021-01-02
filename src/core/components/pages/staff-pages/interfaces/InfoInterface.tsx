@@ -5,12 +5,6 @@ export enum Account {
   Other,
 }
 
-export enum ThaiLangAccount {
-  นิสิตจุฬา,
-  นักเรียนสาธิตจุฬาหรือบุคลากรจุฬา,
-  อื่นๆ,
-}
-
 // interfaces //
 export default interface Info {
   prefix: string

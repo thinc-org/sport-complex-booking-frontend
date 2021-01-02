@@ -145,7 +145,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
       })
       .catch(({ response }) => {
         console.log(response)
-        if (response.data.statusCode === 401) history.push("/staff")
+        if (response && response.data.statusCode === 401) history.push("/staff")
       })
   }
 

@@ -9,6 +9,12 @@ import { useTranslation } from "react-i18next"
 export default function OtherViewInfoComponent({ info }: { info: Info }) {
   /// Page states
   const [isThai, setThai] = useState<boolean>(true)
+  const { i18n, t } = useTranslation()
+
+  useEffect(() => {
+    if (isThai) i18n.changeLanguage("th")
+    else i18n.changeLanguage("en")
+  }, [isThai])
 
   // handles //
   const handlePDF = (e) => {
@@ -58,48 +64,48 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
               <p>{prefix}</p>
             </div>
             <div className="col">
-              <label className="form-label mt-2">{isThai ? "เพศ *" : "Gender *"}</label>
+              <label className="form-label mt-2">{t("gender")}</label>
               <p>{gender}</p>
             </div>
           </div>
           <div className="row">
             <div className="col">
-              <label className="form-label mt-2">{isThai ? "ชื่อ(ภาษาไทย) *" : "Name(Thai) *"}</label>
+              <label className="form-label mt-2">{t("name_th")}</label>
               <p>{name_th}</p>
             </div>
             <div className="col">
-              <label className="form-label mt-2">{isThai ? "นามสกุล(ภาษาไทย) *" : "Surname(Thai) *"}</label>
+              <label className="form-label mt-2">{t("surname_th")}</label>
               <p>{surname_th}</p>
             </div>
           </div>
           <div className="row">
             <div className="col">
-              <label className="form-label mt-2">{isThai ? "ชื่อ(ภาษาอังกฤษ) *" : "Name(English) *"}</label>
+              <label className="form-label mt-2">{t("name_en")}</label>
               <p>{name_en}</p>
             </div>
             <div className="col">
-              <label className="form-label mt-2">{isThai ? "นามสกุล(ภาษาอังกฤษ) *" : "Surname(English) *"}</label>
+              <label className="form-label mt-2">{t("surname_en")}</label>
               <p>{surname_en}</p>
             </div>
           </div>
-          <label className="form-label mt-2">{isThai ? "วันเกิด *" : "Birthdate *"}</label>
+          <label className="form-label mt-2">{t("birthday")}</label>
           <div className="row">
             <div className="col">
               <p>{isValid(new Date(birthday)) ? format(new Date(birthday), "yyyy-MM-dd") : ""}</p>
             </div>
           </div>
-          <label className="form-label mt-2">{isThai ? "เลขประจำตัวประชาชน / หนังสือเดินทาง *" : "National ID / Passport *"}</label>
+          <label className="form-label mt-2">{t("national_id")}</label>
           <p>{national_id}</p>
-          <label className="form-label mt-2">{isThai ? "สถานะสมรส" : "Marital Status"}</label>
+          <label className="form-label mt-2">{t("marital_status")}</label>
           <p>{marital_status}</p>
           <hr />
-          <label className="form-label mt-2">{isThai ? "ที่อยู่" : "Address"}</label>
+          <label className="form-label mt-2">{t("address")}</label>
           <p>{address}</p>
-          <label className="form-label mt-2">{isThai ? "อีเมล" : "Email"}</label>
+          <label className="form-label mt-2">{t("email")}</label>
           <p>{email}</p>
-          <label className="form-label mt-2">{isThai ? "เบอร์โทรศัพท์ที่บ้าน" : "Home Phone Number"}</label>
+          <label className="form-label mt-2">{t("home_phone")}</label>
           <p>{home_phone}</p>
-          <label className="form-label mt-2">{isThai ? "เบอร์โทรศัพท์มือถือ" : "Mobile Phone Number"}</label>
+          <label className="form-label mt-2">{t("mobile_phone")}</label>
           <p>{phone}</p>
           <label className="form-label mt-2">{t("medical_condition")}</label>
           <p>{medical_condition}</p>
@@ -111,58 +117,50 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
           <h4>{isThai ? "การติดต่อในกรณีฉุกเฉิน" : "Contact Person in Case of Emergency"}</h4>
           <div className="row">
             <div className="col">
-              <label className="form-label mt-2">{isThai ? "คำนำหน้า *" : "Prefix *"}</label>
+              <label className="form-label mt-2">{t("contact_person_prefix")}</label>
               <p>{contact_person_prefix}</p>
             </div>
             <div className="col">
-              <label className="form-label mt-2">{isThai ? "ชื่อ *" : "First Name *"}</label>
+              <label className="form-label mt-2">{t("contact_person_name")}</label>
               <p>{contact_person_name}</p>
             </div>
           </div>
-          <label className="form-label mt-2">{isThai ? "นามสกุล *" : "Last Name *"}</label>
+          <label className="form-label mt-2">{t("contact_person_surname")}</label>
           <p>{contact_person_surname}</p>
-          <label className="form-label mt-2">{isThai ? "เบอร์โทรศัพท์ที่บ้าน" : "Home Phone Number"}</label>
+          <label className="form-label mt-2">{t("contact_person_home_phone")}</label>
           <p>{contact_person_home_phone}</p>
-          <label className="form-label mt-2">{isThai ? "เบอร์โทรศัพท์มือถือ" : "Mobile Phone Number"}</label>
+          <label className="form-label mt-2">{t("contact_person_phone")}</label>
           <p>{contact_person_phone}</p>
         </Card>
         <br />
         <Card body className="row shadow dim-white">
           <h4>{isThai ? "เกี่ยวกับสมาชิก" : "Membership"}</h4>
           <h6 className="form-label my-2">{info.membership_type}</h6>
-          <label className="form-label my-2">{isThai ? "รูปภาพของคุณ (ไฟล์ภาพ)" : "Your Photo (image)"}</label>
+          <label className="form-label my-2">{t("user_photo")}</label>
           <div className="form-file">
             <p className="link" id={info.user_photo} onClick={handlePDF}>
               View PDF
             </p>
           </div>
-          <label className="form-label my-2">
-            {isThai ? "เลขประจำตัวประชาชน / หนังสือเดินทาง (.pdf เท่านั้น)" : "National ID / Passport (.pdf only)"}
-          </label>
+          <label className="form-label my-2">{t("national_id_photo")}</label>
           <div className="form-file">
             <p className="link" id={info.national_id_photo} onClick={handlePDF}>
               View PDF
             </p>
           </div>
-          <label className="form-label my-2">{isThai ? "ใบรับรองแพทย์ (.pdf เท่านั้น)" : "Medical Certificate (.pdf only)"}</label>
+          <label className="form-label my-2">{t("medical_certificate")}</label>
           <div className="form-file">
             <p className="link" id={info.medical_certificate} onClick={handlePDF}>
               View PDF
             </p>
           </div>
-          <label className="form-label my-2">
-            {isThai
-              ? "ไม่บังคับ: ทะเบียนบ้านที่มีหน้าของคุณ (.pdf เท่านั้น)"
-              : "Optional: House Registration Document with reference person (.pdf only)"}
-          </label>
+          <label className="form-label my-2">{t("house_registration_number")}</label>
           <div className="form-file">
             <p className="link" id={info.house_registration_number} onClick={handlePDF}>
               View PDF
             </p>
           </div>
-          <label className="form-label my-2">
-            {isThai ? "ไม่บังคับ: เอกสารยืนยันตัวตน (.pdf เท่านั้น)" : "Optional: Relationship Verification document (.pdf only)"}
-          </label>
+          <label className="form-label my-2">{t("relationship_verification_document")}</label>
           <div className="form-file">
             <p className="link" id={info.relationship_verification_document} onClick={handlePDF}>
               View PDF
