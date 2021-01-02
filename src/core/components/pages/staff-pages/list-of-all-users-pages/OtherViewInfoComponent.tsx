@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Button, Card } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import Info from "../interfaces/InfoInterface"
