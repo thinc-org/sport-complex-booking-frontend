@@ -20,7 +20,6 @@ export interface WaitingRoomData {
   date:Date
 }
 
-
 export const DetailsModal: React.FC<DetailsModalProps> = ({ show, setShow, sportName, details, date, times, formatTime, postDataToBackend }) => {
   const { t } = useTranslation()
   const handlePostData = ()=> {
@@ -63,60 +62,35 @@ export const DetailsModal: React.FC<DetailsModalProps> = ({ show, setShow, sport
   )
 }
 
-interface WrongAccessCodeProps{
+interface CustomModalProps {
+  type: "wrongAccessCodeModal" | "cantCreateWaitingRoomModal" 
   show: boolean
-  setShowWrongAccessCodeModal: (value: boolean)=> void
+  setShow: (value: boolean) => void
 }
 
-export const WrongAccessCode:React.FC<WrongAccessCodeProps> = ({show, setShowWrongAccessCodeModal}) => {
-  const { t } = useTranslation()  
+export const CustomModal:React.FC<CustomModalProps> = ({type, show, setShow}) => {
+  const { t } = useTranslation() 
+  const message = t(type, { returnObjects: true })
   if(!show) return null
-   return (
-      <Modal
-        className="modal"
-        show={show}
-        onHide={()=>{setShowWrongAccessCodeModal(false)}}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>{t("wrongAccessCode")}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ fontWeight: "lighter" }}> {t("wrongAccessCodeMsg")} </Modal.Body>
-        <Modal.Footer>
-          <Button variant="pink" className="btn-normal btn-secondary" onClick={()=>setShowWrongAccessCodeModal(false)}>
-            {t("ok")}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-   )
-}
-
-interface CantCreateWaitingRoomProps{
-  show: boolean
-  setShowCantCreateWaitingRoomModal: (value: boolean)=> void
-}
-
-export const CantCreateWaitingRoom:React.FC<CantCreateWaitingRoomProps> = ({show, setShowCantCreateWaitingRoomModal}) => {
-  const { t } = useTranslation()  
-  if(!show) return null
-   return (
-      <Modal
-        className="modal"
-        show={show}
-        onHide={()=>{setShowCantCreateWaitingRoomModal(false)}}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>{t("createWaitingRoomUnsuccessful")}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ fontWeight: "lighter" }}> {t("createWaitingRoomUnsuccessfulMsg")} </Modal.Body>
-        <Modal.Footer>
-          <Button variant="pink" className="btn-normal btn-secondary" onClick={()=>setShowCantCreateWaitingRoomModal(false)}>
-            {t("ok")}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-   )
+  return (
+    <Modal
+      show={show}
+      onHide={() => {
+        setShow(false)
+      }}
+      backdrop="static"
+      keyboard={false}
+      className="modal"  
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>{message['title']}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body style={{ fontWeight: "lighter" }}>{message['body']}</Modal.Body>
+      <Modal.Footer>
+        <Button variant="pink" className="btn-normal" onClick={()=> setShow(false)}>
+          {t("ok")}
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  )
 }

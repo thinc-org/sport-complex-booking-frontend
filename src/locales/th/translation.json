@@ -136,5 +136,37 @@
   "containMoreThan6": "รหัสผ่านต้องมีความยาวมากกว่า 6 ตัวอักษร",
   "passMustMatch": "รหัสผ่านใหม่ต้องเหมือนกัน",
   "oldNewPassMustDiff" :"ไม่สามารถตั้งรหัสผ่านซ้ำได้",
-  "passwordCantBeChanged": "ไม่สามารถเปลี่ยนรหัสผ่านได้ กรุณาลองอีกครั้ง"
+  "passwordCantBeChanged": "ไม่สามารถเปลี่ยนรหัสผ่านได้ กรุณาลองอีกครั้ง",
+  "maritalPlaceHolder": "สมรส, โสด, อื่นๆ",
+  "addressPlaceHolder": "ที่อยู่",
+  "namePlaceHolder": "ชื่อ",
+  "surnamePlaceHolder": "นามสกุล",
+  "passwordChangeConfirm" : {
+    "title": "ยืนยัน",
+    "body": "ต้องการยืนยันหารเปลี่ยนรหัสหรือไม่"
+  },
+  "passwordChangeSuccess" : {
+    "title": "สำเร็จ",
+    "body": "รหัสผ่านของคุณได้ถูกเปลี่ยนแล้ว"
+  },
+  "passwordChangeError": {
+    "title": "เกิดข้อผิดพลาด",
+    "body": "ไม่สาทารถเปลี่ยนรหัสผู้ให้ได้ในขณะนี้"
+  },
+  "wrongAccessCodeModal": {
+    "title":"ไม่สามารถเข้าร่วมห้องจองได้",
+    "body":"กรุณาตรวจสอบว่าห้องรอการจองของคุณถูกต้องและคุณยังไม่ได้สร้างห้องรอการจองของตัวเอง"
+  },
+  "cantCreateWaitingRoomModal": {
+    "title":"เกิดข้อผิดพลาด",
+    "body":"ห้องรอการจองไม่สามารถถูกสร้างได้ในขณะนี้."
+  },
+  "confirmEditAccountModal": {
+    "title":"ยืนยันการส่งใบสมัคร",
+    "body":"คุณต้องการส่งใบสมัครหรือไม่"
+  },
+  "editAccountErrorModal": {
+    "title":"เกิดข้อผิดพลาด",
+    "body":"ไม่แก้ไขข้อมูลผู้ใช้ได้ในขณะนี้"
+  }
 }

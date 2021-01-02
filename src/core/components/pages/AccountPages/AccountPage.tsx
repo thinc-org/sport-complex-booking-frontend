@@ -3,10 +3,7 @@ import { useState, useEffect, useContext } from "react"
 import ChulaAccount from "./ChulaAccount"
 import SatitAndCUPersonelAccount from "./SatitAndCUPersonelAccount"
 import OtherAccount from "./OtherAccount"
-import axios from "axios"
-import { UserContext } from "../../../contexts/UsersContext"
-import {useAuthContext } from "../../../controllers/authContext"
-import { getCookie } from "../../../contexts/cookieHandler"
+import { UserContext, CuStudent, SatitCuPersonel, Other, DefaultAccount } from "../../../contexts/UsersContext"
 import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from 'react-i18next'
 import { Loading } from "../../ui/loading/loading"
@@ -19,11 +16,9 @@ function AccountPage() {
     Other = "Other",
   }
 
-  const {token} = useAuthContext()
   const { setCuStudentAccount, setSatitCuPersonelAccount, setOtherAccount } = useContext(UserContext)
-  const [account_type, setAccountType] = useState()
-  const [penalizeStatus, setPenalizeStatus] = useState()
-  const {i18n} = useTranslation()
+  const [account_type, setAccountType] = useState<string>()
+  const [penalizeStatus, setPenalizeStatus] = useState<boolean>()
 
   useEffect(() => {
     fetch_account_type()
@@ -31,26 +26,23 @@ function AccountPage() {
 
   const fetch_account_type = async () => {
     await client
-      .get("/account_info/")
+      .get<DefaultAccount>("/account_info/")
       .then(({ data }) => {
-        data.jwt = token
         const newData = {...data}
         setPenalizeStatus(data.is_penalize)
-        data.rejected_info ? (
-          data.rejected_info.forEach((field: string)=> {
-            newData[field] = ""
-          })
-        ) : ( console.log("No rejected info"))
-
         if (data.account_type === "CuStudent") {
-          setCuStudentAccount(newData)
+          setCuStudentAccount(newData as CuStudent)
         } else if (data.account_type === "SatitAndCuPersonel") {
-          setSatitCuPersonelAccount(newData)
+          setSatitCuPersonelAccount(newData as SatitCuPersonel)
         } else if (data.account_type === "Other") {
-          setOtherAccount(newData)
+          const other = data as Other
+          other.rejected_info ? (
+            other.rejected_info.forEach((field: string)=> {
+              newData[field] = ""
+            })
+          ) : ( console.log("No rejected info"))
+          setOtherAccount(newData as Other)
         }
-        if (getCookie("is_thai_language")==="true") i18n.changeLanguage('th')
-        else i18n.changeLanguage('en')
         setAccountType(data.account_type)
       })
   }

@@ -17,9 +17,7 @@ export default function SatitAndCUPersonelAccountDisplay({  toggleEditButton }) 
         <div className="row mt-2">
           <div className="col-8">
             <h4 className="align-right">
-              {(language === 'th') 
-              ? (user?.name_th + " " + user?.surname_th) 
-              : (user?.name_en + " " + user?.surname_en)}
+              {user![`name_${language}`] + " " + user![`surname_${language}`]}
             </h4>
           </div>
           <div className="col-4">

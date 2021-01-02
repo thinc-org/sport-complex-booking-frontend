@@ -3,8 +3,8 @@ import { useState } from "react"
 
 type AccountType = "CuStudent" | "SatitCuPersonel" | "Other"
 
-interface DefaultAccount {
-  account_type: AccountType
+export interface DefaultAccount {
+  account_type: string
   is_thai_language: boolean
   name_en: string
   surname_en: string
@@ -17,16 +17,16 @@ interface DefaultAccount {
   expired_penalize_date: Date
 }
 
-interface CuStudent extends DefaultAccount {
+export interface CuStudent extends DefaultAccount {
   account_type: "CuStudent"
   is_first_login: boolean
 }
 
-interface SatitCuPersonel extends DefaultAccount {
+export interface SatitCuPersonel extends DefaultAccount {
   account_type: "SatitCuPersonel"
 }
 
-interface Other extends DefaultAccount {
+export interface Other extends DefaultAccount {
   account_type: "Other",
   prefix: string, //(เพื่อแสดง นาย/นาง/นางสาว)
   birthday: Date, //(use this for cal age)
@@ -54,7 +54,7 @@ interface Other extends DefaultAccount {
   relationship_verification_document: string,
 }
 
-interface UserConstruct {
+export interface UserConstruct {
   cuStudentAccount: CuStudent | undefined,
   satitCuPersonelAccount: SatitCuPersonel| undefined,
   otherAccount: Other| undefined
