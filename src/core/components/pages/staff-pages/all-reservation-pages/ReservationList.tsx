@@ -1,44 +1,47 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
-import { RouteComponentProps } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import { Col, Form, Button, Table } from "react-bootstrap"
 import SuccessfulReservation, { Sport, Court } from "../interfaces/reservationSchemas"
 import format from "date-fns/format"
 import { convertSlotToTime, getTimeText } from "./ReservationDetail"
 import { client } from "../../../../../axiosConfig"
 
-const AllReservation: FunctionComponent<RouteComponentProps<{ pagename: string }>> = (props) => {
+const AllReservation: FunctionComponent = () => {
   // Page state
-  let [pagename, setPagename] = useState<string>(props.match.params.pagename)
-  let [pageNo, setPageNo] = useState<number>(1)
-  let [maxUser, setMaxUser] = useState<number>(1)
+  const [pageNo, setPageNo] = useState<number>(1)
+  const [maxUser, setMaxUser] = useState<number>(1)
   // Search state
-  let [sportType, setSportType] = useState<string>("") // id
-  let [sportIdx, setSportIdx] = useState<number>(-2)
-  let [courtNo, setCourtNo] = useState<number>(-2) // -2 is default
-  let [chooseDate, setChooseDate] = useState<boolean>(false)
-  let [searchDate, setSearchDate] = useState<Date>(new Date())
-  let [searchTime, setSearchTime] = useState<number>(-1)
+  const [sportType, setSportType] = useState<string>("") // id
+  const [sportIdx, setSportIdx] = useState<number>(-2)
+  const [courtNo, setCourtNo] = useState<number>(-2) // -2 is default
+  const [chooseDate, setChooseDate] = useState<boolean>(false)
+  const [searchDate, setSearchDate] = useState<Date>(new Date())
+  const [searchTime, setSearchTime] = useState<number>(-1)
   // Reservation room state
-  let [reserveInfo, setReserveInfo] = useState<SuccessfulReservation[]>([])
-  let [allSports, setAllSports] = useState<Sport[]>([])
+  const [reserveInfo, setReserveInfo] = useState<SuccessfulReservation[]>([])
+  const [allSports, setAllSports] = useState<Sport[]>([])
+
+  const history = useHistory()
+  const { pagename } = useParams<{ pagename: string }>()
 
   // useEffects //
   useEffect(() => {
-    setPagename(props.match.params.pagename)
-  }, [props.match.params.pagename])
+    console.log(pagename)
+  }, [pagename])
 
   useEffect(() => {
     client({
       method: "GET",
       // court-manager/getSports
-      url: "/court-manager/",
+      url: "/court-manager/sports/",
     })
       .then(({ data }) => {
         console.log(data)
-        setAllSports(data.sport_list)
+        setAllSports(data)
       })
       .catch(({ response }) => {
         console.log(response)
+        if (response.data.status === 401) history.push("/staff")
       })
   }, [pagename])
 
@@ -52,9 +55,7 @@ const AllReservation: FunctionComponent<RouteComponentProps<{ pagename: string }
 
   // handles //
   const handleInfo = (e) => {
-    props.history.push({
-      pathname: "/staff/reservationDetail/" + pagename + "/" + e.target.id,
-    })
+    history.push(`/staff/reservationDetail/${pagename}/${e.target.id}`)
   }
 
   const handleChangeSport = (e) => {
