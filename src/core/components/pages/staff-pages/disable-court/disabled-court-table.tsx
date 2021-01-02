@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useRouteMatch, useHistory } from 'react-router-dom'
 import { Button, Table } from 'react-bootstrap'
 import { format } from 'date-fns'

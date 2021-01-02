@@ -1,5 +1,5 @@
 
-import * as React from 'react'
+import React from 'react'
 import { useState, useEffect, useRef, ComponentType } from 'react';
 import { Option, RowProps, QueryParams, ViewResponse, ViewRowProps, disable_time, View } from './disable-court-interface'
 import { client } from '../../../../../axiosConfig'

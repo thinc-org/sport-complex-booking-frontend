@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 import { useEffect, useContext } from 'react'
 import { Switch, Route, useRouteMatch, useHistory } from 'react-router-dom';
 import { getCookie } from '../../contexts/cookieHandler'

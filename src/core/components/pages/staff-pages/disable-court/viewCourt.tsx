@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useViewTable } from './disable-court-hook'
 import { useParams, useHistory, useRouteMatch } from 'react-router-dom'
 import { ViewRow, CourtTable } from './disabled-court-table'
