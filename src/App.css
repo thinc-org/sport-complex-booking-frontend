@@ -286,11 +286,11 @@ p.link {
 
 .box-container {
   background-color: white;
-  border-radius: 14px;
+  border-radius: 15x;
   box-shadow: 0px 10px 30px 5px rgba(204, 204, 204, 0.4);
   margin-bottom: 20px;
   text-align: start;
-  padding: 15px;
+  padding: 14px;
 }
 
 .modal {
