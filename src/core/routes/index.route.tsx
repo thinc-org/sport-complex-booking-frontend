@@ -17,6 +17,7 @@ import { getCookie } from "../contexts/cookieHandler"
 import ChangePassword from "../components/pages/AccountPages/AccountPageUI/ChangePassword"
 import WaitingRoomBan from "../components/pages/Reservation/WaitingRoomBan"
 import Hooray from "../components/pages/Reservation/Hooray"
+import HomePage from "../components/pages/HomePage"
 
 export default function MainRoute() {
   return (
@@ -36,13 +37,7 @@ export default function MainRoute() {
           }}
         />
 
-        <Route
-          exact
-          path="/profile"
-          render={() => {
-            return <div>Under maintenance</div>
-          }}
-        />
+        <Route exact path="/home" component={HomePage} />
         <Route exact path="/reservenow" component={ReserveNow} />
 
         <Route exact path="/joinwaitingroom" component={JoinWaitingRoom} />
