@@ -20,7 +20,7 @@ export const useStaffLogin = (setError) => {
                 history.push('/staff/staffprofile')
             })
             .catch((err) => {
-                setError('invalid', { type: 'async', message: 'Username หรือ Password ไม่ถูกต้อง' })
+                setError('invalidInput', { type: 'async', message: 'Username หรือ Password ไม่ถูกต้อง' })
             })
     }
     return { onLogin }
