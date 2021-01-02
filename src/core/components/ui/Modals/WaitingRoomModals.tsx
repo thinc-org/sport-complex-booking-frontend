@@ -64,7 +64,7 @@ export const DetailsModal: React.FC<DetailsModalProps> = ({ show, setShow, sport
           <Button onClick={() => setShow(false)} type="button" variant="outline-secondary" className="btn-normal">
             {t("cancel")}
           </Button>
-          <Button onClick={handlePostData} variant="pink" className="btn-normal">
+          <Button onClick={() => postDataToBackend(details)} variant="pink" className="btn-normal">
             {t("create")}
           </Button>
         </div>
