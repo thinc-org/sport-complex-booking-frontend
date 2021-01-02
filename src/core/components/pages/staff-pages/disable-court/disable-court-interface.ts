@@ -12,10 +12,10 @@ export interface Option {
     courtNum: number[]
 }
 export interface QueryParams {
-    starting_date: Date | undefined,
-    expired_date: Date | undefined,
-    sportObjId: string | undefined,
-    court_num: number | undefined,
+    starting_date?: Date,
+    expired_date?: Date,
+    sportObjId?: string,
+    court_num?: number,
     description?: string,
     start: number,
     shouldChange?: boolean
