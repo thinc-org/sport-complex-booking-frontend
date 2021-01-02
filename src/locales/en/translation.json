@@ -191,5 +191,7 @@
   "verifyStudent": "Verifying that you're a Chulalongkorn student",
   "continue": "Continue",
   "home": "Home",
-  "account": "Account"
+  "account": "Account",
+  "waitingRoom": "Waiting Room",
+  "noWaitingRoom": "You have no waiting room at this moment."
 }
