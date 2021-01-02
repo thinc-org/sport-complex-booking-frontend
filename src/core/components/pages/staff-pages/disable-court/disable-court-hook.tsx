@@ -112,7 +112,7 @@ export const useViewTable = (params) => {
 
 export const useTableWithPagination = () => {
     const [params, setParams] = useState<QueryParams>({
-        sport_id: undefined,
+        sportObjId: undefined,
         starting_date: undefined,
         expired_date: undefined,
         court_num: undefined,
@@ -173,7 +173,14 @@ export const useTableWithPagination = () => {
             firstEffect.current = false;
             return;
         }
-        fetchData(params)
+        fetchData({
+            sport_id: params.sportObjId,
+            starting_date: params.starting_date,
+            expired_date: params.expired_date,
+            court_num: params.court_num,
+            start: params.start,
+            end: params.end
+        })
     }, [params])
     return { data, page, maxPage, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete }
 }

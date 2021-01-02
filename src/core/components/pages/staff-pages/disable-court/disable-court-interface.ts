@@ -14,7 +14,7 @@ export interface Option {
 export interface QueryParams {
     starting_date: Date | undefined,
     expired_date: Date | undefined,
-    sport_id: string | undefined,
+    sportObjId: string | undefined,
     court_num: number | undefined,
     description?: string,
     start: number,
@@ -65,5 +65,5 @@ export interface Sport {
 }
 export interface AddCourtForm {
     court_num: string,
-    sport_id: string
+    sportObjId: string
 }
