@@ -1,9 +1,8 @@
 import React from "react"
 import { useState, useEffect, useContext } from "react"
-import { Button, Modal } from "react-bootstrap"
+import { Button } from "react-bootstrap"
 import { useHistory } from "react-router-dom"
 import { client } from "../../../../axiosConfig"
-import { UserContext } from "../../../contexts/UsersContext"
 import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 import { timeConversion } from "../Reservation/timeConversion"
 import { ConfirmModal } from "../../ui/Modals/CurrentWaitingRoomModal"
@@ -11,44 +10,41 @@ import { TimeOutModal } from "../../ui/Modals/CurrentWaitingRoomModal"
 import { useTranslation } from "react-i18next"
 import withUserGuard from "../../../guards/user.guard"
 
+interface SportNameResponse {
+  sportNameth: string
+  sportNameen: string
+}
+
 const WaitingRoomPage = () => {
-  const [remainingTime, setRemainingTime] = useState<any>()
-  const [objectID, setObjectID] = useState<any>()
-  const [sport, setSport] = useState("Badminton")
-  const [courtNum, setCourtNum] = useState(Number)
-  const [date, setDate] = useState(new Date().toLocaleDateString())
-  const [timeList, setTimeList] = useState<any>([])
-  const [listMember, setListMember] = useState([])
+  const [remainingTime, setRemainingTime] = useState<string>()
+  const [waitingRoomId, setWaitingRoomId] = useState<string>()
+  const [sport, setSport] = useState<SportNameResponse>({ sportNameth: "แบตมินตัน", sportNameen: "Badminton" })
+  const [date, setDate] = useState<string>(new Date().toLocaleDateString())
+  const [timeList, setTimeList] = useState<Array<number>>([])
+  const [listMember, setListMember] = useState<Array<string>>()
   const [accessCode, setAccessCode] = useState("")
-  const [endTime, setEndTime] = useState<any>()
-  const userContext = useContext(UserContext)
-  // const isThaiLanguage = userContext.is_thai_language
-  const [isThaiLanguage, setIsThaiLanguage] = useState(true)
+  const [endTime, setEndTime] = useState<number>()
   const [modalConfirmOpen, setModalConfirmOpen] = useState(false)
   const [modalTimeOutOpen, setModalTimeOutOpen] = useState(false)
   const [waitingRoomExist, setWaitingRoomExist] = useState<boolean>()
-  const [requiredUserNumber, setRequiredUserNumber] = useState<Number>()
-  const [currentUserNumber, setCurrentUserNumber] = useState<Number>()
-  const { t } = useTranslation()
+  const [requiredUserNumber, setRequiredUserNumber] = useState<Number>(0)
+  const [currentUserNumber, setCurrentUserNumber] = useState<Number>(0)
+  const { t, i18n } = useTranslation()
 
   const history = useHistory()
 
   useEffect(() => {
     fetchWaitingRoom()
-    setEndTime(timeShift(new Date("Jan 01, 2021 08:47:40").getTime(), 7))
-    console.log(timeConversion(48))
-    let list = [1, 2, 48]
-    setTimeList(list)
+    // time sent from backend is UTC before adding 7 for Thailand
+    setEndTime(timeShift(new Date("Jan 03, 2021 08:47:40").getTime(), 7))
   }, [])
 
   useEffect(() => {
-    if (endTime != undefined) {
-      countDown(endTime)
-    }
+    countDown()
   }, [endTime])
 
   useEffect(() => {
-    if (currentUserNumber != null && requiredUserNumber != null) {
+    if (currentUserNumber && requiredUserNumber) {
       if (currentUserNumber == requiredUserNumber) {
         // successful reservation and redirect to hooray page
 
@@ -57,6 +53,22 @@ const WaitingRoomPage = () => {
     }
   }, [currentUserNumber])
 
+  const fetchWaitingRoom = async () => {
+    try {
+      const res = await client.get("/mywaitingroom")
+      setListMember(res.data.list_member)
+      setEndTime(timeShift(new Date(res.data.expired_time).getTime(), 7))
+      setSport({ sportNameth: res.data.sport_name_th, sportNameen: res.data.sport_name_en })
+      setDate(res.data.date.toLocaleString)
+      setTimeList(res.data.time_slot)
+      setRequiredUserNumber(res.data.required_user)
+      setCurrentUserNumber(res.data.listmember.length)
+      setWaitingRoomId(res.data._id)
+      setAccessCode(res.data.access_code)
+    } catch (err) {
+      console.log(err)
+    }
+  }
   function triggerModal(modal) {
     if (modal == "confirmModal") {
       setModalConfirmOpen(!modalConfirmOpen)
@@ -65,11 +77,6 @@ const WaitingRoomPage = () => {
       setModalTimeOutOpen(!modalTimeOutOpen)
       return modalTimeOutOpen
     }
-  }
-
-  const confirmCancellation = () => {
-    closeWaitingRoom()
-    history.push("/home")
   }
 
   const timeOut = async () => {
@@ -84,31 +91,18 @@ const WaitingRoomPage = () => {
     triggerModal("confirmModal")
   }
 
-  const fetchWaitingRoom = async () => {
-    try {
-      const res = await client.get("http://localhost:3000/mywaitingroom")
-      setWaitingRoomExist(true)
-      setListMember(res.data.list_member)
-      setEndTime(timeShift(new Date(res.data.date).getTime(), 7))
-      setSport(res.data.sport)
-      setCourtNum(res.data.court_num)
-      setDate(res.data.date.toLocaleString)
-      setTimeList(res.data.time_slot)
-      setRequiredUserNumber(res.data.required_user)
-      setCurrentUserNumber(res.data.listmember.length)
-    } catch (err) {
-      console.log(err)
-      setWaitingRoomExist(false)
-    }
+  const closeWaitingRoom = async () => {
+    client
+      .delete(`'/mywaitingroom/:${waitingRoomId}'`)
+      .then(() => {
+        history.push("/home")
+      })
+      .catch(() => {
+        history.push("/home")
+      })
   }
 
-  // const kickMember = () => {
-  //     console.log('kick member')
-  // }
-
-  const closeWaitingRoom = () => {}
-
-  const userNumber = (currentUserNumber, requiredUserNumber) => {
+  const userNumber = () => {
     return (
       <span className="ml-3 grey" style={{ fontSize: "18px", fontWeight: 400 }}>
         {currentUserNumber + "/" + requiredUserNumber}
@@ -116,37 +110,38 @@ const WaitingRoomPage = () => {
     )
   }
 
-  const countDown = (end) => {
-    var x = setInterval(function () {
-      var current = new Date().getTime()
-      var diff = Math.floor((endTime - current) / 1000)
-      let min = Math.floor(diff / 60)
-      let sec = diff % 60
-      let formated_min = ""
-      let formated_sec = ""
+  const countDown = () => {
+    if (endTime != undefined) {
+      var x = setInterval(function () {
+        var current = new Date().getTime()
+        var diff = Math.floor((endTime - current) / 1000)
+        let min = Math.floor(diff / 60)
+        let sec = diff % 60
+        let formated_min = ""
+        let formated_sec = ""
 
-      if (sec > -2) {
-        if (sec < 0 && min < 0) {
-          console.log("timeout")
-          return timeOut()
+        if (sec > -2) {
+          if (sec < 0 && min < 0) {
+            console.log("timeout")
+            return timeOut()
+          }
+
+          if (~~(sec / 10) == 0) {
+            formated_sec = "0" + sec.toString()
+          } else {
+            formated_sec = sec.toString()
+          }
+
+          if (~~(min / 10) == 0) {
+            formated_min = "0" + min.toString()
+          } else {
+            formated_min = min.toString()
+          }
+          return setRemainingTime(formated_min + ":" + formated_sec + " ")
         }
-
-        if (~~(sec / 10) == 0) {
-          formated_sec = "0" + sec.toString()
-        } else {
-          formated_sec = sec.toString()
-        }
-
-        if (~~(min / 10) == 0) {
-          formated_min = "0" + min.toString()
-        } else {
-          formated_min = min.toString()
-        }
-        return setRemainingTime(formated_min + ":" + formated_sec + " ")
-      }
-    }, 1000)
-
-    return x
+      }, 1000)
+      return x
+    }
   }
 
   const timeShift = (time, shiftedHours) => {
@@ -154,10 +149,10 @@ const WaitingRoomPage = () => {
     return time + shiftedHours
   }
 
-  if (true) {
+  if (waitingRoomId) {
     return (
       <>
-        <NavHeader header="Waiting Room" />
+        <NavHeader header={t("waitingRoom")} />
         <div className="container">
           <div className="row justify-content-center mt-4">
             <div className="col-12">
@@ -167,7 +162,7 @@ const WaitingRoomPage = () => {
               </div>
               <div className="box-container btn w-100 mb-4">
                 <h6 style={{ fontWeight: 700, fontSize: "14px", marginBottom: "5px" }}> {t("summary")} </h6>
-                <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}> {sport} </h6>
+                <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}> {sport && sport[`sportName${i18n.language}`]} </h6>
                 <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}>
                   {" "}
                   {t("date")}: {date}{" "}
@@ -203,7 +198,7 @@ const WaitingRoomPage = () => {
                 </Button>
                 <div style={{ fontSize: "18px", fontWeight: 400, lineHeight: "26px" }}>
                   {" "}
-                  {t("users")} {userNumber(2, 5)}{" "}
+                  {t("users")} {userNumber()}{" "}
                 </div>
               </div>
               <div className="box-container btn" style={{ width: "100%", marginBottom: "45px" }}>
@@ -213,22 +208,15 @@ const WaitingRoomPage = () => {
                     <th style={{ width: "74%", paddingBottom: "12px" }}> {t("username")} </th>
                     <th> </th>
                   </tr>
-                  <tr>
-                    <td> </td>
-                    <td> name </td>
-                  </tr>
-                  <tr>
-                    <td> </td>
-                    <td> name </td>
-                  </tr>
-                  {listMember.map((eachMember, index) => {
-                    return (
-                      <tr>
-                        <td> {index} </td>
-                        <td> {eachMember} </td>
-                      </tr>
-                    )
-                  })}
+                  {listMember &&
+                    listMember.map((eachMember, index) => {
+                      return (
+                        <tr>
+                          <td> {index + 1} </td>
+                          <td> {eachMember} </td>
+                        </tr>
+                      )
+                    })}
                 </table>
               </div>
               <Button
@@ -246,7 +234,7 @@ const WaitingRoomPage = () => {
                 {t("closeWaitingRoom")}
               </Button>
 
-              <ConfirmModal modalConfirmOpen={modalConfirmOpen} handleClick={handleClick} confirmCancellation={confirmCancellation} />
+              <ConfirmModal modalConfirmOpen={modalConfirmOpen} handleClick={handleClick} closeWaitingRoom={closeWaitingRoom} />
               <TimeOutModal modalTimeOutOpen={modalTimeOutOpen} />
             </div>
           </div>

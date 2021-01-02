@@ -4,11 +4,11 @@ import { useTranslation } from "react-i18next"
 
 export interface ConfirmModalProps {
   modalConfirmOpen: boolean
-  handleClick: any
-  confirmCancellation: any
+  handleClick: (event: React.MouseEvent) => void
+  closeWaitingRoom: (event: React.MouseEvent) => void
 }
 
-export const ConfirmModal: React.FC<ConfirmModalProps> = ({ modalConfirmOpen, handleClick, confirmCancellation }) => {
+export const ConfirmModal: React.FC<ConfirmModalProps> = ({ modalConfirmOpen, handleClick, closeWaitingRoom }) => {
   const { t } = useTranslation()
   return (
     <Modal
@@ -33,7 +33,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({ modalConfirmOpen, ha
                 {" "}
                 <h6 style={{ fontWeight: 400 }}> {t("cancel")} </h6>
               </button>
-              <button type="button" onClick={confirmCancellation} className="btn pr-0 pt-0 pb-0">
+              <button type="button" onClick={closeWaitingRoom} className="btn pr-0 pt-0 pb-0">
                 {" "}
                 <h6 style={{ fontWeight: 400 }}> {t("confirm")} </h6>
               </button>
