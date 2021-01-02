@@ -79,7 +79,6 @@ const StaffRoute = (props) => {
       </div>
     )
   }
-
   return (
     <>
       <NavHeader isOnStaffPage={true} />
