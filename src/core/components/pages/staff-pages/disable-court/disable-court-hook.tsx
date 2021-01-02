@@ -45,9 +45,7 @@ export const useRow = (initial: ViewRowProps[] = []) => {
 export const useEditCourt = () => {
     const [error, setError] = useState<string>()
     const [isEdit, setIsEdit] = useState(false);
-
     return { isEdit, setIsEdit, error, setError }
-
 }
 
 
@@ -92,13 +90,6 @@ export const useOption = () => {
     return { option, currentSport, setCurrentSport }
 }
 
-export const formatDate = (date: Date): string => {
-    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
-}
-export const incrementDate = (date: Date): Date => {
-    date.setDate(date.getDate() + 1);
-    return date;
-}
 
 export const useViewTable = (params) => {
     const [viewData, setViewData] = useState<View>()
@@ -203,7 +194,6 @@ export const seed = () => {
                     time_slot: [i, i + 1]
                 }
             ]
-
         })
     }
     for (let k = 1; k < 40; k++) {
@@ -219,10 +209,8 @@ export const seed = () => {
                     time_slot: [k, k + 1]
                 }
             ]
-
         })
     }
-
     arr.forEach((val) => {
         console.log(val)
         client.post('/courts/disable-courts', val)

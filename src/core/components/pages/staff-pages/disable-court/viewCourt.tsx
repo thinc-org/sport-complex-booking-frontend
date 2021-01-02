@@ -4,7 +4,8 @@ import { useParams, useHistory, useRouteMatch } from 'react-router-dom'
 import { ViewRow, CourtTable } from './disabled-court-table'
 import { ViewRowProps } from './disable-court-interface'
 import { DeleteButton } from './button'
-import { formatDate, useDate, useRow, toViewRowProps, useEditCourt, withDeletable, incrementDate } from './disable-court-hook'
+import { useDate, useEditCourt, withDeletable } from './disable-court-hook'
+import { format, add } from 'date-fns'
 import { FormAlert, ErrorAlert } from './modals'
 import { Row, Col, Container, Button, Form } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
@@ -70,7 +71,7 @@ const ViewCourt = () => {
                                     วันเริ่มต้นการปิด
                             </h5>
                                 <p>
-                                    {viewData?.starting_date ? formatDate(incrementDate(new Date(viewData?.starting_date))) : ''}
+                                    {viewData?.starting_date ? format(add(new Date(viewData?.starting_date), { days: 1 }), 'MM/dd/yyyy') : ''}
                                 </p>
                             </Col>
                             <Col>
@@ -78,7 +79,7 @@ const ViewCourt = () => {
                                     วันสิ้นสุดการปิด
                             </h5>
                                 <p>
-                                    {viewData?.expired_date ? formatDate(new Date(viewData?.expired_date)) : ''}
+                                    {viewData?.expired_date ? format(new Date(viewData?.expired_date), 'MM/dd/yyyy') : ''}
                                 </p>
                             </Col>
                         </>
