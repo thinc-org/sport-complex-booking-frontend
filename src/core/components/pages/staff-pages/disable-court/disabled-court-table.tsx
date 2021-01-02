@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRouteMatch, useHistory } from 'react-router-dom'
 import { Button, Table } from 'react-bootstrap'
-import { formatDate } from './disable-court-hook'
+import { format } from 'date-fns'
 import { getMinute, getTime } from './mapTime'
 import { RowProps, TableProps, ViewRowProps } from './disable-court-interface'
 
@@ -24,10 +24,10 @@ export const CourtRow = (props: RowProps) => {
                         {props.sport_id.sport_name_th}
                     </td>
                     <td>
-                        {formatDate(startingDate)}
+                        {format(startingDate, 'MM/dd/yyyy')}
                     </td>
                     <td className='d-flex flex-row justify-content-between align-items-center'>
-                        {formatDate(expiredDate)}
+                        {format(expiredDate, 'MM/dd/yyyy')}
                         <div className='d-flex flex-row'>
                             <Button variant='outline-transparent' className='mr-2' onClick={onNavigate} >
                                 ดูข้อมูล

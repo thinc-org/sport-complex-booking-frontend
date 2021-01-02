@@ -1,19 +1,19 @@
 import * as React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
-import { getMinuteFromTime, getTimeArr, dayArr } from './mapTime'
+import { getTimeArr, dayArr } from './mapTime'
 interface Props {
     inProp: boolean,
     header: string,
     message: string,
-    handleClose: any,
-    canCancel?: boolean
-    onCancel?: any
+    handleClose: ((event: React.MouseEvent) => void),
+    canCancel?: boolean,
+    onCancel?: ((event: React.MouseEvent) => void)
 }
 export const ErrorAlert = ({ inProp, header, message, handleClose, canCancel = false, onCancel }: Props) => {
     return (
         <>
-            <Modal show={inProp} onHide={onCancel}>
+            <Modal show={inProp} onHide={onCancel ?? handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>{header}</Modal.Title>
                 </Modal.Header>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useRef } from 'react'
 import { Form, Modal, Button, Pagination } from 'react-bootstrap';
 import { Link, useRouteMatch, useHistory } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
 import { useDate, useOption, seed } from './disable-court-hook'
 import { ErrorAlert } from './modals'
@@ -16,9 +16,9 @@ const ListOfCourts = () => {
     const endDateRef = useRef<DatePicker>()
     const { path } = useRouteMatch()
     const { data, maxPage, page, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete } = useTableWithPagination()
-    const { register, handleSubmit, setError, errors, watch, setValue } = useForm();
+    const { register, handleSubmit, setError, errors, control, setValue } = useForm();
     const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
-    const watchSports = watch('sports', '')
+    const watchSports = useWatch({ control, name: 'sports', defaultValue: '' })
     const { option } = useOption()
     const onSelectStartDate = () => {
         startDateRef.current?.setOpen(true)
@@ -56,11 +56,11 @@ const ListOfCourts = () => {
                             </Form.Control>
                             <Form.Control name='courtNum' as='select' ref={register} disabled={watchSports === 'ประเภทกีฬา' ? true : false}>
                                 <option value={''}>เลขคอร์ด</option>
-                                {watchSports && option ? option['sport_list']
+                                {watchSports && option && option['sport_list']
                                     .find(sport => sport._id == watchSports).list_court
                                     .map((court) => {
                                         return <option value={court.court_num} key={court._id}>{court.court_num}</option>
-                                    }) : ''}
+                                    })}
                             </Form.Control>
                             <div >
                                 <label
@@ -100,12 +100,12 @@ const ListOfCourts = () => {
                 <Pagination>
                     <Pagination.Prev onClick={() => { if (page > 1) setPage(prev => prev - 1) }} />
                     {
-                        page <= 5 ? '' : <Pagination.Ellipsis onClick={jumpDown} />
+                        page > 5 && <Pagination.Ellipsis onClick={jumpDown} />
                     }
                     {
-                        pageArr.map((val) => {
-                            return <Pagination.Item key={val} onClick={() => { setPage(val) }}>{val}</Pagination.Item>
-                        })
+                        pageArr.map((val) => (
+                            <Pagination.Item key={val} onClick={() => { setPage(val) }}>{val}</Pagination.Item>
+                        ))
                     }
                     {
                         (page > Math.floor(maxPage / 5) * 5) || page === maxPage || maxPage <= 5 ? '' : <Pagination.Ellipsis onClick={jumpUp} />

@@ -1,9 +1,9 @@
 export interface RowProps {
     starting_date: Date,
     expired_date: Date,
-    sport_id: any,
+    sport_id: Sport,
     court_num: number,
-    description?: string | undefined,
+    description?: string,
     _id: string,
     button?: JSX.Element
 }
@@ -14,21 +14,14 @@ export interface Option {
 export interface QueryParams {
     starting_date: Date | undefined,
     expired_date: Date | undefined,
-    sport_id: any,
+    sport_id: string | undefined,
     court_num: number | undefined,
-    description?: string | undefined,
+    description?: string,
     start: number,
     shouldChange?: boolean
     end: number
 }
-export interface DisableFormData {
-    starting_date: Date,
-    expired_date: Date,
-    sport_id: any,
-    court_num: number,
-    description?: string,
-    disable_time: disable_time[]
-}
+
 export interface disable_time {
     day: number,
     time_slot: number[]
@@ -40,7 +33,7 @@ export interface ViewRowProps {
     button?: JSX.Element
 }
 export interface View {
-    sport_id: any,
+    sport_id: Sport,
     court_num: number,
     starting_date: string,
     expired_date: string,
@@ -55,4 +48,22 @@ export interface TableProps<T> {
     Row: React.FC<T>,
     Button?: Function
 }
-
+export interface Court {
+    court_num: number,
+    open_time: number,
+    close_time: number,
+    __v: number
+}
+export interface Sport {
+    sport_name_th: string,
+    sport_name_en: string,
+    required_user: number,
+    quota: number,
+    list_court: Court[],
+    _id: string,
+    __v: number
+}
+export interface AddCourtForm {
+    court_num: string,
+    sport_id: string
+}

@@ -1,23 +1,23 @@
 import * as React from 'react';
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { Container, Row, Col, Button, Form } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 import { useOption, useDate, withDeletable, useRow } from './disable-court-hook'
 import { ErrorAlert } from './modals'
 import DatePicker from 'react-datepicker'
 import { FormAlert } from './modals'
-import { ViewRowProps } from './disable-court-interface'
+import { ViewRowProps, AddCourtForm } from './disable-court-interface'
 import { CourtTable, ViewRow } from './disabled-court-table'
 import { client } from '../../../../../axiosConfig';
 import { DeleteButton } from './button'
 const AddCourt = () => {
     const history = useHistory()
     const { inProp, rowData, onAddRow, onDeleteRow, setInProp } = useRow()
-    const { register, handleSubmit, setError, errors, watch } = useForm()
+    const { register, handleSubmit, setError, errors, control } = useForm()
     const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
     const { option } = useOption()
-    const watchSports = watch('sport_id', '')
-    const onSubmit = async (data) => {
+    const watchSports = useWatch({ control, name: 'sport_id', defaultValue: '' })
+    const onSubmit = async (data: AddCourtForm) => {
         const formData = {
             ...data,
             court_num: parseInt(data.court_num),
