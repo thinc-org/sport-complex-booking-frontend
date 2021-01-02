@@ -195,7 +195,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   }
 
   const requestChangePassword = () => {
-    console.log(newPassword)
     client({
       method: "PATCH",
       url: "/list-all-user/password/" + _id,

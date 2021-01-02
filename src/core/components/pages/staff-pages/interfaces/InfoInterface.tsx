@@ -23,7 +23,6 @@ export default interface Info {
   medical_condition: string
   contact_person: ContactPerson
   membership_type: string
-  password: string
   // object id //
   user_photo: string
   medical_certificate: string
@@ -68,7 +67,6 @@ export interface CuAndSatitInfo {
   is_penalize: boolean
   expired_penalize_date: Date
   is_first_login: boolean
-  password: string
 }
 
 export interface CuSatitComponentInfo {

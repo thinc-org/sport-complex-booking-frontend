@@ -167,7 +167,6 @@ const UserInfo = () => {
                 contact_person_phone: "",
               },
           membership_type: data.membership_type,
-          password: data.password,
           // Files(Object id) //
           user_photo: data.user_photo,
           medical_certificate: data.medical_certificate,
@@ -290,10 +289,6 @@ const UserInfo = () => {
         console.log(err)
         setShowModalInfo({ ...showModalInfo, showDelete: false, showErr: true })
       })
-  }
-
-  const onSubmit = (data: { username: string }) => {
-    setTempUsername(data.username)
   }
 
   // renders //
