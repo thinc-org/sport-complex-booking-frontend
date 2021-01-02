@@ -6,8 +6,11 @@ import { useStaffLogin } from './staffHooks'
 
 
 function StaffLogin() {
-    const { register, handleSubmit, setError, errors } = useForm();
+    const { register, handleSubmit, setError, errors, clearErrors } = useForm();
     const { onLogin } = useStaffLogin(setError)
+    const handleBackendError = () => {
+        if (errors.invalidInput) clearErrors('invalidInput')
+    }
     return (
         <React.Fragment>
             <Navbar style={{ backgroundColor: '#F1E2E3' }}>
@@ -28,19 +31,19 @@ function StaffLogin() {
                                 <div>
                                     <Form.Group>
                                         <Form.Label> Username </Form.Label>
-                                        <Form.Control type='name' name='username' placeholder='' ref={register({ required: true })} />
+                                        <Form.Control type='name' name='username' placeholder='' ref={register({ required: true })} onChange={handleBackendError} />
                                     </Form.Group>
                                     <Form.Group>
                                         <Form.Label> Password </Form.Label>
-                                        <Form.Control type='password' name='password' placeholder='' ref={register({ required: true })} />
+                                        <Form.Control type='password' name='password' placeholder='' ref={register({ required: true })} onChange={handleBackendError} />
                                     </Form.Group>
                                     <Form.Text>{(errors.username || errors.password) && 'กรุณากรอกทั้ง Username และ Password'}</Form.Text>
-                                    <Form.Text>{errors.invalid && errors.invalid.message}</Form.Text>
+                                    <Form.Text>{errors.invalidInput && errors.invalidInput.message}</Form.Text>
                                 </div>
                                 <div className='d-flex flex-column mt-5 button-group'>
                                     <Button variant='pink' type='submit'>
                                         เข้าสู่ระบบ
-                                </Button>
+                                    </Button>
                                 </div>
                             </Form>
                         </div>
