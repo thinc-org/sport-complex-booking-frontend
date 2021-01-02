@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 export const LoginForm = () => {
   const { t } = useTranslation()
-  const { register, handleSubmit, setError, errors } = useForm();
+  const { register, handleSubmit, setError, errors, clearErrors } = useForm();
   const { isLoading, onLogin } = useLogin(setError)
   const SSOLogin = () => {
     window.location.href = `https://account.it.chula.ac.th/html/login.html?service=${process.env.REACT_APP_URL}/login`
@@ -30,7 +30,7 @@ export const LoginForm = () => {
             <Form.Text>{errors.invalid && errors.invalid.message}</Form.Text>
           </div>
           <div className="d-flex flex-column align-items-center button-group mb-4">
-            <Button variant='pink' type='submit'>
+            <Button variant='pink' type='submit' onClick={() => clearErrors('invalidInput')}>
               {t("signIn")}
             </Button>
             <Button variant='darkpink' onClick={SSOLogin}>

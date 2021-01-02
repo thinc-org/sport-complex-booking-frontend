@@ -6,7 +6,7 @@ import { useStaffLogin } from './staffHooks'
 
 
 function StaffLogin() {
-    const { register, handleSubmit, setError, errors } = useForm();
+    const { register, handleSubmit, setError, errors, clearErrors } = useForm();
     const { onLogin } = useStaffLogin(setError)
     return (
         <React.Fragment>
@@ -38,9 +38,9 @@ function StaffLogin() {
                                     <Form.Text>{errors.invalid && errors.invalid.message}</Form.Text>
                                 </div>
                                 <div className='d-flex flex-column mt-5 button-group'>
-                                    <Button variant='pink' type='submit'>
+                                    <Button variant='pink' type='submit' onClick={() => clearErrors('invalidInput')}>
                                         เข้าสู่ระบบ
-                                </Button>
+                                    </Button>
                                 </div>
                             </Form>
                         </div>

@@ -45,7 +45,7 @@ export const useLogin = (setError) => {
             })
             .catch((err) => {
                 setLoading(false)
-                setError('invalid', {
+                setError('invalidInput', {
                     type: 'async',
                     message: t("invalidInput")
                 })
