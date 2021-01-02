@@ -2,7 +2,7 @@ export const data = [
     {
         icon: '',
         name: 'home',
-        path: '/'
+        path: '/home'
     },
     {
         icon: '',
@@ -12,7 +12,13 @@ export const data = [
     {
         icon: '',
         name: 'myWaitingRoom',
-        path: '/'
+        path: '/waitingroom'
+
+    },
+    {
+        icon: '',
+        name: 'myReservation',
+        path: '/myreservation'
 
     },
     {
