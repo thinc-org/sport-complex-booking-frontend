@@ -13,13 +13,17 @@ import AccountPage from "../components/pages/AccountPages/AccountPage"
 import ReserveNow from "../components/pages/Reservation/ReserveNow"
 import JoinWaitingRoom from "../components/pages/Reservation/JoinWaitingRoom"
 import CreateWaitingRoom from "../components/pages/Reservation/CreateWaitingRoom"
+import HomePage from "../components/pages/HomePage"
 import { getCookie } from "../contexts/cookieHandler"
 import ChangePassword from "../components/pages/AccountPages/AccountPageUI/ChangePassword"
 import WaitingRoomBan from "../components/pages/Reservation/WaitingRoomBan"
 import Hooray from "../components/pages/Reservation/Hooray"
-import HomePage from "../components/pages/HomePage"
 
 export default function MainRoute() {
+  const { isUser, setToken } = useAuthContext()
+  useEffect(() => {
+    if (getCookie("token")) setToken(getCookie("token"))
+  }, [isUser])
   return (
     <>
       <Sidebar></Sidebar>
@@ -37,7 +41,6 @@ export default function MainRoute() {
           }}
         />
 
-        <Route exact path="/home" component={HomePage} />
         <Route exact path="/reservenow" component={ReserveNow} />
 
         <Route exact path="/joinwaitingroom" component={JoinWaitingRoom} />
@@ -46,9 +49,14 @@ export default function MainRoute() {
 
         <Route exact path="/account" component={AccountPage} />
 
-        <Route path="/staff" component={StaffRoute} />
         <Route exact path="/changePassword" component={ChangePassword} />
+
+        <Route exact path="/home" component={HomePage} />
+
+        <Route path="/staff" component={StaffRoute} />
+
         <Route exact path="/banned" component={WaitingRoomBan} />
+
         <Route exact path="/hooray" component={Hooray} />
       </Switch>
     </>
