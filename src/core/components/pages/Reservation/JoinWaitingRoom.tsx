@@ -5,8 +5,13 @@ import {Link, useHistory } from "react-router-dom"
 import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from 'react-i18next'
 import { client } from "../../../../axiosConfig"
-import { WrongAccessCode } from "../../ui/Modals/WaitingRoomModals"
+import { CustomModal } from "../../ui/Modals/WaitingRoomModals"
 import { WaitingRoomAccessCode } from './ReservationInterfaces'
+
+interface ValidityMessage {
+  message: string
+}
+
 
 function JoinWaitingRoom() {
   const { register, handleSubmit, errors } = useForm()
@@ -15,9 +20,9 @@ function JoinWaitingRoom() {
   const [showWrongAccessCodeModal, setShowWrongAccessCodeModal] = useState(false)
 
   const onSubmit = async (data: WaitingRoomAccessCode) => {
-    await client.post('/reservation/joinwaitingroom', data)
-      .then((data) => {
-        if (data['data']['isReservationCreated']) {
+    await client.post<WaitingRoomAccessCode>('/reservation/joinwaitingroom', data)
+      .then(({data}) => {
+        if (data['isReservationCreated']) {
           history.push({pathname:'/hooray', state: { fromJoinWaitingRoom: true }})
         } else {
           history.push('/waitingroom')
@@ -28,8 +33,8 @@ function JoinWaitingRoom() {
 
   const fetchValidity = async () => {
     await client.post('/reservation/checkvalidity')
-      .then((res) => {
-          const resMsg = res['data']['message']
+      .then(({data}) => {
+          const resMsg = data['message']
           if (resMsg !== "Valid user") {
             const state = {msg: resMsg}
             history.push({pathname: '/banned',state})
@@ -86,7 +91,7 @@ function JoinWaitingRoom() {
         </form>
       </div>
       {/* Wrong Access Code Modal */}
-      <WrongAccessCode show={showWrongAccessCodeModal} setShowWrongAccessCodeModal={setShowWrongAccessCodeModal} />
+      <CustomModal type="wrongAccessCodeModal" show={showWrongAccessCodeModal} setShow={setShowWrongAccessCodeModal}  />
     </div>
   )
 }

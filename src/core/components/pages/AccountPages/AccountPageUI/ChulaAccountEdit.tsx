@@ -3,18 +3,13 @@ import { useForm } from "react-hook-form"
 import {  Button } from "react-bootstrap"
 import { UserContext } from "../../../../contexts/UsersContext"
 import { useTranslation } from 'react-i18next'
-import { ConfirmModal, ErrorModal, EdittedData, WarningMessage } from "../../../ui/Modals/AccountPageModals"
+import { EdittedData, WarningMessage, CustomModal } from "../../../ui/Modals/AccountPageModals"
 import { client } from "../../../../../axiosConfig"
-import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
+import {infoSchema } from "../../../../schemas/editUserInfo"
 
 export default function ChulaAccountEdit({ toggleEditButton }) {
   const {t} = useTranslation()
-  const schema = yup.object().shape({
-    phone: yup.string().required(t("phoneErrorMessage")),
-    personal_email: yup.string().required(t("emailErrorMessage")).email(t("emailErrorMessage")),
-  })
-
   const [show, setShow] = useState(false)
   const [showErr, setShowErr] = useState(false)
   const [formData, setFormData] = useState<EdittedData>()
@@ -22,14 +17,11 @@ export default function ChulaAccountEdit({ toggleEditButton }) {
   const { cuStudentAccount: user } = useContext(UserContext)
 
   // React Hook Forms
-  const { register, handleSubmit, errors } = useForm({resolver: yupResolver(schema)})
+  const { register, handleSubmit, errors } = useForm({resolver: yupResolver(infoSchema)})
 
-  const onSubmit = async (data: EdittedData) => {
-    const valid = await schema.isValid(data)
-    if (valid) {
-      setShow(true)
-      setFormData(data)
-    }
+  const onSubmit = (data: EdittedData) => { 
+    setShow(true)
+    setFormData(data)
   }
 
   const handleCancel = (e) => {
@@ -38,7 +30,7 @@ export default function ChulaAccountEdit({ toggleEditButton }) {
   }
 
   const postDataToBackend = async (data: EdittedData) => {
-    await client.put('/account_info', data)
+    await client.put<EdittedData>('/account_info', data)
       .then(() => {
           window.location.reload()
       })
@@ -49,7 +41,8 @@ export default function ChulaAccountEdit({ toggleEditButton }) {
 
   return (
     <div className="mx-auto col-md-6">
-      <WarningMessage show={user!.is_first_login}/>
+      {/* <WarningMessage show={user!.is_first_login}/> */}
+      <WarningMessage show={user!.is_first_login} account={user!.account_type}/>   
       <div className="default-mobile-wrapper animated-card">
         <div className="row mt-2">
           <div className="col-8">
@@ -87,9 +80,9 @@ export default function ChulaAccountEdit({ toggleEditButton }) {
           </div>
 
           {/* MODAL CONFIRM DIALOGUE */}
-          <ConfirmModal show={show} setShow={setShow}  postDataToBackend={postDataToBackend} formData={formData}/>
+          <CustomModal type="confirmEditAccountModal" show={show} setShow={setShow} mainFunction={postDataToBackend} data={formData} />
           {/* MODAL ERROR */}
-          <ErrorModal showErr={showErr} setShowErr={setShowErr}/>
+          <CustomModal type="editAccountErrorModal" show={showErr} setShow={setShowErr}/>
         </form>
       </div>
       <br />

@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { Link, useHistory } from "react-router-dom"
 import withUserGuard from '../../../guards/user.guard'
-import { DetailsModal, CantCreateWaitingRoom } from "../../ui/Modals/WaitingRoomModals"
+import { DetailsModal, CustomModal } from "../../ui/Modals/WaitingRoomModals"
 import { useTranslation } from 'react-i18next'
 import { client } from "../../../../axiosConfig"
 import {WaitingRoomData, HistoryProps} from './ReservationInterfaces'
@@ -35,7 +35,7 @@ function CreateWaitingRoom(props: HistoryProps) {
   let [showTime, setShowTime] = useState(false)
   // Modal
   const [show, setShow] = useState(false)
-  const [showDateWarning, setShowDateWarning] = useState(true)
+  const [showDateWarning, setShowDateWarning] = useState(false)
   const [selectTimeWarning, setSelectTimeWarning] = useState(false)
   const [showCantCreateWaitingRoomModal, setShowCantCreateWaitingRoomModal] = useState(false)
   const [showTimeSlotError, setShowTimeSlotError] = useState(false)
@@ -58,7 +58,7 @@ function CreateWaitingRoom(props: HistoryProps) {
   const validDate = (date1, date2) => {
     const diffTime = date2 - date1
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-    if (diffDays <= 7 && diffDays >0) {
+    if (diffDays <= 7 && diffDays >=0) {
       return true
     } else {
       return false
@@ -88,21 +88,29 @@ function CreateWaitingRoom(props: HistoryProps) {
   }
   // [2] Fetch Quota
   const fetchQuota = async (selectedSportID: string, date: Date) => {
+    const year = date.getFullYear()
+    const month = ((date.getMonth() +1 < 10) ? ("0"+(date.getMonth() +1)) : (date.getMonth() +1))
+    const day =  ((date.getDate() < 10) ? ("0"+date.getDate()) : (date.getDate()))
     const data = {
       sport_id: selectedSportID,
-      date: date
+      date: year + '-' + month+ '-' + day
     }
     await client
       .post("/reservation/checkquota", data)
-      .then(({ data }) => {setquota(data*30)})
+      .then(({ data }) => {
+        setquota(data*30)
+      })
       .catch(() => {})
   }
   // [3] Fetch Time
   const fetchTime = async (court_number: number, selectedSportID: string, date: Date) => {
+    const year = date.getFullYear()
+    const month = ((date.getMonth() +1 < 10) ? ("0"+(date.getMonth() +1)) : (date.getMonth() +1))
+    const day =  ((date.getDate() < 10) ? ("0"+date.getDate()) : (date.getDate()))
     const data = {
       court_number:court_number,
       sport_id: selectedSportID,
-      date: date
+      date: year + '-' + month+ '-' + day
     }
     await client
       .post("/reservation/checktimeslot", data)
@@ -112,15 +120,18 @@ function CreateWaitingRoom(props: HistoryProps) {
   // [4] Post to Backend
   const postDataToBackend = async (data: WaitingRoomData) => {
     const formattedTimeSlot = [0]
+    const year = date.getFullYear()
+    const month = ((date.getMonth() +1 < 10) ? ("0"+(date.getMonth() +1)) : (date.getMonth() +1))
+    const day =  ((date.getDate() < 10) ? ("0"+date.getDate()) : (date.getDate()))
     data.time_slot.forEach((time)=>{formattedTimeSlot.push(Number(time))})
     let newData = {
       ...data,
-      date: date,
+      date: year + '-' + month + '-' + day,
       court_number: Number(data.court_number),
       time_slot: formattedTimeSlot.slice(1)
     }
     await client.post('/reservation/createwaitingroom', newData)
-    .then(()=> {history.push({pathname: '/waitingroom'})})
+    .then((data)=> {history.push({pathname: '/waitingroom'})})
     .catch(()=> {setShowCantCreateWaitingRoomModal(true)})
   }
 
@@ -177,6 +188,8 @@ function CreateWaitingRoom(props: HistoryProps) {
               onChange={(date: Date) => {
                 const fixedDate = new Date(date.setHours(0,0,0,0))
                 setDate(fixedDate)
+                setShowCourt(false)
+                setShowTime(false)
                 if (validDate(today, date)) setShowDateWarning(false)
                 else setShowDateWarning(true)  
               }}
@@ -266,7 +279,7 @@ function CreateWaitingRoom(props: HistoryProps) {
         {/* DetailsModal */}
         <DetailsModal show={show} setShow={setShow} sportName={sportName} details={details} date={date} times={times} formatTime={formatTime} postDataToBackend={postDataToBackend} />
         {/* Create waiting room error modal */}
-        <CantCreateWaitingRoom show={showCantCreateWaitingRoomModal} setShowCantCreateWaitingRoomModal={setShowCantCreateWaitingRoomModal}/>
+        <CustomModal type="cantCreateWaitingRoomModal" show={showCantCreateWaitingRoomModal} setShow={setShowCantCreateWaitingRoomModal}/> 
       </form>
     </div>
   </div>

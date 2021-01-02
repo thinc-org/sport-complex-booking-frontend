@@ -3,18 +3,15 @@ import { useState, useContext } from "react"
 import {  Button } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import { UserContext } from "../../../../contexts/UsersContext"
-import { ConfirmModal, ErrorModal, EdittedData } from "../../../ui/Modals/AccountPageModals"
+import { EdittedData, CustomModal } from "../../../ui/Modals/AccountPageModals"
 import { useTranslation } from 'react-i18next'
 import { client } from "../../../../../axiosConfig"
-import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
+import {infoSchema } from "../../../../schemas/editUserInfo"
 
 export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
   const {t} = useTranslation()
-  const schema = yup.object().shape({
-    phone: yup.string().required(t("phoneErrorMessage")),
-    personal_email: yup.string().required(t("emailErrorMessage")).email(t("emailErrorMessage")),
-  })
+  
   const [show, setShow] = useState(false)
   const [showErr, setShowErr] = useState(false)
   const [formData, setFormData] = useState<EdittedData>()
@@ -22,14 +19,11 @@ export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
 
   
   // React Hook Forms
-  const { register, handleSubmit, errors  } = useForm({resolver: yupResolver(schema)})
+  const { register, handleSubmit, errors  } = useForm({resolver: yupResolver(infoSchema)})
 
-  const onSubmit = async (data: EdittedData) => {
-    const valid = await schema.isValid(data)
-    if (valid) {
-      setShow(true)
-      setFormData(data)
-    }
+  const onSubmit = (data: EdittedData) => {
+    setShow(true)
+    setFormData(data)
   }
 
   const handleCancel = (e) => {
@@ -38,7 +32,7 @@ export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
   }
 
   const postDataToBackend = async (data: EdittedData) => {
-    await client.put('/account_info', data)
+    await client.put<EdittedData>('/account_info', data)
       .then(() => {
           window.location.reload()
       })
@@ -85,9 +79,9 @@ export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
           </div>
 
           {/* MODAL CONFIRM DIALOGUE */}
-          <ConfirmModal show={show} setShow={setShow} postDataToBackend={postDataToBackend} formData={formData}/>
+          <CustomModal type="confirmEditAccountModal" show={show} setShow={setShow} mainFunction={postDataToBackend} data={formData} />
           {/* MODAL ERROR */}
-          <ErrorModal showErr={showErr} setShowErr={setShowErr}/>
+          <CustomModal type="editAccountErrorModal" show={showErr} setShow={setShowErr}/>
         </form>
       </div>
       <br />

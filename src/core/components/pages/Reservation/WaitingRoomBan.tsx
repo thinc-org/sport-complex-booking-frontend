@@ -20,8 +20,8 @@ function WaitingRoomBan(props: HistoryProps) {
 
   const fetchValidity = async () => {
     await client.post("/reservation/checkvalidity")
-    .then((response) => {
-      let resMsg = response['data']['message']
+    .then(({data}) => {
+      let resMsg = data['message']
       if (resMsg === "Valid user") {
         history.push({pathname: '/home'})
       }

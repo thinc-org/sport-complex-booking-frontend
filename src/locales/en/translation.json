@@ -136,5 +136,37 @@
   "containMoreThan6": "New password must contain more than 6 characters.",
   "passMustMatch": "New passwords must match",
   "oldNewPassMustDiff" :"The new password cannot be the same as the old password",
-  "passwordCantBeChanged": "Password cannot be changed at the moment. Please try again later."
+  "passwordCantBeChanged": "Password cannot be changed at the moment. Please try again later.",
+  "maritalPlaceHolder": "Married, Single, etc.",
+  "addressPlaceHolder": "Address",
+  "namePlaceHolder": "Name",
+  "surnamePlaceHolder": "Surname",
+  "passwordChangeConfirm" : {
+    "title": "Confirmation",
+    "body": "Do you want to confirm password change"
+  },
+  "passwordChangeSuccess" : {
+    "title": "Success",
+    "body": "Your password has successfully been changed."
+  },
+  "passwordChangeError": {
+    "title": "An error has occured",
+    "body": "Password cannot be changed at the moment."
+  },
+  "wrongAccessCodeModal": {
+    "title":"Cannot join a waiting room.",
+    "body": "Make sure your waiting room access code is valid and you do not have a waiting room created yet."
+  },
+  "cantCreateWaitingRoomModal": {
+    "title":"Unsuccessful",
+    "body":"The waiting room cannot be created at the moment."
+  },
+  "confirmEditAccountModal": {
+    "title":"Confirm Submission",
+    "body":"Do you want to submit the registration form?"
+  },
+  "editAccountErrorModal": {
+    "title":"An error has occured",
+    "body":"Cannot edit account information at the moment"
+  }
 }

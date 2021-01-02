@@ -40,7 +40,7 @@ export const useLogin = (setError) => {
                 if (res.data.is_first_login) history.push(`${path}/personal`)
                 else history.push('/account')
                 if (res.data.is_thai_language) changeLanguage('th')
-                else changeLanguage('e')
+                else changeLanguage('en')
                 window.location.reload()
             })
             .catch((err) => {
@@ -69,7 +69,7 @@ export const useLogin = (setError) => {
                     if (res.data.is_first_login) history.push(`${path}/personal`)
                     else history.push('/account')
                     if (res.data.is_thai_language) changeLanguage('th')
-                    else changeLanguage('e')
+                    else changeLanguage('en')
                 })
                 .catch((err) => {
                     setLoading(false)

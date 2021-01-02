@@ -1,6 +1,6 @@
 import React from "react"
 import { Button } from "react-bootstrap"
-import {Link } from "react-router-dom"
+import {Link, useHistory } from "react-router-dom"
 import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from 'react-i18next'
 import hooray from "../../../assets/images/hooray.svg"
@@ -11,7 +11,8 @@ function Hooray(props: HistoryProps) {
 
   const {t} = useTranslation()
   const { fromJoinWaitingRoom } = (props['location'] && props['location']['state']) || {}
-
+  //const history = useHistory()
+  //const {fromJoinWaitingRoom} = (history.location && history.location.state || {})
   return (
     <div className="wrapper">
       {fromJoinWaitingRoom ? null : <Redirect to={"/home"} />}
