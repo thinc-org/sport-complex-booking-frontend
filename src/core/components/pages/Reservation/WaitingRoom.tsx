@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap"
 import { useHistory } from "react-router-dom"
 import { client } from "../../../../axiosConfig"
 import { NavHeader } from "../../ui/navbar/navbarSideEffect"
-import { timeConversion } from "../Reservation/timeConversion"
+import { timeConversion, countDown, timeShift } from "./timeFormating"
 import { ConfirmModal } from "../../ui/Modals/CurrentWaitingRoomModal"
 import { TimeOutModal } from "../../ui/Modals/CurrentWaitingRoomModal"
 import { useTranslation } from "react-i18next"
@@ -18,10 +18,10 @@ interface SportNameResponse {
 const WaitingRoomPage = () => {
   const [remainingTime, setRemainingTime] = useState<string>()
   const [waitingRoomId, setWaitingRoomId] = useState<string>()
-  const [sport, setSport] = useState<SportNameResponse>({ sportNameth: "แบตมินตัน", sportNameen: "Badminton" })
+  const [sport, setSport] = useState<SportNameResponse>()
   const [date, setDate] = useState<string>(new Date().toLocaleDateString())
   const [timeList, setTimeList] = useState<Array<number>>([])
-  const [listMember, setListMember] = useState<Array<string>>()
+  const [listMember, setListMember] = useState<Array<string>>([])
   const [accessCode, setAccessCode] = useState("")
   const [endTime, setEndTime] = useState<number>()
   const [modalConfirmOpen, setModalConfirmOpen] = useState(false)
@@ -35,12 +35,10 @@ const WaitingRoomPage = () => {
 
   useEffect(() => {
     fetchWaitingRoom()
-    // time sent from backend is UTC before adding 7 for Thailand
-    setEndTime(timeShift(new Date("Jan 03, 2021 08:47:40").getTime(), 7))
   }, [])
 
   useEffect(() => {
-    countDown()
+    countDown(endTime, timeOut, setRemainingTime)
   }, [endTime])
 
   useEffect(() => {
@@ -57,6 +55,7 @@ const WaitingRoomPage = () => {
     try {
       const res = await client.get("/mywaitingroom")
       setListMember(res.data.list_member)
+      // time sent from backend is UTC before adding 7 for Thailand
       setEndTime(timeShift(new Date(res.data.expired_time).getTime(), 7))
       setSport({ sportNameth: res.data.sport_name_th, sportNameen: res.data.sport_name_en })
       setDate(res.data.date.toLocaleString)
@@ -110,45 +109,6 @@ const WaitingRoomPage = () => {
     )
   }
 
-  const countDown = () => {
-    if (endTime != undefined) {
-      var x = setInterval(function () {
-        var current = new Date().getTime()
-        var diff = Math.floor((endTime - current) / 1000)
-        let min = Math.floor(diff / 60)
-        let sec = diff % 60
-        let formated_min = ""
-        let formated_sec = ""
-
-        if (sec > -2) {
-          if (sec < 0 && min < 0) {
-            console.log("timeout")
-            return timeOut()
-          }
-
-          if (~~(sec / 10) == 0) {
-            formated_sec = "0" + sec.toString()
-          } else {
-            formated_sec = sec.toString()
-          }
-
-          if (~~(min / 10) == 0) {
-            formated_min = "0" + min.toString()
-          } else {
-            formated_min = min.toString()
-          }
-          return setRemainingTime(formated_min + ":" + formated_sec + " ")
-        }
-      }, 1000)
-      return x
-    }
-  }
-
-  const timeShift = (time, shiftedHours) => {
-    shiftedHours = shiftedHours * 60 * 60 * 1000
-    return time + shiftedHours
-  }
-
   if (waitingRoomId) {
     return (
       <>
@@ -165,11 +125,11 @@ const WaitingRoomPage = () => {
                 <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}> {sport && sport[`sportName${i18n.language}`]} </h6>
                 <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}>
                   {" "}
-                  {t("date")}: {date}{" "}
+                  {t("date")}: {date}
                 </h6>
                 <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}>
                   {" "}
-                  {t("time")}:{" "}
+                  {t("time")}:
                   {timeList.map((eachTime) => {
                     return timeConversion(eachTime)
                   })}{" "}
@@ -203,30 +163,31 @@ const WaitingRoomPage = () => {
               </div>
               <div className="box-container btn" style={{ width: "100%", marginBottom: "45px" }}>
                 <table>
-                  <tr style={{ fontSize: "16px", fontWeight: 700, lineHeight: "24px", borderBottom: "1px solid #ddd" }}>
-                    <th style={{ width: "26%", paddingBottom: "12px" }}> # </th>
-                    <th style={{ width: "74%", paddingBottom: "12px" }}> {t("username")} </th>
-                    <th> </th>
-                  </tr>
+                  <thead>
+                    <tr style={{ fontSize: "16px", fontWeight: 700, lineHeight: "24px", borderBottom: "1px solid #ddd" }}>
+                      <th style={{ width: "26%", paddingBottom: "12px" }}> # </th>
+                      <th style={{ width: "74%", paddingBottom: "12px" }}> {t("username")} </th>
+                      <th> </th>
+                    </tr>
+                  </thead>
+
                   {listMember &&
                     listMember.map((eachMember, index) => {
                       return (
-                        <tr>
-                          <td> {index + 1} </td>
-                          <td> {eachMember} </td>
-                        </tr>
+                        <tbody>
+                          <tr>
+                            <td> {index + 1} </td>
+                            <td> {eachMember} </td>
+                          </tr>
+                        </tbody>
                       )
                     })}
                 </table>
               </div>
               <Button
                 onClick={handleClick}
+                className="cancel-btn"
                 style={{
-                  width: "100%",
-                  textAlign: "center",
-                  backgroundColor: "transparent",
-                  color: "red",
-                  borderColor: "red",
                   borderRadius: "15px",
                   marginBottom: "50px",
                 }}
@@ -243,11 +204,14 @@ const WaitingRoomPage = () => {
     )
   } else {
     return (
-      <div className="container">
-        <div className="row justify-content-center mt-5 grey" style={{ fontWeight: 400 }}>
-          {t("noWaitingRoom")}
+      <>
+        <NavHeader header={t("waitingRoom")} />
+        <div className="container">
+          <div className="row justify-content-center mt-5 grey" style={{ fontWeight: 400 }}>
+            {t("noWaitingRoom")}
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 }
