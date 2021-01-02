@@ -1,9 +1,10 @@
 import React, { useState, useEffect, FunctionComponent } from "react"
 import { Row, Col, Button, Form, Card, Modal, Alert, InputGroup } from "react-bootstrap"
 import { Link, RouteComponentProps } from "react-router-dom"
-import { client } from "../../../../../axiosConfig"
-import { CuAndSatitInfo, ThaiLangAccount, Account, ModalUserInfo } from "../interfaces/InfoInterface"
 import format from "date-fns/format"
+import { useForm } from "react-hook-form"
+import { client } from "../../../../../axiosConfig"
+import { CuAndSatitInfo, CuSatitComponentInfo, ThaiLangAccount, Account, ModalUserInfo } from "../interfaces/InfoInterface"
 import PasswordChangeModal from "./PasswordChangeModal"
 import {
   DeleteModal,
@@ -20,10 +21,8 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   // page states
   const [isEditing, setEditing] = useState<boolean>(false)
   const [newPassword, setNewPassword] = useState<string>("")
-  const [confirmPassword, setConfirmPassword] = useState<string>("")
 
   // Modals & Alert //
-  const [showChangePassword, setShowChangePassword] = useState<boolean>(false)
   const [showModals, setShowModals] = useState<ModalUserInfo>({
     showSave: false,
     showComSave: false,
@@ -32,6 +31,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     showErr: false,
     showPasswordErr: false,
     showConfirmChange: false,
+    showChangePassword: false,
   })
   // Alert //
   const [showAlert, setShowAlert] = useState<boolean>(false)
@@ -54,6 +54,8 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     password: "",
   })
   const [tempUser, setTempUser] = useState<CuAndSatitInfo>(user)
+
+  const { register, handleSubmit, getValues } = useForm()
 
   // useEffects //
   useEffect(() => {
@@ -131,23 +133,14 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     setShowAlert(false)
   }
 
-  const handleConfirmChange = () => {
+  const handleConfirmChange = (data: CuSatitComponentInfo) => {
     // if some input is blank -> alert //
     // else -> try change //
-    let { name_th, surname_th, name_en, surname_en, personal_email, phone } = tempUser
+    setTempUser({ ...tempUser, ...data })
+    let { name_th, surname_th, name_en, surname_en, personal_email, phone } = data
     if (name_th !== "" && surname_th !== "" && name_en !== "" && surname_en !== "" && personal_email !== "" && phone !== "")
       setShowModals({ ...showModals, showSave: true })
     else setShowAlert(true)
-  }
-
-  const handleChangePassword = () => {
-    if (tempUser.password !== user.password || newPassword !== confirmPassword) setShowModals({ ...showModals, showPasswordErr: true })
-    else setShowModals({ ...showModals, showConfirmChange: true })
-  }
-
-  const handleChangePassword = () => {
-    if (tempUser.password !== user.password || newPassword !== confirmPassword) setShowModals({ ...showModals, showPasswordErr: true })
-    else setShowModals({ ...showModals, showConfirmChange: true })
   }
 
   // requests //
@@ -199,17 +192,17 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   }
 
   const requestChangePassword = () => {
+    console.log(newPassword)
     client({
-      method: "PUT",
-      url: "/list-all-user/" + _id,
+      method: "PATCH",
+      url: "/list-all-user/password/" + _id,
       data: {
         password: newPassword,
       },
     })
       .then(({ data }) => {
         setUser({ ...user, password: data.password })
-        setShowModals({ ...showModals, showConfirmChange: false })
-        setShowChangePassword(false)
+        setShowModals({ ...showModals, showConfirmChange: false, showChangePassword: false })
       })
       .catch((err) => {
         console.log(err)
@@ -229,13 +222,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         <ErrModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
         <PasswordErrModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
         <ConfirmChangePasswordModal showModalInfo={showModals} setShowModalInfo={setShowModals} info={{ requestChangePassword }} />
-        <PasswordChangeModal
-          showChange={showChangePassword}
-          setShowChange={setShowChangePassword}
-          setNewPassword={setNewPassword}
-          setConfirmPassword={setConfirmPassword}
-          info={{ handleChange, handleChangePassword }}
-        />
+        <PasswordChangeModal showModals={showModals} setShowModals={setShowModals} oldPassword={user.password} setNewPassword={setNewPassword} />
       </div>
     )
   }
@@ -338,111 +325,110 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     let date: Date = new Date(tempUser.expired_penalize_date)
     return (
       <div className="userInformation">
-        <Row>
-          <Col className="py-3">
-            <p>ประเภทบัญชี</p>
-            <Form.Label className="font-weight-bold">{ThaiLangAccount[Account[user.account_type]]}</Form.Label>
-          </Col>
-        </Row>
-        <Row>
-          <Col className="py-3">
-            <p>ชื่อ (อังกฤษ)</p>
-            <Form.Control id="name_en" onChange={handleChange} value={tempUser.name_en} />
-          </Col>
-          <Col className="py-3">
-            <p>นามสกุล (อังกฤษ)</p>
-            <Form.Control id="surname_en" onChange={handleChange} value={tempUser.surname_en} />
-          </Col>
-        </Row>
-        <Row>
-          <Col className="py-3">
-            <p>ชื่อ (ไทย)</p>
-            <Form.Control id="name_th" onChange={handleChange} value={tempUser.name_th} />
-          </Col>
-          <Col className="py-3">
-            <p>นามสกุล (ไทย)</p>
-            <Form.Control id="surname_th" onChange={handleChange} value={tempUser.surname_th} />
-          </Col>
-        </Row>
-        <Row>
-          <Col className="py-3">
-            <p>ชื่อผู้ใช้</p>
-            <Form.Label className="font-weight-bold">{tempUser.username}</Form.Label>
-          </Col>
-        </Row>
-        <Row className="py-3">
-          <Col>
-            <p>อีเมลส่วนตัว</p>
-            <Form.Control id="personal_email" onChange={handleChange} value={tempUser.personal_email} />
-          </Col>
-        </Row>
-        <Row>
-          <Col className="py-3">
-            <p>เบอร์โทร</p>
-            <Form.Control id="phone" onChange={handleChange} value={tempUser.phone} />
-          </Col>
-        </Row>
-        <Row className="py-3">
-          <Col>
-            <Form.Label>สถานะการแบน</Form.Label>
-            <Form.Control className="m-0" as="select" id="is_penalize" onChange={handleChange} value={tempUser.is_penalize ? 1 : 0}>
-              <option value={0}>ปกติ</option>
-              <option value={1}>โดนแบน</option>
-            </Form.Control>
-          </Col>
-        </Row>
-        <Row className="py-3">
-          <Col>
-            <Form.Label>สิ้นสุดการแบน</Form.Label>
-            <Row>
-              <Col sm={4}>
-                <Form.Control
-                  disabled={tempUser.is_penalize ? false : true}
-                  id="expired_penalize_date"
-                  type="date"
-                  onChange={handleChange}
-                  value={tempUser.is_penalize && isValid(date) ? format(date, "yyyy-MM-dd") : ""}
-                />
+        <Form onSubmit={handleSubmit(handleConfirmChange)}>
+          <Row>
+            <Col className="py-3">
+              <p>ประเภทบัญชี</p>
+              <Form.Label className="font-weight-bold">{ThaiLangAccount[Account[user.account_type]]}</Form.Label>
+            </Col>
+          </Row>
+          <Row>
+            <Col className="py-3">
+              <p>ชื่อ (อังกฤษ)</p>
+              <Form.Control ref={register} name="name_en" defaultValue={user.name_en} />
+            </Col>
+            <Col className="py-3">
+              <p>นามสกุล (อังกฤษ)</p>
+              <Form.Control ref={register} name="surname_en" defaultValue={user.surname_en} />
+            </Col>
+          </Row>
+          <Row>
+            <Col className="py-3">
+              <p>ชื่อ (ไทย)</p>
+              <Form.Control ref={register} name="name_th" defaultValue={user.name_th} />
+            </Col>
+            <Col className="py-3">
+              <p>นามสกุล (ไทย)</p>
+              <Form.Control ref={register} name="surname_th" defaultValue={user.surname_th} />
+            </Col>
+          </Row>
+          <Row>
+            <Col className="py-3">
+              <p>ชื่อผู้ใช้</p>
+              <Form.Label className="font-weight-bold">{user.username}</Form.Label>
+            </Col>
+          </Row>
+          <Row className="py-3">
+            <Col>
+              <p>อีเมลส่วนตัว</p>
+              <Form.Control ref={register} name="personal_email" defaultValue={user.personal_email} />
+            </Col>
+          </Row>
+          <Row>
+            <Col className="py-3">
+              <p>เบอร์โทร</p>
+              <Form.Control ref={register} name="phone" defaultValue={user.phone} />
+            </Col>
+          </Row>
+          <Row className="py-3">
+            <Col>
+              <Form.Label>สถานะการแบน</Form.Label>
+              <Form.Control className="m-0" as="select" id="is_penalize" onChange={handleChange} value={tempUser.is_penalize ? 1 : 0}>
+                <option value={0}>ปกติ</option>
+                <option value={1}>โดนแบน</option>
+              </Form.Control>
+            </Col>
+          </Row>
+          <Row className="py-3">
+            <Col>
+              <Form.Label>สิ้นสุดการแบน</Form.Label>
+              <Row>
+                <Col sm={4}>
+                  <Form.Control
+                    id="expired_penalize_date"
+                    disabled={tempUser.is_penalize ? false : true}
+                    type="date"
+                    onChange={handleChange}
+                    value={tempUser.is_penalize && isValid(date) ? format(date, "yyyy-MM-dd") : ""}
+                  />
+                </Col>
+                <Col>
+                  <Form.Control
+                    id="expiredPenalizeTime"
+                    style={{ width: "25%" }}
+                    disabled={tempUser.is_penalize ? false : true}
+                    type="time"
+                    onChange={handleChange}
+                    value={tempUser.is_penalize && isValid(date) ? format(date, "HH:mm") : ""}
+                  />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+          <Row className="mt-5">
+            {String(user.account_type) !== Account[Account.CuStudent] ? (
+              <Col className="text-left">
+                <Button
+                  variant="pink"
+                  className="btn-normal"
+                  onClick={() => {
+                    setShowModals({ ...showModals, showChangePassword: true })
+                  }}
+                >
+                  เปลี่ยนรหัสผ่าน
+                </Button>
               </Col>
-              <Col>
-                <Form.Control
-                  style={{ width: "25%" }}
-                  disabled={tempUser.is_penalize ? false : true}
-                  id="expiredPenalizeTime"
-                  type="time"
-                  onChange={handleChange}
-                  value={tempUser.is_penalize && isValid(date) ? format(date, "HH:mm") : ""}
-                />
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-        <Row className="mt-5">
-          {String(user.account_type) !== Account[Account.CuStudent] ? (
-            <Col className="text-left">
-              <Button
-                variant="pink"
-                className="btn-normal"
-                onClick={() => {
-                  setTempUser({ ...tempUser, password: "" })
-                  setNewPassword("")
-                  setConfirmPassword("")
-                  setShowChangePassword(true)
-                }}
-              >
-                เปลี่ยนรหัสผ่าน
+            ) : null}
+            <Col className="text-right">
+              <Button className="mr-4 btn-normal btn-outline-pink" variant="outline-secondary" onClick={handleCancelChange}>
+                ยกเลิก
+              </Button>
+              <Button variant="pink" className="btn-normal" type="submit" onSubmit={handleSubmit(handleConfirmChange)}>
+                บันทึก
               </Button>
             </Col>
-          ) : null}
-          <Col className="text-right">
-            <Button className="mr-4 btn-normal btn-outline-pink" variant="outline-secondary" onClick={handleCancelChange}>
-              ยกเลิก
-            </Button>
-            <Button variant="pink" className="btn-normal" onClick={handleConfirmChange}>
-              บันทึก
-            </Button>
-          </Col>
-        </Row>
+          </Row>
+        </Form>
       </div>
     )
   }

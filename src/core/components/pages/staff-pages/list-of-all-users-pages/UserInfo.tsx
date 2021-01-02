@@ -1,9 +1,10 @@
-import React, { FunctionComponent, useState, useEffect } from "react"
-import { RouteComponentProps, Link } from "react-router-dom"
+import React, { useState, useEffect } from "react"
+import { Link, useParams } from "react-router-dom"
 import { Button, Card, Form } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import OtherViewInfoComponent from "./OtherViewInfoComponent"
 import OtherEditInfoComponent from "./OtherEditInfoComponent"
+import PasswordChangeModal from "./PasswordChangeModal"
 import {
   DeleteModal,
   CompleteDeleteModal,
@@ -14,15 +15,13 @@ import {
   ConfirmChangePasswordModal,
 } from "./ListOfAllUserModals"
 import Info, { Account, ThaiLangAccount, ModalUserInfo } from "../interfaces/InfoInterface"
-import PasswordChangeModal from "./PasswordChangeModal"
 import format from "date-fns/format"
+import { useForm } from "react-hook-form"
 
-const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
+const UserInfo = () => {
   // page state //
   const [isEdit, setEdit] = useState<boolean>(false)
   const [newPassword, setNewPassword] = useState<string>("")
-  const [confirmPassword, setConfirmPassword] = useState<string>("")
-  const [showChangePassword, setShowChangePassword] = useState<boolean>(false)
   const [showModalInfo, setShowModalInfo] = useState<ModalUserInfo>({
     showDelete: false,
     showComDelete: false,
@@ -31,10 +30,10 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     showErr: false,
     showPasswordErr: false,
     showConfirmChange: false,
+    showChangePassword: false,
   })
 
   // Non CU state //
-  const [_id] = useState<string>(props.match.params._id)
   const [username, setUsername] = useState<string>("")
   const [accountType, setAccountType] = useState<string>("")
   const [membershipType, setMembershipType] = useState<string>("")
@@ -80,9 +79,27 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const [tempAccountExpiredDate, setTempAccountExpiredDate] = useState<Date>(new Date())
   const [tempInfo, setTempInfo] = useState<Info>(info)
 
+  const { _id } = useParams<{ _id: string }>()
+  const { register, handleSubmit } = useForm()
+
   useEffect(() => {
     fetchUserData()
   }, [])
+
+  // handles //
+  const handleEdit = () => {
+    setTempInfo(info)
+    setTempUsername(username)
+    setTempMembershipType(membershipType)
+    setTempPenalize(isPenalize)
+    setTempExpiredPenalizeDate(expiredPenalizeDate)
+    setTempAccountExpiredDate(accountExpiredDate)
+    setEdit(true)
+  }
+
+  const handleSave = () => {
+    setShowModalInfo({ ...showModalInfo, showSave: true })
+  }
 
   // requests //
   const fetchUserData = async () => {
@@ -154,7 +171,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       home_phone,
       contact_person,
       medical_condition,
-      password,
       user_photo,
       medical_certificate,
       national_id_photo,
@@ -184,7 +200,6 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         medical_condition,
         // top section //
         username: tempUsername,
-        password,
         membership_type: tempMembershipType,
         account_expiration_date: tempAccountExpiredDate,
         is_penalize: tempIsPenalize,
@@ -220,45 +235,19 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const requestChangePassword = () => {
     client({
       method: "PATCH",
-      url: "/list-all-user/" + _id,
+      url: "/list-all-user/password/" + _id,
       data: {
         password: newPassword,
       },
     })
       .then(({ data }) => {
-        console.log(data)
         setInfo({ ...info, password: data.password })
-        setShowChangePassword(false)
-        setShowModalInfo({ ...showModalInfo, showConfirmChange: false })
+        setShowModalInfo({ ...showModalInfo, showChangePassword: false, showConfirmChange: false })
       })
       .catch((err) => {
         console.log(err)
         setShowModalInfo({ ...showModalInfo, showErr: true })
       })
-  }
-
-  // handles //
-  const handleChange = (e) => {
-    setTempInfo({ ...tempInfo, [e.target.id]: e.target.value })
-  }
-
-  const handleEdit = () => {
-    setTempInfo(info)
-    setTempUsername(username)
-    setTempMembershipType(membershipType)
-    setTempPenalize(isPenalize)
-    setTempExpiredPenalizeDate(expiredPenalizeDate)
-    setTempAccountExpiredDate(accountExpiredDate)
-    setEdit(true)
-  }
-
-  const handleChangePassword = () => {
-    if (tempInfo.password !== info.password || newPassword !== confirmPassword) setShowModalInfo({ ...showModalInfo, showPasswordErr: true })
-    else setShowModalInfo({ ...showModalInfo, showConfirmChange: true })
-  }
-
-  const handleSave = () => {
-    setShowModalInfo({ ...showModalInfo, showSave: true })
   }
 
   const requestDelete = () => {
@@ -276,181 +265,186 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       })
   }
 
+  const onSubmit = (data: { username: string }) => {
+    setTempUsername(data.username)
+  }
+
   // renders //
   const renderTopSection = () => {
     return (
       <div className="topSection px-4 pt-2">
-        <div className="row">
-          <div className="col">
-            <label className="mt-2">ประเภท</label>
-            <p className="font-weight-bold">{ThaiLangAccount[Account[accountType]]}</p>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <div className="row">
+            <div className="col">
+              <label className="mt-2">ประเภท</label>
+              <p className="font-weight-bold">{ThaiLangAccount[Account[accountType]]}</p>
+            </div>
           </div>
-        </div>
-        <div className="row pb-2">
-          <div className="col">
-            <label className="mt-2">ชื่อผู้ใช้</label>
-            {isEdit ? (
-              <Form.Control
-                className="border"
-                style={{ backgroundColor: "white" }}
-                type="text"
-                defaultValue={username}
-                onChange={(e) => {
-                  setTempUsername(e.target.value)
-                }}
-              />
-            ) : (
-              <p className="font-weight-bold">{username}</p>
-            )}
-          </div>
-        </div>
-        <div className="row pb-2">
-          <div className="col">
-            <label className="mt-2">ประเภทบัญชี</label>
-            {isEdit ? (
-              <div>
+          <div className="row pb-2">
+            <div className="col">
+              <label className="mt-2">ชื่อผู้ใช้</label>
+              {isEdit ? (
                 <Form.Control
+                  ref={register}
+                  name="username"
+                  className="border"
+                  style={{ backgroundColor: "white" }}
+                  type="text"
+                  defaultValue={username}
+                />
+              ) : (
+                <p className="font-weight-bold">{username}</p>
+              )}
+            </div>
+          </div>
+          <div className="row pb-2">
+            <div className="col">
+              <label className="mt-2">ประเภทบัญชี</label>
+              {isEdit ? (
+                <div>
+                  <Form.Control
+                    as="select"
+                    className="m-0"
+                    defaultValue={tempMembershipType !== "" ? tempMembershipType : "ไม่มี"}
+                    onChange={(e) => {
+                      setTempMembershipType(e.target.value)
+                    }}
+                  >
+                    <option disabled value="ไม่มี">
+                      เลือกประเภทบัญชี
+                    </option>
+                    <option>สมาชิกสามัญ ก (staff membership)</option>
+                    <option>สมาชิกสามัญ ข (student membership)</option>
+                    <option>สมาชิกสามัญสมทบ ก (staff-spouse membership)</option>
+                    <option>สมาชิกสามัญสมทบ ข (alumni membership)</option>
+                    <option>สมาชิกวิสามัญ (full membership)</option>
+                    <option>สมาชิกวิสามัญสมทบ (full membership-spouse and children)</option>
+                    <option>สมาชิกวิสามัญเฉพาะสนามกีฬาในร่ม (indoor stadium)</option>
+                    <option>สมาชิกวิสามัญสมทบเฉพาะสนามกีฬาในร่ม (indoor stadium-spouse and children)</option>
+                    <option>สมาชิกรายเดือนสนามกีฬาในร่ม (monthly membership-indoor stadium)</option>
+                  </Form.Control>
+                </div>
+              ) : (
+                <div>
+                  <p className="font-weight-bold">{membershipType}</p>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="row pb-2">
+            <div className="col">
+              <label className="mt-2">สถานะการแบน</label>
+              {isEdit ? (
+                <Form.Control
+                  className="border m-0"
+                  style={{ backgroundColor: "white" }}
                   as="select"
-                  className="m-0"
-                  defaultValue={tempMembershipType !== "" ? tempMembershipType : "ไม่มี"}
+                  defaultValue={isPenalize ? 1 : 0}
                   onChange={(e) => {
-                    setTempMembershipType(e.target.value)
+                    setTempPenalize(e.target.value !== "0" ? true : false)
                   }}
                 >
-                  <option disabled value="ไม่มี">
-                    เลือกประเภทบัญชี
-                  </option>
-                  <option>สมาชิกสามัญ ก (staff membership)</option>
-                  <option>สมาชิกสามัญ ข (student membership)</option>
-                  <option>สมาชิกสามัญสมทบ ก (staff-spouse membership)</option>
-                  <option>สมาชิกสามัญสมทบ ข (alumni membership)</option>
-                  <option>สมาชิกวิสามัญ (full membership)</option>
-                  <option>สมาชิกวิสามัญสมทบ (full membership-spouse and children)</option>
-                  <option>สมาชิกวิสามัญเฉพาะสนามกีฬาในร่ม (indoor stadium)</option>
-                  <option>สมาชิกวิสามัญสมทบเฉพาะสนามกีฬาในร่ม (indoor stadium-spouse and children)</option>
-                  <option>สมาชิกรายเดือนสนามกีฬาในร่ม (monthly membership-indoor stadium)</option>
+                  <option value={0}>ปกติ</option>
+                  <option value={1}>โดนแบน</option>
                 </Form.Control>
-              </div>
-            ) : (
-              <div>
-                <p className="font-weight-bold">{membershipType}</p>
-              </div>
-            )}
+              ) : (
+                <p className="font-weight-bold">{isPenalize ? "โดนแบน" : "ปกติ"}</p>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="row pb-2">
-          <div className="col">
-            <label className="mt-2">สถานะการแบน</label>
-            {isEdit ? (
-              <Form.Control
-                className="border m-0"
-                style={{ backgroundColor: "white" }}
-                as="select"
-                defaultValue={isPenalize ? 1 : 0}
-                onChange={(e) => {
-                  setTempPenalize(e.target.value !== "0" ? true : false)
-                }}
-              >
-                <option value={0}>ปกติ</option>
-                <option value={1}>โดนแบน</option>
-              </Form.Control>
-            ) : (
-              <p className="font-weight-bold">{isPenalize ? "โดนแบน" : "ปกติ"}</p>
-            )}
-          </div>
-        </div>
-        <div className="row">
-          <div className="col">
-            <label className="mt-2">สิ้นสุดการแบน</label>
-            <div className="row">
-              <div className="col pr-0" style={{ width: "60%" }}>
-                <Form.Control
-                  type="date"
-                  disabled={!isEdit || !tempIsPenalize}
-                  value={
-                    isEdit
-                      ? tempExpiredPenalizeDate && tempIsPenalize
-                        ? format(new Date(tempExpiredPenalizeDate), "yyyy-MM-dd")
+          <div className="row">
+            <div className="col">
+              <label className="mt-2">สิ้นสุดการแบน</label>
+              <div className="row">
+                <div className="col pr-0" style={{ width: "60%" }}>
+                  <Form.Control
+                    type="date"
+                    disabled={!isEdit || !tempIsPenalize}
+                    value={
+                      isEdit
+                        ? tempExpiredPenalizeDate && tempIsPenalize
+                          ? format(new Date(tempExpiredPenalizeDate), "yyyy-MM-dd")
+                          : ""
+                        : isPenalize
+                        ? format(new Date(expiredPenalizeDate), "yyyy-MM-dd")
                         : ""
-                      : isPenalize
-                      ? format(new Date(expiredPenalizeDate), "yyyy-MM-dd")
-                      : ""
-                  }
-                  onChange={(e) => {
-                    let incom: Date = new Date(e.target.value)
-                    let old: Date = tempExpiredPenalizeDate ? new Date(tempExpiredPenalizeDate) : new Date()
-                    setTempExpiredPenalizeDate(new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), old.getHours(), old.getMinutes()))
-                  }}
-                />
+                    }
+                    onChange={(e) => {
+                      let incom: Date = new Date(e.target.value)
+                      let old: Date = tempExpiredPenalizeDate ? new Date(tempExpiredPenalizeDate) : new Date()
+                      setTempExpiredPenalizeDate(new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), old.getHours(), old.getMinutes()))
+                    }}
+                  />
+                </div>
+                <div className="col" style={{ width: "40%" }}>
+                  <Form.Control
+                    type="time"
+                    disabled={!isEdit || !tempIsPenalize}
+                    value={
+                      isEdit
+                        ? tempExpiredPenalizeDate && tempIsPenalize
+                          ? format(new Date(tempExpiredPenalizeDate), "HH:mm")
+                          : ""
+                        : isPenalize
+                        ? format(new Date(expiredPenalizeDate), "HH:mm")
+                        : ""
+                    }
+                    onChange={(e) => {
+                      let date: Date = tempExpiredPenalizeDate ? new Date(tempExpiredPenalizeDate) : new Date()
+                      let hour: number = parseInt(e.target.value.slice(0, 2))
+                      let minute: number = parseInt(e.target.value.slice(3, 5))
+                      setTempExpiredPenalizeDate(new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, 0))
+                    }}
+                  />
+                </div>
               </div>
-              <div className="col" style={{ width: "40%" }}>
-                <Form.Control
-                  type="time"
-                  disabled={!isEdit || !tempIsPenalize}
-                  value={
-                    isEdit
-                      ? tempExpiredPenalizeDate && tempIsPenalize
-                        ? format(new Date(tempExpiredPenalizeDate), "HH:mm")
+            </div>
+            <div className="col">
+              <label className="mt-2">วันหมดอายุสมาชิก</label>
+              <div className="row">
+                <div className="col pr-0" style={{ width: "60%" }}>
+                  <Form.Control
+                    type="date"
+                    disabled={!isEdit}
+                    value={
+                      isEdit
+                        ? tempAccountExpiredDate
+                          ? format(new Date(tempAccountExpiredDate), "yyyy-MM-dd")
+                          : ""
+                        : accountExpiredDate
+                        ? format(new Date(accountExpiredDate), "yyyy-MM-dd")
                         : ""
-                      : isPenalize
-                      ? format(new Date(expiredPenalizeDate), "HH:mm")
-                      : ""
-                  }
-                  onChange={(e) => {
-                    let date: Date = tempExpiredPenalizeDate ? new Date(tempExpiredPenalizeDate) : new Date()
-                    let hour: number = parseInt(e.target.value.slice(0, 2))
-                    let minute: number = parseInt(e.target.value.slice(3, 5))
-                    setTempExpiredPenalizeDate(new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, 0))
-                  }}
-                />
+                    }
+                    onChange={(e) => {
+                      setTempAccountExpiredDate(new Date(e.target.value))
+                    }}
+                  />
+                </div>
+                <div className="col" style={{ width: "40%" }}>
+                  <Form.Control
+                    type="time"
+                    disabled={!isEdit}
+                    value={
+                      isEdit
+                        ? tempAccountExpiredDate
+                          ? format(new Date(tempAccountExpiredDate), "HH:mm")
+                          : ""
+                        : accountExpiredDate
+                        ? format(new Date(accountExpiredDate), "HH:mm")
+                        : ""
+                    }
+                    onChange={(e) => {
+                      let date: Date = tempExpiredPenalizeDate ? new Date(tempAccountExpiredDate) : new Date()
+                      let hour: number = parseInt(e.target.value.slice(0, 2))
+                      let minute: number = parseInt(e.target.value.slice(3, 5))
+                      setTempAccountExpiredDate(new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, 0))
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
-          <div className="col">
-            <label className="mt-2">วันหมดอายุสมาชิก</label>
-            <div className="row">
-              <div className="col pr-0" style={{ width: "60%" }}>
-                <Form.Control
-                  type="date"
-                  disabled={!isEdit}
-                  value={
-                    isEdit
-                      ? tempAccountExpiredDate
-                        ? format(new Date(tempAccountExpiredDate), "yyyy-MM-dd")
-                        : ""
-                      : accountExpiredDate
-                      ? format(new Date(accountExpiredDate), "yyyy-MM-dd")
-                      : ""
-                  }
-                  onChange={(e) => {
-                    setTempAccountExpiredDate(new Date(e.target.value))
-                  }}
-                />
-              </div>
-              <div className="col" style={{ width: "40%" }}>
-                <Form.Control
-                  type="time"
-                  disabled={!isEdit}
-                  value={
-                    isEdit
-                      ? tempAccountExpiredDate
-                        ? format(new Date(tempAccountExpiredDate), "HH:mm")
-                        : ""
-                      : accountExpiredDate
-                      ? format(new Date(accountExpiredDate), "HH:mm")
-                      : ""
-                  }
-                  onChange={(e) => {
-                    let date: Date = tempExpiredPenalizeDate ? new Date(tempAccountExpiredDate) : new Date()
-                    let hour: number = parseInt(e.target.value.slice(0, 2))
-                    let minute: number = parseInt(e.target.value.slice(3, 5))
-                    setTempAccountExpiredDate(new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, 0))
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        </Form>
       </div>
     )
   }
@@ -486,21 +480,18 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const renderEditForm = () => {
     return (
       <div>
-        <OtherEditInfoComponent tempInfo={tempInfo} setTempInfo={setTempInfo} _id={_id} />
+        <OtherEditInfoComponent tempInfo={tempInfo} setTempInfo={setTempInfo} handleSave={handleSave} />
         <div className="mt-5">
           <Button
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              setTempInfo({ ...tempInfo, password: "" })
-              setNewPassword("")
-              setConfirmPassword("")
-              setShowChangePassword(true)
+              setShowModalInfo({ ...showModalInfo, showChangePassword: true })
             }}
           >
             เปลี่ยนรหัสผ่าน
           </Button>
-          <Button variant="pink" className="float-right btn-normal" onClick={handleSave}>
+          <Button variant="pink" type="submit" className="float-right btn-normal" onClick={handleSubmit(onSubmit)}>
             บันทึก
           </Button>
           <Button
@@ -528,11 +519,10 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         <PasswordErrModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
         <ConfirmChangePasswordModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ requestChangePassword }} />
         <PasswordChangeModal
-          showChange={showChangePassword}
-          setShowChange={setShowChangePassword}
+          showModals={showModalInfo}
+          setShowModals={setShowModalInfo}
+          oldPassword={info.password}
           setNewPassword={setNewPassword}
-          setConfirmPassword={setConfirmPassword}
-          info={{ handleChange, handleChangePassword }}
         />
       </div>
     )

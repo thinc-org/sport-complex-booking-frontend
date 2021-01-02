@@ -1,7 +1,7 @@
 import React from "react"
 import { useHistory } from "react-router-dom"
-import { Modal, Button } from "react-bootstrap"
-import { ModalAddUser } from "../interfaces/InfoInterface"
+import { Modal, Button, Alert } from "react-bootstrap"
+import { ModalAddUser, AlertAddUser } from "../interfaces/InfoInterface"
 
 interface ModalProps {
   show: ModalAddUser
@@ -127,5 +127,29 @@ export const UsernameErrModal: React.FC<ModalProps> = ({ show, setShow }) => {
         </Button>
       </Modal.Footer>
     </Modal>
+  )
+}
+
+export const AlertUncom: React.FC<{ show: AlertAddUser }> = ({ show }) => {
+  return (
+    <Alert show={show.showAlertUncom} variant="danger" style={{ fontWeight: "lighter" }}>
+      กรุณากรอกรายละเอียดให้ครบ
+    </Alert>
+  )
+}
+
+export const AlertInvalidUsername: React.FC<{ show: AlertAddUser }> = ({ show }) => {
+  return (
+    <Alert show={show.showAlertUsername} variant="danger" style={{ fontWeight: "lighter" }}>
+      ชื่อผู้ใช้ (Username) ต้องมีตัวอักษรอย่างน้อย 1 ตัว
+    </Alert>
+  )
+}
+
+export const AlertErrorPassword: React.FC<{ show: AlertAddUser }> = ({ show }) => {
+  return (
+    <Alert show={show.showAlertPassword} variant="danger" style={{ fontWeight: "lighter" }}>
+      รหัสผ่านไม่ตรงกัน
+    </Alert>
   )
 }
