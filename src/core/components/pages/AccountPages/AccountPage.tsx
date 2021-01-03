@@ -83,7 +83,7 @@ const PenalizeMessage:React.FC<PenalizeMessageProps> = ({show}) => {
   const {t} = useTranslation()
   if(!show) return null
   return (
-    <div className="alert alert-danger mx-3 mt-3" role="alert">
+    <div className="alert alert-danger mx-auto col-md-6 mt-3" role="alert">
       <h3>{t("youArePenalized")}</h3>
       <h6>{t("penalizeMessage")}</h6>
     </div>
