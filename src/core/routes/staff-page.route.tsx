@@ -25,6 +25,7 @@ const StaffRoute = (props) => {
     ["/userInfo", "ข้อมูลผู้ใช้"],
     ["/verifyApprove", "รับรองการลงทะเบียน"],
     ["/verifyInfo", "รับรองการลงทะเบียนรายบุคคล"],
+    ["/disableCourt", "การปิดคอร์ด"],
   ])
 
   const StaffRouteWithHeader = () => {
@@ -62,6 +63,7 @@ const StaffRoute = (props) => {
                         )
                       }}
                     />
+                    <Route exact path={`${path}/disableCourt`} component={DisableCourt} />
                     <Route exact path={`${path}/listOfAllUsers`} component={ListOfAllUsers} />
                     <Route exact path={`${path}/addUser`} component={AddUser} />
                     <Route exact path={`${path}/cuInfo/:_id`} component={CuSatitInfo} />
