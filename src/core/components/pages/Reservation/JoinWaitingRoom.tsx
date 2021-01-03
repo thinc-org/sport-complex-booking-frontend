@@ -12,7 +12,6 @@ interface ValidityMessage {
   message: string
 }
 
-
 function JoinWaitingRoom() {
   const { register, handleSubmit, errors } = useForm()
   const {t} = useTranslation()
@@ -32,7 +31,7 @@ function JoinWaitingRoom() {
   }
 
   const fetchValidity = async () => {
-    await client.post('/reservation/checkvalidity')
+    await client.post<ValidityMessage>('/reservation/checkvalidity')
       .then(({data}) => {
           const resMsg = data['message']
           if (resMsg !== "Valid user") {

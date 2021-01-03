@@ -81,7 +81,7 @@
   "waitingRoomHelp": "The access code can by found when you create a waiting room.",
   "enterCode": "Enter a waiting room access code",
   "dateSelection": "Date Selection",
-  "sevenDays": "You can only reserve at most 7 days in advance.",
+  "sevenDays": "You can only reserve at most 7 days in advance and cannot reserve a past date.",
   "sportSelection": "Sport Selection",
   "courtSelection": "Court Selection",
   "remainingQuota": "Reservation Quota Remaining:",

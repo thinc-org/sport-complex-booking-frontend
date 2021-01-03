@@ -1,5 +1,4 @@
-import React from "react"
-import { useState, useContext } from "react"
+import React, { useState, useContext } from "react"
 import {  Button } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import { UserContext } from "../../../../contexts/UsersContext"
@@ -36,7 +35,7 @@ export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
       .then(() => {
           window.location.reload()
       })
-      .catch((err) => {
+      .catch(() => {
           setShowErr(true)
       })
   }

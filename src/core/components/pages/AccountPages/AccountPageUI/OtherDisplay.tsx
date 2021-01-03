@@ -26,7 +26,7 @@ export default function OtherAaccountDisplay() {
     assignFileTokens()
   }, [])
 
-  const openFile = (token) => {
+  const openFile = (token: string) => {
     let url = process.env.REACT_APP_API_URL + "/fs/view?token=" + token
     let win = window.open(url, '_blank')
     win? win.focus(): console.log("Error")
