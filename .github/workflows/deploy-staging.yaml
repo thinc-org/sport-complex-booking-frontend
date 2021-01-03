@@ -1,0 +1,51 @@
+name: Staging deployment
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set environment
+        run: |
+          BRANCH=${GITHUB_REF##*/}
+          STAGE=$BRANCH
+          echo "BRANCH=$BRANCH" >> $GITHUB_ENV
+          echo "STAGE=$STAGE" >> $GITHUB_ENV
+          echo "PROJECT=frontend-$STAGE" >> $GITHUB_ENV
+      - uses: actions/checkout@v2
+      - name: Build Docker image
+        uses: whoan/docker-build-with-cache-action@v5
+        with:
+          image_name: thinc-org/sport-complex-booking-frontend
+          image_tag: "${{ env.STAGE }}"
+          username: sport-complex-booking
+          password: "${{ secrets.GHCR_PAT }}"
+          registry: ghcr.io
+          build_extra_args: "--build-arg=stage=dev"
+      - uses: appleboy/ssh-action@master
+        name: Deploy to VM
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_KEY }}
+          port: ${{ secrets.VM_PORT }}
+          envs: GITHUB_TOKEN, GITHUB_REPOSITORY, PROJECT, BRANCH, STAGE
+          script: |
+            set -e
+
+            rm -rf $PROJECT
+            git clone -b $BRANCH https://.:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY $PROJECT
+            cd $PROJECT
+
+            docker pull ghcr.io/thinc-org/sport-complex-booking-frontend:$STAGE
+            docker-compose --project-name=$PROJECT -f docker-compose.$STAGE.yml stop
+            docker-compose --project-name=$PROJECT -f docker-compose.$STAGE.yml up -d
+
+            cd ..
+            rm -rf $PROJECT
