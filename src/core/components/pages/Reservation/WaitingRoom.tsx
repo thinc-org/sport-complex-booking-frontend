@@ -1,7 +1,7 @@
 import React from "react"
 import { useState, useEffect, useContext } from "react"
 import { Button } from "react-bootstrap"
-import { useHistory } from "react-router-dom"
+import { useHistory, Link } from "react-router-dom"
 import { client } from "../../../../axiosConfig"
 import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 import { timeConversion, countDown, timeShift } from "./timeFormating"
@@ -207,8 +207,20 @@ const WaitingRoomPage = () => {
       <>
         <NavHeader header={t("waitingRoom")} />
         <div className="container">
-          <div className="row justify-content-center mt-5 grey" style={{ fontWeight: 400 }}>
-            {t("noWaitingRoom")}
+          <div className="row justify-content-center">
+            <div className="col-12 grey text-center">
+              <h6 className=" mt-5" style={{ fontWeight: 400 }}>
+                {t("noWaitingRoom")}
+              </h6>
+              <h6 className="mt-5 mb-3" style={{ fontWeight: 400 }}>
+                {t("checkOutMyReservation")}
+              </h6>
+              <Link to="/myreservation">
+                <Button variant="pink" className="pt-2 pb-2">
+                  {t("myReservation")}
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </>

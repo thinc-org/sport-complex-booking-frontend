@@ -193,5 +193,6 @@
   "home": "Home",
   "account": "Account",
   "waitingRoom": "Waiting Room",
-  "noWaitingRoom": "You have no waiting room at this moment."
+  "noWaitingRoom": "You have no waiting room at this moment.",
+  "checkOutMyReservation": "Check out My Reservation page to see your successful reservations."
 }
