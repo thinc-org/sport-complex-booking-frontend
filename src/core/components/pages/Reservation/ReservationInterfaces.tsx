@@ -1,7 +1,11 @@
 import { History, LocationState } from "history"
 
-export interface HistoryProps {
- history: History<LocationState>
+export interface HoorayHistoryStates {
+  msg: boolean
+}
+
+export interface BanHistoryStates {
+  msg: string
 }
 
 export interface WaitingRoomData {
