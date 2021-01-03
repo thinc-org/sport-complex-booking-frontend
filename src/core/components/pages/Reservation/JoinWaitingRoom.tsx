@@ -5,7 +5,7 @@ import {Link, useHistory } from "react-router-dom"
 import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from 'react-i18next'
 import { client } from "../../../../axiosConfig"
-import { CustomModal } from "../../ui/Modals/WaitingRoomModals"
+import { CustomWaitingRoomModal } from "../../ui/Modals/WaitingRoomModals"
 import { WaitingRoomAccessCode } from './ReservationInterfaces'
 
 interface ValidityMessage {
@@ -90,7 +90,7 @@ function JoinWaitingRoom() {
         </form>
       </div>
       {/* Wrong Access Code Modal */}
-      <CustomModal type="wrongAccessCodeModal" show={showWrongAccessCodeModal} setShow={setShowWrongAccessCodeModal}  />
+      <CustomWaitingRoomModal type="wrongAccessCodeModal" show={showWrongAccessCodeModal} setShow={setShowWrongAccessCodeModal}  />
     </div>
   )
 }

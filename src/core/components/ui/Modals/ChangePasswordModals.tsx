@@ -8,7 +8,7 @@ export interface PasswordData {
   repeatNewPassword?: string
 }
 
-interface CustomModalProps {
+interface CustomPasswordModalProps {
   type: "passwordChangeConfirm" | "passwordChangeSuccess" | "passwordChangeError"
   show: boolean
   setShow: (value: boolean) => void
@@ -16,7 +16,7 @@ interface CustomModalProps {
   data?: PasswordData
 }
 
-export const CustomModal:React.FC<CustomModalProps> = ({type, show, setShow, mainFunction, data}) => {
+export const CustomPasswordModal:React.FC<CustomPasswordModalProps> = ({type, show, setShow, mainFunction, data}) => {
   const { t } = useTranslation() 
   const message = t(type, { returnObjects: true })
   if(!show) return null

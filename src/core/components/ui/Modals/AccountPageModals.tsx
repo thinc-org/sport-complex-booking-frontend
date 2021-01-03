@@ -5,7 +5,7 @@ import { Other } from '../../../contexts/UsersContext'
 
 
 
-interface CustomModalProps {
+interface CustomAccountModalProps {
   type: "confirmEditAccountModal" | "editAccountErrorModal" 
   show: boolean
   setShow: (value: boolean) => void
@@ -13,7 +13,7 @@ interface CustomModalProps {
   data?: EdittedData
 }
 
-export const CustomModal:React.FC<CustomModalProps> = ({type, show, setShow, mainFunction, data}) => {
+export const CustomAccountModal:React.FC<CustomAccountModalProps> = ({type, show, setShow, mainFunction, data}) => {
   const { t } = useTranslation() 
   const message = t(type, { returnObjects: true })
   if(!show) return null

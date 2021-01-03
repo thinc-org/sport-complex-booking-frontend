@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap"
 import { UserContext } from "../../../../contexts/UsersContext"
 import { useForm } from "react-hook-form"
 import withUserGuard from "../../../../guards/user.guard"
-import { PasswordData, CustomModal } from "../../../ui/Modals/ChangePasswordModals"
+import { PasswordData, CustomPasswordModal } from "../../../ui/Modals/ChangePasswordModals"
 import { useTranslation } from 'react-i18next'
 import { Redirect, useHistory } from "react-router-dom"
 import { client } from "../../../../../axiosConfig"
@@ -75,11 +75,11 @@ function ChangePassword() {
       </div>
       <br />
       {/* Confirmation Dialog */}
-      <CustomModal type={"passwordChangeConfirm"} show={show} setShow={setShow} mainFunction={postDataToBackend} data={passwordData}/>
+      <CustomPasswordModal type={"passwordChangeConfirm"} show={show} setShow={setShow} mainFunction={postDataToBackend} data={passwordData}/>
       {/* Success password change modal */}
-      <CustomModal type={"passwordChangeSuccess"} show={showChangeSuccess} setShow={setShowChangeSuccess} mainFunction={returnToAccountPage}/>
+      <CustomPasswordModal type={"passwordChangeSuccess"} show={showChangeSuccess} setShow={setShowChangeSuccess} mainFunction={returnToAccountPage}/>
       {/* Password Change Error */}
-      <CustomModal type={"passwordChangeError"} show={showChangeError} setShow={setShowChangeError} mainFunction={()=>setShowChangeError(false)}/>
+      <CustomPasswordModal type={"passwordChangeError"} show={showChangeError} setShow={setShowChangeError} mainFunction={()=>setShowChangeError(false)}/>
     </div>
   )
 }

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form"
 import {  Button } from "react-bootstrap"
 import { UserContext } from "../../../../contexts/UsersContext"
 import { useTranslation } from 'react-i18next'
-import { EdittedData, WarningMessage, CustomModal } from "../../../ui/Modals/AccountPageModals"
+import { EdittedData, WarningMessage, CustomAccountModal } from "../../../ui/Modals/AccountPageModals"
 import { client } from "../../../../../axiosConfig"
 import { yupResolver } from '@hookform/resolvers/yup'
 import {infoSchema } from "../../../../schemas/editUserInfo"
@@ -79,9 +79,9 @@ export default function ChulaAccountEdit({ toggleEditButton }) {
           </div>
 
           {/* MODAL CONFIRM DIALOGUE */}
-          <CustomModal type="confirmEditAccountModal" show={show} setShow={setShow} mainFunction={postDataToBackend} data={formData} />
+          <CustomAccountModal type="confirmEditAccountModal" show={show} setShow={setShow} mainFunction={postDataToBackend} data={formData} />
           {/* MODAL ERROR */}
-          <CustomModal type="editAccountErrorModal" show={showErr} setShow={setShowErr}/>
+          <CustomAccountModal type="editAccountErrorModal" show={showErr} setShow={setShowErr}/>
         </form>
       </div>
       <br />
