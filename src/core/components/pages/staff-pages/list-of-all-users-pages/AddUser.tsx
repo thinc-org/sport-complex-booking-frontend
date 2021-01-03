@@ -136,17 +136,6 @@ const AddUser: FunctionComponent = () => {
               <Form.Label>ชื่อผู้ใช้</Form.Label>
               <Form.Control ref={register} name="username" defaultValue={username} />
             </Col>
-            <Col>
-              <Form.Group>
-                <Form.Label>กรอกรหัสผ่านอีกครั้ง</Form.Label>
-                <Form.Control
-                  onChange={(e) => {
-                    set_confirm_password(e.target.value)
-                  }}
-                  value={confirm_password}
-                />
-              </Form.Group>
-            </Col>
           </Row>
           {renderPasswordSection()}
           <AlertInvalidUsername show={showAlerts} />
