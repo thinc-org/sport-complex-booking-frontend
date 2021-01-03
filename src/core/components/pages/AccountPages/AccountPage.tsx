@@ -89,7 +89,7 @@ interface PenalizeMessageProps {
   show?: boolean
 }
 
-const PenalizeMessage: React.FC<PenalizeMessageProps> = ({ show }) => {
+const PenalizeMessage: React.FC<PenalizeMessageProps> = ({ show }: PenalizeMessageProps) => {
   const { t } = useTranslation()
   if (!show) return null
   return (

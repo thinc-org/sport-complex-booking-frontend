@@ -1,10 +1,10 @@
-import React from 'react';
-import { Form, ToggleButton, Container, Button, ToggleButtonGroup } from 'react-bootstrap';
-import { NavHeader } from "../../ui/navbar/navbarSideEffect";
-import { useForm } from 'react-hook-form'
-import withUserGuard from '../../../guards/user.guard'
-import { usePersonalInfo } from './loginHooks'
-import { useTranslation } from 'react-i18next'
+import React from "react"
+import { Form, ToggleButton, Container, Button, ToggleButtonGroup } from "react-bootstrap"
+import { NavHeader } from "../../ui/navbar/navbarSideEffect"
+import { useForm } from "react-hook-form"
+import withUserGuard from "../../../guards/user.guard"
+import { usePersonalInfo } from "./loginHooks"
+import { useTranslation } from "react-i18next"
 const PersonalInfo = () => {
   const { t } = useTranslation()
   const { onSubmit } = usePersonalInfo()

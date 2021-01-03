@@ -1,7 +1,6 @@
 import Axios from "axios"
 import { getCookie } from "./core/contexts/cookieHandler"
 
-
 export const client = Axios.create({
   baseURL: process.env.REACT_APP_API_URL,
 })

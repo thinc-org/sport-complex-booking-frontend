@@ -20,7 +20,7 @@ function ChangePassword() {
   const onSubmit = (data: PasswordData) => {
     if (data.oldPassword !== data.newPassword) {
       setRepeatedPassword(false)
-      if (data.newPassword !== data.repeatNewPassword!) {
+      if (data.newPassword !== data.repeatNewPassword) {
         setShowPasswordMismatch(true)
       } else {
         delete data.repeatNewPassword

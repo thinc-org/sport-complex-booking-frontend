@@ -12,7 +12,7 @@ interface historyProps {
 }
 
 function WaitingRoomBan(props: historyProps) {
-  const { msg } = (props["location"] && props["location"]["state"]) || {}
+  const state = ((props.history["location"] && props.history["location"]["state"]) || {}) as { msg: string }
   const { t } = useTranslation()
   const history = useHistory<LocationState | unknown>()
 
@@ -39,7 +39,7 @@ function WaitingRoomBan(props: historyProps) {
     <div className="wrapper">
       <div className="mx-auto col-md-6">
         <div className="default-mobile-wrapper mt-4">
-          <h4>{msg}</h4>
+          <h4>{state.msg}</h4>
           <p>{t("waiting_room_ban")}</p>
           <Link to={"/"}>
             <div className="button-group">

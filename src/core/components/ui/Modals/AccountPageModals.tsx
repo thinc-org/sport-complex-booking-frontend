@@ -14,7 +14,7 @@ export interface EdittedData {
   phone: string
 }
 
-export const ConfirmModal: React.FC<ConfirmModalProps> = ({ show, setShow, postDataToBackend, formData }) => {
+export const ConfirmModal: React.FC<ConfirmModalProps> = ({ show, setShow, postDataToBackend, formData }: ConfirmModalProps) => {
   const { t } = useTranslation()
   if (!show) return null
   return (
@@ -47,7 +47,7 @@ export interface ErrorModalProps {
   setShowErr(show: boolean): void
 }
 
-export const ErrorModal: React.FC<ErrorModalProps> = ({ showErr, setShowErr }) => {
+export const ErrorModal: React.FC<ErrorModalProps> = ({ showErr, setShowErr }: ErrorModalProps) => {
   const { t } = useTranslation()
   if (!showErr) return null
   return (
@@ -83,7 +83,7 @@ interface WarningMessageProps {
   show: boolean
 }
 
-export const WarningMessage: React.FC<WarningMessageProps> = ({ show }) => {
+export const WarningMessage: React.FC<WarningMessageProps> = ({ show }: WarningMessageProps) => {
   const { t } = useTranslation()
   if (!show) return null
   return (
@@ -99,7 +99,7 @@ export interface OtherWarningMessageProps {
   verification_status: string
 }
 
-export const OtherWarningMessage: React.FC<OtherWarningMessageProps> = ({ show, verification_status }) => {
+export const OtherWarningMessage: React.FC<OtherWarningMessageProps> = ({ show, verification_status }: OtherWarningMessageProps) => {
   const { t } = useTranslation()
   if (!show) return null
   switch (verification_status) {

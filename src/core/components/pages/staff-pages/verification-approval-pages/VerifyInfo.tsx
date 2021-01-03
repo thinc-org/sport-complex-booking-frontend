@@ -9,7 +9,7 @@ import Info, { ContactPerson } from "../interfaces/InfoInterface"
 import { RejectInfo, ModalVerify } from "../interfaces/InfoInterface"
 
 /// start of main function ///
-const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (props) => {
+const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> = (props: RouteComponentProps<{ username: string }>) => {
   // page state //
   const [jwt, setJwt] = useState<string>("")
   const [show_reject, set_show_reject] = useState<boolean>(false)
@@ -321,13 +321,13 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ username: string }>> =
 
   const renderModal = () => {
     if (show_modal_info["show_confirm_reject"])
-      return <VerifyModals show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ requestReject }} props={props} />
+      return <VerifyModals show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ requestReject }} rest={props} />
     else if (show_modal_info["show_confirm_accept"])
-      return <VerifyModals show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ requestAccept }} props={props} />
+      return <VerifyModals show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ requestAccept }} rest={props} />
     else if (show_modal_info["show_uncom_accept"] || show_modal_info["show_uncom_reject"] || show_modal_info["show_err"])
-      return <VerifyModals show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{}} props={props} />
+      return <VerifyModals show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{}} rest={props} />
     else if (show_modal_info["show_complete_accept"] || show_modal_info["show_complete_reject"])
-      return <VerifyModals show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ username }} props={props} />
+      return <VerifyModals show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ username }} rest={props} />
   }
 
   return (

@@ -8,7 +8,7 @@
 :root {
   --lightpink-color: #ffeced;
   --pink-color: #ff80ab;
-  --medium-pink-color : #ffb2dd;
+  --medium-pink-color: #ffb2dd;
   --darkpink-color: #c94f7c;
   --grey-color: #e6e6e6;
   --red-color: #c9302c;
@@ -44,7 +44,7 @@ html,
 }
 .btn-mediumPink {
   background-color: var(--medium-pink-color);
-  color:white;
+  color: white;
 }
 .btn-pink {
   background-color: var(--pink-color);
@@ -82,14 +82,13 @@ html,
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
-.btn-outline-transparent{
-  background-color:transparent;
+.btn-outline-transparent {
+  background-color: transparent;
   border: 1px solid black;
   color: black;
 }
 .btn-outline-transparent:hover,
-.btn-outline-transparent:focus
-{
+.btn-outline-transparent:focus {
   background-color: var(--pink-color);
   border-color: transparent;
   color: white;
@@ -245,7 +244,7 @@ p.link {
   background: #df609f;
   color: white;
 }
-.page-link:focus{ 
+.page-link:focus {
   background: #df609f;
   box-shadow: 0 0 0 0.2rem rgba(255, 128, 171, 0.25);
 }
@@ -272,7 +271,7 @@ p.link {
 .form-label {
   font-weight: bold;
 }
-.floating-label{
+.floating-label {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -281,7 +280,7 @@ p.link {
   position: fixed;
   top: 270px;
   z-index: 5;
-  transition:0.3s;
+  transition: 0.3s;
 }
 
 .custom-checkbox {

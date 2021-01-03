@@ -20,7 +20,16 @@ export interface WaitingRoomData {
   date: Date
 }
 
-export const DetailsModal: React.FC<DetailsModalProps> = ({ show, setShow, sportName, details, date, times, formatTime, postDataToBackend }) => {
+export const DetailsModal: React.FC<DetailsModalProps> = ({
+  show,
+  setShow,
+  sportName,
+  details,
+  date,
+  times,
+  formatTime,
+  postDataToBackend,
+}: DetailsModalProps) => {
   const { t } = useTranslation()
   if (!show) return null
   return (

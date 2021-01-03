@@ -9,18 +9,18 @@ interface InfoProps {
   handleSave?: () => void
 }
 
-interface propsTemplate {
+interface PropsTemplate {
   show_modal_info: ModalUserInfo
   set_show_modal_info: React.Dispatch<React.SetStateAction<ModalUserInfo>>
   info: InfoProps
-  props: RouteComponentProps
+  rest: RouteComponentProps
 }
 
-const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: propsTemplate) => {
+const ModalsComponent = ({ show_modal_info, set_show_modal_info, info, rest }: PropsTemplate) => {
   const { show_delete, show_com_delete, show_save, show_com_save, show_err } = show_modal_info
 
   const redirectBack = () => {
-    props.history.push({
+    rest.history.push({
       pathname: "/listOfAllUsers",
     })
   }

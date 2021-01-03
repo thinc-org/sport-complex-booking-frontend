@@ -13,10 +13,10 @@ interface propsTemplate {
   show_modal_info: ModalVerify
   set_show_modal_info: React.Dispatch<React.SetStateAction<ModalVerify>>
   info: InfoProps
-  props: RouteComponentProps
+  rest: RouteComponentProps
 }
 
-const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, props }: propsTemplate) => {
+const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, rest }: propsTemplate) => {
   const {
     show_confirm_accept,
     show_uncom_accept,
@@ -28,8 +28,7 @@ const VerifyModalsComponent = ({ show_modal_info, set_show_modal_info, info, pro
   } = show_modal_info
 
   const redirectBack = () => {
-    console.log(props)
-    props.history.push({
+    rest.history.push({
       pathname: "/verifyApprove",
     })
   }

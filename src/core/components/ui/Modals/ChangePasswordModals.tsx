@@ -15,7 +15,7 @@ interface ConfirmationModalProps {
   passwordData?: PasswordData
 }
 
-export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ show, setShow, postDataToBackend, passwordData }) => {
+export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ show, setShow, postDataToBackend, passwordData }: ConfirmationModalProps) => {
   const { t } = useTranslation()
   if (!show) return null
   return (
@@ -60,7 +60,7 @@ export interface PasswordMismatchModalProps {
   setShowPasswordMismatch(show: boolean): void
 }
 
-export const PasswordMismatchModal: React.FC<PasswordMismatchModalProps> = ({ show, setShowPasswordMismatch }) => {
+export const PasswordMismatchModal: React.FC<PasswordMismatchModalProps> = ({ show, setShowPasswordMismatch }: PasswordMismatchModalProps) => {
   const { t } = useTranslation()
   if (!show) return null
   return (

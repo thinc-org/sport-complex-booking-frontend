@@ -5,14 +5,18 @@ import { UserContext } from "../../../../contexts/UsersContext"
 import { useTranslation } from "react-i18next"
 import { WarningMessage } from "../../../ui/Modals/AccountPageModals"
 
-export default function ChulaAccountDisplay({ toggleEditButton }) {
+interface ChulaAccountDisplayProps {
+  toggleEditButton: () => void
+}
+
+export default function ChulaAccountDisplay({ toggleEditButton }: ChulaAccountDisplayProps) {
   const { cuStudentAccount: user } = useContext(UserContext)
   const { t, i18n } = useTranslation()
   const { language } = i18n
 
   return (
     <div className="mx-auto col-md-6">
-      <WarningMessage show={user!.is_first_login} />
+      <WarningMessage show={!!user && user.is_first_login} />
       <div className="default-mobile-wrapper">
         <div className="row mt-2">
           <div className="col-8">

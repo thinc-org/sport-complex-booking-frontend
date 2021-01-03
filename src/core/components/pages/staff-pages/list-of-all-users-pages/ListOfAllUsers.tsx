@@ -55,7 +55,7 @@ enum Account {
   Other,
 }
 
-const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
+const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props: RouteComponentProps) => {
   // page state
   const [page_no, set_page_no] = useState<number>(1)
   const [max_user, set_max_user] = useState<number>(1)

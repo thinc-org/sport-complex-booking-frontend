@@ -4,9 +4,11 @@ import { RouteComponentProps, Link } from "react-router-dom"
 import fetch from "../interfaces/axiosTemplate"
 import { AddInfo } from "../interfaces/InfoInterface"
 
-const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
+const AddUser: FunctionComponent<RouteComponentProps> = (props: RouteComponentProps) => {
   // Page states //
-  const [jwt, setJwt] = useState<string>("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmRjYTMxNjZhNDMwOTQyOWM5MmI4MjkiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDg3MzYxMTEsImV4cCI6MTYwOTM0MDkxMX0.NxmksdEUKg_2EU8ukKcO-vjisYY79a4TrJRGAibPvVQ")
+  const [jwt, setJwt] = useState<string>(
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmRjYTMxNjZhNDMwOTQyOWM5MmI4MjkiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDg3MzYxMTEsImV4cCI6MTYwOTM0MDkxMX0.NxmksdEUKg_2EU8ukKcO-vjisYY79a4TrJRGAibPvVQ"
+  )
   const [selectingSatit, setSelectingSatit] = useState<boolean>(false)
   const [showAdd, setShowAdd] = useState<boolean>(false)
   const [showCom, setShowCom] = useState<boolean>(false)

@@ -6,7 +6,11 @@ import { useTranslation } from "react-i18next"
 import { ConfirmModal, ErrorModal, EdittedData, WarningMessage } from "../../../ui/Modals/AccountPageModals"
 import { client } from "../../../../../axiosConfig"
 
-export default function ChulaAccountEdit({ toggleEditButton }) {
+interface ChulaAccountEditProps {
+  toggleEditButton: () => void
+}
+
+export default function ChulaAccountEdit({ toggleEditButton }: ChulaAccountEditProps) {
   const [show, setShow] = useState(false)
   const [showErr, setShowErr] = useState(false)
   const [formData, setFormData] = useState<EdittedData>()
@@ -41,7 +45,7 @@ export default function ChulaAccountEdit({ toggleEditButton }) {
 
   return (
     <div className="mx-auto col-md-6">
-      <WarningMessage show={user!.is_first_login} />
+      <WarningMessage show={!!user && user.is_first_login} />
       <div className="default-mobile-wrapper">
         <div className="row mt-2">
           <div className="col-8">

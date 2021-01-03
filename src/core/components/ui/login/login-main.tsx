@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 import Slide from "./slideshow"
 import LoginForm from "./login-form"
 import { Container, Row, Col } from "react-bootstrap"

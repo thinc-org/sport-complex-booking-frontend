@@ -7,7 +7,11 @@ import { ConfirmModal, ErrorModal, EdittedData } from "../../../ui/Modals/Accoun
 import { useTranslation } from "react-i18next"
 import { client } from "../../../../../axiosConfig"
 
-export default function SatitAndCUPersonelAccountEdit({ toggleEditButton }) {
+interface SatitAndCUPersonelAccountEditProps {
+  toggleEditButton: () => void
+}
+
+export default function SatitAndCUPersonelAccountEdit({ toggleEditButton }: SatitAndCUPersonelAccountEditProps) {
   const [show, setShow] = useState(false)
   const [showErr, setShowErr] = useState(false)
   const [formData, setFormData] = useState<EdittedData>()

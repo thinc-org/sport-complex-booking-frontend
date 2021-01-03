@@ -19,7 +19,7 @@ export const convertDate = (date: Date) => {
   return format_date
 }
 
-const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
+const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props: RouteComponentProps<{ _id: string }>) => {
   // console.log(props)
   // page state //
   const [isEdit, setEdit] = useState<boolean>(false)
@@ -467,15 +467,15 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
           show_modal_info={show_modal_info}
           set_show_modal_info={set_show_modal_info}
           info={{ username, handleDeleteUser }}
-          props={props}
+          rest={props}
         />
       )
     else if (show_modal_info.show_com_delete)
-      return <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ username }} props={props} />
+      return <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ username }} rest={props} />
     else if (show_modal_info.show_save)
-      return <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ handleSave }} props={props} />
+      return <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{ handleSave }} rest={props} />
     else if (show_modal_info.show_err || show_modal_info.show_com_save) {
-      return <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{}} props={props} />
+      return <ModalsComponent show_modal_info={show_modal_info} set_show_modal_info={set_show_modal_info} info={{}} rest={props} />
     }
   }
 

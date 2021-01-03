@@ -4,7 +4,7 @@ import { RouteComponentProps } from "react-router-dom"
 import fetch from "../interfaces/axiosTemplate"
 import { OtherInfo } from "../interfaces/InfoInterface"
 
-const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) => {
+const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props: RouteComponentProps) => {
   // page state
   const [jwt, setJwt] = useState<string>("")
   const [page_no, set_page_no] = useState<number>(1)

@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from "react-router-dom"
 import fetch from "../interfaces/axiosTemplate"
 import { CuInfo, ThaiLangAccount, Account } from "../interfaces/InfoInterface"
 
-const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
+const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props: RouteComponentProps<{ _id: string }>) => {
   // page states
   const [is_editing, set_editing] = useState<boolean>(false)
   const [showConfirm, setShowConfirm] = useState<boolean>(false)
