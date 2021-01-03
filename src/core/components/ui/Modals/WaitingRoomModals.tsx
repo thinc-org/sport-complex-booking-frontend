@@ -62,13 +62,13 @@ export const DetailsModal: React.FC<DetailsModalProps> = ({ show, setShow, sport
   )
 }
 
-interface CustomModalProps {
+interface CustomWaitingRoomModalProps {
   type: "wrongAccessCodeModal" | "cantCreateWaitingRoomModal" 
   show: boolean
   setShow: (value: boolean) => void
 }
 
-export const CustomModal:React.FC<CustomModalProps> = ({type, show, setShow}) => {
+export const CustomWaitingRoomModal:React.FC<CustomWaitingRoomModalProps> = ({type, show, setShow}) => {
   const { t } = useTranslation() 
   const message = t(type, { returnObjects: true })
   if(!show) return null

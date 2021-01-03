@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { Link, useHistory } from "react-router-dom"
 import withUserGuard from '../../../guards/user.guard'
-import { DetailsModal, CustomModal } from "../../ui/Modals/WaitingRoomModals"
+import { DetailsModal, CustomWaitingRoomModal } from "../../ui/Modals/WaitingRoomModals"
 import { useTranslation } from 'react-i18next'
 import { client } from "../../../../axiosConfig"
 import {WaitingRoomData, SportData, CourtData} from './ReservationInterfaces'
@@ -284,7 +284,7 @@ function CreateWaitingRoom() {
         {/* DetailsModal */}
         <DetailsModal show={show} setShow={setShow} sportName={sportName} details={details} date={date} times={times} formatTime={formatTime} postDataToBackend={postDataToBackend} />
         {/* Create waiting room error modal */}
-        <CustomModal type="cantCreateWaitingRoomModal" show={showCantCreateWaitingRoomModal} setShow={setShowCantCreateWaitingRoomModal}/> 
+        <CustomWaitingRoomModal type="cantCreateWaitingRoomModal" show={showCantCreateWaitingRoomModal} setShow={setShowCantCreateWaitingRoomModal}/> 
       </form>
     </div>
   </div>

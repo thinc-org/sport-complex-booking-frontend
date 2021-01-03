@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react"
 import {  Button } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import { UserContext } from "../../../../contexts/UsersContext"
-import { EdittedData, CustomModal } from "../../../ui/Modals/AccountPageModals"
+import { EdittedData, CustomAccountModal } from "../../../ui/Modals/AccountPageModals"
 import { useTranslation } from 'react-i18next'
 import { client } from "../../../../../axiosConfig"
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -78,9 +78,9 @@ export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
           </div>
 
           {/* MODAL CONFIRM DIALOGUE */}
-          <CustomModal type="confirmEditAccountModal" show={show} setShow={setShow} mainFunction={postDataToBackend} data={formData} />
+          <CustomAccountModal type="confirmEditAccountModal" show={show} setShow={setShow} mainFunction={postDataToBackend} data={formData} />
           {/* MODAL ERROR */}
-          <CustomModal type="editAccountErrorModal" show={showErr} setShow={setShowErr}/>
+          <CustomAccountModal type="editAccountErrorModal" show={showErr} setShow={setShowErr}/>
         </form>
       </div>
       <br />

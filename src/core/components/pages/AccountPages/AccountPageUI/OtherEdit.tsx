@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form"
 import { UserContext } from "../../../../contexts/UsersContext"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
-import { CustomModal, WarningMessage} from "../../../ui/Modals/AccountPageModals"
+import { CustomAccountModal, WarningMessage} from "../../../ui/Modals/AccountPageModals"
 import { useTranslation } from 'react-i18next'
 import { setCookie } from "../../../../contexts/cookieHandler"
 import { client } from "../../../../../axiosConfig"
@@ -373,9 +373,9 @@ export default function OtherAccountEdit() {
         </div>
 
         {/* MODAL CONFIRM DIALOGUE */}
-        <CustomModal type="confirmEditAccountModal" show={show} setShow={setShow} mainFunction={postDataToBackend} data={formData} />
+        <CustomAccountModal type="confirmEditAccountModal" show={show} setShow={setShow} mainFunction={postDataToBackend} data={formData} />
         {/* MODAL ERROR */}
-        <CustomModal type="editAccountErrorModal" show={showErr} setShow={setShowErr}/>
+        <CustomAccountModal type="editAccountErrorModal" show={showErr} setShow={setShowErr}/>
         {/* END OF FORM */}
       </form>
     </div>
