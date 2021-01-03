@@ -1,5 +1,4 @@
-import React from "react"
-import { useState,useContext } from "react"
+import React, { useState,useContext } from "react"
 import {  Button } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import { UserContext } from "../../../../contexts/UsersContext"
@@ -23,14 +22,13 @@ export default function OtherAccountEdit() {
   let [medical_certificate, set_medical_certificate] = useState<File>()
   let [house_registration_number, set_house_registration_number] = useState<File>()
   let [relationship_verification_document, set_relationship_verification_document] = useState<File>()
-  const [date, setDate] =useState<Date>(new Date())
+  const [date, setDate] =useState(new Date())
   const [show, setShow] = useState(false)
   const [showErr, setShowErr] = useState(false)
   const { otherAccount: user } = useContext(UserContext)
   const [formData, setFormData] = useState<OtherInfo>()
   const { register, handleSubmit, errors  } = useForm({resolver: yupResolver(otherInfoSchema)})
 
-  /// JSX Begins here
   const postDataToBackend = async (data: Other) => {
     console.log(data)
     await client

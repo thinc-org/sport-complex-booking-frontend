@@ -1,5 +1,4 @@
-import React from "react"
-import { useState, useContext } from "react"
+import React, { useState, useContext } from "react"
 import { Button } from "react-bootstrap"
 import { UserContext } from "../../../../contexts/UsersContext"
 import { useForm } from "react-hook-form"
@@ -45,7 +44,7 @@ function ChangePassword() {
     
   return (
     <div className="mx-auto col-md-6 mt-3">
-      {cuStudentAccount?.account_type === "CuStudent" ? <Redirect to="/account" /> : null}
+      {cuStudentAccount?.account_type === "CuStudent" &&  <Redirect to="/account" />}
       <div className="default-mobile-wrapper animated-card">
         <div className="row mt-2">
           <div className="col-8">
@@ -76,13 +75,10 @@ function ChangePassword() {
       </div>
       <br />
       {/* Confirmation Dialog */}
-      {/* <ConfirmationModal show={show} setShow={setShow} postDataToBackend={postDataToBackend} passwordData={passwordData}/> */}
       <CustomModal type={"passwordChangeConfirm"} show={show} setShow={setShow} mainFunction={postDataToBackend} data={passwordData}/>
       {/* Success password change modal */}
-      {/* <PasswordChangeSuccessModal show={showChangeSuccess} returnToAccountPage={returnToAccountPage}/> */}
       <CustomModal type={"passwordChangeSuccess"} show={showChangeSuccess} setShow={setShowChangeSuccess} mainFunction={returnToAccountPage}/>
       {/* Password Change Error */}
-      {/* <PasswordChangeErrorModal show={showChangeError} setShowChangeError={setShowChangeError} /> */}
       <CustomModal type={"passwordChangeError"} show={showChangeError} setShow={setShowChangeError} mainFunction={()=>setShowChangeError(false)}/>
     </div>
   )

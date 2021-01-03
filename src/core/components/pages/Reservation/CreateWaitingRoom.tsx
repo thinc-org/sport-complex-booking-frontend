@@ -8,7 +8,8 @@ import withUserGuard from '../../../guards/user.guard'
 import { DetailsModal, CustomModal } from "../../ui/Modals/WaitingRoomModals"
 import { useTranslation } from 'react-i18next'
 import { client } from "../../../../axiosConfig"
-import {WaitingRoomData, HistoryProps} from './ReservationInterfaces'
+import {WaitingRoomData, HistoryProps, SportData, CourtData} from './ReservationInterfaces'
+import { AxiosResponse } from "axios"
 
 function CreateWaitingRoom(props: HistoryProps) {
   // States
@@ -21,13 +22,13 @@ function CreateWaitingRoom(props: HistoryProps) {
   const {language} = i18n
   const history = useHistory()
   // Sport States
-  const [sport, setSport] = useState([])
+  const [sport, setSport] = useState<SportData[]>([])
   const [sportName, setSportName] = useState<string>()
-  const [requiredUserCount, setRequiredUserCount] = useState()
+  const [requiredUserCount, setRequiredUserCount] = useState<number>()
   // Court States
-  const [courts, setCourts] = useState([])
+  const [courts, setCourts] = useState<CourtData[]>([])
   // Time States
-  const [time, setTime] = useState([1, 2, 3])
+  const [time, setTime] = useState([1, 2])
   const times = watch('time_slot', [])
   const checkedCount = times.filter(Boolean).length
   // Selection
@@ -82,8 +83,9 @@ function CreateWaitingRoom(props: HistoryProps) {
   // [1] Fetch Courts
   const fetchCourts = async () => {
     await client
-      .get("http://localhost:3000/court-manager/sports")
-      .then(({ data }) => {setSport(data)})
+      .get<SportData[]>("http://localhost:3000/court-manager/sports")
+      .then(({ data }) => {setSport(data)
+      console.log(data)})
       .catch(() => {})
   }
   // [2] Fetch Quota
@@ -96,7 +98,7 @@ function CreateWaitingRoom(props: HistoryProps) {
       date: year + '-' + month+ '-' + day
     }
     await client
-      .post("/reservation/checkquota", data)
+      .post<number>("/reservation/checkquota", data)
       .then(({ data }) => {
         setquota(data*30)
       })
@@ -113,7 +115,7 @@ function CreateWaitingRoom(props: HistoryProps) {
       date: year + '-' + month+ '-' + day
     }
     await client
-      .post("/reservation/checktimeslot", data)
+      .post<number[]>("/reservation/checktimeslot", data)
       .then(({ data }) => {setTime(data)})
       .catch(() => {})
   }
@@ -130,8 +132,8 @@ function CreateWaitingRoom(props: HistoryProps) {
       court_number: Number(data.court_number),
       time_slot: formattedTimeSlot.slice(1)
     }
-    await client.post('/reservation/createwaitingroom', newData)
-    .then((data)=> {history.push({pathname: '/waitingroom'})})
+    await client.post<AxiosResponse>('/reservation/createwaitingroom', newData)
+    .then(()=> {history.push({pathname: '/waitingroom'})})
     .catch(()=> {setShowCantCreateWaitingRoomModal(true)})
   }
 
@@ -190,6 +192,8 @@ function CreateWaitingRoom(props: HistoryProps) {
                 setDate(fixedDate)
                 setShowCourt(false)
                 setShowTime(false)
+                setValue('court_number', "")
+                setValue('sport_id', "")
                 if (validDate(today, date)) setShowDateWarning(false)
                 else setShowDateWarning(true)  
               }}
@@ -205,7 +209,7 @@ function CreateWaitingRoom(props: HistoryProps) {
                 setValue("court_number", "")
                 setValue("time_slot", [])
                 fetchQuota(getValues("sport_id"), date)
-                sport.forEach((sport) => {
+                sport!.forEach((sport) => {
                   if (sport['_id'] === getValues("sport_id")) {
                     setCourts(sport['list_court'])
                     setShowCourt(true)
@@ -215,7 +219,7 @@ function CreateWaitingRoom(props: HistoryProps) {
                 })
               }}>
               <option className="dropdown-item" value="">{t("sportSelection")}</option>
-              {sport.map((item, i) => (<option key={i} value={item['_id']}>{language === 'th' ? (item['sport_name_th']) : (item['sport_name_en']) }</option>))}
+              {sport!.map((item, i) => (<option key={i} value={item['_id']}>{language === 'th' ? (item['sport_name_th']) : (item['sport_name_en']) }</option>))}
             </select>
             </div>
             <div>

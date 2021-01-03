@@ -10,7 +10,6 @@ export default function OtherAccount() {
       {(context) => {
         const { otherAccount: user } = context
 
-        /// JSX Begins here
         return (
           <div>
             {
