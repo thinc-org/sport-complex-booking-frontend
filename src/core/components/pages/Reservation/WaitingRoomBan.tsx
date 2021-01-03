@@ -3,16 +3,15 @@ import { Button } from "react-bootstrap"
 import { Link, useHistory } from "react-router-dom"
 import { useEffect } from "react"
 import withUserGuard from "../../../guards/user.guard"
-import { LocationState } from "history"
 import { useTranslation } from 'react-i18next'
 import { client } from "../../../../axiosConfig"
-import { HistoryProps } from "./ReservationInterfaces"
+import { BanHistoryStates } from './ReservationInterfaces'
 
-function WaitingRoomBan(props: HistoryProps) {
-
-  const { msg } = (props['location'] && props['location']['state']) || {}
+function WaitingRoomBan() {
   const {t} = useTranslation()
-  const history = useHistory<LocationState | unknown>()
+  const defaultHistory: BanHistoryStates = {msg: t("waitingRoomBan")}
+  const history = useHistory<BanHistoryStates>()
+  const {msg} = history.location.state ? history.location.state : defaultHistory
   
   useEffect(()=> {
     fetchValidity()

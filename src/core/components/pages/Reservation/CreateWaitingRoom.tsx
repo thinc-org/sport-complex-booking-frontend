@@ -8,10 +8,11 @@ import withUserGuard from '../../../guards/user.guard'
 import { DetailsModal, CustomModal } from "../../ui/Modals/WaitingRoomModals"
 import { useTranslation } from 'react-i18next'
 import { client } from "../../../../axiosConfig"
-import {WaitingRoomData, HistoryProps, SportData, CourtData} from './ReservationInterfaces'
+import {WaitingRoomData, SportData, CourtData} from './ReservationInterfaces'
 import { AxiosResponse } from "axios"
 
-function CreateWaitingRoom(props: HistoryProps) {
+
+function CreateWaitingRoom() {
   // States
   const { register, handleSubmit, getValues, watch, setValue } = useForm()
   const [date, setDate] =useState(new Date())
@@ -72,12 +73,12 @@ function CreateWaitingRoom(props: HistoryProps) {
           const resMsg = res['data']['message']
           if (resMsg !== "Valid user") {
             const state = {msg: resMsg}
-            props.history.push({pathname: '/banned',state})
+            history.push({pathname: '/banned',state})
           }
       })
       .catch(() => {
           const state = {msg: t("youArePenalized")}
-          props.history.push({pathname: '/banned',state})
+          history.push({pathname: '/banned',state})
       })
   }
   // [1] Fetch Courts

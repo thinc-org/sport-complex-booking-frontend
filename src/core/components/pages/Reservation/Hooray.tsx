@@ -4,18 +4,17 @@ import {Link, useHistory } from "react-router-dom"
 import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from 'react-i18next'
 import hooray from "../../../assets/images/hooray.svg"
-import {HistoryProps} from "./ReservationInterfaces"
 import { Redirect } from "react-router-dom"
+import { HoorayHistoryStates } from './ReservationInterfaces'
 
-function Hooray(props: HistoryProps) {
-
+function Hooray() {
   const {t} = useTranslation()
-  const { fromJoinWaitingRoom } = (props['location'] && props['location']['state']) || {}
-  //const history = useHistory()
-  //const {fromJoinWaitingRoom} = (history.location && history.location.state || {})
+  const defaultHistory: HoorayHistoryStates = {msg: false}
+  const history = useHistory<HoorayHistoryStates>()
+  const {msg} = history.location.state ? history.location.state : defaultHistory
   return (
     <div className="wrapper">
-      {fromJoinWaitingRoom ? null : <Redirect to={"/home"} />}
+      {msg['fromJoinWaitingRoom'] ? null : <Redirect to={"/home"} />}
       <div className="mx-auto col-md-6 animated-card">      
           <div className="text-center mt-5"  >
             <img alt="hooray" src={hooray} />
