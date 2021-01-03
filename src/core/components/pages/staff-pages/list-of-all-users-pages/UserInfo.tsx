@@ -101,6 +101,34 @@ const UserInfo = () => {
     setShowModalInfo({ ...showModalInfo, showSave: true })
   }
 
+  const handleChangeDateTime = (e) => {
+    const id = e.target.id
+    const oldPenExp: Date = tempExpiredPenalizeDate ? new Date(tempExpiredPenalizeDate) : new Date()
+    const oldAcExp: Date = tempAccountExpiredDate ? new Date(tempAccountExpiredDate) : new Date()
+    let incom: Date = new Date(e.target.value)
+    if (id === "expiredPenalizeDate") {
+      let date: Date = new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), oldPenExp.getHours(), oldPenExp.getMinutes())
+      if (date < new Date()) date = new Date()
+      setTempExpiredPenalizeDate(date)
+    } else if (id === "expiredPenalizeTime") {
+      let hour: number = parseInt(e.target.value.slice(0, 2))
+      let minute: number = parseInt(e.target.value.slice(3, 5))
+      let date: Date = new Date(oldPenExp.getFullYear(), oldPenExp.getMonth(), oldPenExp.getDate(), hour, minute, 0)
+      if (date < new Date()) date = new Date()
+      setTempExpiredPenalizeDate(date)
+    } else if (id === "accountExpiredDate") {
+      let date: Date = new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), oldAcExp.getHours(), oldAcExp.getMinutes())
+      if (date < new Date()) date = new Date()
+      setTempAccountExpiredDate(date)
+    } else if (id === "accountExpiredTime") {
+      let hour: number = parseInt(e.target.value.slice(0, 2))
+      let minute: number = parseInt(e.target.value.slice(3, 5))
+      let date: Date = new Date(oldAcExp.getFullYear(), oldAcExp.getMonth(), oldAcExp.getDate(), hour, minute, 0)
+      if (date < new Date()) date = new Date()
+      setTempAccountExpiredDate(date)
+    }
+  }
+
   // requests //
   const fetchUserData = async () => {
     await client({
@@ -353,6 +381,7 @@ const UserInfo = () => {
                 <div className="col pr-0" style={{ width: "60%" }}>
                   <Form.Control
                     type="date"
+                    id="expiredPenalizeDate"
                     disabled={!isEdit || !tempIsPenalize}
                     value={
                       isEdit
@@ -363,16 +392,13 @@ const UserInfo = () => {
                         ? format(new Date(expiredPenalizeDate), "yyyy-MM-dd")
                         : ""
                     }
-                    onChange={(e) => {
-                      let incom: Date = new Date(e.target.value)
-                      let old: Date = tempExpiredPenalizeDate ? new Date(tempExpiredPenalizeDate) : new Date()
-                      setTempExpiredPenalizeDate(new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), old.getHours(), old.getMinutes()))
-                    }}
+                    onChange={handleChangeDateTime}
                   />
                 </div>
                 <div className="col" style={{ width: "40%" }}>
                   <Form.Control
                     type="time"
+                    id="expiredPenalizeTime"
                     disabled={!isEdit || !tempIsPenalize}
                     value={
                       isEdit
@@ -383,12 +409,7 @@ const UserInfo = () => {
                         ? format(new Date(expiredPenalizeDate), "HH:mm")
                         : ""
                     }
-                    onChange={(e) => {
-                      let date: Date = tempExpiredPenalizeDate ? new Date(tempExpiredPenalizeDate) : new Date()
-                      let hour: number = parseInt(e.target.value.slice(0, 2))
-                      let minute: number = parseInt(e.target.value.slice(3, 5))
-                      setTempExpiredPenalizeDate(new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, 0))
-                    }}
+                    onChange={handleChangeDateTime}
                   />
                 </div>
               </div>
@@ -399,6 +420,7 @@ const UserInfo = () => {
                 <div className="col pr-0" style={{ width: "60%" }}>
                   <Form.Control
                     type="date"
+                    id="accountExpiredDate"
                     disabled={!isEdit}
                     value={
                       isEdit
@@ -409,14 +431,13 @@ const UserInfo = () => {
                         ? format(new Date(accountExpiredDate), "yyyy-MM-dd")
                         : ""
                     }
-                    onChange={(e) => {
-                      setTempAccountExpiredDate(new Date(e.target.value))
-                    }}
+                    onChange={handleChangeDateTime}
                   />
                 </div>
                 <div className="col" style={{ width: "40%" }}>
                   <Form.Control
                     type="time"
+                    id="accountExpiredTime"
                     disabled={!isEdit}
                     value={
                       isEdit
@@ -427,12 +448,7 @@ const UserInfo = () => {
                         ? format(new Date(accountExpiredDate), "HH:mm")
                         : ""
                     }
-                    onChange={(e) => {
-                      let date: Date = tempExpiredPenalizeDate ? new Date(tempAccountExpiredDate) : new Date()
-                      let hour: number = parseInt(e.target.value.slice(0, 2))
-                      let minute: number = parseInt(e.target.value.slice(3, 5))
-                      setTempAccountExpiredDate(new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, 0))
-                    }}
+                    onChange={handleChangeDateTime}
                   />
                 </div>
               </div>
