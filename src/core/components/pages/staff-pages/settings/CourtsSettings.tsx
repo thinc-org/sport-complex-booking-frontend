@@ -122,8 +122,8 @@ export default function CourtsSettings() {
 
   const renderCourtsTable = () => {
     let courtList = courts.map((court, i)=> {
-      const openTime = Math.floor(court['open_time']! / 2) + ":" + (court['open_time']! * 30)%60
-      const closeTime = Math.floor(court['close_time']! / 2) + ":" + (court['close_time']! * 30)%60
+      const openTime = Math.floor(court['open_time']! / 2) + ":" + (((court['open_time']! -1)* 30)%60).toString().substring(0,1) + "0"
+      const closeTime = Math.floor(court['close_time']! / 2) + ":" + (((court['close_time']!-1) * 30)%60).toString().substring(0,1) + "0"
       if (court['sport_name_th'] === "") return (<div className="alert alert-danger mt-3" role="alert">กรุณาเลือกชนิดกีฬา</div>)
       return(
         <tr key={i} className="tr-normal">
