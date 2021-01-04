@@ -13,12 +13,14 @@ import { DeleteButton } from './button'
 const AddCourt = () => {
     const history = useHistory()
     const { inProp, rowData, onAddRow, onDeleteRow, setInProp } = useRow()
-    const { register, handleSubmit, setError, errors, control } = useForm()
+    const { register, handleSubmit, setError, errors, clearErrors, control } = useForm()
     const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
     const { option } = useOption()
-    const watchSports = useWatch({ control, name: 'sport_id', defaultValue: '' })
+    const watchSports = useWatch({ control, name: 'sportObjId', defaultValue: '' })
     const onSubmit = async (data: AddCourtForm) => {
+        if (errors.request) clearErrors('request')
         const formData = {
+            ...data,
             sport_id: data.sportObjId,
             court_num: parseInt(data.court_num),
             disable_time: rowData,
@@ -54,8 +56,8 @@ const AddCourt = () => {
                     <Row>
                         <Col>
                             <Form.Label>ประเภทกีฬา</Form.Label>
-                            <Form.Control name='sport_id' as='select' ref={register({ required: true })}>
-                                {option ? option['sport_list'].map((sport) => {
+                            <Form.Control name='sportObjId' as='select' ref={register({ required: true })}>
+                                {option ? option.map((sport) => {
                                     return <option value={sport._id} key={sport._id}>{sport.sport_name_th}</option>
                                 }) : <option value={''}>ประเภทกีฬา</option>
                                 }
@@ -66,8 +68,7 @@ const AddCourt = () => {
                         <Col>
                             <Form.Label>เลขคอร์ด</Form.Label>
                             <Form.Control name='court_num' as='select' ref={register({ required: true, validate: val => val != 'เลขคอร์ด' })}>
-                                {watchSports && option ? option['sport_list']
-                                    .find(sport => sport._id == watchSports).list_court
+                                {option && watchSports ? option.find(sport => sport._id == watchSports)?.list_court
                                     .map((court) => {
                                         return <option value={court.court_num} key={court._id}>{court.court_num}</option>
                                     }) : <option>เลขคอร์ด</option>}
