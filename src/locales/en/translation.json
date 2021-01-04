@@ -4,8 +4,8 @@
   "en": "English",
   "phoneLabel": "Mobile",
   "personalEmailLabel": "Personal Email",
-  "CuStudent":"Chulalongkorn University Student",
-  "SatitAndCuPersonel":"Satit Chula and CU Personnel",
+  "CuStudent": "Chulalongkorn University Student",
+  "SatitAndCuPersonel": "Satit Chula and CU Personnel",
   "chulaAccountType": "Chulalongkorn University Student",
   "satitAccountType": "Satit Chula and CU Personnel",
   "edit": "edit",
@@ -117,7 +117,7 @@
   "wantToCreateWaitingRoom": "Do you want to create a reservation waiting room?",
   "reservationDetails": "Reservation Details",
   "passwordMismatch": "Passwords do not match",
-  "enterAgain": "Please enter your new password again",  
+  "enterAgain": "Please enter your new password again",
   "youArePenalized": "You cannot create a waiting room.",
   "penalizeMessage": "You will not be able to make reservations if you are not verified yet, you are being penalized, or you have already created a waiting room.",
   "language": "Language",
@@ -133,21 +133,21 @@
   "createWaitingRoomUnsuccessful": "Unsuccessful",
   "createWaitingRoomUnsuccessfulMsg": "The waiting room cannot be created at the moment.",
   "timeSlotErrorMsg": "You can only book for consecutive time slots.",
-  "enterOldPass":"Enter your old password.",
-  "enterNewPass":"Enter your new password.",
+  "enterOldPass": "Enter your old password.",
+  "enterNewPass": "Enter your new password.",
   "containMoreThan6": "New password must contain more than 6 characters.",
   "passMustMatch": "New passwords must match",
-  "oldNewPassMustDiff" :"The new password cannot be the same as the old password",
+  "oldNewPassMustDiff": "The new password cannot be the same as the old password",
   "passwordCantBeChanged": "Password cannot be changed at the moment. Please try again later.",
   "maritalPlaceHolder": "Married, Single, etc.",
   "addressPlaceHolder": "Address",
   "namePlaceHolder": "Name",
   "surnamePlaceHolder": "Surname",
-  "passwordChangeConfirm" : {
+  "passwordChangeConfirm": {
     "title": "Confirmation",
     "body": "Do you want to confirm password change"
   },
-  "passwordChangeSuccess" : {
+  "passwordChangeSuccess": {
     "title": "Success",
     "body": "Your password has successfully been changed."
   },
@@ -156,20 +156,20 @@
     "body": "Password cannot be changed at the moment."
   },
   "wrongAccessCodeModal": {
-    "title":"Cannot join a waiting room.",
+    "title": "Cannot join a waiting room.",
     "body": "Make sure your waiting room access code is valid and you do not have a waiting room created yet."
   },
   "cantCreateWaitingRoomModal": {
-    "title":"Unsuccessful",
-    "body":"The waiting room cannot be created at the moment."
+    "title": "Unsuccessful",
+    "body": "The waiting room cannot be created at the moment."
   },
   "confirmEditAccountModal": {
-    "title":"Confirm Submission",
-    "body":"Do you want to submit the registration form?"
+    "title": "Confirm Submission",
+    "body": "Do you want to submit the registration form?"
   },
   "editAccountErrorModal": {
-    "title":"An error has occured",
-    "body":"Cannot edit account information at the moment"
+    "title": "An error has occured",
+    "body": "Cannot edit account information at the moment"
   },
   "signIn": "Sign in",
   "signInAsCu": "Sign in as a CU Student",
