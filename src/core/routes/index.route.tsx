@@ -39,17 +39,6 @@ export default function MainRoute() {
         <Route exact path="/createwaitingroom" component={CreateWaitingRoom} />
 
         <Route exact path="/account" component={AccountPage} />
-<<<<<<< HEAD
-=======
-        
-        <Route path='/staff' component={StaffRoute} />
-
-        <Route exact path='/changePassword' component={ChangePassword} />
-
-        <Route exact path='/banned' component={WaitingRoomBan} />
-
-        <Route exact path='/hooray' component={Hooray} />
->>>>>>> Added Yup validation, improved styling, refactored code, completed create waiting room functionality
 
         <Route path="/staff" component={StaffRoute} />
         <Route exact path="/changePassword" component={ChangePassword} />
