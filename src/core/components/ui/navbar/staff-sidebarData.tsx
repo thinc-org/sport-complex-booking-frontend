@@ -7,11 +7,7 @@ export const data = [
   {
     icon: "",
     name: "จัดการสตาฟ",
-<<<<<<< HEAD
     path: "/staff/management",
-=======
-    path: "/staff/Management",
->>>>>>> route from staff sidebar
   },
   {
     icon: "",
