@@ -112,15 +112,6 @@
   "language": "Language",
   "waitingRoomBan": "You do not have the permission to create a waiting room.",
   "backToHome": "Go back to home page.",
-  "signIn": "Sign in",
-  "signInAsCu": "Sign in as a CU Student",
-  "signOut": "Sign out",
-  "oneMoment": "One moment",
-  "verifyStudent": "Verifying that you're a Chulalongkorn student",
-  "continue": "Continue",
-  "home": "Home",
-  "account": "Account",
-  "myWaitingRoom": "My Waiting Room",
   "success": "Success",
   "passwordChanged": "Your password has successfully been changed.",
   "wrongAccessCode": "Cannot join a waiting room.",
@@ -168,5 +159,14 @@
   "editAccountErrorModal": {
     "title":"An error has occured",
     "body":"Cannot edit account information at the moment"
-  }
+  },
+  "signIn": "Sign in",
+  "signInAsCu": "Sign in as a CU Student",
+  "signOut": "Sign out",
+  "oneMoment": "One moment",
+  "verifyStudent": "Verifying that you're a Chulalongkorn student",
+  "continue": "Continue",
+  "home": "Home",
+  "account": "Account",
+  "myWaitingRoom": "My Waiting Room"
 }
