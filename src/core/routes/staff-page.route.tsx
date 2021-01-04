@@ -34,6 +34,9 @@ const StaffRoute = (props) => {
     ["/verifyInfo", "รับรองการลงทะเบียนรายบุคคล"],
     ["/disableCourt", "การปิดคอร์ด"],
     ["/qrcodescanner", ""],
+    ["/allReservation/success", "การจองทั้งหมด"],
+    ["/allReservation/waiting", "ห้องรอการจองทั้งหมด"],
+    ["/reservationDetail`", ""],
   ])
 
   const StaffRouteWithHeader = () => {
@@ -54,9 +57,11 @@ const StaffRoute = (props) => {
                     {headerMap.get(
                       location.pathname.slice(
                         path.length,
-                        location.pathname.indexOf("/", path.length + 1) !== -1
-                          ? location.pathname.indexOf("/", path.length + 1)
-                          : location.pathname.length
+                        location.pathname.indexOf("/", path.length + 1) === -1 ||
+                          location.pathname === `${path}/allReservation/success` ||
+                          location.pathname === `${path}/allReservation/waiting`
+                          ? location.pathname.length
+                          : location.pathname.lastIndexOf("/")
                       )
                     )}{" "}
                   </h1>
@@ -73,6 +78,8 @@ const StaffRoute = (props) => {
                     <Route exact path={`${path}/profile`} component={StaffProfile} />
                     <Route exact path={`${path}/management`} component={StaffManagement} />
                     <Route exact path={`${path}/settings`} component={Settings} />
+                    <Route exact path={`${path}/allReservation/:pagename`} component={AllReservation} />
+                    <Route exact path={`${path}/reservationDetail/:pagename/:_id`} component={ReservationDetail} />
                   </Switch>
                 </div>
               </div>
@@ -89,15 +96,6 @@ const StaffRoute = (props) => {
         <Route exact path={path} component={StaffLogin} />
         <Route exact path={`${path}/openFile/:fileId`} component={FileOpener} />
         <StaffRouteWithHeader />
-      </Switch>
-    </>
-  )
-        <Route
-          exact
-          path={`${path}/allReservation/:pagename`}
-          component={() => staff(<AllReservation {...props} />, props.match.params.pagename === "success" ? "การจองทั้งหมด" : "การรอการจองทั้งหมด")}
-        />
-        <Route exact path={`${path}/reservationDetail/:pagename/:_id`} component={() => staff(<ReservationDetail {...props} />, "")} />
       </Switch>
     </>
   )
