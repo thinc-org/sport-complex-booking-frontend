@@ -1,7 +1,47 @@
 import React from 'react'
 import { Button, Modal } from "react-bootstrap"
 import { useTranslation } from 'react-i18next'
+import { Other } from '../../../contexts/UsersContext'
 
+
+
+interface CustomAccountModalProps {
+  type: "confirmEditAccountModal" | "editAccountErrorModal" 
+  show: boolean
+  setShow: (value: boolean) => void
+  mainFunction?:  (data) => Promise<void> | ((data: EdittedData)=>void) ,
+  data?: EdittedData
+}
+
+export const CustomAccountModal:React.FC<CustomAccountModalProps> = ({type, show, setShow, mainFunction, data}) => {
+  const { t } = useTranslation() 
+  const message = t(type, { returnObjects: true })
+  if(!show) return null
+  return (
+    <Modal
+      show={show}
+      onHide={() => {
+        setShow(false)
+      }}
+      backdrop="static"
+      keyboard={false}
+      className="modal"  
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>{message['title']}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body style={{ fontWeight: "lighter" }}>{message['body']}</Modal.Body>
+      <Modal.Footer>
+        <Button className="btn-normal btn-secondary" onClick={() => {setShow(false)}}>
+          {t("cancel")}
+        </Button>
+        {(data && mainFunction) && <Button variant="pink" className="btn-normal" onClick={()=> mainFunction(data)}>
+          {t("ok")}
+        </Button>}
+      </Modal.Footer>
+    </Modal>
+  )
+}
 
 
 export interface ConfirmModalProps {
@@ -85,64 +125,47 @@ export const ErrorModal:React.FC<ErrorModalProps> = ({showErr, setShowErr}) => {
    )
 }
 
-interface WarningMessageProps {
-  show: boolean
-}
-
-export const WarningMessage:React.FC<WarningMessageProps> = ({show}) => {
-  const {t} = useTranslation() 
-  if(!show) return null
-   return (
-    <div className="alert alert-danger  mt-3" role="alert">
-      <h3>{t("warning")}</h3>
-      <h6>{t("pleaseSubmitRegisForm")}</h6>
-    </div>
-   )
-}
-
-
-export interface OtherWarningMessageProps {
+export interface WarningMessageProps {
   show: boolean,
-  verification_status: string
+  verification_status?: string
+  account: string
 }
 
-export const OtherWarningMessage:React.FC<OtherWarningMessageProps> = ({show, verification_status}) => {
+interface WarningAlertProps {
+  title: string,
+  message: string,
+  category: string,
+}
+
+const WarningAlert:React.FC<WarningAlertProps> = ({title, message, category}) => {
+  return (
+    <div className={`alert alert-${category} mt-3`} role="alert">
+      <h3>{title}</h3>
+      <h6>{message}</h6>
+    </div>
+  )
+}
+
+export const WarningMessage:React.FC<WarningMessageProps> = ({show, verification_status, account}) => {
   const {t} = useTranslation() 
   if(!show) return null
+  if(account === "CuStudent") {
+    return (
+      <WarningAlert title={t("warning")} message={t("pleaseSubmitRegisForm")} category="warning" />
+    )
+  }
   switch (verification_status) {
     case "NotSubmitted": {
-      return (
-        <div className="alert alert-danger mt-3" role="alert">
-          <h3>{t("warning")}</h3>
-          <h6>{t("notSubmittedMessage")}</h6>
-        </div>
-      )
+      return <WarningAlert title={t("warning")} message={t("notSubmittedMessage")} category="warning" />
     }
     case "Rejected": {
-      return (
-        <div className="alert alert-danger mt-3" role="alert">
-          <h3>{t("rejectedTitle")}</h3>
-          <h6>{t("rejectedMessage")}</h6>
-        </div>
-      )
+      return <WarningAlert title={t("rejectedTitle")} message={t("rejectedMessage")} category="danger"/>
     }
     case "Submitted": {
-      return (
-        <div className="alert alert-info  mt-3" role="alert">
-          <h3>{t("submittedTitle")}</h3>
-          <h6>{t("submittedMessage")}</h6>
-        </div>
-      )
+      return <WarningAlert title={t("submittedTitle")} message={t("submittedMessage")} category="info" />
     }
-    case "Approved": {
-      return (
-        <div className="alert alert-info mt-3" role="alert">
-          <h3>{t("approvedTitle")}</h3>
-          <h6>
-            {t("approvedMessage")}
-          </h6>
-        </div>
-      )
+    case "Verified": {
+      return <WarningAlert title={t("approvedTitle")} message={t("approvedMessage")} category="success"/>
     }
     default: {
       return null

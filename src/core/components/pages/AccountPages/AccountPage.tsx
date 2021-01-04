@@ -1,14 +1,12 @@
-import React from "react"
-import { useState, useEffect, useContext } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import ChulaAccount from "./ChulaAccount"
 import SatitAndCUPersonelAccount from "./SatitAndCUPersonelAccount"
 import OtherAccount from "./OtherAccount"
-import axios from "axios"
-import { UserContext } from "../../../contexts/UsersContext"
-import {useAuthContext } from "../../../controllers/authContext"
-import { getCookie } from "../../../contexts/cookieHandler"
+import { UserContext, CuStudent, SatitCuPersonel, Other, DefaultAccount } from "../../../contexts/UsersContext"
 import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from 'react-i18next'
+import { Loading } from "../../ui/loading/loading"
+import { client } from "../../../../axiosConfig"
 
 function AccountPage() {
   enum Account {
@@ -17,45 +15,33 @@ function AccountPage() {
     Other = "Other",
   }
 
-  const {token} = useAuthContext()
   const { setCuStudentAccount, setSatitCuPersonelAccount, setOtherAccount } = useContext(UserContext)
-  const [account_type, setAccountType] = useState();
-  const [penalizeStatus, setPenalizeStatus] = useState();  
-  const {i18n} = useTranslation()
+  const [account_type, setAccountType] = useState<string>()
+  const [penalizeStatus, setPenalizeStatus] = useState<boolean>()
 
   useEffect(() => {
     fetch_account_type()
   }, [])
 
   const fetch_account_type = async () => {
-    await axios
-      .get("http://localhost:3000/account_info/", {
-        headers: {
-          Authorization: "bearer " + token,
-        },
-      })
+    await client
+      .get<DefaultAccount>("/account_info/")
       .then(({ data }) => {
-        data.jwt = token
         const newData = {...data}
         setPenalizeStatus(data.is_penalize)
-        data.rejected_info ? (
-          data.rejected_info.forEach((field)=> {
-            newData[field] = ""
-          })
-        ) : (
-          console.log("No rejected info")
-        )
-
         if (data.account_type === "CuStudent") {
-          setCuStudentAccount(newData)
+          setCuStudentAccount(newData as CuStudent)
         } else if (data.account_type === "SatitAndCuPersonel") {
-          setSatitCuPersonelAccount(newData)
+          setSatitCuPersonelAccount(newData as SatitCuPersonel)
         } else if (data.account_type === "Other") {
-          setOtherAccount(newData)
+          const other = data as Other
+          other.rejected_info ? (
+            other.rejected_info.forEach((field: string)=> {
+              newData[field] = ""
+            })
+          ) : ( console.log("No rejected info"))
+          setOtherAccount(newData as Other)
         }
-        //setLanguage(getCookie("is_thai_language")==="true")
-        if (getCookie("is_thai_language")==="true") i18n.changeLanguage('th');
-        else i18n.changeLanguage('en')
         setAccountType(data.account_type)
       })
   }
@@ -72,7 +58,7 @@ function AccountPage() {
         return <OtherAccount/>
       }
       default: {
-        return <div className="wrapper mx-auto text-center mt-5">Loading...</div>
+        return <div className="wrapper mx-auto text-center mt-5"><Loading /></div>
       }
     }
   } 
@@ -97,9 +83,9 @@ const PenalizeMessage:React.FC<PenalizeMessageProps> = ({show}) => {
   const {t} = useTranslation()
   if(!show) return null
   return (
-    <div className="alert alert-danger mx-3 mt-3" role="alert">
-      <h3>{t("you_are_penalied")}</h3>
-      <h6>{t("penalzie_message")}</h6>
+    <div className="alert alert-danger mx-auto col-md-6 mt-3" role="alert">
+      <h3>{t("youArePenalized")}</h3>
+      <h6>{t("penalizeMessage")}</h6>
     </div>
   )
 }

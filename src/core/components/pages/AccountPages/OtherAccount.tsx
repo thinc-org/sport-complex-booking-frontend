@@ -10,11 +10,10 @@ export default function OtherAccount() {
       {(context) => {
         const { otherAccount: user } = context
 
-        /// JSX Begins here
         return (
           <div>
             {
-              user?.verification_status === "Submitted" || user?.verification_status === "Approved" ? (
+              user?.verification_status === "Submitted" || user?.verification_status === "Verified" ? (
                 <OtherAaccountDisplay/>
               ) : (
                 <OtherAccountEdit/>

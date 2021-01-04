@@ -3,9 +3,10 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
 import en from '../../locales/en/translation.json'
 import th from '../../locales/th/translation.json'
+import {getCookie} from "../../core/contexts/cookieHandler"
 
 i18n.use(LanguageDetector).use(initReactI18next).init({
-  fallbackLng: 'en',
+  fallbackLng: getCookie('is_thai_language')==='true' ? "th" : "en",
   debug: process.env.NODE_ENV === "development",
   resources: {
     th: { common: th },

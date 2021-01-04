@@ -20,12 +20,15 @@ export interface WaitingRoomData {
   date:Date
 }
 
-
 export const DetailsModal: React.FC<DetailsModalProps> = ({ show, setShow, sportName, details, date, times, formatTime, postDataToBackend }) => {
   const { t } = useTranslation()
+  const handlePostData = ()=> {
+    postDataToBackend(details!)
+    setShow(false)
+  }
   if (!show) return null
   return (
-    <Modal className="modal" show={show} onHide={setShow(false)}>
+    <Modal className="modal" show={show} onHide={()=>setShow(false)}>
       <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="confirmModalLabel">
@@ -36,10 +39,10 @@ export const DetailsModal: React.FC<DetailsModalProps> = ({ show, setShow, sport
             </button>
           </div>
           <div className="modal-body">
-            <h4>{t("reservation_details")}</h4>
+            <h4>{t("reservationDetails")}</h4>
             <ul>
               <li>{t("sport")}: {sportName}</li>
-              <li>{t("court")}: {details.court_number}</li>
+              <li>{t("court")}: {details['court_number']}</li>
               <li>{t("bookingDate")}: {date.toString().substring(0,10)}</li>
               <li>{t("bookingTime")}: <ul>{times.map(element => {
                 return (<li key={element.toString()}>{formatTime(element)}</li>)
@@ -50,11 +53,44 @@ export const DetailsModal: React.FC<DetailsModalProps> = ({ show, setShow, sport
             <Button onClick={() => setShow(false)} type="button" variant="outline-secondary" className="btn-normal">
               {t("cancel")}
             </Button>
-            <Button onClick={()=> postDataToBackend(details)} variant="pink" className="btn-normal">
+            <Button onClick={handlePostData} variant="pink" className="btn-normal">
               {t("create")}
             </Button>
           </div>
         </div>
+    </Modal>
+  )
+}
+
+interface CustomWaitingRoomModalProps {
+  type: "wrongAccessCodeModal" | "cantCreateWaitingRoomModal" 
+  show: boolean
+  setShow: (value: boolean) => void
+}
+
+export const CustomWaitingRoomModal:React.FC<CustomWaitingRoomModalProps> = ({type, show, setShow}) => {
+  const { t } = useTranslation() 
+  const message = t(type, { returnObjects: true })
+  if(!show) return null
+  return (
+    <Modal
+      show={show}
+      onHide={() => {
+        setShow(false)
+      }}
+      backdrop="static"
+      keyboard={false}
+      className="modal"  
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>{message['title']}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body style={{ fontWeight: "lighter" }}>{message['body']}</Modal.Body>
+      <Modal.Footer>
+        <Button variant="pink" className="btn-normal" onClick={()=> setShow(false)}>
+          {t("ok")}
+        </Button>
+      </Modal.Footer>
     </Modal>
   )
 }
