@@ -11,7 +11,7 @@ interface StaffResponse {
 }
 export const useStaffLogin = (setError) => {
   const { setToken } = useAuthContext()
-  let history = useHistory()
+  const history = useHistory()
   const onLogin = async (data) => {
     await client
       .post<StaffResponse>(`/staffs/login`, { username: data.username, password: data.password })
