@@ -193,7 +193,7 @@ const WaitingRoomPage = () => {
                 </div>
                 <Button
                   onClick={handleClick}
-                  className="cancel-btn"
+                  className="cancel-btn btn-danger"
                   style={{
                     borderRadius: "15px",
                     marginBottom: "50px",
