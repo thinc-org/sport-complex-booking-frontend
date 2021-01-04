@@ -10,24 +10,6 @@ function StaffProfile() {
   const [isLoading, setIsLoading] = useState(true)
   const [errMessage, setErrMessage] = useState<string>()
 
-  // const fetchData = useCallback(async () => {
-  //   try {
-  //     const res = await client.get("/staffs/profile")
-  //     console.log("fetch data")
-  //     setName(res.data.name)
-  //     setSurname(res.data.surname)
-  //     if (res.data.is_admin) {
-  //       setAccountType("Administration")
-  //     } else {
-  //       setAccountType("Staff")
-  //     }
-  //     setIsLoading(false)
-  //   } catch (err) {
-  //     console.log(err)
-  //     setErrMessage("Request Failed. Please make sure you have logged in and try refresh the page.")
-  //   }
-  // }, [])
-
   const fetchData = useCallback(() => {
     client
       .get("staffs/profile")
@@ -87,4 +69,4 @@ function StaffProfile() {
   )
 }
 
-export default StaffProfile
+export default withAdminGuard(StaffProfile)
