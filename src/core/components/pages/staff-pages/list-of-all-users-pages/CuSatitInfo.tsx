@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FunctionComponent } from "react"
 import { Row, Col, Button, Form, Card, Alert } from "react-bootstrap"
-import { Link, RouteComponentProps, useHistory } from "react-router-dom"
+import { Link, useHistory, useParams } from "react-router-dom"
 import format from "date-fns/format"
 import { useForm } from "react-hook-form"
 import { client } from "../../../../../axiosConfig"
@@ -18,7 +18,7 @@ import {
 import { isValid } from "date-fns"
 import { useTranslation } from "react-i18next"
 
-const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
+const UserInfo: FunctionComponent = () => {
   // page states
   const [isEditing, setEditing] = useState<boolean>(false)
   const [newPassword, setNewPassword] = useState<string>("")
@@ -38,7 +38,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const [showAlert, setShowAlert] = useState<boolean>(false)
 
   // user states
-  const [_id] = useState<string>(props.match.params._id)
+  // const [_id] = useState<string>(props.match.params._id)
   const [user, setUser] = useState<CuAndSatitInfo>({
     account_type: Account.CuStudent,
     is_thai_language: true,
@@ -58,6 +58,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   // react router dom //
   const { register, handleSubmit } = useForm()
   const history = useHistory()
+  const { accType, _id } = useParams<{ accType: string; _id: string }>()
   const { i18n, t } = useTranslation()
 
   // useEffects //
@@ -69,7 +70,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const getInfo = () => {
     client({
       method: "GET",
-      url: "/list-all-user/id/" + _id,
+      url: `/list-all-user/id/${_id}`,
     })
       .then(({ data }) => {
         setUser({
@@ -156,7 +157,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     setShowAlert(false)
     client({
       method: "PUT",
-      url: "/list-all-user/" + _id,
+      url: `/list-all-user/${accType}/${_id}`,
       data: {
         name_th,
         name_en,
@@ -173,8 +174,8 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         setShowModals({ ...showModals, showSave: false, showComSave: true })
         setEditing(false)
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(({ response }) => {
+        console.log(response)
         setShowModals({ ...showModals, showSave: false, showErr: true })
       })
   }
@@ -183,7 +184,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     setShowAlert(false)
     client({
       method: "DELETE",
-      url: "/list-all-user/" + _id,
+      url: `/list-all-user/${_id}`,
     })
       .then(({ data }) => {
         setShowModals({ ...showModals, showDelete: false, showComDelete: true })
@@ -197,7 +198,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   const requestChangePassword = () => {
     client({
       method: "PATCH",
-      url: "/list-all-user/password/" + _id,
+      url: `/list-all-user/password/${_id}`,
       data: {
         password: newPassword,
       },

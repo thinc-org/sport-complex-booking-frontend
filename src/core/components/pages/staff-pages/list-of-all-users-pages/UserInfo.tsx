@@ -133,7 +133,7 @@ const UserInfo = () => {
   const fetchUserData = async () => {
     await client({
       method: "GET",
-      url: "/list-all-user/id/" + _id,
+      url: `/list-all-user/id/${_id}`,
     })
       .then(({ data }) => {
         // console.log(data)
@@ -207,7 +207,7 @@ const UserInfo = () => {
     // console.log("saving...")
     client({
       method: "PUT",
-      url: "/list-all-user/" + _id,
+      url: `/list-all-user/other/${_id}`,
       data: {
         personal_email: email,
         phone,
@@ -253,8 +253,8 @@ const UserInfo = () => {
         // back to view form
         setEdit(false)
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(({ response }) => {
+        console.log(response)
         setShowModalInfo({ ...showModalInfo, showSave: false, showErr: true })
       })
   }
@@ -262,7 +262,7 @@ const UserInfo = () => {
   const requestChangePassword = () => {
     client({
       method: "PATCH",
-      url: "/list-all-user/password/" + _id,
+      url: `/list-all-user/password/${_id}`,
       data: {
         password: newPassword,
       },
@@ -280,7 +280,7 @@ const UserInfo = () => {
     // console.log("YEET!!")
     client({
       method: "DELETE",
-      url: "/list-all-user/" + _id,
+      url: `/list-all-user/${_id}`,
     })
       .then(({ data }) => {
         setShowModalInfo({ ...showModalInfo, showDelete: false, showComDelete: true })

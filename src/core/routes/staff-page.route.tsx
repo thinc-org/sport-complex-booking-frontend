@@ -28,8 +28,9 @@ const StaffRoute = (props) => {
     ["/management", "การจัดการสตาฟ"], // เปลี่ยนเอา
     ["/listOfAllUsers", "รายชื่อผู้ใช้"],
     ["/addUser", "เพิ่มผู้ใช้"],
-    ["/cuInfo", "ข้อมูลผู้ใช้"],
-    ["/userInfo", "ข้อมูลผู้ใช้"],
+    ["/userInfo/other", "ข้อมูลผู้ใช้"],
+    ["/userInfo/custudent", "ข้อมูลผู้ใช้"],
+    ["/userInfo/satit", "ข้อมูลผู้ใช้"],
     ["/verifyApprove", "รับรองการลงทะเบียน"],
     ["/verifyInfo", "รับรองการลงทะเบียนรายบุคคล"],
     ["/disableCourt", "การปิดคอร์ด"],
@@ -70,8 +71,8 @@ const StaffRoute = (props) => {
                     <Route path={`${path}/disableCourt`} component={DisableCourt} />
                     <Route exact path={`${path}/listOfAllUsers`} component={ListOfAllUsers} />
                     <Route exact path={`${path}/addUser`} component={AddUser} />
-                    <Route exact path={`${path}/cuInfo/:_id`} component={CuSatitInfo} />
-                    <Route exact path={`${path}/userInfo/:_id`} component={UserInfo} />
+                    <Route exact path={`${path}/userInfo/other/:_id`} component={UserInfo} />
+                    <Route exact path={`${path}/userInfo/:accType/:_id`} component={CuSatitInfo} />
                     <Route exact path={`${path}/verifyApprove`} component={VeritificationApproval} />
                     <Route exact path={`${path}/verifyInfo/:_id`} component={VerifyInfo} />
                     <Route exact path={`${path}/qrcodescanner`} component={QRScannerPage} />

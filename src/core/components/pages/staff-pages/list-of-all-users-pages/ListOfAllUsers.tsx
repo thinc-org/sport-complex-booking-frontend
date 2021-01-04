@@ -137,10 +137,12 @@ const ListOfAllUsers: FunctionComponent = () => {
       .then(({ data }) => {
         if (data) {
           let account_type: Account = users[index].account_type
-          if (account_type !== Account.Other) {
-            history.push("/staff/cuInfo/" + _id)
+          if (account_type === Account.CuStudent) {
+            history.push(`/staff/userInfo/custudent/${_id}`)
+          } else if (account_type === Account.SatitAndCuPersonel) {
+            history.push(`/staff/userInfo/satit/${_id}`)
           } else {
-            history.push("/staff/userInfo/" + _id)
+            history.push(`/staff/userInfo/other/${_id}`)
           }
         } else {
           setShowNoUser(true)
