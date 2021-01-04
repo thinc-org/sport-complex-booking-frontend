@@ -1,5 +1,5 @@
 import React from "react"
-import { useState, useEffect, useContext } from "react"
+import { useState, useEffect, useContext, useCallback } from "react"
 import { Link } from "react-router-dom"
 import { client } from "../../../axiosConfig"
 import { UserContext } from "../../contexts/UsersContext"
@@ -8,6 +8,7 @@ import { CookieModal } from "../ui/Modals/CookieModal"
 import { PersonCircle, Calendar, PeopleFill, BookmarkFill } from "react-bootstrap-icons"
 import withUserGuard from "../../guards/user.guard"
 import footer from "../../assets/images/footer.svg"
+import { Loading } from "../ui/loading/loading"
 
 interface NameResponse {
   nameth: string
@@ -15,32 +16,41 @@ interface NameResponse {
 }
 
 const HomePage = () => {
-  const [cookieConsent, setCookieConsent] = useState(localStorage.getItem("Cookie Allowance") === "true")
+  const [cookieConsent, setCookieConsent] = useState(() => localStorage.getItem("Cookie Allowance") === "true")
   const [name, setName] = useState<NameResponse>()
   const [disable, setDisable] = useState(true)
   const userContext = useContext(UserContext)
   const { t, i18n } = useTranslation()
+  const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    fetchUserName()
-    console.log("cookieConsent: " + cookieConsent)
-  }, [])
-
-  const fetchUserName = async () => {
+  const fetchUserName = useCallback(async () => {
     try {
       const res = await client.get("/account_info/")
       setName({ nameth: res.data.name_th, nameen: res.data.name_en })
       setDisable(false)
-      console.log(res.data)
+      setIsLoading(false)
     } catch (err) {
       console.log(err)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    fetchUserName()
+    console.log("cookieConsent: " + cookieConsent)
+  }, [fetchUserName])
 
   const handleClick = () => {
     setCookieConsent(true)
     localStorage.setItem("Cookie Allowance", "true")
     return cookieConsent
+  }
+
+  if (isLoading) {
+    return (
+      <div className="wrapper mx-auto text-center mt-5">
+        <Loading />
+      </div>
+    )
   }
 
   return (
