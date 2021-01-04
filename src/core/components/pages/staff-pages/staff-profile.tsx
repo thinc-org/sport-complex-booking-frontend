@@ -1,35 +1,57 @@
 import React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { client } from "../../../../axiosConfig"
 import withAdminGuard from "../../../guards/admin.guard"
 
 function StaffProfile() {
-  const [name, setName] = useState("")
-  const [surname, setSurname] = useState("")
+  const [name, setName] = useState<string>()
+  const [surname, setSurname] = useState<string>()
   const [accountType, setAccountType] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [errMessage, setErrMessage] = useState<string>()
 
-  useEffect(() => {
-    fetchData()
+  // const fetchData = useCallback(async () => {
+  //   try {
+  //     const res = await client.get("/staffs/profile")
+  //     console.log("fetch data")
+  //     setName(res.data.name)
+  //     setSurname(res.data.surname)
+  //     if (res.data.is_admin) {
+  //       setAccountType("Administration")
+  //     } else {
+  //       setAccountType("Staff")
+  //     }
+  //     setIsLoading(false)
+  //   } catch (err) {
+  //     console.log(err)
+  //     setErrMessage("Request Failed. Please make sure you have logged in and try refresh the page.")
+  //   }
+  // }, [])
+
+  const fetchData = useCallback(() => {
+    client
+      .get("staffs/profile")
+      .then((res) => {
+        console.log("fetch data")
+        setName(res.data.name)
+        setSurname(res.data.surname)
+        if (res.data.is_admin) {
+          setAccountType("Administration")
+        } else {
+          setAccountType("Staff")
+        }
+        setIsLoading(false)
+      })
+      .catch((err) => {
+        console.log(err)
+        setErrMessage("Request Failed. Please make sure you have logged in and try refresh the page.")
+      })
   }, [])
 
-  const fetchData = async () => {
-    try {
-      const res = await client.get("/staffs/profile")
-      setName(res.data.name)
-      setSurname(res.data.surname)
-      if (res.data.is_admin) {
-        setAccountType("Administration")
-      } else {
-        setAccountType("Staff")
-      }
-      setIsLoading(false)
-    } catch (err) {
-      console.log(err)
-      setErrMessage("Request Failed. Please make sure you have logged in and try refresh the page.")
-    }
-  }
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
+
   if (errMessage) {
     return (
       <div className="container pl-0" style={{ margin: "50px 10px", color: "red" }}>
@@ -40,7 +62,7 @@ function StaffProfile() {
   return (
     <div className="container pl-0">
       <div style={{ display: isLoading ? "none" : "block" }}>
-        <div className="box-container btn col-6 mt-4">
+        <div className="box-container btn col-6 mt-4 p-3">
           <div>
             <div style={{ fontWeight: 300, fontSize: "16px", lineHeight: "24px", marginBottom: "10px" }}> ชื่อ-นามสกุล </div>
             <div style={{ fontWeight: 700, fontSize: "24px", lineHeight: "24px" }}>
@@ -50,7 +72,7 @@ function StaffProfile() {
           </div>
         </div>
         <br />
-        <div className="box-container btn col-6">
+        <div className="box-container btn col-6 p-3">
           <div>
             <div style={{ fontWeight: 300, fontSize: "16px", lineHeight: "24px", marginBottom: "10px" }}> ประเภทบัญชี </div>
             <div style={{ fontWeight: 700, fontSize: "24px", lineHeight: "24px" }}> {accountType} </div>
@@ -65,4 +87,4 @@ function StaffProfile() {
   )
 }
 
-export default withAdminGuard(StaffProfile)
+export default StaffProfile

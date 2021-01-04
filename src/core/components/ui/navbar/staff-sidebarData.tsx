@@ -7,7 +7,7 @@ export const data = [
   {
     icon: "",
     name: "จัดการสตาฟ",
-    path: "/staff/Management",
+    path: "/staff/management",
   },
   {
     icon: "",
