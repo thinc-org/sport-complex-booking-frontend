@@ -52,6 +52,7 @@ export interface Court {
     court_num: number,
     open_time: number,
     close_time: number,
+    _id: number,
     __v: number
 }
 export interface Sport {
