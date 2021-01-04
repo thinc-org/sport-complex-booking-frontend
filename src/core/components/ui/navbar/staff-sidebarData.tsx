@@ -2,12 +2,12 @@ export const data = [
   {
     icon: "",
     name: "โปรไฟล์",
-    path: "/staff/staffProfile",
+    path: "/staff/profile",
   },
   {
     icon: "",
     name: "จัดการสตาฟ",
-    path: "/staff/staffManagement",
+    path: "/staff/Management",
   },
   {
     icon: "",
