@@ -14,7 +14,6 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({ modalConfirmOpen, ha
     <Modal
       show={modalConfirmOpen}
       className="modal"
-      id="exampleModalCenter"
       tabIndex={-1}
       role="dialog"
       aria-labelledby="contained-modal-title-vcenter"
@@ -55,7 +54,6 @@ export const TimeOutModal: React.FC<TimeOutModalProps> = ({ modalTimeOutOpen }) 
     <Modal
       show={modalTimeOutOpen}
       className="modal"
-      id="exampleModalCenter"
       tabIndex={-1}
       role="dialog"
       aria-labelledby="contained-modal-title-vcenter"

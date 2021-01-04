@@ -1,14 +1,15 @@
-import React from "react"
-import { useState, useEffect, useContext } from "react"
+import React, { ReactPropTypes } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "react-bootstrap"
 import { useHistory, Link } from "react-router-dom"
 import { client } from "../../../../axiosConfig"
 import { NavHeader } from "../../ui/navbar/navbarSideEffect"
-import { timeConversion, countDown, timeShift } from "./timeFormating"
+import { timeShift, timeConversion, timeRemainingDisplay } from "./timeFormating"
 import { ConfirmModal } from "../../ui/Modals/CurrentWaitingRoomModal"
 import { TimeOutModal } from "../../ui/Modals/CurrentWaitingRoomModal"
 import { useTranslation } from "react-i18next"
 import withUserGuard from "../../../guards/user.guard"
+import Countdown from "react-countdown"
 
 interface SportNameResponse {
   sportNameth: string
@@ -26,32 +27,13 @@ const WaitingRoomPage = () => {
   const [endTime, setEndTime] = useState<number>()
   const [modalConfirmOpen, setModalConfirmOpen] = useState(false)
   const [modalTimeOutOpen, setModalTimeOutOpen] = useState(false)
-  const [waitingRoomExist, setWaitingRoomExist] = useState<boolean>()
   const [requiredUserNumber, setRequiredUserNumber] = useState<Number>(0)
   const [currentUserNumber, setCurrentUserNumber] = useState<Number>(0)
   const { t, i18n } = useTranslation()
 
   const history = useHistory()
 
-  useEffect(() => {
-    fetchWaitingRoom()
-  }, [])
-
-  useEffect(() => {
-    countDown(endTime, timeOut, setRemainingTime)
-  }, [endTime])
-
-  useEffect(() => {
-    if (currentUserNumber && requiredUserNumber) {
-      if (currentUserNumber == requiredUserNumber) {
-        // successful reservation and redirect to hooray page
-
-        history.push("/hooray")
-      }
-    }
-  }, [currentUserNumber])
-
-  const fetchWaitingRoom = async () => {
+  const fetchWaitingRoom = useCallback(async () => {
     try {
       const res = await client.get("/mywaitingroom")
       setListMember(res.data.list_member)
@@ -67,7 +49,22 @@ const WaitingRoomPage = () => {
     } catch (err) {
       console.log(err)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    fetchWaitingRoom()
+  }, [fetchWaitingRoom])
+
+  useEffect(() => {
+    if (currentUserNumber && requiredUserNumber) {
+      if (currentUserNumber == requiredUserNumber) {
+        // successful reservation and redirect to hooray page
+
+        history.push("/hooray")
+      }
+    }
+  }, [currentUserNumber])
+
   function triggerModal(modal) {
     if (modal == "confirmModal") {
       setModalConfirmOpen(!modalConfirmOpen)
@@ -79,7 +76,9 @@ const WaitingRoomPage = () => {
   }
 
   const timeOut = async () => {
-    setModalTimeOutOpen(true)
+    await setTimeout(() => {
+      setModalTimeOutOpen(true)
+    }, 1000)
     await setTimeout(() => {
       setModalTimeOutOpen(false)
       history.push("/home")
@@ -107,6 +106,10 @@ const WaitingRoomPage = () => {
         {currentUserNumber + "/" + requiredUserNumber}
       </span>
     )
+  }
+
+  const renderer = ({ minutes, seconds, completed }) => {
+    return timeRemainingDisplay(minutes, seconds, completed, timeOut)
   }
 
   if (waitingRoomId) {
@@ -138,8 +141,7 @@ const WaitingRoomPage = () => {
               <div className="box-container btn w-100 mb-3">
                 <h6 style={{ fontWeight: 300, fontSize: "12px", lineHeight: "17px", marginBottom: "20px" }}> {t("remainingTime")}: </h6>
                 <h6 style={{ fontWeight: 700, fontSize: "36px", lineHeight: "17px", textAlign: "center", marginBottom: "10px" }}>
-                  {" "}
-                  {remainingTime}{" "}
+                  <Countdown date={endTime} renderer={renderer} />
                 </h6>
               </div>
               <div className="box-container btn w-100 mb-5">
