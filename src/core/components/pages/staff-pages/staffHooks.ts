@@ -13,7 +13,7 @@ export const useStaffLogin = (setError) => {
   const { setToken } = useAuthContext()
   const history = useHistory()
   const onLogin = async (data) => {
-    await client
+    client
       .post<StaffResponse>(`/staffs/login`, { username: data.username, password: data.password })
       .then((res: AxiosResponse<StaffResponse>) => {
         setCookie("token", res.data.jwt, 1)
