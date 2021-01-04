@@ -19,7 +19,7 @@ const WaitingRoomPage = () => {
   const [remainingTime, setRemainingTime] = useState<string>()
   const [waitingRoomId, setWaitingRoomId] = useState<string>()
   const [sport, setSport] = useState<SportNameResponse>()
-  const [date, setDate] = useState<string>(new Date().toLocaleDateString())
+  const [date, setDate] = useState<string>()
   const [timeList, setTimeList] = useState<Array<number>>([])
   const [listMember, setListMember] = useState<Array<string>>([])
   const [accessCode, setAccessCode] = useState("")
