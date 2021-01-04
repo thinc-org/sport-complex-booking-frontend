@@ -63,7 +63,7 @@ const StaffRoute = (props) => {
                         )
                       }}
                     />
-                    <Route exact path={`${path}/disableCourt`} component={DisableCourt} />
+                    <Route path={`${path}/disableCourt`} component={DisableCourt} />
                     <Route exact path={`${path}/listOfAllUsers`} component={ListOfAllUsers} />
                     <Route exact path={`${path}/addUser`} component={AddUser} />
                     <Route exact path={`${path}/cuInfo/:_id`} component={CuSatitInfo} />
