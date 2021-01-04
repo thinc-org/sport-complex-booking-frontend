@@ -1,4 +1,15 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Sport Complex Booking
+
+Sport Complex Booking
+
+## Table of Contents
+- [Deployment](deployment)
+- [Available Scripts](available-scripts)
+- [Learn more](learn-more)
+
+## Deployment
+
+staging: [https://staging.sc.suphon.dev/](https://staging.sc.suphon.dev/)
 
 ## Available Scripts
 
