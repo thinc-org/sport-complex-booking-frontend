@@ -1,17 +1,28 @@
-import React, { FunctionComponent, useState, useEffect } from "react"
-import { Form, Card, Row, Col, Button, Modal, Alert } from "react-bootstrap"
-import { RouteComponentProps, Link } from "react-router-dom"
-import fetch from "../interfaces/axiosTemplate"
-import { AddInfo } from "../interfaces/InfoInterface"
+import React, { FunctionComponent, useState } from "react"
+import { Form, Card, Row, Col, Button } from "react-bootstrap"
+import { Link, useHistory } from "react-router-dom"
+import { useForm } from "react-hook-form"
+import { AddInfo, ModalAddUser, AlertAddUser, AddUserComponentInfo } from "../interfaces/InfoInterface"
+import { client } from "../../../../../axiosConfig"
+import ChangePasswordComponent from "./AddUserPasswordComponent"
+import { AddModal, ComModal, ErrModal, UsernameErrModal, AlertUncom, AlertErrorPassword, AlertInvalidUsername } from "./AddUserModalAndAlert"
 
-const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
+const AddUser: FunctionComponent = () => {
   // Page states //
-  const [jwt, setJwt] = useState<string>("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmRjYTMxNjZhNDMwOTQyOWM5MmI4MjkiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDg3MzYxMTEsImV4cCI6MTYwOTM0MDkxMX0.NxmksdEUKg_2EU8ukKcO-vjisYY79a4TrJRGAibPvVQ")
   const [selectingSatit, setSelectingSatit] = useState<boolean>(false)
-  const [showAdd, setShowAdd] = useState<boolean>(false)
-  const [showCom, setShowCom] = useState<boolean>(false)
-  const [showErr, setShowErr] = useState<boolean>(false)
-  const [showAlert, setShowAlert] = useState<boolean>(false)
+  // Modals & Alerts //
+  const [showModals, setShowModals] = useState<ModalAddUser>({
+    showAdd: false,
+    showCom: false,
+    showErr: false,
+    showUsernameErr: false,
+  })
+  const [showAlerts, setShowAlerts] = useState<AlertAddUser>({
+    showAlertUncom: false,
+    showAlertUsername: false,
+    showAlertPassword: false,
+  })
+
   // User states //
   const [user, setUser] = useState<AddInfo>({
     membership_type: "",
@@ -25,32 +36,24 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
     personal_email: "",
     phone: "",
   })
-  // const [tempUser, setTempUser] = useState()
 
-  useEffect(() => {
-    fetch({
-      method: "GET",
-      url: "/account_info/testing/adminToken",
-    })
-      .then(({ data }) => {
-        setJwt(data.token.token)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [])
+  const { register, handleSubmit } = useForm()
+  const history = useHistory()
 
-  const backToListPage = () => {
-    props.history.push({
-      pathname: "/listOfAllUsers",
-    })
+  // functions //
+  const validCheck = (s: string) => {
+    return s.match(/.*([A-z])+.*/g)
   }
 
+  // renders //
   const renderSelector = (option: number) => {
     return (
       <Form.Group>
         <Form.Label>ประเภท</Form.Label>
-        <Form.Control as="select" onChange={handleChangeType} defaultValue={option}>
+        <Form.Control className="m-0" as="select" onChange={handleChangeType} defaultValue={option}>
+          <option value={0} disabled>
+            เลือกประเภทสมาชิก
+          </option>
           <option>สมาชิกสามัญ ก (staff membership)</option>
           <option>สมาชิกสามัญ ข (student membership)</option>
           <option>สมาชิกสามัญสมทบ ก (staff-spouse membership)</option>
@@ -67,30 +70,28 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
   }
 
   const renderNormalForm = () => {
-    let { username, password } = user
     return (
-      <Form>
+      <Form onSubmit={handleSubmit(handleAdd)}>
         {renderSelector(0)}
         <Form.Group>
           <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
-          <Form.Control id="username" onChange={handleChange} value={username} />
+          <Form.Control ref={register} name="username" defaultValue={user.username} />
         </Form.Group>
-        <Form.Group>
-          <Form.Label>รหัสผ่าน (เบอร์โทรศัพท์)</Form.Label>
-          <Form.Control id="password" onChange={handleChange} value={password} />
-        </Form.Group>
+        <AlertInvalidUsername show={showAlerts} />
+        {renderPasswordSection()}
+        <AlertErrorPassword show={showAlerts} />
       </Form>
     )
   }
 
   const renderSatitForm = () => {
-    let { name_th, surname_th, name_en, surname_en, personal_email, phone, username, password, is_thai_language } = user
+    const { name_th, surname_th, name_en, surname_en, personal_email, phone, username, is_thai_language } = user
     return (
-      <Form>
+      <Form onSubmit={handleSubmit(handleAdd)}>
         {renderSelector(9)}
         <Form.Group>
           <Form.Label>ภาษา</Form.Label>
-          <Form.Control as="select" id="is_thai_language" onChange={handleChange} value={is_thai_language ? 1 : 0}>
+          <Form.Control ref={register} name="is_thai_language" className="m-0" as="select" defaultValue={is_thai_language ? 1 : 0}>
             <option value={1}>ภาษาไทย</option>
             <option value={0}>English</option>
           </Form.Control>
@@ -99,21 +100,21 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
           <Row>
             <Col>
               <Form.Label>ชื่อ (ภาษาไทย)</Form.Label>
-              <Form.Control id="name_th" onChange={handleChange} value={name_th} />
+              <Form.Control ref={register} name="name_th" defaultValue={name_th} />
             </Col>
             <Col>
               <Form.Label>นามสกุล (ภาษาไทย)</Form.Label>
-              <Form.Control id="surname_th" onChange={handleChange} value={surname_th} />
+              <Form.Control ref={register} name="surname_th" defaultValue={surname_th} />
             </Col>
           </Row>
           <Row>
             <Col>
               <Form.Label>ชื่อ (ภาษาอังกฤษ)</Form.Label>
-              <Form.Control id="name_en" onChange={handleChange} value={name_en} />
+              <Form.Control ref={register} name="name_en" defaultValue={name_en} />
             </Col>
             <Col>
               <Form.Label>นามสกุล (ภาษาอังกฤษ)</Form.Label>
-              <Form.Control id="surname_en" onChange={handleChange} value={surname_en} />
+              <Form.Control ref={register} name="surname_en" defaultValue={surname_en} />
             </Col>
           </Row>
         </Form.Group>
@@ -121,162 +122,62 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
           <Row>
             <Col>
               <Form.Label>อีเมล</Form.Label>
-              <Form.Control id="personal_email" onChange={handleChange} value={personal_email} />
+              <Form.Control ref={register} name="personal_email" defaultValue={personal_email} />
             </Col>
             <Col>
               <Form.Label>เบอร์โทรศัพท์</Form.Label>
-              <Form.Control id="phone" onChange={handleChange} value={phone} />
+              <Form.Control ref={register} name="phone" defaultValue={phone} />
             </Col>
           </Row>
         </Form.Group>
         <Form.Group>
-          <Row>
+          <Row className="mb-3">
             <Col>
               <Form.Label>ชื่อผู้ใช้</Form.Label>
-              <Form.Control id="username" onChange={handleChange} value={username} />
-            </Col>
-            <Col>
-              <Form.Label>รหัสผ่าน</Form.Label>
-              <Form.Control id="password" onChange={handleChange} value={password} />
+              <Form.Control ref={register} name="username" defaultValue={username} />
             </Col>
           </Row>
+          {renderPasswordSection()}
+          <AlertInvalidUsername show={showAlerts} />
+          <AlertErrorPassword show={showAlerts} />
         </Form.Group>
       </Form>
     )
   }
 
-  const renderAddModal = () => {
+  const renderPasswordSection = () => {
+    return <ChangePasswordComponent selectingSatit={selectingSatit} info={{ handleAdd, register, handleSubmit }} />
+  }
+
+  const renderModals = () => {
     return (
-      <Modal
-        show={showAdd}
-        onHide={() => {
-          setShowAdd(false)
-        }}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>คำเตือน</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ fontWeight: "lighter" }}> ต้องการเพิ่มผู้ใช้หรือไม่ </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="outline-secondary"
-            className="btn-normal btn-outline-pink"
-            onClick={() => {
-              setShowAdd(false)
-            }}
-          >
-            ยกเลิก
-          </Button>
-          <Button variant="pink" className="btn-normal" onClick={requestAdd}>
-            ยืนยัน
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <div>
+        <AddModal show={showModals} setShow={setShowModals} requestAdd={requestAdd} />
+        <ComModal show={showModals} setShow={setShowModals} />
+        <ErrModal show={showModals} setShow={setShowModals} />
+        <UsernameErrModal show={showModals} setShow={setShowModals} />
+      </div>
     )
   }
 
-  const renderComModal = () => {
-    return (
-      <Modal
-        show={showCom}
-        onHide={() => {
-          setShowCom(false)
-        }}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>เสร็จสิ้น</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ fontWeight: "lighter" }}> การเพิ่มผู้ใช้เสร็จสมบูรณ์ </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="pink"
-            className="btn-normal"
-            onClick={() => {
-              setShowCom(false)
-              backToListPage()
-            }}
-          >
-            ตกลง
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    )
-  }
-
-  const renderErrModal = () => {
-    return (
-      <Modal
-        show={showErr}
-        onHide={() => {
-          setShowErr(false)
-        }}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>เกิดข้อผิดพลาด</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ fontWeight: "lighter" }}> ไม่สามารถเพิ่มผู้ใช้ได้ในขณะนี้ </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="pink"
-            className="btn-normal"
-            onClick={() => {
-              setShowErr(false)
-            }}
-          >
-            ตกลง
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    )
-  }
-
-  const renderAlert = () => {
-    return (
-      <Alert show={showAlert} variant="danger" style={{ fontWeight: "lighter" }}>
-        กรุณากรอกรายละเอียดให้ครบ
-      </Alert>
-    )
-  }
-
+  // handles //
   const handleChangeType = (e) => {
     setUser({ ...user, membership_type: e.target.value })
-    if (e.target.value === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" || user.membership_type === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา") {
-      // setUser({...user, membership_type: e.target.value})
+    if (e.target.value === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" || user.membership_type === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา")
       setSelectingSatit(!selectingSatit)
-      // this.setState({
-      //   accountType: e.target.value,
-      //   user: user,
-      //   selectingSatit: !this.state.selectingSatit,
-      // })
-    }
-    // else {
-    //   this.setState({
-    //     accountType: e.target.value,
-    //     user: user,
-    //   })
-    // }
   }
 
-  const handleChange = (e) => {
-    setUser({ ...user, [e.target.id]: e.target.value })
-    // user[e.target.id] = e.target.value
-    // this.setState({
-    //   user: user,
-    // })
-  }
-
-  const handleAdd = (e) => {
-    // if form has been completed -> request add //
-    let { membership_type, username, password, name_th, surname_th, name_en, surname_en, personal_email, phone } = user
-    if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && username !== "" && password !== "") {
-      setShowAdd(true)
-    } else if (
+  const handleAdd = (data: AddUserComponentInfo) => {
+    let { username, name_th, surname_th, name_en, surname_en, personal_email, phone, password, confirmPassword } = data
+    let newUser = data.is_thai_language ? { ...data, membership_type: user.membership_type } : { ...user, username: data.username }
+    delete newUser["confirmPassword"]
+    setUser(newUser)
+    if (!validCheck(username)) setShowAlerts({ showAlertPassword: false, showAlertUncom: false, showAlertUsername: true })
+    else if (password !== confirmPassword) setShowAlerts({ showAlertUncom: false, showAlertUsername: false, showAlertPassword: true })
+    else if (user.membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && user.membership_type && username !== "" && password !== "")
+      setShowModals({ ...showModals, showAdd: true })
+    else if (
+      user.membership_type &&
       username !== "" &&
       password !== "" &&
       name_th !== "" &&
@@ -285,15 +186,13 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
       surname_en !== "" &&
       personal_email !== "" &&
       phone !== ""
-    ) {
-      setShowAdd(true)
-    } else {
-      setShowAlert(true)
-    }
+    )
+      setShowModals({ ...showModals, showAdd: true })
+    else setShowAlerts({ showAlertPassword: false, showAlertUsername: false, showAlertUncom: true })
   }
 
+  // requests //
   const requestAdd = () => {
-    setShowAdd(false)
     let url = "/list-all-user/"
     let data = {}
     let { membership_type, username, password } = user
@@ -308,47 +207,41 @@ const AddUser: FunctionComponent<RouteComponentProps> = (props) => {
       url += "SatitUser"
       data = user
     }
-    fetch({
+    client({
       method: "POST",
       url,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
       data,
     })
       .then(({ data }) => {
-        // if complete -> pop up "complete" //
-        // else -> pop up "incomplete" //
-        // go back to list-of-all-users page
-        setShowCom(true)
+        setShowModals({ ...showModals, showAdd: false, showCom: true })
       })
-      .catch((err) => {
-        console.log(err)
-        setShowErr(true)
+      .catch(({ response }) => {
+        console.log(response)
+        if (response && response.data.statusCode === 400) setShowModals({ ...showModals, showAdd: false, showUsernameErr: true })
+        else if (response && response.data.statusCode === 401) history.push("/staff")
+        else setShowModals({ ...showModals, showAdd: false, showErr: true })
       })
   }
 
   return (
     <div className="addUser">
-      <Card body border="light" onSubmit={handleAdd} className="shadow px-3 py-3 mb-5 mt-4">
+      <Card body border="light" className="shadow px-3 py-3 mb-5 mt-4">
         {selectingSatit ? renderSatitForm() : renderNormalForm()}
-        {renderAlert()}
+        <AlertUncom show={showAlerts} />
         <Row className="pt-5">
           <Col className="text-right">
-            <Link to="/listOfAllUsers">
+            <Link to="/staff/listOfAllUsers">
               <Button size="lg" variant="outline-secondary" className="mr-2 btn-normal btn-outline-pink">
                 ยกเลิก
               </Button>
             </Link>
-            <Button size="lg" variant="pink" className="btn-normal" onClick={handleAdd}>
+            <Button size="lg" variant="pink" className="btn-normal" onClick={handleSubmit(handleAdd)}>
               เพิ่ม
             </Button>
           </Col>
         </Row>
       </Card>
-      {renderAddModal()}
-      {renderComModal()}
-      {renderErrModal()}
+      {renderModals()}
     </div>
   )
 }

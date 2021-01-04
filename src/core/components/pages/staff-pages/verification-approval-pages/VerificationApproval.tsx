@@ -1,118 +1,76 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
-import { Table, Form, Col, Button, Pagination, Modal } from "react-bootstrap"
-import { RouteComponentProps } from "react-router-dom"
-import fetch from "../interfaces/axiosTemplate"
+import { Table, Form, Col, Button, Modal } from "react-bootstrap"
+import { useHistory } from "react-router-dom"
+import { client } from "../../../../../axiosConfig"
 import { OtherInfo } from "../interfaces/InfoInterface"
+import PaginationComponent from "../list-of-all-users-pages/PaginationComponent"
 
-const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) => {
+const VeritificationApproval: FunctionComponent = () => {
   // page state
-  const [jwt, setJwt] = useState<string>("")
-  const [page_no, set_page_no] = useState<number>(1)
-  const [max_user_per_page] = useState<number>(10) // > 1
+  const [pageNo, setPageNo] = useState<number>(1)
+  const [maxUserPerPage] = useState<number>(10) // > 1
+  const [maxUser, setMaxUser] = useState<number>(1)
   const [searchName, setSearchName] = useState<string>("")
-  const [show_no_user, set_show_no_user] = useState<boolean>(false)
+  const [showNoUser, setShowNoUser] = useState<boolean>(false)
   const [users, setUsers] = useState<OtherInfo[]>([])
 
-  /// functions ///
-  useEffect(() => {
-    // request token
-    fetch({
-      method: "GET",
-      url: "/account_info/testing/adminToken",
-    })
-      .then(({ data }) => {
-        setJwt(data.token.token)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [])
+  const history = useHistory()
 
-  // useEffect(() => {
-  //   console.log("users: ")
-  //   console.log(users)
-  // }, [users])
-
+  /// useEffects ///
   useEffect(() => {
     requestUsers()
-  }, [jwt, page_no])
+  }, [pageNo])
 
+  // other functions //
   const requestUsers = () => {
     //  request users from server  //
-    let begin = (page_no - 1) * max_user_per_page
-    let end = page_no * max_user_per_page
-    let additional_url = searchName === "" ? begin + "/" + end : searchName + "/" + begin + "/" + end
-    fetch({
-      method: "get",
-      url: "/approval/" + additional_url,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
+    let params = {
+      start: (pageNo - 1) * maxUserPerPage,
+      end: pageNo * maxUserPerPage,
+    }
+    if (searchName !== "") params["name"] = searchName
+    client({
+      method: "GET",
+      url: "/approval",
+      params: params,
     })
       .then(({ data }) => {
-        let userList: OtherInfo[] = data
+        let userList: OtherInfo[] = data[1]
         let newUserList: OtherInfo[] = []
         for (let user of userList) {
           newUserList = [...newUserList, user]
         }
         setUsers(newUserList)
+        setMaxUser(data[0])
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(({ response }) => {
+        console.log(response)
+        if (response && response.data.statusCode === 401) history.push("/staff")
       })
-  }
-
-  const loadPagination = () => {
-    return (
-      <Pagination className="justify-content-md-end">
-        <Pagination.Prev
-          onClick={() => {
-            handlePagination(page_no - 1)
-          }}
-        />
-        <Pagination.Item active={true}>{page_no}</Pagination.Item>
-        <Pagination.Next
-          onClick={() => {
-            handlePagination(page_no + 1)
-          }}
-        />
-      </Pagination>
-    )
-  }
-
-  // handles //
-  const handlePagination = (next_page: number) => {
-    if ((page_no > next_page && next_page >= 1) || (page_no < next_page && users.length === max_user_per_page)) {
-      set_page_no(next_page)
-    }
   }
 
   const handleSearch = (e) => {
     // send jwt and get //
     // if no user -> "user not found"
     e.preventDefault()
-    requestUsers()
+    if (pageNo !== 1) setPageNo(1)
+    else requestUsers()
   }
 
   const handleInfo = (e) => {
     //send jwt and username
     // if no data of that user -> show pop up
-    let username = e.target.id
-    fetch({
+    let _id = e.target.id
+    client({
       method: "GET",
-      url: "/approval/" + username,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
+      url: "/approval/" + _id,
     })
       .then(({ data }) => {
-        props.history.push({
-          pathname: "/verifyInfo/" + username,
-        })
+        history.push("/staff/verifyInfo/" + _id)
       })
       .catch(({ response }) => {
         if (response.data.message === "User not found") {
-          set_show_no_user(true)
+          setShowNoUser(true)
         } else {
           console.log(response)
         }
@@ -123,9 +81,9 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
   const renderNoUserModal = () => {
     return (
       <Modal
-        show={show_no_user}
+        show={showNoUser}
         onHide={() => {
-          set_show_no_user(false)
+          setShowNoUser(false)
         }}
         backdrop="static"
         keyboard={false}
@@ -139,7 +97,7 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              set_show_no_user(false)
+              setShowNoUser(false)
             }}
           >
             ตกลง
@@ -155,11 +113,11 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
       return (
         <tr key={id} className="tr-normal">
           <td className="font-weight-bold"> {id++} </td>
-          <td> {user.name_en} </td>
-          <td> {user.surname_en} </td>
+          <td> {user.name_th} </td>
+          <td> {user.surname_th} </td>
           <td> {user.username} </td>
           <td>
-            <Button className="btn-normal btn-outline-black" variant="outline-secondary" id={user.username} onClick={handleInfo}>
+            <Button className="btn-normal btn-outline-black" variant="outline-secondary" id={user._id} onClick={handleInfo}>
               ดูรายละเอียด
             </Button>
           </td>
@@ -208,7 +166,9 @@ const VeritificationApproval: FunctionComponent<RouteComponentProps> = (props) =
           {renderNoUserModal()}
         </tbody>
       </Table>
-      <div className="text-right">{loadPagination()}</div>
+      <div className="text-right">
+        <PaginationComponent pageNo={pageNo} setPageNo={setPageNo} maxUser={maxUser} maxUserPerPage={maxUserPerPage} />
+      </div>
     </div>
   )
 }

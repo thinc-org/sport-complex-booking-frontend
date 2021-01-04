@@ -1,7 +1,8 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
-import { Table, Form, Row, Col, Button, Pagination, Modal } from "react-bootstrap"
-import { Link, RouteComponentProps } from "react-router-dom"
-import fetch from "../interfaces/axiosTemplate"
+import { Table, Form, Row, Col, Button, Modal } from "react-bootstrap"
+import { Link, useHistory } from "react-router-dom"
+import { client } from "../../../../../axiosConfig"
+import PaginationComponent from "./PaginationComponent"
 
 interface CUTemplate {
   account_type: Account
@@ -55,14 +56,17 @@ enum Account {
   Other,
 }
 
-const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
+const ListOfAllUsers: FunctionComponent = () => {
   // page state
-  const [page_no, set_page_no] = useState<number>(1)
-  const [max_user, set_max_user] = useState<number>(1)
+  const [pageNo, setPageNo] = useState<number>(1)
+  const [maxUser, setMaxUser] = useState<number>(1)
+  const [maxUserPerPage] = useState<number>(10) // > 1
   const [searchName, setSearchName] = useState<string>("")
-  const [status, set_status] = useState<number>(allStatus.All)
-  const [jwt, set_jwt] = useState<string>("")
-  const [show_no_user, set_show_no_user] = useState<boolean>(false)
+  const [status, setStatus] = useState<number>(allStatus.All)
+  // const [jwt, set_jwt] = useState<string>(
+  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
+  // )
+  const [showNoUser, setShowNoUser] = useState<boolean>(false)
   const [users, setUsers] = useState<Users>([
     {
       account_type: Account.CuStudent,
@@ -78,46 +82,25 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
     },
   ])
 
+  const history = useHistory()
+
   // useEffect //
   useEffect(() => {
-    // request token
-    fetch({
-      method: "GET",
-      url: "/account_info/testing/adminToken",
-    })
-      .then(({ data }) => {
-        set_jwt(data.token.token)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [])
-
-  useEffect(() => {
     requestUsers()
-  }, [jwt, page_no])
-
-  // useEffect(() => {
-  //   console.log("user ::")
-  //   console.log(users)
-  // }, [users, status])
+  }, [pageNo])
 
   const requestUsers = () => {
-    // Send JWT //
     // get params for request //
     let param_data = {
-      begin: (page_no - 1) * 10,
-      end: page_no * 10,
+      begin: (pageNo - 1) * maxUserPerPage,
+      end: pageNo * maxUserPerPage,
     }
     if (searchName !== "") param_data["name"] = searchName
     if (status !== allStatus.All) param_data["penalize"] = allStatus.Banned === status
     //  request users from server  //
-    fetch({
+    client({
       method: "GET",
-      url: "/list-all-user/getUser",
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
+      url: "/list-all-user/filter",
       params: param_data,
     })
       .then(({ data }) => {
@@ -126,48 +109,41 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
           else if (user.account_type === "SatitAndCuPersonel") return { ...user, account_type: Account.SatitAndCuPersonel }
           return { ...user, account_type: Account.Other }
         })
-        set_max_user(data[0])
+        setMaxUser(data[0])
         setUsers(userList)
       })
       .catch(({ response }) => {
         console.log(response)
+        if (response && response.data.statusCode === 401) history.push("/staff")
       })
   }
 
   // handles //
   const handleSearch = (e) => {
-    // send jwt and get //
-    // if no user -> "user not found"
     e.preventDefault()
-    requestUsers()
+    if (pageNo !== 1) setPageNo(1)
+    else requestUsers()
   }
 
   const handleInfo = (e) => {
-    //send jwt and username
+    //send username
     // if no data of that user -> show pop up
-    let index = parseInt(e.target.id) - 1
+    let index = parseInt(e.target.id) - (pageNo - 1) * 10 - 1
     let _id: String = users[index]._id
-    fetch({
+    client({
       method: "GET",
-      url: "/list-all-user/findById/" + _id,
-      headers: {
-        Authorization: "bearer " + jwt,
-      },
+      url: "/list-all-user/id/" + _id,
     })
       .then(({ data }) => {
         if (data) {
           let account_type: Account = users[index].account_type
-          if (account_type === Account.CuStudent) {
-            props.history.push({
-              pathname: "/cuInfo/" + _id,
-            })
+          if (account_type !== Account.Other) {
+            history.push("/staff/cuInfo/" + _id)
           } else {
-            props.history.push({
-              pathname: "/userInfo/" + _id,
-            })
+            history.push("/staff/userInfo/" + _id)
           }
         } else {
-          set_show_no_user(true)
+          setShowNoUser(true)
         }
       })
       .catch((err) => {
@@ -175,67 +151,13 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
       })
   }
 
-  const handlePagination = (next_page: number) => {
-    let max_page: number = Math.floor((max_user + 9) / 10)
-    if (next_page >= 1 && next_page <= max_page) {
-      set_page_no(next_page)
-    }
-  }
-
-  const loadPagination = () => {
-    let max_page: number = Math.floor((max_user + 9) / 10)
-    let numList: Array<number> = []
-    let i = 0
-    while (numList.length < 5) {
-      let page = page_no + i - 2
-      if (page >= 1 && page <= max_page) {
-        numList.push(page)
-      } else if (page > max_page) {
-        break
-      }
-      i++
-    }
-    let elementList = numList.map((num) => {
-      if (num === page_no)
-        return (
-          <Pagination.Item key={num} active={true}>
-            {num}
-          </Pagination.Item>
-        )
-      return (
-        <Pagination.Item
-          key={num}
-          onClick={() => {
-            handlePagination(num)
-          }}
-        >
-          {num}
-        </Pagination.Item>
-      )
-    })
-    return (
-      <Pagination className="justify-content-md-end">
-        <Pagination.Prev
-          onClick={() => {
-            handlePagination(page_no - 1)
-          }}
-        />
-        {elementList}
-        <Pagination.Next
-          onClick={() => {
-            handlePagination(page_no + 1)
-          }}
-        />
-      </Pagination>
-    )
-  }
-
+  // renders //
   const renderNoUserModal = () => {
     return (
       <Modal
-        show={show_no_user}
+        show={showNoUser}
         onHide={() => {
-          set_show_no_user(false)
+          setShowNoUser(false)
         }}
         backdrop="static"
         keyboard={false}
@@ -249,7 +171,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              set_show_no_user(false)
+              setShowNoUser(false)
             }}
           >
             ตกลง
@@ -260,16 +182,9 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
   }
 
   const renderUsersTable = () => {
-    let index = (page_no - 1) * 10 + 1
+    let index = (pageNo - 1) * 10 + 1
     // let user
     let usersList = users.map((user) => {
-      // if (current_user.account_type === Account.CuStudent) {
-      //   user = current_user as CUTemplate
-      // } else if (current_user.account_type === Account.Other) {
-      //   user = current_user as OtherTemplate
-      // } else {
-      //   user = current_user as SatitTemplate
-      // }
       return (
         <tr key={index} className="tr-normal">
           <td className="font-weight-bold"> {index} </td>
@@ -309,12 +224,13 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
           </Col>
           <Col sm="auto">
             <Form.Control
-              onChange={(e) => {
-                set_status(parseInt(e.target.value))
-              }}
               as="select"
               custom
               defaultValue={0}
+              style={{ backgroundColor: "white" }}
+              onChange={(e) => {
+                setStatus(parseInt(e.target.value))
+              }}
             >
               <option disabled value={allStatus.All}>
                 สถานะ
@@ -324,7 +240,7 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
               <option value={allStatus.Banned}>โดนแบน</option>
             </Form.Control>
           </Col>
-          <Button variant="pink" className="py-1 btn-normal" onClick={handleSearch}>
+          <Button variant="pink" className="ml-3 py-1 btn-normal" onClick={handleSearch}>
             ค้นหา
           </Button>
         </Form.Row>
@@ -347,13 +263,15 @@ const ListOfAllUsers: FunctionComponent<RouteComponentProps> = (props) => {
       </Table>
       <Row>
         <Col>
-          <Link to="/addUser">
+          <Link to="/staff/addUser">
             <Button variant="pink" className="btn-normal">
               เพิ่มผู้ใช้
             </Button>
           </Link>
         </Col>
-        <Col>{loadPagination()}</Col>
+        <Col>
+          <PaginationComponent pageNo={pageNo} setPageNo={setPageNo} maxUser={maxUser} maxUserPerPage={maxUserPerPage} />
+        </Col>
       </Row>
     </div>
   )
