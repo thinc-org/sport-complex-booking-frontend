@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { useState, useEffect, useRef, ComponentType } from 'react';
-import { Option, RowProps, QueryParams, ViewResponse, ViewRowProps, disable_time, View } from './disable-court-interface'
+import { Option, RowProps, QueryParams, ViewResponse, ViewRowProps, disable_time, View, Sport } from './disable-court-interface'
 import { client } from '../../../../../axiosConfig'
 
 export const toViewRowProps = (data: disable_time[] | undefined): ViewRowProps[] => {
@@ -74,10 +74,10 @@ export const useDate = (initialStartDate: Date | undefined = undefined, initialE
 
 
 export const useOption = () => {
-    const [option, setOption] = useState<Option>()
+    const [option, setOption] = useState<Sport[]>()
     const [currentSport, setCurrentSport] = useState<string>()
     const fetchOption = async () => {
-        await client.get('/court-manager')
+        await client.get('/court-manager/sports')
             .then((res) => {
                 setOption(res.data)
 

@@ -50,14 +50,14 @@ const ListOfCourts = () => {
                             <Form.Label srOnly={true}>ประเภทกีฬา</Form.Label>
                             <Form.Control name='sports' as='select' ref={register} onChange={validateFilter}>
                                 <option value={''}>ประเภทกีฬา</option>
-                                {option ? option['sport_list'].map((sport) => (
+                                {option ? option.map((sport) => (
                                     <option value={sport._id} key={sport._id}>{sport.sport_name_th}</option>
                                 )) : <option value={''}>ประเภทกีฬา</option>}
                             </Form.Control>
                             <Form.Control name='courtNum' as='select' ref={register} disabled={watchSports === 'ประเภทกีฬา' ? true : false}>
                                 <option value={''}>เลขคอร์ด</option>
-                                {watchSports && option && option['sport_list']
-                                    .find(sport => sport._id == watchSports).list_court
+                                {watchSports && option && option
+                                    .find(sport => sport._id == watchSports)?.list_court
                                     .map((court) => {
                                         return <option value={court.court_num} key={court._id}>{court.court_num}</option>
                                     })}
