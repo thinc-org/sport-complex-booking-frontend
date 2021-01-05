@@ -10,7 +10,7 @@ import QRCode from "qrcode.react"
 import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 import { useTranslation } from "react-i18next"
 import { ReservationCancellationModal } from "../../ui/Modals/ReservationCancelModal"
-import { getCookie } from "../../../../core/contexts/cookieHandler"
+import { Loading } from "../../ui/loading/loading"
 
 interface LocationResponse {
   id: string
@@ -39,7 +39,8 @@ const ReservationDetail = () => {
   const [timeList, setTimeList] = useState<number[]>()
   const [memberList, setMemberList] = useState<Array<MemberResponse>>()
   const [isCheck, setIsCheck] = useState<Boolean>()
-  const [counter, setCounter] = useState<number>()
+  const [counter, setCounter] = useState<number>(10)
+  const [isLoading, setIsLoading] = useState(true)
 
   const fetchId = useCallback(() => {
     if (location.state) {
@@ -61,10 +62,9 @@ const ReservationDetail = () => {
       setTimeList(data.time_slot)
       setMemberList(data.list_member)
       setIsCheck(data.is_check)
-      setCounter(10)
-      countDown()
+      setIsLoading(false)
     } catch (err) {
-      console.log(err)
+      console.log(err.message)
       history.push((location.state as any).path)
     }
   }
@@ -79,9 +79,9 @@ const ReservationDetail = () => {
   }, [])
 
   useEffect(() => {
-    countDown()
+    if (isCheck === false) countDown()
     console.log(counter)
-  }, [counter])
+  }, [counter, isCheck])
 
   const triggerModal = () => {
     console.log("show modal")
@@ -114,7 +114,7 @@ const ReservationDetail = () => {
   }
 
   const qrCode = () => {
-    if (isCheck == false && id != null) {
+    if (!isCheck && id) {
       return (
         <>
           <div className="box-container btn w-100 mb-5" style={{ textAlign: "center" }}>
@@ -125,21 +125,21 @@ const ReservationDetail = () => {
             </div>
             <h5 className="mb-2" style={{ fontWeight: 400 }}>
               {" "}
-              {t("show_qr_to_staff")}{" "}
+              {t("showQRToStaff")}{" "}
             </h5>
           </div>
           <Button onClick={triggerModal} variant="outline-danger cancel-btn">
-            {t("cancel_reservation")}
+            {t("cancelReservation")}
           </Button>
         </>
       )
-    } else if (isCheck == true) {
+    } else if (isCheck) {
       return (
         <>
           <div className="box-container btn w-100 mb-5" style={{ textAlign: "center" }}>
             <h4 className="m-2" style={{ color: "lightgreen" }}>
               {" "}
-              {t("you_have_checked_in")}{" "}
+              {t("youHaveCheckedIn")}{" "}
             </h4>
           </div>
           <div className="container fixed-bottom mt-5">
@@ -154,46 +154,53 @@ const ReservationDetail = () => {
     }
   }
 
-  return (
-    <>
-      <NavHeader header={t("myReservation")} />
-      <div className="container">
-        <div className="row justify-content-center mt-5">
-          <div className="col-12 h-100">
-            <div className="box-container btn mb-4" style={{ width: "100%" }}>
-              <div>
-                <h4 className="mb-2"> {sport && sport[`sport${i18n.language}`]} </h4>
-                <h6 className="mb-0 font-weight-light">
-                  {" "}
-                  {t("court")}: {courtNum}
-                </h6>
-                <h6 className="mb-0 font-weight-light">
-                  {" "}
-                  {t("bookingDate")}:{date}{" "}
-                </h6>
-                <h6 className="mb-0 font-weight-light">
-                  {t("bookingTime")}: {timeList && timeList.map((time) => timeConversion(time))}{" "}
-                </h6>
+  if (!isLoading) {
+    return (
+      <>
+        <NavHeader header={t("myReservation")} />
+        <div className="container">
+          <div className="row justify-content-center mt-5">
+            <div className="col-12 h-100">
+              <div className="box-container btn mb-4" style={{ width: "100%" }}>
+                <div>
+                  <h4 className="mb-2"> {sport && sport[`sport${i18n.language}`]} </h4>
+                  <h6 className="mb-0 font-weight-light">
+                    {" "}
+                    {t("court")}: {courtNum}
+                  </h6>
+                  <h6 className="mb-0 font-weight-light">
+                    {" "}
+                    {t("bookingDate")}:{date}{" "}
+                  </h6>
+                  <h6 className="mb-0 font-weight-light">
+                    {t("bookingTime")}: {timeList && timeList.map((time) => timeConversion(time))}{" "}
+                  </h6>
+                </div>
+                <hr />
+                <div>
+                  <h6 className="mb-2"> {t("members")} </h6>
+                  {memberList &&
+                    memberList.map((eachMember, index) => {
+                      return (
+                        <h6 className="mb-0" style={{ fontWeight: 300 }}>
+                          {index + 1}. {eachMember[`name_${i18n.language}`]}
+                        </h6>
+                      )
+                    })}
+                </div>
               </div>
-              <hr />
-              <div>
-                <h6 className="mb-2"> {t("members")} </h6>
-                {memberList &&
-                  memberList.map((eachMember, index) => {
-                    return (
-                      <h6 className="mb-0" style={{ fontWeight: 300 }}>
-                        {index + 1}. {eachMember[`name_${i18n.language}`]}
-                      </h6>
-                    )
-                  })}
-              </div>
+              {qrCode()}
             </div>
-            {qrCode()}
+            <ReservationCancellationModal modalOpen={modalOpen} triggerModal={triggerModal} confirmCancellation={confirmCancellation} />
           </div>
-          <ReservationCancellationModal modalOpen={modalOpen} triggerModal={triggerModal} confirmCancellation={confirmCancellation} />
         </div>
-      </div>
-    </>
+      </>
+    )
+  }
+  return (
+    <div className="wrapper mx-auto text-center mt-5">
+      <Loading />
+    </div>
   )
 }
 

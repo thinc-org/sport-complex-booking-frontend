@@ -1,17 +1,16 @@
 import React from "react"
 import { Button } from "react-bootstrap"
 import { useRouteMatch, useHistory } from "react-router-dom"
-import { useState, useEffect, useContext } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { client } from "../../../../axiosConfig"
-import { getCookie } from "../../../contexts/cookieHandler"
 import { timeConversion } from "../Reservation/timeConversion"
 import { AxiosResponse } from "axios"
 import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 import { useTranslation } from "react-i18next"
-import { get } from "http"
+import { Loading } from "../../ui/loading/loading"
 
 interface ReservationResponse {
-  _id: number | string
+  _id: string
   is_check: boolean
   sport_id: string
   court_number: number
@@ -23,36 +22,26 @@ const ReservationPage = (props: any) => {
   const history = useHistory()
 
   const [lists, setLists] = useState<Array<ReservationResponse>>([])
-  const [isThaiLanguage, setIsThaiLanguage] = useState(true)
-
+  const [isLoading, setIsLoading] = useState(true)
   var { url, path } = useRouteMatch()
   const { t, i18n } = useTranslation()
 
   useEffect(() => {
-    setLanguage()
     fetchData()
     console.log("fetch data")
   }, [])
 
-  const fetchData = async () => {
-    await client
-      .get("/myreservation", {})
-      .then((res: AxiosResponse) => {
-        setLists(res.data)
-        console.log(res.data)
-      })
-      .catch((err) => {})
-  }
-
-  const setLanguage = () => {
-    if (getCookie("is_thai_langugae") == "true") {
-      setIsThaiLanguage(true)
-    } else if (getCookie("is_thai_language") == "false") {
-      setIsThaiLanguage(false)
+  const fetchData = useCallback(async () => {
+    try {
+      const res: AxiosResponse = await client.get("/myreservation")
+      setLists(res.data)
+      setIsLoading(false)
+    } catch (err) {
+      console.log(err.message)
     }
-  }
+  }, [])
 
-  const handleClick = (id: string | number) => {
+  const handleClick = (id: string) => {
     console.log("button clicked")
     return history.push({
       pathname: `${path}/reservationdetail`,
@@ -63,8 +52,7 @@ const ReservationPage = (props: any) => {
     })
   }
 
-  // display only when there is any reservation
-  if (lists && lists.length) {
+  if (lists && lists.length && !isLoading) {
     return (
       <>
         <NavHeader header={t("myReservation")} />
@@ -80,7 +68,7 @@ const ReservationPage = (props: any) => {
                     style={{ width: "100%", color: "black", borderColor: "transparent" }}
                   >
                     <div>
-                      <h5 style={{ color: "lightgreen", float: "right" }}> {list.is_check ? t("checked_in") : ""} </h5>
+                      <h5 style={{ color: "lightgreen", float: "right" }}> {list.is_check ? t("checkedIn") : ""} </h5>
                       <h5 className="mb-2"> {list.sport_id[`sport_name_${i18n.language}`]} </h5>
                       <h6 className="mb-0 font-weight-light">
                         {" "}
@@ -103,7 +91,7 @@ const ReservationPage = (props: any) => {
         </div>
       </>
     )
-  } else {
+  } else if (!isLoading) {
     return (
       <>
         <NavHeader header={t("myReservation")} />
@@ -115,6 +103,11 @@ const ReservationPage = (props: any) => {
       </>
     )
   }
+  return (
+    <div className="wrapper mx-auto text-center mt-5">
+      <Loading />
+    </div>
+  )
 }
 
 export default ReservationPage
