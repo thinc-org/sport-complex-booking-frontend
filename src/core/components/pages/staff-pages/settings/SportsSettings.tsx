@@ -22,13 +22,13 @@ export default function SportsSettings() {
       quota: 0,
     })
   const [sports, setSports] = useState([{
-      object_id: "",
-      sport_name_th: "",
-      sport_name_en: "",
-      required_user: 0,
-      quota: 4,
-      list_court: [1, 2, 3],
-    },
+    object_id: "",
+    sport_name_th: "",
+    sport_name_en: "",
+    required_user: 0,
+    quota: 4,
+    list_court: [1, 2, 3],
+  },
   ])
 
   useEffect(() => {
@@ -41,49 +41,49 @@ export default function SportsSettings() {
     requestSports(searchName)
   }
 
-  const sendEdittedSportInfo = async (currentSport: SportData)=> {
+  const sendEdittedSportInfo = async (currentSport: SportData) => {
     await client.put<AxiosResponse>('/court-manager/' + currentSport['_id'], currentSport)
-    .then(()=> {
-      setShowEditSport(false)
-      requestSports()
-    })
-    .catch(()=> {setShowError(true) })
+      .then(() => {
+        setShowEditSport(false)
+        requestSports()
+      })
+      .catch(() => { setShowError(true) })
   }
 
   const sendNewSportInfo = async (newSport: SportData) => {
     await client.post<AxiosResponse>('/court-manager/', newSport)
-    .then(()=> {
-      requestSports()
-      setShowAddSport(false)
-    })
-    .catch(()=> {setShowError(true)})
+      .then(() => {
+        requestSports()
+        setShowAddSport(false)
+      })
+      .catch(() => { setShowError(true) })
   }
 
   const sendDeleteSport = async (currentSport: SportData) => {
     await client.delete<AxiosResponse>('/court-manager/' + currentSport['_id'])
-    .then(()=>{
-      setsSowDeleteSport(false)
-      requestSports()
-    }) 
-    .catch(()=> {setShowError(true)})
+      .then(() => {
+        setShowDeleteSport(false)
+        requestSports()
+      })
+      .catch(() => { setShowError(true) })
   }
 
   const requestSports = async (query?: string) => {
-    const start = (pageNo -1) * 10
-    const end = pageNo * 10 
-    const search_filter =  query ? query : "$"
+    const start = (pageNo - 1) * 10
+    const end = pageNo * 10
+    const search_filter = query ? query : "$"
     console.log("start " + start)
-    await client.get<SportData[]>('/court-manager/'+start+ "/" +end + "/" + search_filter)
-      .then(({data}) => {
+    await client.get<SportData[]>('/court-manager/' + start + "/" + end + "/" + search_filter)
+      .then(({ data }) => {
         console.log(data)
         setSports(data['sport_list'])
         setMaxSport(data['allSport_length'])
       })
-      .catch(() => {setShowError(true)})
+      .catch(() => { setShowError(true) })
   }
 
   const onSubmitAddSport = (data: SportData) => {
-    const newData = {...data, quota: data.quota/30, required_user: parseInt(data.required_user+'')}
+    const newData = { ...data, quota: data.quota / 30, required_user: parseInt(data.required_user + '') }
     console.log(newData)
     sendNewSportInfo(newData)
   }
@@ -92,7 +92,7 @@ export default function SportsSettings() {
     return (
       <Modal
         show={showNoSport}
-        onHide={() => {setShowNoSport(false)}}
+        onHide={() => { setShowNoSport(false) }}
         backdrop="static"
         keyboard={false}
       >
@@ -102,7 +102,7 @@ export default function SportsSettings() {
         <Modal.Body style={{ fontWeight: "lighter" }}>ไม่พบข้อมูลของพนักงานท่านนี้</Modal.Body>
         <Modal.Footer>
           <Button variant="pink" className="btn-normal"
-            onClick={() => {setShowNoSport(false)}}
+            onClick={() => { setShowNoSport(false) }}
           >ตกลง</Button>
         </Modal.Footer>
       </Modal>
@@ -126,21 +126,21 @@ export default function SportsSettings() {
           <td><Button
             className="btn-normal btn-outline-black" variant="outline-danger"
             onClick={() => {
-              setsSowDeleteSport(true)
+              setShowDeleteSport(true)
               setCurrentSport(sport)
             }}>ลบกีฬา</Button></td>
         </tr>
       )
     })
     return sportsList
-  }  
+  }
 
   const handlePagination = (next_page: number) => {
     let max_page: number = Math.floor((maxSport + 9) / 10)
     if (next_page >= 1 && next_page <= max_page) {
       requestSports()
     }
-    
+
   }
 
   const loadPagination = () => {
@@ -176,14 +176,14 @@ export default function SportsSettings() {
     return (
       <Pagination className="justify-content-md-end">
         <Pagination.Prev onClick={() => {
-          setPageNo(pageNo -1)
+          setPageNo(pageNo - 1)
           handlePagination(pageNo - 1)
-        }}/>
+        }} />
         {elementList}
         <Pagination.Next onClick={() => {
           setPageNo(pageNo + 1)
           handlePagination(pageNo + 1)
-        }}/>
+        }} />
       </Pagination>
     )
   }
@@ -238,10 +238,10 @@ export default function SportsSettings() {
         </Col>
         <Col>{loadPagination()}</Col>
       </Row>
-      <AddSport show={showAddSport} setShow={setShowAddSport} onSubmitAddSport={onSubmitAddSport}/>
+      <AddSport show={showAddSport} setShow={setShowAddSport} onSubmitAddSport={onSubmitAddSport} />
       <DeleteSport show={showDeleteSport} setShow={setShowDeleteSport} mainFunction={sendDeleteSport} data={currentSport} />
       <EditSport show={showEditSport} setShow={setShowEditSport} setCurrentSport={setCurrentSport} sendEdittedSportInfo={sendEdittedSportInfo} currentSport={currentSport} />
-      <HandleError show={showError} setShow={setShowError}/> 
+      <HandleError show={showError} setShow={setShowError} />
     </div>
   )
 }
