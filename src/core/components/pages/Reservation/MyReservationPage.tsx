@@ -1,26 +1,25 @@
-import React from 'react';
-import { Route, useHistory, Switch, useRouteMatch } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import ReservationPage from '../Reservation/Reservation';
-import ReservationDetail from '../Reservation/ReservationDetail';
-import withUserGuard from '../../../guards/user.guard';
+import React from "react"
+import { Route, useHistory, Switch, useRouteMatch } from "react-router-dom"
+import { useEffect, useState } from "react"
+import ReservationPage from "../Reservation/Reservation"
+import ReservationDetail from "../Reservation/ReservationDetail"
+import withUserGuard from "../../../guards/user.guard"
 
 const MyReservationPage = (props: any) => {
-    const history = useHistory();
+  const history = useHistory()
 
-    let { url, path } = useRouteMatch()
+  let { url, path } = useRouteMatch()
 
-    useEffect(() => {
-        history.push(path)
-    }, [])
+  useEffect(() => {
+    history.push(path)
+  }, [])
 
-    return (
-        <Switch>
-            <Route exact path={`${path}/reservationdetail`} component={ReservationDetail} />
-            <Route path={path} component={ReservationPage} />
-        </Switch>
-
-    )
+  return (
+    <Switch>
+      <Route exact path={`${path}/reservationdetail`} component={ReservationDetail} />
+      <Route path={path} component={ReservationPage} />
+    </Switch>
+  )
 }
 
-export default withUserGuard(MyReservationPage);
+export default withUserGuard(MyReservationPage)

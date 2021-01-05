@@ -302,7 +302,8 @@ p.link {
   border-radius: 15px !important;
 }
 
-.modal-footer, .modal-header {
+.modal-footer,
+.modal-header {
   border-color: transparent;
 }
 
@@ -532,4 +533,17 @@ td {
   color: red;
   border-radius: 15px;
   border-color: red;
+}
+.return-btn {
+  border-radius: 15px;
+
+  text-align: center;
+  background-color: transparent;
+}
+
+.fixed-bottom {
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 50px;
 }
