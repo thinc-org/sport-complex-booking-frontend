@@ -18,10 +18,10 @@ export const ReservationCancellationModal: React.FC<ReservationCancelModalProps>
             <h5 className="modal-title"> {t("warning")} </h5>
           </div>
           <div className="modal-body pt-1 pb-0" style={{ fontSize: "14px", fontWeight: 300 }}>
-            {t("cancel_reservation_question")}
+            {t("cancelReservationQuestion")}
             <br />
-            <br /> {t("cancel_reservation_condition_1")}
-            <br /> {t("cancel_reservation_condition_2")}
+            <br /> {t("cancelReservationCondition1")}
+            <br /> {t("cancelReservationCondition2")}
           </div>
           <div className="modal-footer pt-0 pb-0">
             <button type="button" onClick={triggerModal} className="btn" data-dismiss="modal" style={{ fontSize: "14px", fontWeight: 400 }}>

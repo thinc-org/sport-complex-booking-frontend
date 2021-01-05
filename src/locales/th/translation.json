@@ -196,5 +196,15 @@
   "waitingRoom": "ห้องรอคอย",
   "noWaitingRoom": "คุณไม่มีห้องรอในขณะนี้",
   "checkOutMyReservation": "ไปที่หน้าการจองของฉันเพื่อดูการจองที่สำเร็จ",
-  "goBack": "กลับ"
+  "goBack": "กลับ",
+  "checkedIn": "เช็คอินแล้ว",
+  "members": "สมาชิก",
+  "showQRToStaff": "กรุณาแสดงคิวอาร์โค้ดนี้ให้เจ้าหน้าที่",
+  "cancelReservation": "ยกเลิกการจอง",
+  "cancelReservationQuestion": "คุณต้องการยกเลิกการจองใช่หรือไม่?",
+  "cancelReservationCondition1": "1. ถ้าทำการยกเลิกการจองภายใน 5 วัน คุณและสมาชิกในการจองจะถูกแบนเป็นเวลา 30 วัน",
+  "cancelReservationCondition2": "2. ถ้าทำการยกเลิกการจองภายใน 2 วัน คุณและสมาชิกในการจองจะถูกแบนเป็นเวลา 2 เดือน",
+  "sure": "ตกลง",
+  "no": "ไม่",
+  "youHaveCheckedIn": "เช็ดอินแล้ว!"
 }
