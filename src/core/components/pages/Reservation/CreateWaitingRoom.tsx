@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { client } from "../../../../axiosConfig"
 import {WaitingRoomData, SportData, CourtData} from './ReservationInterfaces'
 import { AxiosResponse } from "axios"
-import { CreateWaitingRoomErrorMsg } from "./ReservationComponents"
+import { CreateWaitingRoomErrorMsg, CheckValidityErrorMsg } from "./ReservationComponents"
 
 function CreateWaitingRoom() {
   // States
@@ -41,8 +41,9 @@ function CreateWaitingRoom() {
   const [selectTimeWarning, setSelectTimeWarning] = useState(false)
   const [showCantCreateWaitingRoomModal, setShowCantCreateWaitingRoomModal] = useState(false)
   const [showTimeSlotError, setShowTimeSlotError] = useState(false)
-  const [warningMessage, setWarningMessage] = useState("")
-  const [showWarningMessage, setShowWarningMessage] = useState(false)
+  const [warningMessage, setWarningMessage] = useState(0)
+  const [showValidityWarningMessage, setShowValidityWarningMessage] = useState(false)
+  const [showCreateWarningMessage, setShowCreateWarningMessage] = useState(false)
   const [invalidAccount, setInvalidAccount] = useState(true)
   const [errorType, setErrorType] = useState("danger")
 
@@ -74,15 +75,15 @@ function CreateWaitingRoom() {
   const fetchValidity = async () => {
     await client.post('/reservation/checkvalidity')
       .then(() => {
-          setShowWarningMessage(false)
+          setShowValidityWarningMessage(false)
           setInvalidAccount(false)
           setErrorType("warning")
       })
       .catch((error) => {
         if (error.response) {
           console.log(error.response.data);
-          setWarningMessage(error.response.data.message)
-          setShowWarningMessage(true)
+          setWarningMessage(error.response.status)
+          setShowValidityWarningMessage(true)
         }
       })
   }
@@ -95,8 +96,8 @@ function CreateWaitingRoom() {
       .catch((error) => {
         if (error.response) {
           console.log(error.response.data);
-          setWarningMessage(error.response.data.message)
-          setShowWarningMessage(true)
+          setWarningMessage(error.response.status)
+          setShowCreateWarningMessage(true)
         }
       })
   }
@@ -116,10 +117,10 @@ function CreateWaitingRoom() {
       })
       .catch((error) => {
         if (error.response) {
-          if (error.response.data.message === "This Id does not exist.") setInvalidAccount(true)
+          if (error.response.status === 404) setInvalidAccount(true)
           console.log(error.response.data);
-          setWarningMessage(error.response.data.message)
-          setShowWarningMessage(true)
+          setWarningMessage(error.response.status)
+          setShowCreateWarningMessage(true)
         }
       })
   }
@@ -138,10 +139,10 @@ function CreateWaitingRoom() {
       .then(({ data }) => {setTime(data)})
       .catch((error) => {
         if (error.response) {
-          if (error.response.data.message === "This Id does not exist.") setInvalidAccount(true)
+          if (error.response.status === 404) setInvalidAccount(true)
           console.log(error.response.data);
-          setWarningMessage(error.response.data.message)
-          setShowWarningMessage(true)
+          setWarningMessage(error.response.status)
+          setShowCreateWarningMessage(true)
         }
       })
   }
@@ -163,10 +164,10 @@ function CreateWaitingRoom() {
     .catch((error)=> {
       setShowCantCreateWaitingRoomModal(true)
       if (error.response) {
-        if (error.response.data.message === "This Id does not exist.") setInvalidAccount(true)
+        if (error.response.status === 404) setInvalidAccount(true)
         console.log(error.response.data);
-        setWarningMessage(error.response.data.message)
-        setShowWarningMessage(true)
+        setWarningMessage(error.response.status)
+        setShowCreateWarningMessage(true)
       }
     })
   }
@@ -209,7 +210,8 @@ function CreateWaitingRoom() {
   return (
     <div className="Orange">
     <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{t("createWaitingRoom")}</h4>
-    <CreateWaitingRoomErrorMsg show={showWarningMessage} errorRes={warningMessage} type={errorType} />
+    <CheckValidityErrorMsg show={showValidityWarningMessage} statusCode={warningMessage} type={errorType} />
+    <CreateWaitingRoomErrorMsg show={showCreateWarningMessage} statusCode={warningMessage} type={errorType} />
     <div className="mx-auto col-md-6">
       <form onSubmit={handleSubmit(onSubmit)}>
         

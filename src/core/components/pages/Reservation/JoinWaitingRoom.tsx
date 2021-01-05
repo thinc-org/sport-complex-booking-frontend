@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { client } from "../../../../axiosConfig"
 import { CustomWaitingRoomModal } from "../../ui/Modals/WaitingRoomModals"
 import { WaitingRoomAccessCode } from './ReservationInterfaces'
-import { CreateWaitingRoomErrorMsg } from "./ReservationComponents"
+import { CheckValidityErrorMsg, JoinWaitingRoomErrorMsg } from "./ReservationComponents"
 interface ValidityMessage {
   message: string
 }
@@ -17,8 +17,9 @@ function JoinWaitingRoom() {
   const {t} = useTranslation()
   const history = useHistory()
   const [showWrongAccessCodeModal, setShowWrongAccessCodeModal] = useState(false)
-  const [warningMessage, setWarningMessage] = useState("")
-  const [showWarningMessage, setShowWarningMessage] = useState(false)
+  const [warningMessage, setWarningMessage] = useState(0)
+  const [showValidityWarningMessage, setShowValidityWarningMessage] = useState(false)
+  const [showJoinWarningMessage, setShowJoinWarningMessage] = useState(false)
   const [invalidAccount, setInvalidAccount] = useState(true)
   const [errorType, setErrorType] = useState("danger")
 
@@ -36,8 +37,8 @@ function JoinWaitingRoom() {
         if (error.response) {
           console.log(error.response.data);
           setErrorType("warning")
-          setWarningMessage(error.response.data.message)
-          setShowWarningMessage(true)
+          setWarningMessage(error.response.status)
+          setShowJoinWarningMessage(true)
         }
       })
   }
@@ -57,8 +58,8 @@ function JoinWaitingRoom() {
         setInvalidAccount(true)
         if (error.response) {
           console.log(error.response.data);
-          setWarningMessage(error.response.data.message)
-          setShowWarningMessage(true)
+          setWarningMessage(error.response.status)
+          setShowValidityWarningMessage(true)
         }
       })
   }
@@ -70,7 +71,8 @@ function JoinWaitingRoom() {
   return (
     <div className="wrapper">
       <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{t("joinWaitingRoom")}</h4>
-      <CreateWaitingRoomErrorMsg show={showWarningMessage} errorRes={warningMessage} type={errorType} />
+      <CheckValidityErrorMsg show={showValidityWarningMessage} statusCode={warningMessage} type={errorType} />
+      <JoinWaitingRoomErrorMsg show={showJoinWarningMessage} statusCode={warningMessage} type={errorType} />
       <div className="mx-auto col-md-6">  
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="default-mobile-wrapper mt-4 animated-card">

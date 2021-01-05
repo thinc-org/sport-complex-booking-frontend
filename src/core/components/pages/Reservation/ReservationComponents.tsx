@@ -19,37 +19,57 @@ export const ErrorMsgBanner:React.FC<ErrorMsgBannerProps> = ({errorMsg, type}) =
   )
 }
 
-export interface CreateWaitingRoomErrorMsg {
+export interface ErrorMessageBannerProps {
   show: boolean
-  errorRes: string
+  statusCode: number
   type: string
 }
 
-export const CreateWaitingRoomErrorMsg:React.FC<CreateWaitingRoomErrorMsg> = ({show, errorRes, type}) => {
+export const CheckValidityErrorMsg:React.FC<ErrorMessageBannerProps> = ({show, statusCode, type}) => {
   const {t} = useTranslation()
   if (!show) return null
-  switch(errorRes) {
-    case "This Id does not exist":
+  switch(statusCode) {
+    case 404:
       return(<ErrorMsgBanner errorMsg={t("idDoesNotExist")} type={type} />)
-    case "This Id does not exist.":
-      return(<ErrorMsgBanner errorMsg={t("idDoesNotExist.")} type={type} />)
-    case "Your account has to verify first":
+    case 401:
       return(<ErrorMsgBanner errorMsg={t("accountHasToVerify")} type={type} />)
-    case "Your account has already expired, please contact staff":
+    case 402:
       return(<ErrorMsgBanner errorMsg={t("alreadyExpired")} type={type} />)
-    case "You have to fill your info first":
+    case 406:
       return(<ErrorMsgBanner errorMsg={t("haveToFillInfo")} type={type} />)
-    case "Your account has been banned, please contact staff":
+    case 403:
       return(<ErrorMsgBanner errorMsg={t("accountBanned")} type={type} />)
-    case "You already have a waiting room":
+    case 409:
       return(<ErrorMsgBanner errorMsg={t("alreadyHaveWaitingRoom")} type={type} />)
-    case "The code is wrong":
-      return(<ErrorMsgBanner errorMsg={t("codeIsWrong")} type={type} />)
-    case "You do not have enough quotas":
-      return(<ErrorMsgBanner errorMsg={t("notEnoughQuota")} type={type} />)
-    case "This court does not exist":
-      return(<ErrorMsgBanner errorMsg={t("courtDoesNotExist")} type={type} />)
     default: 
-      return(<ErrorMsgBanner errorMsg={t("error")}  type={type} />)
+      return(<ErrorMsgBanner errorMsg={t("errorOccured")}  type={type} />)
+  }
+}
+
+export const CreateWaitingRoomErrorMsg:React.FC<ErrorMessageBannerProps> = ({show, statusCode, type}) => {
+  const {t} = useTranslation()
+  if (!show) return null
+  switch(statusCode) {
+    case 401:
+      return(<ErrorMsgBanner errorMsg={t("chosenTimeUnavailable")} type={type} />)
+    case 410:
+      return(<ErrorMsgBanner errorMsg={t("courtDoesNotExist")} type={type} />)
+    case 404:
+      return(<ErrorMsgBanner errorMsg={t("idDoesNotExist.")} type={type} />)
+    default: 
+      return(<ErrorMsgBanner errorMsg={t("errorOccured")}  type={type} />)
+  }
+}
+
+export const JoinWaitingRoomErrorMsg:React.FC<ErrorMessageBannerProps> = ({show, statusCode, type}) => {
+  const {t} = useTranslation()
+  if (!show) return null
+  switch(statusCode) {
+    case 400:
+      return(<ErrorMsgBanner errorMsg={t("codeIsWrong")} type={type} />)
+    case 401:
+      return(<ErrorMsgBanner errorMsg={t("notEnoughQuota")} type={type} />)
+    default: 
+      return(<ErrorMsgBanner errorMsg={t("errorOccured")}  type={type} />)
   }
 }
