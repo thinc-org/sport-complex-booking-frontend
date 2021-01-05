@@ -19,8 +19,8 @@ const StaffRoute = (props) => {
   const { path } = useRouteMatch()
   const location = useLocation()
   const headerMap: Map<string, string> = new Map([
-    ["/staffProfile", "ยินดีต้อนรับ"],
-    ["/staffManagement", "การจัดการสตาฟ"], // เปลี่ยนเอา
+    ["/profile", "ยินดีต้อนรับ"],
+    ["/management", "การจัดการสตาฟ"], // เปลี่ยนเอา
     ["/listOfAllUsers", "รายชื่อผู้ใช้"],
     ["/addUser", "เพิ่มผู้ใช้"],
     ["/cuInfo", "ข้อมูลผู้ใช้"],
@@ -55,9 +55,9 @@ const StaffRoute = (props) => {
                     )}{" "}
                   </h1>
                   <Switch>
-                    <Route path={`${path}/staffProfile`} component={StaffProfile} />
+                    <Route path={`${path}/profile`} component={StaffProfile} />
                     <Route
-                      path={`${path}/staffManagement`}
+                      path={`${path}/management`}
                       render={() => {
                         return (
                           // add pages here staff(page)
