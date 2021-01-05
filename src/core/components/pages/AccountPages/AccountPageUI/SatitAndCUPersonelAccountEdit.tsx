@@ -68,12 +68,12 @@ export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
           <hr/>
           <div className="row mt-3">
             <div className="button-group col-md-12">
-              <Button variant="gray" className="btn-secondary" onClick={handleCancel}>
-                {t("cancel")}
-              </Button>
               <Button variant="pink" className="btn-secondary" type="submit" onClick={()=> setShow(true)}>
                 {t("saveAndSubmit")}
               </Button>
+              <Button variant="gray" className="btn-secondary" onClick={handleCancel}>
+                {t("cancel")}
+              </Button>  
             </div>
           </div>
 

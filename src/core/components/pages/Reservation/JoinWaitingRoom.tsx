@@ -31,7 +31,15 @@ function JoinWaitingRoom() {
           history.push('/waitingroom')
         }
       })
-      .catch(() => {setShowWrongAccessCodeModal(true)})
+      .catch((error) => {
+        setShowWrongAccessCodeModal(true)
+        if (error.response) {
+          console.log(error.response.data);
+          setErrorType("warning")
+          setWarningMessage(error.response.data.message)
+          setShowWarningMessage(true)
+        }
+      })
   }
 
   const fetchValidity = async () => {
@@ -85,7 +93,7 @@ function JoinWaitingRoom() {
                 placeholder="xxxxxx"
                 className="form-control"
               />
-              {errors.accessCode && <p id="input-error">{errors.accessCode.message}</p>}
+              {errors.access_code && <p id="input-error" className="mb-0 pb-0 mt-1">{errors.access_code.message}</p>}
             </div>
           </div>
           <br />

@@ -67,13 +67,13 @@ export default function ChulaAccountEdit({ toggleEditButton }) {
           <hr/>
           <div className="row mt-3">
             <div className="button-group col-md-12">
-              <Button variant="gray" className="btn-secondary" onClick={handleCancel}>
-                {t("cancel")}
+              <Button variant="pink" className="btn-secondary" type="submit">
+                {t("saveAndSubmit")}
               </Button>
             </div>
             <div className="button-group col-md-12">
-              <Button variant="pink" className="btn-secondary" type="submit">
-                {t("saveAndSubmit")}
+              <Button variant="gray" className="btn-secondary" onClick={handleCancel}>
+                {t("cancel")}
               </Button>
             </div>
           </div>
