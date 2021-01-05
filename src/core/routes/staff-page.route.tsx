@@ -15,100 +15,100 @@ import StaffManagement from "../components/pages/staff-pages/staff-management/St
 import Settings from "../components/pages/staff-pages/settings/Settings"
 
 const StaffRoute = (props) => {
-    const { path, url } = useRouteMatch()
-    function staff(page, header) {
-        return (
-            <div className="staff background d-block" style={{ backgroundColor: "white", minHeight: "80vh" }}>
-                <div className="container d-block">
-                    <div className="row justify-content-center">
-                        <div
-                            className="col"
-                            style={{ backgroundColor: " var(--lightpink-color)", marginTop: "5vh", marginBottom: "5vh", minHeight: "80vh", borderRadius: "15px" }}
-                        >
-                            <div className="row justify-content-center" style={{ minHeight: "80vh" }}>
-                                <div className="col-3 justify-content-center" style={{ maxHeight: "800px" }}>
-                                    <StaffSidebar />
-                                </div>
-                                <div className="col-9 mt-5" style={{ minHeight: "600px" }}>
-                                    <h1> {header} </h1>
-                                    {page}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
+  const { path, url } = useRouteMatch()
+  function staff(page, header) {
     return (
-        <>
-            <NavHeader isOnStaffPage={true} />
-            <Switch>
-                <Route exact path={path} component={StaffLogin} />
-                <Route
-                    path={`${path}/staffProfile`}
-                    render={() => {
-                        return staff(<StaffProfile />, "ยินดีต้อนรับ")
-                        // example
-                        // add pages here staff(page)
-                    }}
-                />
-                <Route
-                    path={`${path}/staffManagement`}
-                    render={() => {
-                        return staff(<StaffManagement />, "รายชื่อสตาฟ")
-                    }}
-                />
-                <Route
-                    exact
-                    path={`${path}/listOfAllUsers`}
-                    render={(props) => {
-                        return staff(<ListOfAllUsers {...props} />, "รายชื่อผู้ใช้")
-                    }}
-                />
-                <Route
-                    exact
-                    path={`${path}/addUser`}
-                    render={(props) => {
-                        return staff(<AddUser {...props} />, "เพิ่มผู้ใช้")
-                    }}
-                />
-                <Route
-                    exact
-                    path={`${path}/cuInfo/:_id`}
-                    render={(props) => {
-                        return staff(<CUInfo {...props} />, "ข้อมูลผู้ใช้")
-                    }}
-                />
-                <Route
-                    exact
-                    path={`${path}/userInfo/:_id`}
-                    render={(props) => {
-                        return staff(<UserInfo {...props} />, "ข้อมูลผู้ใช้")
-                    }}
-                />
-                <Route
-                    exact
-                    path={`${path}/verifyApprove`}
-                    render={(props) => {
-                        return staff(<VeritificationApproval {...props} />, "รับรองการลงทะเบียน")
-                    }}
-                />
-                <Route
-                    exact
-                    path={`${path}/verifyInfo/:username`}
-                    render={(props) => {
-                        return staff(<VerifyInfo {...props} />, "รับรองการลงทะเบียนรายบุคคล")
-                    }}
-                />
-                <Route
-                    path={`${path}/settings`}
-                    render={() => {
-                        return staff(<Settings />, "การตั้งค่า")
-                    }}
-                />
-            </Switch>
-        </>
+      <div className="staff background d-block" style={{ backgroundColor: "white", minHeight: "80vh" }}>
+        <div className="container d-block">
+          <div className="row justify-content-center">
+            <div
+              className="col"
+              style={{ backgroundColor: " var(--lightpink-color)", marginTop: "5vh", marginBottom: "5vh", minHeight: "80vh", borderRadius: "15px" }}
+            >
+              <div className="row justify-content-center" style={{ minHeight: "80vh" }}>
+                <div className="col-3 justify-content-center" style={{ maxHeight: "800px" }}>
+                  <StaffSidebar />
+                </div>
+                <div className="col-9 mt-5" style={{ minHeight: "600px" }}>
+                  <h1> {header} </h1>
+                  {page}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     )
+  }
+  return (
+    <>
+      <NavHeader isOnStaffPage={true} />
+      <Switch>
+        <Route exact path={path} component={StaffLogin} />
+        <Route
+          path={`${path}/staffProfile`}
+          render={() => {
+            return staff(<StaffProfile />, "ยินดีต้อนรับ")
+            // example
+            // add pages here staff(page)
+          }}
+        />
+        <Route
+          path={`${path}/staffManagement`}
+          render={() => {
+            return staff(<StaffManagement />, "รายชื่อสตาฟ")
+          }}
+        />
+        <Route
+          exact
+          path={`${path}/listOfAllUsers`}
+          render={(props) => {
+            return staff(<ListOfAllUsers {...props} />, "รายชื่อผู้ใช้")
+          }}
+        />
+        <Route
+          exact
+          path={`${path}/addUser`}
+          render={(props) => {
+            return staff(<AddUser {...props} />, "เพิ่มผู้ใช้")
+          }}
+        />
+        <Route
+          exact
+          path={`${path}/cuInfo/:_id`}
+          render={(props) => {
+            return staff(<CUInfo {...props} />, "ข้อมูลผู้ใช้")
+          }}
+        />
+        <Route
+          exact
+          path={`${path}/userInfo/:_id`}
+          render={(props) => {
+            return staff(<UserInfo {...props} />, "ข้อมูลผู้ใช้")
+          }}
+        />
+        <Route
+          exact
+          path={`${path}/verifyApprove`}
+          render={(props) => {
+            return staff(<VeritificationApproval {...props} />, "รับรองการลงทะเบียน")
+          }}
+        />
+        <Route
+          exact
+          path={`${path}/verifyInfo/:username`}
+          render={(props) => {
+            return staff(<VerifyInfo {...props} />, "รับรองการลงทะเบียนรายบุคคล")
+          }}
+        />
+        <Route
+          path={`${path}/settings`}
+          render={() => {
+            return staff(<Settings />, "การตั้งค่า")
+          }}
+        />
+      </Switch>
+    </>
+  )
 }
 export default StaffRoute
