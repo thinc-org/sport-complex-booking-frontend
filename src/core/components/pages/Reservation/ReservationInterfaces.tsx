@@ -1,8 +1,10 @@
 import { History, LocationState } from "history"
 
 export interface HoorayHistoryStates {
-  msg: boolean
-}
+  msg : {
+    fromJoinWaitingRoom: boolean
+  }
+} 
 
 export interface BanHistoryStates {
   msg: string
