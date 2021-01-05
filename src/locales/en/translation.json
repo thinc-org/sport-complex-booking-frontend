@@ -15,7 +15,7 @@
   "confirmSubmitMsg": "Do you want to submit the registration form?",
   "cancel": "Cancel",
   "saveAndSubmit": "Save and Submit",
-  "errorOccured": "An error has occured",
+  "errorOccured": "An error has occured. Please try again or contact CU Sports Center staff.",
   "cannotEditInfo": "Cannot edit account information at the moment",
   "ok": "OK",
   "warning": "Warning",
@@ -227,5 +227,6 @@
   "alreadyHaveWaitingRoom": "You already have a waiting room.",
   "codeIsWrong": "The access code is wrong.",
   "notEnoughQuota": "You do not have enough quotas.",
-  "courtDoesNotExist": "This court does not exist."
+  "courtDoesNotExist": "This court does not exist.",
+  "chosenTimeUnavailable": "Your chosen time is unavailable"
 }
