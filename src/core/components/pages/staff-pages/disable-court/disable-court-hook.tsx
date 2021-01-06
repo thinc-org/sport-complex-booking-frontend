@@ -119,6 +119,7 @@ export const useTableWithPagination = () => {
         start: 0,
         end: 9
     })
+    const [isError, setIsError] = useState(false);
     const [data, setData] = useState<RowProps[]>();
     const [page, setPage] = useState(1);
     const [maxPage, setMaxPage] = useState(1);
@@ -139,7 +140,7 @@ export const useTableWithPagination = () => {
                 })
 
             })
-            .catch((err) => alert('ไม่สามารถลบได้ กรุณาลองใหม่อีกครั้ง'))
+            .catch((err) => setIsError(true))
     }
     function jumpUp() {
         const currentPage = page ?? 0
@@ -182,7 +183,7 @@ export const useTableWithPagination = () => {
             end: params.end
         })
     }, [params])
-    return { data, page, maxPage, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete }
+    return { data, page, maxPage, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete, isError, setIsError }
 }
 
 
