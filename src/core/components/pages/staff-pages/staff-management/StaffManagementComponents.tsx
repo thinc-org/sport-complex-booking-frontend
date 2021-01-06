@@ -13,14 +13,14 @@ export interface admin_and_staff {
   is_admin: boolean | string,
 }
 
-export interface DeleteStaffModal{
+export interface DeleteStaffModalProps{
   show: boolean
   setShow: (value: boolean) => void
   mainFunction: (value: admin_and_staff) => void
   data: admin_and_staff
 }
 
-export const DeleteStaff: React.FC<DeleteStaffModal> = ({ show, setShow, mainFunction, data }) => {
+export const DeleteStaffModal: React.FC<DeleteStaffModalProps> = ({ show, setShow, mainFunction, data }) => {
   return (
     <Modal
       show={show}
@@ -44,12 +44,12 @@ export const DeleteStaff: React.FC<DeleteStaffModal> = ({ show, setShow, mainFun
   )
 }
 
-export interface EditStaffModal{
+export interface EditStaffModalProps{
   show: boolean
   setShow: (value: boolean) => void
 }
 
-export const EditStaff: React.FC<EditStaffModal> = ({ show, setShow }) => {
+export const EditStaffModal: React.FC<EditStaffModalProps> = ({ show, setShow }) => {
   return (
     <Modal
       show={show}
@@ -79,13 +79,13 @@ export const EditStaff: React.FC<EditStaffModal> = ({ show, setShow }) => {
   )
 }
 
-export interface AddStaffModal{
+export interface AddStaffModalProps{
   show: boolean
   setShow: (value: boolean) => void
   onSubmitAddStaff: (staff: admin_and_staff) => void
 }
 
-export const AddStaff: React.FC<AddStaffModal> = ({ show, setShow, onSubmitAddStaff }) => {
+export const AddStaffModal: React.FC<AddStaffModalProps> = ({ show, setShow, onSubmitAddStaff }) => {
   const { register, handleSubmit, errors } = useForm({ resolver: yupResolver(passwordSchema) })
   return (
     <Modal
@@ -119,12 +119,12 @@ export const AddStaff: React.FC<AddStaffModal> = ({ show, setShow, onSubmitAddSt
             {errors.username && <p id="input-error">{errors.username.message}</p>}
             <Row>
               <Form.Label>รหัสผ่าน</Form.Label>
-              <input type="text" ref={register} name="password" className="form-control" />
+              <input type="password" ref={register} name="password" className="form-control" />
             </Row>
             {errors.password && <p id="input-error">{errors.password.message}</p>}
             <Row>
               <Form.Label>กรอกรหัสผ่านอีกครั้ง</Form.Label>
-              <input type="text" ref={register} name="recheckpassword" className="form-control" />
+              <input type="password" ref={register} name="recheckpassword" className="form-control" />
             </Row>
             {errors.recheckpassword && <p id="input-error">{errors.recheckpassword.message}</p>}
             <Row>
@@ -161,12 +161,12 @@ export const AddStaff: React.FC<AddStaffModal> = ({ show, setShow, onSubmitAddSt
   )
 }
 
-export interface HandleErrorModal{
+export interface HandleErrorModalProps{
   show: boolean
   setShow: (value: boolean) => void
 }
 
-export const HandleError: React.FC<HandleErrorModal> = ({ show, setShow }) => {
+export const HandleErrorModal: React.FC<HandleErrorModalProps> = ({ show, setShow }) => {
   if (!show) return null
   return (
     <Modal
