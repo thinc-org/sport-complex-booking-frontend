@@ -146,7 +146,7 @@ const AddUser: FunctionComponent = () => {
   }
 
   const renderPasswordSection = () => {
-    return <ChangePasswordComponent selectingSatit={selectingSatit} info={{ handleAdd, register, handleSubmit }} />
+    return <ChangePasswordComponent selectingSatit={selectingSatit} register={register} />
   }
 
   const renderModals = () => {
@@ -225,7 +225,7 @@ const AddUser: FunctionComponent = () => {
 
   return (
     <div className="addUser">
-      <Card body border="light" className="shadow px-3 py-3 mb-5 mt-4">
+      <Card body border="light" className="shadow px-3 py-3 mb-5 mt-4 mr-4">
         {selectingSatit ? renderSatitForm() : renderNormalForm()}
         <AlertUncom show={showAlerts} />
         <Row className="pt-5">
