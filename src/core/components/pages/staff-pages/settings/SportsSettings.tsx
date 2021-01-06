@@ -11,7 +11,7 @@ export default function SportsSettings() {
   const [searchName, setSearchName] = useState<string>("")
   const [showNoSport, setShowNoSport] = useState<boolean>(false)
   const [showAddSport, setShowAddSport] = useState<boolean>(false)
-  const [showDeleteSport, setsSowDeleteSport] = useState<boolean>(false)
+  const [showDeleteSport, setShowDeleteSport] = useState<boolean>(false)
   const [showEditSport, setShowEditSport] = useState<boolean>(false)
   const [showError, setShowError] = useState(false)
   const [currentSport, setCurrentSport] = useState<SportData>(
@@ -62,7 +62,7 @@ export default function SportsSettings() {
   const sendDeleteSport = async (currentSport: SportData) => {
     await client.delete<AxiosResponse>('/court-manager/' + currentSport['_id'])
     .then(()=>{
-      setsSowDeleteSport(false)
+      setShowDeleteSport(false)
       requestSports()
     }) 
     .catch(()=> {setShowError(true)})
@@ -126,7 +126,7 @@ export default function SportsSettings() {
           <td><Button
             className="btn-normal btn-outline-black" variant="outline-danger"
             onClick={() => {
-              setsSowDeleteSport(true)
+              setShowDeleteSport(true)
               setCurrentSport(sport)
             }}>ลบกีฬา</Button></td>
         </tr>
@@ -239,7 +239,7 @@ export default function SportsSettings() {
         <Col>{loadPagination()}</Col>
       </Row>
       <AddSport show={showAddSport} setShow={setShowAddSport} onSubmitAddSport={onSubmitAddSport}/>
-      <DeleteSport show={showDeleteSport} setShow={setsSowDeleteSport} mainFunction={sendDeleteSport} data={currentSport} />
+      <DeleteSport show={showDeleteSport} setShow={setShowDeleteSport} mainFunction={sendDeleteSport} data={currentSport} />
       <EditSport show={showEditSport} setShow={setShowEditSport} setCurrentSport={setCurrentSport} sendEdittedSportInfo={sendEdittedSportInfo} currentSport={currentSport} />
       <HandleError show={showError} setShow={setShowError}/> 
     </div>
