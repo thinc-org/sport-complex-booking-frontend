@@ -68,7 +68,7 @@ const StaffRoute = (props) => {
                     <Route exact path={`${path}/verifyInfo/:_id`} component={VerifyInfo} />
                     <Route exact path={`${path}/qrcodescanner`} component={QRScannerPage} />
                     <Route exact path={`${path}/profile`} component={StaffProfile} />
-                    <Route exact path={`${path}/staffmanagement`} component={StaffManagement} />
+                    <Route exact path={`${path}/management`} component={StaffManagement} />
                     <Route exact path={`${path}/settings`} component={Settings} />
                   </Switch>
                 </div>
