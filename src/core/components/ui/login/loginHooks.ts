@@ -38,7 +38,7 @@ export const useLogin = (setError) => {
                 setToken(res.data.token)
                 setIsFirstLogin(false)
                 if (res.data.is_first_login) history.push(`${path}/personal`)
-                else history.push('/account')
+                else history.push('/home')
                 if (res.data.is_thai_language) changeLanguage('th')
                 else changeLanguage('en')
                 window.location.reload()
@@ -67,7 +67,7 @@ export const useLogin = (setError) => {
                     const first_time_login = res.data.is_first_login
                     setIsFirstLogin(first_time_login)
                     if (res.data.is_first_login) history.push(`${path}/personal`)
-                    else history.push('/account')
+                    else history.push('/home')
                     if (res.data.is_thai_language) changeLanguage('th')
                     else changeLanguage('en')
                 })
@@ -88,7 +88,7 @@ export const usePreventUserFromSignIn = () => {
     const history = useHistory()
     const { isUser } = useAuthContext()
     useEffect(() => {
-        if (isUser) history.push('/account')
+        if (isUser) history.push('/home')
     }, [])
 }
 export const usePersonalInfo = () => {
@@ -107,14 +107,14 @@ export const usePersonalInfo = () => {
             })
             .then((res) => {
                 setIsFirstLogin(false)
-                history.push('/account')
+                history.push('/home')
 
             })
             .catch((err) => console.log(err))
     }
     useEffect(() => {
         if (!getIsFirstlogin()) {
-            history.push('/account')
+            history.push('/home')
         }
     }, [])
     return { onSubmit }

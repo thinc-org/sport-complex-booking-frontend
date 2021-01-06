@@ -5,9 +5,9 @@
   "phoneLabel": "เบอร์โทรศัพท์",
   "personalEmailLabel": "อีเมลส่วนตัว",
   "CuStudent": "นิสิตจุฬาลงกรณ์มหาวิทายาลัย",
-  "SatitAndCuPersonel": "นักเรียนโรงเรียนสาธิตจุฬา และ บุคลากรจุฬา",
+  "SatitAndCuPersonel": "นักเรียนโรงเรียนสาธิตจุฬา / บุคลากรจุฬา",
   "chulaAccountType": "นิสิตจุฬาลงกรณ์มหาวิทายาลัย",
-  "satitAccountType": "นักเรียนโรงเรียนสาธิตจุฬา และ บุคลากรจุฬา",
+  "satitAccountType": "นักเรียนโรงเรียนสาธิตจุฬา / บุคลากรจุฬา",
   "edit": "แก้ไข",
   "phoneErrorMessage": "กรุณากรอกหมายเลขโทรศัพท์ที่ถูกต้อง",
   "emailErrorMessage": "กรุณากรอกอีเมลที่ถูกต้อง",
@@ -16,12 +16,12 @@
   "cancel": "ยกเลิก",
   "saveAndSubmit": "บันทึกและส่ง",
   "errorOccured": "เกิดข้อผิดพลาด กรุณาลองใหม่หรือติดต่อเจ้าหน้าที่สปอร์ตเซ็นเตอร์",
-  "cannotEditInfo": "ไม่แก้ไขข้อมูลผู้ใช้ได้ในขณะนี้",
+  "cannotEditInfo": "ไม่สามารถแก้ไขข้อมูลผู้ใช้ได้ในขณะนี้",
   "ok": "ตกลง",
   "warning": "คำเตือน",
   "pleaseSubmitRegisForm": "กรุณาส่งข้อมูลการสมัคร",
   "changePassword": "เปลี่ยนรหัสผ่าน",
-  "prefix": "คำนำหน้าขื่อ *",
+  "prefix": "คำนำหน้าชื่อ *",
   "gender": "เพศ *",
   "name_th": "ชื่อจริง *",
   "surname_th": "นามสกุล *",
@@ -71,7 +71,7 @@
   "newPassword": "รหัสผ่านใหม่",
   "repeatNewPassword": "กรอกรหัสผ่านใหม่อีกครั้ง",
   "hooray": "ยินดีด้วย!",
-  "reservation_success": "การจองสำเร็จแล้ว",
+  "reservationSuccess": "การจองสำเร็จแล้ว",
   "viewWaitingRoom": "ดูห้องจอง",
   "reserveNow": "จองสนาม",
   "chooseReserve": "เลือกเมนู",
@@ -94,14 +94,14 @@
   "submittedTitle": "ข้อมูลการสมัครถูกส่งแล้ว",
   "submittedMessage": "โปรดรอการยืนยัน",
   "approvedTitle": "ข้อมูลการสมัครผ่านการยอมรับแล้ว",
-  "approvedMessage": "หากต้องการแก้ไขข้อทูลกรณาติดต่อเจ้าหน้าทีสปอรต์เซ็นเตอร์โดยตรงที่สนาม",
+  "approvedMessage": "หากต้องการแก้ไขข้อทูลกรณาติดต่อเจ้าหน้าทีสปอร์ตเซ็นเตอร์โดยตรงที่สนาม",
   "create": "สร้าง",
   "sport": "กีฬา",
   "court": "หมายเลขสนาม",
   "bookingDate": "วันที่",
   "bookingTime": "เวลา",
   "confirmation": "ยืนยัน",
-  "confirmPasswordChange": "ต้องการยืนยันหารเปลี่ยนรหัสหรือไม่",
+  "confirmPasswordChange": "ต้องการยืนยันการเปลี่ยนรหัสหรือไม่",
   "submit": "ส่ง",
   "wantToCreateWaitingRoom": "คุณต้องการสร้างห้องรอการจองหรือไม่",
   "reservationDetails": "รายละเอียดการจอง",
@@ -145,7 +145,7 @@
   "surnamePlaceHolder": "นามสกุล",
   "passwordChangeConfirm": {
     "title": "ยืนยัน",
-    "body": "ต้องการยืนยันหารเปลี่ยนรหัสหรือไม่"
+    "body": "ต้องการยืนยันการเปลี่ยนรหัสหรือไม่"
   },
   "passwordChangeSuccess": {
     "title": "สำเร็จ",
@@ -153,7 +153,7 @@
   },
   "passwordChangeError": {
     "title": "เกิดข้อผิดพลาด",
-    "body": "ไม่สาทารถเปลี่ยนรหัสผู้ให้ได้ในขณะนี้"
+    "body": "ไม่สามารถเปลี่ยนรหัสผู้ใช้ได้ในขณะนี้"
   },
   "wrongAccessCodeModal": {
     "title": "ไม่สามารถเข้าร่วมห้องจองได้",
@@ -164,6 +164,10 @@
     "body": "ห้องรอการจองไม่สามารถถูกสร้างได้ในขณะนี้."
   },
   "confirmEditAccountModal": {
+    "title": "ยืนยันการแก้ไขข้อมูล",
+    "body": "คุณต้องการแก้ไขข้อมูลหรือไม่"
+  },
+  "confirmEditOtherAccountModal": {
     "title": "ยืนยันการส่งใบสมัคร",
     "body": "คุณต้องการส่งใบสมัครหรือไม่"
   },
@@ -193,7 +197,7 @@
   "continue": "ต่อไป",
   "home": "หน้าแรก",
   "account": "บัญชีผู้ใช้",
-  "waitingRoom": "ห้องรอคอย",
+  "waitingRoom": "ห้องรอการจอง",
   "noWaitingRoom": "คุณไม่มีห้องรอในขณะนี้",
   "checkOutMyReservation": "ไปที่หน้าการจองของฉันเพื่อดูการจองที่สำเร็จ",
   "goBack": "กลับ",
@@ -229,5 +233,9 @@
   "codeIsWrong": "รหัสเข้าห้องรอการจองไม่ถูกต้อง",
   "notEnoughQuota": "คุณไม่เหลือสิทธิการจองแล้ว",
   "courtDoesNotExist": "ไม่พบสนาม กรุณาของใหม่",
-  "chosenTimeUnavailable": "ไม่สามารถจองเวลาที่คุณเลือกได้"
+  "chosenTimeUnavailable": "ไม่สามารถจองเวลาที่คุณเลือกได้",
+  "oldPasswordMismatch": {
+    "title": "ไม่สามารถเปลี่ยนรหัสผ่านได้",
+    "body":"รหัสผ่านเก่าไม่ถูกต้อง"
+  }
 }

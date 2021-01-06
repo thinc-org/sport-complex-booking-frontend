@@ -17,7 +17,7 @@ function JoinWaitingRoom() {
   const {t} = useTranslation()
   const history = useHistory()
   const [showWrongAccessCodeModal, setShowWrongAccessCodeModal] = useState(false)
-  const [warningMessage, setWarningMessage] = useState(0)
+  const [warningMessage, setWarningMessage] = useState("")
   const [showValidityWarningMessage, setShowValidityWarningMessage] = useState(false)
   const [showJoinWarningMessage, setShowJoinWarningMessage] = useState(false)
   const [invalidAccount, setInvalidAccount] = useState(true)
@@ -35,9 +35,8 @@ function JoinWaitingRoom() {
       .catch((error) => {
         setShowWrongAccessCodeModal(true)
         if (error.response) {
-          console.log(error.response.data);
           setErrorType("warning")
-          setWarningMessage(error.response.status)
+          setWarningMessage(error.response.data.reason)
           setShowJoinWarningMessage(true)
         }
       })
@@ -57,8 +56,7 @@ function JoinWaitingRoom() {
       .catch((error) => {
         setInvalidAccount(true)
         if (error.response) {
-          console.log(error.response.data);
-          setWarningMessage(error.response.status)
+          setWarningMessage(error.response.data.reason)
           setShowValidityWarningMessage(true)
         }
       })
@@ -71,8 +69,8 @@ function JoinWaitingRoom() {
   return (
     <div className="wrapper">
       <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{t("joinWaitingRoom")}</h4>
-      <CheckValidityErrorMsg show={showValidityWarningMessage} statusCode={warningMessage} type={errorType} />
-      <JoinWaitingRoomErrorMsg show={showJoinWarningMessage} statusCode={warningMessage} type={errorType} />
+      <CheckValidityErrorMsg show={showValidityWarningMessage} reason={warningMessage} type={errorType} />
+      <JoinWaitingRoomErrorMsg show={showJoinWarningMessage} reason={warningMessage} type={errorType} />
       <div className="mx-auto col-md-6">  
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="default-mobile-wrapper mt-4 animated-card">

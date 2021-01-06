@@ -9,10 +9,8 @@ import { HoorayHistoryStates } from './ReservationInterfaces'
 
 function Hooray() {
   const {t} = useTranslation()
-  const defaultHistory: HoorayHistoryStates = {msg: {fromJoinWaitingRoom: false}}
   const history = useHistory<HoorayHistoryStates>()
-  const {msg} = history.location.state ? history.location.state : defaultHistory
-  const legitFlow = msg && msg.fromJoinWaitingRoom ? msg.fromJoinWaitingRoom : false
+  const legitFlow = history.location.state ? history.location.state['fromJoinWaitingRoom'] : false
   return (
     <div className="wrapper">
       {legitFlow ? null : <Redirect to={"/home"} />}

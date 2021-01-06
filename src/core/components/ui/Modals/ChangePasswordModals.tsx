@@ -9,7 +9,7 @@ export interface PasswordData {
 }
 
 interface CustomPasswordModalProps {
-  type: "passwordChangeConfirm" | "passwordChangeSuccess" | "passwordChangeError"
+  type: "passwordChangeConfirm" | "passwordChangeSuccess" | "passwordChangeError" | "oldPasswordMismatch"
   show: boolean
   setShow: (value: boolean) => void
   mainFunction: (value: PasswordData)=>void | void

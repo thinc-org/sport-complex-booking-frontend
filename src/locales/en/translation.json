@@ -5,9 +5,9 @@
   "phoneLabel": "Mobile",
   "personalEmailLabel": "Personal Email",
   "CuStudent": "Chulalongkorn University Student",
-  "SatitAndCuPersonel": "Satit Chula and CU Personnel",
+  "SatitAndCuPersonel": "Satit Chula / CU Personnel",
   "chulaAccountType": "Chulalongkorn University Student",
-  "satitAccountType": "Satit Chula and CU Personnel",
+  "satitAccountType": "Satit Chula / CU Personnel",
   "edit": "edit",
   "phoneErrorMessage": "Enter a valid phone number",
   "emailErrorMessage": "Enter a valid email",
@@ -57,7 +57,7 @@
   "male": "Male",
   "female": "Female",
   "other": "Other",
-  "resubmitField": "Please resubmit thsi field",
+  "resubmitField": "Please resubmit this field",
   "noThaiName": "If you do not have a Thai name, please type '-'.",
   "noThaiSurname": "If you do not have a Thai surname, please type '-'.",
   "fieldIsRequired": "This field is required",
@@ -71,7 +71,7 @@
   "repeatNewPassword": "Repeat New Password",
   "password": "Password",
   "hooray": "HOORAY!",
-  "reservation_success": "Your reservation has successfully been made.",
+  "reservationSuccess": "Your reservation has successfully been made.",
   "viewWaitingRoom": "View Waiting Room",
   "chooseReserve": "What do you want to do ?",
   "createWaitingRoom": "Create a Waiting Room",
@@ -164,6 +164,10 @@
   },
   "confirmEditAccountModal": {
     "title": "Confirm Submission",
+    "body": "Do you want to submit the editted information?"
+  },
+  "confirmEditOtherAccountModal": {
+    "title": "Confirm Submission",
     "body": "Do you want to submit the registration form?"
   },
   "editAccountErrorModal": {
@@ -228,5 +232,9 @@
   "codeIsWrong": "The access code is wrong.",
   "notEnoughQuota": "You do not have enough quotas.",
   "courtDoesNotExist": "This court does not exist.",
-  "chosenTimeUnavailable": "Your chosen time is unavailable"
+  "chosenTimeUnavailable": "Your chosen time is unavailable.",
+  "oldPasswordMismatch": {
+    "title": "Can't change password",
+    "body":"Your old password does not match."
+  }
 }

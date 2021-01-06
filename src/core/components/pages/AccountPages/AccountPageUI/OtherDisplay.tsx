@@ -27,7 +27,7 @@ export default function OtherAaccountDisplay() {
   }, [])
 
   const openFile = (token: string) => {
-    let url = process.env.REACT_APP_API_URL + "/fs/view?token=" + token
+    let url = process.env.REACT_APP_API_URL + "/api/fs/view?token=" + token
     let win = window.open(url, '_blank')
     win? win.focus(): console.log("Error")
   }
@@ -46,7 +46,7 @@ export default function OtherAaccountDisplay() {
         })
         setFileTokens(newTokens)
       })
-      .catch (({err})=> {console.log(err)})
+      .catch (()=> {})
     }   
   }
 
@@ -93,7 +93,7 @@ export default function OtherAaccountDisplay() {
           <label className="form-label mt-2">{t("birthday")}</label>
           <div className="row">
             <div className="col-sm-4">
-              <p>{user?.birthday.toString().substring(0,10)}</p>
+              <p>{user?.birthday?.toString().substring(0,10)}</p>
               <div className="valid-feedback"></div>
             </div>
           </div>

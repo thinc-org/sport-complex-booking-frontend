@@ -29,7 +29,6 @@ function AccountPage() {
       .get<DefaultAccount>("/account_info/")
       .then(({ data }) => {
         const newData = {...data}
-        console.log(data)
         setPenalizeStatus(data.is_penalize)
         if (data.expired_penalize_date) setPenalizeEndDate(data.expired_penalize_date.toString().substring(0,10))
         if (data.account_type === "CuStudent") {
@@ -91,7 +90,7 @@ const PenalizeMessage:React.FC<PenalizeMessageProps> = ({show, penalizeEndDate})
       <div className="alert alert-danger mx-auto col-md-6 mt-3" role="alert">
         <h3>{t("youArePenalized")}</h3>
         <h6>{t("penalizeMessage")}</h6>
-        <h6 className="mt-3">{t("endOfPenalty")}: {penalizeEndDate}</h6>
+        {penalizeEndDate && <h6 className="mt-3">{t("endOfPenalty")}: {penalizeEndDate}</h6>}
       </div>
     </div>
   )
