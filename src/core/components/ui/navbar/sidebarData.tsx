@@ -24,4 +24,9 @@ export const data = [
     name: "reserveNow",
     path: "/reservenow",
   },
+  {
+    icon: "",
+    name: "aboutUs",
+    path: "/aboutus",
+  }
 ]
