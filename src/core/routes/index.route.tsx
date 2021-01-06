@@ -20,6 +20,7 @@ import ChangePassword from "../components/pages/AccountPages/AccountPageUI/Chang
 import WaitingRoomBan from "../components/pages/Reservation/WaitingRoomBan"
 import Hooray from "../components/pages/Reservation/Hooray"
 import WaitingRoom from "../components/pages/Reservation/WaitingRoom"
+import AboutUs from "../components/pages/AboutUs"
 
 export default function MainRoute() {
   return (
@@ -60,6 +61,8 @@ export default function MainRoute() {
         <Route exact path="/hooray" component={Hooray} />
 
         <Route exact path="/waitingroom" component={WaitingRoom} />
+
+        <Route exact path="/aboutus" component={AboutUs} />
       </Switch>
     </>
   )

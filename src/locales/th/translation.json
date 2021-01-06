@@ -206,5 +206,16 @@
   "cancelReservationCondition2": "2. ถ้าทำการยกเลิกการจองภายใน 2 วัน คุณและสมาชิกในการจองจะถูกแบนเป็นเวลา 2 เดือน",
   "sure": "ตกลง",
   "no": "ไม่",
-  "youHaveCheckedIn": "เช็ดอินแล้ว!"
+  "youHaveCheckedIn": "เช็ดอินแล้ว!",
+  "aboutUs": "เกี่ยวกับเรา",
+  "productOwner":"เจ้าของงาน",
+  "projectManager": "ผู้จัดการโครงการ",
+  "frontendDeveloper": "นักพัฒนา Frontend",
+  "backendDeveloper": "นักพัฒนา Backend",
+  "designer": "นักออกแบบ UI/UX",
+  "specialThanks": "ขอขอบคุณ",
+  "team": "ทีมงาน",
+  "teamMsg": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin eget turpis eros. Suspendisse elit a nisi auctor fermentum. Nunc luctus sed arcu sed bibendum.",
+  "description": "คำอธิบาย",
+  "descriptionMsg": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 }

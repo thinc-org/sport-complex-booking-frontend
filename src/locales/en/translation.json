@@ -205,5 +205,16 @@
   "cancelReservationCondition2": "2. If you cancel within 2 days of reservation, you and the waiting room members will be banned for 2 months.",
   "sure": "Sure",
   "no": "No",
-  "youHaveCheckedIn": "You have checked in!"
+  "youHaveCheckedIn": "You have checked in!",
+  "aboutUs": "About Us",
+  "productOwner":"Product Owner",
+  "projectManager": "Project Manager",
+  "frontendDeveloper": "Frontend Developer",
+  "backendDeveloper": "Backend Developer",
+  "designer": "UI/UX Designers",
+  "specialThanks": "Special Thanks to",
+  "team": "Team",
+  "teamMsg": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin eget turpis eros. Suspendisse elit a nisi auctor fermentum. Nunc luctus sed arcu sed bibendum.",
+  "description": "Description",
+  "descriptionMsg": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 }

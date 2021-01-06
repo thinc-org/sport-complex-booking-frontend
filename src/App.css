@@ -548,3 +548,45 @@ td {
   left: 0;
   bottom: 50px;
 }
+
+.team-icon-container .icon {
+  margin: 0 auto;
+  text-align: center !important;
+}
+
+.icon {
+  max-width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.vertical-line {
+  border-left: 1px solid #b1b1b1;
+  width: 1px;
+  height: calc(100% - 54px);
+  margin-top: 5px;
+  margin-left: 50%;
+  margin-bottom: 54px;
+}
+
+.vertical-line::after {
+  display: none;
+}
+
+.description-container {
+  position: relative;
+}
+
+.description-container img {
+  max-height: 35px;
+}
+
+.description-container h3 {
+  position: absolute;
+  top: 0;
+}
+
+.description-paragraph {
+  margin-top: 20px;
+}
