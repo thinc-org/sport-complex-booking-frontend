@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
 import { Link, useParams, useHistory } from "react-router-dom"
 import { Table, Row, Col, Button, Card } from "react-bootstrap"
+import format from "date-fns/format"
 import { client } from "../../../../../axiosConfig"
 import { DeleteModal, UserInfo } from "../interfaces/reservationSchemas"
 import { ConfirmDelModal, ErrModal, ComDelModal } from "./DeleteModalComponent"
@@ -102,9 +103,7 @@ const ReservationDetail: FunctionComponent = () => {
           <hr style={{ height: "60px", width: "0px", borderWidth: "1px", borderStyle: "ridge" }} />
           <Col className="px-0 pt-3 text-center" style={{ whiteSpace: "pre-wrap" }}>
             วันที่ / เวลา {"\n"}
-            <label style={{ whiteSpace: "pre-wrap" }}>
-              {date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + "\n" + getTimeText(timeSlot)}
-            </label>
+            <label style={{ whiteSpace: "pre-wrap" }}>{format(date, "dd-MM-yyyy") + "\n" + getTimeText(timeSlot)}</label>
           </Col>
           <hr style={{ height: "60px", width: "0px", borderWidth: "1px", borderStyle: "ridge" }} />
           <Col className="px-0 pt-4 text-center" style={{ whiteSpace: "pre-wrap" }}>
@@ -117,10 +116,9 @@ const ReservationDetail: FunctionComponent = () => {
   }
 
   const renderMemberTable = () => {
-    let index = 1
     let memberList = members.map((member) => {
       return (
-        <tr key={index++} className="tr-normal">
+        <tr key={member.username} className="tr-normal">
           <td className="py-4 text-center"> {member.username} </td>
           <td className="text-center"> {member.personal_email} </td>
           <td className="text-center"> {member.phone} </td>

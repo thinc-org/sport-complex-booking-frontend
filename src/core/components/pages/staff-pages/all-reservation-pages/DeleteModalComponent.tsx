@@ -19,7 +19,7 @@ const getAllPhoneNumber = (members: UserInfo[]): string => {
 
 export const ConfirmDelModal: React.FC<ModalInterface> = ({ showModalInfo, setShowModalInfo, info }) => {
   const { showConfirmDel } = showModalInfo
-  const { requestDelete, members } = info as ConfirmDelInfo
+  const { requestDelete, members }: ConfirmDelInfo = info!
   return (
     <Modal
       show={showConfirmDel}
@@ -29,7 +29,7 @@ export const ConfirmDelModal: React.FC<ModalInterface> = ({ showModalInfo, setSh
       backdrop="static"
       keyboard={false}
     >
-      <Modal.Header closeButton>
+      <Modal.Header closeButton className="px-4 pt-4">
         <Modal.Title>คำเตือน</Modal.Title>
       </Modal.Header>
       <Modal.Body className="px-4" style={{ fontWeight: "lighter", whiteSpace: "pre-line" }}>
