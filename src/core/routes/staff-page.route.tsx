@@ -13,10 +13,7 @@ import FileOpener from "../components/pages/staff-pages/list-of-all-users-pages/
 import VeritificationApproval from "../components/pages/staff-pages/verification-approval-pages/VerificationApproval"
 import VerifyInfo from "../components/pages/staff-pages/verification-approval-pages/VerifyInfo"
 import DisableCourt from "../components/pages/staff-pages/disable-court/disable-court.page.main"
-<<<<<<< HEAD
 import QRScannerPage from "../components/pages/staff-pages/staff-qrcode"
-=======
->>>>>>> 11c9c8c (rebase to dev)
 
 const StaffRoute = (props) => {
   const { path } = useRouteMatch()

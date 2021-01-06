@@ -1,287 +1,85 @@
-import React, { FunctionComponent, useState, useEffect } from "react"
-import { Table, Form, Row, Col, Button, Pagination, Modal, Card } from "react-bootstrap"
-import CreateWaitingRoom from "../../Reservation/CreateWaitingRoom"
-import fetch from "../interfaces/axiosTemplate"
+import { AxiosResponse } from "axios"
+import React, { useState, useEffect } from "react"
+import {Row, Col, Button } from "react-bootstrap"
+import { client } from "../../../../../axiosConfig"
+import { EditTime, SettingsCard } from "./TimeSettingsComponents"
 
 export default function TimeSettings() {
-
-  const [jwt, set_jwt] = useState<string>("")
-  const [show_edit_time, set_show_edit_time] = useState<boolean>(false)
-  const [settings, setSettings] = useState({
-    waiting_room_duration: 15,
-    late_cancellation_punishment: 14,
-    absence_punishment: 30,
-    late_cancellation_day: 2,
-  })
-
-  const createAbsence = () => {
-    let { absence_punishment } = settings
-    return (
-      <div className="card">
-        <div className="card-body">
-          <h5 className="card-title">โทษของการจองแล้วไม่มาใช้คอร์ด: แบนผู้ใช้</h5>
-          <span className="d-flex justify-content-around">
-            <Button
-              variant="pink"
-              className="button"
-              onClick={() => {
-                setSettings({ ...settings, absence_punishment: absence_punishment - 5 })
-              }}>
-              -5
-                </Button>
-            <Button
-              variant="pink"
-              className="button"
-              onClick={() => {
-                setSettings({ ...settings, absence_punishment: absence_punishment - 1 })
-              }}>
-              -1
-                </Button>
-            <span className="mt-3">{absence_punishment} วัน</span>
-            <Button
-              variant="pink"
-              className="button"
-              onClick={() => {
-                setSettings({ ...settings, absence_punishment: absence_punishment + 1 })
-              }}>
-              +1
-                </Button>
-            <Button
-              variant="pink"
-              className="button"
-              onClick={() => {
-                setSettings({ ...settings, absence_punishment: absence_punishment + 5 })
-              }}>
-              +5
-                </Button>
-          </span>
-        </div>
-      </div>
-    )
+  const [showEditTime, setShowEditTime] = useState<boolean>(false)
+  const [waitingRoomDuration, setWaitingRoomDuration] = useState(0)
+  const [lateCancellationPunishment, setLateCancellationPunishment] = useState(0)
+  const [absencePunishment, setAbsencePunishment] = useState(0)
+  const [lateCancellationDay, setLateCancellationDay] = useState(0)
+  const fetchSettings = async () => {
+    await client.get("/court-manager/setting")
+    .then(({data})=> {
+      console.log(data)
+      setWaitingRoomDuration(data['waiting_room_duration'])
+      setLateCancellationPunishment(data['late_cancelation_punishment'])
+      setAbsencePunishment(data['absence_punishment'])
+      setLateCancellationDay(data['late_cancelation_day'])
+    })
+    .catch(()=> {})
   }
 
-  const createLatePunishment = () => {
-    let { late_cancellation_punishment } = settings
-    return (
-      <div className="card">
-        <div className="card-body">
-          <h5 className="card-title">โทษของการจองแล้วยกเลิกหลังกําหนด: แบนผู้ใช้</h5>
-          <span className="d-flex justify-content-around">
-            <Button
-              variant="pink"
-              className="button"
-              onClick={() => {
-                setSettings({ ...settings, late_cancellation_punishment: late_cancellation_punishment - 5 })
-              }}>
-              -5
-                </Button>
-            <Button
-              variant="pink"
-              className="button"
-              onClick={() => {
-                setSettings({ ...settings, late_cancellation_punishment: late_cancellation_punishment - 1 })
-              }}>
-              -1
-                </Button>
-            <span className="mt-3">{late_cancellation_punishment} วัน</span>
-            <Button
-              variant="pink"
-              className="button"
-              onClick={() => {
-                setSettings({ ...settings, late_cancellation_punishment: late_cancellation_punishment + 1 })
-              }}>
-              +1
-                </Button>
-            <Button
-              variant="pink"
-              className="button"
-              onClick={() => {
-                setSettings({ ...settings, late_cancellation_punishment: late_cancellation_punishment + 5 })
-              }}>
-              +5
-                </Button>
-          </span>
-        </div>
-      </div>
-    )
-  }
-
-  const createLateDay = () => {
-    let { late_cancellation_day } = settings
-    return (
-      <div className="card">
-        <div className="card-body">
-          <h5 className="card-title">อนุญาติการยกเลิกล่วงหน้าได้สูงสุด</h5>
-          <span className="d-flex justify-content-around">
-            <Button
-              variant="pink"
-              className="button"
-              onClick={() => {
-                setSettings({ ...settings, late_cancellation_day: late_cancellation_day - 5 })
-              }}>
-              -5
-                </Button>
-            <Button
-              variant="pink"
-              className="button"
-              onClick={() => {
-                setSettings({ ...settings, late_cancellation_day: late_cancellation_day - 1 })
-              }}>
-              -1
-                </Button>
-            <span className="mt-3">{late_cancellation_day} วัน</span>
-            <Button
-              variant="pink"
-              className="button"
-              onClick={() => {
-                setSettings({ ...settings, late_cancellation_day: late_cancellation_day + 1 })
-              }}>
-              +1
-                </Button>
-            <Button
-              variant="pink"
-              className="button"
-              onClick={() => {
-                setSettings({ ...settings, late_cancellation_day: late_cancellation_day + 5 })
-              }}>
-              +5
-                </Button>
-          </span>
-        </div>
-      </div>
-    )
-  }
-
-  const createWaiting = () => {
-    let { waiting_room_duration } = settings
-    return (
-      <div className="card">
-        <div className="card-body">
-          <h5 className="card-title">ระยะเวลาของห้องรอการจอง</h5>
-          <span className="d-flex justify-content-around">
-            <Button
-              variant="pink"
-              className="button"
-              onClick={() => {
-                setSettings({ ...settings, waiting_room_duration: waiting_room_duration - 5 })
-              }}>
-              -5
-                </Button>
-            <Button
-              variant="pink"
-              className="button"
-              onClick={() => {
-                setSettings({ ...settings, waiting_room_duration: waiting_room_duration - 1 })
-              }}>
-              -1
-                </Button>
-            <span className="mt-3">{waiting_room_duration} วัน</span>
-            <Button
-              variant="pink"
-              className="button"
-              onClick={() => {
-                setSettings({ ...settings, waiting_room_duration: waiting_room_duration + 1 })
-              }}>
-              +1
-                </Button>
-            <Button
-              variant="pink"
-              className="button"
-              onClick={() => {
-                setSettings({ ...settings, waiting_room_duration: waiting_room_duration + 5 })
-              }}>
-              +5
-                </Button>
-          </span>
-        </div>
-      </div>
-    )
-  }
-
-  const editTime = () => {
-    let { waiting_room_duration, late_cancellation_day, late_cancellation_punishment, absence_punishment } = settings
-    if (waiting_room_duration <= 0 || late_cancellation_day <= 0 || late_cancellation_punishment <= 0 || absence_punishment <= 0) {
-      return (
-        <Modal
-          show={show_edit_time}
-          onHide={() => {
-            set_show_edit_time(false)
-          }}
-          backdrop="static"
-          keyboard={false}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>คําเตือน</Modal.Title>
-          </Modal.Header>
-          <Modal.Body style={{ fontWeight: "lighter" }}>ค่าที่ใส่มาไม่ถูกต้อง กรุณาเปลี่ยนใหม่อีกครั้ง</Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="pink"
-              className="btn-normal"
-              onClick={() => {
-                set_show_edit_time(false)
-              }}
-            >
-              ตกลง
-              </Button>
-          </Modal.Footer>
-        </Modal>
-      )
-    } else {
-      return (
-        <Modal
-          show={show_edit_time}
-          onHide={() => {
-            set_show_edit_time(false)
-          }}
-          backdrop="static"
-          keyboard={false}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>สําเร็จ</Modal.Title>
-          </Modal.Header>
-          <Modal.Body style={{ fontWeight: "lighter" }}>ระบบได้ทําการเปลี่ยนเวลารียบร้อยแล้ว</Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="pink"
-              className="btn-normal"
-              onClick={() => {
-                set_show_edit_time(false)
-              }}
-            >
-              ตกลง
-              </Button>
-          </Modal.Footer>
-        </Modal>
-      )
+  const saveSettings = async () => {
+    const data = {
+      waiting_room_duration: waitingRoomDuration,
+      late_cancelation_punishment: lateCancellationPunishment,
+      absence_punishment: absencePunishment,
+      late_cancelation_day: lateCancellationDay
     }
+    await client.put<AxiosResponse>("/court-manager/setting", data)
+    .then((data)=> {
+      console.log(data)
+      setShowEditTime(true)
+      fetchSettings()
+    })
+    .catch((err)=> {
+      console.log(err)
+      fetchSettings()
+    })
   }
+
+  useEffect(()=> {
+    fetchSettings()
+  }, [])
 
   return (
-    <div className="card">
+    <div className="default-mobile-wrapper">
       <div className="card-body">
-        <h5 className="card-title">การไม่มา</h5>
-        {createAbsence()}
-        <div>
-          <h5 className="card-title">การยกเลิก</h5>
+        
+        <div className="my-3">
+          <h5 className="card-title font-weight-bold">การไม่มา</h5>
+          <SettingsCard set={setAbsencePunishment} value={absencePunishment} cardTitle={"โทษของการจองแล้วไม่มาใช้คอร์ด: แบนผู้ใช้"} unit={"วัน"} />
         </div>
-        {createLatePunishment()}
-        {createLateDay()}
         <div>
-          <h5 className="card-title">ห้องรอ</h5>
+          <h5 className="card-title font-weight-bold">การยกเลิก</h5>
         </div>
-        {createWaiting()}
+        <div className="my-3">
+          <SettingsCard set={setLateCancellationPunishment} value={lateCancellationPunishment} cardTitle={"โทษของการจองแล้วยกเลิกหลังกําหนด: แบนผู้ใช้"} unit={"วัน"} />
+        </div>
+        <div className="my-3">
+          <SettingsCard set={setLateCancellationDay} value={lateCancellationDay} cardTitle={"อนุญาติการยกเลิกล่วงหน้าได้สูงสุด"} unit={"วัน"} />
+        </div>
+        <div>
+          <h5 className="card-title font-weight-bold">ห้องรอ</h5>
+        </div>
+        <div className="my-3">
+          <SettingsCard set={setWaitingRoomDuration} value={waitingRoomDuration} cardTitle={"ระยะเวลาของห้องรอการจอง"} unit={"นาที"} />
+        </div>
+        
       </div>
       <Row>
         <Col>
           <Button variant="pink" className="btn-normal" onClick={() => {
-            set_show_edit_time(true)
+            saveSettings()
           }}>
             บันทึก
             </Button>
         </Col>
       </Row>
-      {editTime()}
+      <EditTime show={showEditTime} setShow={setShowEditTime} />
     </div>
   )
 }
