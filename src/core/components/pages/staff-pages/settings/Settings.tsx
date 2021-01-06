@@ -1,16 +1,13 @@
-import React, { FunctionComponent, useState, useEffect, useContext } from "react"
+import React, { useState } from "react"
 import SportsSettings from "./SportsSettings"
 import CourtsSettings from "./CourtsSettings"
 import TimeSettings from "./TimeSettings"
-import axios from "axios"
-import { Table, Form, Row, Col, Button, Modal, ToggleButton, ButtonGroup } from "react-bootstrap"
-import fetch from "../interfaces/axiosTemplate"
+import {ToggleButton, ButtonGroup } from "react-bootstrap"
+
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function Settings() {
 
-  let [account_type, set_account_type] = useState();
-  const [checked, setChecked] = useState(false);
   const [radioValue, setRadioValue] = useState('กีฬา');
 
   const radios = [
@@ -19,7 +16,7 @@ export default function Settings() {
     { name: 'เวลา', value: 'เวลา' },
   ];
 
-  const showSettingsPage = (radioValue) => {
+  const showSettingsPage = (radioValue: string) => {
     switch(radioValue) {
       case 'กีฬา':
         return <SportsSettings/>
@@ -27,14 +24,12 @@ export default function Settings() {
           return <CourtsSettings/>
       case 'เวลา':
         return <TimeSettings/>
-
     }
   } 
 
   return (
-    
     <div className="allStaff" style={{ margin: "20px" }}>    
-      <ButtonGroup toggle>
+      <ButtonGroup toggle className="mb-3">
         {radios.map((radio, idx) => (
           <ToggleButton
             className="mr-4 btn-outline-dark"
@@ -50,9 +45,7 @@ export default function Settings() {
           </ToggleButton>
         ))}
       </ButtonGroup>
-      {showSettingsPage(radioValue)}
-
-      
+      {showSettingsPage(radioValue)}  
     </div>
   )
 }
