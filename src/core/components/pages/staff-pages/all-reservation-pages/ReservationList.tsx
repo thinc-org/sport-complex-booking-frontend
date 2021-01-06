@@ -41,17 +41,13 @@ const AllReservation: FunctionComponent = () => {
       })
       .catch(({ response }) => {
         console.log(response)
-        if (response.data.status === 401) history.push("/staff")
+        if (response.data && response.data.status === 401) history.push("/staff")
       })
   }, [pagename])
 
   useEffect(() => {
     requestInfo()
   }, [sportType, courtNo, searchDate, searchTime, pagename])
-
-  // useEffect(() => {
-  //   console.log(searchDate)
-  // }, [searchDate])
 
   // handles //
   const handleInfo = (e) => {

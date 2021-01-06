@@ -3,7 +3,7 @@ import { Link, useParams, useHistory } from "react-router-dom"
 import { Table, Row, Col, Button, Card } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import { DeleteModal, UserInfo } from "../interfaces/reservationSchemas"
-import { ConfirmDelModal } from "./DeleteModalComponent"
+import { ConfirmDelModal, ErrModal, ComDelModal } from "./DeleteModalComponent"
 
 export const convertSlotToTime = (slot: number): string => {
   if (slot % 2 === 0) return String(slot / 2 - 1) + ":30-" + (slot / 2 !== 24 ? String(slot / 2) : "0") + ":00"
@@ -48,17 +48,6 @@ const ReservationDetail: FunctionComponent = () => {
 
   // useEffects //
   useEffect(() => {
-    client({
-      method: "GET",
-      url: "/court-manager/sports",
-    })
-      .then(({ data }) => {
-        console.log(data)
-      })
-      .catch(({ response }) => {
-        console.log(response)
-        if (response.data.status === 401) history.push("/staff")
-      })
     requestInfo()
   }, [])
 
@@ -66,11 +55,9 @@ const ReservationDetail: FunctionComponent = () => {
     console.log(pagename, _id)
   }, [pagename, _id])
 
-  // other functions //
-
   // request //
   const requestInfo = () => {
-    let url: string = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + "/" + _id
+    let url: string = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + `/${_id}`
     client({
       method: "GET",
       url,
@@ -84,14 +71,29 @@ const ReservationDetail: FunctionComponent = () => {
       })
       .catch(({ response }) => {
         console.log(response)
+        if (response.data && response.data.status === 401) history.push("/staff")
       })
   }
-  const requestDelete = () => {}
+  const requestDelete = () => {
+    let url = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + `/${_id}`
+    client({
+      method: "DELETE",
+      url,
+    })
+      .then(({ data }) => {
+        setShowModalInfo({ ...showModalInfo, showConfirmDel: false, showComDel: true })
+      })
+      .catch(({ response }) => {
+        console.log(response)
+        if (response.data && response.data.status === 401) history.push("/staff")
+        else setShowModalInfo({ ...showModalInfo, showConfirmDel: false, showErr: true })
+      })
+  }
 
   // renders //
   const renderHeader = () => {
     return (
-      <Card className=" mb-4 shadow">
+      <Card className=" mb-5 shadow">
         <Row>
           <Col className="px-0 pt-4 text-center" style={{ whiteSpace: "pre-wrap" }}>
             ชื่อกีฬา {"\n"}
@@ -132,6 +134,8 @@ const ReservationDetail: FunctionComponent = () => {
     return (
       <div>
         <ConfirmDelModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ members, requestDelete }} />
+        <ComDelModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
+        <ErrModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
       </div>
     )
   }
@@ -139,7 +143,16 @@ const ReservationDetail: FunctionComponent = () => {
   return (
     <div className="reservationDetail px-5">
       {renderHeader()}
-      <Table>{renderMemberTable()}</Table>
+      <Table responsive className="text-center">
+        <thead className="bg-light">
+          <tr>
+            <th>ชื่อผู้ใช้</th>
+            <th>อีเมล</th>
+            <th>เบอร์โทรศัพท์</th>
+          </tr>
+        </thead>
+        <tbody>{renderMemberTable()}</tbody>
+      </Table>
       <Row className="mt-4">
         <Col>
           <Link to={"/staff/allReservation/" + pagename}>
