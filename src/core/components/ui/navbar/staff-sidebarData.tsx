@@ -39,6 +39,6 @@ export const data = [
   {
     icon: "",
     name: "การตั้งค่า",
-    path: "/staff/setting",
+    path: "/staff/settings",
   },
 ]
