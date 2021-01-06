@@ -1,9 +1,7 @@
 import React, { FunctionComponent, useState } from "react"
 import { Modal, Form, InputGroup, Button } from "react-bootstrap"
-// import {useParams} from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { ModalUserInfo } from "../interfaces/InfoInterface"
-// import {client} from "../../../../../axiosConfig"
 
 interface propsInterface {
   showModals: ModalUserInfo

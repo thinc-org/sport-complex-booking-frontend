@@ -13,41 +13,57 @@ interface ModalProps {
   info?: delModal | { username: string } | saveModal | conChangePassModal
 }
 
+interface BaseModalProps {
+  title: string
+  show: boolean
+  body: string
+  onCancel?: () => void
+  onConfirm: () => void
+}
+
+// Base Modal //
+export const CustomModal: React.FC<BaseModalProps> = ({ title, show, body, onCancel, onConfirm }) => {
+  return (
+    <Modal show={show} onHide={onCancel ? onCancel : onConfirm} backdrop="static" keyboard={false}>
+      <Modal.Header closeButton className="px-4 pt-4">
+        <Modal.Title>{title}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className="px-4 pt-0" style={{ fontWeight: "lighter", whiteSpace: "pre-line" }}>
+        {body}
+      </Modal.Body>
+      <Modal.Footer>
+        {onCancel ? (
+          <div>
+            <Button variant="outline-secondary" className="btn-normal btn-outline-pink mr-3" onClick={onCancel}>
+              ยกเลิก
+            </Button>
+            <Button variant="pink" className="btn-normal" onClick={onConfirm}>
+              ยืนยัน
+            </Button>
+          </div>
+        ) : (
+          <Button variant="pink" className="btn-normal" onClick={onConfirm}>
+            ตกลง
+          </Button>
+        )}
+      </Modal.Footer>
+    </Modal>
+  )
+}
+
 // Delete Modal //
 export const DeleteModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo, info }) => {
   const { requestDelete, username } = info as delModal
   return (
-    <Modal
+    <CustomModal
+      title={"คำเตือน"}
       show={showModalInfo.showDelete}
-      onHide={() => {
+      body={`ท่านกำลังจะลบผู้ใช้ ${username} ออกจากระบบ\nต้องการดำเนินการต่อหรือไม่`}
+      onCancel={() => {
         setShowModalInfo({ ...showModalInfo, showDelete: false })
       }}
-      backdrop="static"
-      keyboard={false}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>คำเตือน</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter", whiteSpace: "pre-line" }}>
-        {"ท่านกำลังจะลบผู้ใช้ " + username + " ออกจากระบบ\n"}
-        ต้องการดำเนินการต่อหรือไม่
-      </Modal.Body>
-
-      <Modal.Footer>
-        <Button
-          variant="outline-secondary"
-          className="btn-normal btn-outline-pink"
-          onClick={() => {
-            setShowModalInfo({ ...showModalInfo, showDelete: false })
-          }}
-        >
-          ยกเลิก
-        </Button>
-        <Button variant="pink" className="btn-normal" onClick={requestDelete}>
-          ยืนยัน
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      onConfirm={requestDelete}
+    />
   )
 }
 
@@ -55,32 +71,15 @@ export const CompleteDeleteModal: React.FC<ModalProps> = ({ showModalInfo, setSh
   const history = useHistory()
   const { username } = info as { username: string }
   return (
-    <Modal
+    <CustomModal
+      title={"เสร็จสิ้น"}
       show={showModalInfo.showComDelete}
-      onHide={() => {
+      body={`ลบผู้ใช้ ${username} ออกจากระบบเรียบร้อยแล้ว`}
+      onConfirm={() => {
         setShowModalInfo({ ...showModalInfo, showComDelete: false })
+        history.push("/staff/listOfAllUsers")
       }}
-      backdrop="static"
-      keyboard={false}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>เสร็จสิ้น</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>{"ลบผู้ใช้ " + username + " ออกจากระบบเรียบร้อยแล้ว"}</Modal.Body>
-
-      <Modal.Footer>
-        <Button
-          variant="pink"
-          className="btn-normal"
-          onClick={() => {
-            setShowModalInfo({ ...showModalInfo, showComDelete: false })
-            history.push("/staff/listOfAllUsers")
-          }}
-        >
-          ตกลง
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    />
   )
 }
 
@@ -88,154 +87,69 @@ export const CompleteDeleteModal: React.FC<ModalProps> = ({ showModalInfo, setSh
 export const SaveModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo, info }) => {
   const { requestSave } = info as saveModal
   return (
-    <Modal
+    <CustomModal
+      title={"คำเตือน"}
       show={showModalInfo.showSave}
-      onHide={() => {
+      body={"ต้องการบันทึกการเปลี่ยนแปลงหรือไม่"}
+      onCancel={() => {
         setShowModalInfo({ ...showModalInfo, showSave: false })
       }}
-      backdrop="static"
-      keyboard={false}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>คำเตือน</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>ต้องการบันทึกการเปลี่ยนแปลงหรือไม่</Modal.Body>
-
-      <Modal.Footer>
-        <Button
-          variant="outline-secondary"
-          className="btn-normal btn-outline-pink"
-          onClick={() => {
-            setShowModalInfo({ ...showModalInfo, showSave: false })
-          }}
-        >
-          ยกเลิก
-        </Button>
-        <Button variant="pink" className="btn-normal" onClick={requestSave}>
-          ยืนยัน
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      onConfirm={requestSave}
+    />
   )
 }
 
 export const CompleteSaveModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo }) => {
   return (
-    <Modal
+    <CustomModal
+      title={"เสร็จสิ้น"}
       show={showModalInfo.showComSave}
-      onHide={() => {
+      body={"บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว"}
+      onConfirm={() => {
         setShowModalInfo({ ...showModalInfo, showComSave: false })
       }}
-      backdrop="static"
-      keyboard={false}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>เสร็จสิ้น</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว</Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="pink"
-          className="btn-normal"
-          onClick={() => {
-            setShowModalInfo({ ...showModalInfo, showComSave: false })
-          }}
-        >
-          ตกลง
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    />
   )
 }
 
 // Error Modal //
 export const ErrModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo }) => {
   return (
-    <Modal
+    <CustomModal
+      title={"เกิดข้อผิดพลาด"}
       show={showModalInfo.showErr}
-      onHide={() => {
+      body={"ไม่สามารถทำได้ในขณะนี้"}
+      onConfirm={() => {
         setShowModalInfo({ ...showModalInfo, showErr: false })
       }}
-      backdrop="static"
-      keyboard={false}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>เกิดข้อผิดพลาด</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>ไม่สามารถทำได้ในขณะนี้</Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="pink"
-          className="btn-normal"
-          onClick={() => {
-            setShowModalInfo({ ...showModalInfo, showErr: false })
-          }}
-        >
-          ตกลง
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    />
   )
 }
 
 export const PasswordErrModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo }) => {
   return (
-    <Modal
+    <CustomModal
+      title={"เกิดข้อผิดพลาด"}
       show={showModalInfo.showPasswordErr}
-      onHide={() => {
+      body={"รหัสผ่านเก่าไม่ถูกต้อง หรือรหัสผ่านใหม่ไม่ตรงกัน"}
+      onConfirm={() => {
         setShowModalInfo({ ...showModalInfo, showPasswordErr: false })
       }}
-      backdrop="static"
-      keyboard={false}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>เกิดข้อผิดพลาด</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}> รหัสผ่านเก่าไม่ถูกต้อง หรือรหัสผ่านใหม่ไม่ตรงกัน </Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="pink"
-          className="btn-normal"
-          onClick={() => {
-            setShowModalInfo({ ...showModalInfo, showPasswordErr: false })
-          }}
-        >
-          ตกลง
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    />
   )
 }
 
 export const ConfirmChangePasswordModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo, info }) => {
   const { requestChangePassword } = info as conChangePassModal
   return (
-    <Modal
+    <CustomModal
+      title={"คำเตือน"}
       show={showModalInfo.showConfirmChange}
-      onHide={() => {
+      body={"ต้องการเปลี่ยนรหัสผ่านหรือไม่"}
+      onCancel={() => {
         setShowModalInfo({ ...showModalInfo, showConfirmChange: false })
       }}
-      backdrop="static"
-      keyboard={false}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>คำเตือน</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}> ต้องการเปลี่ยนรหัสผ่านหรือไม่ </Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="outline-secondary"
-          className="btn-normal btn-outline-pink"
-          onClick={() => {
-            setShowModalInfo({ ...showModalInfo, showConfirmChange: false })
-          }}
-        >
-          ยกเลิก
-        </Button>
-        <Button variant="pink" className="btn-normal" onClick={requestChangePassword}>
-          ยืนยัน
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      onConfirm={requestChangePassword}
+    />
   )
 }
