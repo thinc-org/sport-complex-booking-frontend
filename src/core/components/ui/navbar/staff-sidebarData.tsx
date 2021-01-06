@@ -34,7 +34,7 @@ export const data = [
   {
     icon: "",
     name: "QR Code",
-    path: "/staff/qrcode",
+    path: "/staff/qrcodescanner",
   },
   {
     icon: "",

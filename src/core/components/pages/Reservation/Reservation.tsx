@@ -18,7 +18,7 @@ interface ReservationResponse {
   time_slot: number[]
 }
 
-const ReservationPage = (props: any) => {
+const ReservationPage = () => {
   const history = useHistory()
 
   const [lists, setLists] = useState<Array<ReservationResponse>>([])

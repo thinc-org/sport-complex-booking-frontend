@@ -5,7 +5,7 @@ import ReservationPage from "../Reservation/Reservation"
 import ReservationDetail from "../Reservation/ReservationDetail"
 import withUserGuard from "../../../guards/user.guard"
 
-const MyReservationPage = (props: any) => {
+const MyReservationPage = () => {
   const history = useHistory()
 
   let { url, path } = useRouteMatch()
