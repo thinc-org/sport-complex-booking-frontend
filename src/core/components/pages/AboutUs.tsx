@@ -1,6 +1,6 @@
 import React from 'react';
 import withUserGuard from '../../guards/user.guard';
-import { Button, Row, Col } from "react-bootstrap"
+import { Row, Col } from "react-bootstrap"
 import prodcutOwner from "../../assets/images/productOwner.svg"
 import Backend from "../../assets/images/Backend.svg"
 import Design from "../../assets/images/Design.svg"
@@ -10,7 +10,6 @@ import ProjectManager from "../../assets/images/ProjectManager.svg"
 import titleBackground from "../../assets/images/titleBackground.svg"
 
 function AboutUs() {
-
   return (
     <div className="mx-auto col-md-6 mt-3">
       <div className="description-container">
@@ -138,7 +137,6 @@ function AboutUs() {
       </Row>      
     </div>
   )
-
 }
 
 export default withUserGuard(AboutUs)
