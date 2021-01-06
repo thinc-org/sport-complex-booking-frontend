@@ -41,10 +41,10 @@ function CreateWaitingRoom() {
   const [selectTimeWarning, setSelectTimeWarning] = useState(false)
   const [showCantCreateWaitingRoomModal, setShowCantCreateWaitingRoomModal] = useState(false)
   const [showTimeSlotError, setShowTimeSlotError] = useState(false)
-  const [warningMessage, setWarningMessage] = useState(0)
+  const [warningMessage, setWarningMessage] = useState("")
   const [showValidityWarningMessage, setShowValidityWarningMessage] = useState(false)
   const [showCreateWarningMessage, setShowCreateWarningMessage] = useState(false)
-  const [invalidAccount, setInvalidAccount] = useState(true)
+  const [invalidAccount, setInvalidAccount] = useState(false)
   const [errorType, setErrorType] = useState("danger")
 
   useEffect(() => {
@@ -81,8 +81,8 @@ function CreateWaitingRoom() {
       })
       .catch((error) => {
         if (error.response) {
-          console.log(error.response.data);
-          setWarningMessage(error.response.status)
+          setInvalidAccount(true)
+          setWarningMessage(error.response.data.reason)
           setShowValidityWarningMessage(true)
         }
       })
@@ -90,13 +90,11 @@ function CreateWaitingRoom() {
   // [1] Fetch Courts
   const fetchCourts = async () => {
     await client
-      .get<SportData[]>("http://localhost:3000/court-manager/sports")
-      .then(({ data }) => {setSport(data)
-      console.log(data)})
+      .get<SportData[]>("/court-manager/sports")
+      .then(({ data }) => {setSport(data)})
       .catch((error) => {
         if (error.response) {
-          console.log(error.response.data);
-          setWarningMessage(error.response.status)
+          setWarningMessage(error.response.data.reason)
           setShowCreateWarningMessage(true)
         }
       })
@@ -110,6 +108,7 @@ function CreateWaitingRoom() {
       sport_id: selectedSportID,
       date: year + '-' + month+ '-' + day
     }
+    if (selectedSportID === "") return null
     await client
       .post<number>("/reservation/checkquota", data)
       .then(({ data }) => {
@@ -118,8 +117,7 @@ function CreateWaitingRoom() {
       .catch((error) => {
         if (error.response) {
           if (error.response.status === 404) setInvalidAccount(true)
-          console.log(error.response.data);
-          setWarningMessage(error.response.status)
+          setWarningMessage(error.response.data.reason)
           setShowCreateWarningMessage(true)
         }
       })
@@ -140,8 +138,7 @@ function CreateWaitingRoom() {
       .catch((error) => {
         if (error.response) {
           if (error.response.status === 404) setInvalidAccount(true)
-          console.log(error.response.data);
-          setWarningMessage(error.response.status)
+          setWarningMessage(error.response.data.reason)
           setShowCreateWarningMessage(true)
         }
       })
@@ -165,8 +162,7 @@ function CreateWaitingRoom() {
       setShowCantCreateWaitingRoomModal(true)
       if (error.response) {
         if (error.response.status === 404) setInvalidAccount(true)
-        console.log(error.response.data);
-        setWarningMessage(error.response.status)
+        setWarningMessage(error.response.data.reason)
         setShowCreateWarningMessage(true)
       }
     })
@@ -210,8 +206,8 @@ function CreateWaitingRoom() {
   return (
     <div className="Orange">
     <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{t("createWaitingRoom")}</h4>
-    <CheckValidityErrorMsg show={showValidityWarningMessage} statusCode={warningMessage} type={errorType} />
-    <CreateWaitingRoomErrorMsg show={showCreateWarningMessage} statusCode={warningMessage} type={errorType} />
+    <CheckValidityErrorMsg show={showValidityWarningMessage} reason={warningMessage} type={errorType} />
+    <CreateWaitingRoomErrorMsg show={showCreateWarningMessage && !showValidityWarningMessage} reason={warningMessage} type={errorType} />
     <div className="mx-auto col-md-6">
       <form onSubmit={handleSubmit(onSubmit)}>
         
@@ -281,7 +277,7 @@ function CreateWaitingRoom() {
                 <div className="glass">
                   <div className="glass-contents">
                     <h6>{t("requiredUserMsg")}</h6>
-                    <h4>{requiredUserCount ? requiredUserCount : "..."}{t("users")}</h4>  
+                    <h4>{requiredUserCount ? requiredUserCount : "..."} {t("users")}</h4>  
                     <h6 className="mt-3">{t("remainingQuota")}</h6>
                     {quota - checkedCount * 30 < 30 
                     ? (<h4>{t("usedUpQuota")}</h4>) 
@@ -300,7 +296,7 @@ function CreateWaitingRoom() {
                     <label className="ml-2">
                       <input className="mr-2 time-checkbox" type="checkbox" key={i} 
                       value={item} ref={register} name="time_slot" onClick={()=>checkTimeSlotValidity()}
-                      disabled={shouldDisable(item)}/>{formatTime(item)}</label>
+                      disabled={shouldDisable(item) || quota ===0}/>{formatTime(item)}</label>
                     <hr className="mt-1 p-0" />
                   </div>))}
                   </Row>

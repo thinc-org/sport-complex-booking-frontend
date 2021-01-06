@@ -1,8 +1,10 @@
 import { History, LocationState } from "history"
 
 export interface HoorayHistoryStates {
-  msg : {
-    fromJoinWaitingRoom: boolean
+  location: {
+    state: {
+      fromJoinWaitingRoom: boolean
+    }
   }
 } 
 

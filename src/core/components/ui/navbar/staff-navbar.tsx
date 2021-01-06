@@ -27,7 +27,7 @@ function StaffNavbar() {
             </NavbarBrand>
             <NavbarBrand>
                 <Button className='d-flex align-items-center' style={{ backgroundColor: 'black', borderColor: 'black', borderRadius: '15px', maxHeight: '52px', minWidth: '170px', marginRight: '8vw' }}>
-                    <Link to='/stafflogin' onClick={onLogout} className='styled-link' style={{ textAlign: 'center', width: '100%' }}>
+                    <Link to='/staff' onClick={onLogout} className='styled-link' style={{ textAlign: 'center', width: '100%' }}>
                         ออกจากระบบ
                     </Link>
                 </Button>

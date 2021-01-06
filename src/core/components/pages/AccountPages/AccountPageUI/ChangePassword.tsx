@@ -18,6 +18,7 @@ function ChangePassword() {
   const {cuStudentAccount} = useContext(UserContext)
   const [showChangeSuccess, setShowChangeSuccess] = useState(false)
   const [showChangeError, setShowChangeError] = useState(false)
+  const [showOldPasswordError, setShowOldPasswordError] = useState(false)
   const history = useHistory()
   
   const onSubmit = (data: PasswordData) => {
@@ -33,11 +34,11 @@ function ChangePassword() {
   const postDataToBackend = async (data: PasswordData) => {
     await client.post('/account_info/change_password', data)
       .then(() => {
-          setShowChangeSuccess(true)
+        setShowChangeSuccess(true)
       })
       .catch((err) => {
-          console.log(err)
-          setShowChangeError(true)
+        if (err.response.status === 401) setShowOldPasswordError(true)
+        else setShowChangeError(true)
       })
     setShow(false)
   }
@@ -80,6 +81,8 @@ function ChangePassword() {
       <CustomPasswordModal type={"passwordChangeSuccess"} show={showChangeSuccess} setShow={setShowChangeSuccess} mainFunction={returnToAccountPage}/>
       {/* Password Change Error */}
       <CustomPasswordModal type={"passwordChangeError"} show={showChangeError} setShow={setShowChangeError} mainFunction={()=>setShowChangeError(false)}/>
+      {/* Old Password Mismatch */}
+      <CustomPasswordModal type={"oldPasswordMismatch"} show={showOldPasswordError} setShow={setShowOldPasswordError} mainFunction={()=>setShowOldPasswordError(false)}/>
     </div>
   )
 }

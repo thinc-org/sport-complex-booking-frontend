@@ -30,7 +30,6 @@ export default function OtherAccountEdit() {
   const { register, handleSubmit, errors  } = useForm({resolver: yupResolver(otherInfoSchema)})
 
   const postDataToBackend = async (data: Other) => {
-    console.log(data)
     await client
       .put<Other>("/account_info/", data)
       .then(({ data }) => {
@@ -57,9 +56,7 @@ export default function OtherAccountEdit() {
   const handleFileUpload = async (formData: FormData) => {
     await client
       .post("/fs/upload", formData)
-      .then(({ data }) => {
-        console.log(data)
-      })
+      .then(() => {})
       .catch(() =>{
         setShowErr(true)
       })
@@ -144,13 +141,13 @@ export default function OtherAccountEdit() {
           <div className="row mt-2 mx-1">
             {!is_thai_language ? (
               <div>
-                <Button variant="pink" className="mr-2" onClick={() => changeLanguage(false)}>EN</Button>
-                <Button variant="gray" className="btn-outline-dark" onClick={() => changeLanguage(true)}>TH</Button>
+                <Button variant="pink" className="btn-outline mr-2" onClick={() => changeLanguage(false)}>EN</Button>
+                <Button variant="gray" className="btn-outline mr-2" onClick={() => changeLanguage(true)}>TH</Button>
               </div>
             ) : (
               <div>
-                <Button variant="gray" className="btn-outline-dark mr-2" onClick={() => changeLanguage(false)}>EN</Button>
-                <Button variant="pink" className="" onClick={() => changeLanguage(true)}>TH</Button>
+                <Button variant="gray" className="btn-outline mr-2" onClick={() => changeLanguage(false)}>EN</Button>
+                <Button variant="pink" className="btn-outline mr-2" onClick={() => changeLanguage(true)}>TH</Button>
               </div>
             )}
           </div>
@@ -164,49 +161,49 @@ export default function OtherAccountEdit() {
               <div className="col-md-4">
                 <label className="form-label mt-2">{t("prefix")}</label>
 
-                <select name="prefix" ref={register} defaultValue={user?.prefix} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('prefix')}>
+                <select name="prefix" ref={register} defaultValue={user?.prefix} disabled={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('prefix')}>
                   <option value={t("mr")!}>{t("mr")}</option>
                   <option value={t("ms")!}>{t("ms")}</option>
                   <option value={t("mrs")!}>{t("mrs")}</option>
                 </select>
-                {user?.rejected_info.includes('prefix') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+                {user?.rejected_info?.includes('prefix') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
 
               </div>
               <div className="col-md-4">
                 <label className="form-label mt-2">{t("gender")}</label>
 
-                <select name="gender" ref={register} defaultValue={user?.gender} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('gender')}>
+                <select name="gender" ref={register} defaultValue={user?.gender} disabled={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('gender')}>
                   <option value={t("male")!}>{t("male")}</option>
                   <option value={t("female")!}>{t("female")}</option>
                   <option value={t("other")!}>{t("other")}</option>
                 </select>
-                {user?.rejected_info.includes('gender') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+                {user?.rejected_info?.includes('gender') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
               </div>
             </div>
             <hr />
             <label className="form-label mt-2">{t("name_th")}</label>
             <h6 className="font-weight-light">{t("noThaiName")}</h6>
-            <input name="name_th" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('name_th')} placeholder="ชื่อจริง" defaultValue={user?.name_th} className="form-control"/>
-            {user?.rejected_info.includes('name_th') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+            <input name="name_th" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('name_th')} placeholder="ชื่อจริง" defaultValue={user?.name_th} className="form-control"/>
+            {user?.rejected_info?.includes('name_th') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.name_th && <p id="input-error">{errors.name_th.message}</p>}
 
             <hr />
             <label className="form-label mt-2">{t("surname_th")}</label>
             <h6 className="font-weight-light">{t("noThaiSurname")}</h6>
-            <input name="surname_th" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('surname_th')} placeholder="นามสกุล" defaultValue={user?.surname_th} className="form-control"/>
-            {user?.rejected_info.includes('surname_th') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+            <input name="surname_th" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('surname_th')} placeholder="นามสกุล" defaultValue={user?.surname_th} className="form-control"/>
+            {user?.rejected_info?.includes('surname_th') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.surname_th && <p id="input-error">{errors.surname_th.message}</p>}
             
             <hr />
             <label className="form-label mt-2">{t("name_en")}</label>
-            <input name="name_en" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('name_en')} placeholder="Firstname" defaultValue={user?.name_en} className="form-control"/>
-            {user?.rejected_info.includes('name_en') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}  
+            <input name="name_en" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('name_en')} placeholder="Firstname" defaultValue={user?.name_en} className="form-control"/>
+            {user?.rejected_info?.includes('name_en') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}  
             {errors.name_en && <p id="input-error">{errors.name_en.message}</p>}
             
             <hr />
             <label className="form-label mt-2">{t("surname_en")}</label>
-            <input name="surname_en" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('surname_en')} placeholder="Surname" defaultValue={user?.surname_en} className="form-control"/>
-            {user?.rejected_info.includes('surname_en') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}  
+            <input name="surname_en" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('surname_en')} placeholder="Surname" defaultValue={user?.surname_en} className="form-control"/>
+            {user?.rejected_info?.includes('surname_en') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}  
             {errors.surname_en && <p id="input-error">{errors.surname_en.message}</p>}
             <label className="form-label mt-2">{t("birthday")}</label>
             <div>
@@ -217,45 +214,45 @@ export default function OtherAccountEdit() {
                 setDate(date)      
               }}
               showYearDropdown
-              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('birthday')}
+              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('birthday')}
             />
             </div>
-            {user?.rejected_info.includes('birthday') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+            {user?.rejected_info?.includes('birthday') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             </div>
             <hr />
             <label className="form-label mt-2">{t("national_id")}</label>
-            <input name="national_id" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('national_id')} placeholder="xxxxxxxxxxxxx" defaultValue={user?.national_id} className="form-control"/>
-            {user?.rejected_info.includes('national_id') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+            <input name="national_id" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('national_id')} placeholder="xxxxxxxxxxxxx" defaultValue={user?.national_id} className="form-control"/>
+            {user?.rejected_info?.includes('national_id') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.national_id && <p id="input-error">{errors.national_id.message}</p>}
             
             <hr />
             <label className="form-label mt-2">{t("marital_status")}</label>
-            <input name="marital_status" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('marital_status')} placeholder={t("maritalPlaceHolder")} defaultValue={user?.marital_status} className="form-control"/>
-            {user?.rejected_info.includes('marital_status') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+            <input name="marital_status" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('marital_status')} placeholder={t("maritalPlaceHolder")} defaultValue={user?.marital_status} className="form-control"/>
+            {user?.rejected_info?.includes('marital_status') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.marital_status && <p id="input-error">{errors.marital_status.message}</p>}
             
             <hr />
             <label className="form-label mt-2">{t("address")}</label>
-            <input name="address" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('address')} placeholder={t("addressPlaceHolder")} defaultValue={user?.address} className="form-control"/>
-            {user?.rejected_info.includes('address') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+            <input name="address" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('address')} placeholder={t("addressPlaceHolder")} defaultValue={user?.address} className="form-control"/>
+            {user?.rejected_info?.includes('address') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.address && <p id="input-error">{errors.address.message}</p>}
             
             <hr />
             <label className="form-label mt-2">{t("email")}</label>
-            <input name="personal_email" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('personal_email')} placeholder="example@email.com" defaultValue={user?.personal_email} className="form-control"/>
-            {user?.rejected_info.includes('personal_email') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+            <input name="personal_email" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('personal_email')} placeholder="example@email.com" defaultValue={user?.personal_email} className="form-control"/>
+            {user?.rejected_info?.includes('personal_email') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.personal_email && <p id="input-error">{errors.personal_email.message}</p>}
             
             <hr />
             <label className="form-label mt-2">{t("home_phone")}</label>
-            <input name="home_phone" type="number" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('home_phone')} placeholder="02xxxxxxx" defaultValue={user?.home_phone} className="form-control"/>
-            {user?.rejected_info.includes('home_phone') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+            <input name="home_phone" type="number" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('home_phone')} placeholder="02xxxxxxx" defaultValue={user?.home_phone} className="form-control"/>
+            {user?.rejected_info?.includes('home_phone') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.home_phone && <p id="input-error">{errors.home_phone.message}</p>}
             
             <hr />
             <label className="form-label mt-2">{t("mobile_phone")}</label>
-            <input name="phone" type="number" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('phone')} placeholder="0xxxxxxxxx" defaultValue={user?.phone} className="form-control"/>
-            {user?.rejected_info.includes('phone') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+            <input name="phone" type="number" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('phone')} placeholder="0xxxxxxxxx" defaultValue={user?.phone} className="form-control"/>
+            {user?.rejected_info?.includes('phone') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.phone && <p id="input-error">{errors.phone.message}</p>}
             
             <hr />
@@ -263,7 +260,7 @@ export default function OtherAccountEdit() {
               {t("medical_condition")}
             </label>
             <input name="medical_condition" type="text" ref={register({})}
-            readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('medical_condition')}
+            readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('medical_condition')}
             placeholder="Ex: Asthma" defaultValue={user?.medical_condition} className="form-control"/>
           </div>  
         
@@ -272,35 +269,35 @@ export default function OtherAccountEdit() {
           <h4>{t("emergency_contact")}</h4>
           <div className="col-md-4">
             <label className="form-label mt-2">{t("contact_person_prefix")}</label>
-            <select name="contact_person.contact_person_prefix" ref={register} defaultValue={user?.contact_person.contact_person_prefix} disabled={user?.verification_status === "Rejected" && !user?.rejected_info.includes('contact_person_prefix')}>
+            <select name="contact_person.contact_person_prefix" ref={register} defaultValue={user?.contact_person?.contact_person_prefix} disabled={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('contact_person_prefix')}>
               <option value={t("mr")!}>{t("mr")}</option>
               <option value={t("ms")!}>{t("ms")}</option>
               <option value={t("mrs")!}>{t("mrs")}</option>
             </select>
-            {user?.rejected_info.includes('contact_person_prefix') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+            {user?.rejected_info?.includes('contact_person_prefix') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
           </div>
           
           <hr />
           <label className="form-label mt-2">{t("contact_person_name")}</label>
-          <input name="contact_person.contact_person_name" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('contact_person_name')} placeholder={t("namePlaceHolder")} defaultValue={user?.contact_person?.contact_person_name} className="form-control"/>
-            {user?.rejected_info.includes('contact_person_name') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+          <input name="contact_person.contact_person_name" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('contact_person_name')} placeholder={t("namePlaceHolder")} defaultValue={user?.contact_person?.contact_person_name} className="form-control"/>
+            {user?.rejected_info?.includes('contact_person_name') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.contact_person?.contact_person_name && <p id="input-error">{errors.contact_person.contact_person_name.message}</p>}
           
           <hr />
           <label className="form-label mt-2">{t("contact_person_surname")}</label>
-          <input name="contact_person.contact_person_surname" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('contact_person_surname')} placeholder={t("surnamePlaceHolder")} defaultValue={user?.contact_person?.contact_person_surname} className="form-control"/>
-            {user?.rejected_info.includes('contact_person_name') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+          <input name="contact_person.contact_person_surname" type="text" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('contact_person_surname')} placeholder={t("surnamePlaceHolder")} defaultValue={user?.contact_person?.contact_person_surname} className="form-control"/>
+            {user?.rejected_info?.includes('contact_person_name') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.contact_person?.contact_person_surname && <p id="input-error">{errors.contact_person.contact_person_surname.message}</p>}
           
           <hr />
           <label className="form-label mt-2">{t("contact_person_home_phone")}</label>
-          <input name="contact_person.contact_person_home_phone" type="number" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('contact_person_home_phone')} placeholder="0xxxxxxxx" defaultValue={user?.contact_person?.contact_person_home_phone} className="form-control"/>
-            {user?.rejected_info.includes('contact_person_home_phone') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+          <input name="contact_person.contact_person_home_phone" type="number" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('contact_person_home_phone')} placeholder="0xxxxxxxx" defaultValue={user?.contact_person?.contact_person_home_phone} className="form-control"/>
+            {user?.rejected_info?.includes('contact_person_home_phone') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.contact_person?.contact_person_home_phone && <p id="input-error">{errors.contact_person.contact_person_home_phone.message}</p>}
           <hr />
           <label className="form-label mt-2">{t("contact_person_phone")}</label>
-          <input name="contact_person.contact_person_phone" type="number" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('contact_person_phone')} placeholder="0xxxxxxxxx" defaultValue={user?.contact_person?.contact_person_phone} className="form-control"/>
-            {user?.rejected_info.includes('contact_person_phone') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+          <input name="contact_person.contact_person_phone" type="number" ref={register} readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('contact_person_phone')} placeholder="0xxxxxxxxx" defaultValue={user?.contact_person?.contact_person_phone} className="form-control"/>
+            {user?.rejected_info?.includes('contact_person_phone') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
             {errors.contact_person?.contact_person_phone && <p id="input-error">{errors.contact_person.contact_person_phone.message}</p>}
           
         </div>
@@ -312,10 +309,10 @@ export default function OtherAccountEdit() {
           <div className="form-file">
             <p>{user_photo ? "File Uploaded. Choose a new file?" : ""}</p>
             <input type="file" className="form-file-input form-control" id="user_photo"  
-            readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('user_photo')} 
+            readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('user_photo')} 
             onChange={(e) => assignUserPhoto(e.target.files!)} />
           </div>
-          {user?.rejected_info.includes('user_photo') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+          {user?.rejected_info?.includes('user_photo') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
           <hr />
           <label className="form-label my-2">
             {t("national_id_photo")}
@@ -323,21 +320,21 @@ export default function OtherAccountEdit() {
           <div className="form-file">
             <p>{national_id_scan ? "File Uploaded. Choose a new file?" : ""}</p>
             <input type="file" className="form-file-input  form-control" id="nationID/passport"
-            readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('national_id_photo')} 
+            readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('national_id_photo')} 
             onChange={(e) => assignNationalIdPhoto(e.target.files!)} />
           </div>
-          {user?.rejected_info.includes('national_id_photo') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+          {user?.rejected_info?.includes('national_id_photo') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
           <hr />
           <label className="form-label my-2">{t("medical_certificate")}</label>
           <div className="form-file">
             <p>{medical_certificate ? "File Uploaded. Choose a new file?" : ""}</p>
             <input
               type="file" className="form-file-input  form-control" id="medical_certificate"
-              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('medical_certificate')} 
+              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('medical_certificate')} 
               onChange={(e) => assignMedicalCertificate(e.target.files!)}
             />
           </div>
-          {user?.rejected_info.includes('medical_certificate') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+          {user?.rejected_info?.includes('medical_certificate') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
           <hr />
           <label className="form-label my-2">
             {t("house_registration_number")}
@@ -346,11 +343,11 @@ export default function OtherAccountEdit() {
             <p>{house_registration_number ? "File Uploaded. Choose a new file?" : ""}</p>
             <input
               type="file" className="form-file-input  form-control" id="house_registration_number"
-              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('house_registration_number')} 
+              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('house_registration_number')} 
               onChange={(e) => assignHouseRegistrationNumber(e.target.files!)}
             />
           </div>
-          {user?.rejected_info.includes('house_registration_number') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+          {user?.rejected_info?.includes('house_registration_number') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
           <hr />
           <label className="form-label my-2">
             {t("relationship_verification_document")}
@@ -359,11 +356,11 @@ export default function OtherAccountEdit() {
             <p>{relationship_verification_document ? "File Uploaded. Choose a new file?" : ""}</p>
             <input
               type="file" className="form-file-input  form-control" id="relationship_verification_document"
-              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info.includes('relationship_verification_document')} 
+              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes('relationship_verification_document')} 
               onChange={(e) => assignRelationshipVerificationDocument(e.target.files!)}
             />
           </div>
-          {user?.rejected_info.includes('relationship_verification_document') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
+          {user?.rejected_info?.includes('relationship_verification_document') ? (<p className="input-error" >{t("resubmitField")}</p>) : (null)}
         </div>
         <br />
         <div className="button-group col-md-12">
@@ -373,7 +370,7 @@ export default function OtherAccountEdit() {
         </div>
 
         {/* MODAL CONFIRM DIALOGUE */}
-        <CustomAccountModal type="confirmEditAccountModal" show={show} setShow={setShow} mainFunction={postDataToBackend} data={formData} />
+        <CustomAccountModal type="confirmEditOtherAccountModal" show={show} setShow={setShow} mainFunction={postDataToBackend} data={formData} />
         {/* MODAL ERROR */}
         <CustomAccountModal type="editAccountErrorModal" show={showErr} setShow={setShowErr}/>
         {/* END OF FORM */}

@@ -1,12 +1,11 @@
 import React from 'react'
 import { Button, Modal } from "react-bootstrap"
 import { useTranslation } from 'react-i18next'
-import { Other } from '../../../contexts/UsersContext'
 
 
 
 interface CustomAccountModalProps {
-  type: "confirmEditAccountModal" | "editAccountErrorModal" 
+  type: "confirmEditAccountModal" | "confirmEditOtherAccountModal" | "editAccountErrorModal" 
   show: boolean
   setShow: (value: boolean) => void
   mainFunction?:  (data) => Promise<void> | ((data: EdittedData)=>void) ,
