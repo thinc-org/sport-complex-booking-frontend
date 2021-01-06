@@ -19,7 +19,7 @@ const getAllPhoneNumber = (members: UserInfo[]): string => {
 
 export const ConfirmDelModal: React.FC<ModalInterface> = ({ showModalInfo, setShowModalInfo, info }) => {
   const { showConfirmDel } = showModalInfo
-  const { requestDelete, members }: ConfirmDelInfo = info!
+  const { requestDelete, members } = info as ConfirmDelInfo
   return (
     <CustomModal
       title={"คำเตือน"}
