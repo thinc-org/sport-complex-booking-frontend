@@ -91,7 +91,7 @@ const AddCourt = () => {
                     <Row>
                         <Col >
                             <div style={{ color: 'red' }}>
-                                {(errors.required || !startDate || !endDate || !rowData || errors.validate) && 'กรุณากรอกข้อมูลให้ครบ'}
+                                {(errors.description || !startDate || !endDate || !rowData || errors.court_num) && 'กรุณากรอกข้อมูลให้ครบ'}
                                 {errors.request && errors.request.message}
                             </div>
                         </Col>
