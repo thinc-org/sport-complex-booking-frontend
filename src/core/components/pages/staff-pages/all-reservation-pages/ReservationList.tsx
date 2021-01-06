@@ -145,7 +145,7 @@ const AllReservation: FunctionComponent = () => {
       )
     }
     return (
-      <Form.Control className="form-pink" as="select" onChange={() => {}} value={courtNo}>
+      <Form.Control className="form-pink" as="select" defaultValue={courtNo}>
         <option disabled value={-2}>
           กรุณาเลือกประเภทกีฬาก่อน
         </option>
