@@ -1,5 +1,5 @@
 import React from "react"
-import {  Form, Row, Col, Button, Modal } from "react-bootstrap"
+import { Form, Row, Col, Button, Modal } from "react-bootstrap"
 import TimePicker from 'react-time-picker';
 import { useForm } from "react-hook-form"
 
@@ -8,7 +8,7 @@ export interface NoCourtsModalProps {
   setShow: (value: boolean) => void
 }
 
-export  const NoCourtsModal: React.FC<NoCourtsModalProps> = ({show, setShow}) => {
+export const NoCourtsModal: React.FC<NoCourtsModalProps> = ({ show, setShow }) => {
   return (
     <Modal
       show={show}
@@ -38,11 +38,11 @@ export  const NoCourtsModal: React.FC<NoCourtsModalProps> = ({show, setShow}) =>
 }
 
 export interface CourtData {
-    court_num?: number
-    open_time?: number
-    close_time?:number
-    _id?: string
-  }
+  court_num?: number
+  open_time?: number
+  close_time?: number
+  _id?: string
+}
 
 export interface EditCourtProps {
   show: boolean
@@ -55,16 +55,16 @@ export interface EditCourtProps {
   currentCourt: CourtData | undefined
   currentSportName: string | undefined
   currentSportId: string
-  updateCourt: (value: string)=> void
+  updateCourt: (value: string) => void
 }
 
-export const EditCourt:React.FC<EditCourtProps> = ({show, setShow, openTime, closeTime, onChangeOpenTime, onChangeCloseTime, courts, currentCourt, currentSportName, currentSportId, updateCourt}) => {
-  const { register, handleSubmit} = useForm()
+export const EditCourt: React.FC<EditCourtProps> = ({ show, setShow, openTime, closeTime, onChangeOpenTime, onChangeCloseTime, courts, currentCourt, currentSportName, currentSportId, updateCourt }) => {
+  const { register, handleSubmit } = useForm()
   const onSubmitEditCourt = (data: CourtData) => {
     console.log(data)
-    const formattedOpenTime = (parseInt(openTime.substring(0,2))*2 + 1) + (Math.floor(parseInt(openTime.substring(3,5))/30))
-    const formattedCloseTime = (parseInt(closeTime.substring(0,2))*2 + 1) + (Math.floor(parseInt(closeTime.substring(3,5))/30))
-    const newCourt = {...data, court_num: currentCourt!['court_num'], open_time: formattedOpenTime, close_time: formattedCloseTime}
+    const formattedOpenTime = (parseInt(openTime.substring(0, 2)) * 2 + 1) + (Math.floor(parseInt(openTime.substring(3, 5)) / 30))
+    const formattedCloseTime = (parseInt(closeTime.substring(0, 2)) * 2 + 1) + (Math.floor(parseInt(closeTime.substring(3, 5)) / 30))
+    const newCourt = { ...data, court_num: currentCourt!['court_num'], open_time: formattedOpenTime, close_time: formattedCloseTime }
     courts.forEach((court, i) => {
       if (court['court_num'] === currentCourt!['court_num']) {
         courts[i] = newCourt
@@ -82,46 +82,46 @@ export const EditCourt:React.FC<EditCourtProps> = ({show, setShow, openTime, clo
       keyboard={false}
     >
       <Form onSubmit={handleSubmit(onSubmitEditCourt)}>
-      <Modal.Header closeButton>
-        <Modal.Title>รายละเอียดคอร์ด</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>
-        <p className="font-weight-bold">เลขคอร์ด</p>
-        <h5>{currentCourt!['court_num']}</h5>
-        <p className="font-weight-bold">ประเภทกีฬา</p>
-        <h5>{currentSportName}</h5>
-        <Row>
-          <Col>
-            <p className="font-weight-bold">เวลาเปิด</p>
-            <TimePicker className="time-picker mb-5" value={openTime} onChange={onChangeOpenTime} disableClock={true} type="number" ref={register} name="open_time"/>
-          </Col>
-          <Col>
-            <p className="font-weight-bold">เวลาปิด</p>
-            <TimePicker className="time-picker mb-5"  value={closeTime} onChange={onChangeCloseTime} disableClock={true} type="number" ref={register} name="close_time"/>
-          </Col>
-        </Row>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="outline-pink"
-          className="btn-normal"
-          onClick={() => {
-            setShow(false)
-          }}
-        >
-          ยกเลิก
+        <Modal.Header closeButton>
+          <Modal.Title>รายละเอียดคอร์ด</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ fontWeight: "lighter" }}>
+          <p className="font-weight-bold">เลขคอร์ด</p>
+          <h5>{currentCourt!['court_num']}</h5>
+          <p className="font-weight-bold">ประเภทกีฬา</p>
+          <h5>{currentSportName}</h5>
+          <Row>
+            <Col>
+              <p className="font-weight-bold">เวลาเปิด</p>
+              <TimePicker className="time-picker mb-5" value={openTime} onChange={onChangeOpenTime} disableClock={true} type="number" ref={register} name="open_time" />
+            </Col>
+            <Col>
+              <p className="font-weight-bold">เวลาปิด</p>
+              <TimePicker className="time-picker mb-5" value={closeTime} onChange={onChangeCloseTime} disableClock={true} type="number" ref={register} name="close_time" />
+            </Col>
+          </Row>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="outline-pink"
+            className="btn-normal"
+            onClick={() => {
+              setShow(false)
+            }}
+          >
+            ยกเลิก
       </Button>
-        <Button
-          type="submit"
-          variant="pink"
-          className="btn-normal"
-          onClick={() => {
-            setShow(false)
-          }}
-        >
-          บันทึก
+          <Button
+            type="submit"
+            variant="pink"
+            className="btn-normal"
+            onClick={() => {
+              setShow(false)
+            }}
+          >
+            บันทึก
       </Button>
-      </Modal.Footer>
+        </Modal.Footer>
       </Form>
     </Modal>
   )
@@ -135,7 +135,7 @@ export interface DeleteCourtModalProps {
   currentSportId: string
 }
 
-export const DeleteCourtModal:React.FC<DeleteCourtModalProps> =({show, setShow, deleteCourt, currentCourt, currentSportId}) => {
+export const DeleteCourtModal: React.FC<DeleteCourtModalProps> = ({ show, setShow, deleteCourt, currentCourt, currentSportId }) => {
   return (
     <Modal
       show={show}
@@ -181,21 +181,21 @@ export interface AddCourtFuncProps {
   openTime: string
   closeTime: string
   courts: CourtData[]
-  updateCourt: (value: string)=> void
+  updateCourt: (value: string) => void
   currentSportId: string
 }
 
-export const AddCourtFunc:React.FC<AddCourtFuncProps> = ({show, setShow, onChangeOpenTime, onChangeCloseTime, openTime, closeTime, courts, updateCourt, currentSportId}) => {
-  const { register, handleSubmit, errors} = useForm()
+export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({ show, setShow, onChangeOpenTime, onChangeCloseTime, openTime, closeTime, courts, updateCourt, currentSportId }) => {
+  const { register, handleSubmit, errors } = useForm()
   const onSubmitAddCourt = (data: CourtData) => {
     console.log(data)
-    const formattedOpenTime = (parseInt(openTime.substring(0,2))*2 + 1) + (Math.floor(parseInt(openTime.substring(3,5))/30))
-    const formattedCloseTime = (parseInt(closeTime.substring(0,2))*2 + 1) + (Math.floor(parseInt(closeTime.substring(3,5))/30))
-    const newCourt = {...data, court_num: parseInt(data.court_num+''), open_time: formattedOpenTime, close_time: formattedCloseTime}
+    const formattedOpenTime = (TimeCalculation(openTime))
+    const formattedCloseTime = (TimeCalculation(closeTime))
+    const newCourt = { ...data, court_num: parseInt(data.court_num + ''), open_time: formattedOpenTime, close_time: formattedCloseTime }
     courts.push(newCourt)
     updateCourt(currentSportId)
   }
-  
+
   return (
     <Modal
       show={show}
@@ -209,7 +209,7 @@ export const AddCourtFunc:React.FC<AddCourtFuncProps> = ({show, setShow, onChang
         <Modal.Title>รายละเอียดของคอร์ด</Modal.Title>
       </Modal.Header>
       <Form onSubmit={handleSubmit(onSubmitAddCourt)}>
-      <div className="m-4">
+        <div className="m-4">
           <Form.Group>
             <Row className="mx-1">
               <Form.Label>เลขคอร์ด</Form.Label>
@@ -221,34 +221,39 @@ export const AddCourtFunc:React.FC<AddCourtFuncProps> = ({show, setShow, onChang
             <Row className="mt-3 mx-1">
               <Col className="p-0">
                 <p className="font-weight-bold">เวลาเปิด</p>
-                <TimePicker className="time-picker mb-5" value={openTime} onChange={onChangeOpenTime} disableClock={true} type="number" ref={register} name="open_time"/>
+                <TimePicker className="time-picker mb-5" value={openTime} onChange={onChangeOpenTime} disableClock={true} type="number" ref={register} name="open_time" />
               </Col>
               <Col className="p-0">
                 <p className="font-weight-bold">เวลาปิด</p>
-                <TimePicker className="time-picker mb-5" value={closeTime} onChange={onChangeCloseTime} disableClock={true} type="number" ref={register} name="close_time"/>
+                <TimePicker className="time-picker mb-5" value={closeTime} onChange={onChangeCloseTime} disableClock={true} type="number" ref={register} name="close_time" />
               </Col>
             </Row>
           </Form.Group>
-      </div>
-      <Modal.Footer>
-        <Button
-          variant="outline-pink"
-          className="btn-normal"
-          onClick={() => {
-            setShow(false)
-          }}
-        >
-          ยกเลิก
+        </div>
+        <Modal.Footer>
+          <Button
+            variant="outline-pink"
+            className="btn-normal"
+            onClick={() => {
+              setShow(false)
+            }}
+          >
+            ยกเลิก
         </Button>
-        <Button
-          type="submit"
-          variant="pink"
-          className="btn-normal"
-        >
-          ตกลง
+          <Button
+            type="submit"
+            variant="pink"
+            className="btn-normal"
+          >
+            ตกลง
         </Button>
-      </Modal.Footer>
+        </Modal.Footer>
       </Form>
     </Modal>
   )
+}
+
+function TimeCalculation(Time:string) {
+  let equation: number = parseInt(Time.substring(0, 2)) * 2 + 1 + (Math.floor(parseInt(Time.substring(3, 5)) / 30));
+  return equation;
 }

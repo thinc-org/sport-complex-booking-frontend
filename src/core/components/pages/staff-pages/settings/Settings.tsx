@@ -33,7 +33,7 @@ export default function Settings() {
         {radios.map((radio, idx) => (
           <ToggleButton
             className="mr-4 btn-outline-dark"
-            key={idx}
+            key={radio.value}
             type="radio"
             variant="black"
             name="radio"

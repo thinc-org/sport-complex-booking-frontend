@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { Table, Form, Row, Col, Button, Pagination, Modal } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import { admin_and_staff, DeleteStaff, EditStaff, AddStaff, HandleError } from "./StaffManagementComponents"
+import { AxiosResponse } from "axios"
 
 export default function StaffManagement() {
   const [type, set_type] = useState("")
@@ -45,7 +46,7 @@ export default function StaffManagement() {
     const data = {
       is_admin: currentStaff === "แอดมิน" ? true : false
     }
-    await client.put('/staff-manager/' + staff['_id'], data)
+    await client.put<AxiosResponse>('/staff-manager/' + staff['_id'], data)
       .then(() => {
         requestStaffs()
       })
@@ -55,7 +56,7 @@ export default function StaffManagement() {
   const sendNewStaffInfo = async (newStaff: admin_and_staff) => {
     delete newStaff.recheckpasssword
     console.log("This is newStaff" + newStaff)
-    await client.post('/staff-manager/', newStaff)
+    await client.post<AxiosResponse>('/staff-manager/', newStaff)
       .then(() => {
         setShowAddStaff(false)
         requestStaffs()
@@ -65,7 +66,7 @@ export default function StaffManagement() {
 
   const sendDeleteStaff = async (currentStaff: admin_and_staff) => {
     console.log(currentStaff['_id'])
-    await client.delete('/staff-manager/' + currentStaff['_id'])
+    await client.delete<AxiosResponse>('/staff-manager/' + currentStaff['_id'])
       .then(() => {
         setShowDeleteStaff(false)
         requestStaffs()
@@ -78,7 +79,7 @@ export default function StaffManagement() {
     const end = pageNo * 10
     const query_filter = query ? query : "$"
     const type_filter = type ? type : "all"
-    await client.get('/staff-manager/' + 'admin-and-staff/' + start + "/" + end + "/" + query_filter + "/" + type_filter)
+    await client.get<AxiosResponse>('/staff-manager/' + 'admin-and-staff/' + start + "/" + end + "/" + query_filter + "/" + type_filter)
       .then((data) => {
         console.log(data)
         setStaffs(data['data']['staff_list'])

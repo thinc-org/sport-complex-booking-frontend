@@ -14,6 +14,8 @@ import VeritificationApproval from "../components/pages/staff-pages/verification
 import VerifyInfo from "../components/pages/staff-pages/verification-approval-pages/VerifyInfo"
 import DisableCourt from "../components/pages/staff-pages/disable-court/disable-court.page.main"
 import QRScannerPage from "../components/pages/staff-pages/staff-qrcode"
+import StaffManagement from "../components/pages/staff-pages/staff-management/StaffManagement"
+import Settings from "../components/pages/staff-pages/settings/Settings"
 
 const StaffRoute = (props) => {
   const { path } = useRouteMatch()
@@ -56,16 +58,7 @@ const StaffRoute = (props) => {
                     )}{" "}
                   </h1>
                   <Switch>
-                    <Route path={`${path}/profile`} component={StaffProfile} />
-                    <Route
-                      path={`${path}/management`}
-                      render={() => {
-                        return (
-                          // add pages here staff(page)
-                          <div>under maintainance</div>
-                        )
-                      }}
-                    />
+                    <Route path={`${path}/staffProfile`} component={StaffProfile} />
                     <Route path={`${path}/disableCourt`} component={DisableCourt} />
                     <Route exact path={`${path}/listOfAllUsers`} component={ListOfAllUsers} />
                     <Route exact path={`${path}/addUser`} component={AddUser} />
@@ -75,6 +68,8 @@ const StaffRoute = (props) => {
                     <Route exact path={`${path}/verifyInfo/:_id`} component={VerifyInfo} />
                     <Route exact path={`${path}/qrcodescanner`} component={QRScannerPage} />
                     <Route exact path={`${path}/profile`} component={StaffProfile} />
+                    <Route exact path={`${path}/staffmanagement`} component={StaffManagement} />
+                    <Route exact path={`${path}/settings`} component={Settings} />
                   </Switch>
                 </div>
               </div>
