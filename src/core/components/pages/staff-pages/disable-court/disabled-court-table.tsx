@@ -2,17 +2,16 @@ import React from 'react';
 import { useRouteMatch, useHistory } from 'react-router-dom'
 import { Button, Table } from 'react-bootstrap'
 import { format } from 'date-fns'
+import addDays from 'date-fns/addDays'
 import { getMinute, getTime } from './mapTime'
 import { RowProps, TableProps, ViewRowProps } from './disable-court-interface'
-
 import { dayArr } from './mapTime'
 export const CourtRow = (props: RowProps) => {
     const { url, path } = useRouteMatch()
     const history = useHistory()
     const onNavigate = () => history.push(`${path}/${props._id}`)
-    const startingDate = new Date(props.starting_date)
+    const startingDate = addDays(new Date(props.starting_date), 1);
     const expiredDate = new Date(props.expired_date)
-    startingDate.setDate(startingDate.getDate() + 1);
     return (
         <>
             { props._id && props.court_num ?

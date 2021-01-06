@@ -68,3 +68,11 @@ export interface AddCourtForm {
     court_num: string,
     sportObjId: string
 }
+export interface ModalProps {
+    inProp: boolean,
+    header: string,
+    message: string,
+    handleClose: ((event: React.MouseEvent) => void),
+    canCancel?: boolean,
+    onCancel?: ((event: React.MouseEvent) => void)
+}

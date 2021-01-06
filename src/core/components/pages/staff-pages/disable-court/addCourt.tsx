@@ -18,7 +18,6 @@ const AddCourt = () => {
     const { option } = useOption()
     const watchSports = useWatch({ control, name: 'sportObjId', defaultValue: '' })
     const onSubmit = async (data: AddCourtForm) => {
-        if (errors.request) clearErrors('request')
         const formData = {
             ...data,
             sport_id: data.sportObjId,
@@ -30,11 +29,9 @@ const AddCourt = () => {
         console.log(formData)
         await client.post('/courts/disable-courts', formData)
             .then((res) => {
-                console.log(res)
                 history.goBack()
             })
             .catch(err => {
-                console.log(err.response)
                 setError('request', {
                     type: 'manual',
                     message: err.response.status == 409 ? 'วันหรือเวลาของการปิดคอร์ดนี้ซ้ำกับการปิดคอร์ดที่มีอยู่แล้ว' : 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง'
@@ -109,7 +106,7 @@ const AddCourt = () => {
                     </div>
                     <Button className='w-100 ' variant='pink' onClick={() => setInProp(true)}>เพิ่มการปิดคอร์ดใหม่</Button>
                     <div className='d-flex flex-row justify-content-end w-100 mt-3'>
-                        <Button variant='pink' className='mr-3' type='submit'>บันทึก</Button>
+                        <Button variant='pink' className='mr-3' type='submit' onClick={() => { if (errors.request) clearErrors('request') }}>บันทึก</Button>
                         <Button variant='outline-pink' onClick={() => history.goBack()}>ยกเลิก</Button>
                     </div>
                 </Form>

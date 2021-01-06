@@ -2,15 +2,8 @@ import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import { getTimeArr, dayArr } from './mapTime'
-interface Props {
-    inProp: boolean,
-    header: string,
-    message: string,
-    handleClose: ((event: React.MouseEvent) => void),
-    canCancel?: boolean,
-    onCancel?: ((event: React.MouseEvent) => void)
-}
-export const ErrorAlert = ({ inProp, header, message, handleClose, canCancel = false, onCancel }: Props) => {
+import { ModalProps } from './disable-court-interface'
+export const ErrorAlert = ({ inProp, header, message, handleClose, canCancel = false, onCancel }: ModalProps) => {
     return (
         <>
             <Modal show={inProp} onHide={onCancel ?? handleClose}>
