@@ -69,4 +69,4 @@ function StaffProfile() {
   )
 }
 
-export default withAdminGuard(StaffProfile)
+export default StaffProfile

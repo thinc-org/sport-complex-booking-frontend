@@ -28,6 +28,7 @@ const StaffRoute = (props) => {
     ["/verifyApprove", "รับรองการลงทะเบียน"],
     ["/verifyInfo", "รับรองการลงทะเบียนรายบุคคล"],
     ["/disableCourt", "การปิดคอร์ด"],
+    ["/qrcodescanner", ""],
   ])
 
   const StaffRouteWithHeader = () => {
@@ -72,6 +73,8 @@ const StaffRoute = (props) => {
                     <Route exact path={`${path}/userInfo/:_id`} component={UserInfo} />
                     <Route exact path={`${path}/verifyApprove`} component={VeritificationApproval} />
                     <Route exact path={`${path}/verifyInfo/:_id`} component={VerifyInfo} />
+                    <Route exact path={`${path}/qrcodescanner`} component={QRScannerPage} />
+                    <Route exact path={`${path}/profile`} component={StaffProfile} />
                   </Switch>
                 </div>
               </div>
