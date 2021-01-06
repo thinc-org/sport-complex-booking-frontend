@@ -13,14 +13,14 @@ export interface admin_and_staff {
   is_admin: boolean | string,
 }
 
-export interface DeleteStaffProps {
+export interface DeleteStaffModal{
   show: boolean
   setShow: (value: boolean) => void
   mainFunction: (value: admin_and_staff) => void
   data: admin_and_staff
 }
 
-export const DeleteStaff: React.FC<DeleteStaffProps> = ({ show, setShow, mainFunction, data }) => {
+export const DeleteStaff: React.FC<DeleteStaffModal> = ({ show, setShow, mainFunction, data }) => {
   return (
     <Modal
       show={show}
@@ -44,12 +44,12 @@ export const DeleteStaff: React.FC<DeleteStaffProps> = ({ show, setShow, mainFun
   )
 }
 
-export interface EditStaffProps {
+export interface EditStaffModal{
   show: boolean
   setShow: (value: boolean) => void
 }
 
-export const EditStaff: React.FC<EditStaffProps> = ({ show, setShow }) => {
+export const EditStaff: React.FC<EditStaffModal> = ({ show, setShow }) => {
   return (
     <Modal
       show={show}
@@ -79,13 +79,13 @@ export const EditStaff: React.FC<EditStaffProps> = ({ show, setShow }) => {
   )
 }
 
-export interface AddStaffProps {
+export interface AddStaffModal{
   show: boolean
   setShow: (value: boolean) => void
   onSubmitAddStaff: (staff: admin_and_staff) => void
 }
 
-export const AddStaff: React.FC<AddStaffProps> = ({ show, setShow, onSubmitAddStaff }) => {
+export const AddStaff: React.FC<AddStaffModal> = ({ show, setShow, onSubmitAddStaff }) => {
   const { register, handleSubmit, errors } = useForm({ resolver: yupResolver(passwordSchema) })
   return (
     <Modal
@@ -161,12 +161,12 @@ export const AddStaff: React.FC<AddStaffProps> = ({ show, setShow, onSubmitAddSt
   )
 }
 
-export interface HandleErrorProps {
+export interface HandleErrorModal{
   show: boolean
   setShow: (value: boolean) => void
 }
 
-export const HandleError: React.FC<HandleErrorProps> = ({ show, setShow }) => {
+export const HandleError: React.FC<HandleErrorModal> = ({ show, setShow }) => {
   if (!show) return null
   return (
     <Modal
