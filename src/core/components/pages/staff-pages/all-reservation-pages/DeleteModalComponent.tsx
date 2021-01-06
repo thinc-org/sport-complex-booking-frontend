@@ -1,4 +1,5 @@
 import React from "react"
+import { useHistory, useParams } from "react-router-dom"
 import { Modal, Button } from "react-bootstrap"
 import { DeleteModal, UserInfo } from "../interfaces/reservationSchemas"
 
@@ -19,23 +20,6 @@ const getAllPhoneNumber = (members: UserInfo[]): string => {
 export const ConfirmDelModal: React.FC<ModalInterface> = ({ showModalInfo, setShowModalInfo, info }) => {
   const { showConfirmDel } = showModalInfo
   const { requestDelete, members } = info as ConfirmDelInfo
-  let mem: UserInfo[] = [
-    {
-      username: "sda",
-      personal_email: "sad",
-      phone: "081xxxxxx",
-    },
-    {
-      username: "sda",
-      personal_email: "sad",
-      phone: "081xxxxxx",
-    },
-    {
-      username: "sda",
-      personal_email: "sad",
-      phone: "081xxxxxx",
-    },
-  ]
   return (
     <Modal
       show={showConfirmDel}
@@ -49,7 +33,7 @@ export const ConfirmDelModal: React.FC<ModalInterface> = ({ showModalInfo, setSh
         <Modal.Title>คำเตือน</Modal.Title>
       </Modal.Header>
       <Modal.Body className="px-4" style={{ fontWeight: "lighter", whiteSpace: "pre-line" }}>
-        {"การจองดังกล่าวนี้จะถูกลบ\n\n" + "สตาฟกรุณาโทรแจ้งผู้ใช้ตามที่ระบุก่อนกดตกลง\n" + getAllPhoneNumber(mem)}
+        {"การจองดังกล่าวนี้จะถูกลบ\n\n" + "สตาฟกรุณาโทรแจ้งผู้ใช้ตามที่ระบุก่อนกดตกลง\n" + getAllPhoneNumber(members)}
       </Modal.Body>
       <Modal.Footer>
         <Button
@@ -70,12 +54,15 @@ export const ConfirmDelModal: React.FC<ModalInterface> = ({ showModalInfo, setSh
 }
 
 export const ComDelModal: React.FC<ModalInterface> = ({ showModalInfo, setShowModalInfo }) => {
+  const history = useHistory()
+  const { pagename } = useParams<{ pagename: string; _id: string }>()
   const { showComDel } = showModalInfo
   return (
     <Modal
       show={showComDel}
       onHide={() => {
         setShowModalInfo({ ...showModalInfo, showComDel: false })
+        history.push(`/staff/allReservation/${pagename}`)
       }}
       backdrop="static"
       keyboard={false}
@@ -92,6 +79,7 @@ export const ComDelModal: React.FC<ModalInterface> = ({ showModalInfo, setShowMo
           className="btn-normal"
           onClick={() => {
             setShowModalInfo({ ...showModalInfo, showComDel: false })
+            history.push(`/staff/allReservation/${pagename}`)
           }}
         >
           ตกลง
