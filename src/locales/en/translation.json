@@ -206,5 +206,15 @@
   "sure": "Sure",
   "no": "No",
   "youHaveCheckedIn": "You have checked in!",
-  "aboutUs": "About Us"
+  "aboutUs": "About Us",
+  "productOwner":"Product Owner",
+  "projectManager": "Project Manager",
+  "frontendDeveloper": "Frontend Developer",
+  "backendDeveloper": "Backend Developer",
+  "designer": "UI/UX Designers",
+  "specialThanks": "Special Thanks to",
+  "team": "Team",
+  "teamMsg": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin eget turpis eros. Suspendisse elit a nisi auctor fermentum. Nunc luctus sed arcu sed bibendum.",
+  "description": "Description",
+  "descriptionMsg": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 }

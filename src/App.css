@@ -534,7 +534,6 @@ td {
   border-radius: 15px;
   border-color: red;
 }
-<<<<<<< HEAD
 .return-btn {
   border-radius: 15px;
   height: 50px;
@@ -548,7 +547,7 @@ td {
   position: fixed;
   left: 0;
   bottom: 50px;
-=======
+}
 
 .team-icon-container .icon {
   margin: 0 auto;
@@ -571,6 +570,10 @@ td {
   margin-bottom: 54px;
 }
 
+.vertical-line::after {
+  display: none;
+}
+
 .description-container {
   position: relative;
 }
@@ -586,5 +589,4 @@ td {
 
 .description-paragraph {
   margin-top: 20px;
->>>>>>> add: about us (credit) page
 }

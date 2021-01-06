@@ -1,140 +1,96 @@
 import React from 'react';
 import withUserGuard from '../../guards/user.guard';
 import { Row, Col } from "react-bootstrap"
-import prodcutOwner from "../../assets/images/productOwner.svg"
+import ProductOwner from "../../assets/images/productOwner.svg"
 import Backend from "../../assets/images/Backend.svg"
 import Design from "../../assets/images/Design.svg"
 import Frontend from "../../assets/images/Frontend.svg"
 import Mentors from "../../assets/images/Mentors.svg"
 import ProjectManager from "../../assets/images/ProjectManager.svg"
 import titleBackground from "../../assets/images/titleBackground.svg"
+import { useTranslation } from 'react-i18next'
 
 function AboutUs() {
+  const {t, i18n} = useTranslation()
+  const {language} = i18n 
+  const credits = [
+    {
+      title: "productOwner",
+      team_en: ["Name Surname"],
+      team_th: ["ชื่อ นามสกุล"],
+      icon: ProductOwner
+    },
+    {
+      title: "projectManager",
+      team_en: ["Name Surname"],
+      team_th: ["ชื่อ นามสกุล"],      
+      icon: ProjectManager
+    },
+    {
+      title: "frontendDeveloper",
+      team_en: ["Name Surname", "Name Surname", "Name Surname", "Name Surname", "Name Surname"],
+      team_th: ["ชื่อ นามสกุล", "ชื่อ นามสกุล", "ชื่อ นามสกุล", "ชื่อ นามสกุล", "ชื่อ นามสกุล"],
+      icon: Frontend
+    },
+    {
+      title: "backendDeveloper",
+      team_en: ["Name Surname", "Name Surname", "Name Surname", "Name Surname", "Name Surname"],
+      team_th: ["ชื่อ นามสกุล", "ชื่อ นามสกุล", "ชื่อ นามสกุล", "ชื่อ นามสกุล", "ชื่อ นามสกุล"],
+      icon: Backend
+    },
+    {
+      title: "designer",
+      team_en: ["Name Surname", "Name Surname", "Name Surname"],
+      team_th: ["ชื่อ นามสกุล", "ชื่อ นามสกุล", "ชื่อ นามสกุล"],
+      icon: Design
+    },
+    {
+      title: "specialThanks",
+      team_en: ["Name Surname", "Name Surname", "Name Surname", "Name Surname"],
+      team_th: ["ชื่อ นามสกุล", "ชื่อ นามสกุล","ชื่อ นามสกุล", "ชื่อ นามสกุล"],
+      icon: Mentors
+    },
+  ]
+  
   return (
     <div className="mx-auto col-md-6 mt-3">
       <div className="description-container">
         <img src={titleBackground} alt="titleBackground" />
-        <h3>Description</h3>
+        <h3>{t("description")}</h3>
       </div>
       <div className="description-paragraph">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin eget turpis eros. Suspendisse elit a nisi auctor fermentum. Nunc luctus sed arcu sed bibendum. </p>
+        <p>{t("descriptionMsg")} </p>
         <hr/>
       </div>
       <div className="description-container">
         <img src={titleBackground} alt="titleBackground" />
-        <h3>Team</h3>
+        <h3>{t("team")}</h3>
       </div>
       <div className="description-paragraph mb-4">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p>{t("teamMsg")}</p>
       </div>
-      <Row className="my-3">
-        <Col className="col-2 pr-0">
-          <div className="team-icon-container">
-            <img className="icon" src={prodcutOwner} alt="productOwnerIcon"/>
-          </div>
-          <div className="vertical-line" ></div>
-        </Col>
-        <Col className="col-sm-9">
-          <div className="default-mobile-wrapper animated-card pb-1">
-            <h4>Product Owner</h4>
-            <ul className="list-unstyled">
-              <li><p className="mb-0">Name Surname</p></li>
-            </ul>
-          </div>
-        </Col>
-      </Row>      
-      <Row className="my-3">
-        <Col className="col-2 pr-0">
-          <div className="team-icon-container">
-            <img className="icon" src={ProjectManager} alt="productOwnerIcon"/>
-          </div>
-          <div className="vertical-line" ></div>
-        </Col>
-        <Col className="col-sm-9">
-          <div className="default-mobile-wrapper animated-card pb-1">
-            <h4>Project Manager</h4>
-            <ul className="list-unstyled">
-              <li><p className="mb-0">Name Surname</p></li>
-            </ul>
-          </div>
-        </Col>
-      </Row>      
-      <Row className="my-3">
-        <Col className="col-2 pr-0">
-          <div className="team-icon-container">
-            <img className="icon" src={Frontend} alt="productOwnerIcon"/>
-          </div>
-          <div className="vertical-line" ></div>
-        </Col>
-        <Col className="col-sm-9">
-          <div className="default-mobile-wrapper animated-card pb-1">
-            <h4>Frontend Developers</h4>
-            <ul className="list-unstyled">
-              <li><p className="mb-0">Name Surname</p></li>
-              <li><p className="mb-0">Name Surname</p></li>
-              <li><p className="mb-0">Name Surname</p></li>
-              <li><p className="mb-0">Name Surname</p></li>
-              <li><p className="mb-0">Name Surname</p></li>
-            </ul>
-          </div>
-        </Col>
-      </Row>      
-       <Row className="my-3">
-        <Col className="col-2 pr-0">
-          <div className="team-icon-container">
-            <img className="icon" src={Backend} alt="productOwnerIcon"/>
-          </div>
-          <div className="vertical-line" ></div>
-        </Col>
-        <Col className="col-sm-9">
-          <div className="default-mobile-wrapper animated-card pb-1">
-            <h4>Backend Developers</h4>
-            <ul className="list-unstyled">
-              <li><p className="mb-0">Name Surname</p></li>
-              <li><p className="mb-0">Name Surname</p></li>
-              <li><p className="mb-0">Name Surname</p></li>
-              <li><p className="mb-0">Name Surname</p></li>
-              <li><p className="mb-0">Name Surname</p></li>
-            </ul>
-          </div>
-        </Col>
-      </Row>      
-      <Row className="my-3">
-        <Col className="col-2 pr-0">
-          <div className="team-icon-container">
-            <img className="icon" src={Design} alt="productOwnerIcon"/>
-          </div>
-          <div className="vertical-line" ></div>
-        </Col>
-        <Col className="col-sm-9">
-          <div className="default-mobile-wrapper animated-card pb-1">
-            <h4>UI/UX Designers</h4>
-            <ul className="list-unstyled">
-              <li><p className="mb-0">Name Surname</p></li>
-              <li><p className="mb-0">Name Surname</p></li>
-              <li><p className="mb-0">Name Surname</p></li>
-            </ul>
-          </div>
-        </Col>
-      </Row>      
-      <Row className="my-3">
-        <Col className="col-2 pr-0">
-          <div className="team-icon-container">
-            <img className="icon" src={Mentors} alt="productOwnerIcon"/>
-          </div>
-        </Col>
-        <Col className="col-sm-9">
-          <div className="default-mobile-wrapper animated-card pb-1">
-            <h4>Special Thanks to</h4>
-            <ul className="list-unstyled">
-              <li><p className="mb-0">Name Surname</p></li>
-              <li><p className="mb-0">Name Surname</p></li>
-              <li><p className="mb-0">Name Surname</p></li>
-              <li><p className="mb-0">Name Surname</p></li>
-            </ul>
-          </div>
-        </Col>
-      </Row>      
+      {credits.map((team)=> {
+        return (
+          <Row className="my-3">
+          <Col className="col-2 pr-0 left-col">
+            <div className="team-icon-container">
+              <img className="icon" src={team.icon} alt="productOwnerIcon"/>
+            </div>
+            {team !== credits[credits.length -1] && <div className="vertical-line" ></div>}
+          </Col>
+          <Col className="col-sm-9">
+            <div className="default-mobile-wrapper animated-card pb-1">
+              <h4>{t(team.title)}</h4>
+              <ul className="list-unstyled">
+                {team[`team_${language}`].map((name: string) => {
+                  return(<li><p className="mb-0">{name}</p></li>)
+                })}
+              </ul>
+            </div>
+          </Col>
+        </Row>      
+        )
+      })}  
     </div>
   )
 }
