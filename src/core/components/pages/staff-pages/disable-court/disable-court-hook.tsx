@@ -2,6 +2,7 @@
 import React from 'react'
 import { useState, useEffect, useRef, ComponentType } from 'react';
 import { Option, RowProps, QueryParams, ViewResponse, ViewRowProps, disable_time, View, Sport } from './disable-court-interface'
+import add from 'date-fns/addDays'
 import { client } from '../../../../../axiosConfig'
 
 export const toViewRowProps = (data: disable_time[] | undefined): ViewRowProps[] => {
@@ -95,18 +96,21 @@ export const useViewTable = (params) => {
     const [viewData, setViewData] = useState<View>()
     const [error, setError] = useState<string>()
     const { inProp, rowData, onAddRow, onDeleteRow, setInProp, setRowData } = useRow()
+    const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, setStartDate, setEndDate } = useDate()
     async function fetchViewData() {
         await client.get<ViewResponse>(`/courts/disable-courts/${params}`,)
             .then((res) => {
                 setViewData(res.data)
                 setRowData(toViewRowProps(res.data.disable_time))
+                setStartDate(add(new Date(res.data.starting_date), 1))
+                setEndDate(new Date(res.data.expired_date))
             })
             .catch(err => setError(err.response.message))
     }
     useEffect(() => {
         fetchViewData()
     }, [])
-    return { viewData, inProp, rowData, onAddRow, onDeleteRow, setInProp, error }
+    return { viewData, inProp, rowData, onAddRow, onDeleteRow, setInProp, error, startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert }
 
 }
 
