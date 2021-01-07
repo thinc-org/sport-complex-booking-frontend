@@ -18,8 +18,8 @@ export const toViewRowProps = (data: disable_time[] | undefined): ViewRowProps[]
 export const useRow = (initial: ViewRowProps[] = []) => {
     const [inProp, setInProp] = useState(false)
     const [rowData, setRowData] = useState<ViewRowProps[]>(initial)
-
     const onAddRow = (f) => {
+
         setRowData(prev => {
             const timeSlot: number[] = []
             for (let i = parseInt(f.timeSlotStart); i <= f.timeSlotEnd; i++) {

@@ -310,10 +310,9 @@ p.link {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 140px;
+  width: 125px;
   height: 50px;
-  position: fixed;
-  top: 270px;
+  position: absolute;
   z-index: 5;
   transition: 0.3s;
 }
