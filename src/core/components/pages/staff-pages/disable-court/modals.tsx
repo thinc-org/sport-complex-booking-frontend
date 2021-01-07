@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import { getTimeArr, dayArr } from './mapTime'
-import { ModalProps } from './disable-court-interface'
+import { ModalProps, FormModalProps } from './disable-court-interface'
 export const ErrorAlert = ({ inProp, header, message, handleClose, canCancel = false, onCancel }: ModalProps) => {
     return (
         <>
@@ -25,12 +25,13 @@ export const ErrorAlert = ({ inProp, header, message, handleClose, canCancel = f
     );
 }
 
-export const FormAlert = ({ inProp, handleClose, onSubmit }) => {
+export const FormAlert = ({ inProp, handleClose, onSubmit, validate }: FormModalProps) => {
     const { register, handleSubmit, getValues, errors } = useForm()
     const timeArr: string[] = getTimeArr()
     const validateTime = (value) => {
         return (parseInt(value) >= getValues("timeSlotStart"))
     }
+
     return (
         <Modal show={inProp} onHide={handleClose}>
             <Modal.Header closeButton>
@@ -40,7 +41,7 @@ export const FormAlert = ({ inProp, handleClose, onSubmit }) => {
                 <Modal.Body>
                     <div>
                         <Form.Label>วัน</Form.Label>
-                        <Form.Control name='day' as='select' ref={register({ required: true })} >
+                        <Form.Control name='day' as='select' ref={register({ required: true, validate: () => validate(getValues()) })} >
                             {dayArr.map((val, indx) =>
                                 <option value={indx} key={val}>{val}</option>
                             )}
@@ -48,7 +49,7 @@ export const FormAlert = ({ inProp, handleClose, onSubmit }) => {
                     </div>
                     <div>
                         <Form.Label>เวลาที่เริ่มปิด</Form.Label>
-                        <Form.Control name='timeSlotStart' as='select' ref={register({ required: true })} >
+                        <Form.Control name='timeSlotStart' as='select' ref={register({ required: true, validate: () => validate(getValues()) })} >
                             {timeArr.map((val, indx) =>
                                 <option value={indx + 1} key={val}>{val}</option>
                             )}
@@ -56,7 +57,7 @@ export const FormAlert = ({ inProp, handleClose, onSubmit }) => {
                     </div>
                     <div>
                         <Form.Label>เวลาสิ้นสุดการปิด</Form.Label>
-                        <Form.Control name='timeSlotEnd' as='select' ref={register({ required: true, validate: (value) => validateTime(value) })} >
+                        <Form.Control name='timeSlotEnd' as='select' ref={register({ required: true, validate: () => validate(getValues()) })} >
                             {timeArr.map((val, indx) =>
                                 <option value={indx} key={val}>{val}</option>
                             )}
