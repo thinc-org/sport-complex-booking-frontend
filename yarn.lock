@@ -9265,10 +9265,10 @@ react-side-effect@^2.1.1:
   resolved "https://registry.yarnpkg.com/react-side-effect/-/react-side-effect-2.1.1.tgz"
   integrity sha512-2FoTQzRNTncBVtnzxFOk2mCpcfxQpenBMbk5kSVBg5UcPqV9fRbgY2zhb7GTWWOlpFmAxhClBDlIq8Rsubz1yQ==
 
-react-time-picker@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/react-time-picker/-/react-time-picker-4.1.1.tgz"
-  integrity sha512-ecv04oo8u81HfIB4XYHJxNPuhsVthbbA/rBPcZA+fC2F7lnIGoNqQyqm+VDJwzWw+TA8pXW+A/8uKcapcyriiQ==
+react-time-picker@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/react-time-picker/-/react-time-picker-4.1.2.tgz#7e977ba546a2313d622a536494cec6e4d727b57b"
+  integrity sha512-O2lSyv9j11YcpVuxQnJnqanaYiJ7yyCl7/p6jS6HHcR0i+plX95Ko105CKyJeAd40I6LxHqfweR+9DIL2AFmYg==
   dependencies:
     "@wojtekmaj/date-utils" "^1.0.0"
     get-user-locale "^1.2.0"
