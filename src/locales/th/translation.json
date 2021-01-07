@@ -206,13 +206,14 @@
   "showQRToStaff": "กรุณาแสดงคิวอาร์โค้ดนี้ให้เจ้าหน้าที่",
   "cancelReservation": "ยกเลิกการจอง",
   "cancelReservationQuestion": "คุณต้องการยกเลิกการจองใช่หรือไม่?",
-  "cancelReservationCondition1": "1. ถ้าทำการยกเลิกการจองภายใน 5 วัน คุณและสมาชิกในการจองจะถูกแบนเป็นเวลา 30 วัน",
-  "cancelReservationCondition2": "2. ถ้าทำการยกเลิกการจองภายใน 2 วัน คุณและสมาชิกในการจองจะถูกแบนเป็นเวลา 2 เดือน",
+  "cancelReservationCondition1": "ถ้าทำการยกเลิกการจองภายใน ",
+  "cancelReservationCondition2": " วัน คุณและสมาชิกในการจองจะถูกแบนเป็นเวลา 30 ",
+  "cancelReservationCondition3": " วัน",
   "sure": "ตกลง",
   "no": "ไม่",
   "youHaveCheckedIn": "เช็ดอินแล้ว!",
   "aboutUs": "เกี่ยวกับเรา",
-  "productOwner":"เจ้าของงาน",
+  "productOwner": "เจ้าของงาน",
   "projectManager": "ผู้จัดการโครงการ",
   "frontendDeveloper": "นักพัฒนา Frontend",
   "backendDeveloper": "นักพัฒนา Backend",
@@ -236,6 +237,8 @@
   "chosenTimeUnavailable": "ไม่สามารถจองเวลาที่คุณเลือกได้",
   "oldPasswordMismatch": {
     "title": "ไม่สามารถเปลี่ยนรหัสผ่านได้",
-    "body":"รหัสผ่านเก่าไม่ถูกต้อง"
-  }
+    "body": "รหัสผ่านเก่าไม่ถูกต้อง"
+  },
+  "noReservation": "คุณไม่มีการจองในขณะนี้",
+  "qrcodeInvalid": "คิวอาร์โค้ดนี้จะหมดเวลาในอีก"
 }

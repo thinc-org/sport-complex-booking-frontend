@@ -1,17 +1,25 @@
 .landing {
-    width: 100vw;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.landing .textgroup {
+  position: relative;
+  z-index: 1;
 }
 
 .landing .imagegroup {
-    position: fixed;
+  position: relative;
 }
 
 .landing .imagegroup div {
-    width: 100vw;
+  width: 100vw;
 }
 
 .landing .image {
   position: relative;
+  z-index: 0;
   max-width: 500px;
 }
 .landing .image1 {
@@ -42,70 +50,147 @@
   top: -58%;
 }
 
-@media(max-height: 800px) {
-    .landing .imagegroup {
-        max-width: 300px;
-        left: 14%;
-        top: 25%;
-    }
+a.landing.btn {
+  max-height: 100px;
 }
 
-@media(max-height: 700px) {
-    .landing .imagegroup {
-        max-width: 300px;
-        left: 10%;
-        top: 25%;
-    }
+@media (max-height: 1100px) {
+  .landing .imagegroup {
+    top: -20%;
+  }
+  .landing .textgroup {
+    font-size: 54px;
+  }
 }
 
-@media(max-height: 600px) {
-    .landing .imagegroup {
-        max-width: 250px;
-        left: 12%;
-        top: 25%;
-    }
+@media (max-height: 850px) {
+  .landing .imagegroup {
+    max-width: 300px;
+    left: 12%;
+    top: 5%;
+  }
 }
 
-@media(min-width: 769px) {
-    .landing .textgroup {
-        padding: 10% !important;
-    }
-    .landing h4 {
-        font-size: 54px;
-    }
-    .landing .imagegroup {
-        max-width: 1000px;
-        top: 20%;
-        left: 20vw;
-    }
-    .landing .button {
-        position: relative !important;
-        max-width: 372px;
-        margin: 7%;
-        top: -140px;
-    }
+@media (max-height: 700px) {
+  .landing .imagegroup {
+    max-width: 300px;
+    left: 10%;
+    top: 0%;
+  }
 }
 
-@media(min-width: 992px) {
-    .landing .textgroup {
-        padding: 10% !important;
-    }
-    .landing h4 {
-        font-size: 54px;
-    }
-    .landing .imagegroup {
-        min-width: 900px;
-        top: 15%;
-        left: 10vw;
-    }
+@media (max-height: 600px) {
+  .landing {
+    height: 100vh;
+  }
+  .landing .textgroup {
+    padding: 7% !important;
+  }
+  .landing.row {
+    padding-top: 0 !important;
+  }
 
+  .landing .imagegroup {
+    max-width: 250px;
+    left: 12%;
+    top: 4%;
+  }
+  .landing .button {
+    position: fixed;
+    max-height: 100px;
+  }
 }
 
-@media(min-width: 1200px) {
-    .landing .imagegroup {
-        min-width: 1200px;
-        top: 20%;
-        left: 10vw;
-    }
+@media (max-height: 500px) {
+  .landing .imagegroup {
+    top: 40%;
+  }
+  .landing .button {
+    left: 20%;
+  }
+}
 
+@media (max-height: 400px) {
+  .landing .imagegroup {
+    top: 50%;
+  }
+  .landing .button {
+    left: 0;
+  }
+}
+
+@media (min-width: 600) {
+  .landing .imagegroup {
+    left: 40%;
+  }
+  .landing .textgroup {
+    font-size: 54px;
+  }
+}
+
+@media (min-width: 769px) {
+  .landing .textgroup {
+    padding: 10%;
+  }
+  .landing h4 {
+    font-size: 36px;
+  }
+  .landing .imagegroup {
+    max-width: 600px;
+    top: -100%;
+    left: 22vw;
+  }
+  .landing .button {
+    position: relative !important;
+    max-width: 372px;
+    max-height: 100px;
+    margin: 5%;
+    margin-top: 2%;
+    margin-bottom: 0 !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .landing .textgroup {
+    padding: 10% !important;
+  }
+  .landing h4 {
+    font-size: 54px;
+  }
+  .landing h6 {
+    font-size: 24px;
+  }
+  .landing .imagegroup {
+    min-width: 900px;
+    top: -40%;
+    left: 20vw;
+  }
+}
+
+@media (min-width: 1200px) {
+  .landing .imagegroup {
+    min-width: 1200px;
+    top: -70%;
+    left: 3vw;
+  }
+  .landing .textgroup {
+    font-size: 60px;
+    padding: 10% 0 5% 0 !important;
+  }
+
+  .landing .textgroup h6 {
+    font-size: 30px;
+  }
+  .landing .button {
+    margin-left: 0;
+    padding-left: 0;
+  }
+}
+
+@media (min-width: 1400px) {
+  .landing .imagegroup {
+    min-width: 1200px;
+    top: -70vh;
+    left: 5vw;
+  }
 }

@@ -6,9 +6,17 @@ export interface ReservationCancelModalProps {
   modalOpen: boolean
   triggerModal: (event: React.MouseEvent) => void
   confirmCancellation: (event: React.MouseEvent) => void
+  lateCancellationDay: number
+  lateCancellationPunishment: number
 }
 
-export const ReservationCancellationModal: React.FC<ReservationCancelModalProps> = ({ modalOpen, triggerModal, confirmCancellation }) => {
+export const ReservationCancellationModal: React.FC<ReservationCancelModalProps> = ({
+  modalOpen,
+  triggerModal,
+  confirmCancellation,
+  lateCancellationDay,
+  lateCancellationPunishment,
+}) => {
   const { t } = useTranslation()
   return (
     <Modal show={modalOpen} className="modal" tabIndex={-1} role="dialog" aria-labelledby="contained-modal-title-vcenter" centered aria-hidden="true">
@@ -20,8 +28,7 @@ export const ReservationCancellationModal: React.FC<ReservationCancelModalProps>
           <div className="modal-body pt-1 pb-0" style={{ fontSize: "14px", fontWeight: 300 }}>
             {t("cancelReservationQuestion")}
             <br />
-            <br /> {t("cancelReservationCondition1")}
-            <br /> {t("cancelReservationCondition2")}
+            <br /> {t("cancelReservationCondition1")} {lateCancellationDay} {t("cancelReservationCondition2")} {lateCancellationPunishment}
           </div>
           <div className="modal-footer pt-0 pb-0">
             <button type="button" onClick={triggerModal} className="btn" data-dismiss="modal" style={{ fontSize: "14px", fontWeight: 400 }}>

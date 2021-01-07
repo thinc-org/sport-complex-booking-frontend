@@ -1,11 +1,10 @@
 import React from "react"
-import { useState, useEffect, useContext, useCallback } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useHistory, Link } from "react-router-dom"
 import { useLocation } from "react-router"
 import { Button } from "react-bootstrap"
 import { timeConversion } from "../Reservation/timeConversion"
 import { client } from "../../../../axiosConfig"
-import { UserContext } from "../../../contexts/UsersContext"
 import QRCode from "qrcode.react"
 import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 import { useTranslation } from "react-i18next"
@@ -41,6 +40,8 @@ const ReservationDetail = () => {
   const [isCheck, setIsCheck] = useState<Boolean>()
   const [counter, setCounter] = useState<number>(10)
   const [isLoading, setIsLoading] = useState(true)
+  const [lateCancellationDay, setLateCancellationDay] = useState<number>()
+  const [lateCancellationPunishment, setLateCancellationPunishment] = useState<number>()
 
   const fetchId = useCallback(() => {
     if (location.state) {
@@ -53,15 +54,16 @@ const ReservationDetail = () => {
   const fetchData = async () => {
     try {
       console.log(id)
-      const res = await client.get("myreservation/" + id)
-      const data = res.data
-      console.log(data)
-      setSport({ sportth: data.sport_id.sport_name_th, sporten: data.sport_id.sport_name_en })
-      setCourtNum(data.court_num)
-      setDate(new Date(data.date).toLocaleDateString())
-      setTimeList(data.time_slot)
-      setMemberList(data.list_member)
-      setIsCheck(data.is_check)
+      const res = (await client.get("myreservation/" + id)).data
+      const data = (await client.get("court-manager/setting")).data
+      setSport({ sportth: res.sport_id.sport_name_th, sporten: res.sport_id.sport_name_en })
+      setCourtNum(res.court_number)
+      setDate(new Date(res.date).toLocaleDateString())
+      setTimeList(res.time_slot)
+      setMemberList(res.list_member)
+      setIsCheck(res.is_check)
+      setLateCancellationDay(data.late_cancelation_day)
+      setLateCancellationPunishment(data.late_cancelation_punishment)
       setIsLoading(false)
     } catch (err) {
       console.log(err.message)
@@ -118,11 +120,12 @@ const ReservationDetail = () => {
       return (
         <>
           <div className="box-container btn w-100 mb-5" style={{ textAlign: "center" }}>
-            <QRCode className="m-4" value={id} renderAs="svg" size="128" fgColor="#333" bgColor="#fff" />
-            <div style={{ fontSize: "18px", fontWeight: 400, width: "60px", float: "right", marginLeft: "-60px" }}>
+            <h6 className="mt-2 mb-0" style={{ fontWeight: 400 }}>
               {" "}
-              00:{counter == 10 ? counter : "0" + counter}{" "}
-            </div>
+              {t("qrcodeInvalid")}{" "}
+            </h6>
+            <div style={{ fontSize: "18px", fontWeight: 400 }}> 00:{counter == 10 ? counter : "0" + counter} </div>
+            <QRCode className="mb-4 mt-3" value={id} renderAs="svg" size="128" fgColor="#333" bgColor="#fff" />
             <h5 className="mb-2" style={{ fontWeight: 400 }}>
               {" "}
               {t("showQRToStaff")}{" "}
@@ -170,7 +173,7 @@ const ReservationDetail = () => {
                   </h6>
                   <h6 className="mb-0 font-weight-light">
                     {" "}
-                    {t("bookingDate")}:{date}{" "}
+                    {t("bookingDate")}: {date}{" "}
                   </h6>
                   <h6 className="mb-0 font-weight-light">
                     {t("bookingTime")}: {timeList && timeList.map((time) => timeConversion(time))}{" "}
@@ -191,7 +194,15 @@ const ReservationDetail = () => {
               </div>
               {qrCode()}
             </div>
-            <ReservationCancellationModal modalOpen={modalOpen} triggerModal={triggerModal} confirmCancellation={confirmCancellation} />
+            {lateCancellationDay && lateCancellationPunishment && (
+              <ReservationCancellationModal
+                modalOpen={modalOpen}
+                triggerModal={triggerModal}
+                confirmCancellation={confirmCancellation}
+                lateCancellationDay={lateCancellationDay}
+                lateCancellationPunishment={lateCancellationPunishment}
+              />
+            )}
           </div>
         </div>
       </>
