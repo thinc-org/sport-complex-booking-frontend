@@ -97,7 +97,7 @@ const ReservationPage = () => {
         <NavHeader header={t("myReservation")} />
         <div className="container">
           <div className="row justify-content-center mt-5 grey" style={{ fontWeight: 400 }}>
-            You have no any reservations.
+            {t("noReservation")}
           </div>
         </div>
       </>
