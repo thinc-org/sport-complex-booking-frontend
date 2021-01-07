@@ -1,14 +1,21 @@
-import React, { FunctionComponent, useState, useEffect } from "react"
+import React, { FunctionComponent, useState, useEffect, useMemo } from "react"
 import { Link, useParams, useHistory } from "react-router-dom"
 import { Table, Row, Col, Button, Card } from "react-bootstrap"
 import format from "date-fns/format"
 import { client } from "../../../../../axiosConfig"
-import { DeleteModal, UserInfo } from "../interfaces/reservationSchemas"
-import { ConfirmDelModal, ErrModal, ComDelModal } from "./DeleteModalComponent"
+import SuccessfulReservation, { WaitingRoom, TimeObject } from "../interfaces/reservationSchemas"
+import { ConfirmDeleteModal, ErrModal, DeleteSuccessfulModal } from "./DeleteModalComponent"
 
-export const convertSlotToTime = (slot: number): string => {
-  if (slot % 2 === 0) return String(slot / 2 - 1) + ":30-" + (slot / 2 !== 24 ? String(slot / 2) : "0") + ":00"
-  return String(Math.floor(slot / 2)) + ":00-" + String(Math.floor(slot / 2)) + ":30"
+export const convertSlotToTime = (slot: number): TimeObject => {
+  // if (slot % 2 === 0) return String(slot / 2 - 1) + ":30-" + (slot / 2 !== 24 ? String(slot / 2) : "0") + ":00"
+  // return String(Math.floor(slot / 2)) + ":00-" + String(Math.floor(slot / 2)) + ":30"
+  const hour = Math.floor(slot / 2)
+  return {
+    startHour: slot % 2 === 0 ? `${hour - 1}` : `${hour}`,
+    startMinute: slot % 2 === 0 ? "30" : "00",
+    endHour: `${hour}`,
+    endMinute: slot % 2 === 0 ? "00" : "30",
+  }
 }
 
 export const getTimeText = (timeSlot: number[]): string => {
@@ -20,10 +27,11 @@ export const getTimeText = (timeSlot: number[]): string => {
       (i === 0 && i !== timeSlot.length - 1) ||
       (0 < i && i < timeSlot.length - 1 && timeSlot[i + 1] === timeSlot[i] + 1 && timeSlot[i - 1] !== timeSlot[i] - 1)
     )
-      text += temp.slice(0, temp.indexOf("-"))
+      text += `${temp.startHour}:${temp.startMinute}-`
     else if (i > 0 && timeSlot[i - 1] === timeSlot[i] - 1 && (i === timeSlot.length - 1 || timeSlot[i + 1] !== timeSlot[i] + 1))
-      text += temp.slice(temp.indexOf("-"), 11) + (i === timeSlot.length - 1 ? "" : ",")
-    else if (i === timeSlot.length - 1 || timeSlot[i - 1] !== timeSlot[i] - 1) text += temp + (i === timeSlot.length - 1 ? "" : ",")
+      text += `${temp.endHour}:${temp.endMinute}` + (i === timeSlot.length - 1 ? "" : ",")
+    else if (i === timeSlot.length - 1 || timeSlot[i - 1] !== timeSlot[i] - 1)
+      text += `${temp.startHour}:${temp.startMinute}-${temp.endHour}:${temp.endMinute}` + (i === timeSlot.length - 1 ? "" : ",")
     i++
   }
   return text
@@ -31,18 +39,18 @@ export const getTimeText = (timeSlot: number[]): string => {
 
 const ReservationDetail: FunctionComponent = () => {
   // Page state //
-  let [showModalInfo, setShowModalInfo] = useState<DeleteModal>({
-    showConfirmDel: false,
-    showComDel: false,
-    showErr: false,
-  })
+  const [showConfirmDel, setShowConfirmDel] = useState<boolean>(false)
+  const [showComDel, setShowComDel] = useState<boolean>(false)
+  const [showErr, setShowErr] = useState<boolean>(false)
 
   // reservation detail state
-  let [sportName, setSportName] = useState<string>("แบตมินตัน")
-  let [date, setDate] = useState<Date>(new Date())
-  let [courtNo, setCourtNo] = useState<number>(0)
-  let [timeSlot, setTimeSlot] = useState<number[]>([])
-  let [members, setMembers] = useState<UserInfo[]>([])
+  const [sportName, setSportName] = useState<string>("")
+  const [detail, setDetail] = useState<SuccessfulReservation | WaitingRoom | null>(null)
+  const date = useMemo(() => (detail ? new Date(detail.date) : null), [detail])
+  const sportId = detail?.sport_id
+  const courtNo = detail?.court_number
+  const timeSlot = detail?.time_slot
+  const members = detail?.list_member
 
   const history = useHistory()
   const { pagename, _id } = useParams<{ pagename: string; _id: string }>()
@@ -53,8 +61,18 @@ const ReservationDetail: FunctionComponent = () => {
   }, [])
 
   useEffect(() => {
-    console.log(pagename, _id)
-  }, [pagename, _id])
+    client({
+      method: "GET",
+      url: "/court-manager/sports/",
+    })
+      .then(({ data }) => {
+        const sport = data.find((sport) => sport._id === detail?.sport_id)
+        setSportName(sport?.sport_name_th || "")
+      })
+      .catch(({ response }) => {
+        console.log(response)
+      })
+  }, [sportId])
 
   // request //
   const requestInfo = () => {
@@ -65,16 +83,14 @@ const ReservationDetail: FunctionComponent = () => {
     })
       .then(({ data }) => {
         console.log(data)
-        setCourtNo(data.court_number)
-        setDate(new Date(data.date))
-        setMembers(data.list_member)
-        setTimeSlot(data.time_slot)
+        setDetail(data)
       })
       .catch(({ response }) => {
         console.log(response)
-        if (response.data && response.data.status === 401) history.push("/staff")
+        setShowErr(true)
       })
   }
+
   const requestDelete = () => {
     let url = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + `/${_id}`
     client({
@@ -82,12 +98,13 @@ const ReservationDetail: FunctionComponent = () => {
       url,
     })
       .then(({ data }) => {
-        setShowModalInfo({ ...showModalInfo, showConfirmDel: false, showComDel: true })
+        setShowConfirmDel(false)
+        setShowComDel(true)
       })
       .catch(({ response }) => {
         console.log(response)
-        if (response.data && response.data.status === 401) history.push("/staff")
-        else setShowModalInfo({ ...showModalInfo, showConfirmDel: false, showErr: true })
+        setShowConfirmDel(false)
+        setShowErr(true)
       })
   }
 
@@ -103,7 +120,7 @@ const ReservationDetail: FunctionComponent = () => {
           <hr style={{ height: "60px", width: "0px", borderWidth: "1px", borderStyle: "ridge" }} />
           <Col className="px-0 pt-3 text-center" style={{ whiteSpace: "pre-wrap" }}>
             วันที่ / เวลา {"\n"}
-            <label style={{ whiteSpace: "pre-wrap" }}>{format(date, "dd-MM-yyyy") + "\n" + getTimeText(timeSlot)}</label>
+            <label style={{ whiteSpace: "pre-wrap" }}>{date ? format(date!, "dd-MM-yyyy") + "\n" + getTimeText(timeSlot!) : ""}</label>
           </Col>
           <hr style={{ height: "60px", width: "0px", borderWidth: "1px", borderStyle: "ridge" }} />
           <Col className="px-0 pt-4 text-center" style={{ whiteSpace: "pre-wrap" }}>
@@ -115,28 +132,29 @@ const ReservationDetail: FunctionComponent = () => {
     )
   }
 
-  const renderMemberTable = () => {
-    let memberList = members.map((member) => {
-      return (
-        <tr key={member.username} className="tr-normal">
-          <td className="py-4 text-center"> {member.username} </td>
-          <td className="text-center"> {member.personal_email} </td>
-          <td className="text-center"> {member.phone} </td>
-        </tr>
-      )
-    })
-    return memberList
-  }
-
-  const renderModals = () => {
+  const memberTable = members?.map((member) => {
     return (
-      <div>
-        <ConfirmDelModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ members, requestDelete }} />
-        <ComDelModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
-        <ErrModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
-      </div>
+      <tr key={member?.username} className="tr-normal">
+        <td className="py-4 text-center"> {member?.username} </td>
+        <td className="text-center"> {member?.personal_email} </td>
+        <td className="text-center"> {member?.phone} </td>
+      </tr>
     )
-  }
+  })
+
+  const modals = (
+    <>
+      <ConfirmDeleteModal show={showConfirmDel} onClose={() => setShowConfirmDel(false)} info={{ members, requestDelete }} />
+      <DeleteSuccessfulModal
+        show={showComDel}
+        onClose={() => {
+          setShowComDel(false)
+          history.push(`/staff/allReservation/${pagename}`)
+        }}
+      />
+      <ErrModal show={showErr} onClose={() => setShowErr(false)} />
+    </>
+  )
 
   return (
     <div className="reservationDetail px-5">
@@ -149,7 +167,7 @@ const ReservationDetail: FunctionComponent = () => {
             <th>เบอร์โทรศัพท์</th>
           </tr>
         </thead>
-        <tbody>{renderMemberTable()}</tbody>
+        <tbody>{memberTable}</tbody>
       </Table>
       <Row className="mt-4">
         <Col>
@@ -164,14 +182,14 @@ const ReservationDetail: FunctionComponent = () => {
             variant="danger"
             className="float-right btn-normal btn-outline-red"
             onClick={() => {
-              setShowModalInfo({ ...showModalInfo, showConfirmDel: true })
+              setShowConfirmDel(true)
             }}
           >
             ลบการจอง
           </Button>
         </Col>
       </Row>
-      {renderModals()}
+      {modals}
     </div>
   )
 }

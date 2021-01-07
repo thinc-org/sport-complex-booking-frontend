@@ -1,18 +1,22 @@
-import React, { FunctionComponent, useState, useEffect } from "react"
+import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
 import { useHistory, useParams } from "react-router-dom"
-import { Col, Form, Button, Table } from "react-bootstrap"
+import { Row, Col, Form, Button, Table } from "react-bootstrap"
 import SuccessfulReservation, { Sport, Court } from "../interfaces/reservationSchemas"
 import format from "date-fns/format"
-import { convertSlotToTime, getTimeText } from "./ReservationDetail"
+import { getTimeText } from "./ReservationDetail"
 import { client } from "../../../../../axiosConfig"
+import PaginationComponent from "../list-of-all-users-pages/PaginationComponent"
+import { ErrModal } from "./DeleteModalComponent"
 
 const AllReservation: FunctionComponent = () => {
   // Page state
   const [pageNo, setPageNo] = useState<number>(1)
   const [maxUser, setMaxUser] = useState<number>(1)
+  const [maxUserPerPage] = useState<number>(10)
+  const [showErr, setShowErr] = useState<boolean>(false)
   // Search state
   const [sportType, setSportType] = useState<string>("") // id
-  const [sportIdx, setSportIdx] = useState<number>(-2)
+  const [sportIdx, setSportIdx] = useState<string>("-2")
   const [courtNo, setCourtNo] = useState<number>(-2) // -2 is default
   const [chooseDate, setChooseDate] = useState<boolean>(false)
   const [searchDate, setSearchDate] = useState<Date>(new Date())
@@ -25,9 +29,9 @@ const AllReservation: FunctionComponent = () => {
   const { pagename } = useParams<{ pagename: string }>()
 
   // useEffects //
-  useEffect(() => {
-    console.log(pagename)
-  }, [pagename])
+  // useEffect(() => {
+  //   console.log(pagename)
+  // }, [pagename])
 
   useEffect(() => {
     client({
@@ -36,18 +40,20 @@ const AllReservation: FunctionComponent = () => {
       url: "/court-manager/sports/",
     })
       .then(({ data }) => {
-        console.log(data)
         setAllSports(data)
       })
       .catch(({ response }) => {
         console.log(response)
-        if (response.data && response.data.status === 401) history.push("/staff")
       })
   }, [pagename])
 
-  useEffect(() => {
+  const memoizedCallback = useCallback(() => {
     requestInfo()
   }, [sportType, courtNo, searchDate, searchTime, pagename])
+
+  useEffect(() => {
+    memoizedCallback()
+  }, [memoizedCallback])
 
   // handles //
   const handleInfo = (e) => {
@@ -55,25 +61,25 @@ const AllReservation: FunctionComponent = () => {
   }
 
   const handleChangeSport = (e) => {
-    let idx: number = parseInt(e.target.value)
-    if (allSports.length !== 0 && idx >= 0) setSportType(allSports[idx]._id)
+    let id: string = e.target.value
+    if (id !== "-1" && id !== "-2") setSportType(id)
     else setSportType("")
     setCourtNo(-2)
-    setSportIdx(idx)
+    setSportIdx(id)
   }
 
   const handleChangeDate = (e) => {
     setChooseDate(true)
-    let today = new Date()
-    let incom = new Date(e.target.value)
+    const today = new Date()
+    const incom = new Date(e.target.value)
     setSearchDate(incom < today ? today : incom)
   }
 
   // requests //
   const requestInfo = () => {
     // request reservation_info //
-    let url: string = pagename === "success" ? "/all-reservation" : "/all-waiting-room"
-    let data = {}
+    const url: string = pagename === "success" ? "/all-reservation" : "/all-waiting-room"
+    const data = {}
     if (sportType !== "") data["sportId"] = sportType
     if (courtNo >= 0) data["courtNumber"] = courtNo
     if (chooseDate) data["date"] = searchDate
@@ -90,134 +96,117 @@ const AllReservation: FunctionComponent = () => {
       })
       .catch(({ response }) => {
         console.log(response)
+        setShowErr(true)
       })
   }
 
   // other functions //
   const sportIdToName = (id: string): string => {
     // convert sport id to sport name //
-    for (let sport of allSports) if (sport._id === id) return sport.sport_name_th
-    return ""
+    const sport = allSports.find((sport) => sport._id === id)
+    return sport?.sport_name_th || ""
   }
 
   // renders //
-  const renderSportTypeFilter = () => {
-    let i = 0
-    let sportList = allSports.map((info) => (
-      <option key={i} value={i++}>
-        {info.sport_name_th}
+  const sportTypeFilter = (
+    <Form.Control className="form-pink" as="select" value={sportIdx} onChange={handleChangeSport}>
+      <option value={-2} disabled>
+        ประเภทกีฬา
       </option>
-    ))
-    return (
-      <Form.Control className="form-pink" as="select" value={sportIdx} onChange={handleChangeSport}>
+      <option value={-1}>ทั้งหมด</option>
+      {allSports.map((info) => (
+        <option key={info._id} value={info._id}>
+          {info.sport_name_th}
+        </option>
+      ))}
+    </Form.Control>
+  )
+
+  const courtNumberFilter =
+    sportType !== "" ? (
+      <Form.Control
+        className="form-pink"
+        as="select"
+        value={courtNo}
+        onChange={(e) => {
+          setCourtNo(parseInt(e.target.value))
+        }}
+      >
         <option value={-2} disabled>
-          ประเภทกีฬา
+          เลขคอร์ด
         </option>
         <option value={-1}>ทั้งหมด</option>
-        {sportList}
+        {allSports
+          .find((sport) => sport._id === sportType)!
+          .list_court.map((info) => (
+            <option key={info.court_num} value={info.court_num}>
+              {info.court_num}
+            </option>
+          ))}
       </Form.Control>
-    )
-  }
-
-  const renderCourtNumberFilter = () => {
-    if (sportType !== "" && sportIdx >= 0) {
-      let allCourts: Court[] = allSports[sportIdx].list_court
-      let courtList = allCourts.map((info) => (
-        <option key={info.court_num} value={info.court_num}>
-          {info.court_num}
-        </option>
-      ))
-      return (
-        <Form.Control
-          className="form-pink"
-          as="select"
-          value={courtNo}
-          onChange={(e) => {
-            setCourtNo(parseInt(e.target.value))
-          }}
-        >
-          <option value={-2} disabled>
-            เลขคอร์ด
-          </option>
-          <option value={-1}>ทั้งหมด</option>
-          {courtList}
-        </Form.Control>
-      )
-    }
-    return (
+    ) : (
       <Form.Control className="form-pink" as="select" defaultValue={courtNo}>
         <option disabled value={-2}>
           กรุณาเลือกประเภทกีฬาก่อน
         </option>
       </Form.Control>
     )
-  }
 
-  const renderTimeFilter = () => {
-    let timeList = [
+  const timeFilter = (
+    <Form.Control
+      className="form-pink"
+      as="select"
+      defaultValue={-1}
+      onChange={(e) => {
+        setSearchTime(parseInt(e.target.value))
+      }}
+    >
       <option key={-1} value={-1} disabled>
         เลือกเวลา
-      </option>,
+      </option>
+      ,
       <option key={0} value={0}>
         ทั้งหมด
-      </option>,
-    ]
-    for (let i = 1; i <= 48; i++)
-      timeList.push(
-        <option key={i} value={i}>
-          {convertSlotToTime(i)}
+      </option>
+      {Array.from(Array(48).keys()).map((i) => (
+        <option key={i + 1} value={i + 1}>
+          {getTimeText([i + 1])}
         </option>
-      )
-    return (
-      <Form.Control
-        className="form-pink"
-        as="select"
-        defaultValue={-1}
-        onChange={(e) => {
-          setSearchTime(parseInt(e.target.value))
-        }}
-      >
-        {timeList}
-      </Form.Control>
-    )
-  }
+      ))}
+    </Form.Control>
+  )
 
-  const renderFilterSection = () => {
-    return (
-      <Form.Row className="align-items-center mt-3">
-        <Col>{renderSportTypeFilter()}</Col>
-        <Col>{renderCourtNumberFilter()}</Col>
-        <Col>
-          <Form.Control className="form-pink" type="date" value={chooseDate ? format(searchDate, "yyyy-MM-dd") : ""} onChange={handleChangeDate} />
-        </Col>
-        <Col>{renderTimeFilter()}</Col>
-      </Form.Row>
-    )
-  }
+  const filterSection = (
+    <Form.Row className="align-items-center mt-3">
+      <Col>{sportTypeFilter}</Col>
+      <Col>{courtNumberFilter}</Col>
+      <Col>
+        <Form.Control className="form-pink" type="date" value={chooseDate ? format(searchDate, "yyyy-MM-dd") : ""} onChange={handleChangeDate} />
+      </Col>
+      <Col>{timeFilter}</Col>
+    </Form.Row>
+  )
 
-  const renderTable = () => {
-    let usersList = reserveInfo.map((info) => {
-      const { sport_id, court_number, date, time_slot } = info
-      return (
-        <tr key={info._id} className="tr-normal">
-          <td>{sportIdToName(sport_id)}</td>
-          <td>{court_number}</td>
-          <td>{date ? format(new Date(date), "dd-MM-yyyy") : ""}</td>
-          <td>{getTimeText(time_slot)}</td>
-          <td>
-            <Button className="btn-normal btn-outline-black" variant="outline-secondary" id={info._id} onClick={handleInfo}>
-              ดูข้อมูล
-            </Button>
-          </td>
-        </tr>
-      )
-    })
-    return usersList
-  }
+  const table = reserveInfo.map((info) => {
+    const { sport_id, court_number, date, time_slot } = info
+    return (
+      <tr key={info._id} className="tr-normal">
+        <td>{sportIdToName(sport_id)}</td>
+        <td>{court_number}</td>
+        <td>{date ? format(new Date(date), "dd-MM-yyyy") : ""}</td>
+        <td>{getTimeText(time_slot)}</td>
+        <td>
+          <Button className="btn-normal btn-outline-black" variant="outline-secondary" id={info._id} onClick={handleInfo}>
+            ดูข้อมูล
+          </Button>
+        </td>
+      </tr>
+    )
+  })
 
   return (
     <div className="allReservation mr-4">
-      {renderFilterSection()}
+      {filterSection}
       <div className="mt-4">
         <Table responsive className="text-center" size="md">
           <thead className="bg-light">
@@ -229,9 +218,15 @@ const AllReservation: FunctionComponent = () => {
               <th></th>
             </tr>
           </thead>
-          <tbody>{renderTable()}</tbody>
+          <tbody>{table}</tbody>
         </Table>
+        <Row>
+          <Col>
+            <PaginationComponent pageNo={pageNo} setPageNo={setPageNo} maxUser={maxUser} maxUserPerPage={maxUserPerPage} />
+          </Col>
+        </Row>
       </div>
+      <ErrModal show={showErr} onClose={() => setShowErr(false)} />
     </div>
   )
 }

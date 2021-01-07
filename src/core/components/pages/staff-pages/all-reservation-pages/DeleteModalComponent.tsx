@@ -1,65 +1,40 @@
 import React from "react"
-import { useHistory, useParams } from "react-router-dom"
-import { DeleteModal, UserInfo } from "../interfaces/reservationSchemas"
+import { UserInfo } from "../interfaces/reservationSchemas"
 import { CustomModal } from "../list-of-all-users-pages/ListOfAllUserModals"
 
-type ConfirmDelInfo = { members: UserInfo[]; requestDelete: () => void }
+type ConfirmDelInfo = { members: UserInfo[] | undefined; requestDelete: () => void }
 
 interface ModalInterface {
-  showModalInfo: DeleteModal
-  setShowModalInfo: React.Dispatch<React.SetStateAction<DeleteModal>>
-  info?: ConfirmDelInfo
+  show: boolean
+  onClose: () => void
+}
+
+interface ConfirmModalInterface extends ModalInterface {
+  info: ConfirmDelInfo
 }
 
 const getAllPhoneNumber = (members: UserInfo[]): string => {
-  let list = ""
-  for (let member of members) list += `- ${member.phone}\n`
+  let list = members.map((member) => `- ${member.phone}`).join("\n")
   return list
 }
 
-export const ConfirmDelModal: React.FC<ModalInterface> = ({ showModalInfo, setShowModalInfo, info }) => {
-  const { showConfirmDel } = showModalInfo
-  const { requestDelete, members } = info as ConfirmDelInfo
+export const ConfirmDeleteModal: React.FC<ConfirmModalInterface> = ({ show, onClose, info }) => {
+  const { requestDelete, members } = info
   return (
     <CustomModal
       title={"คำเตือน"}
-      show={showConfirmDel}
-      body={`การจองดังกล่าวนี้จะถูกลบ\n\n สตาฟกรุณาโทรแจ้งผู้ใช้ตามที่ระบุก่อนกดตกลง\n ${getAllPhoneNumber(members)}`}
-      onCancel={() => {
-        setShowModalInfo({ ...showModalInfo, showConfirmDel: false })
-      }}
+      show={show}
+      body={`การจองดังกล่าวนี้จะถูกลบ\n\n สตาฟกรุณาโทรแจ้งผู้ใช้ตามที่ระบุก่อนกดตกลง\n ${getAllPhoneNumber(members ? members : [])}`}
+      onCancel={onClose}
       onConfirm={requestDelete}
     />
   )
 }
 
-export const ComDelModal: React.FC<ModalInterface> = ({ showModalInfo, setShowModalInfo }) => {
-  const history = useHistory()
-  const { pagename } = useParams<{ pagename: string; _id: string }>()
-  const { showComDel } = showModalInfo
-  return (
-    <CustomModal
-      title={"เสร็จสิ้น"}
-      show={showComDel}
-      body={"ระบบได้ทำการลบการจองเรียบร้อยแล้ว"}
-      onConfirm={() => {
-        setShowModalInfo({ ...showModalInfo, showComDel: false })
-        history.push(`/staff/allReservation/${pagename}`)
-      }}
-    />
-  )
+export const DeleteSuccessfulModal: React.FC<ModalInterface> = ({ show, onClose }) => {
+  return <CustomModal title={"เสร็จสิ้น"} show={show} body={"ระบบได้ทำการลบการจองเรียบร้อยแล้ว"} onConfirm={onClose} />
 }
 
-export const ErrModal: React.FC<ModalInterface> = ({ showModalInfo, setShowModalInfo }) => {
-  const { showErr } = showModalInfo
-  return (
-    <CustomModal
-      title={"เกิดข้อผิดพลาด"}
-      show={showErr}
-      body={"ไม่สามารถลบการจองได้ในขณะนี้"}
-      onConfirm={() => {
-        setShowModalInfo({ ...showModalInfo, showErr: false })
-      }}
-    />
-  )
+export const ErrModal: React.FC<ModalInterface> = ({ show, onClose }) => {
+  return <CustomModal title={"เกิดข้อผิดพลาด"} show={show} body={"ไม่สามารถกระทำการได้ในขณะนี้"} onConfirm={onClose} />
 }
