@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useViewTable } from './disable-court-hook'
 import { useParams, useHistory, useRouteMatch } from 'react-router-dom'
 import { ViewRow, CourtTable } from './disabled-court-table'
@@ -18,10 +18,14 @@ const ViewCourt = () => {
     const { path } = useRouteMatch()
     const history = useHistory()
     const params = useParams<Params>()
+    const currentDate = new Date()
     const { viewData, inProp, rowData, onAddRow, onDeleteRow, setInProp } = useViewTable(params.id)
     const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
     const { isEdit, setIsEdit, error, setError } = useEditCourt()
-
+    const toggleEdit = (e) => {
+        setIsEdit(true)
+        e.preventDefault()
+    }
     const onSubmit = (e) => {
         const formData = {
             sport_id: viewData?.sport_id._id,
@@ -87,11 +91,19 @@ const ViewCourt = () => {
                             <>
                                 <Col className='d-flex flex-column'>
                                     <Form.Label>วันที่เริ่มปิด</Form.Label>
-                                    <DatePicker className='form-control' selected={startDate} onChange={onStartDateChange} required />
+                                    <DatePicker className='form-control'
+                                        selected={startDate ? startDate : add(new Date(viewData?.starting_date ? viewData.starting_date : currentDate), { days: 1 })}
+                                        onChange={onStartDateChange}
+                                        required
+                                    />
                                 </Col>
                                 <Col className='d-flex flex-column'>
                                     <Form.Label>วันสิ้นสุดการปิด</Form.Label>
-                                    <DatePicker className='form-control' selected={endDate} onChange={onEndDateChange} required />
+                                    <DatePicker className='form-control'
+                                        selected={endDate ? endDate : new Date(viewData?.expired_date ? viewData.expired_date : currentDate)}
+                                        onChange={onEndDateChange}
+                                        required
+                                    />
                                 </Col>
                             </>
                         }
@@ -124,7 +136,7 @@ const ViewCourt = () => {
                             <Button variant='outline-pink' className='mr-2' onClick={() => history.push('/staff/disableCourt')} style={{ fontSize: '20px' }}>
                                 กลับ
                     </Button>
-                            <Button variant='pink' onClick={() => setIsEdit(true)}>
+                            <Button variant='pink' onClick={toggleEdit}>
                                 แก้ไข
                     </Button>
                         </>
@@ -132,10 +144,10 @@ const ViewCourt = () => {
                         <>
                             <Button variant='outline-pink mr-2' onClick={() => setIsEdit(false)}>
                                 ยกเลิก
-                            </Button>
+                        </Button>
                             <Button variant='pink' type='submit' onClick={onSubmit} >
                                 บันทึก
-                            </Button>
+                        </Button>
                         </>
                     }
                     {error}
