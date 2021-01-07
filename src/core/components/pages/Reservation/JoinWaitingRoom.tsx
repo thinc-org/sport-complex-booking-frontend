@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { client } from "../../../../axiosConfig"
 import { CustomWaitingRoomModal } from "../../ui/Modals/WaitingRoomModals"
 import { WaitingRoomAccessCode } from './ReservationInterfaces'
-
+import { CreateWaitingRoomErrorMsg } from "./ReservationComponents"
 interface ValidityMessage {
   message: string
 }
@@ -17,6 +17,10 @@ function JoinWaitingRoom() {
   const {t} = useTranslation()
   const history = useHistory()
   const [showWrongAccessCodeModal, setShowWrongAccessCodeModal] = useState(false)
+  const [warningMessage, setWarningMessage] = useState("")
+  const [showWarningMessage, setShowWarningMessage] = useState(false)
+  const [invalidAccount, setInvalidAccount] = useState(true)
+  const [errorType, setErrorType] = useState("danger")
 
   const onSubmit = async (data: WaitingRoomAccessCode) => {
     await client.post<WaitingRoomAccessCode>('/reservation/joinwaitingroom', data)
@@ -33,15 +37,21 @@ function JoinWaitingRoom() {
   const fetchValidity = async () => {
     await client.post<ValidityMessage>('/reservation/checkvalidity')
       .then(({data}) => {
+          setInvalidAccount(false)
+          setErrorType("warning")
           const resMsg = data['message']
           if (resMsg !== "Valid user") {
             const state = {msg: resMsg}
             history.push({pathname: '/banned',state})
           }
       })
-      .catch(() => {
-          const state = {msg: t("youArePenalized")}
-          history.push({pathname: '/banned',state})
+      .catch((error) => {
+        setInvalidAccount(true)
+        if (error.response) {
+          console.log(error.response.data);
+          setWarningMessage(error.response.data.message)
+          setShowWarningMessage(true)
+        }
       })
   }
 
@@ -51,9 +61,10 @@ function JoinWaitingRoom() {
 
   return (
     <div className="wrapper">
-      <div className="mx-auto col-md-6">
+      <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{t("joinWaitingRoom")}</h4>
+      <CreateWaitingRoomErrorMsg show={showWarningMessage} errorRes={warningMessage} type={errorType} />
+      <div className="mx-auto col-md-6">  
         <form onSubmit={handleSubmit(onSubmit)}>
-          <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{t("joinWaitingRoom")}</h4>
           <div className="default-mobile-wrapper mt-4 animated-card">
             <span className="row mt-3">
               <h6 className="mx-3 mt-1 font-weight-bold">{t("waitingRoomPassword")}</h6>
@@ -63,6 +74,7 @@ function JoinWaitingRoom() {
               <input
                 name="access_code"
                 type="text"
+                disabled={invalidAccount}
                 ref={register({
                   required: t("enterCode")!,
                   pattern: {
@@ -78,14 +90,14 @@ function JoinWaitingRoom() {
           </div>
           <br />
           <div className="button-group my-2">
+            <Button variant="pink" type="submit" disabled={invalidAccount}>
+              {t("joinWaitingRoom")}
+            </Button>
             <Link to={"/reservenow"}>
               <Button className="btn-secondary">
                 {t("cancel")}
               </Button>
             </Link>
-            <Button variant="pink" type="submit">
-              {t("joinWaitingRoom")}
-            </Button>
           </div>
         </form>
       </div>

@@ -217,5 +217,16 @@
   "team": "ทีมงาน",
   "teamMsg": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin eget turpis eros. Suspendisse elit a nisi auctor fermentum. Nunc luctus sed arcu sed bibendum.",
   "description": "คำอธิบาย",
-  "descriptionMsg": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+  "descriptionMsg": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  "endOfPenalty": "สิ้นสุดการโดนลงโทษ",
+  "idDoesNotExist": "ID ผู้ใช้ไม่ถูกต้อง",
+  "idDoesNotExist.": "กีฬาชนิดนี้อาจถูกลบไปแล้ว กรุณา refresh และลองใหม่อีกครั้ง",
+  "accountHasToVerify": "บัญชีต้องผ่านการตรวจสอบจากพนักงานก่อน",
+  "alreadyExpired": "บัญชีของคุณหมดอายุแล้ว กรุณาติดต่อเจ้าหน้าที่",
+  "haveToFillInfo": "คุณต้องกรอข้อมูลส่วนตัวให้ครบถ้วนก่อน",
+  "accountBanned": "บัญชีของคุณถูกแบน กรุณาติดต่อเจ้าหน้าที่",
+  "alreadyHaveWaitingRoom": "คุณมีห้องรอการจองแล้ว",
+  "codeIsWrong": "รหัสเข้าห้องรอการจองไม่ถูกต้อง",
+  "notEnoughQuota": "คุณไม่เหลือสิทธิการจองแล้ว",
+  "courtDoesNotExist": "ไม่พบสนาม กรุณาของใหม่"
 }

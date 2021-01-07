@@ -216,5 +216,16 @@
   "team": "Team",
   "teamMsg": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin eget turpis eros. Suspendisse elit a nisi auctor fermentum. Nunc luctus sed arcu sed bibendum.",
   "description": "Description",
-  "descriptionMsg": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+  "descriptionMsg": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  "endOfPenalty": "End of penalty period",
+  "idDoesNotExist": "Invalid user ID.",
+  "idDoesNotExist.": "This sport may already be deleted. Please refresh again.",
+  "accountHasToVerify": "Your account has to verify first.",
+  "alreadyExpired": "Your account has already expired, please contact staff.",
+  "haveToFillInfo": "You have to fill your info first.",
+  "accountBanned": "Your account has been banned, please contact staff.",
+  "alreadyHaveWaitingRoom": "You already have a waiting room.",
+  "codeIsWrong": "The access code is wrong.",
+  "notEnoughQuota": "You do not have enough quotas.",
+  "courtDoesNotExist": "This court does not exist."
 }

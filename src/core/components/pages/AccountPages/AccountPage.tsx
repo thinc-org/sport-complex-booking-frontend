@@ -18,6 +18,7 @@ function AccountPage() {
   const { setCuStudentAccount, setSatitCuPersonelAccount, setOtherAccount } = useContext(UserContext)
   const [account_type, setAccountType] = useState<string>()
   const [penalizeStatus, setPenalizeStatus] = useState<boolean>()
+  const [penalizeEndDate, setPenalizeEndDate] = useState("")
 
   useEffect(() => {
     fetch_account_type()
@@ -28,7 +29,9 @@ function AccountPage() {
       .get<DefaultAccount>("/account_info/")
       .then(({ data }) => {
         const newData = {...data}
+        console.log(data)
         setPenalizeStatus(data.is_penalize)
+        if (data.expired_penalize_date) setPenalizeEndDate(data.expired_penalize_date.toString().substring(0,10))
         if (data.account_type === "CuStudent") {
           setCuStudentAccount(newData as CuStudent)
         } else if (data.account_type === "SatitAndCuPersonel") {
@@ -65,7 +68,7 @@ function AccountPage() {
 
   return (
     <>
-      <PenalizeMessage show={penalizeStatus}/>
+      <PenalizeMessage show={penalizeStatus} penalizeEndDate={penalizeEndDate}/>
       {showPage(account_type)}
     </>
   )
@@ -77,15 +80,19 @@ export default withUserGuard(AccountPage)
 
 interface PenalizeMessageProps {
   show?: boolean,
+  penalizeEndDate: string
 }
 
-const PenalizeMessage:React.FC<PenalizeMessageProps> = ({show}) => {
+const PenalizeMessage:React.FC<PenalizeMessageProps> = ({show, penalizeEndDate}) => {
   const {t} = useTranslation()
   if(!show) return null
   return (
-    <div className="alert alert-danger mx-auto col-md-6 mt-3" role="alert">
-      <h3>{t("youArePenalized")}</h3>
-      <h6>{t("penalizeMessage")}</h6>
+    <div className="mx-4">
+      <div className="alert alert-danger mx-auto col-md-6 mt-3" role="alert">
+        <h3>{t("youArePenalized")}</h3>
+        <h6>{t("penalizeMessage")}</h6>
+        <h6 className="mt-3">{t("endOfPenalty")}: {penalizeEndDate}</h6>
+      </div>
     </div>
   )
 }

@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { client } from "../../../../axiosConfig"
 import {WaitingRoomData, SportData, CourtData} from './ReservationInterfaces'
 import { AxiosResponse } from "axios"
-
+import { CreateWaitingRoomErrorMsg } from "./ReservationComponents"
 
 function CreateWaitingRoom() {
   // States
@@ -41,6 +41,10 @@ function CreateWaitingRoom() {
   const [selectTimeWarning, setSelectTimeWarning] = useState(false)
   const [showCantCreateWaitingRoomModal, setShowCantCreateWaitingRoomModal] = useState(false)
   const [showTimeSlotError, setShowTimeSlotError] = useState(false)
+  const [warningMessage, setWarningMessage] = useState("")
+  const [showWarningMessage, setShowWarningMessage] = useState(false)
+  const [invalidAccount, setInvalidAccount] = useState(true)
+  const [errorType, setErrorType] = useState("danger")
 
   useEffect(() => {
     fetchValidity()
@@ -69,16 +73,17 @@ function CreateWaitingRoom() {
   // [0] check account validity
   const fetchValidity = async () => {
     await client.post('/reservation/checkvalidity')
-      .then((res) => {
-          const resMsg = res['data']['message']
-          if (resMsg !== "Valid user") {
-            const state = {msg: resMsg}
-            history.push({pathname: '/banned',state})
-          }
+      .then(() => {
+          setShowWarningMessage(false)
+          setInvalidAccount(false)
+          setErrorType("warning")
       })
-      .catch(() => {
-          const state = {msg: t("youArePenalized")}
-          history.push({pathname: '/banned',state})
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response.data);
+          setWarningMessage(error.response.data.message)
+          setShowWarningMessage(true)
+        }
       })
   }
   // [1] Fetch Courts
@@ -87,7 +92,13 @@ function CreateWaitingRoom() {
       .get<SportData[]>("http://localhost:3000/court-manager/sports")
       .then(({ data }) => {setSport(data)
       console.log(data)})
-      .catch(() => {})
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response.data);
+          setWarningMessage(error.response.data.message)
+          setShowWarningMessage(true)
+        }
+      })
   }
   // [2] Fetch Quota
   const fetchQuota = async (selectedSportID: string, date: Date) => {
@@ -103,7 +114,14 @@ function CreateWaitingRoom() {
       .then(({ data }) => {
         setquota(data*30)
       })
-      .catch(() => {})
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.data.message === "This Id does not exist.") setInvalidAccount(true)
+          console.log(error.response.data);
+          setWarningMessage(error.response.data.message)
+          setShowWarningMessage(true)
+        }
+      })
   }
   // [3] Fetch Time
   const fetchTime = async (court_number: number, selectedSportID: string, date: Date) => {
@@ -118,7 +136,14 @@ function CreateWaitingRoom() {
     await client
       .post<number[]>("/reservation/checktimeslot", data)
       .then(({ data }) => {setTime(data)})
-      .catch(() => {})
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.data.message === "This Id does not exist.") setInvalidAccount(true)
+          console.log(error.response.data);
+          setWarningMessage(error.response.data.message)
+          setShowWarningMessage(true)
+        }
+      })
   }
   // [4] Post to Backend
   const postDataToBackend = async (data: WaitingRoomData) => {
@@ -135,7 +160,15 @@ function CreateWaitingRoom() {
     }
     await client.post<AxiosResponse>('/reservation/createwaitingroom', newData)
     .then(()=> {history.push({pathname: '/waitingroom'})})
-    .catch(()=> {setShowCantCreateWaitingRoomModal(true)})
+    .catch((error)=> {
+      setShowCantCreateWaitingRoomModal(true)
+      if (error.response) {
+        if (error.response.data.message === "This Id does not exist.") setInvalidAccount(true)
+        console.log(error.response.data);
+        setWarningMessage(error.response.data.message)
+        setShowWarningMessage(true)
+      }
+    })
   }
 
   const formatTime = (element: number) => {
@@ -175,11 +208,11 @@ function CreateWaitingRoom() {
 
   return (
     <div className="Orange">
+    <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{t("createWaitingRoom")}</h4>
+    <CreateWaitingRoomErrorMsg show={showWarningMessage} errorRes={warningMessage} type={errorType} />
     <div className="mx-auto col-md-6">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{t("createWaitingRoom")}</h4>
-        <div className="mx">
-        </div>
+        
         <div className="default-mobile-wrapper mt-4 animated-card">
           <span className="row mt">
             <label className="form-label mt-2 ml-3">{t("dateSelection")}</label>
@@ -188,6 +221,7 @@ function CreateWaitingRoom() {
             <DatePicker
               className="form-control date-picker select-drop-down"
               selected={date}
+              disabled={invalidAccount}
               onChange={(date: Date) => {
                 const fixedDate = new Date(date.setHours(0,0,0,0))
                 setDate(fixedDate)
@@ -204,7 +238,7 @@ function CreateWaitingRoom() {
           <div className="mt-2">
             <label className="form-label mt-2">{t("sportSelection")}</label>
             <div>
-              <select name="sport_id" ref={register} className="select-drop-down" onChange={() => {
+              <select name="sport_id" ref={register} className="select-drop-down" disabled={invalidAccount} onChange={() => {
                 setShowCourt(false)
                 setShowTime(false)
                 setValue("court_number", "")
@@ -226,7 +260,7 @@ function CreateWaitingRoom() {
             <div>
               <label className="form-label mt-2">{t("court")}</label>
               <div>
-                <select name="court_number" className="select-drop-down" ref={register}  disabled={!showCourt} onChange={()=> {
+                <select name="court_number" className="select-drop-down" ref={register}  disabled={!showCourt || invalidAccount} onChange={()=> {
                   setShowTime(false)
                   if (getValues("court_number") !== "") {
                     setValue("time_slot", [])
@@ -274,12 +308,12 @@ function CreateWaitingRoom() {
         </div>
         <br />
         <div className="button-group my-2">
+          <Button type="submit" variant="pink" disabled={invalidAccount || showDateWarning || showTimeSlotError || !showCourt || !showTime} onClick={() => {setShow(true)}}>
+            {t("createWaitingRoom")}
+          </Button>
           <Link to={"/reservenow"}>
             <Button className="btn-secondary">{t("cancel")}</Button>
           </Link>
-          <Button type="submit" variant="pink" disabled={showDateWarning || showTimeSlotError || !showCourt || !showTime} onClick={() => {setShow(true)}}>
-            {t("createWaitingRoom")}
-          </Button>
         </div>
         {/* DetailsModal */}
         <DetailsModal show={show} setShow={setShow} sportName={sportName} details={details} date={date} times={times} formatTime={formatTime} postDataToBackend={postDataToBackend} />
