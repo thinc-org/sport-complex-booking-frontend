@@ -12,7 +12,7 @@ import { client } from '../../../../../axiosConfig';
 import { DeleteButton } from './button'
 const AddCourt = () => {
     const history = useHistory()
-    const { inProp, rowData, onAddRow, onDeleteRow, setInProp } = useRow()
+    const { inProp, rowData, onAddRow, onDeleteRow, setInProp, validateTimeSlot } = useRow()
     const { register, handleSubmit, setError, errors, clearErrors, control } = useForm()
     const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
     const { option } = useOption()
@@ -43,7 +43,7 @@ const AddCourt = () => {
 
     return (
         <Container fluid>
-            <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} />
+            <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} validate={validateTimeSlot} />
             <ErrorAlert inProp={show} handleClose={handleAlert} header={'วันที่ไม่ถูกต้อง'} message={'วันที่ไม่ถูกต้อง'} />
             <div className='default-wrapper pt-3 pb-4' style={{ boxShadow: '0 0 0 0' }}>
                 <h4 style={{ paddingBottom: '15px' }}>

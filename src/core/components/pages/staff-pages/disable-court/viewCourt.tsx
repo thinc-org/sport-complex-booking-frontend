@@ -18,8 +18,7 @@ const ViewCourt = () => {
     const { path } = useRouteMatch()
     const history = useHistory()
     const params = useParams<Params>()
-    const currentDate = new Date()
-    const { viewData, inProp, rowData, onAddRow, onDeleteRow, setInProp, startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useViewTable(params.id)
+    const { viewData, inProp, rowData, onAddRow, onDeleteRow, setInProp, startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, validateTimeSlot } = useViewTable(params.id)
     const { isEdit, setIsEdit, error, setError } = useEditCourt()
     const toggleEdit = (e) => {
         setIsEdit(true)
@@ -43,7 +42,7 @@ const ViewCourt = () => {
     return (
         <Container fluid>
             <ErrorAlert inProp={show} handleClose={handleAlert} header={'วันที่ไม่ถูกต้อง'} message={'วันที่ไม่ถูกต้อง'} />
-            <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} />
+            <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} validate={validateTimeSlot} />
             <Form className='default-wrapper pt-3 pb-4' style={{ boxShadow: '0 0 0 0' }}>
                 <h4 style={{ paddingBottom: '15px' }}>
                     ฟิลเตอร์

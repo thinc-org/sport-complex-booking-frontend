@@ -1,3 +1,5 @@
+import { SubmitHandler } from "react-hook-form";
+
 export interface RowProps {
     starting_date: Date,
     expired_date: Date,
@@ -75,4 +77,11 @@ export interface ModalProps {
     handleClose: ((event: React.MouseEvent) => void),
     canCancel?: boolean,
     onCancel?: ((event: React.MouseEvent) => void)
+}
+export interface FormModalProps {
+    inProp: boolean,
+    handleClose: any,
+    onSubmit: SubmitHandler<Record<string, any>>,
+    validate: Function
+
 }

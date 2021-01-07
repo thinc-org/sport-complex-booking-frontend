@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, ComponentType } from 'react';
 import { Option, RowProps, QueryParams, ViewResponse, ViewRowProps, disable_time, View, Sport } from './disable-court-interface'
 import add from 'date-fns/addDays'
 import { client } from '../../../../../axiosConfig'
+import { Item } from 'react-bootstrap/lib/Carousel';
 
 export const toViewRowProps = (data: disable_time[] | undefined): ViewRowProps[] => {
     const result: ViewRowProps[] = []
@@ -19,8 +20,18 @@ export const toViewRowProps = (data: disable_time[] | undefined): ViewRowProps[]
 export const useRow = (initial: ViewRowProps[] = []) => {
     const [inProp, setInProp] = useState(false)
     const [rowData, setRowData] = useState<ViewRowProps[]>(initial)
+    const validateTimeSlot = (row) => {
+        const newTimeSlot = [parseInt(row.timeSlotStart), parseInt(row.timeSlotEnd)]
+        const rowWithSameDay = rowData.filter((r) => r.day === parseInt(row.day))
+        if (rowWithSameDay.length === 0) return true
+        for (let i = 0; i < rowWithSameDay.length; i++) {
+            let currentTimeSlot = rowWithSameDay[i].time_slot
+            if ((newTimeSlot[0] >= currentTimeSlot[0] && newTimeSlot[0] <= currentTimeSlot[currentTimeSlot.length - 1]) ||
+                (newTimeSlot[0] <= currentTimeSlot[0] && newTimeSlot[1] >= currentTimeSlot[0])) return false
+        }
+        return true
+    }
     const onAddRow = (f) => {
-
         setRowData(prev => {
             const timeSlot: number[] = []
             for (let i = parseInt(f.timeSlotStart); i <= f.timeSlotEnd; i++) {
@@ -30,6 +41,7 @@ export const useRow = (initial: ViewRowProps[] = []) => {
             return [...prev, newRow]
         })
         setInProp(false)
+
     }
     const onDeleteRow = (indx) => {
 
@@ -40,7 +52,7 @@ export const useRow = (initial: ViewRowProps[] = []) => {
             return arr;
         })
     }
-    return { inProp, rowData, onAddRow, onDeleteRow, setInProp, toViewRowProps, setRowData }
+    return { inProp, rowData, onAddRow, onDeleteRow, setInProp, toViewRowProps, setRowData, validateTimeSlot }
 }
 
 export const useEditCourt = () => {
@@ -95,7 +107,7 @@ export const useOption = () => {
 export const useViewTable = (params) => {
     const [viewData, setViewData] = useState<View>()
     const [error, setError] = useState<string>()
-    const { inProp, rowData, onAddRow, onDeleteRow, setInProp, setRowData } = useRow()
+    const { inProp, rowData, onAddRow, onDeleteRow, setInProp, setRowData, validateTimeSlot } = useRow()
     const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, setStartDate, setEndDate } = useDate()
     async function fetchViewData() {
         await client.get<ViewResponse>(`/courts/disable-courts/${params}`,)
@@ -110,7 +122,7 @@ export const useViewTable = (params) => {
     useEffect(() => {
         fetchViewData()
     }, [])
-    return { viewData, inProp, rowData, onAddRow, onDeleteRow, setInProp, error, startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert }
+    return { viewData, inProp, rowData, onAddRow, onDeleteRow, setInProp, error, startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, validateTimeSlot }
 
 }
 
