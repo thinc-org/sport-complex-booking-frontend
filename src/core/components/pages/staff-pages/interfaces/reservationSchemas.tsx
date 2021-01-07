@@ -4,7 +4,7 @@ export default interface SuccessfulReservation {
   court_number: number
   date: Date
   time_slot: number[]
-  list_member: { member_object_id: string }[]
+  list_member: UserInfo[]
   is_check: boolean
 }
 
@@ -14,7 +14,7 @@ export interface WaitingRoom {
   court_number: number
   date: Date
   time_slot: number[]
-  list_member: { member_object_id: string }[]
+  list_member: UserInfo[]
   access_code: string
   expired_time: Date
 }
@@ -40,9 +40,9 @@ export interface UserInfo {
   phone: string
 }
 
-// Modals //
-export interface DeleteModal {
-  showConfirmDel: boolean
-  showComDel: boolean
-  showErr: boolean
+export interface TimeObject {
+  startHour: string
+  startMinute: string
+  endHour: string
+  endMinute: string
 }

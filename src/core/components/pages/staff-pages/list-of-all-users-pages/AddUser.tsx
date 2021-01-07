@@ -78,7 +78,7 @@ const AddUser: FunctionComponent = () => {
           <Form.Control ref={register} name="username" defaultValue={user.username} />
         </Form.Group>
         <AlertInvalidUsername show={showAlerts} />
-        {renderPasswordSection()}
+        <ChangePasswordComponent selectingSatit={selectingSatit} register={register} />
         <AlertErrorPassword show={showAlerts} />
       </Form>
     )
@@ -137,16 +137,12 @@ const AddUser: FunctionComponent = () => {
               <Form.Control ref={register} name="username" defaultValue={username} />
             </Col>
           </Row>
-          {renderPasswordSection()}
+          <ChangePasswordComponent selectingSatit={selectingSatit} register={register} />
           <AlertInvalidUsername show={showAlerts} />
           <AlertErrorPassword show={showAlerts} />
         </Form.Group>
       </Form>
     )
-  }
-
-  const renderPasswordSection = () => {
-    return <ChangePasswordComponent selectingSatit={selectingSatit} register={register} />
   }
 
   const renderModals = () => {
