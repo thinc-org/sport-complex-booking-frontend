@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useState} from "react"
 import { Form, Row, Button, Modal } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 
@@ -50,6 +50,8 @@ export interface AddSportProps {
 
 export const AddSport:React.FC<AddSportProps> = ({show, setShow, onSubmitAddSport}) => {
   const { register, handleSubmit, getValues, setValue, errors } = useForm()
+  const [reservationTime, setReservationTime] = useState(60)
+  const [minMembers, setMinMembers] = useState(5)
   return (
     <Modal
       show={show}
@@ -67,14 +69,14 @@ export const AddSport:React.FC<AddSportProps> = ({show, setShow, onSubmitAddSpor
           <Form.Group>
             <Row>
               <Form.Label>ประเภทกีฬา (ภาษาไทย)</Form.Label>
-              <input type="text" ref={register({
+              <input type="text" placeholder="ประเภทกีฬาภาษาไทย" ref={register({
                 required: "กรุณากรอกข้อมูล"
               })} name="sport_name_th" className="form-control" />
             </Row>
             {errors.sport_name_th && <p id="input-error">{errors.sport_name_th.message}</p>}
             <Row>
               <Form.Label>ประเภทกีฬา (ภาษาอังกฤษ)</Form.Label>
-              <input type="text" ref={register({
+              <input type="text" placeholder="ประเภทกีฬาภาษาอังกฤษ" ref={register({
                 required: "กรุณากรอกข้อมูล"
               })} name="sport_name_en" className="form-control" />
             </Row>
@@ -86,22 +88,34 @@ export const AddSport:React.FC<AddSportProps> = ({show, setShow, onSubmitAddSpor
         <h5 className="card-header">เวลาการจองมากที่สุด</h5>
           <div className="card-body">
             <span className="d-flex justify-content-around">
-              <Button  variant="pink" className="button"
-                onClick={() => { setValue('quota', parseInt(getValues('quota')) -60)}}>
+              <Button  variant="pink" className="button" disabled={reservationTime <= 60}
+                onClick={() => { 
+                  setValue('quota', parseInt(getValues('quota')) -60)
+                  setReservationTime(reservationTime -60)
+                }}>
                 -60
               </Button>
-              <Button variant="pink" className="button"
-                onClick={() => {setValue('quota', parseInt(getValues('quota')) -30)}}>
+              <Button variant="pink" className="button" disabled={reservationTime <= 30}
+                onClick={() => {
+                  setValue('quota', parseInt(getValues('quota')) -30)
+                  setReservationTime(reservationTime -30)
+                }}>
                 -30
               </Button>
-              <input type="number" ref={register} name="quota" defaultValue="60" className="form-control w-25"/>
+              <input type="number" readOnly={true} ref={register} name="quota" defaultValue={60} className="form-control square-input"/>
               <span className="mt-3">นาที</span>
               <Button variant="pink" className="button"
-                onClick={() => { setValue('quota',parseInt(getValues('quota')) +30)}}>
+                onClick={() => {
+                  setValue('quota', parseInt(getValues('quota')) +30)
+                  setReservationTime(reservationTime +30)
+                }}>
                 +30
               </Button>
               <Button variant="pink"  className="button"
-                onClick={() => {setValue('quota', parseInt(getValues('quota')) +60)}}>
+                onClick={() => {
+                  setValue('quota', parseInt(getValues('quota')) +60)
+                  setReservationTime(reservationTime +60)
+                }}>
                 +60
               </Button>
             </span>
@@ -112,22 +126,34 @@ export const AddSport:React.FC<AddSportProps> = ({show, setShow, onSubmitAddSpor
         <h5 className="card-header">จํานวนผู้จองขั้นตั่า</h5>
           <div className="card-body">
             <span className="d-flex justify-content-around">
-              <Button variant="pink" className="button"
-                onClick={() => {setValue('required_user', parseInt(getValues('required_user')) -5)}}>
+              <Button variant="pink" className="button" disabled={minMembers <= 5}
+                onClick={() => {
+                  setValue('required_user', parseInt(getValues('required_user')) -5)
+                  setMinMembers(minMembers -5)
+                }}>
                 -5
               </Button>
-              <Button variant="pink" className="button"
-                onClick={() => {setValue('required_user', parseInt(getValues('required_user')) -1)}}>
+              <Button variant="pink" className="button" disabled={minMembers <= 1}
+                onClick={() => {
+                  setValue('required_user', parseInt(getValues('required_user')) -1)
+                  setMinMembers(minMembers -1)
+                }}>
                 -1
               </Button>
-              <input type="number" ref={register} name="required_user" defaultValue="5" className="form-control w-25"/>
+              <input type="number" readOnly={true} ref={register} name="required_user" defaultValue="5" className="form-control square-input"/>
               <span className="mt-3"> คน</span>
               <Button variant="pink"className="button" 
-                onClick={() => {setValue('required_user', parseInt(getValues('required_user')) + 1)}}>
+                onClick={() => {
+                  setValue('required_user', parseInt(getValues('required_user')) +1)
+                  setMinMembers(minMembers +1)
+                }}>
                 +1
               </Button>
               <Button variant="pink"className="button"
-                onClick={() => {setValue('required_user', parseInt(getValues('required_user')) + 5)}}>
+                onClick={() => {
+                  setValue('required_user', parseInt(getValues('required_user')) +5)
+                  setMinMembers(minMembers +5)
+                }}>
                 +5
               </Button>
             </span>
@@ -204,10 +230,10 @@ export interface EditSportProps {
           <h5 className="card-header">เวลาการจองมากที่สุด</h5>
             <div className="card-body">
               <span className="d-flex justify-content-around">
-                <Button variant="pink" className="button" disabled={currentSport['quota']<= 0}
+                <Button variant="pink" className="button" disabled={currentSport['quota']<= 2}
                   onClick={() => {setCurrentSport(({...currentSport!, quota: currentSport!['quota']-2}))}}
                   >-60</Button>
-                <Button variant="pink" className="button" disabled={currentSport['quota']<= 0}
+                <Button variant="pink" className="button" disabled={currentSport['quota']<= 1}
                   onClick={() => {setCurrentSport(({...currentSport!, quota: currentSport!['quota']-1}))}}>-30</Button>
                 <span className="mt-3">{currentSport!['quota'] * 30} นาที</span>
                 <Button variant="pink" className="button"
@@ -224,10 +250,10 @@ export interface EditSportProps {
           <h5 className="card-header">จํานวนผู้จองขั้นตั่า</h5>
             <div className="card-body">
               <span className="d-flex justify-content-around">
-                <Button variant="pink" className="button" disabled={currentSport['required_user']<= 0}
+                <Button variant="pink" className="button" disabled={currentSport['required_user']<= 2}
                   onClick={() => { setCurrentSport(({...currentSport!, required_user: currentSport!['required_user']-2}))}}
                 >-2</Button>
-                <Button  variant="pink" className="button" disabled={currentSport['required_user']<= 0}
+                <Button  variant="pink" className="button" disabled={currentSport['required_user']<= 1}
                   onClick={() => {setCurrentSport(({...currentSport!, required_user: currentSport!['required_user']-1}))}}
                 >-1 </Button>
                 <span className="mt-3">{currentSport!['required_user']} คน</span>
@@ -246,7 +272,6 @@ export interface EditSportProps {
           >ยกเลิก</Button>
           <Button variant="pink" className="btn-normal"
             onClick={() => {
-              console.log(currentSport)
               sendEdittedSportInfo(currentSport)
             }}
           >ตกลง</Button>

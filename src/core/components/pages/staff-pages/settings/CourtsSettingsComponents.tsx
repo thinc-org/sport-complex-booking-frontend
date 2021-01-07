@@ -3,6 +3,32 @@ import { Form, Row, Col, Button, Modal } from "react-bootstrap"
 import TimePicker from 'react-time-picker';
 import { useForm } from "react-hook-form"
 
+const OpenTimeCalculation = (time:string) => {
+  let equation: number = parseInt(time.substring(0, 2)) * 2 + 1 + (Math.floor(parseInt(time.substring(3, 5)) / 30));
+  return equation;
+}
+
+const CloseTimeCalculation =(time:string) => {
+  let equation: number = parseInt(time.substring(0, 2)) * 2 + 1 + (Math.floor(parseInt(time.substring(3, 5)) / 30));
+  return equation-1;
+}
+
+const invalidTime = (openTime: string, closeTime: string): boolean =>  {
+  return (!['00', '30'].includes(openTime.slice(openTime.length-2)) || !['00', '30'].includes(closeTime.slice(closeTime.length-2)))
+}
+const openAfterClose = (formattedOpenTime: number, formattedCloseTime: number): boolean => {
+  if (formattedOpenTime >= formattedCloseTime) return true
+  else return false
+}
+
+const formatOpenTime = (openTime: string) => {
+  return (parseInt(openTime.substring(0, 2)) * 2 + 1) + (Math.floor(parseInt(openTime.substring(3, 5)) / 30))
+}
+
+const formatCloseTime = (closeTime: string) => {
+  return (parseInt(closeTime.substring(0, 2)) * 2) + (Math.floor(parseInt(closeTime.substring(3, 5)) / 30))
+}
+
 export interface NoCourtsModalProps {
   show: boolean
   setShow: (value: boolean) => void
@@ -61,9 +87,8 @@ export interface EditCourtProps {
 export const EditCourt: React.FC<EditCourtProps> = ({ show, setShow, openTime, closeTime, onChangeOpenTime, onChangeCloseTime, courts, currentCourt, currentSportName, currentSportId, updateCourt }) => {
   const { register, handleSubmit } = useForm()
   const onSubmitEditCourt = (data: CourtData) => {
-    console.log(data)
-    const formattedOpenTime = (parseInt(openTime.substring(0, 2)) * 2 + 1) + (Math.floor(parseInt(openTime.substring(3, 5)) / 30))
-    const formattedCloseTime = (parseInt(closeTime.substring(0, 2)) * 2 + 1) + (Math.floor(parseInt(closeTime.substring(3, 5)) / 30))
+    const formattedOpenTime = formatOpenTime(openTime)
+    const formattedCloseTime = formatCloseTime(closeTime)
     const newCourt = { ...data, court_num: currentCourt!['court_num'], open_time: formattedOpenTime, close_time: formattedCloseTime }
     courts.forEach((court, i) => {
       if (court['court_num'] === currentCourt!['court_num']) {
@@ -72,6 +97,7 @@ export const EditCourt: React.FC<EditCourtProps> = ({ show, setShow, openTime, c
     })
     updateCourt(currentSportId)
   }
+
   return (
     <Modal
       show={show}
@@ -100,6 +126,8 @@ export const EditCourt: React.FC<EditCourtProps> = ({ show, setShow, openTime, c
               <TimePicker className="time-picker mb-5" value={closeTime} onChange={onChangeCloseTime} disableClock={true} type="number" ref={register} name="close_time" />
             </Col>
           </Row>
+          {invalidTime(openTime, closeTime) && <p className="input-error">กรุณากำหนดเวลาเป็นช่วงละครึ่งชั่วโมง</p>} 
+          {openAfterClose(formatOpenTime(openTime), formatCloseTime(closeTime)) && <p className="input-error">กรุณากำหนดเวลาปิดหลังเวลาเปิด</p>}
         </Modal.Body>
         <Modal.Footer>
           <Button
@@ -187,15 +215,14 @@ export interface AddCourtFuncProps {
 
 export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({ show, setShow, onChangeOpenTime, onChangeCloseTime, openTime, closeTime, courts, updateCourt, currentSportId }) => {
   const { register, handleSubmit, errors } = useForm()
+  const formattedOpenTime = (OpenTimeCalculation(openTime))
+  const formattedCloseTime = (CloseTimeCalculation(closeTime))
   const onSubmitAddCourt = (data: CourtData) => {
-    console.log(data)
-    const formattedOpenTime = (TimeCalculation(openTime))
-    const formattedCloseTime = (TimeCalculation(closeTime))
     const newCourt = { ...data, court_num: parseInt(data.court_num + ''), open_time: formattedOpenTime, close_time: formattedCloseTime }
     courts.push(newCourt)
     updateCourt(currentSportId)
   }
-
+  
   return (
     <Modal
       show={show}
@@ -214,20 +241,25 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({ show, setShow, onCha
             <Row className="mx-1">
               <Form.Label>เลขคอร์ด</Form.Label>
               <Form.Control id="court_num" type="number" ref={register({
-                required: "กรุณากรอกข้อมูล"
+                min: 1,
+                required: "กรุณากรอกข้อมูล",
               })} name="court_num" placeholder="ตัวอย่าง 1" />
             </Row>
+            {errors.court_num && errors.court_num.type === "min" &&  <p id="input-error">ไม่สามารถตั้งหมายเลขคอร์ดเป็นเลขติดลบได้</p> }
             {errors.court_num && <p id="input-error">{errors.court_num.message}</p>}
             <Row className="mt-3 mx-1">
               <Col className="p-0">
                 <p className="font-weight-bold">เวลาเปิด</p>
                 <TimePicker className="time-picker mb-5" value={openTime} onChange={onChangeOpenTime} disableClock={true} type="number" ref={register} name="open_time" />
+                
               </Col>
               <Col className="p-0">
                 <p className="font-weight-bold">เวลาปิด</p>
                 <TimePicker className="time-picker mb-5" value={closeTime} onChange={onChangeCloseTime} disableClock={true} type="number" ref={register} name="close_time" />
               </Col>
             </Row>
+            {invalidTime(openTime, closeTime) && <p className="input-error">กรุณากำหนดเวลาเป็นช่วงละครึ่งชั่วโมง</p>} 
+            {openAfterClose(formattedOpenTime, formattedCloseTime) && <p className="input-error">กรุณากำหนดเวลาปิดหลังเวลาเปิด</p>}
           </Form.Group>
         </div>
         <Modal.Footer>
@@ -243,6 +275,7 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({ show, setShow, onCha
           <Button
             type="submit"
             variant="pink"
+            disabled={invalidTime(openTime, closeTime) || openAfterClose(formattedOpenTime, formattedCloseTime)}
             className="btn-normal"
           >
             ตกลง
@@ -253,7 +286,3 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({ show, setShow, onCha
   )
 }
 
-function TimeCalculation(Time:string) {
-  let equation: number = parseInt(Time.substring(0, 2)) * 2 + 1 + (Math.floor(parseInt(Time.substring(3, 5)) / 30));
-  return equation;
-}

@@ -37,7 +37,6 @@ export default function SportsSettings() {
 
   const handleSearch = (e) => {
     e.preventDefault()
-    console.log(searchName)
     requestSports(searchName)
   }
 
@@ -72,10 +71,8 @@ export default function SportsSettings() {
     const start = (pageNo -1) * 10
     const end = pageNo * 10 
     const search_filter =  query ? query : "$"
-    console.log("start " + start)
     await client.get<SportData[]>('/court-manager/'+start+ "/" +end + "/" + search_filter)
       .then(({data}) => {
-        console.log(data)
         setSports(data['sport_list'])
         setMaxSport(data['allSport_length'])
       })
@@ -84,7 +81,6 @@ export default function SportsSettings() {
 
   const onSubmitAddSport = (data: SportData) => {
     const newData = {...data, quota: data.quota/30, required_user: parseInt(data.required_user+'')}
-    console.log(newData)
     sendNewSportInfo(newData)
   }
 
@@ -136,22 +132,22 @@ export default function SportsSettings() {
   }  
 
   const handlePagination = (next_page: number) => {
-    let max_page: number = Math.floor((maxSport + 9) / 10)
-    if (next_page >= 1 && next_page <= max_page) {
+    let maxPage: number = Math.floor((maxSport + 9) / 10)
+    if (next_page >= 1 && next_page <= maxPage) {
       requestSports()
     }
     
   }
 
   const loadPagination = () => {
-    let max_page: number = Math.floor((maxSport + 9) / 10)
+    let maxPage: number = Math.floor((maxSport + 9) / 10)
     let numList: Array<number> = []
     let i = 0
     while (numList.length < 5) {
       let page = pageNo + i - 2
-      if (page >= 1 && page <= max_page) {
+      if (page >= 1 && page <= maxPage) {
         numList.push(page)
-      } else if (page > max_page) {
+      } else if (page > maxPage) {
         break
       }
       i++
@@ -164,8 +160,6 @@ export default function SportsSettings() {
           key={num}
           onClick={() => {
             setPageNo(num)
-            console.log(pageNo)
-            console.log("GOTO:" + num)
             handlePagination(num)
           }}
         >
@@ -176,13 +170,18 @@ export default function SportsSettings() {
     return (
       <Pagination className="justify-content-md-end">
         <Pagination.Prev onClick={() => {
-          setPageNo(pageNo -1)
-          handlePagination(pageNo - 1)
+          if (pageNo > 1) {
+            setPageNo(pageNo -1)
+            handlePagination(pageNo - 1)
+          }
         }}/>
         {elementList}
         <Pagination.Next onClick={() => {
-          setPageNo(pageNo + 1)
-          handlePagination(pageNo + 1)
+          if (pageNo < maxPage) {
+            setPageNo(pageNo + 1)
+            handlePagination(pageNo + 1)
+          }
+          
         }}/>
       </Pagination>
     )
