@@ -140,27 +140,24 @@ export interface ContactPerson {
 
 export interface RejectInfo {
   prefix: boolean
+  gender: boolean
   name_th: boolean
   surname_th: boolean
   name_en: boolean
   surname_en: boolean
   birthday: boolean
   national_id: boolean
-  gender: boolean
   marital_status: boolean
   address: boolean
-  phone: boolean
-  home_phone: boolean
   personal_email: boolean
+  home_phone: boolean
+  phone: boolean
+  medical_condition: boolean
   contact_person_prefix: boolean
   contact_person_name: boolean
   contact_person_surname: boolean
   contact_person_home_phone: boolean
   contact_person_phone: boolean
-  medical_condition: boolean
-  membership_type: boolean
-  username: boolean
-  password: boolean
   user_photo: boolean
   medical_certificate: boolean
   national_id_photo: boolean
@@ -170,27 +167,24 @@ export interface RejectInfo {
 
 export const RejectInfoLabel = {
   prefix: "Prefix",
+  gender: "Gender",
   name_th: "Thai name",
   surname_th: "Thai surname",
   name_en: "English name",
   surname_en: "English surname",
   birthday: "Birthdate",
   national_id: "National ID number",
-  gender: "Gender",
   marital_status: "Marital status",
   address: "Address",
-  phone: "Mobile phone",
-  home_phone: "Home phone",
   personal_email: "Email",
+  home_phone: "Home phone",
+  phone: "Mobile phone",
+  medical_condition: "Medical condition",
   contact_person_prefix: "Contact person's prefix",
   contact_person_name: "Contact person's name",
   contact_person_surname: "Contact person's surname",
   contact_person_home_phone: "Contact person's home phone",
   contact_person_phone: "Contact person's mobile phone",
-  medical_condition: "Medical condition",
-  membership_type: "Membership type",
-  username: "Username",
-  password: "Password",
   user_photo: "Photo",
   medical_certificate: "Medical certificate",
   national_id_photo: "National ID / Passport photo",
