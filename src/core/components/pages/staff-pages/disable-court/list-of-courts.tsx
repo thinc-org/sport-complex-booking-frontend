@@ -17,7 +17,7 @@ const ListOfCourts = () => {
     const { path } = useRouteMatch()
     const { data, maxPage, page, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete, isError, setIsError } = useTableWithPagination()
     const { register, handleSubmit, setError, errors, control, setValue } = useForm();
-    const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
+    const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, setStartDate, setEndDate } = useDate()
     const watchSports = useWatch({ control, name: 'sports', defaultValue: '' })
     const { option } = useOption()
     const onSelectStartDate = () => {
@@ -63,7 +63,7 @@ const ListOfCourts = () => {
                                         return <option value={court.court_num} key={court._id}>{court.court_num}</option>
                                     })}
                             </Form.Control>
-                            <div >
+                            <div className='d-flex flex-row position-relative mr-3'>
                                 <label
                                     className='floating-label'
                                     onClick={onSelectStartDate}
@@ -71,8 +71,9 @@ const ListOfCourts = () => {
                                     วันเริ่มต้นการปิด
                                 </label>
                                 <DatePicker className='form-control' selected={startDate} onChange={onStartDateChange} ref={startDateRef} />
+                                <Button variant='outline-transparent' onClick={() => setStartDate(undefined)}>ลบ</Button>
                             </div>
-                            <div>
+                            <div className='d-flex flex-row position-relative mr-3'>
                                 <label
                                     className='floating-label'
                                     onClick={onSelectEndDate}
@@ -80,6 +81,7 @@ const ListOfCourts = () => {
                                     วันสิ้นสุดการปิด
                                 </label>
                                 <DatePicker className='form-control' selected={endDate} onChange={onEndDateChange} ref={endDateRef} />
+                                <Button variant='outline-transparent' onClick={() => setEndDate(undefined)}>ลบ</Button>
                             </div>
                         </div>
                         <Button className='disable-court-button' type='submit' variant='pink'>
