@@ -58,7 +58,7 @@ const ReservationDetail: FunctionComponent = () => {
   // useEffects //
   useEffect(() => {
     requestInfo()
-  }, [])
+  }, [pagename, _id])
 
   useEffect(() => {
     client({
