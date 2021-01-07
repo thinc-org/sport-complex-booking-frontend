@@ -20,8 +20,8 @@ export default function CourtsSettings() {
   const [showEditCourt, setShowEditCourt] = useState(false)
   const [showDeleteCourt, setShowDeleteCourt] = useState(false)
   const [showError, setShowError] = useState(false)
-  const [openTime, onChangeOpenTime] = useState('00:00');
-  const [closeTime, onChangeCloseTime] = useState('00:00');
+  const [openTime, onChangeOpenTime] = useState('08:00');
+  const [closeTime, onChangeCloseTime] = useState('20:00');
   const [sports, setSports] = useState(['sportID1'])
   const [sportsList, setSportsList] = useState([''])
   const [currentSportId, setCurrentSportId] = useState('$')
@@ -42,7 +42,6 @@ export default function CourtsSettings() {
   const requestSports = async () => {
     await client.get<AxiosResponse>('/court-manager/0/999/' + currentSportId)
       .then((data) => {
-        console.log(data['data'])
         const newSport = ['temp']
         data['data']['sport_list'].forEach((sport: string)=> {
           newSport.push(sport)
@@ -56,12 +55,9 @@ export default function CourtsSettings() {
   const requestCourts = async (sportId: string) => {
     await client.get<AxiosResponse>('/court-manager/' + sportId)
       .then((data) => {
-        console.log(data)
-        console.log(data['data']['list_court'])
         setCourts(data['data']['list_court'])
       })
-      .catch((response) => {
-        console.log(response)
+      .catch(() => {
         setShowError(true)
       }) 
   }
@@ -75,15 +71,12 @@ export default function CourtsSettings() {
       sport_id: sportId,
       new_setting: newCourts
     }
-    console.log(data)
     await client.put<AxiosResponse>('/court-manager/court-setting/update', data)
-      .then((data) => {
-        console.log(data)
+      .then(() => {
         setShowDeleteCourt(false)
         requestCourts(currentSportId)
       })
-      .catch((response) => {
-        console.log(response)
+      .catch(() => {
         setShowError(true)
         requestCourts(currentSportId)
       })
@@ -94,16 +87,13 @@ export default function CourtsSettings() {
       sport_id: sportId,
       new_setting: courts
     }
-    console.log(data)
     await client.put<AxiosResponse>('/court-manager/court-setting/update', data)
-      .then((data) => {
-        console.log(data)
+      .then(() => {
         requestCourts(currentSportId)
         setShowEditCourt(false)
         setShowAddCourt(false)
       })
-      .catch((response) => {
-        console.log(response)
+      .catch(() => {
         setShowError(true)
         requestCourts(currentSportId)
       })
@@ -122,8 +112,8 @@ export default function CourtsSettings() {
 
   const renderCourtsTable = () => {
     let courtList = courts.map((court, i)=> {
-      const openTime = Math.floor(court['open_time']! / 2) + ":" + (((court['open_time']! -1)* 30)%60).toString().substring(0,1) + "0"
-      const closeTime = Math.floor(court['close_time']! / 2) + ":" + (((court['close_time']!-1) * 30)%60).toString().substring(0,1) + "0"
+      const openTime = Math.floor((court['open_time']!-1) / 2) + ":" + (Math.floor((court['open_time']!) % 2) === 0 ? "30" : "00")
+      const closeTime = Math.floor((court['close_time']!) / 2) + ":" + (Math.floor((court['close_time']! + 1) % 2) !== 0 ? "00" : "30")
       if (court['sport_name_th'] === "") return (<div className="alert alert-danger mt-3" role="alert">กรุณาเลือกชนิดกีฬา</div>)
       return(
         <tr key={i} className="tr-normal">
@@ -136,6 +126,8 @@ export default function CourtsSettings() {
           onClick={() => {
             setCurrentCourt(court)
             setShowEditCourt(true)
+            onChangeOpenTime("" + Math.floor((court['open_time']!-1) / 2) + ":" + (Math.floor((court['open_time']!) % 2) === 0 ? "30" : "00"))
+            onChangeCloseTime("" +Math.floor((court['close_time']!) / 2) + ":" + (Math.floor((court['close_time']! + 1) % 2) !== 0 ? "00" : "30"))
           }}>แก้ไข</Button>
           </td>
           <td>
@@ -144,8 +136,7 @@ export default function CourtsSettings() {
             onClick={() => {
               setCurrentCourt(court)
               setShowDeleteCourt(true)
-              //deleteCourt(court['_id'], currentSportId)
-          }}>ลบกีฬา</Button></td>
+          }}>ลบคอร์ด</Button></td>
         </tr>
       )
     })

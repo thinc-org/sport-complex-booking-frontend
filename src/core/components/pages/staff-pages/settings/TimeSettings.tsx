@@ -51,22 +51,22 @@ export default function TimeSettings() {
         
         <div className="my-3">
           <h5 className="card-title font-weight-bold">การไม่มา</h5>
-          <SettingsCard set={setAbsencePunishment} value={absencePunishment} cardTitle={"โทษของการจองแล้วไม่มาใช้คอร์ด: แบนผู้ใช้"} unit={"วัน"} />
+          <SettingsCard type={"absencePunishment"} set={setAbsencePunishment} value={absencePunishment} cardTitle={"โทษของการจองแล้วไม่มาใช้คอร์ด: แบนผู้ใช้"} unit={"วัน"} />
         </div>
         <div>
           <h5 className="card-title font-weight-bold">การยกเลิก</h5>
         </div>
         <div className="my-3">
-          <SettingsCard set={setLateCancellationPunishment} value={lateCancellationPunishment} cardTitle={"โทษของการจองแล้วยกเลิกหลังกําหนด: แบนผู้ใช้"} unit={"วัน"} />
+          <SettingsCard type={"lateCancelPunishment"} set={setLateCancellationPunishment} value={lateCancellationPunishment} cardTitle={"โทษของการจองแล้วยกเลิกหลังกําหนด: แบนผู้ใช้"} unit={"วัน"} />
         </div>
         <div className="my-3">
-          <SettingsCard set={setLateCancellationDay} value={lateCancellationDay} cardTitle={"อนุญาติการยกเลิกล่วงหน้าได้สูงสุด"} unit={"วัน"} />
+          <SettingsCard type={"lateCancelDay"} set={setLateCancellationDay} value={lateCancellationDay} cardTitle={"อนุญาติการยกเลิกล่วงหน้าได้สูงสุด"} unit={"วัน"} />
         </div>
         <div>
           <h5 className="card-title font-weight-bold">ห้องรอ</h5>
         </div>
         <div className="my-3">
-          <SettingsCard set={setWaitingRoomDuration} value={waitingRoomDuration} cardTitle={"ระยะเวลาของห้องรอการจอง"} unit={"นาที"} />
+          <SettingsCard type={"waitingRooomDuration"} set={setWaitingRoomDuration} value={waitingRoomDuration} cardTitle={"ระยะเวลาของห้องรอการจอง"} unit={"นาที"} />
         </div>
         
       </div>

@@ -2,13 +2,14 @@ import React from "react"
 import {Button, Modal } from "react-bootstrap"
 
 export interface SettingsCardProps {
+  type: "absencePunishment" | "lateCancelPunishment" | "lateCancelDay" | "waitingRooomDuration"
   set: (value: number) => void
   value: number
   cardTitle: string
   unit: string
 }
 
-export const SettingsCard:React.FC<SettingsCardProps> = ({set, value, cardTitle, unit}) => {
+export const SettingsCard:React.FC<SettingsCardProps> = ({type, set, value, cardTitle, unit}) => {
   return (
       <div className="default-mobile-wrapper">
         <div className="card-body">
@@ -17,7 +18,7 @@ export const SettingsCard:React.FC<SettingsCardProps> = ({set, value, cardTitle,
             <Button
               variant="pink"
               className="button"
-              disabled = {value - 5 < 0}
+              disabled = {value - 5 < 0 || (type === "waitingRooomDuration" && value -5 <=0)}
               onClick={() => {
                 set(value -5)
               }}>
@@ -26,7 +27,7 @@ export const SettingsCard:React.FC<SettingsCardProps> = ({set, value, cardTitle,
             <Button
               variant="pink"
               className="button"
-              disabled = {value - 1 < 0}
+              disabled = {value - 1 < 0 || (type === "waitingRooomDuration" && value -1 <=0)}
               onClick={() => {
                 set(value -1)
               }}>
