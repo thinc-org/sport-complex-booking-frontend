@@ -126,8 +126,8 @@ export default function CourtsSettings() {
           onClick={() => {
             setCurrentCourt(court)
             setShowEditCourt(true)
-            onChangeOpenTime("" + Math.floor((court['open_time']!-1) / 2) + ":" + (Math.floor((court['open_time']!) % 2) === 0 ? "30" : "00"))
-            onChangeCloseTime("" +Math.floor((court['close_time']!) / 2) + ":" + (Math.floor((court['close_time']! + 1) % 2) !== 0 ? "00" : "30"))
+            onChangeOpenTime(openTime)
+            onChangeCloseTime(closeTime)
           }}>แก้ไข</Button>
           </td>
           <td>
