@@ -19,8 +19,7 @@ const ViewCourt = () => {
     const history = useHistory()
     const params = useParams<Params>()
     const currentDate = new Date()
-    const { viewData, inProp, rowData, onAddRow, onDeleteRow, setInProp } = useViewTable(params.id)
-    const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
+    const { viewData, inProp, rowData, onAddRow, onDeleteRow, setInProp, startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useViewTable(params.id)
     const { isEdit, setIsEdit, error, setError } = useEditCourt()
     const toggleEdit = (e) => {
         setIsEdit(true)
@@ -92,7 +91,7 @@ const ViewCourt = () => {
                                 <Col className='d-flex flex-column'>
                                     <Form.Label>วันที่เริ่มปิด</Form.Label>
                                     <DatePicker className='form-control'
-                                        selected={startDate ? startDate : add(new Date(viewData?.starting_date ? viewData.starting_date : currentDate), { days: 1 })}
+                                        selected={startDate}
                                         onChange={onStartDateChange}
                                         required
                                     />
@@ -100,7 +99,7 @@ const ViewCourt = () => {
                                 <Col className='d-flex flex-column'>
                                     <Form.Label>วันสิ้นสุดการปิด</Form.Label>
                                     <DatePicker className='form-control'
-                                        selected={endDate ? endDate : new Date(viewData?.expired_date ? viewData.expired_date : currentDate)}
+                                        selected={endDate}
                                         onChange={onEndDateChange}
                                         required
                                     />
