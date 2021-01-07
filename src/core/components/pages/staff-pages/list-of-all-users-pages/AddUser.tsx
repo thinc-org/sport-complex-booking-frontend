@@ -37,12 +37,13 @@ const AddUser: FunctionComponent = () => {
     phone: "",
   })
 
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit, errors } = useForm()
   const history = useHistory()
 
   // functions //
   const validCheck = (s: string) => {
-    return s.match(/.*([A-z])+.*/g)
+    if (s !== "") return s.match(/.*([A-z])+.*/g)
+    return false
   }
 
   // renders //
@@ -75,7 +76,21 @@ const AddUser: FunctionComponent = () => {
         {renderSelector(0)}
         <Form.Group>
           <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
-          <Form.Control ref={register} name="username" defaultValue={user.username} />
+          <Form.Control
+            ref={register({
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Invalid email address",
+              },
+            })}
+            name="username"
+            defaultValue={user.username}
+          />
+          {errors.username && (
+            <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+              {errors.username.message}
+            </span>
+          )}
         </Form.Group>
         <AlertInvalidUsername show={showAlerts} />
         <ChangePasswordComponent selectingSatit={selectingSatit} register={register} />
@@ -119,10 +134,24 @@ const AddUser: FunctionComponent = () => {
           </Row>
         </Form.Group>
         <Form.Group>
-          <Row>
+          <Row className="mb-3">
             <Col>
-              <Form.Label>อีเมล</Form.Label>
-              <Form.Control ref={register} name="personal_email" defaultValue={personal_email} />
+              <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
+              <Form.Control
+                ref={register({
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email address",
+                  },
+                })}
+                name="username"
+                defaultValue={username}
+              />
+              {errors.username && (
+                <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                  {errors.username.message}
+                </span>
+              )}
             </Col>
             <Col>
               <Form.Label>เบอร์โทรศัพท์</Form.Label>
@@ -165,7 +194,9 @@ const AddUser: FunctionComponent = () => {
 
   const handleAdd = (data: AddUserComponentInfo) => {
     let { username, name_th, surname_th, name_en, surname_en, personal_email, phone, password, confirmPassword } = data
-    let newUser = data.is_thai_language ? { ...data, membership_type: user.membership_type } : { ...user, username: data.username }
+    let newUser = data.is_thai_language
+      ? { ...data, personal_email: data.username, membership_type: user.membership_type }
+      : { ...user, username: data.username, personal_email: data.username }
     delete newUser["confirmPassword"]
     setUser(newUser)
     if (!validCheck(username)) setShowAlerts({ showAlertPassword: false, showAlertUncom: false, showAlertUsername: true })
@@ -191,13 +222,14 @@ const AddUser: FunctionComponent = () => {
   const requestAdd = () => {
     let url = "/list-all-user/"
     let data = {}
-    let { membership_type, username, password } = user
+    let { membership_type, username, password, personal_email } = user
     if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา") {
       url += "OtherUser"
       data = {
-        membership_type: membership_type,
-        username: username,
-        password: password,
+        membership_type,
+        personal_email,
+        username,
+        password,
       }
     } else {
       url += "SatitUser"

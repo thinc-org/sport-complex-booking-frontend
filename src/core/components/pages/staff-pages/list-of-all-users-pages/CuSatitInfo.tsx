@@ -337,21 +337,37 @@ const UserInfo: FunctionComponent = () => {
           <Row>
             <Col className="py-3">
               <p>ชื่อ (อังกฤษ)</p>
-              <Form.Control ref={register} name="name_en" defaultValue={user.name_en} />
+              {String(user.account_type) === Account[Account.CuStudent] ? (
+                <p className="font-weight-bold mb-0">{user.name_en}</p>
+              ) : (
+                <Form.Control ref={register} name="name_en" defaultValue={user.name_en} />
+              )}
             </Col>
             <Col className="py-3">
               <p>นามสกุล (อังกฤษ)</p>
-              <Form.Control ref={register} name="surname_en" defaultValue={user.surname_en} />
+              {String(user.account_type) === Account[Account.CuStudent] ? (
+                <p className="font-weight-bold mb-0">{user.surname_en}</p>
+              ) : (
+                <Form.Control ref={register} name="surname_en" defaultValue={user.surname_en} />
+              )}
             </Col>
           </Row>
           <Row>
             <Col className="py-3">
               <p>ชื่อ (ไทย)</p>
-              <Form.Control ref={register} name="name_th" defaultValue={user.name_th} />
+              {String(user.account_type) === Account[Account.CuStudent] ? (
+                <p className="font-weight-bold mb-0">{user.name_th}</p>
+              ) : (
+                <Form.Control ref={register} name="name_th" defaultValue={user.name_th} />
+              )}
             </Col>
             <Col className="py-3">
               <p>นามสกุล (ไทย)</p>
-              <Form.Control ref={register} name="surname_th" defaultValue={user.surname_th} />
+              {String(user.account_type) === Account[Account.CuStudent] ? (
+                <p className="font-weight-bold mb-0">{user.surname_th}</p>
+              ) : (
+                <Form.Control ref={register} name="surname_th" defaultValue={user.surname_th} />
+              )}
             </Col>
           </Row>
           <Row>
