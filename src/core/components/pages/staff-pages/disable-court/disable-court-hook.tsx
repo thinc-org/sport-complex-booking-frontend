@@ -32,6 +32,7 @@ export const useRow = (initial: ViewRowProps[] = []) => {
         return true
     }
     const onAddRow = (f) => {
+
         setRowData(prev => {
             const timeSlot: number[] = []
             for (let i = parseInt(f.timeSlotStart); i <= f.timeSlotEnd; i++) {
