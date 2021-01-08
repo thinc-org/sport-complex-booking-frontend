@@ -19,7 +19,17 @@ export const ReservationCancellationModal: React.FC<ReservationCancelModalProps>
 }) => {
   const { t } = useTranslation()
   return (
-    <Modal show={modalOpen} className="modal" tabIndex={-1} role="dialog" aria-labelledby="contained-modal-title-vcenter" centered aria-hidden="true">
+    <Modal
+      show={modalOpen}
+      className="modal"
+      tabIndex={-1}
+      role="dialog"
+      keyboard={true}
+      onHide={triggerModal}
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      aria-hidden="true"
+    >
       <div className="modal-dialog modal-dialog-centered" role="document">
         <div className="modal-content">
           <div className="modal-header pb-0">
