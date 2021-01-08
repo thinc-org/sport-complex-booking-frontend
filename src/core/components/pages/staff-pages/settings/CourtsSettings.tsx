@@ -3,8 +3,7 @@ import { Table, Form, Row, Col, Button } from "react-bootstrap"
 import TimePicker from 'react-time-picker';
 import { client } from "../../../../../axiosConfig"
 import { NoCourtsModal, EditCourt, DeleteCourtModal, AddCourtFunc } from "./CourtsSettingsComponents";
-import { HandleError } from "./SportSettingsComponents"
-import { AxiosResponse } from "axios";
+import { HandleError, SportData } from "./SportSettingsComponents"
 
 export default function CourtsSettings() {
 
@@ -40,7 +39,12 @@ export default function CourtsSettings() {
   }, [])
 
   const requestSports = async () => {
-    await client.get<AxiosResponse>('/court-manager/search?start=0&end=999&filter=' + currentSportId)
+    await client.get<SportData[]>('/court-manager/search?', {
+      params: {
+        start: 0,
+        end: 999,
+        filter: currentSportId,
+      }})
       .then((data) => {
         const newSport = ['temp']
         data['data']['sport_list'].forEach((sport: string)=> {
@@ -53,7 +57,7 @@ export default function CourtsSettings() {
   }
 
   const requestCourts = async (sportId: string) => {
-    await client.get<AxiosResponse>('/court-manager/' + sportId)
+    await client.get<CourtData[]>('/court-manager/' + sportId)
       .then((data) => {
         setCourts(data['data']['list_court'])
       })
@@ -71,7 +75,7 @@ export default function CourtsSettings() {
       sport_id: sportId,
       new_setting: newCourts
     }
-    await client.put<AxiosResponse>('/court-manager/court-setting/update', data)
+    await client.put<CourtData>('/court-manager/court-setting/update', data)
       .then(() => {
         setShowDeleteCourt(false)
         requestCourts(currentSportId)
@@ -87,7 +91,7 @@ export default function CourtsSettings() {
       sport_id: sportId,
       new_setting: courts
     }
-    await client.put<AxiosResponse>('/court-manager/court-setting/update', data)
+    await client.put<CourtData>('/court-manager/court-setting/update', data)
       .then(() => {
         requestCourts(currentSportId)
         setShowEditCourt(false)

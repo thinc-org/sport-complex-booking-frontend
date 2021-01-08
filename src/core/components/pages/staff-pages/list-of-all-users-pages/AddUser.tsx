@@ -160,12 +160,6 @@ const AddUser: FunctionComponent = () => {
           </Row>
         </Form.Group>
         <Form.Group>
-          <Row className="mb-3">
-            <Col>
-              <Form.Label>ชื่อผู้ใช้</Form.Label>
-              <Form.Control ref={register} name="username" defaultValue={username} />
-            </Col>
-          </Row>
           <ChangePasswordComponent selectingSatit={selectingSatit} register={register} />
           <AlertInvalidUsername show={showAlerts} />
           <AlertErrorPassword show={showAlerts} />
@@ -196,7 +190,7 @@ const AddUser: FunctionComponent = () => {
     let { username, name_th, surname_th, name_en, surname_en, personal_email, phone, password, confirmPassword } = data
     let newUser = data.is_thai_language
       ? { ...data, personal_email: data.username, membership_type: user.membership_type }
-      : { ...user, username: data.username, personal_email: data.username }
+      : { ...user, username: data.username, personal_email: data.username, password:data.password }
     delete newUser["confirmPassword"]
     setUser(newUser)
     if (!validCheck(username)) setShowAlerts({ showAlertPassword: false, showAlertUncom: false, showAlertUsername: true })
