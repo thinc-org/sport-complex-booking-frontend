@@ -26,6 +26,11 @@ interface SportResponse {
   sporten: string
 }
 
+interface QRValueResponse {
+  id: string
+  time: number
+}
+
 const ReservationDetail = () => {
   const location = useLocation()
   const history = useHistory()
@@ -38,14 +43,18 @@ const ReservationDetail = () => {
   const [timeList, setTimeList] = useState<number[]>()
   const [memberList, setMemberList] = useState<Array<MemberResponse>>()
   const [isCheck, setIsCheck] = useState<Boolean>()
-  const [counter, setCounter] = useState<number>(10)
+  const [counter, setCounter] = useState<number>()
   const [isLoading, setIsLoading] = useState(true)
   const [lateCancellationDay, setLateCancellationDay] = useState<number>()
   const [lateCancellationPunishment, setLateCancellationPunishment] = useState<number>()
+  const [validTime, setValidTime] = useState<number>()
+  const [qrValue, setQRValue] = useState<QRValueResponse>()
+  const [isRefreshingQRCode, setIsRefreshingQRCode] = useState<boolean>()
 
   const fetchId = useCallback(() => {
     if (location.state) {
       setId((location.state as LocationResponse).id)
+      setQRValue({ id: (location.state as LocationResponse).id, time: new Date().getTime() })
     } else {
       history.push((location.state as LocationResponse).path)
     }
@@ -64,7 +73,10 @@ const ReservationDetail = () => {
       setIsCheck(res.is_check)
       setLateCancellationDay(data.late_cancelation_day)
       setLateCancellationPunishment(data.late_cancelation_punishment)
+      setValidTime(new Date().getTime() + 10000)
       setIsLoading(false)
+      setIsRefreshingQRCode(false)
+      setCounter(10)
     } catch (err) {
       console.log(err.message)
       history.push((location.state as any).path)
@@ -81,8 +93,7 @@ const ReservationDetail = () => {
   }, [])
 
   useEffect(() => {
-    if (isCheck === false) countDown()
-    console.log(counter)
+    if (!isCheck) countDown()
   }, [counter, isCheck])
 
   const triggerModal = () => {
@@ -106,14 +117,31 @@ const ReservationDetail = () => {
   }
 
   const countDown = () => {
-    if (!isCheck) {
+    if (!isCheck && !isRefreshingQRCode) {
       setTimeout(function () {
         if (counter) {
           setCounter(counter - 1)
-        } else if (counter === 0) history.push((location.state as any).path)
+        } else if (counter === 0) {
+          setIsRefreshingQRCode(true)
+          fetchData()
+          setValidTime(new Date().getTime())
+        }
       }, 1000)
     }
   }
+
+  //   const qrValue = () => {
+  //       return (
+  //           {
+  //               id: id,
+  //               time: validTime
+  //           }
+  //       )
+  //   }
+
+  useEffect(() => {
+    console.log(qrValue)
+  }, [qrValue])
 
   const qrCode = () => {
     if (!isCheck && id) {
@@ -125,7 +153,14 @@ const ReservationDetail = () => {
               {t("qrcodeInvalid")}{" "}
             </h6>
             <div style={{ fontSize: "18px", fontWeight: 400 }}> 00:{counter == 10 ? counter : "0" + counter} </div>
-            <QRCode className="mb-4 mt-3" value={id} renderAs="svg" size="128" fgColor="#333" bgColor="#fff" />
+            {!isRefreshingQRCode ? (
+              <QRCode className="mb-4 mt-3" value={validTime + "/" + id} renderAs="svg" size="128" fgColor="#333" bgColor="#fff" />
+            ) : (
+              <h6 className="pt-4 pb-4 mt-5 mb-5" style={{ color: "red" }}>
+                {" "}
+                Refreshing QR Code...{" "}
+              </h6>
+            )}
             <h5 className="mb-2" style={{ fontWeight: 400 }}>
               {" "}
               {t("showQRToStaff")}{" "}
