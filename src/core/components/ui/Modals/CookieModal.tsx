@@ -10,16 +10,7 @@ export interface CookieModalProps {
 export const CookieModal: React.FC<CookieModalProps> = ({ show, handleClick }) => {
   const { t } = useTranslation()
   return (
-    <Modal
-      show={show}
-      className="modal"
-      id="exampleModalCenter"
-      tabIndex={-1}
-      role="dialog"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-      aria-hidden="true"
-    >
+    <Modal show={show} className="modal" tabIndex={-1} role="dialog" backdrop="static" keyboard={false} centered>
       <div className="modal-dialog modal-dialog-centered" role="document">
         <div className="modal-content">
           <div className="modal-header pb-0">

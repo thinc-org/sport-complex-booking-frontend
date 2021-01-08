@@ -13,6 +13,9 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
   const [messageBody, setMessageBody] = useState<string>("")
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [data, setData] = useState("")
+  const [id, setId] = useState<string>()
+  const [currentTime, setCurrentTime] = useState<number>()
+  const [validTime, setValidTime] = useState<number>()
 
   codeReader
     .decodeOnceFromVideoDevice(undefined, "video")
@@ -23,6 +26,14 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
       console.log(readingResult)
     })
     .catch((err) => console.error(err))
+
+  useEffect(() => {
+    if (readingResult.text) {
+      setCurrentTime(new Date().getTime())
+      setValidTime(parseInt(readingResult.text.slice(0, readingResult.text.indexOf("/"))))
+      setId(readingResult.text.slice(readingResult.text.indexOf("/") + 1))
+    }
+  }, [readingResult])
 
   const checkIn = useCallback(async (reservationId) => {
     try {
@@ -48,15 +59,29 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
   }, [])
 
   useEffect(() => {
-    if (data) {
-      console.log("data: " + data)
-      checkIn(data)
+    if (validTime && id && currentTime) {
+      console.log("current time: " + currentTime)
+      console.log("valid time: " + validTime)
+      console.log("id: " + id)
+      if (currentTime <= validTime) checkIn(id)
+      else {
+        setMessageHeader("คิวอาร์โค้ดหมดเวลา")
+        setMessageBody("ID: " + id)
+        setModalOpen(true)
+        setTimeout(function () {
+          setModalOpen(false)
+          setData("")
+        }, 3000)
+      }
     }
-  }, [data, checkIn])
+  }, [validTime, id, checkIn])
 
   const refresh = () => {
     console.log("refresh")
-    return setData("")
+    setReadingResult(undefined)
+    setCurrentTime(undefined)
+    setValidTime(undefined)
+    setId("")
   }
 
   return (
