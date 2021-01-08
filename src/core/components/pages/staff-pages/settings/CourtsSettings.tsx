@@ -39,7 +39,7 @@ export default function CourtsSettings() {
   }, [])
 
   const requestSports = async () => {
-    await client.get<SportData[]>('/court-manager/search?', {
+    await client.get<SportData[]>('/court-manager/search', {
       params: {
         start: 0,
         end: 999,

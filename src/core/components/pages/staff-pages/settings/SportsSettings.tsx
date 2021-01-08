@@ -71,7 +71,7 @@ export default function SportsSettings() {
     const start = (pageNo -1) * 10
     const end = pageNo * 10 
     const search_filter =  query ? query : "$"
-    await client.get<SportData[]>('/court-manager/search?', {
+    await client.get<SportData[]>('/court-manager/search', {
       params: {
         start: start,
         end: end,
