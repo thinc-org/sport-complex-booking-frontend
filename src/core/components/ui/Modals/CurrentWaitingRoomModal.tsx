@@ -16,6 +16,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({ modalConfirmOpen, ha
       className="modal"
       tabIndex={-1}
       role="dialog"
+      onHide={handleClick}
       aria-labelledby="contained-modal-title-vcenter"
       centered
       aria-hidden="true"

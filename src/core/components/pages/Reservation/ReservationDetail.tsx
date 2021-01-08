@@ -27,6 +27,11 @@ interface SportResponse {
   sporten: string
 }
 
+interface QRValueResponse {
+  id: string
+  time: number
+}
+
 const ReservationDetail = () => {
   const location = useLocation()
   const history = useHistory<LocationResponse>()
@@ -45,11 +50,14 @@ const ReservationDetail = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [lateCancellationDay, setLateCancellationDay] = useState<number>()
   const [lateCancellationPunishment, setLateCancellationPunishment] = useState<number>()
+  const [validTime, setValidTime] = useState<number>()
+  const [qrValue, setQRValue] = useState<QRValueResponse>()
+  const [isRefreshingQRCode, setIsRefreshingQRCode] = useState<boolean>()
 
   const fetchId = useCallback(() => {
     if (location.state) {
       setId(history.location.state.id)
-      // setId((location.state as LocationResponse).id)
+      setQRValue({ id: (location.state as LocationResponse).id, time: new Date().getTime() })
     } else {
       history.push(history.location.state.path)
       // history.push((location.state as LocationResponse).path)
@@ -69,7 +77,10 @@ const ReservationDetail = () => {
       setIsCheck(res.is_check)
       setLateCancellationDay(data.late_cancelation_day)
       setLateCancellationPunishment(data.late_cancelation_punishment)
+      setValidTime(new Date().getTime() + 10000)
       setIsLoading(false)
+      setIsRefreshingQRCode(false)
+      setCounter(10)
     } catch (err) {
       console.log(err.message)
       history.push(history.location.state.path)
@@ -100,8 +111,7 @@ const ReservationDetail = () => {
   }, [fetchId])
 
   useEffect(() => {
-    if (isCheck === false) countDown()
-    console.log(counter)
+    if (!isCheck) countDown()
   }, [counter, isCheck, countDown])
 
   const triggerModal = () => {
