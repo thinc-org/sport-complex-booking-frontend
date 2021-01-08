@@ -71,7 +71,7 @@ export default function SportsSettings() {
     const start = (pageNo -1) * 10
     const end = pageNo * 10 
     const search_filter =  query ? query : "$"
-    await client.get<SportData[]>('/court-manager/'+start+ "/" +end + "/" + search_filter)
+    await client.get<SportData[]>('/court-manager/search?start='+start+ "&end=" +end + "&filter=" + search_filter)
       .then(({data}) => {
         setSports(data['sport_list'])
         setMaxSport(data['allSport_length'])
