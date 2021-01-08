@@ -78,7 +78,7 @@ export default function StaffManagement() {
     const end = pageNo * 10
     const query_filter = query ? query : "$"
     const type_filter = type ? type : "all"
-    await client.get<admin_and_staff[]>('/staff-manager/' + 'admin-and-staff/' + start + "/" + end + "/" + query_filter + "/" + type_filter)
+    await client.get<admin_and_staff[]>('/staff-manager/admin-and-staff/search?start=' + start + "&end=" + end + "&filter=" + query_filter + "&type=" + type_filter)
       .then((data) => {
         console.log(data)
         setStaffs(data['data']['staff_list'])

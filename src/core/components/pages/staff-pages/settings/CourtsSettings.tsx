@@ -40,7 +40,7 @@ export default function CourtsSettings() {
   }, [])
 
   const requestSports = async () => {
-    await client.get<AxiosResponse>('/court-manager/0/999/' + currentSportId)
+    await client.get<AxiosResponse>('/court-manager/search?start=0&end=999&filter=' + currentSportId)
       .then((data) => {
         const newSport = ['temp']
         data['data']['sport_list'].forEach((sport: string)=> {
