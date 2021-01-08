@@ -87,6 +87,7 @@ export default function SportsSettings() {
 
   const sendDeleteSport = async (currentSport: SportData) => {
     await client
+      // TODO
       // .delete<AxiosResponse>("/court-manager/" + currentSport["_id"])
       .delete("/court-manager/" + currentSport.object_id)
       .then(() => {

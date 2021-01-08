@@ -53,7 +53,7 @@ export default function CourtsSettings() {
     await client
       .get<Sport>("/court-manager/" + sportId)
       .then(({ data }) => {
-        setCourts(data.list_court)
+        setCourts(data["list_court"])
       })
       .catch(() => {
         setShowError(true)
@@ -70,7 +70,7 @@ export default function CourtsSettings() {
       new_setting: newCourts,
     }
     await client
-      .put<AxiosResponse>("/court-manager/court-setting/update", data)
+      .put("/court-manager/court-setting/update", data)
       .then(() => {
         setShowDeleteCourt(false)
         requestCourts(currentSportId)

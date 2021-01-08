@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from "react"
 import { Form, Card, Row, Col, Button } from "react-bootstrap"
 import { Link, useHistory } from "react-router-dom"
-import { FormProvider, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { AddInfo, ModalAddUser, AlertAddUser, AddUserComponentInfo } from "../interfaces/InfoInterface"
 import { client } from "../../../../../axiosConfig"
 import ChangePasswordComponent from "./AddUserPasswordComponent"
@@ -38,12 +38,13 @@ const AddUser: FunctionComponent = () => {
   })
 
   const methods = useForm()
-  const { register, handleSubmit } = methods
+  const { register, handleSubmit, errors } = methods
   const history = useHistory()
 
   // functions //
   const validCheck = (s: string) => {
-    return s.match(/.*([A-z])+.*/g)
+    if (s !== "") return s.match(/.*([A-z])+.*/g)
+    return false
   }
 
   // renders //
@@ -72,23 +73,21 @@ const AddUser: FunctionComponent = () => {
 
   const renderNormalForm = () => {
     return (
-      <FormProvider {...methods}>
-        <Form onSubmit={handleSubmit(handleAdd)}>
-          {renderSelector(0)}
-          <Form.Group>
-            <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
-            <Form.Control ref={register} name="username" defaultValue={user.username} />
-          </Form.Group>
-          <AlertInvalidUsername show={showAlerts} />
-          <ChangePasswordComponent selectingSatit={selectingSatit} />
-          <AlertErrorPassword show={showAlerts} />
-        </Form>
-      </FormProvider>
+      <Form onSubmit={handleSubmit(handleAdd)}>
+        {renderSelector(0)}
+        <Form.Group>
+          <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
+          <Form.Control ref={register} name="username" defaultValue={user.username} />
+        </Form.Group>
+        <AlertInvalidUsername show={showAlerts} />
+        <ChangePasswordComponent selectingSatit={selectingSatit} />
+        <AlertErrorPassword show={showAlerts} />
+      </Form>
     )
   }
 
   const renderSatitForm = () => {
-    const { name_th, surname_th, name_en, surname_en, personal_email, phone, username, is_thai_language } = user
+    const { name_th, surname_th, name_en, surname_en, phone, username, is_thai_language } = user
     return (
       <Form onSubmit={handleSubmit(handleAdd)}>
         {renderSelector(9)}
@@ -122,10 +121,24 @@ const AddUser: FunctionComponent = () => {
           </Row>
         </Form.Group>
         <Form.Group>
-          <Row>
+          <Row className="mb-3">
             <Col>
-              <Form.Label>อีเมล</Form.Label>
-              <Form.Control ref={register} name="personal_email" defaultValue={personal_email} />
+              <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
+              <Form.Control
+                ref={register({
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email address",
+                  },
+                })}
+                name="username"
+                defaultValue={username}
+              />
+              {errors.username && (
+                <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                  {errors.username.message}
+                </span>
+              )}
             </Col>
             <Col>
               <Form.Label>เบอร์โทรศัพท์</Form.Label>
@@ -194,13 +207,14 @@ const AddUser: FunctionComponent = () => {
   const requestAdd = () => {
     let url = "/list-all-user/"
     let data = {}
-    const { membership_type, username, password } = user
+    const { membership_type, username, password, personal_email } = user
     if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา") {
       url += "OtherUser"
       data = {
-        membership_type: membership_type,
-        username: username,
-        password: password,
+        membership_type,
+        personal_email,
+        username,
+        password,
       }
     } else {
       url += "SatitUser"
@@ -211,7 +225,7 @@ const AddUser: FunctionComponent = () => {
       url,
       data,
     })
-      .then(({ data }) => {
+      .then(() => {
         setShowModals({ ...showModals, showAdd: false, showCom: true })
       })
       .catch(({ response }) => {

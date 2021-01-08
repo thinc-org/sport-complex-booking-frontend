@@ -239,5 +239,6 @@
     "body": "Your old password does not match."
   },
   "noReservation": "You have no any reservation.",
-  "qrcodeInvalid": "This QR code will be invalid in"
+  "qrcodeInvalid": "This QR code will be invalid in",
+  "usernameLabel": "Username"
 }

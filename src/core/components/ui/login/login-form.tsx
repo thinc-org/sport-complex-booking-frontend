@@ -23,7 +23,7 @@ const LoginForm = () => {
         <div style={{ display: isLoading ? "none" : "block" }}>
           <div style={{ marginBottom: "40px" }}>
             <Form.Group>
-              <Form.Label>{t("email")}</Form.Label>
+              <Form.Label>{t("usernameLabel")}</Form.Label>
               <Form.Control type="email" placeholder="Email" name="username" ref={register({ required: true })} onChange={handleBackendError} />
               <Form.Text>{errors.username && t("fieldIsRequired")}</Form.Text>
             </Form.Group>
