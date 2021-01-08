@@ -7,7 +7,7 @@ function Landing() {
   return (
     <>
       <NavHeader isOnStaffPage={true} />
-      <div className="container" style={{ backgroundColor: "var(--bg-color)" }}>
+      <div className="container landing" style={{ backgroundColor: "var(--bg-color)" }}>
         <div className="row landing" style={{ height: "100vh" }}>
           <div className="d-none d-sm-block my-auto col-sm-8 textgroup landing">
             <h4> Chulalongkorn University </h4>
@@ -25,23 +25,17 @@ function Landing() {
             <h4> Chulalongkorn University </h4>
             <h4> Sports Center </h4>
           </div>
-
-          <div className="landing smallimagegroup col-12 col-sm-4 p-0 d-block d-sm-none">
-            <div className="group small">
-              <img className="img" src={landing} alt="" />
-            </div>
+          <div className="col-12 small-imagegroup landing d-block d-sm-none">
+            <img className="landing small-relative-img" src={landing} />
           </div>
-        </div>
-        <img src={landing} className="landing relative-img d-none d-sm-block" alt="" />
-
-        <div className="d-block d-sm-none col-12 fixed-bottom button">
-          <Link className="landing btn col button-group pt-5" to="/login">
+          <Link className="landing btn col button-group d-block d-sm-none pt-4 mt-3" to="/login">
             <Button variant="pink" className="mb-0">
               Enter Sports Center
             </Button>
           </Link>
         </div>
       </div>
+      <img src={landing} className="landing relative-img d-none d-sm-block" />
     </>
   )
 }
