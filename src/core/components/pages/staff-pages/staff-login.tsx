@@ -14,7 +14,7 @@ function StaffLogin() {
     <React.Fragment>
       <Navbar style={{ backgroundColor: "#F1E2E3" }}>
         <NavbarBrand className="mr-auto">
-          <img className="logo" src={logo} />
+          <img className="logo" src={logo} alt="" />
         </NavbarBrand>
       </Navbar>
       <div className="container staff-login" style={{ height: "90vh" }}>

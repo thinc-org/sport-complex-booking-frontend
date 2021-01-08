@@ -8,6 +8,13 @@ import { client } from "../../../../../axiosConfig"
 import PaginationComponent from "../list-of-all-users-pages/PaginationComponent"
 import { ErrModal } from "./DeleteModalComponent"
 
+interface RequestBody {
+  sportId: string
+  courtNumber: number
+  date: Date
+  timeSlot: number
+}
+
 const AllReservation: FunctionComponent = () => {
   // Page state
   const [pageNo, setPageNo] = useState<number>(1)
@@ -47,39 +54,11 @@ const AllReservation: FunctionComponent = () => {
       })
   }, [pagename])
 
-  const memoizedCallback = useCallback(() => {
-    requestInfo()
-  }, [sportType, courtNo, searchDate, searchTime, pagename])
-
-  useEffect(() => {
-    memoizedCallback()
-  }, [memoizedCallback])
-
-  // handles //
-  const handleInfo = (e) => {
-    history.push(`/staff/reservationDetail/${pagename}/${e.target.id}`)
-  }
-
-  const handleChangeSport = (e) => {
-    const id: string = e.target.value
-    if (id !== "-1" && id !== "-2") setSportType(id)
-    else setSportType("")
-    setCourtNo(-2)
-    setSportIdx(id)
-  }
-
-  const handleChangeDate = (e) => {
-    setChooseDate(true)
-    const today = new Date()
-    const incom = new Date(e.target.value)
-    setSearchDate(incom < today ? today : incom)
-  }
-
   // requests //
-  const requestInfo = () => {
+  const requestInfo = useCallback(() => {
     // request reservation_info //
     const url: string = pagename === "success" ? "/all-reservation" : "/all-waiting-room"
-    const data = {}
+    const data: Partial<RequestBody> = {}
     if (sportType !== "") data["sportId"] = sportType
     if (courtNo >= 0) data["courtNumber"] = courtNo
     if (chooseDate) data["date"] = searchDate
@@ -98,6 +77,35 @@ const AllReservation: FunctionComponent = () => {
         console.log(response)
         setShowErr(true)
       })
+  }, [chooseDate, courtNo, pagename, searchDate, searchTime, sportType])
+
+  const memoizedCallback = useCallback(() => {
+    requestInfo()
+  }, [requestInfo])
+
+  useEffect(() => {
+    memoizedCallback()
+  }, [memoizedCallback])
+
+  // handles //
+  const handleInfo = (e: React.MouseEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement
+    history.push(`/staff/reservationDetail/${pagename}/${target.id}`)
+  }
+
+  const handleChangeSport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const id: string = e.target.value
+    if (id !== "-1" && id !== "-2") setSportType(id)
+    else setSportType("")
+    setCourtNo(-2)
+    setSportIdx(id)
+  }
+
+  const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setChooseDate(true)
+    const today = new Date()
+    const incom = new Date(e.target.value)
+    setSearchDate(incom < today ? today : incom)
   }
 
   // other functions //

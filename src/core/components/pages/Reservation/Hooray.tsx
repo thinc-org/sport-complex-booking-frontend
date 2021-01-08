@@ -1,6 +1,6 @@
 import React from "react"
 import { Button } from "react-bootstrap"
-import { Link, useHistory , Redirect } from "react-router-dom"
+import { Link, useHistory, Redirect } from "react-router-dom"
 import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from "react-i18next"
 import hooray from "../../../assets/images/hooray.svg"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent } from "react"
+import React, { useState, useEffect, FunctionComponent, useCallback } from "react"
 import { Row, Col, Button, Form, Card, Alert } from "react-bootstrap"
 import { Link, RouteComponentProps, useHistory } from "react-router-dom"
 import format from "date-fns/format"
@@ -58,15 +58,9 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   // react router dom //
   const { register, handleSubmit } = useForm()
   const history = useHistory()
-  const { i18n, t } = useTranslation()
+  const { t } = useTranslation()
 
-  // useEffects //
-  useEffect(() => {
-    getInfo()
-    i18n.changeLanguage("th")
-  }, [])
-
-  const getInfo = () => {
+  const getInfo = useCallback(() => {
     client({
       method: "GET",
       url: "/list-all-user/id/" + _id,
@@ -91,7 +85,12 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
         console.log(response)
         if (response && response.data.statusCode === 401) history.push("/staff")
       })
-  }
+  }, [_id, history])
+
+  // useEffects //
+  useEffect(() => {
+    getInfo()
+  }, [getInfo])
 
   // Alerts & Modals //
   const renderAlert = () => {
@@ -103,7 +102,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   }
 
   // handles //
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.id === "is_penalize") {
       // set is_penalize
       if (e.target.value === "1") setTempUser({ ...tempUser, [e.target.id]: true })

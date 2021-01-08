@@ -18,7 +18,10 @@ interface CustomPasswordModalProps {
 
 export const CustomPasswordModal: React.FC<CustomPasswordModalProps> = ({ type, show, setShow, mainFunction, data }) => {
   const { t } = useTranslation()
-  const message = t(type, { returnObjects: true })
+  const message: {
+    title: string
+    body: string
+  } = t(type, { returnObjects: true })
   if (!show) return null
   return (
     <Modal
@@ -31,9 +34,9 @@ export const CustomPasswordModal: React.FC<CustomPasswordModalProps> = ({ type, 
       className="modal"
     >
       <Modal.Header closeButton>
-        <Modal.Title>{message["title"]}</Modal.Title>
+        <Modal.Title>{message.title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>{message["body"]}</Modal.Body>
+      <Modal.Body style={{ fontWeight: "lighter" }}>{message.body}</Modal.Body>
       <Modal.Footer>
         {type === "passwordChangeConfirm" && (
           <Button

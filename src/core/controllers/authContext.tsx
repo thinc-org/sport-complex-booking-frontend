@@ -4,7 +4,7 @@ import { getCookie } from "../contexts/cookieHandler"
 interface AuthContextConstruct {
   token: string | undefined
   isUser: boolean
-  setToken: Function
+  setToken: (token: string) => void
   isAdmin: boolean
 }
 

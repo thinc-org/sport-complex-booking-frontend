@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { Link, useParams, useHistory } from "react-router-dom"
 import { Button, Card, Form } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
@@ -16,7 +16,7 @@ import {
 } from "./ListOfAllUserModals"
 import Info, { ModalUserInfo } from "../interfaces/InfoInterface"
 import format from "date-fns/format"
-import { useForm } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
 
 const UserInfo = () => {
   // page state //
@@ -79,58 +79,12 @@ const UserInfo = () => {
 
   // react router dom
   const { _id } = useParams<{ _id: string }>()
-  const { register, handleSubmit } = useForm()
+  const methods = useForm()
+  const { register } = methods
   const history = useHistory()
 
-  useEffect(() => {
-    fetchUserData()
-  }, [])
-
-  // handles //
-  const handleEdit = () => {
-    setTempInfo(info)
-    setTempUsername(username)
-    setTempMembershipType(membershipType)
-    setTempPenalize(isPenalize)
-    setTempExpiredPenalizeDate(expiredPenalizeDate)
-    setTempAccountExpiredDate(accountExpiredDate)
-    setEdit(true)
-  }
-
-  const handleSave = () => {
-    setShowModalInfo({ ...showModalInfo, showSave: true })
-  }
-
-  const handleChangeDateTime = (e) => {
-    const id = e.target.id
-    const oldPenExp: Date = tempExpiredPenalizeDate ? new Date(tempExpiredPenalizeDate) : new Date()
-    const oldAcExp: Date = tempAccountExpiredDate ? new Date(tempAccountExpiredDate) : new Date()
-    const incom: Date = new Date(e.target.value)
-    if (id === "expiredPenalizeDate") {
-      let date: Date = new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), oldPenExp.getHours(), oldPenExp.getMinutes())
-      if (date < new Date()) date = new Date()
-      setTempExpiredPenalizeDate(date)
-    } else if (id === "expiredPenalizeTime") {
-      const hour: number = parseInt(e.target.value.slice(0, 2))
-      const minute: number = parseInt(e.target.value.slice(3, 5))
-      let date: Date = new Date(oldPenExp.getFullYear(), oldPenExp.getMonth(), oldPenExp.getDate(), hour, minute, 0)
-      if (date < new Date()) date = new Date()
-      setTempExpiredPenalizeDate(date)
-    } else if (id === "accountExpiredDate") {
-      let date: Date = new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), oldAcExp.getHours(), oldAcExp.getMinutes())
-      if (date < new Date()) date = new Date()
-      setTempAccountExpiredDate(date)
-    } else if (id === "accountExpiredTime") {
-      const hour: number = parseInt(e.target.value.slice(0, 2))
-      const minute: number = parseInt(e.target.value.slice(3, 5))
-      let date: Date = new Date(oldAcExp.getFullYear(), oldAcExp.getMonth(), oldAcExp.getDate(), hour, minute, 0)
-      if (date < new Date()) date = new Date()
-      setTempAccountExpiredDate(date)
-    }
-  }
-
   // requests //
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     await client({
       method: "GET",
       url: "/list-all-user/id/" + _id,
@@ -179,6 +133,53 @@ const UserInfo = () => {
         console.log(response)
         if (response && response.data.statusCode === 401) history.push("/staff")
       })
+  }, [_id, history])
+
+  useEffect(() => {
+    fetchUserData()
+  }, [fetchUserData])
+
+  // handles //
+  const handleEdit = () => {
+    setTempInfo(info)
+    setTempUsername(username)
+    setTempMembershipType(membershipType)
+    setTempPenalize(isPenalize)
+    setTempExpiredPenalizeDate(expiredPenalizeDate)
+    setTempAccountExpiredDate(accountExpiredDate)
+    setEdit(true)
+  }
+
+  const handleSave = () => {
+    setShowModalInfo({ ...showModalInfo, showSave: true })
+  }
+
+  const handleChangeDateTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const id = e.target.id
+    const oldPenExp: Date = tempExpiredPenalizeDate ? new Date(tempExpiredPenalizeDate) : new Date()
+    const oldAcExp: Date = tempAccountExpiredDate ? new Date(tempAccountExpiredDate) : new Date()
+    const incom: Date = new Date(e.target.value)
+    if (id === "expiredPenalizeDate") {
+      let date: Date = new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), oldPenExp.getHours(), oldPenExp.getMinutes())
+      if (date < new Date()) date = new Date()
+      setTempExpiredPenalizeDate(date)
+    } else if (id === "expiredPenalizeTime") {
+      const hour: number = parseInt(e.target.value.slice(0, 2))
+      const minute: number = parseInt(e.target.value.slice(3, 5))
+      let date: Date = new Date(oldPenExp.getFullYear(), oldPenExp.getMonth(), oldPenExp.getDate(), hour, minute, 0)
+      if (date < new Date()) date = new Date()
+      setTempExpiredPenalizeDate(date)
+    } else if (id === "accountExpiredDate") {
+      let date: Date = new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), oldAcExp.getHours(), oldAcExp.getMinutes())
+      if (date < new Date()) date = new Date()
+      setTempAccountExpiredDate(date)
+    } else if (id === "accountExpiredTime") {
+      const hour: number = parseInt(e.target.value.slice(0, 2))
+      const minute: number = parseInt(e.target.value.slice(3, 5))
+      let date: Date = new Date(oldAcExp.getFullYear(), oldAcExp.getMonth(), oldAcExp.getDate(), hour, minute, 0)
+      if (date < new Date()) date = new Date()
+      setTempAccountExpiredDate(date)
+    }
   }
 
   const requestSave = () => {
@@ -490,14 +491,7 @@ const UserInfo = () => {
   const renderEditForm = () => {
     return (
       <div>
-        <OtherEditInfoComponent
-          tempInfo={tempInfo}
-          setTempInfo={setTempInfo}
-          handleSubmit={handleSubmit}
-          register={register}
-          setTempUsername={setTempUsername}
-          handleSave={handleSave}
-        />
+        <OtherEditInfoComponent tempInfo={tempInfo} setTempInfo={setTempInfo} setTempUsername={setTempUsername} handleSave={handleSave} />
         <div className="mt-5">
           <Button
             variant="pink"
@@ -538,14 +532,16 @@ const UserInfo = () => {
   }
 
   return (
-    <div className="UserInfo mt-4">
-      {renderModals()}
-      {/* Info start here */}
-      <Card body className="mb-5 mr-4">
-        {renderTopSection()}
-        {isEdit ? renderEditForm() : renderViewForm()}
-      </Card>
-    </div>
+    <FormProvider {...methods}>
+      <div className="UserInfo mt-4">
+        {renderModals()}
+        {/* Info start here */}
+        <Card body className="mb-5 mr-4">
+          {renderTopSection()}
+          {isEdit ? renderEditForm() : renderViewForm()}
+        </Card>
+      </div>
+    </FormProvider>
   )
 }
 

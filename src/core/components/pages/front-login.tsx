@@ -3,8 +3,8 @@ import React from "react"
 import { Switch, Route, useRouteMatch } from "react-router-dom"
 import FrontLoginMain from "../ui/login/login-main"
 import PersonalInfo from "../ui/login/personal-info-form"
-const FrontLoginPage = (props: any) => {
-  const { url, path } = useRouteMatch()
+const FrontLoginPage = () => {
+  const { path } = useRouteMatch()
   return (
     <>
       <Switch>

@@ -1,6 +1,17 @@
-import React, { useState, useEffect, useRef, ComponentType } from "react"
+import React, { useState, useEffect, useRef, ComponentType, useCallback } from "react"
 
-import { RowProps, QueryParams, ViewResponse, ViewRowProps, disable_time, View, Sport } from "./disable-court-interface"
+import {
+  RowProps,
+  QueryParams,
+  ViewResponse,
+  ViewRowProps,
+  disable_time,
+  View,
+  Sport,
+  TimeSlotRow,
+  DisabledCourtSearchBody,
+  DisableCourtBody,
+} from "./disable-court-interface"
 import add from "date-fns/addDays"
 import { client } from "../../../../../axiosConfig"
 
@@ -18,7 +29,7 @@ export const toViewRowProps = (data: disable_time[] | undefined): ViewRowProps[]
 export const useRow = (initial: ViewRowProps[] = []) => {
   const [inProp, setInProp] = useState(false)
   const [rowData, setRowData] = useState<ViewRowProps[]>(initial)
-  const validateTimeSlot = (row) => {
+  const validateTimeSlot = (row: TimeSlotRow) => {
     const newTimeSlot = [parseInt(row.timeSlotStart), parseInt(row.timeSlotEnd)]
     const rowWithSameDay = rowData.filter((r) => r.day === parseInt(row.day))
     if (rowWithSameDay.length === 0) return true
@@ -32,10 +43,11 @@ export const useRow = (initial: ViewRowProps[] = []) => {
     }
     return true
   }
-  const onAddRow = (f) => {
+  const onAddRow = (f: TimeSlotRow) => {
     setRowData((prev) => {
       const timeSlot: number[] = []
-      for (let i = parseInt(f.timeSlotStart); i <= f.timeSlotEnd; i++) {
+      // for (let i = parseInt(f.timeSlotStart); i <= f.timeSlotEnd; i++) {
+      for (let i = parseInt(f.timeSlotStart); i <= parseInt(f.timeSlotEnd); i++) {
         timeSlot.push(i)
       }
       const newRow = { indx: prev?.length, day: parseInt(f.day), time_slot: timeSlot }
@@ -43,10 +55,10 @@ export const useRow = (initial: ViewRowProps[] = []) => {
     })
     setInProp(false)
   }
-  const onDeleteRow = (indx) => {
+  const onDeleteRow = (indx: number) => {
     setRowData((prev) => {
       const arr = [...prev]
-      const found = arr.findIndex((element) => element["indx"] == indx)
+      const found = arr.findIndex((element) => element["indx"] === indx)
       if (found > -1) arr.splice(found, 1)
       return arr
     })
@@ -67,13 +79,13 @@ export const useDate = (initialStartDate: Date | undefined = undefined, initialE
   const [endDate, setEndDate] = useState<Date | undefined>(initialEndDate)
   const [show, setShow] = useState(false)
   const handleAlert = () => setShow(false)
-  const onStartDateChange = (date) => {
+  const onStartDateChange = (date: Date) => {
     date.setHours(0, 0, 0, 0)
     if (date < currentDate || (endDate && date > endDate)) {
       setShow(true)
     } else setStartDate(date)
   }
-  const onEndDateChange = (date) => {
+  const onEndDateChange = (date: Date) => {
     date.setHours(0, 0, 0, 0)
     if (startDate && date < startDate) setShow(true)
     else setEndDate(date)
@@ -98,12 +110,13 @@ export const useOption = () => {
   return { option, currentSport, setCurrentSport }
 }
 
-export const useViewTable = (params) => {
+export const useViewTable = (params: string) => {
   const [viewData, setViewData] = useState<View>()
   const [error, setError] = useState<string>()
   const { inProp, rowData, onAddRow, onDeleteRow, setInProp, setRowData, validateTimeSlot } = useRow()
   const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, setStartDate, setEndDate } = useDate()
-  async function fetchViewData() {
+
+  const fetchViewData = useCallback(async () => {
     await client
       .get<ViewResponse>(`/courts/disable-courts/${params}`)
       .then((res) => {
@@ -113,10 +126,11 @@ export const useViewTable = (params) => {
         setEndDate(new Date(res.data.expired_date))
       })
       .catch((err) => setError(err.response.message))
-  }
+  }, [params, setEndDate, setRowData, setStartDate])
+
   useEffect(() => {
     fetchViewData()
-  }, [])
+  }, [fetchViewData])
   return {
     viewData,
     inProp,
@@ -149,13 +163,13 @@ export const useTableWithPagination = () => {
   const [page, setPage] = useState(1)
   const [maxPage, setMaxPage] = useState(1)
   const firstEffect = useRef(true)
-  const nearestFiveFloor = page % 5 == 0 && page != 1 ? page - 4 : 5 * Math.floor(page / 5) + 1
+  const nearestFiveFloor = page % 5 === 0 && page !== 1 ? page - 4 : 5 * Math.floor(page / 5) + 1
   const nearestFiveCeil = 5 * Math.ceil(page / 5) > maxPage ? maxPage : 5 * Math.ceil(page / 5)
   const pageArr = Array.from(Array(nearestFiveCeil + 1).keys()).slice(nearestFiveFloor, nearestFiveCeil + 1)
-  const onDelete = (id: string) => {
+  const onDelete = (id: number) => {
     client
       .delete(`/courts/disable-courts/${id}`)
-      .then((res) => {
+      .then(() => {
         setParams((prev) => {
           return {
             ...prev,
@@ -165,7 +179,7 @@ export const useTableWithPagination = () => {
           }
         })
       })
-      .catch((err) => setIsError(true))
+      .catch(() => setIsError(true))
   }
   function jumpUp() {
     const currentPage = page ?? 0
@@ -173,10 +187,10 @@ export const useTableWithPagination = () => {
   }
   function jumpDown() {
     const currentPage = page ?? 0
-    if (currentPage % 5 == 0) setPage(5 * (Math.floor(currentPage / 5) - 1))
+    if (currentPage % 5 === 0) setPage(5 * (Math.floor(currentPage / 5) - 1))
     else setPage(5 * Math.floor(currentPage / 5))
   }
-  const fetchData = async (parameter) => {
+  const fetchData = async (parameter: DisabledCourtSearchBody) => {
     await client
       .post("/courts/disable-courts/search", parameter)
       .then((res) => {
@@ -186,6 +200,7 @@ export const useTableWithPagination = () => {
       })
       .catch((err) => console.log(err))
   }
+
   useEffect(() => {
     setParams((prev) => {
       return {
@@ -195,6 +210,7 @@ export const useTableWithPagination = () => {
       }
     })
   }, [page])
+
   useEffect(() => {
     if (firstEffect.current) {
       firstEffect.current = false
@@ -209,11 +225,12 @@ export const useTableWithPagination = () => {
       end: params.end,
     })
   }, [params])
+
   return { data, page, maxPage, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete, isError, setIsError }
 }
 
 export const seed = () => {
-  const arr: any[] = []
+  const arr: DisableCourtBody[] = []
   for (let i = 1; i < 40; i++) {
     arr.push({
       sport_id: "5fe45df25f8cc3264d3a8895",
@@ -253,7 +270,7 @@ export const seed = () => {
   })
 }
 
-export function withDeletable<P>(Component: ComponentType<P>, F: any): React.FC<P> {
+export function withDeletable<P>(Component: ComponentType<P>, F: (indx: number) => void): React.FC<P> {
   return function WithDeletable(props: P) {
     return <Component {...props} onClick={F} />
   }

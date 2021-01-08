@@ -75,8 +75,8 @@ export interface EditCourtProps {
   setShow: (value: boolean) => void
   openTime: string
   closeTime: string
-  onChangeOpenTime: (value: string) => void
-  onChangeCloseTime: (value: string) => void
+  onChangeOpenTime: React.Dispatch<React.SetStateAction<string>>
+  onChangeCloseTime: React.Dispatch<React.SetStateAction<string>>
   courts: CourtData[]
   currentCourt: CourtData | undefined
   currentSportName: string | undefined
@@ -97,7 +97,7 @@ export const EditCourt: React.FC<EditCourtProps> = ({
   currentSportId,
   updateCourt,
 }) => {
-  const { register, handleSubmit } = useForm()
+  const { /*register,*/ handleSubmit } = useForm()
   const onSubmitEditCourt = (data: CourtData) => {
     const formattedOpenTime = formatOpenTime(openTime)
     const formattedCloseTime = formatCloseTime(closeTime)
@@ -134,10 +134,10 @@ export const EditCourt: React.FC<EditCourtProps> = ({
               <TimePicker
                 className="time-picker mb-5"
                 value={openTime}
-                onChange={onChangeOpenTime}
+                onChange={(value) => onChangeOpenTime(value.toString())} // MAJOR CHANGE
                 disableClock={true}
-                type="number"
-                ref={register}
+                // type="number"
+                // ref={register} TODO
                 name="open_time"
               />
             </Col>
@@ -146,10 +146,10 @@ export const EditCourt: React.FC<EditCourtProps> = ({
               <TimePicker
                 className="time-picker mb-5"
                 value={closeTime}
-                onChange={onChangeCloseTime}
+                onChange={(value) => onChangeCloseTime(value.toString())} // MAJOR CHANGE
                 disableClock={true}
-                type="number"
-                ref={register}
+                // type="number"
+                // ref={register} TODO
                 name="close_time"
               />
             </Col>
@@ -232,8 +232,8 @@ export const DeleteCourtModal: React.FC<DeleteCourtModalProps> = ({ show, setSho
 export interface AddCourtFuncProps {
   show: boolean
   setShow: (value: boolean) => void
-  onChangeOpenTime: (e) => void
-  onChangeCloseTime: (e) => void
+  onChangeOpenTime: React.Dispatch<React.SetStateAction<string>>
+  onChangeCloseTime: React.Dispatch<React.SetStateAction<string>>
   openTime: string
   closeTime: string
   courts: CourtData[]
@@ -297,10 +297,10 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
                 <TimePicker
                   className="time-picker mb-5"
                   value={openTime}
-                  onChange={onChangeOpenTime}
+                  onChange={(value) => onChangeOpenTime(value.toString())} // MAJOR CHANGE
                   disableClock={true}
-                  type="number"
-                  ref={register}
+                  // type="number"
+                  // ref={register} TODO
                   name="open_time"
                 />
               </Col>
@@ -309,10 +309,10 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
                 <TimePicker
                   className="time-picker mb-5"
                   value={closeTime}
-                  onChange={onChangeCloseTime}
+                  onChange={(value) => onChangeCloseTime(value.toString())} // MAJOR CHANGE
                   disableClock={true}
-                  type="number"
-                  ref={register}
+                  // type="number"
+                  // ref={register} TODO
                   name="close_time"
                 />
               </Col>

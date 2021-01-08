@@ -20,8 +20,7 @@ export function getTimeArr(): string[] {
 }
 
 export function getMinuteFromTime(time: string): number {
-  let result: number
   const arr = time.split(":")
-  result = arr.length == 2 ? parseInt(arr[0]) * 60 + parseInt(arr[1]) : 0
+  const result = arr.length === 2 ? parseInt(arr[0]) * 60 + parseInt(arr[1]) : 0
   return result
 }

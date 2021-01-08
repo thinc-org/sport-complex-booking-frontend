@@ -84,15 +84,6 @@ export interface PasswordToggle {
   confirmPassword: boolean
 }
 
-export interface CuSatitComponentInfo {
-  name_th: string
-  surname_th: string
-  name_en: string
-  surname_en: string
-  personal_email: string
-  phone: string
-}
-
 export interface AddInfo {
   membership_type: string
   is_thai_language: boolean
@@ -168,7 +159,7 @@ export interface RejectInfo {
   relationship_verification_document: boolean
 }
 
-export const RejectInfoLabel = {
+export const RejectInfoLabel: Record<keyof RejectInfo, string> = {
   prefix: "Prefix",
   name_th: "Thai name",
   surname_th: "Thai surname",
@@ -198,6 +189,8 @@ export const RejectInfoLabel = {
   relationship_verification_document: "Relation verification photo",
 }
 
+export type RejectInfoLabelKey = keyof RejectInfo
+
 // Modals //
 export interface ModalVerify {
   showConfirmAccept: boolean
@@ -218,20 +211,6 @@ export interface ModalUserInfo {
   showPasswordErr: boolean
   showConfirmChange: boolean
   showChangePassword: boolean
-}
-
-export interface ModalAddUser {
-  showAdd: boolean
-  showCom: boolean
-  showErr: boolean
-  showUsernameErr: boolean
-}
-
-// Alerts //
-export interface AlertAddUser {
-  showAlertUncom: boolean
-  showAlertUsername: boolean
-  showAlertPassword: boolean
 }
 
 export interface ModalAddUser {

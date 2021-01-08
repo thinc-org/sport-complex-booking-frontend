@@ -2,17 +2,25 @@ import React from "react"
 import { Button, Modal } from "react-bootstrap"
 import { useTranslation } from "react-i18next"
 
+export interface EdittedData {
+  personal_email: string
+  phone: string
+}
+
 interface CustomAccountModalProps {
   type: "confirmEditAccountModal" | "confirmEditOtherAccountModal" | "editAccountErrorModal"
   show: boolean
   setShow: (value: boolean) => void
-  mainFunction?: (data) => Promise<void> | ((data: EdittedData) => void)
+  mainFunction?: (data: EdittedData) => Promise<void> | ((data: EdittedData) => void)
   data?: EdittedData
 }
 
 export const CustomAccountModal: React.FC<CustomAccountModalProps> = ({ type, show, setShow, mainFunction, data }) => {
   const { t } = useTranslation()
-  const message = t(type, { returnObjects: true })
+  const message: {
+    title: string
+    body: string
+  } = t(type, { returnObjects: true })
   if (!show) return null
   return (
     <Modal
@@ -25,9 +33,9 @@ export const CustomAccountModal: React.FC<CustomAccountModalProps> = ({ type, sh
       className="modal"
     >
       <Modal.Header closeButton>
-        <Modal.Title>{message["title"]}</Modal.Title>
+        <Modal.Title>{message.title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>{message["body"]}</Modal.Body>
+      <Modal.Body style={{ fontWeight: "lighter" }}>{message.body}</Modal.Body>
       <Modal.Footer>
         <Button
           className="btn-normal btn-secondary"
@@ -47,45 +55,42 @@ export const CustomAccountModal: React.FC<CustomAccountModalProps> = ({ type, sh
   )
 }
 
-export interface ConfirmModalProps {
-  show?: boolean
-  setShow(show: boolean): void
-  postDataToBackend: (data) => void
-  formData?: EdittedData
-}
+// UNUSED COMPONENT
 
-export interface EdittedData {
-  personal_email: string
-  phone: string
-}
+// export interface ConfirmModalProps {
+//   show?: boolean
+//   setShow(show: boolean): void
+//   postDataToBackend: (data: EdittedData | undefined) => void
+//   formData?: EdittedData
+// }
 
-export const ConfirmModal: React.FC<ConfirmModalProps> = ({ show, setShow, postDataToBackend, formData }) => {
-  const { t } = useTranslation()
-  if (!show) return null
-  return (
-    <Modal className="modal" show={show} onHide={() => setShow(false)}>
-      <div className="modal-content">
-        <div className="modal-header">
-          <h5 className="modal-title" id="confirmModalLabel">
-            {t("confirmSubmit")}
-          </h5>
-          <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div className="modal-body">{t("confirmSubmitMsg")}</div>
-        <div className="modal-footer">
-          <Button onClick={() => setShow(false)} type="button" variant="outline-secondary" className="btn-normal" data-dismiss="modal">
-            {t("cancel")}
-          </Button>
-          <Button onClick={() => postDataToBackend(formData)} variant="pink" className="btn-normal">
-            {t("saveAndSubmit")}
-          </Button>
-        </div>
-      </div>
-    </Modal>
-  )
-}
+// export const ConfirmModal: React.FC<ConfirmModalProps> = ({ show, setShow, postDataToBackend, formData }) => {
+//   const { t } = useTranslation()
+//   if (!show) return null
+//   return (
+//     <Modal className="modal" show={show} onHide={() => setShow(false)}>
+//       <div className="modal-content">
+//         <div className="modal-header">
+//           <h5 className="modal-title" id="confirmModalLabel">
+//             {t("confirmSubmit")}
+//           </h5>
+//           <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+//             <span aria-hidden="true">&times;</span>
+//           </button>
+//         </div>
+//         <div className="modal-body">{t("confirmSubmitMsg")}</div>
+//         <div className="modal-footer">
+//           <Button onClick={() => setShow(false)} type="button" variant="outline-secondary" className="btn-normal" data-dismiss="modal">
+//             {t("cancel")}
+//           </Button>
+//           <Button onClick={() => postDataToBackend(formData)} variant="pink" className="btn-normal">
+//             {t("saveAndSubmit")}
+//           </Button>
+//         </div>
+//       </div>
+//     </Modal>
+//   )
+// }
 
 export interface ErrorModalProps {
   showErr?: boolean

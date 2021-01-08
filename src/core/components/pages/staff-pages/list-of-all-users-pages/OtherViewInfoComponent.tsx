@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { Button, Card } from "react-bootstrap"
 import Info from "../interfaces/InfoInterface"
 import format from "date-fns/format"
@@ -8,16 +8,11 @@ import { useTranslation } from "react-i18next"
 export default function OtherViewInfoComponent({ info }: { info: Info }) {
   /// Page states
   const [isThai, setThai] = useState<boolean>(true)
-  const { i18n, t } = useTranslation()
-
-  useEffect(() => {
-    if (isThai) i18n.changeLanguage("th")
-    else i18n.changeLanguage("en")
-  }, [isThai])
+  const { t } = useTranslation()
 
   // handles //
-  const handlePDF = (e) => {
-    const fileId = e.target.id
+  const handlePDF = (e: React.MouseEvent<HTMLElement>) => {
+    const fileId = (e.target as HTMLElement).id
     window.open(`/staff/openFile/${fileId}`, "_blank")
   }
 

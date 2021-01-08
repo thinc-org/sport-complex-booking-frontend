@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { Button } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import { Link, useHistory } from "react-router-dom"
@@ -8,6 +8,7 @@ import { client } from "../../../../axiosConfig"
 import { CustomWaitingRoomModal } from "../../ui/Modals/WaitingRoomModals"
 import { WaitingRoomAccessCode } from "./ReservationInterfaces"
 import { CheckValidityErrorMsg, JoinWaitingRoomErrorMsg } from "./ReservationComponents"
+
 interface ValidityMessage {
   message: string
 }
@@ -27,7 +28,7 @@ function JoinWaitingRoom() {
     await client
       .post<WaitingRoomAccessCode>("/reservation/joinwaitingroom", data)
       .then(({ data }) => {
-        if (data["isReservationCreated"]) {
+        if (data.isReservationCreated) {
           history.push({ pathname: "/hooray", state: { fromJoinWaitingRoom: true } })
         } else {
           history.push("/waitingroom")
@@ -43,7 +44,7 @@ function JoinWaitingRoom() {
       })
   }
 
-  const fetchValidity = async () => {
+  const fetchValidity = useCallback(async () => {
     await client
       .post<ValidityMessage>("/reservation/checkvalidity")
       .then(({ data }) => {
@@ -62,11 +63,11 @@ function JoinWaitingRoom() {
           setShowValidityWarningMessage(true)
         }
       })
-  }
+  }, [history])
 
   useEffect(() => {
     fetchValidity()
-  }, [])
+  }, [fetchValidity])
 
   return (
     <div className="wrapper">

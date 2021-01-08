@@ -3,21 +3,21 @@ import { useRouteMatch, useHistory } from "react-router-dom"
 import { Button, Table } from "react-bootstrap"
 import { format } from "date-fns"
 import addDays from "date-fns/addDays"
-import { getMinute, getTime , dayArr } from "./mapTime"
+import { getMinute, getTime, dayArr } from "./mapTime"
 import { RowProps, TableProps, ViewRowProps } from "./disable-court-interface"
 
-export const CourtRow = (props: RowProps) => {
-  const { url, path } = useRouteMatch()
+export const CourtRow = ({ _id, starting_date, expired_date, court_num, sport_id, button }: RowProps) => {
+  const { path } = useRouteMatch()
   const history = useHistory()
-  const onNavigate = () => history.push(`${path}/${props._id}`)
-  const startingDate = addDays(new Date(props.starting_date), 1)
-  const expiredDate = new Date(props.expired_date)
+  const onNavigate = () => history.push(`${path}/${_id}`)
+  const startingDate = addDays(new Date(starting_date), 1)
+  const expiredDate = new Date(expired_date)
   return (
     <>
-      {props._id && props.court_num ? (
+      {_id && court_num ? (
         <tr>
-          <td>{props.court_num}</td>
-          <td>{props.sport_id.sport_name_th}</td>
+          <td>{court_num}</td>
+          <td>{sport_id.sport_name_th}</td>
           <td>{format(startingDate, "MM/dd/yyyy")}</td>
           <td className="d-flex flex-row justify-content-between align-items-center">
             {format(expiredDate, "MM/dd/yyyy")}
@@ -25,7 +25,7 @@ export const CourtRow = (props: RowProps) => {
               <Button variant="outline-transparent" className="mr-2" onClick={onNavigate}>
                 ดูข้อมูล
               </Button>
-              {props.button}
+              {button}
             </div>
           </td>
         </tr>
@@ -62,9 +62,14 @@ export function CourtTable<T>({ data, header, Row, Button }: TableProps<T>) {
         </tr>
       </thead>
       <tbody>
-        {data?.map((val, indx) => {
-          return <Row {...val} indx={indx} key={val._id ?? indx} button={Button ? <Button indx={val._id ?? indx} /> : null} />
-        })}
+        {data?.map((val, index) => (
+          <Row
+            {...val}
+            indx={index}
+            key={val._id || index}
+            button={Button ? <Button indx={typeof val._id === "number" ? val._id : index} /> : undefined}
+          />
+        ))}
       </tbody>
     </Table>
   )

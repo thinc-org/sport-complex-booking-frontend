@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useContext, useCallback } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 
 import { Link } from "react-router-dom"
 import { client } from "../../../axiosConfig"
-import { UserContext } from "../../contexts/UsersContext"
 import { useTranslation } from "react-i18next"
 import { CookieModal } from "../ui/Modals/CookieModal"
 import { PersonCircle, Calendar, PeopleFill, BookmarkFill } from "react-bootstrap-icons"
 import withUserGuard from "../../guards/user.guard"
 import footer from "../../assets/images/footer.svg"
 import { Loading } from "../ui/loading/loading"
+import { useLanguage } from "../../utils/language"
 
 interface NameResponse {
   nameth: string
@@ -19,8 +19,8 @@ const HomePage = () => {
   const [cookieConsent, setCookieConsent] = useState(() => localStorage.getItem("Cookie Allowance") === "true")
   const [name, setName] = useState<NameResponse>()
   const [disable, setDisable] = useState(true)
-  const userContext = useContext(UserContext)
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const language = useLanguage()
   const [isLoading, setIsLoading] = useState(true)
 
   const fetchUserName = useCallback(async () => {
@@ -36,7 +36,7 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchUserName()
-    console.log("cookieConsent: " + cookieConsent)
+    // console.log("cookieConsent: " + cookieConsent)
   }, [fetchUserName])
 
   const handleClick = () => {
@@ -59,7 +59,7 @@ const HomePage = () => {
         <div className="col-12">
           <div style={{ fontSize: "24px", marginBottom: "30px", fontWeight: 400, lineHeight: "17px", textAlign: "center" }}>
             {" "}
-            {t("welcome")}, {name && name[`name${i18n.language}`]}
+            {t("welcome")}, {name && name[`name${language}`]}
           </div>
           {!name && (
             <>
@@ -99,7 +99,7 @@ const HomePage = () => {
 
           <CookieModal show={!cookieConsent} handleClick={handleClick} />
         </div>
-        <img src={footer} style={{ position: "fixed", bottom: 0, zIndex: 0, height: "45%", width: "100%" }} />
+        <img src={footer} style={{ position: "fixed", bottom: 0, zIndex: 0, height: "45%", width: "100%" }} alt="" />
       </div>
     </div>
   )

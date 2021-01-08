@@ -4,13 +4,14 @@ import { Button } from "react-bootstrap"
 import { useHistory, Link } from "react-router-dom"
 import { client } from "../../../../axiosConfig"
 import { NavHeader } from "../../ui/navbar/navbarSideEffect"
-import { timeShift, timeConversion, timeRemainingDisplay } from "./timeFormating"
-import { ConfirmModal , TimeOutModal } from "../../ui/Modals/CurrentWaitingRoomModal"
+import { timeShift, timeConversion, TimeRemainingDisplay } from "./timeFormating"
+import { ConfirmModal, TimeOutModal } from "../../ui/Modals/CurrentWaitingRoomModal"
 
 import { useTranslation } from "react-i18next"
 import withUserGuard from "../../../guards/user.guard"
-import Countdown from "react-countdown"
+import Countdown, { CountdownRenderProps } from "react-countdown"
 import { Loading } from "../../ui/loading/loading"
+import { useLanguage } from "../../../utils/language"
 
 interface SportNameResponse {
   sportNameth: string
@@ -18,7 +19,6 @@ interface SportNameResponse {
 }
 
 const WaitingRoomPage = () => {
-  const [remainingTime, setRemainingTime] = useState<string>()
   const [waitingRoomId, setWaitingRoomId] = useState<string>()
   const [sport, setSport] = useState<SportNameResponse>()
   const [date, setDate] = useState<string>()
@@ -31,7 +31,8 @@ const WaitingRoomPage = () => {
   const [requiredUserNumber, setRequiredUserNumber] = useState<number>(0)
   const [currentUserNumber, setCurrentUserNumber] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(true)
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const language = useLanguage()
 
   const history = useHistory()
 
@@ -60,20 +61,17 @@ const WaitingRoomPage = () => {
   }, [fetchWaitingRoom])
 
   useEffect(() => {
-    if (currentUserNumber && requiredUserNumber) {
-      if (currentUserNumber == requiredUserNumber) {
-        // successful reservation and redirect to hooray page
-
-        history.push("/hooray")
-      }
+    if (currentUserNumber && requiredUserNumber && currentUserNumber === requiredUserNumber) {
+      // successful reservation and redirect to hooray page
+      history.push("/hooray")
     }
-  }, [currentUserNumber])
+  }, [history, currentUserNumber, requiredUserNumber])
 
-  function triggerModal(modal) {
-    if (modal == "confirmModal") {
+  function triggerModal(modal: string) {
+    if (modal === "confirmModal") {
       setModalConfirmOpen(!modalConfirmOpen)
       return modalConfirmOpen
-    } else if (modal == "timeOutModal") {
+    } else if (modal === "timeOutModal") {
       setModalTimeOutOpen(!modalTimeOutOpen)
       return modalTimeOutOpen
     }
@@ -112,8 +110,8 @@ const WaitingRoomPage = () => {
     )
   }
 
-  const renderer = ({ minutes, seconds, completed }) => {
-    return timeRemainingDisplay(minutes, seconds, completed, timeOut)
+  const renderer = (props: CountdownRenderProps) => {
+    return <TimeRemainingDisplay onTimeOut={timeOut} {...props} />
   }
 
   if (!isLoading) {
@@ -130,17 +128,15 @@ const WaitingRoomPage = () => {
                 </div>
                 <div className="box-container btn w-100 mb-4">
                   <h6 style={{ fontWeight: 700, fontSize: "14px", marginBottom: "5px" }}> {t("summary")} </h6>
-                  <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}> {sport && sport[`sportName${i18n.language}`]} </h6>
+                  <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}> {sport && sport[`sportName${language}`]} </h6>
                   <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}>
-                    {" "}
                     {t("date")}: {date}
                   </h6>
                   <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}>
-                    {" "}
                     {t("time")}:
                     {timeList.map((eachTime) => {
                       return timeConversion(eachTime)
-                    })}{" "}
+                    })}
                   </h6>
                 </div>
                 <div className="box-container btn w-100 mb-3">
@@ -160,12 +156,10 @@ const WaitingRoomPage = () => {
                     onClick={fetchWaitingRoom}
                     style={{ fontSize: "15px", fontWeight: 400, float: "right", borderRadius: "15px", padding: "2px 10px" }}
                   >
-                    {" "}
-                    {t("refresh")}{" "}
+                    {t("refresh")}
                   </Button>
                   <div style={{ fontSize: "18px", fontWeight: 400, lineHeight: "26px" }}>
-                    {" "}
-                    {t("users")} {userNumber()}{" "}
+                    {t("users")} {userNumber()}
                   </div>
                 </div>
                 <div className="box-container btn" style={{ width: "100%", marginBottom: "45px" }}>
@@ -179,16 +173,14 @@ const WaitingRoomPage = () => {
                     </thead>
 
                     {listMember &&
-                      listMember.map((eachMember, index) => {
-                        return (
-                          <tbody>
-                            <tr>
-                              <td> {index + 1} </td>
-                              <td> {eachMember} </td>
-                            </tr>
-                          </tbody>
-                        )
-                      })}
+                      listMember.map((eachMember, index) => (
+                        <tbody key={index}>
+                          <tr>
+                            <td> {index + 1} </td>
+                            <td> {eachMember} </td>
+                          </tr>
+                        </tbody>
+                      ))}
                   </table>
                 </div>
                 <Button

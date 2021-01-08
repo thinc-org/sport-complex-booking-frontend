@@ -3,13 +3,14 @@ import React, { useState, useEffect, useCallback } from "react"
 import { useHistory, Link } from "react-router-dom"
 import { useLocation } from "react-router"
 import { Button } from "react-bootstrap"
-import { timeConversion } from "../Reservation/timeConversion"
+import { timeConversion } from "../Reservation/timeFormating"
 import { client } from "../../../../axiosConfig"
 import QRCode from "qrcode.react"
 import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 import { useTranslation } from "react-i18next"
 import { ReservationCancellationModal } from "../../ui/Modals/ReservationCancelModal"
 import { Loading } from "../../ui/loading/loading"
+import { useLanguage } from "../../../utils/language"
 
 interface LocationResponse {
   id: string
@@ -28,8 +29,9 @@ interface SportResponse {
 
 const ReservationDetail = () => {
   const location = useLocation()
-  const history = useHistory()
-  const { t, i18n } = useTranslation()
+  const history = useHistory<LocationResponse>()
+  const { t } = useTranslation()
+  const language = useLanguage()
 
   const [id, setId] = useState<string>()
   const [sport, setSport] = useState<SportResponse>()
@@ -45,16 +47,18 @@ const ReservationDetail = () => {
 
   const fetchId = useCallback(() => {
     if (location.state) {
-      setId((location.state as LocationResponse).id)
+      setId(history.location.state.id)
+      // setId((location.state as LocationResponse).id)
     } else {
-      history.push((location.state as LocationResponse).path)
+      history.push(history.location.state.path)
+      // history.push((location.state as LocationResponse).path)
     }
-  }, [])
+  }, [setId, history, location.state])
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       console.log(id)
-      const res = (await client.get("myreservation/" + id)).data
+      const res = (await client.get(`myreservation/${id}`)).data
       const data = (await client.get("court-manager/setting")).data
       setSport({ sportth: res.sport_id.sport_name_th, sporten: res.sport_id.sport_name_en })
       setCourtNum(res.court_number)
@@ -67,23 +71,37 @@ const ReservationDetail = () => {
       setIsLoading(false)
     } catch (err) {
       console.log(err.message)
-      history.push((location.state as any).path)
+      history.push(history.location.state.path)
+      // history.push((location.state as any).path)
     }
-  }
+  }, [history, id])
+
+  const countDown = useCallback(() => {
+    if (!isCheck) {
+      setTimeout(function () {
+        if (counter) {
+          setCounter(counter - 1)
+        } else if (counter === 0) {
+          history.push(history.location.state.path)
+          //history.push((location.state as any).path)
+        }
+      }, 1000)
+    }
+  }, [counter, history, isCheck])
 
   useEffect(() => {
     if (id) fetchData()
-  }, [id])
+  }, [fetchData, id])
 
   useEffect(() => {
     fetchId()
     console.log("reservation detail")
-  }, [])
+  }, [fetchId])
 
   useEffect(() => {
     if (isCheck === false) countDown()
     console.log(counter)
-  }, [counter, isCheck])
+  }, [counter, isCheck, countDown])
 
   const triggerModal = () => {
     console.log("show modal")
@@ -97,22 +115,13 @@ const ReservationDetail = () => {
     client
       .delete("myreservation/" + id)
       .then(() => {
-        history.push((location.state as any).path)
+        history.push(history.location.state.path)
+        // history.push((location.state as any).path)
       })
       .catch((err) => {
         console.log(err)
         triggerModal()
       })
-  }
-
-  const countDown = () => {
-    if (!isCheck) {
-      setTimeout(function () {
-        if (counter) {
-          setCounter(counter - 1)
-        } else if (counter === 0) history.push((location.state as any).path)
-      }, 1000)
-    }
   }
 
   const qrCode = () => {
@@ -121,14 +130,12 @@ const ReservationDetail = () => {
         <>
           <div className="box-container btn w-100 mb-5" style={{ textAlign: "center" }}>
             <h6 className="mt-2 mb-0" style={{ fontWeight: 400 }}>
-              {" "}
               {t("qrcodeInvalid")}{" "}
             </h6>
-            <div style={{ fontSize: "18px", fontWeight: 400 }}> 00:{counter == 10 ? counter : "0" + counter} </div>
-            <QRCode className="mb-4 mt-3" value={id} renderAs="svg" size="128" fgColor="#333" bgColor="#fff" />
+            <div style={{ fontSize: "18px", fontWeight: 400 }}> 00:{counter === 10 ? counter : "0" + counter} </div>
+            <QRCode className="mb-4 mt-3" value={id} renderAs="svg" size={128} fgColor="#333" bgColor="#fff" />
             <h5 className="mb-2" style={{ fontWeight: 400 }}>
-              {" "}
-              {t("showQRToStaff")}{" "}
+              {t("showQRToStaff")}
             </h5>
           </div>
           <Button onClick={triggerModal} variant="outline-danger cancel-btn">
@@ -141,12 +148,11 @@ const ReservationDetail = () => {
         <>
           <div className="box-container btn w-100 mb-5" style={{ textAlign: "center" }}>
             <h4 className="m-2" style={{ color: "lightgreen" }}>
-              {" "}
-              {t("youHaveCheckedIn")}{" "}
+              {t("youHaveCheckedIn")}
             </h4>
           </div>
           <div className="container fixed-bottom mt-5">
-            <Link to={(location.state as LocationResponse).path}>
+            <Link to={history.location.state.path /*(location.state as LocationResponse).path*/}>
               <Button variant="outline-dark return-btn" className="w-100">
                 {t("goBack")}
               </Button>
@@ -166,13 +172,11 @@ const ReservationDetail = () => {
             <div className="col-12 h-100">
               <div className="box-container btn mb-4" style={{ width: "100%" }}>
                 <div>
-                  <h4 className="mb-2"> {sport && sport[`sport${i18n.language}`]} </h4>
+                  <h4 className="mb-2"> {sport && sport[`sport${language}`]} </h4>
                   <h6 className="mb-0 font-weight-light">
-                    {" "}
                     {t("court")}: {courtNum}
                   </h6>
                   <h6 className="mb-0 font-weight-light">
-                    {" "}
                     {t("bookingDate")}: {date}{" "}
                   </h6>
                   <h6 className="mb-0 font-weight-light">
@@ -185,8 +189,8 @@ const ReservationDetail = () => {
                   {memberList &&
                     memberList.map((eachMember, index) => {
                       return (
-                        <h6 className="mb-0" style={{ fontWeight: 300 }}>
-                          {index + 1}. {eachMember[`name_${i18n.language}`]}
+                        <h6 className="mb-0" style={{ fontWeight: 300 }} key={index}>
+                          {index + 1}. {eachMember[`name_${language}`]}
                         </h6>
                       )
                     })}

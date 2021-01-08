@@ -30,8 +30,7 @@ export const CookieModal: React.FC<CookieModalProps> = ({ show, handleClick }) =
           </div>
           <div className="modal-footer pt-3 pb-0 pr-0">
             <Button variant="pink" onClick={handleClick} className="btn pt-1 pb-1" data-dismiss="modal" style={{ fontSize: "14px", fontWeight: 400 }}>
-              {" "}
-              {t("allow")}{" "}
+              {t("allow")}
             </Button>
           </div>
         </div>

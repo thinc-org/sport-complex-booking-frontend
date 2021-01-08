@@ -29,11 +29,9 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({ modalConfirmOpen, ha
             <h6 style={{ fontWeight: 300 }}> {t("closeWaitingRoom?")} </h6>
             <div className="modal-footer pt-0 pb-0 pr-0">
               <button type="button" onClick={handleClick} className="btn pt-0 pb-0" data-dismiss="modal">
-                {" "}
                 <h6 style={{ fontWeight: 400 }}> {t("cancel")} </h6>
               </button>
               <button type="button" onClick={closeWaitingRoom} className="btn pr-0 pt-0 pb-0">
-                {" "}
                 <h6 style={{ fontWeight: 400 }}> {t("confirm")} </h6>
               </button>
             </div>

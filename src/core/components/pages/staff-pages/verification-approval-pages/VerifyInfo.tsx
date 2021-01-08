@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from "react"
+import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
 import { RouteComponentProps, Link, useHistory } from "react-router-dom"
 import { Button, Card, Form, Collapse } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
@@ -13,8 +13,7 @@ import {
   ErrorModal,
 } from "./VerifyModalsComopnent"
 import format from "date-fns/format"
-import Info, { RejectInfo, ModalVerify, RejectInfoLabel } from "../interfaces/InfoInterface"
-
+import Info, { RejectInfo, ModalVerify, RejectInfoLabel, RejectInfoLabelKey } from "../interfaces/InfoInterface"
 
 /// start of main function ///
 const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
@@ -97,12 +96,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
 
   const history = useHistory()
 
-  // useEffects //
-  useEffect(() => {
-    fetchUserData()
-  }, [])
-
-  const fetchUserData = () => {
+  const fetchUserData = useCallback(() => {
     client({
       method: "GET",
       url: "/approval/" + _id,
@@ -147,17 +141,19 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
         console.log(response)
         if (response && response.data.statusCode === 401) history.push("/staff")
       })
-  }
+  }, [_id, history])
+
+  // useEffects //
+  useEffect(() => {
+    fetchUserData()
+  }, [fetchUserData])
 
   const confirmReject = () => {
     // check if at least one condition is checked
     let checked = false
-    for (const key in rejectInfo) {
-      if (rejectInfo[key] === true) {
-        checked = true
-        break
-      }
-    }
+    Object.entries(rejectInfo).forEach(([key, val], index) => {
+      if (val) checked = true
+    })
     if (!checked) setShowModalInfo({ ...showModalInfo, showUncomReject: true })
     else setShowModalInfo({ ...showModalInfo, showConfirmReject: true })
   }
@@ -165,9 +161,9 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   const requestReject = () => {
     // console.log("request rejected!!!")
     const rejectList: string[] = []
-    for (const name in rejectInfo) {
-      if (rejectInfo[name]) rejectList.push(name)
-    }
+    Object.entries(rejectInfo).forEach(([key, val], index) => {
+      rejectList.push(key)
+    })
     // send request //
     client({
       method: "PATCH",
@@ -209,8 +205,9 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   }
 
   // handles //
-  const handleChangeExpire = (e) => {
-    const date = e.target.value
+  const handleChangeExpire = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement
+    const date = target.value
     if (new Date(date) < new Date()) setAccountExpiredDate(new Date())
     else setAccountExpiredDate(new Date(date))
   }
@@ -289,14 +286,15 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
       return (
         <Form.Check
           key={index}
-          label={RejectInfoLabel[name]}
+          label={RejectInfoLabel[name as RejectInfoLabelKey]}
           id={name}
           type="checkbox"
-          defaultChecked={rejectInfo[name]}
-          onChange={(e) => {
+          defaultChecked={rejectInfo[name as keyof RejectInfo]}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const target = e.target as HTMLInputElement
             setRejectInfo({
               ...rejectInfo,
-              [e.target.id]: e.target.checked,
+              [target.id]: e.target.checked,
             })
           }}
         />

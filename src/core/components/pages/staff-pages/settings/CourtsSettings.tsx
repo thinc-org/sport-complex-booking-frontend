@@ -1,18 +1,12 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { Table, Form, Row, Col, Button } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import { NoCourtsModal, EditCourt, DeleteCourtModal, AddCourtFunc } from "./CourtsSettingsComponents"
 import { HandleError } from "./SportSettingsComponents"
 import { AxiosResponse } from "axios"
+import { Sport, Court } from "../disable-court/disable-court-interface"
 
 export default function CourtsSettings() {
-  interface CourtData {
-    court_num: number
-    open_time?: number
-    close_time?: number
-    _id: string
-  }
-
   const [showAddCourt, setShowAddCourt] = useState(false)
   const [showNoCourt, setShowNoCourt] = useState(false)
   const [showEditCourt, setShowEditCourt] = useState(false)
@@ -23,42 +17,43 @@ export default function CourtsSettings() {
   const [sports, setSports] = useState(["sportID1"])
   const [sportsList, setSportsList] = useState([""])
   const [currentSportId, setCurrentSportId] = useState("$")
-  const [currentSportName, setCurrentSportName] = useState()
+  const [currentSportName, setCurrentSportName] = useState("")
   const [currentCourt, setCurrentCourt] = useState({})
-  const [courts, setCourts] = useState<CourtData[]>([
+  const [courts, setCourts] = useState<Court[]>([
     {
       court_num: 0,
       open_time: 0,
       close_time: 0,
       _id: "",
+      __v: 0,
     },
   ])
 
-  useEffect(() => {
-    requestSports()
-  }, [])
-
-  const requestSports = async () => {
+  const requestSports = useCallback(async () => {
     await client
-      .get<AxiosResponse>("/court-manager/0/999/" + currentSportId)
-      .then((data) => {
+      .get("/court-manager/0/999/" + currentSportId)
+      .then(({ data }) => {
         const newSport = ["temp"]
-        data["data"]["sport_list"].forEach((sport: string) => {
+        data["sport_list"].forEach((sport: string) => {
           newSport.push(sport)
         })
         setSports(newSport.slice(1))
-        setSportsList(data["data"]["sport_list"])
+        setSportsList(data["sport_list"])
       })
       .catch(() => {
         setShowError(true)
       })
-  }
+  }, [currentSportId])
+
+  useEffect(() => {
+    requestSports()
+  }, [requestSports])
 
   const requestCourts = async (sportId: string) => {
     await client
-      .get<AxiosResponse>("/court-manager/" + sportId)
-      .then((data) => {
-        setCourts(data["data"]["list_court"])
+      .get<Sport>("/court-manager/" + sportId)
+      .then(({ data }) => {
+        setCourts(data.list_court)
       })
       .catch(() => {
         setShowError(true)
@@ -68,7 +63,7 @@ export default function CourtsSettings() {
   const deleteCourt = async (courtId: string, sportId: string) => {
     let newCourts = courts
     newCourts = newCourts.filter(function (court) {
-      return court["_id"] !== courtId
+      return court._id !== courtId
     })
     const data = {
       sport_id: sportId,
@@ -104,11 +99,16 @@ export default function CourtsSettings() {
       })
   }
 
-  const handleChangeSport = (e) => {
-    setCurrentSportId(e.target.value!)
+  const handleChangeSport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement
+    setCurrentSportId(target.value)
     sportsList.forEach((sport) => {
-      if (sport["_id"] === e.target.value!) {
-        setCurrentSportName(sport["sport_name_th"])
+      // TODO: sport is a only `string` it doesn't have `_id`
+      // if (sport["_id"] === target.value) {
+      if (sport === target.value) {
+        // TODO same as aboce
+        // setCurrentSportName(sport["sport_name_th"])
+        setCurrentSportName(sport)
       }
     })
     requestCourts(e.target.value!)
@@ -118,7 +118,9 @@ export default function CourtsSettings() {
     const courtList = courts.map((court, i) => {
       const openTime = Math.floor((court["open_time"]! - 1) / 2) + ":" + (Math.floor(court["open_time"]! % 2) === 0 ? "30" : "00")
       const closeTime = Math.floor(court["close_time"]! / 2) + ":" + (Math.floor((court["close_time"]! + 1) % 2) !== 0 ? "00" : "30")
-      if (court["sport_name_th"] === "")
+      // TODO court doesn't have a `sport_name_th` field. the type is incompatible.
+      // if (court["sport_name_th"] === "")
+      if (court._id === "")
         return (
           <div className="alert alert-danger mt-3" role="alert">
             กรุณาเลือกชนิดกีฬา
@@ -166,12 +168,16 @@ export default function CourtsSettings() {
     <div>
       <Form.Group controlId="exampleForm.ControlSelect1">
         <Form.Label>ประเภทกีฬา</Form.Label>
-        <Form.Control as="select" custom defaultValue={0} onChange={(e) => handleChangeSport(e)}>
+        <Form.Control as="select" custom defaultValue={0} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeSport(e)}>
           <option value={"$"}>เลือกประเภทกีฬา</option>
           {sports.map((sport, i) => {
             return (
-              <option key={i} value={sport["_id"]}>
-                {sport["sport_name_th"]}
+              // TODO sport is a only `string`. the type is incompatible
+              // <option key={i} value={sport["_id"]}>
+              //   {sport["sport_name_th"]}
+              // </option>
+              <option key={i} value={sport}>
+                {sport}
               </option>
             )
           })}

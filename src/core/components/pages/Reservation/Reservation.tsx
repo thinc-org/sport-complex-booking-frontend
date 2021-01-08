@@ -3,37 +3,38 @@ import { Button } from "react-bootstrap"
 import { useRouteMatch, useHistory } from "react-router-dom"
 
 import { client } from "../../../../axiosConfig"
-import { timeConversion } from "../Reservation/timeConversion"
+import { timeConversion } from "../Reservation/timeFormating"
 import { AxiosResponse } from "axios"
 import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 import { useTranslation } from "react-i18next"
 import { Loading } from "../../ui/loading/loading"
+import { CuStudent, Other, SatitCuPersonel } from "../../../contexts/UsersContext"
+import { Sport } from "../staff-pages/interfaces/reservationSchemas"
+import { useLanguage } from "../../../utils/language"
 
 interface ReservationResponse {
   _id: string
   is_check: boolean
-  sport_id: string
+  sport_id: Sport
   court_number: number
   date: Date
   time_slot: number[]
+  day_of_week: number
+  list_member: (CuStudent | SatitCuPersonel | Other)[]
 }
 
 const ReservationPage = () => {
   const history = useHistory()
 
-  const [lists, setLists] = useState<Array<ReservationResponse>>([])
+  const [lists, setLists] = useState<ReservationResponse[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const { url, path } = useRouteMatch()
-  const { t, i18n } = useTranslation()
-
-  useEffect(() => {
-    fetchData()
-    console.log("fetch data")
-  }, [])
+  const { path } = useRouteMatch()
+  const { t } = useTranslation()
+  const language = useLanguage()
 
   const fetchData = useCallback(async () => {
     try {
-      const res: AxiosResponse = await client.get("/myreservation")
+      const res: AxiosResponse<ReservationResponse[]> = await client.get("/myreservation")
       setLists(res.data)
       setIsLoading(false)
     } catch (err) {
@@ -52,6 +53,11 @@ const ReservationPage = () => {
     })
   }
 
+  useEffect(() => {
+    fetchData()
+    console.log("fetch data")
+  }, [fetchData])
+
   if (lists && lists.length && !isLoading) {
     return (
       <>
@@ -62,6 +68,7 @@ const ReservationPage = () => {
               {lists.map((list) => {
                 return (
                   <Button
+                    key={list._id}
                     variant="pink"
                     onClick={() => handleClick(list._id)}
                     className="box-container btn"
@@ -69,18 +76,15 @@ const ReservationPage = () => {
                   >
                     <div>
                       <h5 style={{ color: "lightgreen", float: "right" }}> {list.is_check ? t("checkedIn") : ""} </h5>
-                      <h5 className="mb-2"> {list.sport_id[`sport_name_${i18n.language}`]} </h5>
+                      <h5 className="mb-2"> {list.sport_id[`sport_name_${language}`]} </h5>
                       <h6 className="mb-0 font-weight-light">
-                        {" "}
-                        {t("court")}: {list.court_number}{" "}
+                        {t("court")}: {list.court_number}
                       </h6>
                       <h6 className="mb-0 font-weight-light">
-                        {" "}
-                        {t("bookingDate")}: {new Date(list.date).toLocaleDateString()}{" "}
+                        {t("bookingDate")}: {new Date(list.date).toLocaleDateString()}
                       </h6>
                       <h6 className="mb-0 font-weight-light">
-                        {" "}
-                        {t("bookingTime")}: {list.time_slot.map((eachTimeSlot) => timeConversion(eachTimeSlot))}{" "}
+                        {t("bookingTime")}: {list.time_slot.map((eachTimeSlot) => timeConversion(eachTimeSlot))}
                       </h6>
                     </div>
                   </Button>

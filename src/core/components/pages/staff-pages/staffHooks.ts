@@ -3,18 +3,25 @@ import { setCookie } from "../../../contexts/cookieHandler"
 import { useAuthContext } from "../../../controllers/authContext"
 import { useHistory } from "react-router-dom"
 import { client } from "../../../../axiosConfig"
+import { ErrorOption } from "react-hook-form"
 
 interface StaffResponse {
   jwt: string
   message: string
   statusCode: string
 }
-export const useStaffLogin = (setError) => {
+
+export interface LoginDTO {
+  username: string
+  password: string
+}
+
+export const useStaffLogin = (setError: (name: string, error: ErrorOption) => void) => {
   const { setToken } = useAuthContext()
   const history = useHistory()
-  const onLogin = async (data) => {
+  const onLogin = async (data: LoginDTO) => {
     client
-      .post<StaffResponse>(`/staffs/login`, { username: data.username, password: data.password })
+      .post<StaffResponse>(`/staffs/login`, data)
       .then((res: AxiosResponse<StaffResponse>) => {
         setCookie("token", res.data.jwt, 1)
         setToken(res.data.jwt)

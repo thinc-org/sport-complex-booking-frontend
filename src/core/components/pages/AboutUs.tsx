@@ -9,10 +9,11 @@ import Mentors from "../../assets/images/Mentors.svg"
 import ProjectManager from "../../assets/images/ProjectManager.svg"
 import titleBackground from "../../assets/images/titleBackground.svg"
 import { useTranslation } from "react-i18next"
+import { useLanguage } from "../../utils/language"
 
 function AboutUs() {
-  const { t, i18n } = useTranslation()
-  const { language } = i18n
+  const { t } = useTranslation()
+  const language = useLanguage()
   const credits = [
     {
       title: "productOwner",

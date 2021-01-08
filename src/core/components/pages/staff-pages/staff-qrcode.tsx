@@ -1,14 +1,14 @@
 import React, { useState, useEffect, FunctionComponent, useCallback } from "react"
 
 import { RouteComponentProps } from "react-router-dom"
-import { BrowserQRCodeReader } from "@zxing/library"
+import { BrowserQRCodeReader, Result } from "@zxing/library"
 import { client } from "../../../../axiosConfig"
 import { Button } from "react-bootstrap"
 import { CheckinModal } from "../../ui/Modals/CheckinModal"
 
 const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
   const codeReader = new BrowserQRCodeReader()
-  const [readingResult, setReadingResult] = useState<any>([])
+  const [readingResult, setReadingResult] = useState<Result>()
   const [messageHeader, setMessageHeader] = useState<string>("")
   const [messageBody, setMessageBody] = useState<string>("")
   const [modalOpen, setModalOpen] = useState<boolean>(false)
@@ -18,13 +18,15 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
     .decodeOnceFromVideoDevice(undefined, "video")
     .then((result) => {
       setReadingResult(result)
-      setData(readingResult.text)
+      // TODO Property 'text' is private and only accessible within class 'Result'.
+      // readingResult?.text && setData(readingResult.text)
+      console.log(readingResult)
     })
     .catch((err) => console.error(err))
 
   const checkIn = useCallback(async (reservationId) => {
     try {
-      const res = await client.patch("myreservation/" + reservationId)
+      await client.patch("myreservation/" + reservationId)
       setMessageHeader("เช็คอินสำเร็จ")
       setMessageBody("ID: " + reservationId)
       setModalOpen(true)
@@ -68,8 +70,7 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
             <div style={{ fontSize: "36px", fontWeight: 700, textAlign: "center" }}> QR CODE SCANNER </div>
           </div>
           <Button variant="pink" className="col-4 offset-4 p-0 pl-2 pr-2 mb-2" onClick={refresh}>
-            {" "}
-            Refresh{" "}
+            Refresh
           </Button>
           <div className="box-container btn offset-1 col-10 pt-3" style={{ boxShadow: "none" }}>
             <video id="video" width="100%" style={{ border: "1px solid gray" }}></video>

@@ -1,6 +1,6 @@
 import React from "react"
-import { useViewTable , useEditCourt, withDeletable } from "./disable-court-hook"
-import { useParams, useHistory, useRouteMatch } from "react-router-dom"
+import { useViewTable, useEditCourt, withDeletable } from "./disable-court-hook"
+import { useParams, useHistory } from "react-router-dom"
 import { ViewRow, CourtTable } from "./disabled-court-table"
 import { ViewRowProps } from "./disable-court-interface"
 import { DeleteButton } from "./button"
@@ -15,7 +15,6 @@ interface Params {
   id: string
 }
 const ViewCourt = () => {
-  const { path } = useRouteMatch()
   const history = useHistory()
   const params = useParams<Params>()
   const {
@@ -34,11 +33,11 @@ const ViewCourt = () => {
     validateTimeSlot,
   } = useViewTable(params.id)
   const { isEdit, setIsEdit, error, setError } = useEditCourt()
-  const toggleEdit = (e) => {
+  const toggleEdit = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     setIsEdit(true)
     e.preventDefault()
   }
-  const onSubmit = (e) => {
+  const onSubmit = () => {
     const formData = {
       sport_id: viewData?.sport_id._id,
       disable_time: rowData,

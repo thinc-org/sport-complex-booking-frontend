@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form"
 import { useLogin } from "./loginHooks"
 import { useTranslation } from "react-i18next"
 
-export const LoginForm = () => {
+const LoginForm = () => {
   const { t } = useTranslation()
   const { register, handleSubmit, setError, errors, clearErrors } = useForm()
   const { isLoading, onLogin } = useLogin(setError)
@@ -51,4 +51,5 @@ export const LoginForm = () => {
     </div>
   )
 }
+
 export default LoginForm

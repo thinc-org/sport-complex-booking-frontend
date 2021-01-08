@@ -1,18 +1,18 @@
-import React, { useEffect } from "react"
-import { Route, useHistory, Switch, useRouteMatch } from "react-router-dom"
+import React from "react"
+import { Route, Switch, useRouteMatch } from "react-router-dom"
 
 import ReservationPage from "../Reservation/Reservation"
 import ReservationDetail from "../Reservation/ReservationDetail"
 import withUserGuard from "../../../guards/user.guard"
 
 const MyReservationPage = () => {
-  const history = useHistory()
+  // const history = useHistory()
 
-  const { url, path } = useRouteMatch()
+  const { path } = useRouteMatch()
 
-  useEffect(() => {
-    history.push(path)
-  }, [])
+  // useEffect(() => {
+  //   history.push(path)
+  // }, [history, path])
 
   return (
     <Switch>

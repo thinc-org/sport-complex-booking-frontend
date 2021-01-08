@@ -14,7 +14,7 @@ function StaffNavbar() {
     if (!location.pathname.toLowerCase().includes("staff") || location.pathname.toLowerCase() === "/stafflogin") setHidden(true)
     else setHidden(false)
   }, [location])
-  const onLogout = async (e) => {
+  const onLogout = async () => {
     setToken("")
     setCookie("token", "", 0)
     history.replace("/staff")
@@ -23,7 +23,7 @@ function StaffNavbar() {
   return (
     <Navbar style={{ display: hide ? "none" : "" }}>
       <NavbarBrand className="mr-auto">
-        <img className="logo" src={logo} />
+        <img className="logo" src={logo} alt="" />
       </NavbarBrand>
       <NavbarBrand>
         <Button

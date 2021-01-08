@@ -1,9 +1,15 @@
-import React, { FunctionComponent, useState, useEffect } from "react"
+import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
 import { Table, Form, Col, Button, Modal } from "react-bootstrap"
 import { useHistory } from "react-router-dom"
 import { client } from "../../../../../axiosConfig"
 import { OtherInfo } from "../interfaces/InfoInterface"
 import PaginationComponent from "../list-of-all-users-pages/PaginationComponent"
+
+interface RejectedInfo {
+  start: number
+  end: number
+  name: string
+}
 
 const VeritificationApproval: FunctionComponent = () => {
   // page state
@@ -13,18 +19,12 @@ const VeritificationApproval: FunctionComponent = () => {
   const [searchName, setSearchName] = useState<string>("")
   const [showNoUser, setShowNoUser] = useState<boolean>(false)
   const [users, setUsers] = useState<OtherInfo[]>([])
-
   const history = useHistory()
 
-  /// useEffects ///
-  useEffect(() => {
-    requestUsers()
-  }, [pageNo])
-
   // other functions //
-  const requestUsers = () => {
+  const requestUsers = useCallback(() => {
     //  request users from server  //
-    const params = {
+    const params: Partial<RejectedInfo> = {
       start: (pageNo - 1) * maxUserPerPage,
       end: pageNo * maxUserPerPage,
     }
@@ -47,9 +47,14 @@ const VeritificationApproval: FunctionComponent = () => {
         console.log(response)
         if (response && response.data.statusCode === 401) history.push("/staff")
       })
-  }
+  }, [history, maxUserPerPage, pageNo, searchName])
 
-  const handleSearch = (e) => {
+  /// useEffects ///
+  useEffect(() => {
+    requestUsers()
+  }, [requestUsers])
+
+  const handleSearch = (e: React.FormEvent) => {
     // send jwt and get //
     // if no user -> "user not found"
     e.preventDefault()
@@ -57,10 +62,11 @@ const VeritificationApproval: FunctionComponent = () => {
     else requestUsers()
   }
 
-  const handleInfo = (e) => {
-    //send jwt and username
+  const handleInfo = (e: React.MouseEvent<HTMLElement>) => {
+    // send jwt and username
     // if no data of that user -> show pop up
-    const _id = e.target.id
+    const target = e.target as HTMLElement
+    const _id = target.id
     client({
       method: "GET",
       url: "/approval/" + _id,

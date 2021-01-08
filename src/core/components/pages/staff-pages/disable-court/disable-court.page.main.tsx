@@ -6,7 +6,7 @@ import ViewCourt from "./viewCourt"
 import AddCourt from "./addCourt"
 
 const DisableCourt = () => {
-  const { path, url } = useRouteMatch()
+  const { path } = useRouteMatch()
   return (
     <Switch>
       <Route path={`${path}/add`} component={AddCourt} />

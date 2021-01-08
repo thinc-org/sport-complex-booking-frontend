@@ -5,25 +5,22 @@ import { client } from "../../../../../axiosConfig"
 import Info, { EditComponentInfo } from "../interfaces/InfoInterface"
 import format from "date-fns/format"
 import isValid from "date-fns/isValid"
+import { useFormContext } from "react-hook-form"
 
 export default function OtherEditInfoComponent({
   tempInfo,
   setTempInfo,
-  register,
-  handleSubmit,
   setTempUsername,
   handleSave,
 }: {
   tempInfo: Info
   setTempInfo: React.Dispatch<React.SetStateAction<Info>>
-  register: any
-  handleSubmit: any
   setTempUsername: React.Dispatch<React.SetStateAction<string>>
   handleSave: () => void
 }) {
   // Page state //
+  const { register, handleSubmit } = useFormContext()
   const { _id } = useParams<{ _id: string }>()
-
   const [userPhotoFile, setUserPhotoFile] = useState<File>()
   const [medicalCertificateFile, setMedicalCertificateFile] = useState<File>()
   const [nationalIdPhotoFile, setNationalIdPhotoFile] = useState<File>()
@@ -31,7 +28,7 @@ export default function OtherEditInfoComponent({
   const [relationshipVerificationDocumentFile, setRelationshipVerificationDocumentFile] = useState<File>()
 
   // handles //
-  const handleUpload = (typename, file) => {
+  const handleUpload = (typename: string, file: File) => {
     const formData = new FormData()
     const selectedFile = file
     // Update the formData object
@@ -100,7 +97,6 @@ export default function OtherEditInfoComponent({
     email,
     home_phone,
     phone,
-    contact_person,
     medical_condition,
     membership_type,
   } = tempInfo
@@ -236,7 +232,7 @@ export default function OtherEditInfoComponent({
                 label="โสด"
                 type="radio"
                 value="Single"
-                onChange={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setTempInfo({ ...tempInfo, marital_status: e.target.value })
                 }}
                 checked={marital_status === "Single" ? true : false}
@@ -246,7 +242,7 @@ export default function OtherEditInfoComponent({
                 label="สมรส"
                 type="radio"
                 value="Married"
-                onChange={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setTempInfo({ ...tempInfo, marital_status: e.target.value })
                 }}
                 checked={marital_status === "Married" ? true : false}
@@ -256,7 +252,7 @@ export default function OtherEditInfoComponent({
                 label="อื่นๆ : "
                 type="radio"
                 value=""
-                onChange={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setTempInfo({ ...tempInfo, marital_status: e.target.value })
                 }}
                 checked={marital_status !== "Single" && marital_status !== "Married" ? true : false}
@@ -379,8 +375,8 @@ export default function OtherEditInfoComponent({
                 label={userPhotoFile ? (userPhotoFile! as File).name : "Choose File"}
                 id="user_photo"
                 custom
-                onChange={(e) => {
-                  if (e.target.files[0]) {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.files && e.target.files[0]) {
                     setUserPhotoFile(e.target.files[0])
                     handleUpload(e.target.id, e.target.files[0])
                   }
@@ -394,8 +390,8 @@ export default function OtherEditInfoComponent({
                 label={nationalIdPhotoFile ? (nationalIdPhotoFile! as File).name : "Choose File"}
                 id="national_id_photo"
                 custom
-                onChange={(e) => {
-                  if (e.target.files[0]) {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.files && e.target.files[0]) {
                     setNationalIdPhotoFile(e.target.files[0])
                     handleUpload(e.target.id, e.target.files[0])
                   }
@@ -409,8 +405,8 @@ export default function OtherEditInfoComponent({
                 label={medicalCertificateFile ? (medicalCertificateFile! as File).name : "Choose File"}
                 id="medical_certificate"
                 custom
-                onChange={(e) => {
-                  if (e.target.files[0]) {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.files && e.target.files[0]) {
                     setMedicalCertificateFile(e.target.files[0])
                     handleUpload(e.target.id, e.target.files[0])
                   }
@@ -424,8 +420,8 @@ export default function OtherEditInfoComponent({
                 label={houseRegistrationNumberFile ? (houseRegistrationNumberFile! as File).name : "Choose File"}
                 id="house_registration_number"
                 custom
-                onChange={(e) => {
-                  if (e.target.files[0]) {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.files && e.target.files[0]) {
                     setHouseRegistrationNumberFile(e.target.files[0])
                     handleUpload(e.target.id, e.target.files[0])
                   }
@@ -439,8 +435,8 @@ export default function OtherEditInfoComponent({
                 label={relationshipVerificationDocumentFile ? (relationshipVerificationDocumentFile! as File).name : "Choose File"}
                 id="relationship_verification_document"
                 custom
-                onChange={(e) => {
-                  if (e.target.files[0]) {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.files && e.target.files[0]) {
                     setRelationshipVerificationDocumentFile(e.target.files[0])
                     console.log(e.target.files[0])
                     handleUpload(e.target.id, e.target.files[0])

@@ -28,11 +28,11 @@ function Landing() {
 
           <div className="landing smallimagegroup col-12 col-sm-4 p-0 d-block d-sm-none">
             <div className="group small">
-              <img className="img" src={landing} />
+              <img className="img" src={landing} alt="" />
             </div>
           </div>
         </div>
-        <img src={landing} className="landing relative-img d-none d-sm-block" />
+        <img src={landing} className="landing relative-img d-none d-sm-block" alt="" />
 
         <div className="d-block d-sm-none col-12 fixed-bottom button">
           <Link className="landing btn col button-group pt-5" to="/login">

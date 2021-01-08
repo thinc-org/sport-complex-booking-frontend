@@ -1,10 +1,11 @@
-import React, { createContext , useState } from "react"
+import React, { createContext, useState } from "react"
 
+export type AccountType = "CuStudent" | "SatitAndCuPersonel" | "Other"
 
-type AccountType = "CuStudent" | "SatitCuPersonel" | "Other"
+type OnlyString<P> = { [K in keyof P]: P[K] extends string ? K : never }[keyof P]
 
 export interface DefaultAccount {
-  account_type: string
+  account_type: AccountType
   is_thai_language: boolean
   name_en: string
   surname_en: string
@@ -23,7 +24,7 @@ export interface CuStudent extends DefaultAccount {
 }
 
 export interface SatitCuPersonel extends DefaultAccount {
-  account_type: "SatitCuPersonel"
+  account_type: "SatitAndCuPersonel"
 }
 
 export interface Other extends DefaultAccount {
@@ -45,7 +46,7 @@ export interface Other extends DefaultAccount {
   medical_condition: string
   membership_type: string
   verification_status: string
-  rejected_info: string[]
+  rejected_info: OnlyString<Omit<Other, "account_type" | "rejected_info">>[]
   account_expiration_date: Date
   user_photo: string //(ของcollectionที่เก็บรูป)
   medical_certificate: string
@@ -53,6 +54,8 @@ export interface Other extends DefaultAccount {
   house_registration_number: string //with reference person
   relationship_verification_document: string
 }
+
+export type AccountInfo = DefaultAccount | CuStudent | SatitCuPersonel | Other
 
 export interface UserConstruct {
   cuStudentAccount: CuStudent | undefined
@@ -65,7 +68,7 @@ export interface UserConstruct {
 
 export const UserContext = createContext({} as UserConstruct)
 
-export default function UserContextProvider(props) {
+export default function UserContextProvider({ ...props }) {
   const [cuStudentAccount, setCuStudentAccount] = useState<CuStudent>()
   const [satitCuPersonelAccount, setSatitCuPersonelAccount] = useState<SatitCuPersonel>()
   const [otherAccount, setOtherAccount] = useState<Other>()

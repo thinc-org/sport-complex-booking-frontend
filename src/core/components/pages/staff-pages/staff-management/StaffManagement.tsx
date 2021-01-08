@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { Table, Form, Row, Col, Button, Pagination, Modal } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import { admin_and_staff, DeleteStaffModal, EditStaffModal, AddStaffModal, HandleErrorModal } from "./StaffManagementComponents"
@@ -21,7 +21,7 @@ export default function StaffManagement() {
     is_admin: true,
   })
 
-  const [staffs, setStaffs] = useState([
+  const [staffs, setStaffs] = useState<admin_and_staff[]>([
     {
       name: "",
       surname: "",
@@ -32,11 +32,34 @@ export default function StaffManagement() {
     },
   ])
 
+  const requestStaffs = useCallback(
+    async (query?: string, type?: string) => {
+      const start = (pageNo - 1) * 10
+      const end = pageNo * 10
+      const query_filter = query ? query : "$"
+      const type_filter = type ? type : "all"
+      await client
+        .get<admin_and_staff[]>("/staff-manager/admin-and-staff/" + start + "/" + end + "/" + query_filter + "/" + type_filter)
+        .then(({ data }) => {
+          console.log(data)
+          // TODO: fix DTO is not match to what you use
+          // setStaffs(data["staff_list"])
+          // setMaxStaff(data["allStaff_length"])
+          setStaffs(data)
+          setMaxStaff(data.length)
+        })
+        .catch(() => {
+          setShowError(true)
+        })
+    },
+    [pageNo]
+  )
+
   useEffect(() => {
     requestStaffs()
-  }, [pageNo])
+  }, [requestStaffs])
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     requestStaffs(searchName, type)
   }
@@ -76,23 +99,6 @@ export default function StaffManagement() {
       .then(() => {
         setShowDeleteStaff(false)
         requestStaffs()
-      })
-      .catch(() => {
-        setShowError(true)
-      })
-  }
-
-  const requestStaffs = async (query?: string, type?: string) => {
-    const start = (pageNo - 1) * 10
-    const end = pageNo * 10
-    const query_filter = query ? query : "$"
-    const type_filter = type ? type : "all"
-    await client
-      .get<admin_and_staff[]>("/staff-manager/" + "admin-and-staff/" + start + "/" + end + "/" + query_filter + "/" + type_filter)
-      .then((data) => {
-        console.log(data)
-        setStaffs(data["data"]["staff_list"])
-        setMaxStaff(data["data"]["allStaff_length"])
       })
       .catch(() => {
         setShowError(true)

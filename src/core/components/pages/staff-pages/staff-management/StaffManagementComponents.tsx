@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { passwordSchema } from "./StaffManagementSchema"
 
 export interface admin_and_staff {
+  _id?: string // MAJOR CHANGE
   name: string
   surname: string
   username: string
@@ -76,7 +77,7 @@ export const EditStaffModal: React.FC<EditStaffModalProps> = ({ show, setShow })
       <Modal.Header closeButton>
         <Modal.Title>คําเตือน</Modal.Title>
       </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>ท่านได้ทําการเปลี่ยนสถานะของพนักงาน กรุณากด'ตกลง'เพื่อการดําเนินต่อ</Modal.Body>
+      <Modal.Body style={{ fontWeight: "lighter" }}>{"ท่านได้ทําการเปลี่ยนสถานะของพนักงาน กรุณากด'ตกลง'เพื่อการดําเนินต่อ"}</Modal.Body>
       <Modal.Footer>
         <Button
           variant="pink"

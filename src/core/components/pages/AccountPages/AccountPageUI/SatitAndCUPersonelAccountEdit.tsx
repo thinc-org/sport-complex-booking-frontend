@@ -8,7 +8,11 @@ import { client } from "../../../../../axiosConfig"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { infoSchema } from "../../../../schemas/editUserInfo"
 
-export default function SatitAndCUPersonelAccountEdit({ toggleEditButton }) {
+interface SatitAndCUPersonelAccountEditProps {
+  toggleEditButton: () => void
+}
+
+export default function SatitAndCUPersonelAccountEdit({ toggleEditButton }: SatitAndCUPersonelAccountEditProps) {
   const { t } = useTranslation()
 
   const [show, setShow] = useState(false)
@@ -24,7 +28,7 @@ export default function SatitAndCUPersonelAccountEdit({ toggleEditButton }) {
     setFormData(data)
   }
 
-  const handleCancel = (e) => {
+  const handleCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     toggleEditButton()
   }

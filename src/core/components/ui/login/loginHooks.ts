@@ -2,11 +2,14 @@ import { useState, useEffect } from "react"
 import { useHistory, useRouteMatch } from "react-router-dom"
 import { useAuthContext } from "../../../controllers/authContext"
 import { setCookie } from "../../../contexts/cookieHandler"
-import { setIsFirstLogin , getIsFirstlogin } from "../../../../constant"
+import { setIsFirstLogin, getIsFirstlogin } from "../../../../constant"
 
 import { client } from "../../../../axiosConfig"
 import { AxiosResponse } from "axios"
 import { useTranslation } from "react-i18next"
+import { ErrorOption } from "react-hook-form"
+import { LoginDTO } from "../../pages/staff-pages/staffHooks"
+import { DefaultAccount } from "../../../contexts/UsersContext"
 
 interface UserResponse {
   token: string
@@ -14,16 +17,15 @@ interface UserResponse {
   is_thai_language: boolean
   jwt: string
 }
-export const useLogin = (setError) => {
+
+export const useLogin = (setError: (name: string, error: ErrorOption) => void) => {
   const { setToken } = useAuthContext()
   const history = useHistory()
-  const { url, path } = useRouteMatch()
+  const { path } = useRouteMatch()
   const [isLoading, setLoading] = useState(false)
   const { i18n, t } = useTranslation()
-  const changeLanguage = (language) => {
-    i18n.changeLanguage(language)
-  }
-  const onLogin = async (data) => {
+
+  const onLogin = async (data: LoginDTO) => {
     setLoading(true)
     console.log(data)
     await client
@@ -40,8 +42,8 @@ export const useLogin = (setError) => {
         setIsFirstLogin(false)
         if (res.data.is_first_login) history.push(`${path}/personal`)
         else history.push("/home")
-        if (res.data.is_thai_language) changeLanguage("th")
-        else changeLanguage("en")
+        if (res.data.is_thai_language) i18n.changeLanguage("th")
+        else i18n.changeLanguage("en")
         window.location.reload()
       })
       .catch((err) => {
@@ -52,6 +54,7 @@ export const useLogin = (setError) => {
         })
       })
   }
+
   useEffect(() => {
     if (history.location.search) {
       const params = history.location.search
@@ -69,8 +72,8 @@ export const useLogin = (setError) => {
           setIsFirstLogin(first_time_login)
           if (res.data.is_first_login) history.push(`${path}/personal`)
           else history.push("/home")
-          if (res.data.is_thai_language) changeLanguage("th")
-          else changeLanguage("en")
+          if (res.data.is_thai_language) i18n.changeLanguage("th")
+          else i18n.changeLanguage("en")
         })
         .catch((err) => {
           setLoading(false)
@@ -80,7 +83,7 @@ export const useLogin = (setError) => {
           })
         })
     }
-  }, [])
+  }, [i18n, history, path, setError, setToken, t])
 
   return { isLoading, onLogin }
 }
@@ -90,12 +93,12 @@ export const usePreventUserFromSignIn = () => {
   const { isUser } = useAuthContext()
   useEffect(() => {
     if (isUser) history.push("/home")
-  }, [])
+  }, [history, isUser])
 }
 export const usePersonalInfo = () => {
   const { token } = useAuthContext()
   const history = useHistory()
-  const onSubmit = (data) => {
+  const onSubmit = (data: DefaultAccount) => {
     client
       .put(
         `/users/validation`,
@@ -120,6 +123,6 @@ export const usePersonalInfo = () => {
     if (!getIsFirstlogin()) {
       history.push("/home")
     }
-  }, [])
+  }, [history])
   return { onSubmit }
 }

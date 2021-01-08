@@ -22,10 +22,12 @@ export interface WaitingRoomData {
 
 export const DetailsModal: React.FC<DetailsModalProps> = ({ show, setShow, sportName, details, date, times, formatTime, postDataToBackend }) => {
   const { t } = useTranslation()
-  const handlePostData = () => {
-    postDataToBackend(details!)
-    setShow(false)
-  }
+
+  // const handlePostData = () => {
+  //   postDataToBackend(details!)
+  //   setShow(false)
+  // }
+
   if (!show) return null
   return (
     <Modal className="modal" show={show} onHide={() => setShow(false)}>
@@ -81,7 +83,10 @@ interface CustomWaitingRoomModalProps {
 
 export const CustomWaitingRoomModal: React.FC<CustomWaitingRoomModalProps> = ({ type, show, setShow }) => {
   const { t } = useTranslation()
-  const message = t(type, { returnObjects: true })
+  const message: {
+    title: string
+    body: string
+  } = t(type, { returnObjects: true })
   if (!show) return null
   return (
     <Modal
@@ -94,9 +99,9 @@ export const CustomWaitingRoomModal: React.FC<CustomWaitingRoomModalProps> = ({ 
       className="modal"
     >
       <Modal.Header closeButton>
-        <Modal.Title>{message["title"]}</Modal.Title>
+        <Modal.Title>{message.title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>{message["body"]}</Modal.Body>
+      <Modal.Body style={{ fontWeight: "lighter" }}>{message.body}</Modal.Body>
       <Modal.Footer>
         <Button variant="pink" className="btn-normal" onClick={() => setShow(false)}>
           {t("ok")}

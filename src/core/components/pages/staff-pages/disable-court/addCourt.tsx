@@ -3,7 +3,7 @@ import { useForm, useWatch } from "react-hook-form"
 import { Container, Row, Col, Button, Form } from "react-bootstrap"
 import { useHistory } from "react-router-dom"
 import { useOption, useDate, withDeletable, useRow } from "./disable-court-hook"
-import { ErrorAlert , FormAlert } from "./modals"
+import { ErrorAlert, FormAlert } from "./modals"
 import DatePicker from "react-datepicker"
 
 import { ViewRowProps, AddCourtForm } from "./disable-court-interface"
@@ -29,13 +29,13 @@ const AddCourt = () => {
     console.log(formData)
     await client
       .post("/courts/disable-courts", formData)
-      .then((res) => {
+      .then(() => {
         history.goBack()
       })
       .catch((err) => {
         setError("request", {
           type: "manual",
-          message: err.response.status == 409 ? "วันหรือเวลาของการปิดคอร์ดนี้ซ้ำกับการปิดคอร์ดที่มีอยู่แล้ว" : "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง",
+          message: err.response.status === 409 ? "วันหรือเวลาของการปิดคอร์ดนี้ซ้ำกับการปิดคอร์ดที่มีอยู่แล้ว" : "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง",
         })
       })
   }
@@ -68,10 +68,10 @@ const AddCourt = () => {
           <Row>
             <Col>
               <Form.Label>เลขคอร์ด</Form.Label>
-              <Form.Control name="court_num" as="select" ref={register({ required: true, validate: (val) => val != "เลขคอร์ด" })}>
+              <Form.Control name="court_num" as="select" ref={register({ required: true, validate: (val) => val !== "เลขคอร์ด" })}>
                 {option && watchSports ? (
                   option
-                    .find((sport) => sport._id == watchSports)
+                    .find((sport) => sport._id === watchSports)
                     ?.list_court.map((court) => {
                       return (
                         <option value={court.court_num} key={court._id}>

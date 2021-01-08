@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from "react"
 import { Form, Card, Row, Col, Button } from "react-bootstrap"
 import { Link, useHistory } from "react-router-dom"
-import { useForm } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
 import { AddInfo, ModalAddUser, AlertAddUser, AddUserComponentInfo } from "../interfaces/InfoInterface"
 import { client } from "../../../../../axiosConfig"
 import ChangePasswordComponent from "./AddUserPasswordComponent"
@@ -37,7 +37,8 @@ const AddUser: FunctionComponent = () => {
     phone: "",
   })
 
-  const { register, handleSubmit } = useForm()
+  const methods = useForm()
+  const { register, handleSubmit } = methods
   const history = useHistory()
 
   // functions //
@@ -71,16 +72,18 @@ const AddUser: FunctionComponent = () => {
 
   const renderNormalForm = () => {
     return (
-      <Form onSubmit={handleSubmit(handleAdd)}>
-        {renderSelector(0)}
-        <Form.Group>
-          <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
-          <Form.Control ref={register} name="username" defaultValue={user.username} />
-        </Form.Group>
-        <AlertInvalidUsername show={showAlerts} />
-        <ChangePasswordComponent selectingSatit={selectingSatit} register={register} />
-        <AlertErrorPassword show={showAlerts} />
-      </Form>
+      <FormProvider {...methods}>
+        <Form onSubmit={handleSubmit(handleAdd)}>
+          {renderSelector(0)}
+          <Form.Group>
+            <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
+            <Form.Control ref={register} name="username" defaultValue={user.username} />
+          </Form.Group>
+          <AlertInvalidUsername show={showAlerts} />
+          <ChangePasswordComponent selectingSatit={selectingSatit} />
+          <AlertErrorPassword show={showAlerts} />
+        </Form>
+      </FormProvider>
     )
   }
 
@@ -137,7 +140,7 @@ const AddUser: FunctionComponent = () => {
               <Form.Control ref={register} name="username" defaultValue={username} />
             </Col>
           </Row>
-          <ChangePasswordComponent selectingSatit={selectingSatit} register={register} />
+          <ChangePasswordComponent selectingSatit={selectingSatit} />
           <AlertInvalidUsername show={showAlerts} />
           <AlertErrorPassword show={showAlerts} />
         </Form.Group>
@@ -157,16 +160,16 @@ const AddUser: FunctionComponent = () => {
   }
 
   // handles //
-  const handleChangeType = (e) => {
+  const handleChangeType = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, membership_type: e.target.value })
     if (e.target.value === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" || user.membership_type === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา")
       setSelectingSatit(!selectingSatit)
   }
 
   const handleAdd = (data: AddUserComponentInfo) => {
-    const { username, name_th, surname_th, name_en, surname_en, personal_email, phone, password, confirmPassword } = data
-    const newUser = data.is_thai_language ? { ...data, membership_type: user.membership_type } : { ...user, username: data.username }
-    delete newUser["confirmPassword"]
+    const { confirmPassword, ...rest } = data
+    const { username, name_th, surname_th, name_en, surname_en, personal_email, phone, password } = rest
+    const newUser = data.is_thai_language ? { ...rest, membership_type: user.membership_type } : { ...user, username: data.username }
     setUser(newUser)
     if (!validCheck(username)) setShowAlerts({ showAlertPassword: false, showAlertUncom: false, showAlertUsername: true })
     else if (password !== confirmPassword) setShowAlerts({ showAlertUncom: false, showAlertUsername: false, showAlertPassword: true })

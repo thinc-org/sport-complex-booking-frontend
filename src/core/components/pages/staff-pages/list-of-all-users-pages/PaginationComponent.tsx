@@ -18,7 +18,7 @@ const PaginationComponent: React.FC<PaginationProps> = ({ pageNo, setPageNo, max
   }
 
   const max_page: number = Math.floor((maxUser + maxUserPerPage - 1) / maxUserPerPage)
-  const numList: Array<number> = []
+  const numList: number[] = []
   let haveMore = true
   let i = 0
   while (numList.length < 5) {

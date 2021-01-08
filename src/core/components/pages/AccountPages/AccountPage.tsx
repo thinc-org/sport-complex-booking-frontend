@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react"
+import React, { useState, useEffect, useContext, useCallback } from "react"
 import ChulaAccount from "./ChulaAccount"
 import SatitAndCUPersonelAccount from "./SatitAndCUPersonelAccount"
 import OtherAccount from "./OtherAccount"
@@ -8,43 +8,43 @@ import { useTranslation } from "react-i18next"
 import { Loading } from "../../ui/loading/loading"
 import { client } from "../../../../axiosConfig"
 
-function AccountPage() {
-  enum Account {
-    CuStudent = "CuStudent",
-    SatitAndCuPersonel = "SatitAndCuPersonel",
-    Other = "Other",
-  }
+enum Account {
+  CuStudent = "CuStudent",
+  SatitAndCuPersonel = "SatitAndCuPersonel",
+  Other = "Other",
+}
 
+function AccountPage() {
   const { setCuStudentAccount, setSatitCuPersonelAccount, setOtherAccount } = useContext(UserContext)
   const [account_type, setAccountType] = useState<string>()
   const [penalizeStatus, setPenalizeStatus] = useState<boolean>()
   const [penalizeEndDate, setPenalizeEndDate] = useState("")
 
-  useEffect(() => {
-    fetch_account_type()
-  }, [])
-
-  const fetch_account_type = async () => {
+  const fetch_account_type = useCallback(async () => {
     await client.get<DefaultAccount>("/account_info/").then(({ data }) => {
-      const newData = { ...data }
       setPenalizeStatus(data.is_penalize)
-      if (data.expired_penalize_date) setPenalizeEndDate(data.expired_penalize_date.toString().substring(0, 10))
+      if (data.expired_penalize_date) setPenalizeEndDate(data.expired_penalize_date.toString().substring(0, 10)) // date-fns
       if (data.account_type === "CuStudent") {
-        setCuStudentAccount(newData as CuStudent)
+        setCuStudentAccount(data as CuStudent)
       } else if (data.account_type === "SatitAndCuPersonel") {
-        setSatitCuPersonelAccount(newData as SatitCuPersonel)
+        setSatitCuPersonelAccount(data as SatitCuPersonel)
       } else if (data.account_type === "Other") {
         const other = data as Other
+        const newOther = data as Other
         other.rejected_info
-          ? other.rejected_info.forEach((field: string) => {
-              newData[field] = ""
+          ? other.rejected_info.forEach((field) => {
+              newOther[field] = ""
             })
           : console.log("No rejected info")
-        setOtherAccount(newData as Other)
+        setOtherAccount(newOther)
       }
       setAccountType(data.account_type)
     })
-  }
+  }, [setCuStudentAccount, setOtherAccount, setSatitCuPersonelAccount])
+
+  useEffect(() => {
+    fetch_account_type()
+  }, [fetch_account_type])
 
   const showPage = (account_type: string | undefined) => {
     switch (account_type) {

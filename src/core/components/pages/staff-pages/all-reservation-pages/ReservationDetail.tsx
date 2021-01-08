@@ -1,10 +1,11 @@
-import React, { FunctionComponent, useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect, useMemo, useCallback } from "react"
 import { Link, useParams, useHistory } from "react-router-dom"
 import { Table, Row, Col, Button, Card } from "react-bootstrap"
 import format from "date-fns/format"
 import { client } from "../../../../../axiosConfig"
 import SuccessfulReservation, { WaitingRoom, TimeObject } from "../interfaces/reservationSchemas"
 import { ConfirmDeleteModal, ErrModal, DeleteSuccessfulModal } from "./DeleteModalComponent"
+import { Sport } from "../disable-court/disable-court-interface"
 
 export const convertSlotToTime = (slot: number): TimeObject => {
   // if (slot % 2 === 0) return String(slot / 2 - 1) + ":30-" + (slot / 2 !== 24 ? String(slot / 2) : "0") + ":00"
@@ -37,7 +38,7 @@ export const getTimeText = (timeSlot: number[]): string => {
   return text
 }
 
-const ReservationDetail: FunctionComponent = () => {
+const ReservationDetail: React.FC = () => {
   // Page state //
   const [showConfirmDel, setShowConfirmDel] = useState<boolean>(false)
   const [showComDel, setShowComDel] = useState<boolean>(false)
@@ -55,27 +56,8 @@ const ReservationDetail: FunctionComponent = () => {
   const history = useHistory()
   const { pagename, _id } = useParams<{ pagename: string; _id: string }>()
 
-  // useEffects //
-  useEffect(() => {
-    requestInfo()
-  }, [pagename, _id])
-
-  useEffect(() => {
-    client({
-      method: "GET",
-      url: "/court-manager/sports/",
-    })
-      .then(({ data }) => {
-        const sport = data.find((sport) => sport._id === detail?.sport_id)
-        setSportName(sport?.sport_name_th || "")
-      })
-      .catch(({ response }) => {
-        console.log(response)
-      })
-  }, [sportId])
-
   // request //
-  const requestInfo = () => {
+  const requestInfo = useCallback(() => {
     const url: string = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + `/${_id}`
     client({
       method: "GET",
@@ -89,7 +71,24 @@ const ReservationDetail: FunctionComponent = () => {
         console.log(response)
         setShowErr(true)
       })
-  }
+  }, [_id, pagename])
+
+  // useEffects //
+  useEffect(() => {
+    requestInfo()
+  }, [requestInfo])
+
+  useEffect(() => {
+    client
+      .get<Sport[]>("/court-manager/sports/")
+      .then(({ data }) => {
+        const sport = data.find((sport) => sport._id === detail?.sport_id)
+        setSportName(sport?.sport_name_th || "")
+      })
+      .catch(({ response }) => {
+        console.log(response)
+      })
+  }, [sportId, detail?.sport_id])
 
   const requestDelete = () => {
     const url = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + `/${_id}`
@@ -97,7 +96,7 @@ const ReservationDetail: FunctionComponent = () => {
       method: "DELETE",
       url,
     })
-      .then(({ data }) => {
+      .then(() => {
         setShowConfirmDel(false)
         setShowComDel(true)
       })

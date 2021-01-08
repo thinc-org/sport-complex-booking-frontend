@@ -1,8 +1,16 @@
-import React, { FunctionComponent, useState, useEffect } from "react"
+import { AxiosResponse } from "axios"
+import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
 import { Table, Form, Row, Col, Button, Modal } from "react-bootstrap"
 import { Link, useHistory } from "react-router-dom"
 import { client } from "../../../../../axiosConfig"
+import { AccountInfo } from "../../../../contexts/UsersContext"
 import PaginationComponent from "./PaginationComponent"
+
+enum Account {
+  CuStudent = "CuStudent",
+  SatitAndCuPersonel = "SatitAndCuPersonel",
+  Other = "Other",
+}
 
 interface CUTemplate {
   account_type: Account
@@ -50,11 +58,15 @@ enum allStatus {
   Banned,
 }
 
-enum Account {
-  CuStudent,
-  SatitAndCuPersonel,
-  Other,
+interface ParamsDataRequest {
+  begin: number
+  end: number
+  name: string
+  surname: string
+  penalize: boolean
 }
+
+type FilterResponse = [number, AccountInfo[]]
 
 const ListOfAllUsers: FunctionComponent = () => {
   // page state
@@ -84,51 +96,56 @@ const ListOfAllUsers: FunctionComponent = () => {
 
   const history = useHistory()
 
-  // useEffect //
-  useEffect(() => {
-    requestUsers()
-  }, [pageNo])
-
-  const requestUsers = () => {
+  const requestUsers = useCallback(() => {
     // get params for request //
-    const param_data = {
+    const param_data: Partial<ParamsDataRequest> = {
       begin: (pageNo - 1) * maxUserPerPage,
       end: pageNo * maxUserPerPage,
     }
-    if (searchName !== "") param_data["name"] = searchName
-    if (status !== allStatus.All) param_data["penalize"] = allStatus.Banned === status
+    if (searchName !== "") param_data.name = searchName
+    if (status !== allStatus.All) param_data.penalize = allStatus.Banned === status
     //  request users from server  //
     client({
       method: "GET",
       url: "/list-all-user/filter",
       params: param_data,
     })
-      .then(({ data }) => {
+      .then(({ data }: AxiosResponse<FilterResponse>) => {
+        /* TODO In this case Users that create from `CUTemplate` | `OtherTemplate` | `SatitTemplate` is incompatible 
+           to `CuStudent` | `SatitCuPersonel` | `Other` because they don't have `_id` field
+           I'm not sure how to fix problem this. so I decide to add `_id: ""` field to userList
+        */
         const userList = data[1].map((user) => {
-          if (user.account_type === "CuStudent") return { ...user, account_type: Account.CuStudent }
-          else if (user.account_type === "SatitAndCuPersonel") return { ...user, account_type: Account.SatitAndCuPersonel }
-          return { ...user, account_type: Account.Other }
+          if (user.account_type === "CuStudent") return { ...user, account_type: Account.CuStudent, _id: "" }
+          else if (user.account_type === "SatitAndCuPersonel") return { ...user, account_type: Account.SatitAndCuPersonel, _id: "" }
+          return { ...user, account_type: Account.Other, _id: "" }
         })
         setMaxUser(data[0])
-        setUsers(userList)
+        setUsers(userList as Users)
       })
       .catch(({ response }) => {
         console.log(response)
         if (response && response.data.statusCode === 401) history.push("/staff")
       })
-  }
+  }, [history, maxUserPerPage, pageNo, searchName, status])
+
+  // useEffect //
+  useEffect(() => {
+    requestUsers()
+  }, [requestUsers])
 
   // handles //
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault()
     if (pageNo !== 1) setPageNo(1)
     else requestUsers()
   }
 
-  const handleInfo = (e) => {
+  const handleInfo = (e: React.MouseEvent<HTMLElement>) => {
     //send username
     // if no data of that user -> show pop up
-    const index = parseInt(e.target.id) - (pageNo - 1) * 10 - 1
+    const target = e.target as HTMLElement
+    const index = parseInt(target.id) - (pageNo - 1) * 10 - 1
     const _id: string = users[index]._id
     client({
       method: "GET",

@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Link } from "react-router-dom"
-const Footer = (props: any) => {
+const Footer = () => {
   return (
     <div className="custom-footer d-flex flex-row justify-content-center">
       <Link

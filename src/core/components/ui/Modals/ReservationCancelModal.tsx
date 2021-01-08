@@ -32,12 +32,10 @@ export const ReservationCancellationModal: React.FC<ReservationCancelModalProps>
           </div>
           <div className="modal-footer pt-0 pb-0">
             <button type="button" onClick={triggerModal} className="btn" data-dismiss="modal" style={{ fontSize: "14px", fontWeight: 400 }}>
-              {" "}
-              {t("no")}{" "}
+              {t("no")}
             </button>
             <button type="button" onClick={confirmCancellation} className="btn" style={{ fontSize: "14px", fontWeight: 400 }}>
-              {" "}
-              {t("sure")}{" "}
+              {t("sure")}
             </button>
           </div>
         </div>

@@ -3,9 +3,8 @@ import React from "react"
 import Slide from "./slideshow"
 import LoginForm from "./login-form"
 import { Container, Row, Col } from "react-bootstrap"
-import { usePreventUserFromSignIn } from "./loginHooks"
+
 const FrontLoginMain = () => {
-  const prevent = usePreventUserFromSignIn()
   return (
     <Container
       style={{

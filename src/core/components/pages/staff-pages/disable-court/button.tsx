@@ -2,8 +2,9 @@ import React, { useState } from "react"
 import { ErrorAlert } from "./modals"
 
 import { Button } from "react-bootstrap"
+import { DeleteButtonProps } from "./disable-court-interface"
 
-export const DeleteButton = ({ onClick, indx }) => {
+export const DeleteButton = ({ onClick, indx }: DeleteButtonProps) => {
   const [show, setShow] = useState(false)
   return (
     <>

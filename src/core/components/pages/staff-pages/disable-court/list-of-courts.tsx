@@ -4,41 +4,45 @@ import { Form, Button, Pagination } from "react-bootstrap"
 import { useRouteMatch, useHistory } from "react-router-dom"
 import { useForm, useWatch } from "react-hook-form"
 import DatePicker from "react-datepicker"
-import { useDate, useOption , useTableWithPagination, withDeletable } from "./disable-court-hook"
+import { useDate, useOption, useTableWithPagination, withDeletable } from "./disable-court-hook"
 import { ErrorAlert } from "./modals"
 import { DeleteButton } from "./button"
 import { CourtTable, CourtRow } from "./disabled-court-table"
-import { RowProps } from "./disable-court-interface"
+import { ListOfCourtsForm, RowProps } from "./disable-court-interface"
 
 const ListOfCourts = () => {
   const history = useHistory()
-  const startDateRef = useRef<DatePicker>()
-  const endDateRef = useRef<DatePicker>()
+  const startDateRef = useRef<DatePicker>(null)
+  const endDateRef = useRef<DatePicker>(null)
   const { path } = useRouteMatch()
   const { data, maxPage, page, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete, isError, setIsError } = useTableWithPagination()
-  const { register, handleSubmit, setError, errors, control, setValue } = useForm()
+  const { register, handleSubmit, control, setValue } = useForm<ListOfCourtsForm>()
   const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, setStartDate, setEndDate } = useDate()
   const watchSports = useWatch({ control, name: "sports", defaultValue: "" })
   const { option } = useOption()
+
   const onSelectStartDate = () => {
     startDateRef.current?.setOpen(true)
   }
   const onSelectEndDate = () => {
     endDateRef.current?.setOpen(true)
   }
-  const validateFilter = async (event) => {
+
+  const validateFilter = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === "ประเภทกีฬา" || !event.target.value) setValue("courtNum", "เลขคอร์ด")
   }
-  const onSubmit = (form) => {
+
+  const onSubmit = (form: ListOfCourtsForm) => {
     setParams({
       sportObjId: form.sports ? form.sports : undefined,
-      starting_date: startDate ?? undefined,
-      expired_date: endDate ?? undefined,
+      starting_date: startDate,
+      expired_date: endDate,
       court_num: form.courtNum ? parseInt(form.courtNum) : undefined,
       start: 0,
       end: 9,
     })
   }
+
   const onAdd = () => history.push(`${path}/add`)
   return (
     <>
@@ -66,7 +70,7 @@ const ListOfCourts = () => {
                 {watchSports &&
                   option &&
                   option
-                    .find((sport) => sport._id == watchSports)
+                    .find((sport) => sport._id === watchSports)
                     ?.list_court.map((court) => {
                       return (
                         <option value={court.court_num} key={court._id}>
@@ -79,7 +83,7 @@ const ListOfCourts = () => {
                 <label className="floating-label" onClick={onSelectStartDate} style={{ display: startDate ? "none" : "" }}>
                   วันเริ่มต้นการปิด
                 </label>
-                <DatePicker className="form-control" selected={startDate} onChange={onStartDateChange} ref={startDateRef} />
+                <DatePicker className="form-control" selected={startDate} onChange={onStartDateChange} name="somw" ref={startDateRef} />
                 <Button variant="outline-transparent" onClick={() => setStartDate(undefined)}>
                   ลบ
                 </Button>

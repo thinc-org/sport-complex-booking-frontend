@@ -1,10 +1,5 @@
-
 export interface HoorayHistoryStates {
-  location: {
-    state: {
-      fromJoinWaitingRoom: boolean
-    }
-  }
+  fromJoinWaitingRoom: boolean
 }
 
 export interface BanHistoryStates {
@@ -19,6 +14,7 @@ export interface WaitingRoomData {
 }
 
 export interface WaitingRoomAccessCode {
+  isReservationCreated: boolean
   access_code: string
 }
 

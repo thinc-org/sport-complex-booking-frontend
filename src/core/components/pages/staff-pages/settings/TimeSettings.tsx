@@ -20,7 +20,9 @@ export default function TimeSettings() {
         setAbsencePunishment(data["absence_punishment"])
         setLateCancellationDay(data["late_cancelation_day"])
       })
-      .catch(() => {})
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   const saveSettings = async () => {
