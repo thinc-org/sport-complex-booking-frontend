@@ -78,7 +78,7 @@ export default function StaffManagement() {
     const end = pageNo * 10
     const query_filter = query ? query : "$"
     const type_filter = type ? type : "all"
-    await client.get<admin_and_staff[]>('/staff-manager/admin-and-staff/search?',{
+    await client.get<admin_and_staff[]>('/staff-manager/admin-and-staff/search',{
       params: {
         start:start,
         end: end,
