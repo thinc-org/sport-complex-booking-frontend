@@ -1,8 +1,14 @@
-import { AxiosResponse } from "axios"
 import React, { useState, useEffect } from "react"
 import {Row, Col, Button } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import { EditTime, SettingsCard } from "./TimeSettingsComponents"
+
+interface TimeSettingsData {
+  waiting_room_duration: number
+  late_cancelation_punishment: number
+  absence_punishment: number
+  late_cancelation_day: number
+}
 
 export default function TimeSettings() {
   const [showEditTime, setShowEditTime] = useState<boolean>(false)
@@ -11,7 +17,7 @@ export default function TimeSettings() {
   const [absencePunishment, setAbsencePunishment] = useState(0)
   const [lateCancellationDay, setLateCancellationDay] = useState(0)
   const fetchSettings = async () => {
-    await client.get("/court-manager/setting")
+    await client.get<TimeSettingsData>("/court-manager/setting")
     .then(({data})=> {
       console.log(data)
       setWaitingRoomDuration(data['waiting_room_duration'])
@@ -29,7 +35,7 @@ export default function TimeSettings() {
       absence_punishment: absencePunishment,
       late_cancelation_day: lateCancellationDay
     }
-    await client.put<AxiosResponse>("/court-manager/setting", data)
+    await client.put<TimeSettingsData>("/court-manager/setting", data)
     .then((data)=> {
       console.log(data)
       setShowEditTime(true)
