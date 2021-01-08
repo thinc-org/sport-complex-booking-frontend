@@ -11,24 +11,24 @@ interface PaginationProps {
 const PaginationComponent: React.FC<PaginationProps> = ({ pageNo, setPageNo, maxUser, maxUserPerPage }) => {
   // functions //
   const handlePagination = (next_page: number) => {
-    let max_page: number = Math.floor((maxUser + maxUserPerPage - 1) / maxUserPerPage)
+    const max_page: number = Math.floor((maxUser + maxUserPerPage - 1) / maxUserPerPage)
     if (next_page >= 1 && next_page <= max_page) {
       setPageNo(next_page)
     }
   }
 
-  let max_page: number = Math.floor((maxUser + maxUserPerPage - 1) / maxUserPerPage)
-  let numList: Array<number> = []
+  const max_page: number = Math.floor((maxUser + maxUserPerPage - 1) / maxUserPerPage)
+  const numList: Array<number> = []
   let haveMore = true
   let i = 0
   while (numList.length < 5) {
-    let page = pageNo + i - 2
+    const page = pageNo + i - 2
     if (page >= max_page) haveMore = false
     if (page >= 1 && page <= max_page) numList.push(page)
     else if (page > max_page) break
     i++
   }
-  let elementList = numList.map((num) => {
+  const elementList = numList.map((num) => {
     if (num === pageNo)
       return (
         <Pagination.Item key={num} active={true}>

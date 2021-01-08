@@ -1,24 +1,23 @@
 import React, { useState, useContext } from "react"
-import {  Button } from "react-bootstrap"
+import { Button } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import { UserContext } from "../../../../contexts/UsersContext"
 import { EdittedData, CustomAccountModal } from "../../../ui/Modals/AccountPageModals"
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from "react-i18next"
 import { client } from "../../../../../axiosConfig"
-import { yupResolver } from '@hookform/resolvers/yup'
-import {infoSchema } from "../../../../schemas/editUserInfo"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { infoSchema } from "../../../../schemas/editUserInfo"
 
-export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
-  const {t} = useTranslation()
-  
+export default function SatitAndCUPersonelAccountEdit({ toggleEditButton }) {
+  const { t } = useTranslation()
+
   const [show, setShow] = useState(false)
   const [showErr, setShowErr] = useState(false)
   const [formData, setFormData] = useState<EdittedData>()
-  const { satitCuPersonelAccount:user } = useContext(UserContext)
+  const { satitCuPersonelAccount: user } = useContext(UserContext)
 
-  
   // React Hook Forms
-  const { register, handleSubmit, errors  } = useForm({resolver: yupResolver(infoSchema)})
+  const { register, handleSubmit, errors } = useForm({ resolver: yupResolver(infoSchema) })
 
   const onSubmit = (data: EdittedData) => {
     setShow(true)
@@ -31,12 +30,13 @@ export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
   }
 
   const postDataToBackend = async (data: EdittedData) => {
-    await client.put<EdittedData>('/account_info', data)
+    await client
+      .put<EdittedData>("/account_info", data)
       .then(() => {
-          window.location.reload()
+        window.location.reload()
       })
       .catch(() => {
-          setShowErr(true)
+        setShowErr(true)
       })
   }
 
@@ -57,30 +57,35 @@ export default function SatitAndCUPersonelAccountEdit({  toggleEditButton }) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="">
             <label className="form-label mt-2">{t("phoneLabel")}</label>
-            <input name="phone" type="number" ref={register} placeholder="0xxxxxxxxx" defaultValue={user?.phone} className="form-control"/>
+            <input name="phone" type="number" ref={register} placeholder="0xxxxxxxxx" defaultValue={user?.phone} className="form-control" />
             {errors.mobile && <p id="input-error">{errors.mobile.message}</p>}
 
             <label className="form-label mt-2">{t("personalEmailLabel")}</label>
             <input
-              name="personal_email" ref={register} placeholder="example@email.com" defaultValue={user?.personal_email} className="form-control"/>
+              name="personal_email"
+              ref={register}
+              placeholder="example@email.com"
+              defaultValue={user?.personal_email}
+              className="form-control"
+            />
             {errors.personal_email && <p id="input-error">{errors.personal_email.message}</p>}
           </div>
-          <hr/>
+          <hr />
           <div className="row mt-3">
             <div className="button-group col-md-12">
-              <Button variant="pink" className="btn-secondary" type="submit" onClick={()=> setShow(true)}>
+              <Button variant="pink" className="btn-secondary" type="submit" onClick={() => setShow(true)}>
                 {t("saveAndSubmit")}
               </Button>
               <Button variant="gray" className="btn-secondary" onClick={handleCancel}>
                 {t("cancel")}
-              </Button>  
+              </Button>
             </div>
           </div>
 
           {/* MODAL CONFIRM DIALOGUE */}
           <CustomAccountModal type="confirmEditAccountModal" show={show} setShow={setShow} mainFunction={postDataToBackend} data={formData} />
           {/* MODAL ERROR */}
-          <CustomAccountModal type="editAccountErrorModal" show={showErr} setShow={setShowErr}/>
+          <CustomAccountModal type="editAccountErrorModal" show={showErr} setShow={setShowErr} />
         </form>
       </div>
       <br />

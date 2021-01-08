@@ -13,8 +13,8 @@ import {
   ErrorModal,
 } from "./VerifyModalsComopnent"
 import format from "date-fns/format"
-import Info from "../interfaces/InfoInterface"
-import { RejectInfo, ModalVerify, RejectInfoLabel } from "../interfaces/InfoInterface"
+import Info, { RejectInfo, ModalVerify, RejectInfoLabel } from "../interfaces/InfoInterface"
+
 
 /// start of main function ///
 const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
@@ -151,7 +151,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
 
   const confirmReject = () => {
     // check if at least one condition is checked
-    let checked: boolean = false
+    let checked = false
     for (const key in rejectInfo) {
       if (rejectInfo[key] === true) {
         checked = true
@@ -164,7 +164,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
 
   const requestReject = () => {
     // console.log("request rejected!!!")
-    let rejectList: string[] = []
+    const rejectList: string[] = []
     for (const name in rejectInfo) {
       if (rejectInfo[name]) rejectList.push(name)
     }
@@ -187,9 +187,9 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   }
 
   const requestAccept = () => {
-    let date = accountExpiredDate
+    const date = accountExpiredDate
     // utc+0: 17.00, utc+7: 0.00
-    let utc7Time = new Date(Date.UTC(date!.getFullYear(), date!.getMonth(), date!.getDate() - 1, 17, 0, 0, 0))
+    const utc7Time = new Date(Date.UTC(date!.getFullYear(), date!.getMonth(), date!.getDate() - 1, 17, 0, 0, 0))
     // send request //
     client({
       method: "PATCH",
@@ -210,7 +210,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
 
   // handles //
   const handleChangeExpire = (e) => {
-    let date = e.target.value
+    const date = e.target.value
     if (new Date(date) < new Date()) setAccountExpiredDate(new Date())
     else setAccountExpiredDate(new Date(date))
   }
@@ -285,7 +285,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   }
 
   const renderRejectionInfo = () => {
-    let infoList = Object.keys(rejectInfo).map((name, index) => {
+    const infoList = Object.keys(rejectInfo).map((name, index) => {
       return (
         <Form.Check
           key={index}

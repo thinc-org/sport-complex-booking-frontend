@@ -4,7 +4,6 @@ import OtherAccountEdit from "./AccountPageUI/OtherEdit"
 import { UserContext } from "../../../contexts/UsersContext"
 
 export default function OtherAccount() {
-
   return (
     <UserContext.Consumer>
       {(context) => {
@@ -12,13 +11,7 @@ export default function OtherAccount() {
 
         return (
           <div>
-            {
-              user?.verification_status === "Submitted" || user?.verification_status === "Verified" ? (
-                <OtherAaccountDisplay/>
-              ) : (
-                <OtherAccountEdit/>
-              )
-            }
+            {user?.verification_status === "Submitted" || user?.verification_status === "Verified" ? <OtherAaccountDisplay /> : <OtherAccountEdit />}
           </div>
         )
       }}

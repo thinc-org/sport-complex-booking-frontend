@@ -1,7 +1,8 @@
 .disable-court-wrapper {
-  background-color: transparent
+  background-color: transparent;
 }
-.disable-court-filter select, .disable-court-filter input {
+.disable-court-filter select,
+.disable-court-filter input {
   background-color: var(--medium-pink-color);
   height: 2.5rem;
   height: 50px;
@@ -11,42 +12,43 @@
   max-width: 120px;
   transition: 0.2s;
 }
-.disable-court-filter select option{
+.disable-court-filter select option {
   background-color: var(--medium-pink-color);
 }
-.disable-court-table thead{
+.disable-court-table thead {
   border: 0;
   background-color: var(--medium-pink-color);
 }
-.disable-court-table tbody>tr{
+.disable-court-table tbody > tr {
   border: 0;
   background-color: white;
 }
-.disable-court-table tbody>tr{
-  border-bottom: 2px solid #ECEEEF
+.disable-court-table tbody > tr {
+  border-bottom: 2px solid #eceeef;
 }
 .disable-court-link,
- .disable-court-link:hover {
+.disable-court-link:hover {
   text-decoration-line: none;
-  color:white;
+  color: white;
 }
-.disable-court-button{
+.disable-court-button {
   font-size: 1.2rem;
   padding: 0.375rem 0.75rem;
   min-width: 120px;
   border-radius: 15px;
-  color:white !important;
+  color: white !important;
 }
 
 .list-data .col h5 {
-    font-weight: 700;
-    font-size: 1.1rem;
+  font-weight: 700;
+  font-size: 1.1rem;
 }
 
-.disable-court-form select, .disable-court-form input {
+.disable-court-form select,
+.disable-court-form input {
   border-radius: 4px;
 }
-.small-table{
+.small-table {
   max-height: 350px;
   overflow: auto;
 }

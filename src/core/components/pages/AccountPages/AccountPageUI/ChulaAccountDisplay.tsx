@@ -1,24 +1,25 @@
 import React, { useContext } from "react"
 import { Button } from "react-bootstrap"
 import { UserContext } from "../../../../contexts/UsersContext"
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from "react-i18next"
 import { WarningMessage } from "../../../ui/Modals/AccountPageModals"
 
-export default function ChulaAccountDisplay({ toggleEditButton }) {
+interface ChulaAccountDisplayProps {
+  toggleEditButton: () => void
+}
 
-  const { cuStudentAccount:user } = useContext(UserContext)
-  const {t, i18n} = useTranslation()
-  const {language} = i18n 
+export default function ChulaAccountDisplay({ toggleEditButton }: ChulaAccountDisplayProps) {
+  const { cuStudentAccount: user } = useContext(UserContext)
+  const { t, i18n } = useTranslation()
+  const { language } = i18n
 
   return (
     <div className="mx-auto col-md-6">
-      <WarningMessage show={user!.is_first_login} account={user!.account_type}/>   
+      <WarningMessage show={user!.is_first_login} account={user!.account_type} />
       <div className="default-mobile-wrapper animated-card">
         <div className="row mt-2">
           <div className="col-8">
-            <h4 className="align-right">
-              {user![`name_${language}`] + " " + user![`surname_${language}`]}
-            </h4>
+            <h4 className="align-right">{user![`name_${language}`] + " " + user![`surname_${language}`]}</h4>
           </div>
           <div className="col-4">
             <Button className="btn-secondary btn-sm float-right" onClick={toggleEditButton}>
@@ -40,8 +41,7 @@ export default function ChulaAccountDisplay({ toggleEditButton }) {
           <div className="valid-feedback"></div>
         </div>
       </div>
-      <div className="button-group col-md-12 mt-4">
-      </div>
+      <div className="button-group col-md-12 mt-4"></div>
       <br />
     </div>
   )

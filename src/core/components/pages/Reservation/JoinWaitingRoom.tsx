@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react"
 import { Button } from "react-bootstrap"
 import { useForm } from "react-hook-form"
-import {Link, useHistory } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import withUserGuard from "../../../guards/user.guard"
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from "react-i18next"
 import { client } from "../../../../axiosConfig"
 import { CustomWaitingRoomModal } from "../../ui/Modals/WaitingRoomModals"
-import { WaitingRoomAccessCode } from './ReservationInterfaces'
+import { WaitingRoomAccessCode } from "./ReservationInterfaces"
 import { CheckValidityErrorMsg, JoinWaitingRoomErrorMsg } from "./ReservationComponents"
 interface ValidityMessage {
   message: string
@@ -14,7 +14,7 @@ interface ValidityMessage {
 
 function JoinWaitingRoom() {
   const { register, handleSubmit, errors } = useForm()
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   const history = useHistory()
   const [showWrongAccessCodeModal, setShowWrongAccessCodeModal] = useState(false)
   const [warningMessage, setWarningMessage] = useState("")
@@ -24,12 +24,13 @@ function JoinWaitingRoom() {
   const [errorType, setErrorType] = useState("danger")
 
   const onSubmit = async (data: WaitingRoomAccessCode) => {
-    await client.post<WaitingRoomAccessCode>('/reservation/joinwaitingroom', data)
-      .then(({data}) => {
-        if (data['isReservationCreated']) {
-          history.push({pathname:'/hooray', state: { fromJoinWaitingRoom: true }})
+    await client
+      .post<WaitingRoomAccessCode>("/reservation/joinwaitingroom", data)
+      .then(({ data }) => {
+        if (data["isReservationCreated"]) {
+          history.push({ pathname: "/hooray", state: { fromJoinWaitingRoom: true } })
         } else {
-          history.push('/waitingroom')
+          history.push("/waitingroom")
         }
       })
       .catch((error) => {
@@ -43,15 +44,16 @@ function JoinWaitingRoom() {
   }
 
   const fetchValidity = async () => {
-    await client.post<ValidityMessage>('/reservation/checkvalidity')
-      .then(({data}) => {
-          setInvalidAccount(false)
-          setErrorType("warning")
-          const resMsg = data['message']
-          if (resMsg !== "Valid user") {
-            const state = {msg: resMsg}
-            history.push({pathname: '/banned',state})
-          }
+    await client
+      .post<ValidityMessage>("/reservation/checkvalidity")
+      .then(({ data }) => {
+        setInvalidAccount(false)
+        setErrorType("warning")
+        const resMsg = data["message"]
+        if (resMsg !== "Valid user") {
+          const state = { msg: resMsg }
+          history.push({ pathname: "/banned", state })
+        }
       })
       .catch((error) => {
         setInvalidAccount(true)
@@ -62,16 +64,16 @@ function JoinWaitingRoom() {
       })
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchValidity()
-  },[])
+  }, [])
 
   return (
     <div className="wrapper">
       <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{t("joinWaitingRoom")}</h4>
       <CheckValidityErrorMsg show={showValidityWarningMessage} reason={warningMessage} type={errorType} />
       <JoinWaitingRoomErrorMsg show={showJoinWarningMessage} reason={warningMessage} type={errorType} />
-      <div className="mx-auto col-md-6">  
+      <div className="mx-auto col-md-6">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="default-mobile-wrapper mt-4 animated-card">
             <span className="row mt-3">
@@ -93,7 +95,11 @@ function JoinWaitingRoom() {
                 placeholder="xxxxxx"
                 className="form-control"
               />
-              {errors.access_code && <p id="input-error" className="mb-0 pb-0 mt-1">{errors.access_code.message}</p>}
+              {errors.access_code && (
+                <p id="input-error" className="mb-0 pb-0 mt-1">
+                  {errors.access_code.message}
+                </p>
+              )}
             </div>
           </div>
           <br />
@@ -102,15 +108,13 @@ function JoinWaitingRoom() {
               {t("joinWaitingRoom")}
             </Button>
             <Link to={"/reservenow"}>
-              <Button className="btn-secondary">
-                {t("cancel")}
-              </Button>
+              <Button className="btn-secondary">{t("cancel")}</Button>
             </Link>
           </div>
         </form>
       </div>
       {/* Wrong Access Code Modal */}
-      <CustomWaitingRoomModal type="wrongAccessCodeModal" show={showWrongAccessCodeModal} setShow={setShowWrongAccessCodeModal}  />
+      <CustomWaitingRoomModal type="wrongAccessCodeModal" show={showWrongAccessCodeModal} setShow={setShowWrongAccessCodeModal} />
     </div>
   )
 }

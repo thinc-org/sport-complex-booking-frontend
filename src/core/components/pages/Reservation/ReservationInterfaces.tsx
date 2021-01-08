@@ -1,4 +1,3 @@
-import { History, LocationState } from "history"
 
 export interface HoorayHistoryStates {
   location: {
@@ -6,17 +5,17 @@ export interface HoorayHistoryStates {
       fromJoinWaitingRoom: boolean
     }
   }
-} 
+}
 
 export interface BanHistoryStates {
   msg: string
 }
 
 export interface WaitingRoomData {
-  sport_id: string,
-  court_number: number,
-  time_slot: number[],
-  date:Date
+  sport_id: string
+  court_number: number
+  time_slot: number[]
+  date: Date
 }
 
 export interface WaitingRoomAccessCode {

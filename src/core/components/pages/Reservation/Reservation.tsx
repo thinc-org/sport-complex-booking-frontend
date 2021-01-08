@@ -1,7 +1,7 @@
-import React from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { Button } from "react-bootstrap"
 import { useRouteMatch, useHistory } from "react-router-dom"
-import { useState, useEffect, useCallback } from "react"
+
 import { client } from "../../../../axiosConfig"
 import { timeConversion } from "../Reservation/timeConversion"
 import { AxiosResponse } from "axios"
@@ -23,7 +23,7 @@ const ReservationPage = () => {
 
   const [lists, setLists] = useState<Array<ReservationResponse>>([])
   const [isLoading, setIsLoading] = useState(true)
-  var { url, path } = useRouteMatch()
+  const { url, path } = useRouteMatch()
   const { t, i18n } = useTranslation()
 
   useEffect(() => {

@@ -22,7 +22,7 @@ export const getTimeText = (timeSlot: number[]): string => {
   let text = ""
   let i = 0
   while (i < timeSlot.length) {
-    let temp = convertSlotToTime(timeSlot[i])
+    const temp = convertSlotToTime(timeSlot[i])
     if (
       (i === 0 && i !== timeSlot.length - 1) ||
       (0 < i && i < timeSlot.length - 1 && timeSlot[i + 1] === timeSlot[i] + 1 && timeSlot[i - 1] !== timeSlot[i] - 1)
@@ -76,7 +76,7 @@ const ReservationDetail: FunctionComponent = () => {
 
   // request //
   const requestInfo = () => {
-    let url: string = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + `/${_id}`
+    const url: string = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + `/${_id}`
     client({
       method: "GET",
       url,
@@ -92,7 +92,7 @@ const ReservationDetail: FunctionComponent = () => {
   }
 
   const requestDelete = () => {
-    let url = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + `/${_id}`
+    const url = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + `/${_id}`
     client({
       method: "DELETE",
       url,

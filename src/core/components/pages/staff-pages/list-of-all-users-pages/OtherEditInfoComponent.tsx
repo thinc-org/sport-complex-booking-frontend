@@ -33,7 +33,7 @@ export default function OtherEditInfoComponent({
   // handles //
   const handleUpload = (typename, file) => {
     const formData = new FormData()
-    let selectedFile = file
+    const selectedFile = file
     // Update the formData object
     if (selectedFile) {
       formData.append(typename, selectedFile, selectedFile.name)
@@ -86,7 +86,7 @@ export default function OtherEditInfoComponent({
   }
 
   /// JSX Begins here
-  let {
+  const {
     prefix,
     gender,
     name_th,
@@ -104,7 +104,7 @@ export default function OtherEditInfoComponent({
     medical_condition,
     membership_type,
   } = tempInfo
-  let {
+  const {
     contact_person_prefix,
     contact_person_name,
     contact_person_surname,

@@ -1,6 +1,6 @@
-import React from "react"
-import { useState, useEffect, FunctionComponent, useCallback } from "react"
-import { RouteComponentProps, Link, Redirect } from "react-router-dom"
+import React, { useState, useEffect, FunctionComponent, useCallback } from "react"
+
+import { RouteComponentProps } from "react-router-dom"
 import { BrowserQRCodeReader } from "@zxing/library"
 import { client } from "../../../../axiosConfig"
 import { Button } from "react-bootstrap"

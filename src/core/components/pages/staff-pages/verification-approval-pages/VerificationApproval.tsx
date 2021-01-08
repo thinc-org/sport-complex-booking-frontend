@@ -24,7 +24,7 @@ const VeritificationApproval: FunctionComponent = () => {
   // other functions //
   const requestUsers = () => {
     //  request users from server  //
-    let params = {
+    const params = {
       start: (pageNo - 1) * maxUserPerPage,
       end: pageNo * maxUserPerPage,
     }
@@ -35,9 +35,9 @@ const VeritificationApproval: FunctionComponent = () => {
       params: params,
     })
       .then(({ data }) => {
-        let userList: OtherInfo[] = data[1]
+        const userList: OtherInfo[] = data[1]
         let newUserList: OtherInfo[] = []
-        for (let user of userList) {
+        for (const user of userList) {
           newUserList = [...newUserList, user]
         }
         setUsers(newUserList)
@@ -60,7 +60,7 @@ const VeritificationApproval: FunctionComponent = () => {
   const handleInfo = (e) => {
     //send jwt and username
     // if no data of that user -> show pop up
-    let _id = e.target.id
+    const _id = e.target.id
     client({
       method: "GET",
       url: "/approval/" + _id,
@@ -109,7 +109,7 @@ const VeritificationApproval: FunctionComponent = () => {
 
   const renderUsersTable = () => {
     let id = 1
-    let usersList = users.map((user) => {
+    const usersList = users.map((user) => {
       return (
         <tr key={id} className="tr-normal">
           <td className="font-weight-bold"> {id++} </td>

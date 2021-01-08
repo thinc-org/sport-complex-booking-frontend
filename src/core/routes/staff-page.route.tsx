@@ -9,7 +9,7 @@ import ListOfAllUsers from "../components/pages/staff-pages/list-of-all-users-pa
 import AddUser from "../components/pages/staff-pages/list-of-all-users-pages/AddUser"
 import CuSatitInfo from "../components/pages/staff-pages/list-of-all-users-pages/CuSatitInfo"
 import UserInfo from "../components/pages/staff-pages/list-of-all-users-pages/UserInfo"
-import FileOpener from "../components/pages/staff-pages/list-of-all-users-pages/FileOpener"
+import FileOpener from "../components/pages/FileOpener"
 import VeritificationApproval from "../components/pages/staff-pages/verification-approval-pages/VerificationApproval"
 import VerifyInfo from "../components/pages/staff-pages/verification-approval-pages/VerifyInfo"
 import DisableCourt from "../components/pages/staff-pages/disable-court/disable-court.page.main"
@@ -20,7 +20,7 @@ import Settings from "../components/pages/staff-pages/settings/Settings"
 import AllReservation from "../components/pages/staff-pages/all-reservation-pages/ReservationList"
 import ReservationDetail from "../components/pages/staff-pages/all-reservation-pages/ReservationDetail"
 
-const StaffRoute = (props) => {
+const StaffRoute = () => {
   const { path } = useRouteMatch()
   const location = useLocation()
   const headerMap: Map<string, string> = new Map([
@@ -63,7 +63,7 @@ const StaffRoute = (props) => {
                           ? location.pathname.length
                           : location.pathname.lastIndexOf("/")
                       )
-                    )}{" "}
+                    )}
                   </h1>
                   <Switch>
                     <Route path={`${path}/staffProfile`} component={StaffProfile} />

@@ -1,13 +1,13 @@
 import React from "react"
 
 export const timeConversion = (input: number) => {
-  let start_hour: number = 0
-  let start_min: number = 0
-  let end_hour: number = 0
-  let end_min: number = 0
+  let start_hour = 0
+  let start_min = 0
+  let end_hour = 0
+  let end_min = 0
   let start = ""
   let end = ""
-  let timeFormat: string = ""
+  let timeFormat = ""
   if (input % 2 === 0) {
     end_hour = input / 2
     end_min = 0

@@ -1,5 +1,5 @@
-import React from "react"
-import { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback } from "react"
+
 import { useHistory, Link } from "react-router-dom"
 import { useLocation } from "react-router"
 import { Button } from "react-bootstrap"
@@ -37,7 +37,7 @@ const ReservationDetail = () => {
   const [date, setDate] = useState<string>()
   const [timeList, setTimeList] = useState<number[]>()
   const [memberList, setMemberList] = useState<Array<MemberResponse>>()
-  const [isCheck, setIsCheck] = useState<Boolean>()
+  const [isCheck, setIsCheck] = useState<boolean>()
   const [counter, setCounter] = useState<number>(10)
   const [isLoading, setIsLoading] = useState(true)
   const [lateCancellationDay, setLateCancellationDay] = useState<number>()
@@ -91,7 +91,7 @@ const ReservationDetail = () => {
     return modalOpen
   }
 
-  let [modalOpen, setModalOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
 
   const confirmCancellation = () => {
     client

@@ -164,8 +164,8 @@ const AddUser: FunctionComponent = () => {
   }
 
   const handleAdd = (data: AddUserComponentInfo) => {
-    let { username, name_th, surname_th, name_en, surname_en, personal_email, phone, password, confirmPassword } = data
-    let newUser = data.is_thai_language ? { ...data, membership_type: user.membership_type } : { ...user, username: data.username }
+    const { username, name_th, surname_th, name_en, surname_en, personal_email, phone, password, confirmPassword } = data
+    const newUser = data.is_thai_language ? { ...data, membership_type: user.membership_type } : { ...user, username: data.username }
     delete newUser["confirmPassword"]
     setUser(newUser)
     if (!validCheck(username)) setShowAlerts({ showAlertPassword: false, showAlertUncom: false, showAlertUsername: true })
@@ -191,7 +191,7 @@ const AddUser: FunctionComponent = () => {
   const requestAdd = () => {
     let url = "/list-all-user/"
     let data = {}
-    let { membership_type, username, password } = user
+    const { membership_type, username, password } = user
     if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา") {
       url += "OtherUser"
       data = {

@@ -1,19 +1,19 @@
 import React from "react"
 import { Form, Row, Button, Modal } from "react-bootstrap"
 import { useForm } from "react-hook-form"
-import { yupResolver } from '@hookform/resolvers/yup'
+import { yupResolver } from "@hookform/resolvers/yup"
 import { passwordSchema } from "./StaffManagementSchema"
 
 export interface admin_and_staff {
-  name: string,
-  surname: string,
-  username: string,
-  password?: string,
-  recheckpasssword?: string | undefined,
-  is_admin: boolean | string,
+  name: string
+  surname: string
+  username: string
+  password?: string
+  recheckpasssword?: string | undefined
+  is_admin: boolean | string
 }
 
-export interface DeleteStaffModalProps{
+export interface DeleteStaffModalProps {
   show: boolean
   setShow: (value: boolean) => void
   mainFunction: (value: admin_and_staff) => void
@@ -24,7 +24,9 @@ export const DeleteStaffModal: React.FC<DeleteStaffModalProps> = ({ show, setSho
   return (
     <Modal
       show={show}
-      onHide={() => { setShow(false) }}
+      onHide={() => {
+        setShow(false)
+      }}
       backdrop="static"
       keyboard={false}
     >
@@ -33,18 +35,30 @@ export const DeleteStaffModal: React.FC<DeleteStaffModalProps> = ({ show, setSho
       </Modal.Header>
       <Modal.Body style={{ fontWeight: "lighter" }}>ท่านกําลังจะลบพนักงานออกจากระบบ ต้องการดําเนินต่อใช่หรือไม่</Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-pink" className="btn-normal"
-          onClick={() => { setShow(false) }}
-        >ยกเลิก</Button>
-        <Button variant="pink" className="btn-normal"
-          onClick={() => { mainFunction(data!) }}
-        >ตกลง</Button>
+        <Button
+          variant="outline-pink"
+          className="btn-normal"
+          onClick={() => {
+            setShow(false)
+          }}
+        >
+          ยกเลิก
+        </Button>
+        <Button
+          variant="pink"
+          className="btn-normal"
+          onClick={() => {
+            mainFunction(data!)
+          }}
+        >
+          ตกลง
+        </Button>
       </Modal.Footer>
     </Modal>
   )
 }
 
-export interface EditStaffModalProps{
+export interface EditStaffModalProps {
   show: boolean
   setShow: (value: boolean) => void
 }
@@ -69,17 +83,17 @@ export const EditStaffModal: React.FC<EditStaffModalProps> = ({ show, setShow })
           className="btn-normal"
           onClick={() => {
             setShow(false)
-            window.location.reload();
+            window.location.reload()
           }}
         >
           ตกลง
-          </Button>
+        </Button>
       </Modal.Footer>
     </Modal>
   )
 }
 
-export interface AddStaffModalProps{
+export interface AddStaffModalProps {
   show: boolean
   setShow: (value: boolean) => void
   onSubmitAddStaff: (staff: admin_and_staff) => void
@@ -129,13 +143,10 @@ export const AddStaffModal: React.FC<AddStaffModalProps> = ({ show, setShow, onS
             {errors.recheckpassword && <p id="input-error">{errors.recheckpassword.message}</p>}
             <Row>
               <Form.Label>ประเภท</Form.Label>
-              <Form.Control
-                as="select"
-                custom
-                ref={register}
-                name="is_admin"
-              >
-                <option disabled value="ประเภท">ประเภท</option>
+              <Form.Control as="select" custom ref={register} name="is_admin">
+                <option disabled value="ประเภท">
+                  ประเภท
+                </option>
                 <option value="สตาฟ">สตาฟ</option>
                 <option value="แอดมิน">แอดมิน</option>
               </Form.Control>
@@ -146,22 +157,23 @@ export const AddStaffModal: React.FC<AddStaffModalProps> = ({ show, setShow, onS
           <Button
             variant="outline-pink"
             className="btn-normal"
-            onClick={() => { setShow(false) }}
-          > ยกเลิก
-        </Button>
-          <Button
-            type="submit"
-            variant="pink"
-            className="btn-normal"
-          >เพิ่ม
-        </Button>
+            onClick={() => {
+              setShow(false)
+            }}
+          >
+            {" "}
+            ยกเลิก
+          </Button>
+          <Button type="submit" variant="pink" className="btn-normal">
+            เพิ่ม
+          </Button>
         </Modal.Footer>
       </form>
     </Modal>
   )
 }
 
-export interface HandleErrorModalProps{
+export interface HandleErrorModalProps {
   show: boolean
   setShow: (value: boolean) => void
 }
@@ -171,7 +183,9 @@ export const HandleErrorModal: React.FC<HandleErrorModalProps> = ({ show, setSho
   return (
     <Modal
       show={show}
-      onHide={() => { setShow(false) }}
+      onHide={() => {
+        setShow(false)
+      }}
       backdrop="static"
       keyboard={false}
     >
@@ -180,9 +194,15 @@ export const HandleErrorModal: React.FC<HandleErrorModalProps> = ({ show, setSho
       </Modal.Header>
       <Modal.Body style={{ fontWeight: "lighter" }}>กรุณาลองใหม่อีกครั้ง</Modal.Body>
       <Modal.Footer>
-        <Button variant="pink" className="btn-normal"
-          onClick={() => { setShow(false) }}
-        >ตกลง</Button>
+        <Button
+          variant="pink"
+          className="btn-normal"
+          onClick={() => {
+            setShow(false)
+          }}
+        >
+          ตกลง
+        </Button>
       </Modal.Footer>
     </Modal>
   )

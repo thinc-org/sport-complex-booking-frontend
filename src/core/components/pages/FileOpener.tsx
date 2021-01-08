@@ -1,11 +1,11 @@
-import { METHODS } from "http"
 import React from "react"
 import { useParams } from "react-router-dom"
 import useSWR from "swr"
-import { client } from "../../../../../axiosConfig"
+import { client } from "../../../axiosConfig"
+
+const fetch = (url: string) => client.get(url).then((res) => res.data)
 
 const FileOpener = () => {
-  const fetch = (url) => client.get(url).then((res) => res.data)
   const { fileId } = useParams<{ fileId: string }>()
   // swr is just an example. you can retrieve the token using any method you like
   const { data, error, isValidating } = useSWR(`/fs/viewFileToken/${fileId}`, fetch, { suspense: true })

@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { Row, Col, Form, Button, Table } from "react-bootstrap"
-import SuccessfulReservation, { Sport, Court } from "../interfaces/reservationSchemas"
+import SuccessfulReservation, { Sport } from "../interfaces/reservationSchemas"
 import format from "date-fns/format"
 import { getTimeText } from "./ReservationDetail"
 import { client } from "../../../../../axiosConfig"
@@ -61,7 +61,7 @@ const AllReservation: FunctionComponent = () => {
   }
 
   const handleChangeSport = (e) => {
-    let id: string = e.target.value
+    const id: string = e.target.value
     if (id !== "-1" && id !== "-2") setSportType(id)
     else setSportType("")
     setCourtNo(-2)

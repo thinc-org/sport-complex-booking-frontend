@@ -2,33 +2,32 @@ import React, { useState } from "react"
 import SportsSettings from "./SportsSettings"
 import CourtsSettings from "./CourtsSettings"
 import TimeSettings from "./TimeSettings"
-import {ToggleButton, ButtonGroup } from "react-bootstrap"
+import { ToggleButton, ButtonGroup } from "react-bootstrap"
 
-import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.min.css"
 
 export default function Settings() {
-
-  const [radioValue, setRadioValue] = useState('กีฬา');
+  const [radioValue, setRadioValue] = useState("กีฬา")
 
   const radios = [
-    { name: 'กีฬา', value: 'กีฬา' },
-    { name: 'คอร์ด', value: 'คอร์ด' },
-    { name: 'เวลา', value: 'เวลา' },
-  ];
+    { name: "กีฬา", value: "กีฬา" },
+    { name: "คอร์ด", value: "คอร์ด" },
+    { name: "เวลา", value: "เวลา" },
+  ]
 
   const showSettingsPage = (radioValue: string) => {
-    switch(radioValue) {
-      case 'กีฬา':
-        return <SportsSettings/>
-      case 'คอร์ด':
-          return <CourtsSettings/>
-      case 'เวลา':
-        return <TimeSettings/>
+    switch (radioValue) {
+      case "กีฬา":
+        return <SportsSettings />
+      case "คอร์ด":
+        return <CourtsSettings />
+      case "เวลา":
+        return <TimeSettings />
     }
-  } 
+  }
 
   return (
-    <div className="allStaff" style={{ margin: "20px" }}>    
+    <div className="allStaff" style={{ margin: "20px" }}>
       <ButtonGroup toggle className="mb-3">
         {radios.map((radio, idx) => (
           <ToggleButton
@@ -45,7 +44,7 @@ export default function Settings() {
           </ToggleButton>
         ))}
       </ButtonGroup>
-      {showSettingsPage(radioValue)}  
+      {showSettingsPage(radioValue)}
     </div>
   )
 }

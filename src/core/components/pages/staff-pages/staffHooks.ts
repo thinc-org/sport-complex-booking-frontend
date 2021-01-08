@@ -1,4 +1,4 @@
-import Axios, { AxiosResponse } from "axios"
+import { AxiosResponse } from "axios"
 import { setCookie } from "../../../contexts/cookieHandler"
 import { useAuthContext } from "../../../controllers/authContext"
 import { useHistory } from "react-router-dom"

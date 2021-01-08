@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import { Button, Card } from "react-bootstrap"
-import { client } from "../../../../../axiosConfig"
 import Info from "../interfaces/InfoInterface"
 import format from "date-fns/format"
 import isValid from "date-fns/isValid"
@@ -18,12 +17,12 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
 
   // handles //
   const handlePDF = (e) => {
-    let fileId = e.target.id
+    const fileId = e.target.id
     window.open(`/staff/openFile/${fileId}`, "_blank")
   }
 
   /// JSX Begins here
-  let {
+  const {
     prefix,
     gender,
     name_th,
@@ -40,7 +39,7 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
     medical_condition,
     contact_person,
   } = info
-  let { contact_person_prefix, contact_person_name, contact_person_surname, contact_person_home_phone, contact_person_phone } = contact_person
+  const { contact_person_prefix, contact_person_name, contact_person_surname, contact_person_home_phone, contact_person_phone } = contact_person
 
   return (
     <div className="row mr-4 mt-5">

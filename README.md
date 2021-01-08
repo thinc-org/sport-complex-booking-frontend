@@ -3,6 +3,7 @@
 Sport Complex Booking
 
 ## Table of Contents
+
 - [Deployment](deployment)
 - [Available Scripts](available-scripts)
 - [Learn more](learn-more)

@@ -14,7 +14,7 @@ interface ConfirmModalInterface extends ModalInterface {
 }
 
 const getAllPhoneNumber = (members: UserInfo[]): string => {
-  let list = members.map((member) => `- ${member.phone}`).join("\n")
+  const list = members.map((member) => `- ${member.phone}`).join("\n")
   return list
 }
 

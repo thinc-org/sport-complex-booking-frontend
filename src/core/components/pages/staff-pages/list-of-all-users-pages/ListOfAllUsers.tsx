@@ -91,7 +91,7 @@ const ListOfAllUsers: FunctionComponent = () => {
 
   const requestUsers = () => {
     // get params for request //
-    let param_data = {
+    const param_data = {
       begin: (pageNo - 1) * maxUserPerPage,
       end: pageNo * maxUserPerPage,
     }
@@ -104,7 +104,7 @@ const ListOfAllUsers: FunctionComponent = () => {
       params: param_data,
     })
       .then(({ data }) => {
-        let userList = data[1].map((user) => {
+        const userList = data[1].map((user) => {
           if (user.account_type === "CuStudent") return { ...user, account_type: Account.CuStudent }
           else if (user.account_type === "SatitAndCuPersonel") return { ...user, account_type: Account.SatitAndCuPersonel }
           return { ...user, account_type: Account.Other }
@@ -128,15 +128,15 @@ const ListOfAllUsers: FunctionComponent = () => {
   const handleInfo = (e) => {
     //send username
     // if no data of that user -> show pop up
-    let index = parseInt(e.target.id) - (pageNo - 1) * 10 - 1
-    let _id: String = users[index]._id
+    const index = parseInt(e.target.id) - (pageNo - 1) * 10 - 1
+    const _id: string = users[index]._id
     client({
       method: "GET",
       url: "/list-all-user/id/" + _id,
     })
       .then(({ data }) => {
         if (data) {
-          let account_type: Account = users[index].account_type
+          const account_type: Account = users[index].account_type
           if (account_type !== Account.Other) {
             history.push("/staff/cuInfo/" + _id)
           } else {
@@ -184,7 +184,7 @@ const ListOfAllUsers: FunctionComponent = () => {
   const renderUsersTable = () => {
     let index = (pageNo - 1) * 10 + 1
     // let user
-    let usersList = users.map((user) => {
+    const usersList = users.map((user) => {
       return (
         <tr key={index} className="tr-normal">
           <td className="font-weight-bold"> {index} </td>

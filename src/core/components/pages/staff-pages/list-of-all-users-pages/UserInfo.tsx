@@ -105,14 +105,14 @@ const UserInfo = () => {
     const id = e.target.id
     const oldPenExp: Date = tempExpiredPenalizeDate ? new Date(tempExpiredPenalizeDate) : new Date()
     const oldAcExp: Date = tempAccountExpiredDate ? new Date(tempAccountExpiredDate) : new Date()
-    let incom: Date = new Date(e.target.value)
+    const incom: Date = new Date(e.target.value)
     if (id === "expiredPenalizeDate") {
       let date: Date = new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), oldPenExp.getHours(), oldPenExp.getMinutes())
       if (date < new Date()) date = new Date()
       setTempExpiredPenalizeDate(date)
     } else if (id === "expiredPenalizeTime") {
-      let hour: number = parseInt(e.target.value.slice(0, 2))
-      let minute: number = parseInt(e.target.value.slice(3, 5))
+      const hour: number = parseInt(e.target.value.slice(0, 2))
+      const minute: number = parseInt(e.target.value.slice(3, 5))
       let date: Date = new Date(oldPenExp.getFullYear(), oldPenExp.getMonth(), oldPenExp.getDate(), hour, minute, 0)
       if (date < new Date()) date = new Date()
       setTempExpiredPenalizeDate(date)
@@ -121,8 +121,8 @@ const UserInfo = () => {
       if (date < new Date()) date = new Date()
       setTempAccountExpiredDate(date)
     } else if (id === "accountExpiredTime") {
-      let hour: number = parseInt(e.target.value.slice(0, 2))
-      let minute: number = parseInt(e.target.value.slice(3, 5))
+      const hour: number = parseInt(e.target.value.slice(0, 2))
+      const minute: number = parseInt(e.target.value.slice(3, 5))
       let date: Date = new Date(oldAcExp.getFullYear(), oldAcExp.getMonth(), oldAcExp.getDate(), hour, minute, 0)
       if (date < new Date()) date = new Date()
       setTempAccountExpiredDate(date)

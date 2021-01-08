@@ -1,12 +1,12 @@
-import React, { ReactPropTypes } from "react"
-import { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback } from "react"
+
 import { Button } from "react-bootstrap"
 import { useHistory, Link } from "react-router-dom"
 import { client } from "../../../../axiosConfig"
 import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 import { timeShift, timeConversion, timeRemainingDisplay } from "./timeFormating"
-import { ConfirmModal } from "../../ui/Modals/CurrentWaitingRoomModal"
-import { TimeOutModal } from "../../ui/Modals/CurrentWaitingRoomModal"
+import { ConfirmModal , TimeOutModal } from "../../ui/Modals/CurrentWaitingRoomModal"
+
 import { useTranslation } from "react-i18next"
 import withUserGuard from "../../../guards/user.guard"
 import Countdown from "react-countdown"
@@ -28,8 +28,8 @@ const WaitingRoomPage = () => {
   const [endTime, setEndTime] = useState<number>()
   const [modalConfirmOpen, setModalConfirmOpen] = useState(false)
   const [modalTimeOutOpen, setModalTimeOutOpen] = useState(false)
-  const [requiredUserNumber, setRequiredUserNumber] = useState<Number>(0)
-  const [currentUserNumber, setCurrentUserNumber] = useState<Number>(0)
+  const [requiredUserNumber, setRequiredUserNumber] = useState<number>(0)
+  const [currentUserNumber, setCurrentUserNumber] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(true)
   const { t, i18n } = useTranslation()
 

@@ -110,16 +110,16 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
       else setTempUser({ ...tempUser, [e.target.id]: false })
     } else if (e.target.id === "expired_penalize_date") {
       // set date
-      let incom: Date = new Date(e.target.value)
-      let old: Date = new Date(tempUser.expired_penalize_date)
+      const incom: Date = new Date(e.target.value)
+      const old: Date = new Date(tempUser.expired_penalize_date)
       let date: Date = new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), old.getHours(), old.getMinutes())
       if (date < new Date()) date = new Date()
       setTempUser({ ...tempUser, expired_penalize_date: date })
     } else if (e.target.id === "expiredPenalizeTime") {
       // set time
-      let date: Date = new Date(tempUser.expired_penalize_date)
-      let hour: number = parseInt(e.target.value.slice(0, 2))
-      let minute: number = parseInt(e.target.value.slice(3, 5))
+      const date: Date = new Date(tempUser.expired_penalize_date)
+      const hour: number = parseInt(e.target.value.slice(0, 2))
+      const minute: number = parseInt(e.target.value.slice(3, 5))
       let newDate: Date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, 0)
       if (newDate < new Date()) newDate = new Date()
       setTempUser({ ...tempUser, expired_penalize_date: newDate })
@@ -141,7 +141,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
     // if some input is blank -> alert //
     // else -> try change //
     setTempUser({ ...tempUser, ...data })
-    let { name_th, surname_th, name_en, surname_en, personal_email, phone } = data
+    const { name_th, surname_th, name_en, surname_en, personal_email, phone } = data
     if (name_th !== "" && surname_th !== "" && name_en !== "" && surname_en !== "" && personal_email !== "" && phone !== "")
       setShowModals({ ...showModals, showSave: true })
     else setShowAlert(true)
@@ -229,7 +229,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   }
 
   const renderForm = () => {
-    let date: Date = new Date(user.expired_penalize_date)
+    const date: Date = new Date(user.expired_penalize_date)
     return (
       <div className="userInformation">
         <Row className="py-3">
@@ -323,7 +323,7 @@ const UserInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props
   }
 
   const renderEditingForm = () => {
-    let date: Date = new Date(tempUser.expired_penalize_date)
+    const date: Date = new Date(tempUser.expired_penalize_date)
     return (
       <div className="userInformation">
         <Form onSubmit={handleSubmit(handleConfirmChange)}>
