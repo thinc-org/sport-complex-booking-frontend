@@ -22,14 +22,15 @@ export const useRow = (initial: ViewRowProps[] = []) => {
     const [rowData, setRowData] = useState<ViewRowProps[]>(initial)
     const validateTimeSlot = (row) => {
         const newTimeSlot = [parseInt(row.timeSlotStart), parseInt(row.timeSlotEnd)]
+        const timeSlotIsValid = newTimeSlot[0] < newTimeSlot[1]
         const rowWithSameDay = rowData.filter((r) => r.day === parseInt(row.day))
-        if (rowWithSameDay.length === 0) return true
+        if (rowWithSameDay.length === 0) return timeSlotIsValid
         for (let i = 0; i < rowWithSameDay.length; i++) {
             let currentTimeSlot = rowWithSameDay[i].time_slot
             if ((newTimeSlot[0] >= currentTimeSlot[0] && newTimeSlot[0] <= currentTimeSlot[currentTimeSlot.length - 1]) ||
                 (newTimeSlot[0] <= currentTimeSlot[0] && newTimeSlot[1] >= currentTimeSlot[0])) return false
         }
-        return true
+        return timeSlotIsValid
     }
     const onAddRow = (f) => {
 
