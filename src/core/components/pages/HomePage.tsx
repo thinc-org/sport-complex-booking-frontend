@@ -19,7 +19,6 @@ const HomePage = () => {
   const [cookieConsent, setCookieConsent] = useState(() => localStorage.getItem("Cookie Allowance") === "true")
   const [name, setName] = useState<NameResponse>()
   const [disable, setDisable] = useState(true)
-  const userContext = useContext(UserContext)
   const { t, i18n } = useTranslation()
   const [isLoading, setIsLoading] = useState(true)
 
@@ -27,7 +26,7 @@ const HomePage = () => {
     try {
       const res = await client.get("/account_info/")
       setName({ nameth: res.data.name_th, nameen: res.data.name_en })
-      setDisable(false)
+      if (res.data.name_en) setDisable(false)
       setIsLoading(false)
     } catch (err) {
       console.log(err)
@@ -61,7 +60,7 @@ const HomePage = () => {
             {" "}
             {t("welcome")}, {name && name[`name${i18n.language}`]}
           </div>
-          {!name && (
+          {disable && (
             <>
               <div className="homepage-warning-head"> {t("warning")}: </div>
               <div className="homepage-warning-body"> {t("fillAccount")} </div>
