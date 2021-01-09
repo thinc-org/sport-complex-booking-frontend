@@ -123,21 +123,13 @@ const ReservationDetail = () => {
           setCounter(counter - 1)
         } else if (counter === 0) {
           setIsRefreshingQRCode(true)
-          fetchData()
-          setValidTime(new Date().getTime())
+          setValidTime(new Date().getTime() + 10000)
+          setIsRefreshingQRCode(false)
+          setCounter(10)
         }
       }, 1000)
     }
   }
-
-  //   const qrValue = () => {
-  //       return (
-  //           {
-  //               id: id,
-  //               time: validTime
-  //           }
-  //       )
-  //   }
 
   useEffect(() => {
     console.log(qrValue)
@@ -154,7 +146,7 @@ const ReservationDetail = () => {
             </h6>
             <div style={{ fontSize: "18px", fontWeight: 400 }}> 00:{counter == 10 ? counter : "0" + counter} </div>
             {!isRefreshingQRCode ? (
-              <QRCode className="mb-4 mt-3" value={validTime + "/" + id} renderAs="svg" size="128" fgColor="#333" bgColor="#fff" />
+              <QRCode className="mb-4 mt-3" value={validTime + "/" + id} renderAs="svg" size={128} fgColor="#333" bgColor="#fff" />
             ) : (
               <h6 className="pt-4 pb-4 mt-5 mb-5" style={{ color: "red" }}>
                 {" "}
