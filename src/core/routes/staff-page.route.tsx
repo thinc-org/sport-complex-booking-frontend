@@ -5,7 +5,7 @@ import StaffLogin from "../components/pages/staff-pages/staff-login"
 import StaffSidebar from "../components/ui/navbar/staff-sidebar"
 import StaffProfile from "../components/pages/staff-pages/staff-profile"
 import { NavHeader } from "../components/ui/navbar/navbarSideEffect"
-import ListOfAllUsers from "../components/pages/staff-pages/list-of-all-users-pages/ListOfAllUsers"
+// import ListOfAllUsers from "../components/pages/staff-pages/list-of-all-users-pages/ListOfAllUsers"
 import AddUser from "../components/pages/staff-pages/list-of-all-users-pages/AddUser"
 import CuSatitInfo from "../components/pages/staff-pages/list-of-all-users-pages/CuSatitInfo"
 import UserInfo from "../components/pages/staff-pages/list-of-all-users-pages/UserInfo"
@@ -69,7 +69,7 @@ const StaffRoute = () => {
                   <Switch>
                     <Route path={`${path}/staffProfile`} component={StaffProfile} />
                     <Route path={`${path}/disableCourt`} component={DisableCourt} />
-                    <Route exact path={`${path}/listOfAllUsers`} component={ListOfAllUsers} />
+                    {/* <Route exact path={`${path}/listOfAllUsers`} component={ListOfAllUsers} /> */}
                     <Route exact path={`${path}/addUser`} component={AddUser} />
                     <Route exact path={`${path}/userInfo/other/:_id`} component={UserInfo} />
                     <Route exact path={`${path}/userInfo/:accType/:_id`} component={CuSatitInfo} />

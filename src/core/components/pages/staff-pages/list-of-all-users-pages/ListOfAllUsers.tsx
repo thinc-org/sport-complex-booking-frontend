@@ -202,7 +202,6 @@ const ListOfAllUsers: FunctionComponent = () => {
 
   const renderUsersTable = () => {
     let index = (pageNo - 1) * 10 + 1
-    // let user
     const usersList = users.map((user) => {
       return (
         <tr key={index} className="tr-normal">

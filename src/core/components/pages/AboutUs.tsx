@@ -11,10 +11,17 @@ import titleBackground from "../../assets/images/titleBackground.svg"
 import { useTranslation } from "react-i18next"
 import { useLanguage } from "../../utils/language"
 
+interface CreditsInfo {
+  title: string
+  team_en: string[]
+  team_th: string[]
+  icon: string
+}
+
 function AboutUs() {
   const { t } = useTranslation()
   const language = useLanguage()
-  const credits = [
+  const credits: CreditsInfo[] = [
     {
       title: "productOwner",
       team_en: ["Name Surname"],
@@ -83,11 +90,17 @@ function AboutUs() {
               <div className="default-mobile-wrapper animated-card pb-1">
                 <h4>{t(team.title)}</h4>
                 <ul className="list-unstyled">
-                  {team[`team_${language}`].map((name: string) => (
-                    <li key={name}>
-                      <p className="mb-0">{name}</p>
-                    </li>
-                  ))}
+                  {language === "th"
+                    ? team.team_th.map((name) => (
+                        <li key={name}>
+                          <p className="mb-0">{name}</p>
+                        </li>
+                      ))
+                    : team.team_en.map((name) => (
+                        <li key={name}>
+                          <p className="mb-0">{name}</p>
+                        </li>
+                      ))}
                 </ul>
               </div>
             </Col>
