@@ -37,14 +37,24 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
 
   const checkIn = useCallback(async (reservationId) => {
     try {
-      await client.patch("myreservation/" + reservationId)
-      setMessageHeader("เช็คอินสำเร็จ")
-      setMessageBody("ID: " + reservationId)
-      setModalOpen(true)
-      setTimeout(function () {
-        setModalOpen(false)
-        setData("")
-      }, 3000)
+      const res = await client.patch("myreservation/" + reservationId)
+      if (res.data.is_check) {
+        setMessageHeader("เช็คอินซ้ำ")
+        setMessageBody(res.data.sport_id.sport_name_th + " ID: " + reservationId)
+        setModalOpen(true)
+        setTimeout(function () {
+          setModalOpen(false)
+          setData("")
+        }, 3000)
+      } else {
+        setMessageHeader("เช็คอินสำเร็จ")
+        setMessageBody(res.data.sport_id.sport_name_th + " ID: " + reservationId)
+        setModalOpen(true)
+        setTimeout(function () {
+          setModalOpen(false)
+          setData("")
+        }, 3000)
+      }
     } catch (err) {
       console.log("Reservation ID: " + reservationId)
       console.log(err.message)
@@ -60,9 +70,6 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
 
   useEffect(() => {
     if (validTime && id && currentTime) {
-      console.log("current time: " + currentTime)
-      console.log("valid time: " + validTime)
-      console.log("id: " + id)
       if (currentTime <= validTime) checkIn(id)
       else {
         setMessageHeader("คิวอาร์โค้ดหมดเวลา")
@@ -78,7 +85,7 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
 
   const refresh = () => {
     console.log("refresh")
-    setReadingResult(undefined)
+    setReadingResult([])
     setCurrentTime(undefined)
     setValidTime(undefined)
     setId("")
