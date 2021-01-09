@@ -180,7 +180,6 @@ const WaitingRoomPage = () => {
                     </thead>
 
                     {listMember &&
-<<<<<<< HEAD
                       listMember.map((eachMember, index) => (
                         <tbody key={index}>
                           <tr>
@@ -189,18 +188,6 @@ const WaitingRoomPage = () => {
                           </tr>
                         </tbody>
                       ))}
-=======
-                      listMember.map((eachMember, index) => {
-                        return (
-                          <tbody>
-                            <tr>
-                              <td> {index + 1} </td>
-                              <td> {eachMember[`name_${i18n.language}`]} </td>
-                            </tr>
-                          </tbody>
-                        )
-                      })}
->>>>>>> waiting room bug fix
                   </table>
                 </div>
                 <Button
