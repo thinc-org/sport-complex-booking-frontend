@@ -88,19 +88,6 @@ const ReservationDetail = () => {
     }
   }, [history, id])
 
-  const countDown = useCallback(() => {
-    if (!isCheck) {
-      setTimeout(function () {
-        if (counter) {
-          setCounter(counter - 1)
-        } else if (counter === 0) {
-          history.push(history.location.state.path)
-          //history.push((location.state as any).path)
-        }
-      }, 1000)
-    }
-  }, [counter, history, isCheck])
-
   useEffect(() => {
     if (id) fetchData()
   }, [fetchData, id])
@@ -109,10 +96,6 @@ const ReservationDetail = () => {
     fetchId()
     console.log("reservation detail")
   }, [fetchId])
-
-  useEffect(() => {
-    if (!isCheck) countDown()
-  }, [counter, isCheck, countDown])
 
   const triggerModal = () => {
     console.log("show modal")
@@ -134,6 +117,27 @@ const ReservationDetail = () => {
         triggerModal()
       })
   }
+
+  const countDown = () => {
+    if (!isCheck && !isRefreshingQRCode) {
+      setTimeout(function () {
+        if (counter) {
+          setCounter(counter - 1)
+        } else if (counter === 0) {
+          setIsRefreshingQRCode(true)
+          setValidTime(new Date().getTime() + 10000)
+          setIsRefreshingQRCode(false)
+          setCounter(10)
+        }
+      }, 1000)
+    }
+  }
+  useEffect(() => {
+    if (!isCheck) countDown()
+  }, [counter, isCheck, countDown])
+  useEffect(() => {
+    console.log(qrValue)
+  }, [qrValue])
 
   const qrCode = () => {
     if (!isCheck && id) {

@@ -28,7 +28,7 @@ const HomePage = () => {
     try {
       const res = await client.get("/account_info/")
       setName({ nameth: res.data.name_th, nameen: res.data.name_en })
-      setDisable(false)
+      if (res.data.name_en) setDisable(false)
       setIsLoading(false)
     } catch (err) {
       console.log(err)
@@ -61,7 +61,7 @@ const HomePage = () => {
             {" "}
             {t("welcome")}, {name && name[languageName]}
           </div>
-          {!name && (
+          {disable && (
             <>
               <div className="homepage-warning-head"> {t("warning")}: </div>
               <div className="homepage-warning-body"> {t("fillAccount")} </div>
