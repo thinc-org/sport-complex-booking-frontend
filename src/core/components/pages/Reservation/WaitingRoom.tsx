@@ -17,13 +17,18 @@ interface SportNameResponse {
   sportNameen: string
 }
 
+interface MemberResponse {
+  name_th: string
+  name_en: string
+}
+
 const WaitingRoomPage = () => {
   const [remainingTime, setRemainingTime] = useState<string>()
   const [waitingRoomId, setWaitingRoomId] = useState<string>()
   const [sport, setSport] = useState<SportNameResponse>()
   const [date, setDate] = useState<string>()
   const [timeList, setTimeList] = useState<Array<number>>([])
-  const [listMember, setListMember] = useState<Array<string>>([])
+  const [listMember, setListMember] = useState<Array<MemberResponse>>([])
   const [accessCode, setAccessCode] = useState("")
   const [endTime, setEndTime] = useState<number>()
   const [modalConfirmOpen, setModalConfirmOpen] = useState(false)
@@ -38,14 +43,15 @@ const WaitingRoomPage = () => {
   const fetchWaitingRoom = useCallback(async () => {
     try {
       const res = await client.get("/mywaitingroom")
+      console.log(res.data)
       setListMember(res.data.list_member)
       // time sent from backend is UTC before adding 7 for Thailand
-      setEndTime(timeShift(new Date(res.data.expired_time).getTime(), 7))
-      setSport({ sportNameth: res.data.sport_name_th, sportNameen: res.data.sport_name_en })
-      setDate(res.data.date.toLocaleString)
+      setEndTime(timeShift(new Date(res.data.expired_date).getTime(), 7))
+      setSport({ sportNameth: res.data.sport_id.sport_name_th, sportNameen: res.data.sport_id.sport_name_en })
+      setDate(new Date(res.data.date).toLocaleDateString())
       setTimeList(res.data.time_slot)
-      setRequiredUserNumber(res.data.required_user)
-      setCurrentUserNumber(res.data.listmember.length)
+      setRequiredUserNumber(res.data.sport_id.required_user)
+      setCurrentUserNumber(res.data.list_member.length)
       setWaitingRoomId(res.data._id)
       setAccessCode(res.data.access_code)
       setIsLoading(false)
@@ -95,7 +101,7 @@ const WaitingRoomPage = () => {
 
   const closeWaitingRoom = async () => {
     client
-      .delete(`'/mywaitingroom/:${waitingRoomId}'`)
+      .delete("mywaitingroom/cancel/" + waitingRoomId)
       .then(() => {
         history.push("/home")
       })
@@ -157,7 +163,7 @@ const WaitingRoomPage = () => {
                   <Button
                     variant="pink"
                     className="btn"
-                    onClick={fetchWaitingRoom}
+                    onClick={() => window.location.reload()}
                     style={{ fontSize: "15px", fontWeight: 400, float: "right", borderRadius: "15px", padding: "2px 10px" }}
                   >
                     {" "}
@@ -184,7 +190,7 @@ const WaitingRoomPage = () => {
                           <tbody>
                             <tr>
                               <td> {index + 1} </td>
-                              <td> {eachMember} </td>
+                              <td> {eachMember[`name_${i18n.language}`]} </td>
                             </tr>
                           </tbody>
                         )
