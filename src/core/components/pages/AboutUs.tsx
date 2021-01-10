@@ -36,26 +36,26 @@ function AboutUs() {
     },
     {
       title: "frontendDeveloper",
-      team_en: ["Name Surname", "Name Surname", "Name Surname", "Name Surname", "Name Surname"],
-      team_th: ["ชื่อ นามสกุล", "ชื่อ นามสกุล", "ชื่อ นามสกุล", "ชื่อ นามสกุล", "ชื่อ นามสกุล"],
+      team_en: ["Name Surname1", "Name Surname2", "Name Surname3", "Name Surname4", "Name Surname5"],
+      team_th: ["ชื่อ นามสกุล1", "ชื่อ นามสกุล2", "ชื่อ นามสกุล3", "ชื่อ นามสกุล4", "ชื่อ นามสกุล5"],
       icon: Frontend,
     },
     {
       title: "backendDeveloper",
-      team_en: ["Name Surname", "Name Surname", "Name Surname", "Name Surname", "Name Surname"],
-      team_th: ["ชื่อ นามสกุล", "ชื่อ นามสกุล", "ชื่อ นามสกุล", "ชื่อ นามสกุล", "ชื่อ นามสกุล"],
+      team_en: ["Name Surname1", "Name Surname2", "Name Surname3", "Name Surname4", "Name Surname5"],
+      team_th: ["ชื่อ นามสกุล1", "ชื่อ นามสกุล2", "ชื่อ นามสกุล3", "ชื่อ นามสกุล4", "ชื่อ นามสกุล5"],
       icon: Backend,
     },
     {
       title: "designer",
-      team_en: ["Name Surname", "Name Surname", "Name Surname"],
-      team_th: ["ชื่อ นามสกุล", "ชื่อ นามสกุล", "ชื่อ นามสกุล"],
+      team_en: ["Name Surname1", "Name Surname2", "Name Surname3"],
+      team_th: ["ชื่อ นามสกุล1", "ชื่อ นามสกุล2", "ชื่อ นามสกุล3"],
       icon: Design,
     },
     {
       title: "specialThanks",
-      team_en: ["Name Surname", "Name Surname", "Name Surname", "Name Surname"],
-      team_th: ["ชื่อ นามสกุล", "ชื่อ นามสกุล", "ชื่อ นามสกุล", "ชื่อ นามสกุล"],
+      team_en: ["Name Surname1", "Name Surname2", "Name Surname3", "Name Surname4"],
+      team_th: ["ชื่อ นามสกุล1", "ชื่อ นามสกุล2", "ชื่อ นามสกุล3", "ชื่อ นามสกุล4"],
       icon: Mentors,
     },
   ]
@@ -93,12 +93,16 @@ function AboutUs() {
                   {language === "th"
                     ? team.team_th.map((name) => (
                         <li key={name}>
-                          <p className="mb-0">{name}</p>
+                          <p className="mb-0" key={name}>
+                            {name}
+                          </p>
                         </li>
                       ))
                     : team.team_en.map((name) => (
                         <li key={name}>
-                          <p className="mb-0">{name}</p>
+                          <p className="mb-0" key={name}>
+                            {name}
+                          </p>
                         </li>
                       ))}
                 </ul>

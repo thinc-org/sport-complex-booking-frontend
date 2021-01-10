@@ -46,7 +46,7 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
         else i18n.changeLanguage("en")
         window.location.reload()
       })
-      .catch((err) => {
+      .catch(() => {
         setLoading(false)
         setError("invalidInput", {
           type: "async",

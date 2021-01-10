@@ -3,27 +3,21 @@ import { Button } from "react-bootstrap"
 import { UserContext } from "../../../../contexts/UsersContext"
 import { useTranslation } from "react-i18next"
 import { WarningMessage } from "../../../ui/Modals/AccountPageModals"
-import { useLanguage } from "../../../../utils/language"
+import { useNameLanguage } from "../../../../utils/language"
+import { AccountProps } from "../../../../dto/account.dto"
 
-interface ChulaAccountDisplayProps {
-  toggleEditButton: () => void
-}
-
-export default function ChulaAccountDisplay({ toggleEditButton }: ChulaAccountDisplayProps) {
+export default function ChulaAccountDisplay({ toggleEditButton }: AccountProps) {
   const { cuStudentAccount: user } = useContext(UserContext)
   const { t } = useTranslation()
-  const language = useLanguage()
+  const nameLanguage = useNameLanguage("name")
+  const surnameLanguage = useNameLanguage("surname")
 
   return (
     <div className="mx-auto col-md-6">
       <WarningMessage show={user!.is_first_login} account={user!.account_type} />
       <div className="default-mobile-wrapper animated-card">
         <div className="row mt-2">
-          <div className="col-8">
-            {user && (
-              <h4 className="align-right">{language === "th" ? user.name_th + " " + user.surname_th : user.name_en + " " + user.surname_en}</h4>
-            )}
-          </div>
+          <div className="col-8">{user && <h4 className="align-right">{user[nameLanguage] + " " + user[surnameLanguage]}</h4>}</div>
           <div className="col-4">
             <Button className="btn-secondary btn-sm float-right" onClick={toggleEditButton}>
               {t("edit")}

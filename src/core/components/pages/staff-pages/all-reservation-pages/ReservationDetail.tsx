@@ -88,7 +88,7 @@ const ReservationDetail: React.FC = () => {
       .catch(({ response }) => {
         console.log(response)
       })
-  }, [sportId, detail?.sport_id])
+  }, [sportId, detail])
 
   const requestDelete = () => {
     const url = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + `/${_id}`

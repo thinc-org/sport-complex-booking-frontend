@@ -5,7 +5,7 @@ import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from "react-i18next"
 import hooray from "../../../assets/images/hooray.svg"
 
-import { HoorayHistoryStates } from "./ReservationInterfaces"
+import { HoorayHistoryStates } from "../../../dto/waitingRoom.dto"
 
 function Hooray() {
   const { t } = useTranslation()

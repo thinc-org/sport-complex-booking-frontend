@@ -7,12 +7,7 @@ import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from "react-i18next"
 import { Loading } from "../../ui/loading/loading"
 import { client } from "../../../../axiosConfig"
-
-enum Account {
-  CuStudent = "CuStudent",
-  SatitAndCuPersonel = "SatitAndCuPersonel",
-  Other = "Other",
-}
+import { Account } from "../../../dto/account.dto"
 
 function AccountPage() {
   const { setCuStudentAccount, setSatitCuPersonelAccount, setOtherAccount } = useContext(UserContext)
@@ -30,7 +25,16 @@ function AccountPage() {
         setSatitCuPersonelAccount(data as SatitCuPersonel)
       } else if (data.account_type === "Other") {
         const other = data as Other
-        const newOther = data as Other
+        const newOther = other.contact_person
+          ? {
+              ...other,
+              contact_person_prefix: other.contact_person.contact_person_prefix,
+              contact_person_name: other.contact_person.contact_person_name,
+              contact_person_surname: other.contact_person.contact_person_surname,
+              contact_person_home_phone: other.contact_person.contact_person_home_phone,
+              contact_person_phone: other.contact_person.contact_person_phone,
+            }
+          : { ...other }
         other.rejected_info
           ? other.rejected_info.forEach((field) => {
               newOther[field] = ""

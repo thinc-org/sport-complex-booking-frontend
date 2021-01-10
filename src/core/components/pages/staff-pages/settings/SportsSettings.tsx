@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { Table, Form, Row, Col, Button, Pagination, Modal } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
-import { AxiosResponse } from "axios"
-import { SportData, DeleteSport, AddSport, HandleError, EditSport } from "./SportSettingsComponents"
+import { DeleteSport, AddSport, HandleError, EditSport } from "./SportSettingsComponents"
+import { ListCourts, SportData } from "../../../../dto/settings.dto"
 
 export default function SportsSettings() {
   const [pageNo, setPageNo] = useState(1)
@@ -18,15 +18,16 @@ export default function SportsSettings() {
     sport_name_en: "",
     required_user: 0,
     quota: 0,
+    list_court: [],
   })
   const [sports, setSports] = useState<SportData[]>([
     {
-      object_id: "",
+      _id: "",
       sport_name_th: "",
       sport_name_en: "",
       required_user: 0,
       quota: 4,
-      list_court: [1, 2, 3],
+      list_court: [],
     },
   ])
 
@@ -36,13 +37,16 @@ export default function SportsSettings() {
       const end = pageNo * 10
       const search_filter = query ? query : "$"
       await client
-        .get<SportData[]>("/court-manager/" + start + "/" + end + "/" + search_filter)
+        .get<ListCourts>("/court-manager/search", {
+          params: {
+            start: start,
+            end: end,
+            filter: search_filter,
+          },
+        })
         .then(({ data }) => {
-          // TODO DTO is not match to what you use
-          // setSports(data["sport_list"])
-          // setMaxSport(data["allSport_length"])
-          setSports(data)
-          setMaxSport(data.length)
+          setSports(data["sport_list"])
+          setMaxSport(data["allSport_length"])
         })
         .catch(() => {
           setShowError(true)
@@ -62,8 +66,7 @@ export default function SportsSettings() {
 
   const sendEdittedSportInfo = async (currentSport: SportData) => {
     await client
-      //.put<AxiosResponse>("/court-manager/" + currentSport["_id"], currentSport)
-      .put<AxiosResponse>("/court-manager/" + currentSport.object_id, currentSport)
+      .put<SportData>("/court-manager/" + currentSport._id, currentSport)
       .then(() => {
         setShowEditSport(false)
         requestSports()
@@ -75,7 +78,7 @@ export default function SportsSettings() {
 
   const sendNewSportInfo = async (newSport: SportData) => {
     await client
-      .post("/court-manager/", newSport)
+      .post<SportData>("/court-manager/", newSport)
       .then(() => {
         requestSports()
         setShowAddSport(false)
@@ -87,9 +90,7 @@ export default function SportsSettings() {
 
   const sendDeleteSport = async (currentSport: SportData) => {
     await client
-      // TODO
-      // .delete<AxiosResponse>("/court-manager/" + currentSport["_id"])
-      .delete("/court-manager/" + currentSport.object_id)
+      .delete<SportData>("/court-manager/" + currentSport._id)
       .then(() => {
         setShowDeleteSport(false)
         requestSports()

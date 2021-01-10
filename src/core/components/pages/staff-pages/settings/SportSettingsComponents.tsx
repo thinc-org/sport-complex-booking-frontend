@@ -1,22 +1,7 @@
 import React, { useState } from "react"
 import { Form, Row, Button, Modal } from "react-bootstrap"
 import { useForm } from "react-hook-form"
-
-export interface SportData {
-  object_id?: string
-  sport_name_th: string
-  sport_name_en: string
-  required_user: number
-  quota: number
-  list_court?: number[]
-}
-
-export interface DeleteSportProps {
-  show: boolean
-  setShow: (value: boolean) => void
-  mainFunction: (value: SportData) => void
-  data: SportData
-}
+import { DeleteSportProps, AddSportProps, HandleErrorProps, EditSportProps } from "../../../../dto/settings.dto"
 
 export const DeleteSport: React.FC<DeleteSportProps> = ({ show, setShow, mainFunction, data }) => {
   return (
@@ -54,12 +39,6 @@ export const DeleteSport: React.FC<DeleteSportProps> = ({ show, setShow, mainFun
       </Modal.Footer>
     </Modal>
   )
-}
-
-export interface AddSportProps {
-  show: boolean
-  setShow: (value: boolean) => void
-  onSubmitAddSport: (sport: SportData) => void
 }
 
 export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSport }) => {
@@ -234,11 +213,6 @@ export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSp
   )
 }
 
-export interface HandleErrorProps {
-  show: boolean
-  setShow: (value: boolean) => void
-}
-
 export const HandleError: React.FC<HandleErrorProps> = ({ show, setShow }) => {
   if (!show) return null
   return (
@@ -267,14 +241,6 @@ export const HandleError: React.FC<HandleErrorProps> = ({ show, setShow }) => {
       </Modal.Footer>
     </Modal>
   )
-}
-
-export interface EditSportProps {
-  show: boolean
-  setShow: (value: boolean) => void
-  setCurrentSport: (value: SportData) => void
-  sendEdittedSportInfo: (value: SportData) => void
-  currentSport: SportData
 }
 
 export const EditSport: React.FC<EditSportProps> = ({ show, setShow, setCurrentSport, sendEdittedSportInfo, currentSport }) => {

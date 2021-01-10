@@ -3,23 +3,7 @@ import { Form, Row, Button, Modal } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { passwordSchema } from "./StaffManagementSchema"
-
-export interface admin_and_staff {
-  _id?: string // MAJOR CHANGE
-  name: string
-  surname: string
-  username: string
-  password?: string
-  recheckpasssword?: string | undefined
-  is_admin: boolean | string
-}
-
-export interface DeleteStaffModalProps {
-  show: boolean
-  setShow: (value: boolean) => void
-  mainFunction: (value: admin_and_staff) => void
-  data: admin_and_staff
-}
+import { DeleteStaffModalProps, EditStaffModalProps, AddStaffModalProps, HandleErrorModalProps } from "../../../../dto/staffManagement.dto"
 
 export const DeleteStaffModal: React.FC<DeleteStaffModalProps> = ({ show, setShow, mainFunction, data }) => {
   return (
@@ -59,11 +43,6 @@ export const DeleteStaffModal: React.FC<DeleteStaffModalProps> = ({ show, setSho
   )
 }
 
-export interface EditStaffModalProps {
-  show: boolean
-  setShow: (value: boolean) => void
-}
-
 export const EditStaffModal: React.FC<EditStaffModalProps> = ({ show, setShow }) => {
   return (
     <Modal
@@ -84,7 +63,6 @@ export const EditStaffModal: React.FC<EditStaffModalProps> = ({ show, setShow })
           className="btn-normal"
           onClick={() => {
             setShow(false)
-            window.location.reload()
           }}
         >
           ตกลง
@@ -92,12 +70,6 @@ export const EditStaffModal: React.FC<EditStaffModalProps> = ({ show, setShow })
       </Modal.Footer>
     </Modal>
   )
-}
-
-export interface AddStaffModalProps {
-  show: boolean
-  setShow: (value: boolean) => void
-  onSubmitAddStaff: (staff: admin_and_staff) => void
 }
 
 export const AddStaffModal: React.FC<AddStaffModalProps> = ({ show, setShow, onSubmitAddStaff }) => {
@@ -172,11 +144,6 @@ export const AddStaffModal: React.FC<AddStaffModalProps> = ({ show, setShow, onS
       </form>
     </Modal>
   )
-}
-
-export interface HandleErrorModalProps {
-  show: boolean
-  setShow: (value: boolean) => void
 }
 
 export const HandleErrorModal: React.FC<HandleErrorModalProps> = ({ show, setShow }) => {
