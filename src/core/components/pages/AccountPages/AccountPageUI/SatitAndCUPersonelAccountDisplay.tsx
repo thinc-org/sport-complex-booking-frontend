@@ -3,23 +3,20 @@ import { Button } from "react-bootstrap"
 import { UserContext } from "../../../../contexts/UsersContext"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import { useNameLanguage } from "../../../../utils/language"
+import { AccountProps } from "../../../../dto/account.dto"
 
-interface SatitAndCUPersonelAccountDisplayProps {
-  toggleEditButton: () => void
-}
-
-export default function SatitAndCUPersonelAccountDisplay({ toggleEditButton }: SatitAndCUPersonelAccountDisplayProps) {
+export default function SatitAndCUPersonelAccountDisplay({ toggleEditButton }: AccountProps) {
   const { satitCuPersonelAccount: user } = useContext(UserContext)
-  const { t, i18n } = useTranslation()
-  const { language } = i18n
+  const { t } = useTranslation()
+  const nameLanguage = useNameLanguage("name")
+  const surnameLanguage = useNameLanguage("surname")
 
   return (
     <div className="mx-auto col-md-6">
       <div className="default-mobile-wrapper animated-card">
         <div className="row mt-2">
-          <div className="col-8">
-            <h4 className="align-right">{user![`name_${language}`] + " " + user![`surname_${language}`]}</h4>
-          </div>
+          <div className="col-8">{user && <h4 className="align-right">{user[nameLanguage] + " " + user[surnameLanguage]}</h4>}</div>
           <div className="col-4">
             <Button className="btn-secondary float-right" onClick={toggleEditButton}>
               {t("edit")}

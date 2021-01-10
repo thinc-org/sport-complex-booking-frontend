@@ -2,6 +2,7 @@ import React from "react"
 import { Form, Row, Col, Button, Modal } from "react-bootstrap"
 import TimePicker from "react-time-picker"
 import { useForm } from "react-hook-form"
+import { NoCourtsModalProps, CourtData, EditCourtProps, DeleteCourtModalProps, AddCourtFuncProps } from "../../../../dto/settings.dto"
 
 const OpenTimeCalculation = (time: string) => {
   const equation: number = parseInt(time.substring(0, 2)) * 2 + 1 + Math.floor(parseInt(time.substring(3, 5)) / 30)
@@ -27,11 +28,6 @@ const formatOpenTime = (openTime: string) => {
 
 const formatCloseTime = (closeTime: string) => {
   return parseInt(closeTime.substring(0, 2)) * 2 + Math.floor(parseInt(closeTime.substring(3, 5)) / 30)
-}
-
-export interface NoCourtsModalProps {
-  show: boolean
-  setShow: (value: boolean) => void
 }
 
 export const NoCourtsModal: React.FC<NoCourtsModalProps> = ({ show, setShow }) => {
@@ -63,27 +59,6 @@ export const NoCourtsModal: React.FC<NoCourtsModalProps> = ({ show, setShow }) =
   )
 }
 
-export interface CourtData {
-  court_num?: number
-  open_time?: number
-  close_time?: number
-  _id?: string
-}
-
-export interface EditCourtProps {
-  show: boolean
-  setShow: (value: boolean) => void
-  openTime: string
-  closeTime: string
-  onChangeOpenTime: React.Dispatch<React.SetStateAction<string>>
-  onChangeCloseTime: React.Dispatch<React.SetStateAction<string>>
-  courts: CourtData[]
-  currentCourt: CourtData | undefined
-  currentSportName: string | undefined
-  currentSportId: string
-  updateCourt: (value: string) => void
-}
-
 export const EditCourt: React.FC<EditCourtProps> = ({
   show,
   setShow,
@@ -109,7 +84,7 @@ export const EditCourt: React.FC<EditCourtProps> = ({
     })
     updateCourt(currentSportId)
   }
-
+  if (!currentCourt) return null
   return (
     <Modal
       show={show}
@@ -183,14 +158,6 @@ export const EditCourt: React.FC<EditCourtProps> = ({
   )
 }
 
-export interface DeleteCourtModalProps {
-  show: boolean
-  setShow: (value: boolean) => void
-  deleteCourt: (value1: string, value2: string) => void
-  currentCourt: CourtData
-  currentSportId: string
-}
-
 export const DeleteCourtModal: React.FC<DeleteCourtModalProps> = ({ show, setShow, deleteCourt, currentCourt, currentSportId }) => {
   return (
     <Modal
@@ -227,18 +194,6 @@ export const DeleteCourtModal: React.FC<DeleteCourtModalProps> = ({ show, setSho
       </Modal.Footer>
     </Modal>
   )
-}
-
-export interface AddCourtFuncProps {
-  show: boolean
-  setShow: (value: boolean) => void
-  onChangeOpenTime: React.Dispatch<React.SetStateAction<string>>
-  onChangeCloseTime: React.Dispatch<React.SetStateAction<string>>
-  openTime: string
-  closeTime: string
-  courts: CourtData[]
-  updateCourt: (value: string) => void
-  currentSportId: string
 }
 
 export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({

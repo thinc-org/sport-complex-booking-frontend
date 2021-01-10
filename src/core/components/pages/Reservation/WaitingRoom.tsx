@@ -33,6 +33,7 @@ const WaitingRoomPage = () => {
   const [isLoading, setIsLoading] = useState(true)
   const { t } = useTranslation()
   const language = useLanguage()
+  const sportLanguage: "sportNameth" | "sportNameen" = language === "th" ? "sportNameth" : "sportNameen"
 
   const history = useHistory()
 
@@ -128,7 +129,7 @@ const WaitingRoomPage = () => {
                 </div>
                 <div className="box-container btn w-100 mb-4">
                   <h6 style={{ fontWeight: 700, fontSize: "14px", marginBottom: "5px" }}> {t("summary")} </h6>
-                  <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}> {sport && sport[`sportName${language}`]} </h6>
+                  <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}> {sport && sport[sportLanguage]} </h6>
                   <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}>
                     {t("date")}: {date}
                   </h6>

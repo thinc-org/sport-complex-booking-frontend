@@ -8,8 +8,7 @@ import withUserGuard from "../../../guards/user.guard"
 import { DetailsModal, CustomWaitingRoomModal } from "../../ui/Modals/WaitingRoomModals"
 import { useTranslation } from "react-i18next"
 import { client } from "../../../../axiosConfig"
-import { WaitingRoomData, SportData, CourtData } from "./ReservationInterfaces"
-import { AxiosResponse } from "axios"
+import { WaitingRoomData, SportData, CourtData, CreateResponse } from "../../../dto/waitingRoom.dto"
 import { CreateWaitingRoomErrorMsg, CheckValidityErrorMsg } from "./ReservationComponents"
 
 function CreateWaitingRoom() {
@@ -21,6 +20,7 @@ function CreateWaitingRoom() {
   const [quota, setquota] = useState(0)
   const { t, i18n } = useTranslation()
   const { language } = i18n
+  const sportLanguage = language === "th" ? "sport_name_th" : "sport_name_en"
   const history = useHistory()
   // Sport States
   const [sport, setSport] = useState<SportData[]>([])
@@ -163,7 +163,7 @@ function CreateWaitingRoom() {
       time_slot: formattedTimeSlot.slice(1),
     }
     await client
-      .post<AxiosResponse>("/reservation/createwaitingroom", newData)
+      .post<CreateResponse>("/reservation/createwaitingroom", newData)
       .then(() => {
         history.push({ pathname: "/waitingroom" })
       })
@@ -272,7 +272,7 @@ function CreateWaitingRoom() {
                         setCourts(sport["list_court"])
                         setShowCourt(true)
                         setRequiredUserCount(sport["required_user"])
-                        setSportName(language === "th" ? sport["sport_name_th"] : sport["sport_name_en"])
+                        setSportName(sport[sportLanguage])
                       }
                     })
                   }}
@@ -282,7 +282,7 @@ function CreateWaitingRoom() {
                   </option>
                   {sport!.map((item, i) => (
                     <option key={i} value={item["_id"]}>
-                      {language === "th" ? item["sport_name_th"] : item["sport_name_en"]}
+                      {item[sportLanguage]}
                     </option>
                   ))}
                 </select>

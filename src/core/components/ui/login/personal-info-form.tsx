@@ -18,10 +18,10 @@ const PersonalInfo = () => {
             <Form.Label>{t("language")}</Form.Label>
             <div style={{ marginBottom: "24px" }}>
               <ToggleButtonGroup type="radio" name="is_thai_language" defaultValue={false}>
-                <ToggleButton variant="toggle" inputRef={register} value={true}>
+                <ToggleButton variant="toggle" inputRef={register} value={"true"}>
                   {t("th")}
                 </ToggleButton>
-                <ToggleButton variant="toggle" inputRef={register} value={false}>
+                <ToggleButton variant="toggle" inputRef={register} value={"false"}>
                   {t("en")}
                 </ToggleButton>
               </ToggleButtonGroup>

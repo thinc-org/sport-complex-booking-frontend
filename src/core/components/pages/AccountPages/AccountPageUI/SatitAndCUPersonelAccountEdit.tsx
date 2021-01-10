@@ -7,18 +7,18 @@ import { useTranslation } from "react-i18next"
 import { client } from "../../../../../axiosConfig"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { infoSchema } from "../../../../schemas/editUserInfo"
+import { useNameLanguage } from "../../../../utils/language"
+import { AccountProps } from "../../../../dto/account.dto"
 
-interface SatitAndCUPersonelAccountEditProps {
-  toggleEditButton: () => void
-}
-
-export default function SatitAndCUPersonelAccountEdit({ toggleEditButton }: SatitAndCUPersonelAccountEditProps) {
+export default function SatitAndCUPersonelAccountEdit({ toggleEditButton }: AccountProps) {
   const { t } = useTranslation()
 
   const [show, setShow] = useState(false)
   const [showErr, setShowErr] = useState(false)
   const [formData, setFormData] = useState<EdittedData>()
   const { satitCuPersonelAccount: user } = useContext(UserContext)
+  const nameLanguage = useNameLanguage("name")
+  const surnameLanguage = useNameLanguage("surname")
 
   // React Hook Forms
   const { register, handleSubmit, errors } = useForm({ resolver: yupResolver(infoSchema) })
@@ -48,11 +48,7 @@ export default function SatitAndCUPersonelAccountEdit({ toggleEditButton }: Sati
     <div className="mx-auto col-md-6">
       <div className="default-mobile-wrapper animated-card">
         <div className="row mt-2">
-          <div className="col-8">
-            <h4 className="align-right">
-              {user?.name_en} {user?.surname_en}
-            </h4>
-          </div>
+          <div className="col-8">{user && <h4 className="align-right">{user[nameLanguage] + " " + user[surnameLanguage]}</h4>}</div>
         </div>
         <div className="row">
           <h6 className="mx-3">{t("satitAccountType")}</h6>

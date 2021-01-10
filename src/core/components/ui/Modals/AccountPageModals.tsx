@@ -1,6 +1,7 @@
 import React from "react"
 import { Button, Modal } from "react-bootstrap"
 import { useTranslation } from "react-i18next"
+import { Other } from "../../../contexts/UsersContext"
 
 export interface EdittedData {
   personal_email: string
@@ -11,7 +12,7 @@ interface CustomAccountModalProps {
   type: "confirmEditAccountModal" | "confirmEditOtherAccountModal" | "editAccountErrorModal"
   show: boolean
   setShow: (value: boolean) => void
-  mainFunction?: (data: EdittedData) => Promise<void> | ((data: EdittedData) => void)
+  mainFunction?: (data: Other) => Promise<void> //(data: EdittedData) => Promise<void> | ((data: EdittedData) => void)
   data?: EdittedData
 }
 
@@ -46,7 +47,7 @@ export const CustomAccountModal: React.FC<CustomAccountModalProps> = ({ type, sh
           {t("cancel")}
         </Button>
         {data && mainFunction && (
-          <Button variant="pink" className="btn-normal" onClick={() => mainFunction(data)}>
+          <Button variant="pink" className="btn-normal" onClick={() => mainFunction(data as Other)}>
             {t("ok")}
           </Button>
         )}

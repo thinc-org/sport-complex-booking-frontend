@@ -10,7 +10,7 @@ import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 import { useTranslation } from "react-i18next"
 import { ReservationCancellationModal } from "../../ui/Modals/ReservationCancelModal"
 import { Loading } from "../../ui/loading/loading"
-import { useLanguage } from "../../../utils/language"
+import { useLanguage, useNameLanguage } from "../../../utils/language"
 
 interface LocationResponse {
   id: string
@@ -32,7 +32,8 @@ const ReservationDetail = () => {
   const history = useHistory<LocationResponse>()
   const { t } = useTranslation()
   const language = useLanguage()
-
+  const nameLanguage: "name_en" | "name_th" = useNameLanguage("name") as "name_en" | "name_th"
+  const sportLanguage: "sportth" | "sporten" = language === "th" ? "sportth" : "sporten"
   const [id, setId] = useState<string>()
   const [sport, setSport] = useState<SportResponse>()
   const [courtNum, setCourtNum] = useState("")
@@ -172,7 +173,7 @@ const ReservationDetail = () => {
             <div className="col-12 h-100">
               <div className="box-container btn mb-4" style={{ width: "100%" }}>
                 <div>
-                  <h4 className="mb-2"> {sport && sport[`sport${language}`]} </h4>
+                  <h4 className="mb-2"> {sport && sport[sportLanguage]} </h4>
                   <h6 className="mb-0 font-weight-light">
                     {t("court")}: {courtNum}
                   </h6>
@@ -190,7 +191,7 @@ const ReservationDetail = () => {
                     memberList.map((eachMember, index) => {
                       return (
                         <h6 className="mb-0" style={{ fontWeight: 300 }} key={index}>
-                          {index + 1}. {eachMember[`name_${language}`]}
+                          {index + 1}. {eachMember[nameLanguage]}
                         </h6>
                       )
                     })}

@@ -1,13 +1,6 @@
 import React from "react"
 import { Button, Modal } from "react-bootstrap"
-
-export interface SettingsCardProps {
-  type: "absencePunishment" | "lateCancelPunishment" | "lateCancelDay" | "waitingRooomDuration"
-  set: (value: number) => void
-  value: number
-  cardTitle: string
-  unit: string
-}
+import { SettingsCardProps, EditTimeModalProps } from "../../../../dto/settings.dto"
 
 export const SettingsCard: React.FC<SettingsCardProps> = ({ type, set, value, cardTitle, unit }) => {
   return (
@@ -60,11 +53,6 @@ export const SettingsCard: React.FC<SettingsCardProps> = ({ type, set, value, ca
       </div>
     </div>
   )
-}
-
-export interface EditTimeModalProps {
-  show: boolean
-  setShow: (value: boolean) => void
 }
 
 export const EditTime: React.FC<EditTimeModalProps> = ({ show, setShow }) => {
