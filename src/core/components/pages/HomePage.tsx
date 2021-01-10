@@ -21,6 +21,7 @@ const HomePage = () => {
   const [disable, setDisable] = useState(true)
   const { t } = useTranslation()
   const language = useLanguage()
+  const languageName = language === "th" ? "nameth" : "nameen"
   const [isLoading, setIsLoading] = useState(true)
 
   const fetchUserName = useCallback(async () => {
@@ -36,7 +37,6 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchUserName()
-    // console.log("cookieConsent: " + cookieConsent)
   }, [fetchUserName])
 
   const handleClick = () => {
@@ -59,7 +59,7 @@ const HomePage = () => {
         <div className="col-12">
           <div style={{ fontSize: "24px", marginBottom: "30px", fontWeight: 400, lineHeight: "17px", textAlign: "center" }}>
             {" "}
-            {t("welcome")}, {name && name[`name${language}`]}
+            {t("welcome")}, {name && name[languageName]}
           </div>
           {!name && (
             <>

@@ -4,7 +4,7 @@ import { client } from "../../../../../axiosConfig"
 import { NoCourtsModal, EditCourt, DeleteCourtModal, AddCourtFunc } from "./CourtsSettingsComponents"
 import { HandleError } from "./SportSettingsComponents"
 import { AxiosResponse } from "axios"
-import { Sport, Court } from "../disable-court/disable-court-interface"
+import { ListCourts, CourtData, SportData } from "../../../../dto/settings.dto"
 
 export default function CourtsSettings() {
   const [showAddCourt, setShowAddCourt] = useState(false)
@@ -14,12 +14,20 @@ export default function CourtsSettings() {
   const [showError, setShowError] = useState(false)
   const [openTime, onChangeOpenTime] = useState("08:00")
   const [closeTime, onChangeCloseTime] = useState("20:00")
-  const [sports, setSports] = useState(["sportID1"])
-  const [sportsList, setSportsList] = useState([""])
+  const [sports, setSports] = useState<SportData[]>([
+    {
+      _id: "",
+      sport_name_th: "",
+      sport_name_en: "",
+      required_user: 0,
+      quota: 0,
+      list_court: [],
+    },
+  ])
   const [currentSportId, setCurrentSportId] = useState("$")
   const [currentSportName, setCurrentSportName] = useState("")
-  const [currentCourt, setCurrentCourt] = useState({})
-  const [courts, setCourts] = useState<Court[]>([
+  const [currentCourt, setCurrentCourt] = useState<CourtData>()
+  const [courts, setCourts] = useState<CourtData[]>([
     {
       court_num: 0,
       open_time: 0,
@@ -29,29 +37,31 @@ export default function CourtsSettings() {
     },
   ])
 
-  const requestSports = useCallback(async () => {
+  const requestSports = useCallback(async (currentSportId: string) => {
     await client
-      .get("/court-manager/0/999/" + currentSportId)
+      .get<ListCourts>("/court-manager/search", {
+        params: {
+          start: 0,
+          end: 999,
+          filter: currentSportId,
+        },
+      })
       .then(({ data }) => {
-        const newSport = ["temp"]
-        data["sport_list"].forEach((sport: string) => {
-          newSport.push(sport)
-        })
-        setSports(newSport.slice(1))
-        setSportsList(data["sport_list"])
+        setSports(data["sport_list"])
       })
       .catch(() => {
         setShowError(true)
       })
-  }, [currentSportId])
+  }, [])
 
   useEffect(() => {
-    requestSports()
+    requestSports("$")
   }, [requestSports])
 
   const requestCourts = async (sportId: string) => {
+    if (sportId === "$") return null
     await client
-      .get<Sport>("/court-manager/" + sportId)
+      .get<SportData>("/court-manager/" + sportId)
       .then(({ data }) => {
         setCourts(data["list_court"])
       })
@@ -101,31 +111,24 @@ export default function CourtsSettings() {
 
   const handleChangeSport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement
+    const id = target.value
     setCurrentSportId(target.value)
-    sportsList.forEach((sport) => {
-      // TODO: sport is a only `string` it doesn't have `_id`
-      // if (sport["_id"] === target.value) {
-      if (sport === target.value) {
-        // TODO same as aboce
-        // setCurrentSportName(sport["sport_name_th"])
-        setCurrentSportName(sport)
+    sports.forEach((sport: SportData) => {
+      if (sport._id === id) {
+        setCurrentSportName(sport.sport_name_th)
       }
     })
-    requestCourts(e.target.value!)
+    if (id !== "$") {
+      setCurrentSportId(id)
+      requestCourts(id)
+    }
   }
 
   const renderCourtsTable = () => {
     const courtList = courts.map((court, i) => {
       const openTime = Math.floor((court["open_time"]! - 1) / 2) + ":" + (Math.floor(court["open_time"]! % 2) === 0 ? "30" : "00")
       const closeTime = Math.floor(court["close_time"]! / 2) + ":" + (Math.floor((court["close_time"]! + 1) % 2) !== 0 ? "00" : "30")
-      // TODO court doesn't have a `sport_name_th` field. the type is incompatible.
-      // if (court["sport_name_th"] === "")
-      if (court._id === "")
-        return (
-          <div className="alert alert-danger mt-3" role="alert">
-            กรุณาเลือกชนิดกีฬา
-          </div>
-        )
+
       return (
         <tr key={i} className="tr-normal">
           <td> {court["court_num"]} </td>
@@ -172,17 +175,20 @@ export default function CourtsSettings() {
           <option value={"$"}>เลือกประเภทกีฬา</option>
           {sports.map((sport, i) => {
             return (
-              // TODO sport is a only `string`. the type is incompatible
-              // <option key={i} value={sport["_id"]}>
-              //   {sport["sport_name_th"]}
-              // </option>
-              <option key={i} value={sport}>
-                {sport}
+              <option key={i} value={sport._id}>
+                {sport.sport_name_th}
               </option>
             )
           })}
         </Form.Control>
       </Form.Group>
+
+      {currentSportId === "$" && (
+        <div className="alert alert-danger mt-3" role="alert">
+          กรุณาเลือกชนิดกีฬา
+        </div>
+      )}
+
       <Table responsive className={currentSportId !== "$" ? "text-center" : "invisible"} size="md">
         <thead className="bg-light">
           <tr className="tr-pink">
@@ -233,7 +239,7 @@ export default function CourtsSettings() {
         show={showDeleteCourt}
         setShow={setShowDeleteCourt}
         deleteCourt={deleteCourt}
-        currentCourt={currentCourt}
+        currentCourt={currentCourt!}
         currentSportId={currentSportId}
       />
       <AddCourtFunc

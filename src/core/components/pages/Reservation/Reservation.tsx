@@ -31,6 +31,7 @@ const ReservationPage = () => {
   const { path } = useRouteMatch()
   const { t } = useTranslation()
   const language = useLanguage()
+  const sportLanguage: "sport_name_en" | "sport_name_th" = language === "th" ? "sport_name_th" : "sport_name_en"
 
   const fetchData = useCallback(async () => {
     try {
@@ -76,7 +77,7 @@ const ReservationPage = () => {
                   >
                     <div>
                       <h5 style={{ color: "lightgreen", float: "right" }}> {list.is_check ? t("checkedIn") : ""} </h5>
-                      <h5 className="mb-2"> {list.sport_id[`sport_name_${language}`]} </h5>
+                      <h5 className="mb-2"> {list.sport_id[sportLanguage]} </h5>
                       <h6 className="mb-0 font-weight-light">
                         {t("court")}: {list.court_number}
                       </h6>

@@ -6,12 +6,8 @@ import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from "react-i18next"
 import { client } from "../../../../axiosConfig"
 import { CustomWaitingRoomModal } from "../../ui/Modals/WaitingRoomModals"
-import { WaitingRoomAccessCode } from "./ReservationInterfaces"
+import { WaitingRoomAccessCode, ValidityMessage } from "../../../dto/waitingRoom.dto"
 import { CheckValidityErrorMsg, JoinWaitingRoomErrorMsg } from "./ReservationComponents"
-
-interface ValidityMessage {
-  message: string
-}
 
 function JoinWaitingRoom() {
   const { register, handleSubmit, errors } = useForm()

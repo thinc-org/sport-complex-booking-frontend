@@ -1,11 +1,7 @@
 import React from "react"
 import "react-datepicker/dist/react-datepicker.css"
 import { useTranslation } from "react-i18next"
-
-export interface ErrorMsgBannerProps {
-  errorMsg: string
-  type: string
-}
+import { ErrorMsgBannerProps, ErrorMessageBannerProps } from "../../../dto/waitingRoom.dto"
 
 export const ErrorMsgBanner: React.FC<ErrorMsgBannerProps> = ({ errorMsg, type }) => {
   const { t } = useTranslation()
@@ -17,12 +13,6 @@ export const ErrorMsgBanner: React.FC<ErrorMsgBannerProps> = ({ errorMsg, type }
       </div>
     </div>
   )
-}
-
-export interface ErrorMessageBannerProps {
-  show: boolean
-  reason: string
-  type: string
 }
 
 export const CheckValidityErrorMsg: React.FC<ErrorMessageBannerProps> = ({ show, reason, type }) => {

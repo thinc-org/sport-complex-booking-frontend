@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { Table, Form, Row, Col, Button, Pagination, Modal } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
-import { admin_and_staff, DeleteStaffModal, EditStaffModal, AddStaffModal, HandleErrorModal } from "./StaffManagementComponents"
+import { AdminAndStaff, StaffResponse } from "../../../../dto/staffManagement.dto"
+import { DeleteStaffModal, EditStaffModal, AddStaffModal, HandleErrorModal } from "./StaffManagementComponents"
 
 export default function StaffManagement() {
   const [type, set_type] = useState("")
@@ -13,21 +14,20 @@ export default function StaffManagement() {
   const [showDeleteStaff, setShowDeleteStaff] = useState(false)
   const [showEditStaff, setShowEditStaff] = useState(false)
   const [showError, setShowError] = useState(false)
-
-  const [currentStaff, setCurrentStaff] = useState<admin_and_staff>({
+  const [currentStaff, setCurrentStaff] = useState<AdminAndStaff>({
+    _id: "",
     name: "",
     surname: "",
     username: "",
     is_admin: true,
   })
 
-  const [staffs, setStaffs] = useState<admin_and_staff[]>([
+  const [staffs, setStaffs] = useState<AdminAndStaff[]>([
     {
+      _id: "",
       name: "",
       surname: "",
       username: "",
-      password: "",
-      recheckpasssword: "",
       is_admin: true,
     },
   ])
@@ -39,14 +39,18 @@ export default function StaffManagement() {
       const query_filter = query ? query : "$"
       const type_filter = type ? type : "all"
       await client
-        .get<admin_and_staff[]>("/staff-manager/admin-and-staff/" + start + "/" + end + "/" + query_filter + "/" + type_filter)
+        .get("/staff-manager/admin-and-staff/search", {
+          params: {
+            start: start,
+            end: end,
+            filter: query_filter,
+            type: type_filter,
+          },
+        })
         .then(({ data }) => {
           console.log(data)
-          // TODO: fix DTO is not match to what you use
-          // setStaffs(data["staff_list"])
-          // setMaxStaff(data["allStaff_length"])
-          setStaffs(data)
-          setMaxStaff(data.length)
+          setStaffs(data["staff_list"])
+          setMaxStaff(data["allStaff_length"])
         })
         .catch(() => {
           setShowError(true)
@@ -64,12 +68,12 @@ export default function StaffManagement() {
     requestStaffs(searchName, type)
   }
 
-  const sendEdittedStaffInfo = async (currentStaff: string, staff: admin_and_staff) => {
+  const sendEdittedStaffInfo = async (currentStaff: string, staff: AdminAndStaff) => {
     const data = {
       is_admin: currentStaff === "แอดมิน" ? true : false,
     }
     await client
-      .put<admin_and_staff[]>("/staff-manager/" + staff["_id"], data)
+      .put<StaffResponse>("/staff-manager/" + staff["_id"], data)
       .then(() => {
         requestStaffs()
       })
@@ -78,12 +82,13 @@ export default function StaffManagement() {
       })
   }
 
-  const sendNewStaffInfo = async (newStaff: admin_and_staff) => {
+  const sendNewStaffInfo = async (newStaff: AdminAndStaff) => {
     delete newStaff.recheckpasssword
     console.log("This is newStaff" + newStaff)
     await client
-      .post<admin_and_staff[]>("/staff-manager/", newStaff)
-      .then(() => {
+      .post<StaffResponse>("/staff-manager/", newStaff)
+      .then(({ data }) => {
+        console.log(data)
         setShowAddStaff(false)
         requestStaffs()
       })
@@ -92,10 +97,10 @@ export default function StaffManagement() {
       })
   }
 
-  const sendDeleteStaff = async (currentStaff: admin_and_staff) => {
+  const sendDeleteStaff = async (currentStaff: AdminAndStaff) => {
     console.log(currentStaff["_id"])
     await client
-      .delete<admin_and_staff[]>("/staff-manager/" + currentStaff["_id"])
+      .delete<StaffResponse>("/staff-manager/" + currentStaff["_id"])
       .then(() => {
         setShowDeleteStaff(false)
         requestStaffs()
@@ -105,12 +110,12 @@ export default function StaffManagement() {
       })
   }
 
-  const onSubmitAddStaff = (data: admin_and_staff) => {
+  const onSubmitAddStaff = (data: AdminAndStaff) => {
     const newData = { ...data, is_admin: data.is_admin === "แอดมิน" ? true : false }
     sendNewStaffInfo(newData)
   }
 
-  const onSubmitEditStaff = (newValue: string, staff: admin_and_staff) => {
+  const onSubmitEditStaff = (newValue: string, staff: AdminAndStaff) => {
     sendEdittedStaffInfo(newValue, staff)
     setShowEditStaff(true)
   }
@@ -146,14 +151,13 @@ export default function StaffManagement() {
 
   const renderStaffsTable = () => {
     let index = (pageNo - 1) * 10 + 1
-    const staffsList = staffs.map((staff, i) => {
+    const staffsList = staffs.map((staff) => {
       return (
         <tr key={index} className="tr-normal">
           <td className="font-weight-bold"> {index++} </td>
           <td> {staff.name} </td>
           <td> {staff.surname} </td>
           <td> {staff.username}</td>
-          {/* <td>{JSON.stringify(staff)}</td> */}
           <td>
             <div>
               <Form>
@@ -162,7 +166,11 @@ export default function StaffManagement() {
                     as="select"
                     custom
                     defaultValue={staff.is_admin ? "แอดมิน" : "สตาฟ"}
-                    onChange={(e) => onSubmitEditStaff(e.target.value, staff)}
+                    disabled={staff.name === "first admin"}
+                    onChange={(e) => {
+                      onSubmitEditStaff(e.target.value, staff)
+                      setShowEditStaff(true)
+                    }}
                   >
                     <option value="สตาฟ">สตาฟ</option>
                     <option value="แอดมิน">แอดมิน</option>
@@ -175,6 +183,7 @@ export default function StaffManagement() {
             <Button
               className="btn-normal btn-outline-black"
               variant="outline-danger"
+              disabled={staff.name === "first admin"}
               onClick={() => {
                 setShowDeleteStaff(true)
                 setCurrentStaff(staff)
@@ -269,7 +278,6 @@ export default function StaffManagement() {
           <Col sm="auto">
             <Form.Control
               onChange={(e) => {
-                // set_status(parseInt(e.target.value))
                 set_type(e.target.value)
               }}
               as="select"

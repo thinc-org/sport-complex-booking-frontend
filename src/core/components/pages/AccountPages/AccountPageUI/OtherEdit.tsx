@@ -115,7 +115,7 @@ export default function OtherAccountEdit() {
     set_relationship_verification_document(file[0])
   }
 
-  const changeLanguage = (is_thai_language) => {
+  const changeLanguage = (is_thai_language: boolean) => {
     if (is_thai_language) {
       setCookie("is_thai_language", true, 999)
       i18n.changeLanguage("th")
@@ -369,7 +369,7 @@ export default function OtherAccountEdit() {
             <select
               name="contact_person.contact_person_prefix"
               ref={register}
-              defaultValue={user?.contact_person?.contact_person_prefix}
+              defaultValue={user?.contact_person_prefix}
               disabled={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("contact_person_prefix")}
             >
               <option value={t("mr")!}>{t("mr")}</option>
@@ -387,11 +387,11 @@ export default function OtherAccountEdit() {
             ref={register}
             readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("contact_person_name")}
             placeholder={t("namePlaceHolder")}
-            defaultValue={user?.contact_person?.contact_person_name}
+            defaultValue={user?.contact_person_name}
             className="form-control"
           />
           {user?.rejected_info?.includes("contact_person_name") ? <p className="input-error">{t("resubmitField")}</p> : null}
-          {errors.contact_person?.contact_person_name && <p id="input-error">{errors.contact_person.contact_person_name.message}</p>}
+          {errors.contact_person_name && <p id="input-error">{errors.contact_person_name.message}</p>}
 
           <hr />
           <label className="form-label mt-2">{t("contact_person_surname")}</label>
@@ -401,11 +401,11 @@ export default function OtherAccountEdit() {
             ref={register}
             readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("contact_person_surname")}
             placeholder={t("surnamePlaceHolder")}
-            defaultValue={user?.contact_person?.contact_person_surname}
+            defaultValue={user?.contact_person_surname}
             className="form-control"
           />
-          {user?.rejected_info?.includes("contact_person_name") ? <p className="input-error">{t("resubmitField")}</p> : null}
-          {errors.contact_person?.contact_person_surname && <p id="input-error">{errors.contact_person.contact_person_surname.message}</p>}
+          {user?.rejected_info?.includes("contact_person_surname") ? <p className="input-error">{t("resubmitField")}</p> : null}
+          {errors.contact_person_surname && <p id="input-error">{errors.contact_person_surname.message}</p>}
 
           <hr />
           <label className="form-label mt-2">{t("contact_person_home_phone")}</label>
@@ -419,7 +419,7 @@ export default function OtherAccountEdit() {
             className="form-control"
           />
           {user?.rejected_info?.includes("contact_person_home_phone") ? <p className="input-error">{t("resubmitField")}</p> : null}
-          {errors.contact_person?.contact_person_home_phone && <p id="input-error">{errors.contact_person.contact_person_home_phone.message}</p>}
+          {errors.contact_person_home_phone && <p id="input-error">{errors.contact_person_home_phone.message}</p>}
           <hr />
           <label className="form-label mt-2">{t("contact_person_phone")}</label>
           <input
@@ -428,11 +428,11 @@ export default function OtherAccountEdit() {
             ref={register}
             readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("contact_person_phone")}
             placeholder="0xxxxxxxxx"
-            defaultValue={user?.contact_person?.contact_person_phone}
+            defaultValue={user?.contact_person_phone}
             className="form-control"
           />
           {user?.rejected_info?.includes("contact_person_phone") ? <p className="input-error">{t("resubmitField")}</p> : null}
-          {errors.contact_person?.contact_person_phone && <p id="input-error">{errors.contact_person.contact_person_phone.message}</p>}
+          {errors.contact_person_phone && <p id="input-error">{errors.contact_person_phone.message}</p>}
         </div>
         <br />
         <div className="default-mobile-wrapper">

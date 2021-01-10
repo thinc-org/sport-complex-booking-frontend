@@ -30,7 +30,7 @@ export interface SatitCuPersonel extends DefaultAccount {
 export interface Other extends DefaultAccount {
   account_type: "Other"
   prefix: string //(เพื่อแสดง นาย/นาง/นางสาว)
-  birthday: Date //(use this for cal age)
+  birthday: string //(use this for cal age)
   national_id: string //(also pasport no in foreign)
   gender: string
   marital_status: string
@@ -43,6 +43,11 @@ export interface Other extends DefaultAccount {
     contact_person_home_phone: string
     contact_person_phone: string
   }
+  contact_person_prefix: string
+  contact_person_name: string
+  contact_person_surname: string
+  contact_person_home_phone: string
+  contact_person_phone: string
   medical_condition: string
   membership_type: string
   verification_status: string
