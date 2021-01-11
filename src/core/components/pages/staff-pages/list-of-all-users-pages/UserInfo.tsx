@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react"
 import { Link, useParams, useHistory } from "react-router-dom"
 import { Button, Card, Form } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
+import { Other } from "../../../../contexts/UsersContext"
 import OtherViewInfoComponent from "./OtherViewInfoComponent"
 import OtherEditInfoComponent from "./OtherEditInfoComponent"
 import PasswordChangeModal from "./PasswordChangeModal"
@@ -85,12 +86,9 @@ const UserInfo = () => {
 
   // requests //
   const fetchUserData = useCallback(async () => {
-    await client({
-      method: "GET",
-      url: `/list-all-user/id/${_id}`,
-    })
+    await client
+      .get<Other>(`/list-all-user/id/${_id}`)
       .then(({ data }) => {
-        // console.log(data)
         setUsername(data.username)
         setMembershipType(data.membership_type)
         setPenalize(data.is_penalize)
@@ -103,7 +101,7 @@ const UserInfo = () => {
           name_en: data.name_en,
           surname_en: data.surname_en,
           gender: data.gender,
-          birthday: data.birthday,
+          birthday: new Date(data.birthday),
           national_id: data.national_id,
           marital_status: data.marital_status,
           address: data.address,
@@ -205,7 +203,6 @@ const UserInfo = () => {
       house_registration_number,
       relationship_verification_document,
     } = tempInfo
-    // console.log("saving...")
     client({
       method: "PUT",
       url: `/list-all-user/other/${_id}`,
@@ -240,8 +237,7 @@ const UserInfo = () => {
         relationship_verification_document,
       },
     })
-      .then(({ data }) => {
-        // console.log("Update completed")
+      .then(() => {
         // set temp to data
         setUsername(tempUsername)
         setMembershipType(tempMembershipType)
@@ -268,7 +264,7 @@ const UserInfo = () => {
         password: newPassword,
       },
     })
-      .then(({ data }) => {
+      .then(() => {
         setShowModalInfo({ ...showModalInfo, showChangePassword: false, showConfirmChange: false })
       })
       .catch((err) => {
@@ -278,12 +274,11 @@ const UserInfo = () => {
   }
 
   const requestDelete = () => {
-    // console.log("YEET!!")
     client({
       method: "DELETE",
       url: `/list-all-user/${_id}`,
     })
-      .then(({ data }) => {
+      .then(() => {
         setShowModalInfo({ ...showModalInfo, showDelete: false, showComDelete: true })
       })
       .catch((err) => {

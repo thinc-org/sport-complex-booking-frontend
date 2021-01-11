@@ -1,56 +1,51 @@
-import { AxiosResponse } from "axios"
 import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
 import { Table, Form, Row, Col, Button, Modal } from "react-bootstrap"
 import { Link, useHistory } from "react-router-dom"
 import { client } from "../../../../../axiosConfig"
-import { AccountInfo } from "../../../../contexts/UsersContext"
+import { AxiosResponse } from "axios"
+// import { AccountInfo } from "../../../../contexts/UsersContext"
+import { Account, UserInfoRes } from "../../../../dto/listOfAllUsers.dto"
 import PaginationComponent from "./PaginationComponent"
 
-enum Account {
-  CuStudent = "CuStudent",
-  SatitAndCuPersonel = "SatitAndCuPersonel",
-  Other = "Other",
-}
+// interface CUTemplate {
+//   account_type: Account
+//   is_thai_language: boolean
+//   is_first_login: boolean
+//   name_th: string
+//   surname_th: string
+//   name_en: string
+//   surname_en: string
+//   username: string
+//   is_penalize: boolean
+//   _id: string
+// }
 
-interface CUTemplate {
-  account_type: Account
-  is_thai_language: boolean
-  is_first_login: boolean
-  name_th: string
-  surname_th: string
-  name_en: string
-  surname_en: string
-  username: string
-  is_penalize: boolean
-  _id: string
-}
+// interface OtherTemplate {
+//   account_type: Account
+//   reject_info: string[]
+//   name_th: string
+//   surname_th: string
+//   name_en: string
+//   surname_en: string
+//   username: string
+//   is_penalize: boolean
+//   _id: string
+// }
 
-interface OtherTemplate {
-  account_type: Account
-  reject_info: string[]
-  name_th: string
-  surname_th: string
-  name_en: string
-  surname_en: string
-  username: string
-  is_penalize: boolean
-  _id: string
-}
+// interface SatitTemplate {
+//   account_type: Account
+//   is_thai_language: boolean
+//   name_th: string
+//   surname_th: string
+//   name_en: string
+//   surname_en: string
+//   username: string
+//   password: string
+//   is_penalize: boolean
+//   _id: string
+// }
 
-interface SatitTemplate {
-  account_type: Account
-  is_thai_language: boolean
-  name_th: string
-  surname_th: string
-  name_en: string
-  surname_en: string
-  username: string
-  password: string
-  is_penalize: boolean
-  _id: string
-}
-
-type Users = (CUTemplate | SatitTemplate | OtherTemplate)[]
+// type Users = (CUTemplate | SatitTemplate | OtherTemplate)[]
 
 enum allStatus {
   All,
@@ -66,33 +61,17 @@ interface ParamsDataRequest {
   penalize: boolean
 }
 
-type FilterResponse = [number, AccountInfo[]]
+// type FilterResponse = [number, AccountInfo[]]
 
 const ListOfAllUsers: FunctionComponent = () => {
   // page state
   const [pageNo, setPageNo] = useState<number>(1)
-  const [maxUser, setMaxUser] = useState<number>(1)
+  const [maxUser] = useState<number>(1) //fix
   const [maxUserPerPage] = useState<number>(10) // > 1
   const [searchName, setSearchName] = useState<string>("")
   const [status, setStatus] = useState<number>(allStatus.All)
-  // const [jwt, set_jwt] = useState<string>(
-  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
-  // )
   const [showNoUser, setShowNoUser] = useState<boolean>(false)
-  const [users, setUsers] = useState<Users>([
-    {
-      account_type: Account.CuStudent,
-      is_thai_language: true,
-      name_th: "",
-      surname_th: "",
-      name_en: "",
-      surname_en: "",
-      username: "",
-      is_penalize: true,
-      is_first_login: false,
-      _id: "",
-    },
-  ])
+  const [users] = useState<UserInfoRes[]>([]) //fix
 
   const history = useHistory()
 
@@ -105,23 +84,25 @@ const ListOfAllUsers: FunctionComponent = () => {
     if (searchName !== "") param_data.name = searchName
     if (status !== allStatus.All) param_data.penalize = allStatus.Banned === status
     //  request users from server  //
+    console.log("yvyvyyvyvy")
     client({
       method: "GET",
       url: "/list-all-user/filter",
       params: param_data,
     })
-      .then(({ data }: AxiosResponse<FilterResponse>) => {
+      .then(({ data }: AxiosResponse<any>) => {
         /* TODO In this case Users that create from `CUTemplate` | `OtherTemplate` | `SatitTemplate` is incompatible 
            to `CuStudent` | `SatitCuPersonel` | `Other` because they don't have `_id` field
            I'm not sure how to fix problem this. so I decide to add `_id: ""` field to userList
         */
-        const userList = data[1].map((user) => {
-          if (user.account_type === "CuStudent") return { ...user, account_type: Account.CuStudent, _id: "" }
-          else if (user.account_type === "SatitAndCuPersonel") return { ...user, account_type: Account.SatitAndCuPersonel, _id: "" }
-          return { ...user, account_type: Account.Other, _id: "" }
-        })
-        setMaxUser(data[0])
-        setUsers(userList as Users)
+        console.log(data)
+        // const userList = data[1].map((user) => {
+        //   if (user.account_type === "CuStudent") return { ...user, account_type: Account.CuStudent, _id: "" }
+        //   else if (user.account_type === "SatitAndCuPersonel") return { ...user, account_type: Account.SatitAndCuPersonel, _id: "" }
+        //   return { ...user, account_type: Account.Other, _id: "" }
+        // })
+        // setMaxUser(data[0])
+        // setUsers(userList as Users)
       })
       .catch(({ response }) => {
         console.log(response)

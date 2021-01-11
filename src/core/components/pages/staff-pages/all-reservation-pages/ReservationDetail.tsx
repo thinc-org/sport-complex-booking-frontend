@@ -3,13 +3,11 @@ import { Link, useParams, useHistory } from "react-router-dom"
 import { Table, Row, Col, Button, Card } from "react-bootstrap"
 import format from "date-fns/format"
 import { client } from "../../../../../axiosConfig"
-import SuccessfulReservation, { WaitingRoom, TimeObject } from "../interfaces/reservationSchemas"
+import { Room, TimeObject } from "../../../../dto/reservation.dto"
 import { ConfirmDeleteModal, ErrModal, DeleteSuccessfulModal } from "./DeleteModalComponent"
 import { Sport } from "../../../../dto/sport.dto"
 
 export const convertSlotToTime = (slot: number): TimeObject => {
-  // if (slot % 2 === 0) return String(slot / 2 - 1) + ":30-" + (slot / 2 !== 24 ? String(slot / 2) : "0") + ":00"
-  // return String(Math.floor(slot / 2)) + ":00-" + String(Math.floor(slot / 2)) + ":30"
   const hour = Math.floor(slot / 2)
   return {
     startHour: slot % 2 === 0 ? `${hour - 1}` : `${hour}`,
@@ -46,7 +44,7 @@ const ReservationDetail: React.FC = () => {
 
   // reservation detail state
   const [sportName, setSportName] = useState<string>("")
-  const [detail, setDetail] = useState<SuccessfulReservation | WaitingRoom | null>(null)
+  const [detail, setDetail] = useState<Room | null>(null)
   const date = useMemo(() => (detail ? new Date(detail.date) : null), [detail])
   const sportId = detail?.sport_id
   const courtNo = detail?.court_number
@@ -59,12 +57,10 @@ const ReservationDetail: React.FC = () => {
   // request //
   const requestInfo = useCallback(() => {
     const url: string = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + `/${_id}`
-    client({
-      method: "GET",
-      url,
-    })
+    client
+      .get<Room>(url)
       .then(({ data }) => {
-        console.log(data)
+        // console.log(data)
         setDetail(data)
       })
       .catch(({ response }) => {

@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Row, Col, Form, InputGroup, Button } from "react-bootstrap"
-import { useFormContext } from "react-hook-form"
+import { useForm } from "react-hook-form"
 
 interface ChangePasswordProps {
   selectingSatit: boolean
@@ -8,7 +8,7 @@ interface ChangePasswordProps {
 
 const ChangePasswordComponent: React.FC<ChangePasswordProps> = ({ selectingSatit }) => {
   // states //
-  const { register } = useFormContext()
+  const { register } = useForm()
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [showConPassword, setShowConPassword] = useState<boolean>(false)
 
