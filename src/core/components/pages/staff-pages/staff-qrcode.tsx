@@ -1,6 +1,6 @@
 import React from "react"
 import { useState, useEffect, FunctionComponent, useCallback } from "react"
-import { RouteComponentProps, Link, Redirect } from "react-router-dom"
+import { RouteComponentProps } from "react-router-dom"
 import { BrowserQRCodeReader } from "@zxing/library"
 import { client } from "../../../../axiosConfig"
 import { Button } from "react-bootstrap"
@@ -12,7 +12,6 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
   const [messageHeader, setMessageHeader] = useState<string>("")
   const [messageBody, setMessageBody] = useState<string>("")
   const [modalOpen, setModalOpen] = useState<boolean>(false)
-  const [data, setData] = useState("")
   const [id, setId] = useState<string>()
   const [currentTime, setCurrentTime] = useState<number>()
   const [validTime, setValidTime] = useState<number>()
@@ -21,7 +20,6 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
     .decodeOnceFromVideoDevice(undefined, "video")
     .then((result) => {
       setReadingResult(result)
-      setData(readingResult.text)
     })
     .catch((err) => console.error(err))
 
@@ -42,7 +40,6 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
         setModalOpen(true)
         setTimeout(function () {
           setModalOpen(false)
-          setData("")
         }, 3000)
       } else {
         setMessageHeader("เช็คอินสำเร็จ")
@@ -50,7 +47,6 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
         setModalOpen(true)
         setTimeout(function () {
           setModalOpen(false)
-          setData("")
         }, 3000)
       }
     } catch (err) {
@@ -61,7 +57,6 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
       setModalOpen(true)
       setTimeout(function () {
         setModalOpen(false)
-        setData("")
       }, 3000)
     }
   }, [])
@@ -75,11 +70,10 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
         setModalOpen(true)
         setTimeout(function () {
           setModalOpen(false)
-          setData("")
         }, 3000)
       }
     }
-  }, [validTime, id, checkIn])
+  }, [validTime, id, checkIn, currentTime])
 
   const refresh = () => {
     console.log("refresh")
