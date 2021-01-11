@@ -8,7 +8,7 @@ import { useDate, useOption, useTableWithPagination, withDeletable } from "./dis
 import { ErrorAlert } from "./modals"
 import { DeleteButton } from "./button"
 import { CourtTable, CourtRow } from "./disabled-court-table"
-import { ListOfCourtsForm, RowProps } from "./disable-court-interface"
+import { ListOfCourtsForm, RowProps } from "../../../../dto/disableCourt.dto"
 
 const ListOfCourts = () => {
   const history = useHistory()

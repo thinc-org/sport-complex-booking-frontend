@@ -2,7 +2,7 @@ import React from "react"
 import { useViewTable, useEditCourt, withDeletable } from "./disable-court-hook"
 import { useParams, useHistory } from "react-router-dom"
 import { ViewRow, CourtTable } from "./disabled-court-table"
-import { ViewRowProps } from "./disable-court-interface"
+import { ViewRowProps } from "../../../../dto/disableCourt.dto"
 import { DeleteButton } from "./button"
 
 import { format, add } from "date-fns"
