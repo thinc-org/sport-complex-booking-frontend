@@ -1,14 +1,13 @@
 import React, { useState, useEffect, FunctionComponent, useCallback } from "react"
 
 import { RouteComponentProps } from "react-router-dom"
-import { BrowserQRCodeReader, Result } from "@zxing/library"
 import { client } from "../../../../axiosConfig"
 import { Button } from "react-bootstrap"
 import { CheckinModal } from "../../ui/Modals/CheckinModal"
+import QrReader from "react-qr-reader"
 
 const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
-  const codeReader = new BrowserQRCodeReader()
-  const [readingResult, setReadingResult] = useState<Result>()
+  const [readingResult, setReadingResult] = useState<string>()
   const [messageHeader, setMessageHeader] = useState<string>("")
   const [messageBody, setMessageBody] = useState<string>("")
   const [modalOpen, setModalOpen] = useState<boolean>(false)
@@ -16,21 +15,22 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
   const [currentTime, setCurrentTime] = useState<number>()
   const [validTime, setValidTime] = useState<number>()
 
-  codeReader
-    .decodeOnceFromVideoDevice(undefined, "video")
-    .then((result) => {
-      setReadingResult(result)
-      // TODO Property 'text' is private and only accessible within class 'Result'.
-      // readingResult?.text && setData(readingResult.text)
-      console.log(readingResult)
-    })
-    .catch((err) => console.error(err))
+  const handleScan = (data) => {
+    if (data) setReadingResult(data)
+  }
+
+  const handleError = (err) => {
+    console.log(err)
+  }
 
   useEffect(() => {
-    if (readingResult.text) {
+    if (readingResult) {
+      console.log("current time: " + new Date().getTime())
+      console.log("valid time: " + parseInt(readingResult.slice(0, readingResult.indexOf("/"))))
+      console.log("id: " + readingResult.slice(readingResult.indexOf("/") + 1))
       setCurrentTime(new Date().getTime())
-      setValidTime(parseInt(readingResult.text.slice(0, readingResult.text.indexOf("/"))))
-      setId(readingResult.text.slice(readingResult.text.indexOf("/") + 1))
+      setValidTime(parseInt(readingResult.slice(0, readingResult.indexOf("/"))))
+      setId(readingResult.slice(readingResult.indexOf("/") + 1))
     }
   }, [readingResult])
 
@@ -54,7 +54,7 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
       }
     } catch (err) {
       console.log("Reservation ID: " + reservationId)
-      console.log(err.message)
+      console.log(err.name)
       setMessageHeader("เช็คอินไม่สำเร็จ")
       setMessageBody(err.message)
       setModalOpen(true)
@@ -80,7 +80,7 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
 
   const refresh = () => {
     console.log("refresh")
-    setReadingResult([])
+    setReadingResult(undefined)
     setCurrentTime(undefined)
     setValidTime(undefined)
     setId("")
@@ -100,7 +100,8 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
             Refresh
           </Button>
           <div className="box-container btn offset-1 col-10 pt-3" style={{ boxShadow: "none" }}>
-            <video id="video" width="100%" style={{ border: "1px solid gray" }}></video>
+            {/* <video id="video" width="100%" style={{ border: "1px solid gray" }}></video> */}
+            <QrReader delay={500} onError={handleError} onScan={handleScan} style={{ width: "100%" }} />
           </div>
           <CheckinModal modalOpen={modalOpen} messageHeader={messageHeader} messageBody={messageBody} />
         </div>
