@@ -26,7 +26,7 @@ function Landing() {
             <h4> Sports Center </h4>
           </div>
           <div className="col-12 small-imagegroup landing d-block d-sm-none">
-            <img className="landing small-relative-img" src={landing} />
+            <img alt="" className="landing small-relative-img" src={landing} />
           </div>
           <Link className="landing btn col button-group d-block d-sm-none pt-4 mt-3" to="/login">
             <Button variant="pink" className="mb-0">
@@ -35,7 +35,7 @@ function Landing() {
           </Link>
         </div>
       </div>
-      <img src={landing} className="landing relative-img d-none d-sm-block" />
+      <img alt="" src={landing} className="landing relative-img d-none d-sm-block" />
     </>
   )
 }

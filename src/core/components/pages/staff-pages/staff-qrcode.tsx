@@ -12,7 +12,6 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
   const [messageHeader, setMessageHeader] = useState<string>("")
   const [messageBody, setMessageBody] = useState<string>("")
   const [modalOpen, setModalOpen] = useState<boolean>(false)
-  const [data, setData] = useState("")
   const [id, setId] = useState<string>()
   const [currentTime, setCurrentTime] = useState<number>()
   const [validTime, setValidTime] = useState<number>()
@@ -44,7 +43,6 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
         setModalOpen(true)
         setTimeout(function () {
           setModalOpen(false)
-          setData("")
         }, 3000)
       } else {
         setMessageHeader("เช็คอินสำเร็จ")
@@ -52,7 +50,6 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
         setModalOpen(true)
         setTimeout(function () {
           setModalOpen(false)
-          setData("")
         }, 3000)
       }
     } catch (err) {
@@ -63,7 +60,6 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
       setModalOpen(true)
       setTimeout(function () {
         setModalOpen(false)
-        setData("")
       }, 3000)
     }
   }, [])
@@ -77,11 +73,10 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
         setModalOpen(true)
         setTimeout(function () {
           setModalOpen(false)
-          setData("")
         }, 3000)
       }
     }
-  }, [validTime, id, checkIn])
+  }, [validTime, id, checkIn, currentTime])
 
   const refresh = () => {
     console.log("refresh")

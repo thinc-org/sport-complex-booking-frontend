@@ -45,10 +45,9 @@ const WaitingRoomPage = () => {
   const fetchWaitingRoom = useCallback(async () => {
     try {
       const res = await client.get("/mywaitingroom")
-      console.log(res.data)
       setListMember(res.data.list_member)
       // time sent from backend is UTC before adding 7 for Thailand
-      setEndTime(timeShift(new Date(res.data.expired_date).getTime(), 7))
+      setEndTime(timeShift(new Date(res.data.expired_date).getTime(), 0))
       setSport({ sportNameth: res.data.sport_id.sport_name_th, sportNameen: res.data.sport_id.sport_name_en })
       setDate(new Date(res.data.date).toLocaleDateString())
       setTimeList(res.data.time_slot)
@@ -58,7 +57,7 @@ const WaitingRoomPage = () => {
       setAccessCode(res.data.access_code)
       setIsLoading(false)
     } catch (err) {
-      console.log(err)
+      console.log(err.message)
       setIsLoading(false)
     }
   }, [])
@@ -87,6 +86,7 @@ const WaitingRoomPage = () => {
   const timeOut = async () => {
     await setTimeout(() => {
       setModalTimeOutOpen(true)
+      fetchWaitingRoom()
     }, 1000)
     await setTimeout(() => {
       setModalTimeOutOpen(false)
@@ -160,7 +160,7 @@ const WaitingRoomPage = () => {
                   <Button
                     variant="pink"
                     className="btn"
-                    onClick={() => window.location.reload()}
+                    onClick={fetchWaitingRoom}
                     style={{ fontSize: "15px", fontWeight: 400, float: "right", borderRadius: "15px", padding: "2px 10px" }}
                   >
                     {t("refresh")}
