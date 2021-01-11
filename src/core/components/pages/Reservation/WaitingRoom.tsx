@@ -41,7 +41,9 @@ const WaitingRoomPage = () => {
 
   const fetchWaitingRoom = useCallback(async () => {
     try {
+      console.log("fetch data")
       const res = await client.get("/mywaitingroom")
+      console.log(res.data.list_member)
       setListMember(res.data.list_member)
       // time sent from backend is UTC before adding 7 for Thailand
       setEndTime(timeShift(new Date(res.data.expired_date).getTime(), 0))
@@ -54,7 +56,8 @@ const WaitingRoomPage = () => {
       setAccessCode(res.data.access_code)
       setIsLoading(false)
     } catch (err) {
-      console.log(err.message)
+      console.log(err.name)
+      setWaitingRoomId(undefined)
       setIsLoading(false)
     }
   }, [])
@@ -86,10 +89,11 @@ const WaitingRoomPage = () => {
   const timeOut = async () => {
     await setTimeout(() => {
       setModalTimeOutOpen(true)
-      fetchWaitingRoom()
     }, 1000)
     await setTimeout(() => {
       setModalTimeOutOpen(false)
+      setEndTime(undefined)
+      closeWaitingRoom()
       history.push("/home")
     }, 3000)
   }

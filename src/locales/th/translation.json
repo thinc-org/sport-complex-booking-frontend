@@ -206,9 +206,8 @@
   "showQRToStaff": "กรุณาแสดงคิวอาร์โค้ดนี้ให้เจ้าหน้าที่",
   "cancelReservation": "ยกเลิกการจอง",
   "cancelReservationQuestion": "คุณต้องการยกเลิกการจองใช่หรือไม่?",
-  "cancelReservationCondition1": "ถ้าทำการยกเลิกการจองภายใน ",
-  "cancelReservationCondition2": " วัน คุณและสมาชิกในการจองจะถูกแบนเป็นเวลา ",
-  "cancelReservationCondition3": " วัน",
+  "cancelReservationCondition": "ถ้าทำการยกเลิกการจองภายใน {{lateCancellationDay}} วัน คุณและสมาชิกในการจองจะถูกแบนเป็นเวลา {{lateCancellationPunishment}} วัน",
+
   "sure": "ตกลง",
   "no": "ไม่",
   "youHaveCheckedIn": "เช็ดอินแล้ว!",
