@@ -1,7 +1,7 @@
 import React from "react"
 import { Form, Row, Col, Button, Modal } from "react-bootstrap"
 import TimePicker from "react-time-picker"
-import { useForm } from "react-hook-form"
+import { Control, useForm, useWatch } from "react-hook-form"
 import { NoCourtsModalProps, CourtData, EditCourtProps, DeleteCourtModalProps, AddCourtFuncProps } from "../../../../dto/settings.dto"
 
 const OpenTimeCalculation = (time: string) => {
@@ -72,7 +72,7 @@ export const EditCourt: React.FC<EditCourtProps> = ({
   currentSportId,
   updateCourt,
 }) => {
-  const { /*register,*/ handleSubmit } = useForm()
+  const { register, handleSubmit, control } = useForm()
   const onSubmitEditCourt = (data: CourtData) => {
     const formattedOpenTime = formatOpenTime(openTime)
     const formattedCloseTime = formatCloseTime(closeTime)
@@ -84,6 +84,25 @@ export const EditCourt: React.FC<EditCourtProps> = ({
     })
     updateCourt(currentSportId)
   }
+
+  function OpenTimeWatched({ control }: { control: Control }) {
+    const open = useWatch({
+      control,
+      name: "open_time",
+      defaultValue: openTime,
+    })
+    return <input ref={register} readOnly={true} className="invisible" name="open_time" value={open} />
+  }
+
+  function CloseTimeWatched({ control }: { control: Control }) {
+    const close = useWatch({
+      control,
+      name: "close_time",
+      defaultValue: closeTime,
+    })
+    return <input ref={register} readOnly={true} className="invisible" name="close_time" value={close} />
+  }
+
   if (!currentCourt) return null
   return (
     <Modal
@@ -109,24 +128,22 @@ export const EditCourt: React.FC<EditCourtProps> = ({
               <TimePicker
                 className="time-picker mb-5"
                 value={openTime}
-                onChange={(value) => onChangeOpenTime(value.toString())} // MAJOR CHANGE
+                onChange={(value) => onChangeOpenTime(value.toString())}
                 disableClock={true}
-                // type="number"
-                // ref={register} TODO
                 name="open_time"
               />
+              <OpenTimeWatched control={control} />
             </Col>
             <Col>
               <p className="font-weight-bold">เวลาปิด</p>
               <TimePicker
                 className="time-picker mb-5"
                 value={closeTime}
-                onChange={(value) => onChangeCloseTime(value.toString())} // MAJOR CHANGE
+                onChange={(value) => onChangeCloseTime(value.toString())}
                 disableClock={true}
-                // type="number"
-                // ref={register} TODO
                 name="close_time"
               />
+              <CloseTimeWatched control={control} />
             </Col>
           </Row>
           {invalidTime(openTime, closeTime) && <p className="input-error">กรุณากำหนดเวลาเป็นช่วงละครึ่งชั่วโมง</p>}
@@ -207,13 +224,30 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
   updateCourt,
   currentSportId,
 }) => {
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit, errors, control } = useForm()
   const formattedOpenTime = OpenTimeCalculation(openTime)
   const formattedCloseTime = CloseTimeCalculation(closeTime)
   const onSubmitAddCourt = (data: CourtData) => {
     const newCourt = { ...data, court_num: parseInt(data.court_num + ""), open_time: formattedOpenTime, close_time: formattedCloseTime }
     courts.push(newCourt)
     updateCourt(currentSportId)
+  }
+  function OpenTimeWatched({ control }: { control: Control }) {
+    const open = useWatch({
+      control,
+      name: "open_time",
+      defaultValue: openTime,
+    })
+    return <input ref={register} readOnly={true} className="invisible" name="open_time" value={open} />
+  }
+
+  function CloseTimeWatched({ control }: { control: Control }) {
+    const close = useWatch({
+      control,
+      name: "close_time",
+      defaultValue: closeTime,
+    })
+    return <input ref={register} readOnly={true} className="invisible" name="close_time" value={close} />
   }
 
   return (
@@ -252,24 +286,22 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
                 <TimePicker
                   className="time-picker mb-5"
                   value={openTime}
-                  onChange={(value) => onChangeOpenTime(value.toString())} // MAJOR CHANGE
+                  onChange={(value) => onChangeOpenTime(value.toString())}
                   disableClock={true}
-                  // type="number"
-                  // ref={register} TODO
                   name="open_time"
                 />
+                <OpenTimeWatched control={control} />
               </Col>
               <Col className="p-0">
                 <p className="font-weight-bold">เวลาปิด</p>
                 <TimePicker
                   className="time-picker mb-5"
                   value={closeTime}
-                  onChange={(value) => onChangeCloseTime(value.toString())} // MAJOR CHANGE
+                  onChange={(value) => onChangeCloseTime(value.toString())}
                   disableClock={true}
-                  // type="number"
-                  // ref={register} TODO
                   name="close_time"
                 />
+                <CloseTimeWatched control={control} />
               </Col>
             </Row>
             {invalidTime(openTime, closeTime) && <p className="input-error">กรุณากำหนดเวลาเป็นช่วงละครึ่งชั่วโมง</p>}
