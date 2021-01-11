@@ -1,10 +1,11 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { Row, Col, Form, Button, Table } from "react-bootstrap"
-import SuccessfulReservation, { Sport } from "../interfaces/reservationSchemas"
+import { ReserveListRes, Room, Sport } from "../../../../dto/reservation.dto"
 import format from "date-fns/format"
 import { getTimeText } from "./ReservationDetail"
 import { client } from "../../../../../axiosConfig"
+import { AxiosResponse } from "axios"
 import PaginationComponent from "../list-of-all-users-pages/PaginationComponent"
 import { ErrModal } from "./DeleteModalComponent"
 
@@ -29,30 +30,11 @@ const AllReservation: FunctionComponent = () => {
   const [searchDate, setSearchDate] = useState<Date>(new Date())
   const [searchTime, setSearchTime] = useState<number>(-1)
   // Reservation room state
-  const [reserveInfo, setReserveInfo] = useState<SuccessfulReservation[]>([])
+  const [reserveInfo, setReserveInfo] = useState<Room[]>([])
   const [allSports, setAllSports] = useState<Sport[]>([])
 
   const history = useHistory()
   const { pagename } = useParams<{ pagename: string }>()
-
-  // useEffects //
-  // useEffect(() => {
-  //   console.log(pagename)
-  // }, [pagename])
-
-  useEffect(() => {
-    client({
-      method: "GET",
-      // court-manager/getSports
-      url: "/court-manager/sports/",
-    })
-      .then(({ data }) => {
-        setAllSports(data)
-      })
-      .catch(({ response }) => {
-        console.log(response)
-      })
-  }, [pagename])
 
   // requests //
   const requestInfo = useCallback(() => {
@@ -68,8 +50,8 @@ const AllReservation: FunctionComponent = () => {
       url,
       data,
     })
-      .then(({ data }) => {
-        console.log(data)
+      .then(({ data }: AxiosResponse<ReserveListRes>) => {
+        // console.log(data)
         setReserveInfo(data[1])
         setMaxUser(data[0])
       })
@@ -79,13 +61,21 @@ const AllReservation: FunctionComponent = () => {
       })
   }, [chooseDate, courtNo, pagename, searchDate, searchTime, sportType])
 
-  const memoizedCallback = useCallback(() => {
+  // useEffects
+  useEffect(() => {
     requestInfo()
   }, [requestInfo])
 
   useEffect(() => {
-    memoizedCallback()
-  }, [memoizedCallback])
+    client
+      .get<Sport[]>("/court-manager/sports/")
+      .then(({ data }) => {
+        setAllSports(data)
+      })
+      .catch(({ response }) => {
+        console.log(response)
+      })
+  }, [pagename])
 
   // handles //
   const handleInfo = (e: React.MouseEvent<HTMLInputElement>) => {

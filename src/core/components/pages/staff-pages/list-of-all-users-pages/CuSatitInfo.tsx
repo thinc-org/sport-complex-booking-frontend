@@ -5,6 +5,7 @@ import format from "date-fns/format"
 import { useForm } from "react-hook-form"
 import { client } from "../../../../../axiosConfig"
 import { CuAndSatitInfo, CuSatitComponentInfo, Account, ModalUserInfo } from "../interfaces/InfoInterface"
+import { CuStudent, SatitCuPersonel } from "../../../../contexts/UsersContext"
 import PasswordChangeModal from "./PasswordChangeModal"
 import {
   DeleteModal,
@@ -38,7 +39,6 @@ const UserInfo: FunctionComponent = () => {
   const [showAlert, setShowAlert] = useState<boolean>(false)
 
   // user states
-  // const [_id] = useState<string>(props.match.params._id)
   const [user, setUser] = useState<CuAndSatitInfo>({
     account_type: Account.CuStudent,
     is_thai_language: true,
@@ -51,7 +51,6 @@ const UserInfo: FunctionComponent = () => {
     phone: "",
     is_penalize: false,
     expired_penalize_date: new Date(),
-    is_first_login: true,
   })
   const [tempUser, setTempUser] = useState<CuAndSatitInfo>(user)
 
@@ -62,13 +61,11 @@ const UserInfo: FunctionComponent = () => {
   const { t } = useTranslation()
 
   const getInfo = useCallback(() => {
-    client({
-      method: "GET",
-      url: `/list-all-user/id/${_id}`,
-    })
+    client
+      .get<CuStudent | SatitCuPersonel>(`/list-all-user/id/${_id}`)
       .then(({ data }) => {
         setUser({
-          account_type: data.account_type,
+          account_type: data.account_type === "CuStudent" ? Account.CuStudent : Account.SatitAndCuPersonel,
           is_thai_language: data.is_thai_language,
           name_th: data.name_th,
           surname_th: data.surname_th,
@@ -79,7 +76,6 @@ const UserInfo: FunctionComponent = () => {
           phone: data.phone,
           is_penalize: data.is_penalize,
           expired_penalize_date: data.expired_penalize_date ? data.expired_penalize_date : new Date(),
-          is_first_login: data.is_first_login,
         })
       })
       .catch(({ response }) => {
@@ -168,7 +164,7 @@ const UserInfo: FunctionComponent = () => {
         expired_penalize_date,
       },
     })
-      .then(({ data }) => {
+      .then(() => {
         setUser(tempUser)
         setShowModals({ ...showModals, showSave: false, showComSave: true })
         setEditing(false)
@@ -185,7 +181,7 @@ const UserInfo: FunctionComponent = () => {
       method: "DELETE",
       url: `/list-all-user/${_id}`,
     })
-      .then(({ data }) => {
+      .then(() => {
         setShowModals({ ...showModals, showDelete: false, showComDelete: true })
       })
       .catch(({ response }) => {
@@ -202,7 +198,7 @@ const UserInfo: FunctionComponent = () => {
         password: newPassword,
       },
     })
-      .then(({ data }) => {
+      .then(() => {
         setShowModals({ ...showModals, showConfirmChange: false, showChangePassword: false })
       })
       .catch((err) => {
