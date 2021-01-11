@@ -5,7 +5,7 @@ import format from "date-fns/format"
 import { client } from "../../../../../axiosConfig"
 import SuccessfulReservation, { WaitingRoom, TimeObject } from "../interfaces/reservationSchemas"
 import { ConfirmDeleteModal, ErrModal, DeleteSuccessfulModal } from "./DeleteModalComponent"
-import { Sport } from "../disable-court/disable-court-interface"
+import { Sport } from "../../../../dto/sport.dto"
 
 export const convertSlotToTime = (slot: number): TimeObject => {
   // if (slot % 2 === 0) return String(slot / 2 - 1) + ":30-" + (slot / 2 !== 24 ? String(slot / 2) : "0") + ":00"

@@ -2,7 +2,7 @@ import React from "react"
 import { Modal, Button, Form } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import { getTimeArr, dayArr } from "./mapTime"
-import { ModalProps, FormModalProps, TimeSlotRow } from "./disable-court-interface"
+import { ModalProps, FormModalProps, TimeSlotRow } from "../../../../dto/disableCourt.dto"
 export const ErrorAlert = ({ inProp, header, message, handleClose, canCancel = false, onCancel }: ModalProps) => {
   return (
     <>
@@ -29,10 +29,6 @@ export const ErrorAlert = ({ inProp, header, message, handleClose, canCancel = f
 export const FormAlert = ({ inProp, handleClose, onSubmit, validate }: FormModalProps) => {
   const { register, handleSubmit, getValues, errors } = useForm<TimeSlotRow>()
   const timeArr: string[] = getTimeArr()
-  // const validateTime = (value: string) => {
-  //   return parseInt(value) >= getValues("timeSlotStart")
-  // }
-
   return (
     <Modal show={inProp} onHide={handleClose}>
       <Modal.Header closeButton>
@@ -70,8 +66,10 @@ export const FormAlert = ({ inProp, handleClose, onSubmit, validate }: FormModal
               ))}
             </Form.Control>
             <Form.Text>{errors.timeSlotEnd && "เวลาที่ใส่ไม่ถูกต้อง"}</Form.Text>
-            {/* This line will be fixed later */}
-            {/* <Form.Text>{errors.required && "กรุณากรอกข้อมูลให้ครบ"}</Form.Text> */}
+            <Form.Text>
+              {(errors.timeSlotStart?.type === "required" || errors.timeSlotEnd?.type === "required" || errors.day?.type === "required") &&
+                "กรุณากรอกข้อมูลให้ครบ"}
+            </Form.Text>
           </div>
         </Modal.Body>
         <Modal.Footer>
