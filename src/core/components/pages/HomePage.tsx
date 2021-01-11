@@ -1,8 +1,7 @@
 import React from "react"
-import { useState, useEffect, useContext, useCallback } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Link } from "react-router-dom"
 import { client } from "../../../axiosConfig"
-import { UserContext } from "../../contexts/UsersContext"
 import { useTranslation } from "react-i18next"
 import { CookieModal } from "../ui/Modals/CookieModal"
 import { PersonCircle, Calendar, PeopleFill, BookmarkFill } from "react-bootstrap-icons"
@@ -35,7 +34,6 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchUserName()
-    console.log("cookieConsent: " + cookieConsent)
   }, [fetchUserName])
 
   const handleClick = () => {
@@ -98,7 +96,7 @@ const HomePage = () => {
 
           <CookieModal show={!cookieConsent} handleClick={handleClick} />
         </div>
-        <img src={footer} style={{ position: "fixed", bottom: 0, zIndex: 0, height: "45%", width: "100%" }} />
+        <img alt="" src={footer} style={{ position: "fixed", bottom: 0, zIndex: 0, height: "45%", width: "100%" }} />
       </div>
     </div>
   )

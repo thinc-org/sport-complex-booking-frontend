@@ -36,13 +36,13 @@ export const timeConversion = (input: number) => {
     start_hour = end_hour - 1
   }
 
-  if (~~(start_hour / 10 == 0) && start_min == 0) {
+  if (~~(start_hour / 10 === 0) && start_min === 0) {
     start = "0" + start_hour + ":00"
-  } else if (~~(start_hour / 10 == 0) && start_min == 30) {
+  } else if (~~(start_hour / 10 === 0) && start_min === 30) {
     start = "0" + start_hour + ":30"
-  } else if (~~(start_hour / 10 != 0) && start_min == 0) {
+  } else if (~~(start_hour / 10 !== 0) && start_min === 0) {
     start = start_hour + ":00"
-  } else if (~~(start_hour / 10 != 0) && start_min == 30) {
+  } else if (~~(start_hour / 10 !== 0) && start_min === 30) {
     start = start_hour + ":30"
   }
 

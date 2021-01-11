@@ -23,13 +23,8 @@ const ReservationPage = () => {
 
   const [lists, setLists] = useState<Array<ReservationResponse>>([])
   const [isLoading, setIsLoading] = useState(true)
-  var { url, path } = useRouteMatch()
+  var { path } = useRouteMatch()
   const { t, i18n } = useTranslation()
-
-  useEffect(() => {
-    fetchData()
-    console.log("fetch data")
-  }, [])
 
   const fetchData = useCallback(async () => {
     try {
@@ -40,6 +35,11 @@ const ReservationPage = () => {
       console.log(err.message)
     }
   }, [])
+
+  useEffect(() => {
+    fetchData()
+    console.log("fetch data")
+  }, [fetchData])
 
   const handleClick = (id: string) => {
     console.log("button clicked")

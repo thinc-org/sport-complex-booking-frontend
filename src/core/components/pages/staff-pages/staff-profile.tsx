@@ -1,7 +1,6 @@
 import React from "react"
 import { useState, useEffect, useCallback } from "react"
 import { client } from "../../../../axiosConfig"
-import withAdminGuard from "../../../guards/admin.guard"
 
 function StaffProfile() {
   const [name, setName] = useState<string>()
