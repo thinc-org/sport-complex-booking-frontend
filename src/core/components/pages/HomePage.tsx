@@ -99,7 +99,7 @@ const HomePage = () => {
 
           <CookieModal show={!cookieConsent} handleClick={handleClick} />
         </div>
-        <img src={footer} style={{ position: "fixed", bottom: 0, zIndex: 0, height: "45%", width: "100%" }} alt="" />
+        <img alt="" src={footer} style={{ position: "fixed", bottom: 0, zIndex: 0, height: "45%", width: "100%" }} />
       </div>
     </div>
   )

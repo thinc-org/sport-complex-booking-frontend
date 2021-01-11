@@ -52,12 +52,10 @@ const ReservationDetail = () => {
   const [lateCancellationPunishment, setLateCancellationPunishment] = useState<number>()
   const [validTime, setValidTime] = useState<number>()
   const [qrValue, setQRValue] = useState<QRValueResponse>()
-  const [isRefreshingQRCode, setIsRefreshingQRCode] = useState<boolean>()
 
   const fetchId = useCallback(() => {
     if (location.state) {
       setId(history.location.state.id)
-      setQRValue({ id: (location.state as LocationResponse).id, time: new Date().getTime() })
     } else {
       history.push(history.location.state.path)
       // history.push((location.state as LocationResponse).path)
@@ -79,7 +77,6 @@ const ReservationDetail = () => {
       setLateCancellationPunishment(data.late_cancelation_punishment)
       setValidTime(new Date().getTime() + 10000)
       setIsLoading(false)
-      setIsRefreshingQRCode(false)
       setCounter(10)
     } catch (err) {
       console.log(err.message)
@@ -113,31 +110,27 @@ const ReservationDetail = () => {
         // history.push((location.state as any).path)
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err.message)
         triggerModal()
       })
   }
 
-  const countDown = () => {
-    if (!isCheck && !isRefreshingQRCode) {
+  const countDown = useCallback(() => {
+    if (!isCheck) {
       setTimeout(function () {
         if (counter) {
           setCounter(counter - 1)
         } else if (counter === 0) {
-          setIsRefreshingQRCode(true)
           setValidTime(new Date().getTime() + 10000)
-          setIsRefreshingQRCode(false)
           setCounter(10)
         }
       }, 1000)
     }
-  }
+  }, [counter, isCheck])
+
   useEffect(() => {
     if (!isCheck) countDown()
   }, [counter, isCheck, countDown])
-  useEffect(() => {
-    console.log(qrValue)
-  }, [qrValue])
 
   const qrCode = () => {
     if (!isCheck && id) {
@@ -148,7 +141,8 @@ const ReservationDetail = () => {
               {t("qrcodeInvalid")}{" "}
             </h6>
             <div style={{ fontSize: "18px", fontWeight: 400 }}> 00:{counter === 10 ? counter : "0" + counter} </div>
-            <QRCode className="mb-4 mt-3" value={id} renderAs="svg" size={128} fgColor="#333" bgColor="#fff" />
+            <QRCode className="mb-4 mt-3" value={validTime + "/" + id} renderAs="svg" size={128} fgColor="#333" bgColor="#fff" />
+
             <h5 className="mb-2" style={{ fontWeight: 400 }}>
               {t("showQRToStaff")}
             </h5>
