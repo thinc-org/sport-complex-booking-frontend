@@ -1,8 +1,8 @@
 // enums //
 export enum Account {
-  CuStudent,
-  SatitAndCuPersonel,
-  Other,
+  CuStudent = "CuStudent",
+  SatitAndCuPersonel = "SatitAndCuPersonel",
+  Other = "Other",
 }
 
 // interfaces //
@@ -66,7 +66,6 @@ export interface CuAndSatitInfo {
   phone: string
   is_penalize: boolean
   expired_penalize_date: Date
-  is_first_login: boolean
 }
 
 export interface CuSatitComponentInfo {

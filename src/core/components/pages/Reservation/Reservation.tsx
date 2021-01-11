@@ -9,7 +9,7 @@ import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 import { useTranslation } from "react-i18next"
 import { Loading } from "../../ui/loading/loading"
 import { CuStudent, Other, SatitCuPersonel } from "../../../contexts/UsersContext"
-import { Sport } from "../staff-pages/interfaces/reservationSchemas"
+import { Sport } from "../../../dto/reservation.dto"
 import { useLanguage } from "../../../utils/language"
 
 interface ReservationResponse {

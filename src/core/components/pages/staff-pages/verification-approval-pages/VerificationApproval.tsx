@@ -2,7 +2,8 @@ import React, { FunctionComponent, useState, useEffect, useCallback } from "reac
 import { Table, Form, Col, Button, Modal } from "react-bootstrap"
 import { useHistory } from "react-router-dom"
 import { client } from "../../../../../axiosConfig"
-import { OtherInfo } from "../interfaces/InfoInterface"
+import { AxiosResponse } from "axios"
+import { VerifyInfoRes, VerifyListRes } from "../../../../dto/verification.dto"
 import PaginationComponent from "../list-of-all-users-pages/PaginationComponent"
 
 interface RejectedInfo {
@@ -18,7 +19,7 @@ const VeritificationApproval: FunctionComponent = () => {
   const [maxUser, setMaxUser] = useState<number>(1)
   const [searchName, setSearchName] = useState<string>("")
   const [showNoUser, setShowNoUser] = useState<boolean>(false)
-  const [users, setUsers] = useState<OtherInfo[]>([])
+  const [users, setUsers] = useState<VerifyInfoRes[]>([])
   const history = useHistory()
 
   // other functions //
@@ -34,9 +35,10 @@ const VeritificationApproval: FunctionComponent = () => {
       url: "/approval",
       params: params,
     })
-      .then(({ data }) => {
-        const userList: OtherInfo[] = data[1]
-        let newUserList: OtherInfo[] = []
+      .then(({ data }: AxiosResponse<VerifyListRes>) => {
+        console.log(data)
+        const userList: VerifyInfoRes[] = data[1]
+        let newUserList: VerifyInfoRes[] = []
         for (const user of userList) {
           newUserList = [...newUserList, user]
         }
@@ -71,7 +73,7 @@ const VeritificationApproval: FunctionComponent = () => {
       method: "GET",
       url: "/approval/" + _id,
     })
-      .then(({ data }) => {
+      .then(() => {
         history.push("/staff/verifyInfo/" + _id)
       })
       .catch(({ response }) => {

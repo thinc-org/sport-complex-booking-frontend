@@ -2,6 +2,7 @@ import React, { FunctionComponent, useState, useEffect, useCallback } from "reac
 import { RouteComponentProps, Link, useHistory } from "react-router-dom"
 import { Button, Card, Form, Collapse } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
+import { Other } from "../../../../contexts/UsersContext"
 import OtherViewInfoComponent from "../list-of-all-users-pages/OtherViewInfoComponent"
 import {
   ConfirmRejectModal,
@@ -94,13 +95,12 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   const history = useHistory()
 
   const fetchUserData = useCallback(() => {
-    client({
-      method: "GET",
-      url: "/approval/" + _id,
-    })
+    client
+      .get<Other>(`/approval/${_id}`)
       .then(({ data }) => {
+        // console.log(data)
         setUsername(data.username)
-        setMembershipType(data.membershipType)
+        setMembershipType(data.membership_type)
         setInfo({
           prefix: data.prefix,
           name_th: data.name_th,
@@ -126,7 +126,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
                 contact_person_phone: "",
               },
           // Files //
-          membership_type: data.membershipType,
+          membership_type: data.membership_type,
           user_photo: data.user_photo,
           medical_certificate: data.medical_certificate,
           national_id_photo: data.national_id_photo,
@@ -156,12 +156,10 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   }
 
   const requestReject = () => {
-    // console.log("request rejected!!!")
     const rejectList: string[] = []
     Object.entries(rejectInfo).forEach(([key, val], index) => {
       rejectList.push(key)
     })
-    // send request //
     client({
       method: "PATCH",
       url: "/approval/reject",
@@ -170,7 +168,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
         reject_info: rejectList,
       },
     })
-      .then((res) => {
+      .then(() => {
         setShowModalInfo({ ...showModalInfo, showConfirmReject: false, showCompleteReject: true })
       })
       .catch((err) => {
@@ -183,7 +181,6 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     const date = accountExpiredDate
     // utc+0: 17.00, utc+7: 0.00
     const utc7Time = new Date(Date.UTC(date!.getFullYear(), date!.getMonth(), date!.getDate() - 1, 17, 0, 0, 0))
-    // send request //
     client({
       method: "PATCH",
       url: "/approval/approve",
@@ -192,7 +189,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
         newExpiredDate: utc7Time,
       },
     })
-      .then(({ data }) => {
+      .then(() => {
         setShowModalInfo({ ...showModalInfo, showConfirmAccept: false, showCompleteAccept: true })
       })
       .catch((err) => {
