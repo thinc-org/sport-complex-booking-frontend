@@ -11,6 +11,7 @@ export interface ListCourtResponse {
 }
 
 export interface CourtData {
+  // Migrate to sport.dto.ts
   court_num: number
   open_time: number
   close_time: number
@@ -60,6 +61,7 @@ export interface AddCourtFuncProps {
 // Sport settings DTO
 
 export interface SportData {
+  //Migrate to sport.dto.ts
   _id?: string
   sport_name_th: string
   sport_name_en: string
