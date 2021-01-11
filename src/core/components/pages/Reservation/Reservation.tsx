@@ -43,6 +43,11 @@ const ReservationPage = () => {
     }
   }, [])
 
+  useEffect(() => {
+    fetchData()
+    console.log("fetch data")
+  }, [fetchData])
+
   const handleClick = (id: string) => {
     console.log("button clicked")
     return history.push({
