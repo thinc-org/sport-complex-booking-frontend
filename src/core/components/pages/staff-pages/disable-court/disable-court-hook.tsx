@@ -7,11 +7,11 @@ import {
   ViewRowProps,
   disable_time,
   View,
-  Sport,
   TimeSlotRow,
   DisabledCourtSearchBody,
   DisableCourtBody,
-} from "./disable-court-interface"
+} from "../../../../dto/disableCourt.dto"
+import { Sport } from "../../../../dto/sport.dto"
 import add from "date-fns/addDays"
 import { client } from "../../../../../axiosConfig"
 
