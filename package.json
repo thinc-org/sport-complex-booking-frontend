@@ -90,13 +90,17 @@
     "lint-staged": "^10.5.3",
     "prettier": "^2.2.1"
   },
+  "resolutions": {
+    "**/@typescript-eslint/eslint-plugin": "^4.1.1",
+    "**/@typescript-eslint/parser": "^4.1.1"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": [
+    "src/**/*.{ts,tsx}": [
       "yarn prettier --write",
       "yarn eslint --fix"
     ]
