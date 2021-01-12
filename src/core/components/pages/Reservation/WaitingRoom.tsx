@@ -11,24 +11,16 @@ import { useTranslation } from "react-i18next"
 import withUserGuard from "../../../guards/user.guard"
 import Countdown, { CountdownRenderProps } from "react-countdown"
 import { Loading } from "../../ui/loading/loading"
-import { useLanguage } from "../../../utils/language"
-
-interface SportNameResponse {
-  sportNameth: string
-  sportNameen: string
-}
-
-interface MemberResponse {
-  name_th: string
-  name_en: string
-}
+import { useLanguage, useNameLanguage } from "../../../utils/language"
+import { SportData, MemberResponse, WaitingRoomResponse } from "../../../dto/waitingRoom.dto"
+import { AxiosResponse } from "axios"
 
 const WaitingRoomPage = () => {
   const [waitingRoomId, setWaitingRoomId] = useState<string>()
-  const [sport, setSport] = useState<SportNameResponse>()
+  const [sport, setSport] = useState<SportData>()
   const [date, setDate] = useState<string>()
   const [timeList, setTimeList] = useState<Array<number>>([])
-  const [listMember, setListMember] = useState<Array<MemberResponse>>([])
+  const [listMember, setListMember] = useState<MemberResponse[]>([])
   const [accessCode, setAccessCode] = useState("")
   const [endTime, setEndTime] = useState<number>()
   const [modalConfirmOpen, setModalConfirmOpen] = useState(false)
@@ -38,19 +30,19 @@ const WaitingRoomPage = () => {
   const [isLoading, setIsLoading] = useState(true)
   const { t } = useTranslation()
   const language = useLanguage()
-  const sportLanguage: "sportNameth" | "sportNameen" = language === "th" ? "sportNameth" : "sportNameen"
-
+  const nameLanguage: "name_en" | "name_th" = useNameLanguage("name") as "name_en" | "name_th"
+  const sportLanguage: "sport_name_th" | "sport_name_en" = language === "th" ? "sport_name_th" : "sport_name_en"
   const history = useHistory()
 
   const fetchWaitingRoom = useCallback(async () => {
     try {
       console.log("fetch data")
-      const res = await client.get("/mywaitingroom")
-      console.log(res.data.list_member)
+      const res: AxiosResponse<WaitingRoomResponse> = await client.get("/mywaitingroom")
       setListMember(res.data.list_member)
       // time sent from backend is UTC before adding 7 for Thailand
+      // but date adjusts itself according to the local device, so there is no timeshift at the moment
       setEndTime(timeShift(new Date(res.data.expired_date).getTime(), 0))
-      setSport({ sportNameth: res.data.sport_id.sport_name_th, sportNameen: res.data.sport_id.sport_name_en })
+      setSport(res.data.sport_id)
       setDate(new Date(res.data.date).toLocaleDateString())
       setTimeList(res.data.time_slot)
       setRequiredUserNumber(res.data.sport_id.required_user)
@@ -184,14 +176,16 @@ const WaitingRoomPage = () => {
                     </thead>
 
                     {listMember &&
-                      listMember.map((eachMember, index) => (
-                        <tbody key={index}>
-                          <tr>
-                            <td> {index + 1} </td>
-                            <td> {eachMember} </td>
-                          </tr>
-                        </tbody>
-                      ))}
+                      listMember.map((eachMember, index: number) => {
+                        return (
+                          <tbody key={index}>
+                            <tr>
+                              <td> {index + 1} </td>
+                              <td> {eachMember[nameLanguage]} </td>
+                            </tr>
+                          </tbody>
+                        )
+                      })}
                   </table>
                 </div>
                 <Button

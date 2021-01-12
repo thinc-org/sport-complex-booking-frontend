@@ -1,4 +1,5 @@
 import { Account } from "../components/pages/staff-pages/interfaces/InfoInterface"
+import { CuStudent, Other, SatitCuPersonel } from "../contexts/UsersContext"
 
 export type Room = SuccessRoom | WaitingRoom
 
@@ -51,4 +52,40 @@ export interface Court {
   court_num: number
   open_time: number
   close_time: number
+}
+export interface LocationResponse {
+  id: string
+  path: string
+}
+
+export interface MemberResponse {
+  name_th: string
+  name_en: string
+}
+
+export interface SportResponse {
+  sport_name_th: string
+  sport_name_en: string
+}
+
+export interface ReservationDetailResponse {
+  sport_id: SportResponse
+  court_number: number
+  date: Date
+  time_slot: number[]
+  list_member: (CuStudent | Other | SatitCuPersonel)[]
+  is_check: boolean
+  late_cancelation_day: number
+  late_cancelation_punishment: number
+}
+
+export interface ReservationResponse {
+  _id: string
+  is_check: boolean
+  sport_id: SportResponse
+  court_number: number
+  date: Date
+  time_slot: number[]
+  day_of_week: number
+  list_member: (CuStudent | SatitCuPersonel | Other)[]
 }

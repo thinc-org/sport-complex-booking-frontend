@@ -11,26 +11,7 @@ import { useTranslation } from "react-i18next"
 import { ReservationCancellationModal } from "../../ui/Modals/ReservationCancelModal"
 import { Loading } from "../../ui/loading/loading"
 import { useLanguage, useNameLanguage } from "../../../utils/language"
-
-interface LocationResponse {
-  id: string
-  path: string
-}
-
-interface MemberResponse {
-  name_th: string
-  name_en: string
-}
-
-interface SportResponse {
-  sportth: string
-  sporten: string
-}
-
-interface QRValueResponse {
-  id: string
-  time: number
-}
+import { LocationResponse, MemberResponse, SportResponse, ReservationDetailResponse } from "../../../dto/reservation.dto"
 
 const ReservationDetail = () => {
   const location = useLocation()
@@ -38,10 +19,10 @@ const ReservationDetail = () => {
   const { t } = useTranslation()
   const language = useLanguage()
   const nameLanguage: "name_en" | "name_th" = useNameLanguage("name") as "name_en" | "name_th"
-  const sportLanguage: "sportth" | "sporten" = language === "th" ? "sportth" : "sporten"
+  const sportLanguage: "sport_name_th" | "sport_name_en" = language === "th" ? "sport_name_th" : "sport_name_en"
   const [id, setId] = useState<string>()
   const [sport, setSport] = useState<SportResponse>()
-  const [courtNum, setCourtNum] = useState("")
+  const [courtNum, setCourtNum] = useState<number>()
   const [date, setDate] = useState<string>()
   const [timeList, setTimeList] = useState<number[]>()
   const [memberList, setMemberList] = useState<Array<MemberResponse>>()
@@ -51,23 +32,20 @@ const ReservationDetail = () => {
   const [lateCancellationDay, setLateCancellationDay] = useState<number>()
   const [lateCancellationPunishment, setLateCancellationPunishment] = useState<number>()
   const [validTime, setValidTime] = useState<number>()
-  const [qrValue, setQRValue] = useState<QRValueResponse>()
 
   const fetchId = useCallback(() => {
     if (location.state) {
       setId(history.location.state.id)
     } else {
       history.push(history.location.state.path)
-      // history.push((location.state as LocationResponse).path)
     }
   }, [setId, history, location.state])
 
   const fetchData = useCallback(async () => {
     try {
-      console.log(id)
-      const res = (await client.get(`myreservation/${id}`)).data
+      const res: ReservationDetailResponse = (await client.get(`myreservation/${id}`)).data
       const data = (await client.get("court-manager/setting")).data
-      setSport({ sportth: res.sport_id.sport_name_th, sporten: res.sport_id.sport_name_en })
+      setSport(res.sport_id)
       setCourtNum(res.court_number)
       setDate(new Date(res.date).toLocaleDateString())
       setTimeList(res.time_slot)
@@ -81,18 +59,14 @@ const ReservationDetail = () => {
     } catch (err) {
       console.log(err.message)
       history.push(history.location.state.path)
-      // history.push((location.state as any).path)
     }
-  }, [history, id])
-
-  useEffect(() => {
-    if (id) fetchData()
-  }, [fetchData, id])
-
+  }, [id, history])
   useEffect(() => {
     fetchId()
-    console.log("reservation detail")
   }, [fetchId])
+  useEffect(() => {
+    if (id) fetchData()
+  }, [id, fetchData])
 
   const triggerModal = () => {
     console.log("show modal")
@@ -107,7 +81,6 @@ const ReservationDetail = () => {
       .delete("myreservation/" + id)
       .then(() => {
         history.push(history.location.state.path)
-        // history.push((location.state as any).path)
       })
       .catch((err) => {
         console.log(err.message)
