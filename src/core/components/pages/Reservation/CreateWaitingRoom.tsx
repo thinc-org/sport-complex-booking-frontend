@@ -8,8 +8,9 @@ import withUserGuard from "../../../guards/user.guard"
 import { DetailsModal, CustomWaitingRoomModal } from "../../ui/Modals/WaitingRoomModals"
 import { useTranslation } from "react-i18next"
 import { client } from "../../../../axiosConfig"
-import { WaitingRoomData, SportData, CourtData, CreateResponse } from "../../../dto/waitingRoom.dto"
+import { WaitingRoomData, CreateResponse } from "../../../dto/waitingRoom.dto"
 import { CreateWaitingRoomErrorMsg, CheckValidityErrorMsg } from "./ReservationComponents"
+import { Sport, Court } from "../../../dto/sport.dto"
 
 function CreateWaitingRoom() {
   // States
@@ -23,11 +24,11 @@ function CreateWaitingRoom() {
   const sportLanguage = language === "th" ? "sport_name_th" : "sport_name_en"
   const history = useHistory()
   // Sport States
-  const [sport, setSport] = useState<SportData[]>([])
+  const [sport, setSport] = useState<Sport[]>([])
   const [sportName, setSportName] = useState<string>()
   const [requiredUserCount, setRequiredUserCount] = useState<number>()
   // Court States
-  const [courts, setCourts] = useState<CourtData[]>([])
+  const [courts, setCourts] = useState<Court[]>([])
   // Time States
   const [time, setTime] = useState([1, 2])
   const times = watch("time_slot", [])
@@ -90,7 +91,7 @@ function CreateWaitingRoom() {
   // [1] Fetch Courts
   const fetchCourts = async () => {
     await client
-      .get<SportData[]>("/court-manager/sports")
+      .get<Sport[]>("/court-manager/sports")
       .then(({ data }) => {
         setSport(data)
       })

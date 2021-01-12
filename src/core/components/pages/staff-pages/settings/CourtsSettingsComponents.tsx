@@ -2,7 +2,8 @@ import React from "react"
 import { Form, Row, Col, Button, Modal } from "react-bootstrap"
 import TimePicker from "react-time-picker"
 import { Control, useForm, useWatch } from "react-hook-form"
-import { NoCourtsModalProps, CourtData, EditCourtProps, DeleteCourtModalProps, AddCourtFuncProps } from "../../../../dto/settings.dto"
+import { NoCourtsModalProps, EditCourtProps, DeleteCourtModalProps, AddCourtFuncProps } from "../../../../dto/settings.dto"
+import { Court } from "../../../../dto/sport.dto"
 
 const OpenTimeCalculation = (time: string) => {
   const equation: number = parseInt(time.substring(0, 2)) * 2 + 1 + Math.floor(parseInt(time.substring(3, 5)) / 30)
@@ -73,7 +74,7 @@ export const EditCourt: React.FC<EditCourtProps> = ({
   updateCourt,
 }) => {
   const { register, handleSubmit, control } = useForm()
-  const onSubmitEditCourt = (data: CourtData) => {
+  const onSubmitEditCourt = (data: Court) => {
     const formattedOpenTime = formatOpenTime(openTime)
     const formattedCloseTime = formatCloseTime(closeTime)
     const newCourt = { ...data, court_num: currentCourt!["court_num"], open_time: formattedOpenTime, close_time: formattedCloseTime }
@@ -227,7 +228,7 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
   const { register, handleSubmit, errors, control } = useForm()
   const formattedOpenTime = OpenTimeCalculation(openTime)
   const formattedCloseTime = CloseTimeCalculation(closeTime)
-  const onSubmitAddCourt = (data: CourtData) => {
+  const onSubmitAddCourt = (data: Court) => {
     const newCourt = { ...data, court_num: parseInt(data.court_num + ""), open_time: formattedOpenTime, close_time: formattedCloseTime }
     courts.push(newCourt)
     updateCourt(currentSportId)

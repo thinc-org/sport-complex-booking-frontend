@@ -12,12 +12,13 @@ import withUserGuard from "../../../guards/user.guard"
 import Countdown, { CountdownRenderProps } from "react-countdown"
 import { Loading } from "../../ui/loading/loading"
 import { useLanguage, useNameLanguage } from "../../../utils/language"
-import { SportData, MemberResponse, WaitingRoomResponse } from "../../../dto/waitingRoom.dto"
+import { MemberResponse, WaitingRoomResponse } from "../../../dto/waitingRoom.dto"
+import { Sport } from "../../../dto/sport.dto"
 import { AxiosResponse } from "axios"
 
 const WaitingRoomPage = () => {
   const [waitingRoomId, setWaitingRoomId] = useState<string>()
-  const [sport, setSport] = useState<SportData>()
+  const [sport, setSport] = useState<Sport>()
   const [date, setDate] = useState<string>()
   const [timeList, setTimeList] = useState<Array<number>>([])
   const [listMember, setListMember] = useState<MemberResponse[]>([])
