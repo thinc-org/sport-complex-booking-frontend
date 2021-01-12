@@ -4,7 +4,8 @@ import { client } from "../../../../../axiosConfig"
 import { NoCourtsModal, EditCourt, DeleteCourtModal, AddCourtFunc } from "./CourtsSettingsComponents"
 import { HandleError } from "./SportSettingsComponents"
 import { AxiosResponse } from "axios"
-import { ListCourts, CourtData, SportData } from "../../../../dto/settings.dto"
+import { ListCourts } from "../../../../dto/settings.dto"
+import { Sport, Court } from "../../../../dto/sport.dto"
 
 export default function CourtsSettings() {
   const [showAddCourt, setShowAddCourt] = useState(false)
@@ -14,7 +15,7 @@ export default function CourtsSettings() {
   const [showError, setShowError] = useState(false)
   const [openTime, onChangeOpenTime] = useState("08:00")
   const [closeTime, onChangeCloseTime] = useState("20:00")
-  const [sports, setSports] = useState<SportData[]>([
+  const [sports, setSports] = useState<Sport[]>([
     {
       _id: "",
       sport_name_th: "",
@@ -22,12 +23,13 @@ export default function CourtsSettings() {
       required_user: 0,
       quota: 0,
       list_court: [],
+      __v: 0,
     },
   ])
   const [currentSportId, setCurrentSportId] = useState("$")
   const [currentSportName, setCurrentSportName] = useState("")
-  const [currentCourt, setCurrentCourt] = useState<CourtData>()
-  const [courts, setCourts] = useState<CourtData[]>([
+  const [currentCourt, setCurrentCourt] = useState<Court>()
+  const [courts, setCourts] = useState<Court[]>([
     {
       court_num: 0,
       open_time: 0,
@@ -61,7 +63,7 @@ export default function CourtsSettings() {
   const requestCourts = async (sportId: string) => {
     if (sportId === "$") return null
     await client
-      .get<SportData>("/court-manager/" + sportId)
+      .get<Sport>("/court-manager/" + sportId)
       .then(({ data }) => {
         setCourts(data["list_court"])
       })
@@ -113,7 +115,7 @@ export default function CourtsSettings() {
     const target = e.target as HTMLInputElement
     const id = target.value
     setCurrentSportId(target.value)
-    sports.forEach((sport: SportData) => {
+    sports.forEach((sport: Sport) => {
       if (sport._id === id) {
         setCurrentSportName(sport.sport_name_th)
       }
