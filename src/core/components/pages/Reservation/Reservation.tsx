@@ -8,20 +8,8 @@ import { AxiosResponse } from "axios"
 import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 import { useTranslation } from "react-i18next"
 import { Loading } from "../../ui/loading/loading"
-import { CuStudent, Other, SatitCuPersonel } from "../../../contexts/UsersContext"
-import { Sport } from "../../../dto/reservation.dto"
 import { useLanguage } from "../../../utils/language"
-
-interface ReservationResponse {
-  _id: string
-  is_check: boolean
-  sport_id: Sport
-  court_number: number
-  date: Date
-  time_slot: number[]
-  day_of_week: number
-  list_member: (CuStudent | SatitCuPersonel | Other)[]
-}
+import { ReservationResponse } from "../../../dto/reservation.dto"
 
 const ReservationPage = () => {
   const history = useHistory()
