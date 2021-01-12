@@ -1,10 +1,10 @@
 import React, { useState, useEffect, FunctionComponent, useCallback } from "react"
-
 import { RouteComponentProps } from "react-router-dom"
 import { client } from "../../../../axiosConfig"
 import { Button } from "react-bootstrap"
 import { CheckinModal } from "../../ui/Modals/CheckinModal"
 import QrReader from "react-qr-reader"
+import { ReservationDetailResponse } from "../../../dto/reservation.dto"
 
 const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
   const [readingResult, setReadingResult] = useState<string>()
@@ -15,11 +15,11 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
   const [currentTime, setCurrentTime] = useState<number>()
   const [validTime, setValidTime] = useState<number>()
 
-  const handleScan = (data) => {
+  const handleScan = (data: string | null) => {
     if (data) setReadingResult(data)
   }
 
-  const handleError = (err) => {
+  const handleError = (err: string | null) => {
     console.log(err)
   }
 
@@ -36,17 +36,17 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
 
   const checkIn = useCallback(async (reservationId) => {
     try {
-      const res = await client.patch("myreservation/" + reservationId)
-      if (res.data.is_check) {
+      const res: ReservationDetailResponse = (await client.patch("myreservation/" + reservationId)).data
+      if (res.is_check) {
         setMessageHeader("เช็คอินซ้ำ")
-        setMessageBody(res.data.sport_id.sport_name_th + " ID: " + reservationId)
+        setMessageBody(res.sport_id.sport_name_th + " ID: " + reservationId)
         setModalOpen(true)
         setTimeout(function () {
           setModalOpen(false)
         }, 3000)
       } else {
         setMessageHeader("เช็คอินสำเร็จ")
-        setMessageBody(res.data.sport_id.sport_name_th + " ID: " + reservationId)
+        setMessageBody(res.sport_id.sport_name_th + " ID: " + reservationId)
         setModalOpen(true)
         setTimeout(function () {
           setModalOpen(false)
@@ -100,7 +100,6 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
             Refresh
           </Button>
           <div className="box-container btn offset-1 col-10 pt-3" style={{ boxShadow: "none" }}>
-            {/* <video id="video" width="100%" style={{ border: "1px solid gray" }}></video> */}
             <QrReader delay={500} onError={handleError} onScan={handleScan} style={{ width: "100%" }} />
           </div>
           <CheckinModal modalOpen={modalOpen} messageHeader={messageHeader} messageBody={messageBody} />

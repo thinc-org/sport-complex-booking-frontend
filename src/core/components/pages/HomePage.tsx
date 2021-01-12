@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react"
-
 import { Link } from "react-router-dom"
 import { client } from "../../../axiosConfig"
 import { useTranslation } from "react-i18next"
@@ -9,11 +8,7 @@ import withUserGuard from "../../guards/user.guard"
 import footer from "../../assets/images/footer.svg"
 import { Loading } from "../ui/loading/loading"
 import { useLanguage } from "../../utils/language"
-
-interface NameResponse {
-  nameth: string
-  nameen: string
-}
+import { NameResponse } from "../../dto/account.dto"
 
 const HomePage = () => {
   const [cookieConsent, setCookieConsent] = useState(() => localStorage.getItem("Cookie Allowance") === "true")
@@ -21,13 +16,13 @@ const HomePage = () => {
   const [disable, setDisable] = useState(true)
   const { t } = useTranslation()
   const language = useLanguage()
-  const languageName = language === "th" ? "nameth" : "nameen"
+  const languageName = language === "th" ? "name_th" : "name_en"
   const [isLoading, setIsLoading] = useState(true)
 
   const fetchUserName = useCallback(async () => {
     try {
       const res = await client.get("/account_info/")
-      setName({ nameth: res.data.name_th, nameen: res.data.name_en })
+      setName(res.data)
       if (res.data.name_en) setDisable(false)
       setIsLoading(false)
     } catch (err) {
