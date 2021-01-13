@@ -205,9 +205,8 @@
   "showQRToStaff": "Please show this QR code to the sport center staff",
   "cancelReservation": "Cancel Reservation",
   "cancelReservationQuestion": "Are you sure to cancel this reservation?",
-  "cancelReservationCondition1": "If you cancel within ",
-  "cancelReservationCondition2": " days of reservation, you and the waiting room members will be banned for ",
-  "cancelReservationCondition3": " days.",
+  "cancelReservationCondition": "If you cancel within {{lateCancellationDay}} days of reservation, you and the waiting room members will be banned for {{lateCancellationPunishment}} days.",
+
   "sure": "Sure",
   "no": "No",
   "youHaveCheckedIn": "You have checked in!",

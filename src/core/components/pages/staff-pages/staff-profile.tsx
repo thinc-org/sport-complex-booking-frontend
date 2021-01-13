@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react"
 
 import { client } from "../../../../axiosConfig"
+import { HandleErrorModal } from "../staff-pages/staff-management/StaffManagementComponents"
 
 function StaffProfile() {
   const [name, setName] = useState<string>()
@@ -8,6 +9,7 @@ function StaffProfile() {
   const [accountType, setAccountType] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [errMessage, setErrMessage] = useState<string>()
+  const [showError, setShowError] = useState(false)
 
   const fetchData = useCallback(() => {
     client
@@ -26,6 +28,7 @@ function StaffProfile() {
       .catch((err) => {
         console.log(err)
         setErrMessage("Request Failed. Please make sure you have logged in and try refresh the page.")
+        setShowError(true)
       })
   }, [])
 
@@ -37,6 +40,7 @@ function StaffProfile() {
     return (
       <div className="container pl-0" style={{ margin: "50px 10px", color: "red" }}>
         <h5>{errMessage}</h5>
+        <HandleErrorModal show={showError} setShow={setShowError} />
       </div>
     )
   }
@@ -57,7 +61,7 @@ function StaffProfile() {
           <div>
             <div style={{ fontWeight: 300, fontSize: "16px", lineHeight: "24px", marginBottom: "10px" }}> ประเภทบัญชี </div>
             <div style={{ fontWeight: 700, fontSize: "24px", lineHeight: "24px" }}> {accountType} </div>
-          </div>
+          </div>{" "}
         </div>
       </div>
 
