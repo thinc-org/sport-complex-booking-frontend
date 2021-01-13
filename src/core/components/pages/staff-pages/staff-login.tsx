@@ -1,5 +1,6 @@
 import React from "react"
-import { Form, Button } from "react-bootstrap"
+import { Form, Button, Navbar, NavbarBrand } from "react-bootstrap"
+import logo from "../../../assets/images/logo.png"
 import { useForm } from "react-hook-form"
 import { useStaffLogin } from "./staffHooks"
 
@@ -11,6 +12,11 @@ function StaffLogin() {
   }
   return (
     <React.Fragment>
+      <Navbar style={{ backgroundColor: "#F1E2E3" }}>
+        <NavbarBrand className="mr-auto">
+          <img className="logo" src={logo} alt="" />
+        </NavbarBrand>
+      </Navbar>
       <div className="container staff-login" style={{ height: "90vh" }}>
         <div className="row justify-content-center h-100">
           <div className="my-auto col-10">
