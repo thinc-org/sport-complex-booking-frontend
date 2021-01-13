@@ -152,6 +152,8 @@ export default function StaffManagement() {
   const renderStaffsTable = () => {
     let index = (pageNo - 1) * 10 + 1
     const staffsList = staffs.map((staff) => {
+      if (type === "staff" && staff.is_admin === true) return null
+      if (type === "admin" && staff.is_admin === false) return null
       return (
         <tr key={index} className="tr-normal">
           <td className="font-weight-bold"> {index++} </td>
@@ -165,7 +167,7 @@ export default function StaffManagement() {
                   <Form.Control
                     as="select"
                     custom
-                    defaultValue={staff.is_admin ? "แอดมิน" : "สตาฟ"}
+                    value={staff.is_admin ? "แอดมิน" : "สตาฟ"}
                     disabled={staff.name === "first admin"}
                     onChange={(e) => {
                       onSubmitEditStaff(e.target.value, staff)
