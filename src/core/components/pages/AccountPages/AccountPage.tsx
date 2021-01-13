@@ -7,7 +7,7 @@ import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from "react-i18next"
 import { Loading } from "../../ui/loading/loading"
 import { client } from "../../../../axiosConfig"
-import { Account } from "../../../dto/account.dto"
+import { Account, PenalizeMessageProps } from "../../../dto/account.dto"
 
 function AccountPage() {
   const { setCuStudentAccount, setSatitCuPersonelAccount, setOtherAccount } = useContext(UserContext)
@@ -71,6 +71,24 @@ function AccountPage() {
     }
   }
 
+  const PenalizeMessage: React.FC<PenalizeMessageProps> = ({ show, penalizeEndDate }) => {
+    const { t } = useTranslation()
+    if (!show) return null
+    return (
+      <div className="mx-4">
+        <div className="alert alert-danger mx-auto col-md-6 mt-3" role="alert">
+          <h3>{t("youArePenalized")}</h3>
+          <h6>{t("penalizeMessage")}</h6>
+          {penalizeEndDate && (
+            <h6 className="mt-3">
+              {t("endOfPenalty")}: {penalizeEndDate}
+            </h6>
+          )}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <>
       <PenalizeMessage show={penalizeStatus} penalizeEndDate={penalizeEndDate} />
@@ -80,26 +98,3 @@ function AccountPage() {
 }
 
 export default withUserGuard(AccountPage)
-
-interface PenalizeMessageProps {
-  show?: boolean
-  penalizeEndDate: string
-}
-
-const PenalizeMessage: React.FC<PenalizeMessageProps> = ({ show, penalizeEndDate }) => {
-  const { t } = useTranslation()
-  if (!show) return null
-  return (
-    <div className="mx-4">
-      <div className="alert alert-danger mx-auto col-md-6 mt-3" role="alert">
-        <h3>{t("youArePenalized")}</h3>
-        <h6>{t("penalizeMessage")}</h6>
-        {penalizeEndDate && (
-          <h6 className="mt-3">
-            {t("endOfPenalty")}: {penalizeEndDate}
-          </h6>
-        )}
-      </div>
-    </div>
-  )
-}

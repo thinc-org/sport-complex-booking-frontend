@@ -23,11 +23,6 @@ export interface WaitingRoomData {
 export const DetailsModal: React.FC<DetailsModalProps> = ({ show, setShow, sportName, details, date, times, formatTime, postDataToBackend }) => {
   const { t } = useTranslation()
 
-  // const handlePostData = () => {
-  //   postDataToBackend(details!)
-  //   setShow(false)
-  // }
-
   if (!show) return null
   return (
     <Modal className="modal" show={show} onHide={() => setShow(false)}>

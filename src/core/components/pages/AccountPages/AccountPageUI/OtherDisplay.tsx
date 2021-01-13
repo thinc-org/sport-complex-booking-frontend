@@ -19,10 +19,6 @@ export default function OtherAaccountDisplay() {
     { fileName: "relationship_verification_document", token: "" },
   ])
 
-  useEffect(() => {
-    assignFileTokens()
-  })
-
   const openFile = (token: string) => {
     const url = process.env.REACT_APP_API_URL + "/fs/view?token=" + token
     const win = window.open(url, "_blank")
@@ -30,7 +26,8 @@ export default function OtherAaccountDisplay() {
   }
 
   const getFileToken = async (fileName: FileName) => {
-    const fileID = user![fileName]
+    if (!user) return null
+    const fileID = user[fileName]
     if (fileID) {
       await client
         .get<Token>("/fs/viewFileToken/" + fileID)
@@ -54,9 +51,14 @@ export default function OtherAaccountDisplay() {
       getFileToken(file.fileName as FileName)
     })
   }
+
+  useEffect(() => {
+    assignFileTokens()
+  })
+
   return (
     <div className="mx-auto col-md-6">
-      <WarningMessage show={user!.verification_status !== ""} verification_status={user!.verification_status} account={user!.account_type} />
+      {user && <WarningMessage show={user.verification_status !== ""} verification_status={user.verification_status} account={user.account_type} />}
       <div className="default-mobile-wrapper animated-card">
         <div className="">
           {/* START OF THE FORM */}

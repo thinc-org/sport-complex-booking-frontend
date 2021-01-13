@@ -179,8 +179,9 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
 
   const requestAccept = () => {
     const date = accountExpiredDate
+    if (!date) return null
     // utc+0: 17.00, utc+7: 0.00
-    const utc7Time = new Date(Date.UTC(date!.getFullYear(), date!.getMonth(), date!.getDate() - 1, 17, 0, 0, 0))
+    const utc7Time = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate() - 1, 17, 0, 0, 0))
     client({
       method: "PATCH",
       url: "/approval/approve",

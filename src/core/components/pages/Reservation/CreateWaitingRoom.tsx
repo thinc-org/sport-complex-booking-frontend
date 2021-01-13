@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { Button, Row } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import DatePicker from "react-datepicker"
@@ -48,19 +48,6 @@ function CreateWaitingRoom() {
   const [invalidAccount, setInvalidAccount] = useState(false)
   const [errorType, setErrorType] = useState("danger")
 
-  useEffect(() => {
-    fetchValidity()
-    fetchCourts()
-  }, [])
-  const onSubmit = (data: WaitingRoomData) => {
-    if (data.time_slot.length === 0) {
-      setShow(false)
-      setSelectTimeWarning(true)
-    } else {
-      setSelectTimeWarning(false)
-      setDetails(data)
-    }
-  }
   // Date difference > 7
   const validDate = (date1: Date, date2: Date) => {
     const diffTime = date2.getTime() - date1.getTime()
@@ -72,7 +59,7 @@ function CreateWaitingRoom() {
     }
   }
   // [0] check account validity
-  const fetchValidity = async () => {
+  const fetchValidity = useCallback(async () => {
     await client
       .post("/reservation/checkvalidity")
       .then(() => {
@@ -87,9 +74,9 @@ function CreateWaitingRoom() {
           setShowValidityWarningMessage(true)
         }
       })
-  }
+  }, [])
   // [1] Fetch Courts
-  const fetchCourts = async () => {
+  const fetchCourts = useCallback(async () => {
     await client
       .get<Sport[]>("/court-manager/sports")
       .then(({ data }) => {
@@ -101,7 +88,7 @@ function CreateWaitingRoom() {
           setShowCreateWarningMessage(true)
         }
       })
-  }
+  }, [])
   // [2] Fetch Quota
   const fetchQuota = async (selectedSportID: string, date: Date) => {
     const year = date.getFullYear()
@@ -135,10 +122,12 @@ function CreateWaitingRoom() {
       sport_id: selectedSportID,
       date: year + "-" + month + "-" + day,
     }
+    console.log(data)
     await client
       .post<number[]>("/reservation/checktimeslot", data)
       .then(({ data }) => {
         setTime(data)
+        console.log(data)
       })
       .catch((error) => {
         if (error.response) {
@@ -210,8 +199,8 @@ function CreateWaitingRoom() {
       disableCheck = true
     else disableCheck = false
     if (getValues("time_slot")) {
-      if (getValues("time_slot")!.indexOf(item + "") === 0) disableCheck = false
-      if (getValues("time_slot")!.indexOf(item + "") === getValues("time_slot")!.length - 1) disableCheck = false
+      if (getValues("time_slot").indexOf(item + "") === 0) disableCheck = false
+      if (getValues("time_slot").indexOf(item + "") === getValues("time_slot").length - 1) disableCheck = false
       if (getValues("time_slot").length === 0) disableCheck = false
     } else disableCheck = true
     return disableCheck
@@ -224,6 +213,21 @@ function CreateWaitingRoom() {
       else setShowTimeSlotError(false)
     }
   }
+
+  const onSubmit = (data: WaitingRoomData) => {
+    if (data.time_slot.length === 0) {
+      setShow(false)
+      setSelectTimeWarning(true)
+    } else {
+      setSelectTimeWarning(false)
+      setDetails(data)
+    }
+  }
+
+  useEffect(() => {
+    fetchValidity()
+    fetchCourts()
+  }, [fetchValidity, fetchCourts])
 
   return (
     <div className="Orange">
@@ -261,14 +265,14 @@ function CreateWaitingRoom() {
                   name="sport_id"
                   ref={register}
                   className="select-drop-down"
-                  disabled={invalidAccount}
+                  disabled={invalidAccount || showDateWarning}
                   onChange={() => {
                     setShowCourt(false)
                     setShowTime(false)
                     setValue("court_number", "")
                     setValue("time_slot", [])
                     fetchQuota(getValues("sport_id"), date)
-                    sport!.forEach((sport) => {
+                    sport.forEach((sport) => {
                       if (sport["_id"] === getValues("sport_id")) {
                         setCourts(sport["list_court"])
                         setShowCourt(true)
@@ -281,7 +285,7 @@ function CreateWaitingRoom() {
                   <option className="dropdown-item" value="">
                     {t("sportSelection")}
                   </option>
-                  {sport!.map((item, i) => (
+                  {sport.map((item, i) => (
                     <option key={i} value={item["_id"]}>
                       {item[sportLanguage]}
                     </option>

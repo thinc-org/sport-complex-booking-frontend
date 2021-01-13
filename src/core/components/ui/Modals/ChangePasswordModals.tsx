@@ -48,7 +48,7 @@ export const CustomPasswordModal: React.FC<CustomPasswordModalProps> = ({ type, 
             {t("cancel")}
           </Button>
         )}
-        <Button variant="pink" className="btn-normal" onClick={() => mainFunction(data!)}>
+        <Button variant="pink" className="btn-normal" onClick={() => (data ? mainFunction(data) : console.log("date unavailable"))}>
           {t("ok")}
         </Button>
       </Modal.Footer>

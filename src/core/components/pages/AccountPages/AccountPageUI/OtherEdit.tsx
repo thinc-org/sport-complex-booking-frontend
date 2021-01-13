@@ -29,29 +29,6 @@ export default function OtherAccountEdit() {
   const [formData, setFormData] = useState<OtherInfo>()
   const { register, handleSubmit, errors } = useForm({ resolver: yupResolver(otherInfoSchema) })
 
-  const postDataToBackend = async (data: Other) => {
-    await client
-      .put<Other>("/account_info/", data)
-      .then(({ data }) => {
-        if (data.verification_status === "Submitted") {
-          handleAllFilesUpload(user_photo, national_id_scan, medical_certificate, house_registration_number, relationship_verification_document)
-        }
-        window.location.reload()
-      })
-      .catch(function (error) {
-        if (error.response) {
-          setShow(false)
-          setShowErr(true)
-        }
-      })
-  }
-
-  const onSubmit = (data: OtherInfo) => {
-    setShow(true)
-    setShow(true)
-    setFormData(data)
-  }
-
   // Handlers
   const handleFileUpload = async (formData: FormData) => {
     await client.post("/fs/upload", formData).catch(() => {
@@ -59,19 +36,6 @@ export default function OtherAccountEdit() {
     })
   }
 
-  const handleAllFilesUpload = async (
-    userPhotoInput: File | undefined,
-    nationalIdInput: File | undefined,
-    medicalCertificateInput: File | undefined,
-    houseRegistrationNumberInput: File | undefined,
-    relationshipVerificationDocumentInput: File | undefined
-  ) => {
-    if (userPhotoInput) uploadUserPhoto(userPhotoInput)
-    if (nationalIdInput) uploadNationalId(nationalIdInput)
-    if (medicalCertificateInput) uploadMedicalCertificate(medicalCertificateInput)
-    if (houseRegistrationNumberInput) uploadHouseRegistrationNumber(houseRegistrationNumberInput)
-    if (relationshipVerificationDocumentInput) uploadRelationshipVerificationDocument(relationshipVerificationDocumentInput)
-  }
   const uploadUserPhoto = (file: File) => {
     const formData = new FormData()
     formData.append("user_photo", file ? file : file, file?.name)
@@ -115,6 +79,20 @@ export default function OtherAccountEdit() {
     set_relationship_verification_document(file[0])
   }
 
+  const handleAllFilesUpload = async (
+    userPhotoInput: File | undefined,
+    nationalIdInput: File | undefined,
+    medicalCertificateInput: File | undefined,
+    houseRegistrationNumberInput: File | undefined,
+    relationshipVerificationDocumentInput: File | undefined
+  ) => {
+    if (userPhotoInput) uploadUserPhoto(userPhotoInput)
+    if (nationalIdInput) uploadNationalId(nationalIdInput)
+    if (medicalCertificateInput) uploadMedicalCertificate(medicalCertificateInput)
+    if (houseRegistrationNumberInput) uploadHouseRegistrationNumber(houseRegistrationNumberInput)
+    if (relationshipVerificationDocumentInput) uploadRelationshipVerificationDocument(relationshipVerificationDocumentInput)
+  }
+
   const changeLanguage = (is_thai_language: boolean) => {
     if (is_thai_language) {
       setCookie("is_thai_language", true, 999)
@@ -127,10 +105,33 @@ export default function OtherAccountEdit() {
     }
   }
 
+  const postDataToBackend = async (data: Other) => {
+    await client
+      .put<Other>("/account_info/", data)
+      .then(({ data }) => {
+        if (data.verification_status === "Submitted") {
+          handleAllFilesUpload(user_photo, national_id_scan, medical_certificate, house_registration_number, relationship_verification_document)
+        }
+        window.location.reload()
+      })
+      .catch(function (error) {
+        if (error.response) {
+          setShow(false)
+          setShowErr(true)
+        }
+      })
+  }
+
+  const onSubmit = (data: OtherInfo) => {
+    setShow(true)
+    setShow(true)
+    setFormData(data)
+  }
+
   return (
     /// THIS IS THE START OF THE EDITING VIEW
     <div className="mx-auto col-md-6">
-      <WarningMessage show={user!.verification_status !== ""} verification_status={user!.verification_status} account={user!.account_type} />
+      {user && <WarningMessage show={user.verification_status !== ""} verification_status={user.verification_status} account={user.account_type} />}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="default-mobile-wrapper my-3">
           <h4 className="align-right mb-2">{t("language")}</h4>
@@ -171,9 +172,9 @@ export default function OtherAccountEdit() {
                   defaultValue={user?.prefix}
                   disabled={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("prefix")}
                 >
-                  <option value={t("mr")!}>{t("mr")}</option>
-                  <option value={t("ms")!}>{t("ms")}</option>
-                  <option value={t("mrs")!}>{t("mrs")}</option>
+                  <option value={t("mr").toString()}>{t("mr")}</option>
+                  <option value={t("ms").toString()}>{t("ms")}</option>
+                  <option value={t("mrs").toString()}>{t("mrs")}</option>
                 </select>
                 {user?.rejected_info?.includes("prefix") ? <p className="input-error">{t("resubmitField")}</p> : null}
               </div>
@@ -186,9 +187,9 @@ export default function OtherAccountEdit() {
                   defaultValue={user?.gender}
                   disabled={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("gender")}
                 >
-                  <option value={t("male")!}>{t("male")}</option>
-                  <option value={t("female")!}>{t("female")}</option>
-                  <option value={t("other")!}>{t("other")}</option>
+                  <option value={t("male").toString()}>{t("male")}</option>
+                  <option value={t("female").toString()}>{t("female")}</option>
+                  <option value={t("other").toString()}>{t("other")}</option>
                 </select>
                 {user?.rejected_info?.includes("gender") ? <p className="input-error">{t("resubmitField")}</p> : null}
               </div>
@@ -372,9 +373,9 @@ export default function OtherAccountEdit() {
               defaultValue={user?.contact_person_prefix}
               disabled={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("contact_person_prefix")}
             >
-              <option value={t("mr")!}>{t("mr")}</option>
-              <option value={t("ms")!}>{t("ms")}</option>
-              <option value={t("mrs")!}>{t("mrs")}</option>
+              <option value={t("mr").toString()}>{t("mr")}</option>
+              <option value={t("ms").toString()}>{t("ms")}</option>
+              <option value={t("mrs").toString()}>{t("mrs")}</option>
             </select>
             {user?.rejected_info?.includes("contact_person_prefix") ? <p className="input-error">{t("resubmitField")}</p> : null}
           </div>
@@ -446,7 +447,7 @@ export default function OtherAccountEdit() {
               className="form-file-input form-control"
               id="user_photo"
               readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("user_photo")}
-              onChange={(e) => assignUserPhoto(e.target.files!)}
+              onChange={(e) => e.target.files && assignUserPhoto(e.target.files)}
             />
           </div>
           {user?.rejected_info?.includes("user_photo") ? <p className="input-error">{t("resubmitField")}</p> : null}
@@ -459,7 +460,7 @@ export default function OtherAccountEdit() {
               className="form-file-input  form-control"
               id="nationID/passport"
               readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("national_id_photo")}
-              onChange={(e) => assignNationalIdPhoto(e.target.files!)}
+              onChange={(e) => e.target.files && assignNationalIdPhoto(e.target.files)}
             />
           </div>
           {user?.rejected_info?.includes("national_id_photo") ? <p className="input-error">{t("resubmitField")}</p> : null}
@@ -472,7 +473,7 @@ export default function OtherAccountEdit() {
               className="form-file-input  form-control"
               id="medical_certificate"
               readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("medical_certificate")}
-              onChange={(e) => assignMedicalCertificate(e.target.files!)}
+              onChange={(e) => e.target.files && assignMedicalCertificate(e.target.files)}
             />
           </div>
           {user?.rejected_info?.includes("medical_certificate") ? <p className="input-error">{t("resubmitField")}</p> : null}
@@ -485,7 +486,7 @@ export default function OtherAccountEdit() {
               className="form-file-input  form-control"
               id="house_registration_number"
               readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("house_registration_number")}
-              onChange={(e) => assignHouseRegistrationNumber(e.target.files!)}
+              onChange={(e) => e.target.files && assignHouseRegistrationNumber(e.target.files)}
             />
           </div>
           {user?.rejected_info?.includes("house_registration_number") ? <p className="input-error">{t("resubmitField")}</p> : null}
@@ -498,7 +499,7 @@ export default function OtherAccountEdit() {
               className="form-file-input  form-control"
               id="relationship_verification_document"
               readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("relationship_verification_document")}
-              onChange={(e) => assignRelationshipVerificationDocument(e.target.files!)}
+              onChange={(e) => e.target.files && assignRelationshipVerificationDocument(e.target.files)}
             />
           </div>
           {user?.rejected_info?.includes("relationship_verification_document") ? <p className="input-error">{t("resubmitField")}</p> : null}

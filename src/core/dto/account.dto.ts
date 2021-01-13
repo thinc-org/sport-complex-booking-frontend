@@ -18,3 +18,8 @@ export interface NameResponse {
   name_th: string
   name_en: string
 }
+
+export interface PenalizeMessageProps {
+  show?: boolean
+  penalizeEndDate: string
+}

@@ -9,6 +9,8 @@ import { ViewRowProps, AddCourtForm } from "../../../../dto/disableCourt.dto"
 import { CourtTable, ViewRow } from "./disabled-court-table"
 import { client } from "../../../../../axiosConfig"
 import { DeleteButton } from "./button"
+import { Court } from "../../../../dto/sport.dto"
+
 const AddCourt = () => {
   const history = useHistory()
   const { inProp, rowData, onAddRow, onDeleteRow, setInProp, validateTimeSlot } = useRow()
@@ -71,7 +73,7 @@ const AddCourt = () => {
                 {option && watchSports ? (
                   option
                     .find((sport) => sport._id === watchSports)
-                    ?.list_court.map((court) => {
+                    ?.list_court.map((court: Court) => {
                       return (
                         <option value={court.court_num} key={court._id}>
                           {court.court_num}

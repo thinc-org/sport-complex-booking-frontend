@@ -6,7 +6,7 @@ import { CheckinModal } from "../../ui/Modals/CheckinModal"
 import QrReader from "react-qr-reader"
 import { ReservationDetailResponse } from "../../../dto/reservation.dto"
 
-const QRScannerPage: FunctionComponent<RouteComponentProps> = (props) => {
+const QRScannerPage: FunctionComponent<RouteComponentProps> = () => {
   const [readingResult, setReadingResult] = useState<string>()
   const [messageHeader, setMessageHeader] = useState<string>("")
   const [messageBody, setMessageBody] = useState<string>("")

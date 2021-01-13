@@ -27,7 +27,7 @@ export const useStaffLogin = (setError: (name: string, error: ErrorOption) => vo
         setToken(res.data.jwt)
         history.push("/staff/profile")
       })
-      .catch((err) => {
+      .catch(() => {
         setError("invalidInput", { type: "async", message: "Username หรือ Password ไม่ถูกต้อง" })
       })
   }
