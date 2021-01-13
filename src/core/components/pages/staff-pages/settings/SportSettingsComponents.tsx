@@ -31,7 +31,7 @@ export const DeleteSport: React.FC<DeleteSportProps> = ({ show, setShow, mainFun
           variant="pink"
           className="btn-normal"
           onClick={() => {
-            mainFunction(data!)
+            mainFunction(data)
           }}
         >
           ตกลง
@@ -255,7 +255,7 @@ export const EditSport: React.FC<EditSportProps> = ({ show, setShow, setCurrentS
       animation={false}
     >
       <Modal.Header closeButton>
-        <Modal.Title>ประเภทกีฬา: {currentSport!["sport_name_th"]}</Modal.Title>
+        <Modal.Title>ประเภทกีฬา: {currentSport["sport_name_th"]}</Modal.Title>
       </Modal.Header>
       <div className="card">
         <h5 className="card-header">เวลาการจองมากที่สุด</h5>
@@ -266,7 +266,7 @@ export const EditSport: React.FC<EditSportProps> = ({ show, setShow, setCurrentS
               className="button"
               disabled={currentSport["quota"] <= 2}
               onClick={() => {
-                setCurrentSport({ ...currentSport!, quota: currentSport!["quota"] - 2 })
+                setCurrentSport({ ...currentSport, quota: currentSport["quota"] - 2 })
               }}
             >
               -60
@@ -276,17 +276,17 @@ export const EditSport: React.FC<EditSportProps> = ({ show, setShow, setCurrentS
               className="button"
               disabled={currentSport["quota"] <= 1}
               onClick={() => {
-                setCurrentSport({ ...currentSport!, quota: currentSport!["quota"] - 1 })
+                setCurrentSport({ ...currentSport, quota: currentSport["quota"] - 1 })
               }}
             >
               -30
             </Button>
-            <span className="mt-3">{currentSport!["quota"] * 30} นาที</span>
+            <span className="mt-3">{currentSport["quota"] * 30} นาที</span>
             <Button
               variant="pink"
               className="button"
               onClick={() => {
-                setCurrentSport({ ...currentSport!, quota: currentSport!["quota"] + 1 })
+                setCurrentSport({ ...currentSport, quota: currentSport["quota"] + 1 })
               }}
             >
               +30
@@ -295,7 +295,7 @@ export const EditSport: React.FC<EditSportProps> = ({ show, setShow, setCurrentS
               variant="pink"
               className="button"
               onClick={() => {
-                setCurrentSport({ ...currentSport!, quota: currentSport!["quota"] + 2 })
+                setCurrentSport({ ...currentSport, quota: currentSport["quota"] + 2 })
               }}
             >
               +60
@@ -313,7 +313,7 @@ export const EditSport: React.FC<EditSportProps> = ({ show, setShow, setCurrentS
               className="button"
               disabled={currentSport["required_user"] <= 2}
               onClick={() => {
-                setCurrentSport({ ...currentSport!, required_user: currentSport!["required_user"] - 2 })
+                setCurrentSport({ ...currentSport, required_user: currentSport["required_user"] - 2 })
               }}
             >
               -2
@@ -323,17 +323,17 @@ export const EditSport: React.FC<EditSportProps> = ({ show, setShow, setCurrentS
               className="button"
               disabled={currentSport["required_user"] <= 1}
               onClick={() => {
-                setCurrentSport({ ...currentSport!, required_user: currentSport!["required_user"] - 1 })
+                setCurrentSport({ ...currentSport, required_user: currentSport["required_user"] - 1 })
               }}
             >
               -1{" "}
             </Button>
-            <span className="mt-3">{currentSport!["required_user"]} คน</span>
+            <span className="mt-3">{currentSport["required_user"]} คน</span>
             <Button
               variant="pink"
               className="button"
               onClick={() => {
-                setCurrentSport({ ...currentSport!, required_user: currentSport!["required_user"] + 1 })
+                setCurrentSport({ ...currentSport, required_user: currentSport["required_user"] + 1 })
               }}
             >
               +1
@@ -342,7 +342,7 @@ export const EditSport: React.FC<EditSportProps> = ({ show, setShow, setCurrentS
               variant="pink"
               className="button"
               onClick={() => {
-                setCurrentSport({ ...currentSport!, required_user: currentSport!["required_user"] + 2 })
+                setCurrentSport({ ...currentSport, required_user: currentSport["required_user"] + 2 })
               }}
             >
               +2

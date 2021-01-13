@@ -27,6 +27,31 @@ export default function OtherEditInfoComponent({
   const [houseRegistrationNumberFile, setHouseRegistrationNumberFile] = useState<File>()
   const [relationshipVerificationDocumentFile, setRelationshipVerificationDocumentFile] = useState<File>()
 
+  const {
+    prefix,
+    gender,
+    name_th,
+    surname_th,
+    name_en,
+    surname_en,
+    national_id,
+    marital_status,
+    birthday,
+    address,
+    email,
+    home_phone,
+    phone,
+    medical_condition,
+    membership_type,
+  } = tempInfo
+  const {
+    contact_person_prefix,
+    contact_person_name,
+    contact_person_surname,
+    contact_person_home_phone,
+    contact_person_phone,
+  } = tempInfo.contact_person
+
   // handles //
   const handleUpload = (typename: string, file: File) => {
     const formData = new FormData()
@@ -83,31 +108,6 @@ export default function OtherEditInfoComponent({
   }
 
   /// JSX Begins here
-  const {
-    prefix,
-    gender,
-    name_th,
-    surname_th,
-    name_en,
-    surname_en,
-    national_id,
-    marital_status,
-    birthday,
-    address,
-    email,
-    home_phone,
-    phone,
-    medical_condition,
-    membership_type,
-  } = tempInfo
-  const {
-    contact_person_prefix,
-    contact_person_name,
-    contact_person_surname,
-    contact_person_home_phone,
-    contact_person_phone,
-  } = tempInfo.contact_person
-
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <div className="row mr-4 mt-5">
@@ -372,7 +372,7 @@ export default function OtherEditInfoComponent({
             <label className="form-label my-2">รูปภาพของคุณ (ไฟล์ภาพ)</label>
             <div className="form-file">
               <Form.File
-                label={userPhotoFile ? (userPhotoFile! as File).name : "Choose File"}
+                label={userPhotoFile ? (userPhotoFile as File).name : "Choose File"}
                 id="user_photo"
                 custom
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -387,7 +387,7 @@ export default function OtherEditInfoComponent({
             <label className="form-label my-2">เลขประจำตัวประชาชน / หนังสือเดินทาง (.pdf เท่านั้น)</label>
             <div className="form-file">
               <Form.File
-                label={nationalIdPhotoFile ? (nationalIdPhotoFile! as File).name : "Choose File"}
+                label={nationalIdPhotoFile ? (nationalIdPhotoFile as File).name : "Choose File"}
                 id="national_id_photo"
                 custom
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -402,7 +402,7 @@ export default function OtherEditInfoComponent({
             <label className="form-label my-2">ใบรับรองแพทย์ (.pdf เท่านั้น)</label>
             <div className="form-file">
               <Form.File
-                label={medicalCertificateFile ? (medicalCertificateFile! as File).name : "Choose File"}
+                label={medicalCertificateFile ? (medicalCertificateFile as File).name : "Choose File"}
                 id="medical_certificate"
                 custom
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -417,7 +417,7 @@ export default function OtherEditInfoComponent({
             <label className="form-label my-2">ไม่บังคับ: ทะเบียนบ้านที่มีหน้าของคุณ (.pdf เท่านั้น)</label>
             <div className="form-file">
               <Form.File
-                label={houseRegistrationNumberFile ? (houseRegistrationNumberFile! as File).name : "Choose File"}
+                label={houseRegistrationNumberFile ? (houseRegistrationNumberFile as File).name : "Choose File"}
                 id="house_registration_number"
                 custom
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -432,7 +432,7 @@ export default function OtherEditInfoComponent({
             <label className="form-label my-2">ไม่บังคับ: เอกสารยืนยันตัวตน (.pdf เท่านั้น)</label>
             <div className="form-file">
               <Form.File
-                label={relationshipVerificationDocumentFile ? (relationshipVerificationDocumentFile! as File).name : "Choose File"}
+                label={relationshipVerificationDocumentFile ? (relationshipVerificationDocumentFile as File).name : "Choose File"}
                 id="relationship_verification_document"
                 custom
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

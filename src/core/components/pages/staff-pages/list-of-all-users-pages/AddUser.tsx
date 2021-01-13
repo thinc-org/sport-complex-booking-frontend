@@ -47,6 +47,70 @@ const AddUser: FunctionComponent = () => {
     return false
   }
 
+  // handles //
+  const handleChangeType = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUser({ ...user, membership_type: e.target.value })
+    if (e.target.value === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" || user.membership_type === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา")
+      setSelectingSatit(!selectingSatit)
+  }
+
+  const handleAdd = (data: AddUserComponentInfo) => {
+    const { confirmPassword, ...rest } = data
+    const { username, name_th, surname_th, name_en, surname_en, personal_email, phone, password } = rest
+    const newUser = data.is_thai_language ? { ...rest, membership_type: user.membership_type } : { ...user, username: data.username }
+    setUser(newUser)
+    if (!validCheck(username)) setShowAlerts({ showAlertPassword: false, showAlertUncom: false, showAlertUsername: true })
+    else if (password !== confirmPassword) setShowAlerts({ showAlertUncom: false, showAlertUsername: false, showAlertPassword: true })
+    else if (user.membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && user.membership_type && username !== "" && password !== "")
+      setShowModals({ ...showModals, showAdd: true })
+    else if (
+      user.membership_type &&
+      username !== "" &&
+      password !== "" &&
+      name_th !== "" &&
+      surname_th !== "" &&
+      name_en !== "" &&
+      surname_en !== "" &&
+      personal_email !== "" &&
+      phone !== ""
+    )
+      setShowModals({ ...showModals, showAdd: true })
+    else setShowAlerts({ showAlertPassword: false, showAlertUsername: false, showAlertUncom: true })
+  }
+
+  // requests //
+  const requestAdd = () => {
+    let url = "/list-all-user/"
+    let data = {}
+    const { membership_type, username, password, personal_email } = user
+    if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา") {
+      url += "OtherUser"
+      data = {
+        membership_type,
+        personal_email,
+        username,
+        password,
+      }
+    } else {
+      url += "SatitUser"
+      data = user
+    }
+    client({
+      method: "POST",
+      url,
+      data,
+    })
+      .then(() => {
+        setShowModals({ ...showModals, showAdd: false, showCom: true })
+      })
+      .catch(({ response }) => {
+        console.log(response)
+        if (response && response.data.statusCode === 400) setShowModals({ ...showModals, showAdd: false, showUsernameErr: true })
+        else if (response && response.data.statusCode === 401) history.push("/staff")
+        else setShowModals({ ...showModals, showAdd: false, showErr: true })
+      })
+  }
+
   // renders //
   const renderSelector = (option: number) => {
     return (
@@ -170,70 +234,6 @@ const AddUser: FunctionComponent = () => {
         <UsernameErrModal show={showModals} setShow={setShowModals} />
       </div>
     )
-  }
-
-  // handles //
-  const handleChangeType = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({ ...user, membership_type: e.target.value })
-    if (e.target.value === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" || user.membership_type === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา")
-      setSelectingSatit(!selectingSatit)
-  }
-
-  const handleAdd = (data: AddUserComponentInfo) => {
-    const { confirmPassword, ...rest } = data
-    const { username, name_th, surname_th, name_en, surname_en, personal_email, phone, password } = rest
-    const newUser = data.is_thai_language ? { ...rest, membership_type: user.membership_type } : { ...user, username: data.username }
-    setUser(newUser)
-    if (!validCheck(username)) setShowAlerts({ showAlertPassword: false, showAlertUncom: false, showAlertUsername: true })
-    else if (password !== confirmPassword) setShowAlerts({ showAlertUncom: false, showAlertUsername: false, showAlertPassword: true })
-    else if (user.membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && user.membership_type && username !== "" && password !== "")
-      setShowModals({ ...showModals, showAdd: true })
-    else if (
-      user.membership_type &&
-      username !== "" &&
-      password !== "" &&
-      name_th !== "" &&
-      surname_th !== "" &&
-      name_en !== "" &&
-      surname_en !== "" &&
-      personal_email !== "" &&
-      phone !== ""
-    )
-      setShowModals({ ...showModals, showAdd: true })
-    else setShowAlerts({ showAlertPassword: false, showAlertUsername: false, showAlertUncom: true })
-  }
-
-  // requests //
-  const requestAdd = () => {
-    let url = "/list-all-user/"
-    let data = {}
-    const { membership_type, username, password, personal_email } = user
-    if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา") {
-      url += "OtherUser"
-      data = {
-        membership_type,
-        personal_email,
-        username,
-        password,
-      }
-    } else {
-      url += "SatitUser"
-      data = user
-    }
-    client({
-      method: "POST",
-      url,
-      data,
-    })
-      .then(() => {
-        setShowModals({ ...showModals, showAdd: false, showCom: true })
-      })
-      .catch(({ response }) => {
-        console.log(response)
-        if (response && response.data.statusCode === 400) setShowModals({ ...showModals, showAdd: false, showUsernameErr: true })
-        else if (response && response.data.statusCode === 401) history.push("/staff")
-        else setShowModals({ ...showModals, showAdd: false, showErr: true })
-      })
   }
 
   return (

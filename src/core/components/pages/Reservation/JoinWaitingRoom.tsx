@@ -83,10 +83,10 @@ function JoinWaitingRoom() {
                 type="text"
                 disabled={invalidAccount}
                 ref={register({
-                  required: t("enterCode")!,
+                  required: t("enterCode").toString(),
                   pattern: {
                     value: /^[A-Z0-9._%+-]/i,
-                    message: t("enterCode")!,
+                    message: t("enterCode"),
                   },
                 })}
                 placeholder="xxxxxx"

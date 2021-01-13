@@ -75,11 +75,12 @@ export const EditCourt: React.FC<EditCourtProps> = ({
 }) => {
   const { register, handleSubmit, control } = useForm()
   const onSubmitEditCourt = (data: Court) => {
+    if (!currentCourt) return null
     const formattedOpenTime = formatOpenTime(openTime)
     const formattedCloseTime = formatCloseTime(closeTime)
-    const newCourt = { ...data, court_num: currentCourt!["court_num"], open_time: formattedOpenTime, close_time: formattedCloseTime }
+    const newCourt = { ...data, court_num: currentCourt["court_num"], open_time: formattedOpenTime, close_time: formattedCloseTime }
     courts.forEach((court, i) => {
-      if (court["court_num"] === currentCourt!["court_num"]) {
+      if (court["court_num"] === currentCourt["court_num"]) {
         courts[i] = newCourt
       }
     })
@@ -120,7 +121,7 @@ export const EditCourt: React.FC<EditCourtProps> = ({
         </Modal.Header>
         <Modal.Body style={{ fontWeight: "lighter" }}>
           <p className="font-weight-bold">เลขคอร์ด</p>
-          <h5>{currentCourt!["court_num"]}</h5>
+          <h5>{currentCourt["court_num"]}</h5>
           <p className="font-weight-bold">ประเภทกีฬา</p>
           <h5>{currentSportName}</h5>
           <Row>
@@ -204,7 +205,7 @@ export const DeleteCourtModal: React.FC<DeleteCourtModalProps> = ({ show, setSho
           variant="pink"
           className="btn-normal"
           onClick={() => {
-            deleteCourt(currentCourt["_id"]!, currentSportId)
+            deleteCourt(currentCourt["_id"], currentSportId)
           }}
         >
           ตกลง

@@ -10,47 +10,6 @@ import { data } from "./sidebarData"
 import { useNavHeader } from "./navbarSideEffect"
 import { useTranslation } from "react-i18next"
 
-// UNUSED COMPONENT
-
-// const NavigationBar = () => {
-//   return (
-//     <Navbar expand="lg" style={{ background: "var(--bg-color)", paddingTop: "60px" }}>
-//       <Container>
-//         <div className="w-100 d-flex">
-//           <Navbar.Toggle aria-controls="basic-navbar-nav" />
-//           <Navbar.Brand as="span" className="ml-5">
-//             <Link to="/"></Link>
-//           </Navbar.Brand>
-//         </div>
-//         <Navbar.Collapse id="basic-navbar-nav">
-//           <Nav className="mr-auto nav-link-group">
-//             <Nav.Link as="span">
-//               <Link to="/">Home</Link>
-//             </Nav.Link>
-//             <Nav.Link as="span">
-//               <Link to="/">Account</Link>
-//             </Nav.Link>
-//             <Nav.Link as="span">
-//               <Link to="/">My reservation</Link>
-//             </Nav.Link>
-//             <Nav.Link as="span">
-//               <Link to="/">Waiting Room</Link>
-//             </Nav.Link>
-//             <Nav.Link as="span">
-//               <Link to="/">Reserve Now</Link>
-//             </Nav.Link>
-//           </Nav>
-//           <Nav className="ml-auto">
-//             <Nav.Link as="span" className="nav-right">
-//               <Link to="/login">Sign in</Link>
-//             </Nav.Link>
-//           </Nav>
-//         </Navbar.Collapse>
-//       </Container>
-//     </Navbar>
-//   )
-// }
-
 const Sidebar = () => {
   const [inProp, setInProp] = useState(false)
   const { header, isOnStaffPage } = useNavHeader()

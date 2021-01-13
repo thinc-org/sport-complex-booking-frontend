@@ -115,7 +115,9 @@ const ReservationDetail: React.FC = () => {
           <hr style={{ height: "60px", width: "0px", borderWidth: "1px", borderStyle: "ridge" }} />
           <Col className="px-0 pt-3 text-center" style={{ whiteSpace: "pre-wrap" }}>
             วันที่ / เวลา {"\n"}
-            <label style={{ whiteSpace: "pre-wrap" }}>{date ? format(date!, "dd-MM-yyyy") + "\n" + getTimeText(timeSlot!) : ""}</label>
+            {date && timeSlot && (
+              <label style={{ whiteSpace: "pre-wrap" }}>{date ? format(date, "dd-MM-yyyy") + "\n" + getTimeText(timeSlot) : ""}</label>
+            )}
           </Col>
           <hr style={{ height: "60px", width: "0px", borderWidth: "1px", borderStyle: "ridge" }} />
           <Col className="px-0 pt-4 text-center" style={{ whiteSpace: "pre-wrap" }}>

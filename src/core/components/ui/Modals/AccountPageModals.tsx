@@ -56,43 +56,6 @@ export const CustomAccountModal: React.FC<CustomAccountModalProps> = ({ type, sh
   )
 }
 
-// UNUSED COMPONENT
-
-// export interface ConfirmModalProps {
-//   show?: boolean
-//   setShow(show: boolean): void
-//   postDataToBackend: (data: EdittedData | undefined) => void
-//   formData?: EdittedData
-// }
-
-// export const ConfirmModal: React.FC<ConfirmModalProps> = ({ show, setShow, postDataToBackend, formData }) => {
-//   const { t } = useTranslation()
-//   if (!show) return null
-//   return (
-//     <Modal className="modal" show={show} onHide={() => setShow(false)}>
-//       <div className="modal-content">
-//         <div className="modal-header">
-//           <h5 className="modal-title" id="confirmModalLabel">
-//             {t("confirmSubmit")}
-//           </h5>
-//           <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-//             <span aria-hidden="true">&times;</span>
-//           </button>
-//         </div>
-//         <div className="modal-body">{t("confirmSubmitMsg")}</div>
-//         <div className="modal-footer">
-//           <Button onClick={() => setShow(false)} type="button" variant="outline-secondary" className="btn-normal" data-dismiss="modal">
-//             {t("cancel")}
-//           </Button>
-//           <Button onClick={() => postDataToBackend(formData)} variant="pink" className="btn-normal">
-//             {t("saveAndSubmit")}
-//           </Button>
-//         </div>
-//       </div>
-//     </Modal>
-//   )
-// }
-
 export interface ErrorModalProps {
   showErr?: boolean
   setShowErr(show: boolean): void

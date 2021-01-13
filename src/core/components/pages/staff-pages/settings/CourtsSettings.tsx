@@ -28,7 +28,13 @@ export default function CourtsSettings() {
   ])
   const [currentSportId, setCurrentSportId] = useState("$")
   const [currentSportName, setCurrentSportName] = useState("")
-  const [currentCourt, setCurrentCourt] = useState<Court>()
+  const [currentCourt, setCurrentCourt] = useState<Court>({
+    court_num: 0,
+    open_time: 0,
+    close_time: 0,
+    _id: "",
+    __v: 0,
+  })
   const [courts, setCourts] = useState<Court[]>([
     {
       court_num: 0,
@@ -127,9 +133,9 @@ export default function CourtsSettings() {
   }
 
   const renderCourtsTable = () => {
-    const courtList = courts.map((court, i) => {
-      const openTime = Math.floor((court["open_time"]! - 1) / 2) + ":" + (Math.floor(court["open_time"]! % 2) === 0 ? "30" : "00")
-      const closeTime = Math.floor(court["close_time"]! / 2) + ":" + (Math.floor((court["close_time"]! + 1) % 2) !== 0 ? "00" : "30")
+    const courtList = courts.map((court: Court, i) => {
+      const openTime = Math.floor((court["open_time"] - 1) / 2) + ":" + (Math.floor(court["open_time"] % 2) === 0 ? "30" : "00")
+      const closeTime = Math.floor(court["close_time"] / 2) + ":" + (Math.floor((court["close_time"] + 1) % 2) !== 0 ? "00" : "30")
 
       return (
         <tr key={i} className="tr-normal">
@@ -241,7 +247,7 @@ export default function CourtsSettings() {
         show={showDeleteCourt}
         setShow={setShowDeleteCourt}
         deleteCourt={deleteCourt}
-        currentCourt={currentCourt!}
+        currentCourt={currentCourt}
         currentSportId={currentSportId}
       />
       <AddCourtFunc

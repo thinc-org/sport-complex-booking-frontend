@@ -19,7 +19,7 @@ export const AddModal: React.FC<ModalProps> = ({ show, setShow, requestAdd }) =>
       onCancel={() => {
         setShow({ ...show, showAdd: false })
       }}
-      onConfirm={requestAdd!}
+      onConfirm={requestAdd ? requestAdd : () => console.log("unavailable")}
     />
   )
 }

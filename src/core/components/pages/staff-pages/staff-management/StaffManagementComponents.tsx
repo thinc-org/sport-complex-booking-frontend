@@ -33,7 +33,7 @@ export const DeleteStaffModal: React.FC<DeleteStaffModalProps> = ({ show, setSho
           variant="pink"
           className="btn-normal"
           onClick={() => {
-            mainFunction(data!)
+            mainFunction(data)
           }}
         >
           ตกลง

@@ -135,7 +135,7 @@ const AllReservation: FunctionComponent = () => {
         </option>
         <option value={-1}>ทั้งหมด</option>
         {allSports
-          .find((sport) => sport._id === sportType)!
+          .find((sport: Sport) => sport._id === sportType)!
           .list_court.map((info) => (
             <option key={info.court_num} value={info.court_num}>
               {info.court_num}

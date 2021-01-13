@@ -1,5 +1,6 @@
 import { Account } from "../components/pages/staff-pages/interfaces/InfoInterface"
 import { CuStudent, Other, SatitCuPersonel } from "../contexts/UsersContext"
+import { Court } from "./sport.dto"
 
 export type Room = SuccessRoom | WaitingRoom
 
@@ -48,11 +49,6 @@ export interface Sport {
   list_court: [Court]
 }
 
-export interface Court {
-  court_num: number
-  open_time: number
-  close_time: number
-}
 export interface LocationResponse {
   id: string
   path: string

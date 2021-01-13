@@ -68,13 +68,13 @@ const ReservationDetail = () => {
     if (id) fetchData()
   }, [id, fetchData])
 
+  const [modalOpen, setModalOpen] = useState(false)
+
   const triggerModal = () => {
     console.log("show modal")
     setModalOpen(!modalOpen)
     return modalOpen
   }
-
-  const [modalOpen, setModalOpen] = useState(false)
 
   const confirmCancellation = () => {
     client
