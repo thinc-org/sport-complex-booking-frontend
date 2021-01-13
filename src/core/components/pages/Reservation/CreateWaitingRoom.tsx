@@ -102,6 +102,7 @@ function CreateWaitingRoom() {
     await client
       .post<number>("/reservation/checkquota", data)
       .then(({ data }) => {
+        console.log(data)
         setquota(data * 30)
       })
       .catch((error) => {
@@ -192,17 +193,11 @@ function CreateWaitingRoom() {
 
   const shouldDisable = (item: number) => {
     let disableCheck = false
-    if (
-      ((!times.includes(JSON.stringify(item)) && quota / 30 <= checkedCount) || invalidTimeSlot(item)) &&
-      !getValues("time_slot")?.includes(item.toString())
-    )
-      disableCheck = true
-    else disableCheck = false
-    if (getValues("time_slot")) {
-      if (getValues("time_slot").indexOf(item + "") === 0) disableCheck = false
-      if (getValues("time_slot").indexOf(item + "") === getValues("time_slot").length - 1) disableCheck = false
-      if (getValues("time_slot").length === 0) disableCheck = false
-    } else disableCheck = true
+    if (invalidTimeSlot(item)) disableCheck = true
+    if (quota / 30 <= checkedCount) disableCheck = true
+    if (times.includes(item + "")) disableCheck = false
+    if (quota === 0 && !times.includes(item + "")) disableCheck = true
+    if (checkedCount === 0) disableCheck = false
     return disableCheck
   }
 
@@ -344,8 +339,8 @@ function CreateWaitingRoom() {
                 </div>
                 <hr />
                 <label className="form-label mt-2 mb-3">{t("timeSlotSelection")}</label>
-                {selectTimeWarning ? <p className="input-error">{t("pleaseSelectTime")}</p> : null}
-                {showTimeSlotError ? <p className="input-error">{t("timeSlotErrorMsg")}</p> : null}
+                {selectTimeWarning ? <p className="alert-warning p-2">{t("pleaseSelectTime")}</p> : null}
+                {showTimeSlotError ? <p className="alert-warning p-2">{t("timeSlotErrorMsg")}</p> : null}
                 <div className={showTime ? "d-md-flex time-slot-container" : "d-md-flex time-slot-container-hidden"}>
                   <Row className="mx-1">
                     {time.map((item, i) => (

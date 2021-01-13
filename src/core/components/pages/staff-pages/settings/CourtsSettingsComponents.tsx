@@ -130,7 +130,7 @@ export const EditCourt: React.FC<EditCourtProps> = ({
               <TimePicker
                 className="time-picker mb-5"
                 value={openTime}
-                onChange={(value) => onChangeOpenTime(value.toString())}
+                onChange={(value) => onChangeOpenTime(value ? value.toString() : "00:00")}
                 disableClock={true}
                 name="open_time"
               />
@@ -141,7 +141,7 @@ export const EditCourt: React.FC<EditCourtProps> = ({
               <TimePicker
                 className="time-picker mb-5"
                 value={closeTime}
-                onChange={(value) => onChangeCloseTime(value.toString())}
+                onChange={(value) => onChangeCloseTime(value ? value.toString() : "00:00")}
                 disableClock={true}
                 name="close_time"
               />
@@ -165,6 +165,7 @@ export const EditCourt: React.FC<EditCourtProps> = ({
             type="submit"
             variant="pink"
             className="btn-normal"
+            disabled={invalidTime(openTime, closeTime) || openAfterClose(formatOpenTime(openTime), formatCloseTime(closeTime))}
             onClick={() => {
               setShow(false)
             }}
@@ -288,7 +289,7 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
                 <TimePicker
                   className="time-picker mb-5"
                   value={openTime}
-                  onChange={(value) => onChangeOpenTime(value.toString())}
+                  onChange={(value) => onChangeOpenTime(value ? value.toString() : "00:00")}
                   disableClock={true}
                   name="open_time"
                 />
@@ -299,7 +300,7 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
                 <TimePicker
                   className="time-picker mb-5"
                   value={closeTime}
-                  onChange={(value) => onChangeCloseTime(value.toString())}
+                  onChange={(value) => onChangeCloseTime(value ? value.toString() : "00:00")}
                   disableClock={true}
                   name="close_time"
                 />

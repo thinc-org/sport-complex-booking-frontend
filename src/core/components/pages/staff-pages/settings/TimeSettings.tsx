@@ -14,7 +14,6 @@ export default function TimeSettings() {
     await client
       .get<TimeSettingsData>("/court-manager/setting")
       .then(({ data }) => {
-        console.log(data)
         setWaitingRoomDuration(data["waiting_room_duration"])
         setLateCancellationPunishment(data["late_cancelation_punishment"])
         setAbsencePunishment(data["absence_punishment"])
@@ -35,7 +34,6 @@ export default function TimeSettings() {
     await client
       .put<TimeSettingsData>("/court-manager/setting", data)
       .then((data) => {
-        console.log(data)
         setShowEditTime(true)
         fetchSettings()
       })
