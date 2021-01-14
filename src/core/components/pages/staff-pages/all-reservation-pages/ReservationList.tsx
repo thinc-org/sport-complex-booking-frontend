@@ -52,7 +52,6 @@ const AllReservation: FunctionComponent = () => {
       data,
     })
       .then(({ data }: AxiosResponse<ReserveListRes>) => {
-        // console.log(data)
         setReserveInfo(data[1])
         setMaxUser(data[0])
       })
