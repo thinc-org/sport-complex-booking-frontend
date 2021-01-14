@@ -447,7 +447,7 @@ export default function OtherEditInfoComponent({
         </div>
       </div>
       <div className="mt-5">
-        <Button variant="pink" type="submit" className="float-right btn-normal" onSubmit={handleSubmit(onSubmit)}>
+        <Button variant="pink" type="submit" className="float-right btn-normal">
           บันทึก
         </Button>
       </div>
