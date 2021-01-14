@@ -428,7 +428,7 @@ const UserInfo: FunctionComponent = () => {
               <Button className="mr-4 btn-normal btn-outline-pink" variant="outline-secondary" onClick={handleCancelChange}>
                 ยกเลิก
               </Button>
-              <Button variant="pink" className="btn-normal" type="submit" onSubmit={handleSubmit(handleConfirmChange)}>
+              <Button variant="pink" className="btn-normal" type="submit">
                 บันทึก
               </Button>
             </Col>
