@@ -47,13 +47,8 @@ const ListOfAllUsers: FunctionComponent = () => {
       params: param_data,
     })
       .then(({ data }: AxiosResponse<UserListRes>) => {
-        const userList = data[1].map((user) => {
-          if (user.account_type === "CuStudent") return { ...user, account_type: Account.CuStudent, _id: "" }
-          else if (user.account_type === "SatitAndCuPersonel") return { ...user, account_type: Account.SatitAndCuPersonel, _id: "" }
-          return { ...user, account_type: Account.Other, _id: "" }
-        })
         setMaxUser(data[0])
-        setUsers(userList)
+        setUsers(data[1])
       })
       .catch(({ response }) => {
         console.log(response)
