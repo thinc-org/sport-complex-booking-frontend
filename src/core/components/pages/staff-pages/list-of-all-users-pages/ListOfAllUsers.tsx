@@ -4,7 +4,8 @@ import { Link, useHistory } from "react-router-dom"
 import { client } from "../../../../../axiosConfig"
 import { AxiosResponse } from "axios"
 // import { AccountInfo } from "../../../../contexts/UsersContext"
-import { Account, UserInfoRes } from "../../../../dto/listOfAllUsers.dto"
+import { UserInfoRes } from "../../../../dto/listOfAllUsers.dto"
+import { Account } from "../../../../dto/account.dto"
 import PaginationComponent from "./PaginationComponent"
 
 // interface CUTemplate {

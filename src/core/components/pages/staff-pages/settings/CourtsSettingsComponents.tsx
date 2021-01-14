@@ -2,7 +2,7 @@ import React from "react"
 import { Form, Row, Col, Button, Modal } from "react-bootstrap"
 import TimePicker from "react-time-picker"
 import { Control, useForm, useWatch } from "react-hook-form"
-import { NoCourtsModalProps, EditCourtProps, DeleteCourtModalProps, AddCourtFuncProps } from "../../../../dto/settings.dto"
+import { NormalModalProps, EditCourtProps, DeleteCourtModalProps, AddCourtFuncProps } from "../../../../dto/settings.dto"
 import { Court } from "../../../../dto/sport.dto"
 
 const OpenTimeCalculation = (time: string) => {
@@ -31,7 +31,7 @@ const formatCloseTime = (closeTime: string) => {
   return parseInt(closeTime.substring(0, 2)) * 2 + Math.floor(parseInt(closeTime.substring(3, 5)) / 30)
 }
 
-export const NoCourtsModal: React.FC<NoCourtsModalProps> = ({ show, setShow }) => {
+export const NoCourtsModal: React.FC<NormalModalProps> = ({ show, setShow }) => {
   return (
     <Modal
       show={show}

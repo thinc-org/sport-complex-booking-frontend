@@ -15,8 +15,8 @@ function AccountPage() {
   const [penalizeStatus, setPenalizeStatus] = useState<boolean>()
   const [penalizeEndDate, setPenalizeEndDate] = useState("")
 
-  const fetch_account_type = useCallback(async () => {
-    await client.get<DefaultAccount>("/account_info/").then(({ data }) => {
+  const fetch_account_type = useCallback(() => {
+    client.get<DefaultAccount>("/account_info/").then(({ data }) => {
       setPenalizeStatus(data.is_penalize)
       if (data.expired_penalize_date) setPenalizeEndDate(data.expired_penalize_date.toString().substring(0, 10)) // date-fns
       if (data.account_type === "CuStudent") {

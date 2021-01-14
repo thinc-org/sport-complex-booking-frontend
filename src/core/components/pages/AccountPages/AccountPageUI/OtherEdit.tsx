@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next"
 import { setCookie } from "../../../../contexts/cookieHandler"
 import { client } from "../../../../../axiosConfig"
 import { OtherInfo } from "../../staff-pages/interfaces/InfoInterface"
-
+import { DocumentUploadResponse } from "../../../../dto/account.dto"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { otherInfoSchema } from "../../../../schemas/editUserInfo"
 
@@ -30,10 +30,16 @@ export default function OtherAccountEdit() {
   const { register, handleSubmit, errors } = useForm({ resolver: yupResolver(otherInfoSchema) })
 
   // Handlers
-  const handleFileUpload = async (formData: FormData) => {
-    await client.post("/fs/upload", formData).catch(() => {
-      setShowErr(true)
-    })
+  const handleFileUpload = (formData: FormData) => {
+    client
+      .post<DocumentUploadResponse>("/fs/upload", formData)
+      .then(({ data }) => {
+        console.log("RESPONSE DTO IS")
+        console.log(data)
+      })
+      .catch(() => {
+        setShowErr(true)
+      })
   }
 
   const uploadUserPhoto = (file: File) => {
@@ -79,7 +85,7 @@ export default function OtherAccountEdit() {
     set_relationship_verification_document(file[0])
   }
 
-  const handleAllFilesUpload = async (
+  const handleAllFilesUpload = (
     userPhotoInput: File | undefined,
     nationalIdInput: File | undefined,
     medicalCertificateInput: File | undefined,
@@ -105,8 +111,8 @@ export default function OtherAccountEdit() {
     }
   }
 
-  const postDataToBackend = async (data: Other) => {
-    await client
+  const postDataToBackend = (data: Other) => {
+    client
       .put<Other>("/account_info/", data)
       .then(({ data }) => {
         if (data.verification_status === "Submitted") {

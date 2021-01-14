@@ -1,3 +1,5 @@
+import { NormalModalProps } from "./settings.dto"
+
 export interface StaffResponse {
   allStaff_length: number
   staff_list: AdminAndStaff[]
@@ -13,25 +15,11 @@ export interface AdminAndStaff {
   is_admin: boolean | string
 }
 
-export interface DeleteStaffModalProps {
-  show: boolean
-  setShow: (value: boolean) => void
+export interface DeleteStaffModalProps extends NormalModalProps {
   mainFunction: (value: AdminAndStaff) => void
   data: AdminAndStaff
 }
 
-export interface EditStaffModalProps {
-  show: boolean
-  setShow: (value: boolean) => void
-}
-
-export interface AddStaffModalProps {
-  show: boolean
-  setShow: (value: boolean) => void
+export interface AddStaffModalProps extends NormalModalProps {
   onSubmitAddStaff: (staff: AdminAndStaff) => void
-}
-
-export interface HandleErrorModalProps {
-  show: boolean
-  setShow: (value: boolean) => void
 }

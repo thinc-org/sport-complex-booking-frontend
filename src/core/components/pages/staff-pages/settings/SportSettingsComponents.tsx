@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Form, Row, Button, Modal } from "react-bootstrap"
 import { useForm } from "react-hook-form"
-import { DeleteSportProps, AddSportProps, HandleErrorProps, EditSportProps } from "../../../../dto/settings.dto"
+import { DeleteSportProps, AddSportProps, NormalModalProps, EditSportProps } from "../../../../dto/settings.dto"
 
 export const DeleteSport: React.FC<DeleteSportProps> = ({ show, setShow, mainFunction, data }) => {
   return (
@@ -213,7 +213,7 @@ export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSp
   )
 }
 
-export const HandleError: React.FC<HandleErrorProps> = ({ show, setShow }) => {
+export const HandleError: React.FC<NormalModalProps> = ({ show, setShow }) => {
   if (!show) return null
   return (
     <Modal

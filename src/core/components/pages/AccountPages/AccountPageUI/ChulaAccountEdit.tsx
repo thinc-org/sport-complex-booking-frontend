@@ -32,8 +32,8 @@ export default function ChulaAccountEdit({ toggleEditButton }: AccountProps) {
     toggleEditButton()
   }
 
-  const postDataToBackend = async (data: EdittedData) => {
-    await client
+  const postDataToBackend = (data: EdittedData) => {
+    client
       .put<EdittedData>("/account_info", data)
       .then(() => {
         window.location.reload()

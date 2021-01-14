@@ -3,7 +3,8 @@ import { Form, Row, Button, Modal } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { passwordSchema } from "./StaffManagementSchema"
-import { DeleteStaffModalProps, EditStaffModalProps, AddStaffModalProps, HandleErrorModalProps } from "../../../../dto/staffManagement.dto"
+import { DeleteStaffModalProps, AddStaffModalProps } from "../../../../dto/staffManagement.dto"
+import { NormalModalProps } from "../../../../dto/settings.dto"
 
 export const DeleteStaffModal: React.FC<DeleteStaffModalProps> = ({ show, setShow, mainFunction, data }) => {
   return (
@@ -43,7 +44,7 @@ export const DeleteStaffModal: React.FC<DeleteStaffModalProps> = ({ show, setSho
   )
 }
 
-export const EditStaffModal: React.FC<EditStaffModalProps> = ({ show, setShow }) => {
+export const EditStaffModal: React.FC<NormalModalProps> = ({ show, setShow }) => {
   return (
     <Modal
       show={show}
@@ -146,7 +147,7 @@ export const AddStaffModal: React.FC<AddStaffModalProps> = ({ show, setShow, onS
   )
 }
 
-export const HandleErrorModal: React.FC<HandleErrorModalProps> = ({ show, setShow }) => {
+export const HandleErrorModal: React.FC<NormalModalProps> = ({ show, setShow }) => {
   if (!show) return null
   return (
     <Modal

@@ -4,6 +4,8 @@ import { client } from "../../../../../axiosConfig"
 import { DeleteSport, AddSport, HandleError, EditSport } from "./SportSettingsComponents"
 import { ListCourts } from "../../../../dto/settings.dto"
 import { Sport } from "../../../../dto/sport.dto"
+import useSportState from "./SettingsHooks/useSportState"
+import useCurrentSportState from "./SettingsHooks/useCurrentSportStates"
 
 export default function SportsSettings() {
   const [pageNo, setPageNo] = useState(1)
@@ -14,33 +16,15 @@ export default function SportsSettings() {
   const [showDeleteSport, setShowDeleteSport] = useState<boolean>(false)
   const [showEditSport, setShowEditSport] = useState<boolean>(false)
   const [showError, setShowError] = useState(false)
-  const [currentSport, setCurrentSport] = useState<Sport>({
-    sport_name_th: "",
-    sport_name_en: "",
-    required_user: 0,
-    quota: 0,
-    list_court: [],
-    _id: "",
-    __v: 0,
-  })
-  const [sports, setSports] = useState<Sport[]>([
-    {
-      _id: "",
-      sport_name_th: "",
-      sport_name_en: "",
-      required_user: 0,
-      quota: 4,
-      list_court: [],
-      __v: 0,
-    },
-  ])
+  const [currentSport, setCurrentSport] = useCurrentSportState()
+  const [sports, setSports] = useSportState()
 
   const requestSports = useCallback(
-    async (query?: string) => {
+    (query?: string) => {
       const start = (pageNo - 1) * 10
       const end = pageNo * 10
       const search_filter = query ? query : "$"
-      await client
+      client
         .get<ListCourts>("/court-manager/search", {
           params: {
             start: start,
@@ -68,8 +52,8 @@ export default function SportsSettings() {
     requestSports(searchName)
   }
 
-  const sendEdittedSportInfo = async (currentSport: Sport) => {
-    await client
+  const sendEdittedSportInfo = (currentSport: Sport) => {
+    client
       .put<Sport>("/court-manager/" + currentSport._id, currentSport)
       .then(() => {
         setShowEditSport(false)
@@ -80,8 +64,8 @@ export default function SportsSettings() {
       })
   }
 
-  const sendNewSportInfo = async (newSport: Sport) => {
-    await client
+  const sendNewSportInfo = (newSport: Sport) => {
+    client
       .post<Sport>("/court-manager/", newSport)
       .then(() => {
         requestSports()
@@ -92,8 +76,8 @@ export default function SportsSettings() {
       })
   }
 
-  const sendDeleteSport = async (currentSport: Sport) => {
-    await client
+  const sendDeleteSport = (currentSport: Sport) => {
+    client
       .delete<Sport>("/court-manager/" + currentSport._id)
       .then(() => {
         setShowDeleteSport(false)
