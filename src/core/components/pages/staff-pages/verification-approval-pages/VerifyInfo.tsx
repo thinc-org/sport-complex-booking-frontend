@@ -98,7 +98,6 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     client
       .get<Other>(`/approval/${_id}`)
       .then(({ data }) => {
-        // console.log(data)
         setUsername(data.username)
         setMembershipType(data.membership_type)
         setInfo({
