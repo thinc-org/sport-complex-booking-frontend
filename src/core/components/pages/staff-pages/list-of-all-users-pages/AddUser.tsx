@@ -6,6 +6,8 @@ import { AddInfo, ModalAddUser, AlertAddUser, AddUserComponentInfo } from "../in
 import { client } from "../../../../../axiosConfig"
 import ChangePasswordComponent from "./AddUserPasswordComponent"
 import { AddModal, ComModal, ErrModal, UsernameErrModal, AlertUncom, AlertErrorPassword, AlertInvalidUsername } from "./AddUserModalAndAlert"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { emailSchema } from "../../../../schemas/editUserInfo"
 
 const AddUser: FunctionComponent = () => {
   // Page states //
@@ -37,7 +39,7 @@ const AddUser: FunctionComponent = () => {
     phone: "",
   })
 
-  const methods = useForm()
+  const methods = useForm({ resolver: yupResolver(emailSchema) })
   const { register, handleSubmit, errors } = methods
   const history = useHistory()
 
@@ -142,6 +144,11 @@ const AddUser: FunctionComponent = () => {
         <Form.Group>
           <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
           <Form.Control ref={register} name="username" defaultValue={user.username} />
+          {errors.username && (
+            <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+              {errors.username.message}
+            </span>
+          )}
         </Form.Group>
         <AlertInvalidUsername show={showAlerts} />
         <ChangePasswordComponent selectingSatit={selectingSatit} />
@@ -188,16 +195,7 @@ const AddUser: FunctionComponent = () => {
           <Row className="mb-3">
             <Col>
               <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
-              <Form.Control
-                ref={register({
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Invalid email address",
-                  },
-                })}
-                name="username"
-                defaultValue={username}
-              />
+              <Form.Control ref={register} name="username" defaultValue={username} />
               {errors.username && (
                 <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
                   {errors.username.message}
