@@ -33,7 +33,7 @@ export default function TimeSettings() {
     }
     await client
       .put<TimeSettingsData>("/court-manager/setting", data)
-      .then((data) => {
+      .then(() => {
         setShowEditTime(true)
         fetchSettings()
       })
