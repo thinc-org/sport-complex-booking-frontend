@@ -1,6 +1,6 @@
 import React from "react"
 import { Button, Modal } from "react-bootstrap"
-import { SettingsCardProps, EditTimeModalProps } from "../../../../dto/settings.dto"
+import { SettingsCardProps, NormalModalProps } from "../../../../dto/settings.dto"
 
 export const SettingsCard: React.FC<SettingsCardProps> = ({ type, set, value, cardTitle, unit }) => {
   return (
@@ -55,7 +55,7 @@ export const SettingsCard: React.FC<SettingsCardProps> = ({ type, set, value, ca
   )
 }
 
-export const EditTime: React.FC<EditTimeModalProps> = ({ show, setShow }) => {
+export const EditTime: React.FC<NormalModalProps> = ({ show, setShow }) => {
   return (
     <Modal
       show={show}

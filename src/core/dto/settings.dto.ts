@@ -2,24 +2,17 @@ import { Sport, Court } from "./sport.dto"
 
 // Court settings DTO
 
+export interface NormalModalProps {
+  show: boolean
+  setShow: (value: boolean) => void
+}
+
 export interface ListCourts {
   allSport_length: number
   sport_list: Sport[]
 }
 
-export interface ListCourtResponse {
-  allSport_length: number
-  sport_list: Sport[]
-}
-
-export interface NoCourtsModalProps {
-  show: boolean
-  setShow: (value: boolean) => void
-}
-
-export interface EditCourtProps {
-  show: boolean
-  setShow: (value: boolean) => void
+export interface EditCourtProps extends NormalModalProps {
   openTime: string
   closeTime: string
   onChangeOpenTime: React.Dispatch<React.SetStateAction<string>>
@@ -31,17 +24,13 @@ export interface EditCourtProps {
   updateCourt: (value: string) => void
 }
 
-export interface DeleteCourtModalProps {
-  show: boolean
-  setShow: (value: boolean) => void
+export interface DeleteCourtModalProps extends NormalModalProps {
   deleteCourt: (value1: string, value2: string) => void
   currentCourt: Court
   currentSportId: string
 }
 
-export interface AddCourtFuncProps {
-  show: boolean
-  setShow: (value: boolean) => void
+export interface AddCourtFuncProps extends NormalModalProps {
   onChangeOpenTime: React.Dispatch<React.SetStateAction<string>>
   onChangeCloseTime: React.Dispatch<React.SetStateAction<string>>
   openTime: string
@@ -51,27 +40,16 @@ export interface AddCourtFuncProps {
   currentSportId: string
 }
 
-export interface DeleteSportProps {
-  show: boolean
-  setShow: (value: boolean) => void
+export interface DeleteSportProps extends NormalModalProps {
   mainFunction: (value: Sport) => void
   data: Sport
 }
 
-export interface AddSportProps {
-  show: boolean
-  setShow: (value: boolean) => void
+export interface AddSportProps extends NormalModalProps {
   onSubmitAddSport: (sport: Sport) => void
 }
 
-export interface HandleErrorProps {
-  show: boolean
-  setShow: (value: boolean) => void
-}
-
-export interface EditSportProps {
-  show: boolean
-  setShow: (value: boolean) => void
+export interface EditSportProps extends NormalModalProps {
   setCurrentSport: (value: Sport) => void
   sendEdittedSportInfo: (value: Sport) => void
   currentSport: Sport
@@ -92,9 +70,4 @@ export interface SettingsCardProps {
   value: number
   cardTitle: string
   unit: string
-}
-
-export interface EditTimeModalProps {
-  show: boolean
-  setShow: (value: boolean) => void
 }

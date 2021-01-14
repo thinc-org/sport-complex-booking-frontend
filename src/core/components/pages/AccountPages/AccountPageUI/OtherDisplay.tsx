@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react"
+import React, { useContext, useState, useEffect, useCallback } from "react"
 import { UserContext } from "../../../../contexts/UsersContext"
 import { Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
@@ -25,36 +25,39 @@ export default function OtherAaccountDisplay() {
     win ? win.focus() : console.log("Error")
   }
 
-  const getFileToken = async (fileName: FileName) => {
-    if (!user) return null
-    const fileID = user[fileName]
-    if (fileID) {
-      await client
-        .get<Token>("/fs/viewFileToken/" + fileID)
-        .then(({ data }) => {
-          const newTokens = fileTokens
-          newTokens.forEach((file) => {
-            if (file["fileName"] === fileName) {
-              file["token"] = data.token
-            }
+  const getFileToken = useCallback(
+    (fileName: FileName) => {
+      if (!user) return null
+      const fileID = user[fileName]
+      if (fileID) {
+        client
+          .get<Token>("/fs/viewFileToken/" + fileID)
+          .then(({ data }) => {
+            const newTokens = fileTokens
+            newTokens.forEach((file) => {
+              if (file["fileName"] === fileName) {
+                file["token"] = data.token
+              }
+            })
+            setFileTokens(newTokens)
           })
-          setFileTokens(newTokens)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    }
-  }
+          .catch((err) => {
+            console.log(err)
+          })
+      }
+    },
+    [fileTokens, user]
+  )
 
-  const assignFileTokens = () => {
-    fileTokens.forEach((file) => {
+  const assignFileTokens = useCallback(() => {
+    return fileTokens.forEach((file) => {
       getFileToken(file.fileName as FileName)
     })
-  }
+  }, [getFileToken, fileTokens])
 
   useEffect(() => {
     assignFileTokens()
-  })
+  }, [assignFileTokens])
 
   return (
     <div className="mx-auto col-md-6">

@@ -1,9 +1,5 @@
-// enums //
-export enum Account {
-  CuStudent = "CuStudent",
-  SatitAndCuPersonel = "SatitAndCuPersonel",
-  Other = "Other",
-}
+//enums
+import { Account } from "../../../../dto/account.dto"
 
 // interfaces //
 export default interface Info {

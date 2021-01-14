@@ -59,8 +59,8 @@ function CreateWaitingRoom() {
     }
   }
   // [0] check account validity
-  const fetchValidity = useCallback(async () => {
-    await client
+  const fetchValidity = useCallback(() => {
+    client
       .post("/reservation/checkvalidity")
       .then(() => {
         setShowValidityWarningMessage(false)
@@ -76,8 +76,8 @@ function CreateWaitingRoom() {
       })
   }, [])
   // [1] Fetch Courts
-  const fetchCourts = useCallback(async () => {
-    await client
+  const fetchCourts = useCallback(() => {
+    client
       .get<Sport[]>("/court-manager/sports")
       .then(({ data }) => {
         setSport(data)
@@ -90,7 +90,7 @@ function CreateWaitingRoom() {
       })
   }, [])
   // [2] Fetch Quota
-  const fetchQuota = async (selectedSportID: string, date: Date) => {
+  const fetchQuota = useCallback((selectedSportID: string, date: Date) => {
     const year = date.getFullYear()
     const month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1
     const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate()
@@ -99,10 +99,9 @@ function CreateWaitingRoom() {
       date: year + "-" + month + "-" + day,
     }
     if (selectedSportID === "") return null
-    await client
+    client
       .post<number>("/reservation/checkquota", data)
       .then(({ data }) => {
-        console.log(data)
         setquota(data * 30)
       })
       .catch((error) => {
@@ -112,9 +111,9 @@ function CreateWaitingRoom() {
           setShowCreateWarningMessage(true)
         }
       })
-  }
+  }, [])
   // [3] Fetch Time
-  const fetchTime = async (court_number: number, selectedSportID: string, date: Date) => {
+  const fetchTime = useCallback((court_number: number, selectedSportID: string, date: Date) => {
     const year = date.getFullYear()
     const month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1
     const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate()
@@ -123,12 +122,10 @@ function CreateWaitingRoom() {
       sport_id: selectedSportID,
       date: year + "-" + month + "-" + day,
     }
-    console.log(data)
-    await client
+    client
       .post<number[]>("/reservation/checktimeslot", data)
       .then(({ data }) => {
         setTime(data)
-        console.log(data)
       })
       .catch((error) => {
         if (error.response) {
@@ -137,9 +134,9 @@ function CreateWaitingRoom() {
           setShowCreateWarningMessage(true)
         }
       })
-  }
+  }, [])
   // [4] Post to Backend
-  const postDataToBackend = async (data: WaitingRoomData) => {
+  const postDataToBackend = (data: WaitingRoomData) => {
     const formattedTimeSlot = [0]
     const year = date.getFullYear()
     const month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1
@@ -153,7 +150,7 @@ function CreateWaitingRoom() {
       court_number: Number(data.court_number),
       time_slot: formattedTimeSlot.slice(1),
     }
-    await client
+    client
       .post<CreateResponse>("/reservation/createwaitingroom", newData)
       .then(() => {
         history.push({ pathname: "/waitingroom" })

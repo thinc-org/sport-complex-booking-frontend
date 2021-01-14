@@ -10,8 +10,8 @@ export default function TimeSettings() {
   const [lateCancellationPunishment, setLateCancellationPunishment] = useState(0)
   const [absencePunishment, setAbsencePunishment] = useState(0)
   const [lateCancellationDay, setLateCancellationDay] = useState(0)
-  const fetchSettings = async () => {
-    await client
+  const fetchSettings = () => {
+    client
       .get<TimeSettingsData>("/court-manager/setting")
       .then(({ data }) => {
         setWaitingRoomDuration(data["waiting_room_duration"])
@@ -24,14 +24,14 @@ export default function TimeSettings() {
       })
   }
 
-  const saveSettings = async () => {
+  const saveSettings = () => {
     const data = {
       waiting_room_duration: waitingRoomDuration,
       late_cancelation_punishment: lateCancellationPunishment,
       absence_punishment: absencePunishment,
       late_cancelation_day: lateCancellationDay,
     }
-    await client
+    client
       .put<TimeSettingsData>("/court-manager/setting", data)
       .then(() => {
         setShowEditTime(true)

@@ -6,6 +6,9 @@ import { HandleError } from "./SportSettingsComponents"
 import { AxiosResponse } from "axios"
 import { ListCourts } from "../../../../dto/settings.dto"
 import { Sport, Court } from "../../../../dto/sport.dto"
+import useSportState from "./SettingsHooks/useSportState"
+import useCourtState from "./SettingsHooks/useCourtState"
+import useCurrentCourtState from "./SettingsHooks/useCurrentCourtStates"
 
 export default function CourtsSettings() {
   const [showAddCourt, setShowAddCourt] = useState(false)
@@ -15,70 +18,52 @@ export default function CourtsSettings() {
   const [showError, setShowError] = useState(false)
   const [openTime, onChangeOpenTime] = useState("08:00")
   const [closeTime, onChangeCloseTime] = useState("20:00")
-  const [sports, setSports] = useState<Sport[]>([
-    {
-      _id: "",
-      sport_name_th: "",
-      sport_name_en: "",
-      required_user: 0,
-      quota: 0,
-      list_court: [],
-      __v: 0,
-    },
-  ])
+  const [sports, setSports] = useSportState()
   const [currentSportId, setCurrentSportId] = useState("$")
   const [currentSportName, setCurrentSportName] = useState("")
-  const [currentCourt, setCurrentCourt] = useState<Court>({
-    court_num: 0,
-    open_time: 0,
-    close_time: 0,
-    _id: "",
-    __v: 0,
-  })
-  const [courts, setCourts] = useState<Court[]>([
-    {
-      court_num: 0,
-      open_time: 0,
-      close_time: 0,
-      _id: "",
-      __v: 0,
-    },
-  ])
+  const [currentCourt, setCurrentCourt] = useCurrentCourtState()
+  const [courts, setCourts] = useCourtState()
 
-  const requestSports = useCallback(async (currentSportId: string) => {
-    await client
-      .get<ListCourts>("/court-manager/search", {
-        params: {
-          start: 0,
-          end: 999,
-          filter: currentSportId,
-        },
-      })
-      .then(({ data }) => {
-        setSports(data["sport_list"])
-      })
-      .catch(() => {
-        setShowError(true)
-      })
-  }, [])
+  const requestSports = useCallback(
+    (currentSportId: string) => {
+      client
+        .get<ListCourts>("/court-manager/search", {
+          params: {
+            start: 0,
+            end: 999,
+            filter: currentSportId,
+          },
+        })
+        .then(({ data }) => {
+          setSports(data["sport_list"])
+        })
+        .catch(() => {
+          setShowError(true)
+        })
+    },
+    [setSports]
+  )
 
   useEffect(() => {
     requestSports("$")
   }, [requestSports])
 
-  const requestCourts = async (sportId: string) => {
-    if (sportId === "$") return null
-    await client
-      .get<Sport>("/court-manager/" + sportId)
-      .then(({ data }) => {
-        setCourts(data["list_court"])
-      })
-      .catch(() => {
-        setShowError(true)
-      })
-  }
+  const requestCourts = useCallback(
+    (sportId: string) => {
+      if (sportId === "$") return null
+      client
+        .get<Sport>("/court-manager/" + sportId)
+        .then(({ data }) => {
+          setCourts(data["list_court"])
+        })
+        .catch(() => {
+          setShowError(true)
+        })
+    },
+    [setCourts]
+  )
 
-  const deleteCourt = async (courtId: string, sportId: string) => {
+  const deleteCourt = (courtId: string, sportId: string) => {
     let newCourts = courts
     newCourts = newCourts.filter(function (court) {
       return court._id !== courtId
@@ -87,7 +72,7 @@ export default function CourtsSettings() {
       sport_id: sportId,
       new_setting: newCourts,
     }
-    await client
+    client
       .put("/court-manager/court-setting/update", data)
       .then(() => {
         setShowDeleteCourt(false)
@@ -99,12 +84,12 @@ export default function CourtsSettings() {
       })
   }
 
-  const updateCourt = async (sportId: string) => {
+  const updateCourt = (sportId: string) => {
     const data = {
       sport_id: sportId,
       new_setting: courts,
     }
-    await client
+    client
       .put<AxiosResponse>("/court-manager/court-setting/update", data)
       .then(() => {
         requestCourts(currentSportId)

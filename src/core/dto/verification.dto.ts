@@ -1,4 +1,4 @@
-import { Account } from "../components/pages/staff-pages/interfaces/InfoInterface"
+import { Account } from "../dto/account.dto"
 
 export type VerifyListRes = [number, VerifyInfoRes[]]
 

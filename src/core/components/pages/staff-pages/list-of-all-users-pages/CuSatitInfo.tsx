@@ -4,7 +4,7 @@ import { Link, useHistory, useParams } from "react-router-dom"
 import format from "date-fns/format"
 import { useForm } from "react-hook-form"
 import { client } from "../../../../../axiosConfig"
-import { CuAndSatitInfo, CuSatitComponentInfo, Account, ModalUserInfo } from "../interfaces/InfoInterface"
+import { CuAndSatitInfo, CuSatitComponentInfo, ModalUserInfo } from "../interfaces/InfoInterface"
 import { CuStudent, SatitCuPersonel } from "../../../../contexts/UsersContext"
 import PasswordChangeModal from "./PasswordChangeModal"
 import {
@@ -18,6 +18,7 @@ import {
 } from "./ListOfAllUserModals"
 import { isValid } from "date-fns"
 import { useTranslation } from "react-i18next"
+import { Account } from "../../../../dto/account.dto"
 
 const UserInfo: FunctionComponent = () => {
   // page states

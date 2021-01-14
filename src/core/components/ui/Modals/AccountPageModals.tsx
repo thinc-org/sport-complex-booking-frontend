@@ -12,7 +12,7 @@ interface CustomAccountModalProps {
   type: "confirmEditAccountModal" | "confirmEditOtherAccountModal" | "editAccountErrorModal"
   show: boolean
   setShow: (value: boolean) => void
-  mainFunction?: (data: Other) => Promise<void> //(data: EdittedData) => Promise<void> | ((data: EdittedData) => void)
+  mainFunction?: (data: Other) => void
   data?: EdittedData
 }
 

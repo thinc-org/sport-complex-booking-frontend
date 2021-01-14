@@ -42,11 +42,6 @@ export interface WaitingRoomAccessCode {
   access_code: string
 }
 
-export interface MemberResponse {
-  name_th: string
-  name_en: string
-}
-
 export interface WaitingRoomResponse {
   list_member: (CuStudent | SatitCuPersonel | Other)[]
   expired_date: Date

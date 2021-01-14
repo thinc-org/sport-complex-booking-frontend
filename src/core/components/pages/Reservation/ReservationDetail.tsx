@@ -11,7 +11,8 @@ import { useTranslation } from "react-i18next"
 import { ReservationCancellationModal } from "../../ui/Modals/ReservationCancelModal"
 import { Loading } from "../../ui/loading/loading"
 import { useLanguage, useNameLanguage } from "../../../utils/language"
-import { LocationResponse, MemberResponse, SportResponse, ReservationDetailResponse } from "../../../dto/reservation.dto"
+import { LocationResponse, SportResponse, ReservationDetailResponse } from "../../../dto/reservation.dto"
+import { NameResponse } from "../../../dto/account.dto"
 
 const ReservationDetail = () => {
   const location = useLocation()
@@ -25,7 +26,7 @@ const ReservationDetail = () => {
   const [courtNum, setCourtNum] = useState<number>()
   const [date, setDate] = useState<string>()
   const [timeList, setTimeList] = useState<number[]>()
-  const [memberList, setMemberList] = useState<Array<MemberResponse>>()
+  const [memberList, setMemberList] = useState<Array<NameResponse>>()
   const [isCheck, setIsCheck] = useState<boolean>()
   const [counter, setCounter] = useState<number>(10)
   const [isLoading, setIsLoading] = useState(true)

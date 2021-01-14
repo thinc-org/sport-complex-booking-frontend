@@ -33,8 +33,8 @@ export default function SatitAndCUPersonelAccountEdit({ toggleEditButton }: Acco
     toggleEditButton()
   }
 
-  const postDataToBackend = async (data: EdittedData) => {
-    await client
+  const postDataToBackend = (data: EdittedData) => {
+    client
       .put<EdittedData>("/account_info", data)
       .then(() => {
         window.location.reload()

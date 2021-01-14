@@ -20,8 +20,8 @@ function JoinWaitingRoom() {
   const [invalidAccount, setInvalidAccount] = useState(true)
   const [errorType, setErrorType] = useState("danger")
 
-  const onSubmit = async (data: WaitingRoomAccessCode) => {
-    await client
+  const onSubmit = (data: WaitingRoomAccessCode) => {
+    client
       .post<WaitingRoomAccessCode>("/reservation/joinwaitingroom", data)
       .then(({ data }) => {
         if (data.isReservationCreated) {
@@ -40,8 +40,8 @@ function JoinWaitingRoom() {
       })
   }
 
-  const fetchValidity = useCallback(async () => {
-    await client
+  const fetchValidity = useCallback(() => {
+    client
       .post<ValidityMessage>("/reservation/checkvalidity")
       .then(({ data }) => {
         setInvalidAccount(false)

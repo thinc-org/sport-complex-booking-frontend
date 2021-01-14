@@ -23,3 +23,11 @@ export interface PenalizeMessageProps {
   show?: boolean
   penalizeEndDate: string
 }
+
+export interface DocumentUploadResponse {
+  user_photo?: string
+  national_id_photo?: string
+  medical_certificate?: string
+  house_registration_number?: string
+  relationship_verification_document?: string
+}

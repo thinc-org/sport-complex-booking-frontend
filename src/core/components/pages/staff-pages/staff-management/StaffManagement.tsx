@@ -33,13 +33,13 @@ export default function StaffManagement() {
   ])
 
   const requestStaffs = useCallback(
-    async (query?: string, type?: string) => {
+    (query?: string, type?: string) => {
       const start = (pageNo - 1) * 10
       const end = pageNo * 10
       const query_filter = query ? query : "$"
       const type_filter = type ? type : "all"
-      await client
-        .get("/staff-manager/admin-and-staff/search", {
+      client
+        .get<StaffResponse>("/staff-manager/admin-and-staff/search", {
           params: {
             start: start,
             end: end,
@@ -68,11 +68,11 @@ export default function StaffManagement() {
     requestStaffs(searchName, type)
   }
 
-  const sendEdittedStaffInfo = async (currentStaff: string, staff: AdminAndStaff) => {
+  const sendEdittedStaffInfo = (currentStaff: string, staff: AdminAndStaff) => {
     const data = {
       is_admin: currentStaff === "แอดมิน" ? true : false,
     }
-    await client
+    client
       .put<StaffResponse>("/staff-manager/" + staff["_id"], data)
       .then(() => {
         requestStaffs()
@@ -82,10 +82,10 @@ export default function StaffManagement() {
       })
   }
 
-  const sendNewStaffInfo = async (newStaff: AdminAndStaff) => {
+  const sendNewStaffInfo = (newStaff: AdminAndStaff) => {
     delete newStaff.recheckpasssword
     console.log("This is newStaff" + newStaff)
-    await client
+    client
       .post<StaffResponse>("/staff-manager/", newStaff)
       .then(({ data }) => {
         console.log(data)
@@ -97,9 +97,9 @@ export default function StaffManagement() {
       })
   }
 
-  const sendDeleteStaff = async (currentStaff: AdminAndStaff) => {
+  const sendDeleteStaff = (currentStaff: AdminAndStaff) => {
     console.log(currentStaff["_id"])
-    await client
+    client
       .delete<StaffResponse>("/staff-manager/" + currentStaff["_id"])
       .then(() => {
         setShowDeleteStaff(false)
