@@ -66,6 +66,7 @@ export default function OtherEditInfoComponent({
         data: formData,
       })
         .then(({ data }) => {
+          console.log(data)
           setTempInfo({
             ...tempInfo,
             [Object.keys(data)[0]]: data[Object.keys(data)[0]],
@@ -78,7 +79,6 @@ export default function OtherEditInfoComponent({
   }
 
   const onSubmit = (data: EditComponentInfo) => {
-    // console.log(data)
     setTempInfo({
       ...tempInfo,
       prefix: data.prefix,
@@ -438,7 +438,6 @@ export default function OtherEditInfoComponent({
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   if (e.target.files && e.target.files[0]) {
                     setRelationshipVerificationDocumentFile(e.target.files[0])
-                    console.log(e.target.files[0])
                     handleUpload(e.target.id, e.target.files[0])
                   }
                 }}
@@ -448,7 +447,7 @@ export default function OtherEditInfoComponent({
         </div>
       </div>
       <div className="mt-5">
-        <Button variant="pink" type="submit" className="float-right btn-normal" onClick={handleSubmit(onSubmit)}>
+        <Button variant="pink" type="submit" className="float-right btn-normal" onSubmit={handleSubmit(onSubmit)}>
           บันทึก
         </Button>
       </div>
