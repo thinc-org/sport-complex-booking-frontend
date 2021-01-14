@@ -4,7 +4,7 @@ import { Link, useHistory, useParams } from "react-router-dom"
 import format from "date-fns/format"
 import { useForm } from "react-hook-form"
 import { client } from "../../../../../axiosConfig"
-import { CuAndSatitInfo, CuSatitComponentInfo, ModalUserInfo } from "../interfaces/InfoInterface"
+import { CuSatitComponentInfo, Account, ModalUserInfo } from "../interfaces/InfoInterface"
 import { CuStudent, SatitCuPersonel } from "../../../../contexts/UsersContext"
 import PasswordChangeModal from "./PasswordChangeModal"
 import {
@@ -19,6 +19,8 @@ import {
 import { isValid } from "date-fns"
 import { useTranslation } from "react-i18next"
 import { Account } from "../../../../dto/account.dto"
+
+type CuSatitType = CuStudent | SatitCuPersonel
 
 const UserInfo: FunctionComponent = () => {
   // page states
@@ -40,7 +42,7 @@ const UserInfo: FunctionComponent = () => {
   const [showAlert, setShowAlert] = useState<boolean>(false)
 
   // user states
-  const [user, setUser] = useState<CuAndSatitInfo>({
+  const [user, setUser] = useState<CuSatitType>({
     account_type: Account.CuStudent,
     is_thai_language: true,
     name_th: "",
@@ -52,8 +54,9 @@ const UserInfo: FunctionComponent = () => {
     phone: "",
     is_penalize: false,
     expired_penalize_date: new Date(),
+    is_first_login: false,
   })
-  const [tempUser, setTempUser] = useState<CuAndSatitInfo>(user)
+  const [tempUser, setTempUser] = useState<CuSatitType>(user)
 
   // react router dom //
   const { register, handleSubmit } = useForm()
@@ -63,21 +66,9 @@ const UserInfo: FunctionComponent = () => {
 
   const getInfo = useCallback(() => {
     client
-      .get<CuStudent | SatitCuPersonel>(`/list-all-user/id/${_id}`)
+      .get<CuSatitType>(`/list-all-user/id/${_id}`)
       .then(({ data }) => {
-        setUser({
-          account_type: data.account_type === "CuStudent" ? Account.CuStudent : Account.SatitAndCuPersonel,
-          is_thai_language: data.is_thai_language,
-          name_th: data.name_th,
-          surname_th: data.surname_th,
-          name_en: data.name_en,
-          surname_en: data.surname_en,
-          username: data.username,
-          personal_email: data.personal_email,
-          phone: data.phone,
-          is_penalize: data.is_penalize,
-          expired_penalize_date: data.expired_penalize_date ? data.expired_penalize_date : new Date(),
-        })
+        data.account_type === "CuStudent" ? setUser(data as CuStudent) : setUser(data as SatitCuPersonel)
       })
       .catch(({ response }) => {
         console.log(response)

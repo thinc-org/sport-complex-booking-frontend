@@ -81,7 +81,7 @@ const UserInfo = () => {
   // react router dom
   const { _id } = useParams<{ _id: string }>()
   const methods = useForm()
-  const { register } = methods
+  const { register, errors } = methods
   const history = useHistory()
 
   // requests //
@@ -303,7 +303,12 @@ const UserInfo = () => {
               <label className="mt-2">ชื่อผู้ใช้</label>
               {isEdit ? (
                 <Form.Control
-                  ref={register({ pattern: /.*([A-z])+.*/g })}
+                  ref={register({
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Invalid username (email address)",
+                    },
+                  })}
                   name="username"
                   className="border"
                   style={{ backgroundColor: "white" }}
@@ -312,6 +317,11 @@ const UserInfo = () => {
                 />
               ) : (
                 <p className="font-weight-bold">{username}</p>
+              )}
+              {errors.username && (
+                <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                  {errors.username.message}
+                </span>
               )}
             </div>
           </div>
