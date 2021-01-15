@@ -111,15 +111,9 @@ export default function OtherAaccountDisplay() {
         <div className="form-file">
           {user?.user_photo ? (
             <div>
-              <Button
-                type="button"
-                className="btn-normal btn-secondary"
-                onClick={() => {
-                  window.open("openFile/" + user.user_photo)
-                }}
-              >
+              <a type="button" className="btn-normal btn-secondary" href={"openFile/" + user.user_photo} target="_blank" rel="noopener noreferrer">
                 {t("viewFile")}
-              </Button>
+              </a>
             </div>
           ) : (
             <p>{t("noFile")}</p>
@@ -129,15 +123,15 @@ export default function OtherAaccountDisplay() {
         <label className="form-label my-2">{t("national_id_photo")}</label>
         <div className="form-file">
           {user?.national_id_photo ? (
-            <Button
+            <a
               type="button"
               className="btn-normal btn-secondary"
-              onClick={() => {
-                window.open("openFile/" + user.national_id_photo)
-              }}
+              href={"openFile/" + user.national_id_photo}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               {t("viewFile")}
-            </Button>
+            </a>
           ) : (
             <p>{t("noFile")}</p>
           )}
@@ -146,15 +140,15 @@ export default function OtherAaccountDisplay() {
         <label className="form-label my-2">{t("medical_certificate")}</label>
         <div className="form-file">
           {user?.medical_certificate ? (
-            <Button
+            <a
               type="button"
               className="btn-normal btn-secondary"
-              onClick={() => {
-                window.open("openFile/" + user.medical_certificate)
-              }}
+              href={"openFile/" + user.medical_certificate}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               {t("viewFile")}
-            </Button>
+            </a>
           ) : (
             <p>{t("noFile")}</p>
           )}
@@ -163,15 +157,15 @@ export default function OtherAaccountDisplay() {
         <label className="form-label my-2">{t("house_registration_number")}</label>
         <div className="form-file">
           {user?.house_registration_number ? (
-            <Button
+            <a
               type="button"
               className="btn-normal btn-secondary"
-              onClick={() => {
-                window.open("openFile/" + user.house_registration_number)
-              }}
+              href={"openFile/" + user.house_registration_number}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               {t("viewFile")}
-            </Button>
+            </a>
           ) : (
             <p>{t("noFile")}</p>
           )}
@@ -180,15 +174,15 @@ export default function OtherAaccountDisplay() {
         <label className="form-label my-2">{t("relationship_verification_document")}</label>
         <div className="form-file">
           {user?.relationship_verification_document ? (
-            <Button
+            <a
               type="button"
               className="btn-normal btn-secondary"
-              onClick={() => {
-                window.open("openFile/" + user.relationship_verification_document)
-              }}
+              href={"openFile/" + user.relationship_verification_document}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               {t("viewFile")}
-            </Button>
+            </a>
           ) : (
             <p>{t("noFile")}</p>
           )}
