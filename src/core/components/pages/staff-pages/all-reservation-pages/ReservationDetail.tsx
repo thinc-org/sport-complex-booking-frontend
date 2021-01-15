@@ -60,7 +60,6 @@ const ReservationDetail: React.FC = () => {
     client
       .get<Room>(url)
       .then(({ data }) => {
-        // console.log(data)
         setDetail(data)
       })
       .catch(({ response }) => {

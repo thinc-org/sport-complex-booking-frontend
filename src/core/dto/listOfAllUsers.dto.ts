@@ -1,6 +1,6 @@
 import { VerifyInfoRes } from "./verification.dto"
 
-// export type UserListRes = [number, UserInfoRes[]]
+export type UserListRes = [number, UserInfoRes[]]
 
 export enum Account {
   CuStudent = "CuStudent",

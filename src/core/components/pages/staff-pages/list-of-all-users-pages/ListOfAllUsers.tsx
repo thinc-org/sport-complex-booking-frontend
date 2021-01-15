@@ -3,50 +3,8 @@ import { Table, Form, Row, Col, Button, Modal } from "react-bootstrap"
 import { Link, useHistory } from "react-router-dom"
 import { client } from "../../../../../axiosConfig"
 import { AxiosResponse } from "axios"
-// import { AccountInfo } from "../../../../contexts/UsersContext"
-import { UserInfoRes } from "../../../../dto/listOfAllUsers.dto"
-import { Account } from "../../../../dto/account.dto"
+import { Account, UserInfoRes, UserListRes } from "../../../../dto/listOfAllUsers.dto"
 import PaginationComponent from "./PaginationComponent"
-
-// interface CUTemplate {
-//   account_type: Account
-//   is_thai_language: boolean
-//   is_first_login: boolean
-//   name_th: string
-//   surname_th: string
-//   name_en: string
-//   surname_en: string
-//   username: string
-//   is_penalize: boolean
-//   _id: string
-// }
-
-// interface OtherTemplate {
-//   account_type: Account
-//   reject_info: string[]
-//   name_th: string
-//   surname_th: string
-//   name_en: string
-//   surname_en: string
-//   username: string
-//   is_penalize: boolean
-//   _id: string
-// }
-
-// interface SatitTemplate {
-//   account_type: Account
-//   is_thai_language: boolean
-//   name_th: string
-//   surname_th: string
-//   name_en: string
-//   surname_en: string
-//   username: string
-//   password: string
-//   is_penalize: boolean
-//   _id: string
-// }
-
-// type Users = (CUTemplate | SatitTemplate | OtherTemplate)[]
 
 enum allStatus {
   All,
@@ -62,17 +20,15 @@ interface ParamsDataRequest {
   penalize: boolean
 }
 
-// type FilterResponse = [number, AccountInfo[]]
-
 const ListOfAllUsers: FunctionComponent = () => {
   // page state
   const [pageNo, setPageNo] = useState<number>(1)
-  const [maxUser] = useState<number>(1) //fix
+  const [maxUser, setMaxUser] = useState<number>(1) //fix
   const [maxUserPerPage] = useState<number>(10) // > 1
   const [searchName, setSearchName] = useState<string>("")
   const [status, setStatus] = useState<number>(allStatus.All)
   const [showNoUser, setShowNoUser] = useState<boolean>(false)
-  const [users] = useState<UserInfoRes[]>([]) //fix
+  const [users, setUsers] = useState<UserInfoRes[]>([]) //fix
 
   const history = useHistory()
 
@@ -85,25 +41,14 @@ const ListOfAllUsers: FunctionComponent = () => {
     if (searchName !== "") param_data.name = searchName
     if (status !== allStatus.All) param_data.penalize = allStatus.Banned === status
     //  request users from server  //
-    console.log("yvyvyyvyvy")
     client({
       method: "GET",
       url: "/list-all-user/filter",
       params: param_data,
     })
-      .then(({ data }: AxiosResponse<any>) => {
-        /* TODO In this case Users that create from `CUTemplate` | `OtherTemplate` | `SatitTemplate` is incompatible 
-           to `CuStudent` | `SatitCuPersonel` | `Other` because they don't have `_id` field
-           I'm not sure how to fix problem this. so I decide to add `_id: ""` field to userList
-        */
-        console.log(data)
-        // const userList = data[1].map((user) => {
-        //   if (user.account_type === "CuStudent") return { ...user, account_type: Account.CuStudent, _id: "" }
-        //   else if (user.account_type === "SatitAndCuPersonel") return { ...user, account_type: Account.SatitAndCuPersonel, _id: "" }
-        //   return { ...user, account_type: Account.Other, _id: "" }
-        // })
-        // setMaxUser(data[0])
-        // setUsers(userList as Users)
+      .then(({ data }: AxiosResponse<UserListRes>) => {
+        setMaxUser(data[0])
+        setUsers(data[1])
       })
       .catch(({ response }) => {
         console.log(response)

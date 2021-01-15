@@ -1,6 +1,3 @@
-//enums
-import { Account } from "../../../../dto/account.dto"
-
 // interfaces //
 export default interface Info {
   prefix: string
@@ -50,20 +47,6 @@ export interface EditComponentInfo {
   contact_person_phone: string
 }
 
-export interface CuAndSatitInfo {
-  account_type: Account
-  is_thai_language: boolean
-  name_th: string
-  surname_th: string
-  name_en: string
-  surname_en: string
-  username: string
-  personal_email: string
-  phone: string
-  is_penalize: boolean
-  expired_penalize_date: Date
-}
-
 export interface CuSatitComponentInfo {
   name_th: string
   surname_th: string
@@ -99,7 +82,6 @@ export interface AddUserComponentInfo {
   name_en: string
   surname_en: string
   username: string
-  personal_email: string
   phone: string
   password: string
   confirmPassword: string

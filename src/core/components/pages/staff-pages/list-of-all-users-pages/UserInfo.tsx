@@ -18,6 +18,8 @@ import {
 import Info, { ModalUserInfo } from "../interfaces/InfoInterface"
 import format from "date-fns/format"
 import { FormProvider, useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { emailSchema } from "../../../../schemas/editUserInfo"
 
 const UserInfo = () => {
   // page state //
@@ -80,8 +82,8 @@ const UserInfo = () => {
 
   // react router dom
   const { _id } = useParams<{ _id: string }>()
-  const methods = useForm()
-  const { register } = methods
+  const methods = useForm({ resolver: yupResolver(emailSchema) })
+  const { register, errors } = methods
   const history = useHistory()
 
   // requests //
@@ -303,7 +305,7 @@ const UserInfo = () => {
               <label className="mt-2">ชื่อผู้ใช้</label>
               {isEdit ? (
                 <Form.Control
-                  ref={register({ pattern: /.*([A-z])+.*/g })}
+                  ref={register}
                   name="username"
                   className="border"
                   style={{ backgroundColor: "white" }}
@@ -312,6 +314,11 @@ const UserInfo = () => {
                 />
               ) : (
                 <p className="font-weight-bold">{username}</p>
+              )}
+              {errors.username && (
+                <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                  {errors.username.message}
+                </span>
               )}
             </div>
           </div>

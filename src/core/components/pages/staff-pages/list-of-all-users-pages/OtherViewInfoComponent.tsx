@@ -4,17 +4,29 @@ import Info from "../interfaces/InfoInterface"
 import format from "date-fns/format"
 import isValid from "date-fns/isValid"
 import { useTranslation } from "react-i18next"
+import { useLanguge } from "../../../../i18n/i18n"
 
 export default function OtherViewInfoComponent({ info }: { info: Info }) {
   /// Page states
-  const [isThai, setThai] = useState<boolean>(true)
+  const [isThai, setThai] = useState<boolean>(false)
   const { t } = useTranslation()
+  const { changeLanguage } = useLanguge()
 
   // handles //
   const handlePDF = (e: React.MouseEvent<HTMLElement>) => {
     const fileId = (e.target as HTMLElement).id
-    window.open(`/staff/openFile/${fileId}`, "_blank")
+    if (fileId) window.open(`/staff/openFile/${fileId}`, "_blank")
   }
+
+  // const changeLanguage = (lang: string) => {
+  //   if (lang === "th") {
+  //     setThai(true)
+  //     i18n.changeLanguage("th")
+  //   } else {
+  //     setThai(false)
+  //     i18n.changeLanguage("en")
+  //   }
+  // }
 
   /// JSX Begins here
   const {
@@ -44,10 +56,26 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
           <h4>{isThai ? "ข้อมูลสมาชิก" : "Member Information"}</h4>
           <div className="row">
             <div className="col py-2">
-              <Button variant="outline-secondary" active={isThai} className="btn-normal btn-outline-black mr-2" onClick={() => setThai(true)}>
+              <Button
+                variant="outline-secondary"
+                active={isThai}
+                className="btn-normal btn-outline-black mr-2"
+                onClick={() => {
+                  changeLanguage("th")
+                  setThai(true)
+                }}
+              >
                 ไทย
               </Button>
-              <Button variant="outline-secondary" active={!isThai} className="btn-normal btn-outline-black" onClick={() => setThai(false)}>
+              <Button
+                variant="outline-secondary"
+                active={!isThai}
+                className="btn-normal btn-outline-black"
+                onClick={() => {
+                  changeLanguage("en")
+                  setThai(false)
+                }}
+              >
                 English
               </Button>
             </div>
@@ -132,31 +160,35 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
           <h6 className="form-label my-2">{info.membership_type}</h6>
           <label className="form-label my-2">{t("user_photo")}</label>
           <div className="form-file">
-            <p className="link" id={info.user_photo} onClick={handlePDF}>
+            <p className={info.user_photo ? "link" : undefined} id={info.user_photo} onClick={handlePDF}>
               View PDF
             </p>
           </div>
           <label className="form-label my-2">{t("national_id_photo")}</label>
           <div className="form-file">
-            <p className="link" id={info.national_id_photo} onClick={handlePDF}>
+            <p className={info.national_id_photo ? "link" : undefined} id={info.national_id_photo} onClick={handlePDF}>
               View PDF
             </p>
           </div>
           <label className="form-label my-2">{t("medical_certificate")}</label>
           <div className="form-file">
-            <p className="link" id={info.medical_certificate} onClick={handlePDF}>
+            <p className={info.medical_certificate ? "link" : undefined} id={info.medical_certificate} onClick={handlePDF}>
               View PDF
             </p>
           </div>
           <label className="form-label my-2">{t("house_registration_number")}</label>
           <div className="form-file">
-            <p className="link" id={info.house_registration_number} onClick={handlePDF}>
+            <p className={info.house_registration_number ? "link" : undefined} id={info.house_registration_number} onClick={handlePDF}>
               View PDF
             </p>
           </div>
           <label className="form-label my-2">{t("relationship_verification_document")}</label>
           <div className="form-file">
-            <p className="link" id={info.relationship_verification_document} onClick={handlePDF}>
+            <p
+              className={info.relationship_verification_document ? "link" : undefined}
+              id={info.relationship_verification_document}
+              onClick={handlePDF}
+            >
               View PDF
             </p>
           </div>
