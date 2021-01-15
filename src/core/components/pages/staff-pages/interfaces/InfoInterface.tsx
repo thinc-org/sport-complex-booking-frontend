@@ -1,6 +1,3 @@
-//enums
-import { Account } from "../../../../dto/account.dto"
-
 // interfaces //
 export default interface Info {
   prefix: string
