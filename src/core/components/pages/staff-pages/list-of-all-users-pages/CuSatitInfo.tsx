@@ -4,7 +4,7 @@ import { Link, useHistory, useParams } from "react-router-dom"
 import format from "date-fns/format"
 import { useForm } from "react-hook-form"
 import { client } from "../../../../../axiosConfig"
-import { CuSatitComponentInfo, Account, ModalUserInfo } from "../interfaces/InfoInterface"
+import { CuSatitComponentInfo, ModalUserInfo } from "../interfaces/InfoInterface"
 import { CuStudent, SatitCuPersonel } from "../../../../contexts/UsersContext"
 import PasswordChangeModal from "./PasswordChangeModal"
 import {
