@@ -1,6 +1,5 @@
 import React, { useContext } from "react"
 import { UserContext } from "../../../../contexts/UsersContext"
-import { Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import { WarningMessage } from "../../../ui/Modals/AccountPageModals"
 import { useTranslation } from "react-i18next"
