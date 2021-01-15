@@ -36,13 +36,7 @@ const VeritificationApproval: FunctionComponent = () => {
       params: params,
     })
       .then(({ data }: AxiosResponse<VerifyListRes>) => {
-        console.log(data)
-        const userList: VerifyInfoRes[] = data[1]
-        let newUserList: VerifyInfoRes[] = []
-        for (const user of userList) {
-          newUserList = [...newUserList, user]
-        }
-        setUsers(newUserList)
+        setUsers(data[1])
         setMaxUser(data[0])
       })
       .catch(({ response }) => {

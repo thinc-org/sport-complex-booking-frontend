@@ -40,7 +40,7 @@ export default function SportsSettings() {
           setShowError(true)
         })
     },
-    [pageNo]
+    [pageNo, setSports]
   )
 
   useEffect(() => {

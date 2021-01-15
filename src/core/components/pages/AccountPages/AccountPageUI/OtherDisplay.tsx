@@ -1,63 +1,13 @@
-import React, { useContext, useState, useEffect, useCallback } from "react"
+import React, { useContext } from "react"
 import { UserContext } from "../../../../contexts/UsersContext"
 import { Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import { WarningMessage } from "../../../ui/Modals/AccountPageModals"
 import { useTranslation } from "react-i18next"
-import { client } from "../../../../../axiosConfig"
-import { Token, FileName } from "../../../../dto/account.dto"
 
 export default function OtherAaccountDisplay() {
   const { otherAccount: user } = useContext(UserContext)
   const { t } = useTranslation()
-
-  const [fileTokens, setFileTokens] = useState([
-    { fileName: "user_photo", token: "" },
-    { fileName: "national_id_photo", token: "" },
-    { fileName: "medical_certificate", token: "" },
-    { fileName: "house_registration_number", token: "" },
-    { fileName: "relationship_verification_document", token: "" },
-  ])
-
-  const openFile = (token: string) => {
-    const url = process.env.REACT_APP_API_URL + "/fs/view?token=" + token
-    const win = window.open(url, "_blank")
-    win ? win.focus() : console.log("Error")
-  }
-
-  const getFileToken = useCallback(
-    (fileName: FileName) => {
-      if (!user) return null
-      const fileID = user[fileName]
-      if (fileID) {
-        client
-          .get<Token>("/fs/viewFileToken/" + fileID)
-          .then(({ data }) => {
-            const newTokens = fileTokens
-            newTokens.forEach((file) => {
-              if (file["fileName"] === fileName) {
-                file["token"] = data.token
-              }
-            })
-            setFileTokens(newTokens)
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-      }
-    },
-    [fileTokens, user]
-  )
-
-  const assignFileTokens = useCallback(() => {
-    return fileTokens.forEach((file) => {
-      getFileToken(file.fileName as FileName)
-    })
-  }, [getFileToken, fileTokens])
-
-  useEffect(() => {
-    assignFileTokens()
-  }, [assignFileTokens])
 
   return (
     <div className="mx-auto col-md-6">
@@ -160,9 +110,17 @@ export default function OtherAaccountDisplay() {
         <label className="form-label my-2">{t("user_photo")}</label>
         <div className="form-file">
           {user?.user_photo ? (
-            <Button className="btn-normal btn-secondary" onClick={() => openFile(fileTokens[0]["token"])}>
-              {t("viewFile")}
-            </Button>
+            <div>
+              <Button
+                type="button"
+                className="btn-normal btn-secondary"
+                onClick={() => {
+                  window.open("openFile/" + user.user_photo)
+                }}
+              >
+                {t("viewFile")}
+              </Button>
+            </div>
           ) : (
             <p>{t("noFile")}</p>
           )}
@@ -171,7 +129,13 @@ export default function OtherAaccountDisplay() {
         <label className="form-label my-2">{t("national_id_photo")}</label>
         <div className="form-file">
           {user?.national_id_photo ? (
-            <Button className="btn-normal btn-secondary" onClick={() => openFile(fileTokens[1]["token"])}>
+            <Button
+              type="button"
+              className="btn-normal btn-secondary"
+              onClick={() => {
+                window.open("openFile/" + user.national_id_photo)
+              }}
+            >
               {t("viewFile")}
             </Button>
           ) : (
@@ -182,7 +146,13 @@ export default function OtherAaccountDisplay() {
         <label className="form-label my-2">{t("medical_certificate")}</label>
         <div className="form-file">
           {user?.medical_certificate ? (
-            <Button className="btn-normal btn-secondary" onClick={() => openFile(fileTokens[2]["token"])}>
+            <Button
+              type="button"
+              className="btn-normal btn-secondary"
+              onClick={() => {
+                window.open("openFile/" + user.medical_certificate)
+              }}
+            >
               {t("viewFile")}
             </Button>
           ) : (
@@ -193,7 +163,13 @@ export default function OtherAaccountDisplay() {
         <label className="form-label my-2">{t("house_registration_number")}</label>
         <div className="form-file">
           {user?.house_registration_number ? (
-            <Button className="btn-normal btn-secondary" onClick={() => openFile(fileTokens[3]["token"])}>
+            <Button
+              type="button"
+              className="btn-normal btn-secondary"
+              onClick={() => {
+                window.open("openFile/" + user.house_registration_number)
+              }}
+            >
               {t("viewFile")}
             </Button>
           ) : (
@@ -204,7 +180,13 @@ export default function OtherAaccountDisplay() {
         <label className="form-label my-2">{t("relationship_verification_document")}</label>
         <div className="form-file">
           {user?.relationship_verification_document ? (
-            <Button className="btn-normal btn-secondary" onClick={() => openFile(fileTokens[4]["token"])}>
+            <Button
+              type="button"
+              className="btn-normal btn-secondary"
+              onClick={() => {
+                window.open("openFile/" + user.relationship_verification_document)
+              }}
+            >
               {t("viewFile")}
             </Button>
           ) : (
