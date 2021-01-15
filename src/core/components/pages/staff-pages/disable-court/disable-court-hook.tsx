@@ -96,8 +96,8 @@ export const useDate = (initialStartDate: Date | undefined = undefined, initialE
 export const useOption = () => {
   const [option, setOption] = useState<Sport[]>()
   const [currentSport, setCurrentSport] = useState<string>()
-  const fetchOption = async () => {
-    await client
+  const fetchOption = () => {
+    client
       .get("/court-manager/sports")
       .then((res) => {
         setOption(res.data)
@@ -116,8 +116,8 @@ export const useViewTable = (params: string) => {
   const { inProp, rowData, onAddRow, onDeleteRow, setInProp, setRowData, validateTimeSlot } = useRow()
   const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, setStartDate, setEndDate } = useDate()
 
-  const fetchViewData = useCallback(async () => {
-    await client
+  const fetchViewData = useCallback(() => {
+    client
       .get<ViewResponse>(`/courts/disable-courts/${params}`)
       .then((res) => {
         setViewData(res.data)
@@ -190,8 +190,8 @@ export const useTableWithPagination = () => {
     if (currentPage % 5 === 0) setPage(5 * (Math.floor(currentPage / 5) - 1))
     else setPage(5 * Math.floor(currentPage / 5))
   }
-  const fetchData = async (parameter: DisabledCourtSearchBody) => {
-    await client
+  const fetchData = (parameter: DisabledCourtSearchBody) => {
+    client
       .post("/courts/disable-courts/search", parameter)
       .then((res) => {
         const result = res.data.sliced_results
