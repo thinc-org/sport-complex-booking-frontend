@@ -85,7 +85,6 @@ export interface AddUserComponentInfo {
   name_en: string
   surname_en: string
   username: string
-  personal_email: string
   phone: string
   password: string
   confirmPassword: string

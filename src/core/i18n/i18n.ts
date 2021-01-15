@@ -1,6 +1,6 @@
 import i18n from "i18next"
 import LanguageDetector from "i18next-browser-languagedetector"
-import { initReactI18next } from "react-i18next"
+import { initReactI18next, useTranslation } from "react-i18next"
 import en from "../../locales/en/translation.json"
 import th from "../../locales/th/translation.json"
 import { getCookie } from "../../core/contexts/cookieHandler"
@@ -24,5 +24,18 @@ i18n
     },
     defaultNS: "common",
   })
+
+type Language = "th" | "en"
+
+export const useLanguge = () => {
+  const { i18n } = useTranslation()
+  const language = i18n.language as Language
+
+  const changeLanguage = (lang: Language) => {
+    i18n.changeLanguage(lang)
+  }
+
+  return { language, changeLanguage }
+}
 
 export default i18n

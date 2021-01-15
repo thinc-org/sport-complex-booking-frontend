@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from "react"
 import { Form, Card, Row, Col, Button } from "react-bootstrap"
 import { Link, useHistory } from "react-router-dom"
-import { useForm } from "react-hook-form"
+import { useForm, FormProvider } from "react-hook-form"
 import { AddInfo, ModalAddUser, AlertAddUser, AddUserComponentInfo } from "../interfaces/InfoInterface"
 import { client } from "../../../../../axiosConfig"
 import ChangePasswordComponent from "./AddUserPasswordComponent"
@@ -58,8 +58,10 @@ const AddUser: FunctionComponent = () => {
 
   const handleAdd = (data: AddUserComponentInfo) => {
     const { confirmPassword, ...rest } = data
-    const { username, name_th, surname_th, name_en, surname_en, personal_email, phone, password } = rest
-    const newUser = data.is_thai_language ? { ...rest, membership_type: user.membership_type } : { ...user, username: data.username }
+    const { username, name_th, surname_th, name_en, surname_en, phone, password } = rest
+    const newUser = data.is_thai_language
+      ? { ...rest, membership_type: user.membership_type, personal_email: username }
+      : { ...user, username: username }
     setUser(newUser)
     if (!validCheck(username)) setShowAlerts({ showAlertPassword: false, showAlertUncom: false, showAlertUsername: true })
     else if (password !== confirmPassword) setShowAlerts({ showAlertUncom: false, showAlertUsername: false, showAlertPassword: true })
@@ -73,7 +75,7 @@ const AddUser: FunctionComponent = () => {
       surname_th !== "" &&
       name_en !== "" &&
       surname_en !== "" &&
-      personal_email !== "" &&
+      username !== "" &&
       phone !== ""
     )
       setShowModals({ ...showModals, showAdd: true })
@@ -139,87 +141,85 @@ const AddUser: FunctionComponent = () => {
 
   const renderNormalForm = () => {
     return (
-      <Form onSubmit={handleSubmit(handleAdd)}>
-        {renderSelector(0)}
-        <Form.Group>
-          <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
-          <Form.Control ref={register} name="username" defaultValue={user.username} />
-          {errors.username && (
-            <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
-              {errors.username.message}
-            </span>
-          )}
-        </Form.Group>
-        <AlertInvalidUsername show={showAlerts} />
-        <ChangePasswordComponent selectingSatit={selectingSatit} />
-        <AlertErrorPassword show={showAlerts} />
-      </Form>
+      <FormProvider {...methods}>
+        <Form onSubmit={handleSubmit(handleAdd)}>
+          {renderSelector(0)}
+          <Form.Group>
+            <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
+            <Form.Control ref={register} name="username" defaultValue={user.username} />
+            {errors.username && (
+              <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                {errors.username.message}
+              </span>
+            )}
+          </Form.Group>
+          <AlertInvalidUsername show={showAlerts} />
+          <ChangePasswordComponent selectingSatit={selectingSatit} />
+          <AlertErrorPassword show={showAlerts} />
+        </Form>
+      </FormProvider>
     )
   }
 
   const renderSatitForm = () => {
     const { name_th, surname_th, name_en, surname_en, phone, username, is_thai_language } = user
     return (
-      <Form onSubmit={handleSubmit(handleAdd)}>
-        {renderSelector(9)}
-        <Form.Group>
-          <Form.Label>ภาษา</Form.Label>
-          <Form.Control ref={register} name="is_thai_language" className="m-0" as="select" defaultValue={is_thai_language ? 1 : 0}>
-            <option value={1}>ภาษาไทย</option>
-            <option value={0}>English</option>
-          </Form.Control>
-        </Form.Group>
-        <Form.Group>
-          <Row>
-            <Col>
-              <Form.Label>ชื่อ (ภาษาไทย)</Form.Label>
-              <Form.Control ref={register} name="name_th" defaultValue={name_th} />
-            </Col>
-            <Col>
-              <Form.Label>นามสกุล (ภาษาไทย)</Form.Label>
-              <Form.Control ref={register} name="surname_th" defaultValue={surname_th} />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Form.Label>ชื่อ (ภาษาอังกฤษ)</Form.Label>
-              <Form.Control ref={register} name="name_en" defaultValue={name_en} />
-            </Col>
-            <Col>
-              <Form.Label>นามสกุล (ภาษาอังกฤษ)</Form.Label>
-              <Form.Control ref={register} name="surname_en" defaultValue={surname_en} />
-            </Col>
-          </Row>
-        </Form.Group>
-        <Form.Group>
-          <Row className="mb-3">
-            <Col>
-              <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
-              <Form.Control ref={register} name="username" defaultValue={username} />
-              {errors.username && (
-                <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
-                  {errors.username.message}
-                </span>
-              )}
-            </Col>
-            <Col>
-              <Form.Label>เบอร์โทรศัพท์</Form.Label>
-              <Form.Control ref={register} name="phone" defaultValue={phone} />
-            </Col>
-          </Row>
-        </Form.Group>
-        <Form.Group>
-          <Row className="mb-3">
-            <Col>
-              <Form.Label>ชื่อผู้ใช้</Form.Label>
-              <Form.Control ref={register} name="username" defaultValue={username} />
-            </Col>
-          </Row>
-          <ChangePasswordComponent selectingSatit={selectingSatit} />
-          <AlertInvalidUsername show={showAlerts} />
-          <AlertErrorPassword show={showAlerts} />
-        </Form.Group>
-      </Form>
+      <FormProvider {...methods}>
+        <Form onSubmit={handleSubmit(handleAdd)}>
+          {renderSelector(9)}
+          <Form.Group>
+            <Form.Label>ภาษา</Form.Label>
+            <Form.Control ref={register} name="is_thai_language" className="m-0" as="select" defaultValue={is_thai_language ? 1 : 0}>
+              <option value={1}>ภาษาไทย</option>
+              <option value={0}>English</option>
+            </Form.Control>
+          </Form.Group>
+          <Form.Group>
+            <Row>
+              <Col>
+                <Form.Label>ชื่อ (ภาษาไทย)</Form.Label>
+                <Form.Control ref={register} name="name_th" defaultValue={name_th} />
+              </Col>
+              <Col>
+                <Form.Label>นามสกุล (ภาษาไทย)</Form.Label>
+                <Form.Control ref={register} name="surname_th" defaultValue={surname_th} />
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Form.Label>ชื่อ (ภาษาอังกฤษ)</Form.Label>
+                <Form.Control ref={register} name="name_en" defaultValue={name_en} />
+              </Col>
+              <Col>
+                <Form.Label>นามสกุล (ภาษาอังกฤษ)</Form.Label>
+                <Form.Control ref={register} name="surname_en" defaultValue={surname_en} />
+              </Col>
+            </Row>
+          </Form.Group>
+          <Form.Group>
+            <Row className="mb-3">
+              <Col>
+                <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
+                <Form.Control ref={register} name="username" defaultValue={username} />
+                {errors.username && (
+                  <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                    {errors.username.message}
+                  </span>
+                )}
+              </Col>
+              <Col>
+                <Form.Label>เบอร์โทรศัพท์</Form.Label>
+                <Form.Control ref={register} name="phone" defaultValue={phone} />
+              </Col>
+            </Row>
+          </Form.Group>
+          <Form.Group>
+            <ChangePasswordComponent selectingSatit={selectingSatit} />
+            <AlertInvalidUsername show={showAlerts} />
+            <AlertErrorPassword show={showAlerts} />
+          </Form.Group>
+        </Form>
+      </FormProvider>
     )
   }
 

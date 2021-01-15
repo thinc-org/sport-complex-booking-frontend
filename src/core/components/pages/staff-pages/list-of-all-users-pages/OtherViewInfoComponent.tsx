@@ -4,11 +4,13 @@ import Info from "../interfaces/InfoInterface"
 import format from "date-fns/format"
 import isValid from "date-fns/isValid"
 import { useTranslation } from "react-i18next"
+import { useLanguge } from "../../../../i18n/i18n"
 
 export default function OtherViewInfoComponent({ info }: { info: Info }) {
   /// Page states
   const [isThai, setThai] = useState<boolean>(false)
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const { changeLanguage } = useLanguge()
 
   // handles //
   const handlePDF = (e: React.MouseEvent<HTMLElement>) => {
@@ -16,15 +18,15 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
     if (fileId) window.open(`/staff/openFile/${fileId}`, "_blank")
   }
 
-  const changeLanguage = (lang: string) => {
-    if (lang === "th") {
-      setThai(true)
-      i18n.changeLanguage("th")
-    } else {
-      setThai(false)
-      i18n.changeLanguage("en")
-    }
-  }
+  // const changeLanguage = (lang: string) => {
+  //   if (lang === "th") {
+  //     setThai(true)
+  //     i18n.changeLanguage("th")
+  //   } else {
+  //     setThai(false)
+  //     i18n.changeLanguage("en")
+  //   }
+  // }
 
   /// JSX Begins here
   const {
@@ -54,10 +56,26 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
           <h4>{isThai ? "ข้อมูลสมาชิก" : "Member Information"}</h4>
           <div className="row">
             <div className="col py-2">
-              <Button variant="outline-secondary" active={isThai} className="btn-normal btn-outline-black mr-2" onClick={() => changeLanguage("th")}>
+              <Button
+                variant="outline-secondary"
+                active={isThai}
+                className="btn-normal btn-outline-black mr-2"
+                onClick={() => {
+                  changeLanguage("th")
+                  setThai(true)
+                }}
+              >
                 ไทย
               </Button>
-              <Button variant="outline-secondary" active={!isThai} className="btn-normal btn-outline-black" onClick={() => changeLanguage("en")}>
+              <Button
+                variant="outline-secondary"
+                active={!isThai}
+                className="btn-normal btn-outline-black"
+                onClick={() => {
+                  changeLanguage("en")
+                  setThai(false)
+                }}
+              >
                 English
               </Button>
             </div>
