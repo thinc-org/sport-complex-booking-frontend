@@ -25,10 +25,10 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
   const [isLoading, setLoading] = useState(false)
   const { i18n, t } = useTranslation()
 
-  const onLogin = async (data: LoginDTO) => {
+  const onLogin = (data: LoginDTO) => {
     setLoading(true)
     console.log(data)
-    await client
+    client
       .post<UserResponse>(`/users/login`, {
         username: data.username,
         password: data.password,
