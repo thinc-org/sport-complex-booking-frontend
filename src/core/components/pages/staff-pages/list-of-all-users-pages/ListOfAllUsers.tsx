@@ -161,7 +161,7 @@ const ListOfAllUsers: FunctionComponent = () => {
               style={{ backgroundColor: "white" }}
               type="text"
               id="searchName"
-              placeholder=" ค้นหา "
+              placeholder=" ค้นหาชื่อจริง "
               onChange={(e) => {
                 setSearchName(e.target.value)
               }}

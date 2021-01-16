@@ -19,6 +19,8 @@ import {
 import { isValid } from "date-fns"
 import { useTranslation } from "react-i18next"
 import { Account } from "../../../../dto/account.dto"
+import { infoSchema } from "../../../../schemas/editUserInfo"
+import { yupResolver } from "@hookform/resolvers/yup"
 
 type CuSatitType = CuStudent | SatitCuPersonel
 
@@ -59,7 +61,7 @@ const UserInfo: FunctionComponent = () => {
   const [tempUser, setTempUser] = useState<CuSatitType>(user)
 
   // react router dom //
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit, errors } = useForm({ resolver: yupResolver(infoSchema) })
   const history = useHistory()
   const { accType, _id } = useParams<{ accType: string; _id: string }>()
   const { t } = useTranslation()
@@ -369,12 +371,22 @@ const UserInfo: FunctionComponent = () => {
               <Form.Control ref={register} name="personal_email" defaultValue={user.personal_email} />
             </Col>
           </Row>
+          {errors.personal_email && (
+            <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+              {errors.personal_email.message}
+            </span>
+          )}
           <Row>
             <Col className="py-3">
               <p>เบอร์โทร</p>
               <Form.Control ref={register} name="phone" defaultValue={user.phone} />
             </Col>
           </Row>
+          {errors.phone && (
+            <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+              {errors.phone.message}
+            </span>
+          )}
           <Row className="py-3">
             <Col>
               <p>สถานะการแบน</p>
