@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next"
 import { ErrorOption } from "react-hook-form"
 import { LoginDTO } from "../../pages/staff-pages/staffHooks"
 import { DefaultAccount } from "../../../contexts/UsersContext"
+import { useLanguge } from "../../../i18n/i18n"
 
 interface UserResponse {
   token: string
@@ -24,10 +25,10 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
   const { path } = useRouteMatch()
   const [isLoading, setLoading] = useState(false)
   const { i18n, t } = useTranslation()
+  const { changeLanguage } = useLanguge()
 
   const onLogin = (data: LoginDTO) => {
     setLoading(true)
-    console.log(data)
     client
       .post<UserResponse>(`/users/login`, {
         username: data.username,
@@ -42,8 +43,8 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
         setIsFirstLogin(false)
         if (res.data.is_first_login) history.push(`${path}/personal`)
         else history.push("/home")
-        if (res.data.is_thai_language) i18n.changeLanguage("th")
-        else i18n.changeLanguage("en")
+        if (res.data.is_thai_language) changeLanguage("th")
+        else changeLanguage("en")
         window.location.reload()
       })
       .catch(() => {
@@ -72,8 +73,8 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
           setIsFirstLogin(first_time_login)
           if (res.data.is_first_login) history.push(`${path}/personal`)
           else history.push("/home")
-          if (res.data.is_thai_language) i18n.changeLanguage("th")
-          else i18n.changeLanguage("en")
+          if (res.data.is_thai_language) changeLanguage("th")
+          else changeLanguage("en")
         })
         .catch((err) => {
           setLoading(false)
@@ -83,7 +84,7 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
           })
         })
     }
-  }, [i18n, history, path, setError, setToken, t])
+  }, [i18n, history, path, setError, setToken, t, changeLanguage])
 
   return { isLoading, onLogin }
 }
@@ -113,7 +114,7 @@ export const usePersonalInfo = () => {
           },
         }
       )
-      .then((res) => {
+      .then(() => {
         setIsFirstLogin(false)
         history.push("/home")
       })
