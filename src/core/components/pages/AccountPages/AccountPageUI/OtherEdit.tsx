@@ -31,31 +31,29 @@ export default function OtherAccountEdit() {
 
   // Handlers
   const handleFileUpload = (formData: FormData) => {
-    client
-      .post<DocumentUploadResponse>("/fs/upload", { ...formData })
-      .catch(() => {
-        setShowErr(true)
-      })
+    client.post<DocumentUploadResponse>("/fs/upload", formData).catch(() => {
+      setShowErr(true)
+    })
   }
 
   const uploadUserPhoto = (file: File) => {
     const formData = new FormData()
-    formData.append("user_photo", file ? file : file, file?.name)
+    formData.append("user_photo", file, file?.name)
     handleFileUpload(formData)
   }
   const uploadNationalId = (file: File) => {
     const formData = new FormData()
-    formData.append("national_id_photo", file ? file : file, file?.name)
+    formData.append("national_id_photo", file, file?.name)
     handleFileUpload(formData)
   }
   const uploadMedicalCertificate = (file: File) => {
     const formData = new FormData()
-    formData.append("medical_certificate", file ? file : file, file?.name)
+    formData.append("medical_certificate", file, file?.name)
     handleFileUpload(formData)
   }
   const uploadHouseRegistrationNumber = (file: File) => {
     const formData = new FormData()
-    formData.append("house_registration_number", file ? file : file, file?.name)
+    formData.append("house_registration_number", file, file?.name)
     handleFileUpload(formData)
   }
   const uploadRelationshipVerificationDocument = (file: File) => {
@@ -134,7 +132,7 @@ export default function OtherAccountEdit() {
     /// THIS IS THE START OF THE EDITING VIEW
     <div className="mx-auto col-md-6">
       {user && <WarningMessage show={user.verification_status !== ""} verification_status={user.verification_status} account={user.account_type} />}
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="needs-validation">
         <div className="default-mobile-wrapper my-3">
           <h4 className="align-right mb-2">{t("language")}</h4>
           <div className="row mt-2 mx-1">
@@ -444,65 +442,88 @@ export default function OtherAccountEdit() {
           <label className="form-label my-2">{t("user_photo")}</label>
           <div className="form-file">
             <p>{user_photo ? "File Uploaded. Choose a new file?" : ""}</p>
-            <input
-              type="file"
-              className="form-file-input form-control"
-              id="user_photo"
-              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("user_photo")}
-              onChange={(e) => e.target.files && assignUserPhoto(e.target.files)}
-            />
+            {!user?.user_photo ? (
+              <input
+                type="file"
+                className="form-file-input form-control"
+                id="user_photo"
+                required
+                readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("user_photo")}
+                onChange={(e) => e.target.files && assignUserPhoto(e.target.files)}
+              />
+            ) : (
+              <p>{t("submitted")}</p>
+            )}
           </div>
           {user?.rejected_info?.includes("user_photo") ? <p className="input-error">{t("resubmitField")}</p> : null}
           <hr />
           <label className="form-label my-2">{t("national_id_photo")}</label>
           <div className="form-file">
             <p>{national_id_scan ? "File Uploaded. Choose a new file?" : ""}</p>
-            <input
-              type="file"
-              className="form-file-input  form-control"
-              id="nationID/passport"
-              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("national_id_photo")}
-              onChange={(e) => e.target.files && assignNationalIdPhoto(e.target.files)}
-            />
+            {!user?.national_id_photo ? (
+              <input
+                type="file"
+                className="form-file-input  form-control"
+                id="nationID/passport"
+                required
+                readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("national_id_photo")}
+                onChange={(e) => e.target.files && assignNationalIdPhoto(e.target.files)}
+              />
+            ) : (
+              <p>{t("submitted")}</p>
+            )}
           </div>
           {user?.rejected_info?.includes("national_id_photo") ? <p className="input-error">{t("resubmitField")}</p> : null}
           <hr />
           <label className="form-label my-2">{t("medical_certificate")}</label>
           <div className="form-file">
             <p>{medical_certificate ? "File Uploaded. Choose a new file?" : ""}</p>
-            <input
-              type="file"
-              className="form-file-input  form-control"
-              id="medical_certificate"
-              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("medical_certificate")}
-              onChange={(e) => e.target.files && assignMedicalCertificate(e.target.files)}
-            />
+            {!user?.medical_certificate ? (
+              <input
+                type="file"
+                className="form-file-input  form-control"
+                id="medical_certificate"
+                required
+                readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("medical_certificate")}
+                onChange={(e) => e.target.files && assignMedicalCertificate(e.target.files)}
+              />
+            ) : (
+              <p>{t("submitted")}</p>
+            )}
           </div>
           {user?.rejected_info?.includes("medical_certificate") ? <p className="input-error">{t("resubmitField")}</p> : null}
           <hr />
           <label className="form-label my-2">{t("house_registration_number")}</label>
           <div className="form-file">
             <p>{house_registration_number ? "File Uploaded. Choose a new file?" : ""}</p>
-            <input
-              type="file"
-              className="form-file-input  form-control"
-              id="house_registration_number"
-              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("house_registration_number")}
-              onChange={(e) => e.target.files && assignHouseRegistrationNumber(e.target.files)}
-            />
+            {!user?.house_registration_number ? (
+              <input
+                type="file"
+                className="form-file-input  form-control"
+                id="house_registration_number"
+                readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("house_registration_number")}
+                onChange={(e) => e.target.files && assignHouseRegistrationNumber(e.target.files)}
+              />
+            ) : (
+              <p>{t("submitted")}</p>
+            )}
           </div>
           {user?.rejected_info?.includes("house_registration_number") ? <p className="input-error">{t("resubmitField")}</p> : null}
           <hr />
           <label className="form-label my-2">{t("relationship_verification_document")}</label>
           <div className="form-file">
             <p>{relationship_verification_document ? "File Uploaded. Choose a new file?" : ""}</p>
-            <input
-              type="file"
-              className="form-file-input  form-control"
-              id="relationship_verification_document"
-              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("relationship_verification_document")}
-              onChange={(e) => e.target.files && assignRelationshipVerificationDocument(e.target.files)}
-            />
+            {!user?.relationship_verification_document ? (
+              <input
+                type="file"
+                className="form-file-input  form-control"
+                id="relationship_verification_document"
+                readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("relationship_verification_document")}
+                onChange={(e) => e.target.files && assignRelationshipVerificationDocument(e.target.files)}
+              />
+            ) : (
+              <p>{t("submitted")}</p>
+            )}
           </div>
           {user?.rejected_info?.includes("relationship_verification_document") ? <p className="input-error">{t("resubmitField")}</p> : null}
         </div>

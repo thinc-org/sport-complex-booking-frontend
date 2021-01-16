@@ -51,7 +51,6 @@ const ListOfAllUsers: FunctionComponent = () => {
         setUsers(data[1])
       })
       .catch(({ response }) => {
-        console.log(response)
         if (response && response.data.statusCode === 401) history.push("/staff")
       })
   }, [history, maxUserPerPage, pageNo, searchName, status])
@@ -153,7 +152,7 @@ const ListOfAllUsers: FunctionComponent = () => {
       <Form onSubmit={handleSearch} className="mb-2">
         <Form.Row className="justify-content-end align-items-center">
           <Col md="auto">
-            <Form.Label className="mb-0 font-weight-bold"> ค้นหาผู้ใช้ </Form.Label>
+            <Form.Label className="mb-0 font-weight-bold"> ค้นหาชื่อ </Form.Label>
           </Col>
           <Col md="5">
             <Form.Control

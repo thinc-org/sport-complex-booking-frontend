@@ -36,7 +36,6 @@ function useNavHeader(): navHeaderState | navHeaderProps {
   useEffect(() => {
     setState(currentState)
     const listener = (newState: navHeaderState) => {
-      console.log(JSON.stringify(newState))
       setState(newState)
     }
     emitter.addListener("change", listener)

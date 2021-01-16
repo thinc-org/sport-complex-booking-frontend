@@ -27,7 +27,6 @@ const AddCourt = () => {
       starting_date: startDate?.toUTCString(),
       expired_date: endDate?.toUTCString(),
     }
-    console.log(formData)
     await client
       .post("/courts/disable-courts", formData)
       .then(() => {
@@ -113,7 +112,7 @@ const AddCourt = () => {
           <div className="mt-3 small-table">
             {CourtTable<ViewRowProps>({
               data: rowData,
-              header: ["Index", "วัน", "เวลาที่เริ่มปิด", "เวลาสิ้นสุดการปิด"],
+              header: ["ลำดับ", "วัน", "เวลาที่เริ่มปิด", "เวลาสิ้นสุดการปิด"],
               Row: ViewRow,
               Button: withDeletable(DeleteButton, onDeleteRow),
             })}

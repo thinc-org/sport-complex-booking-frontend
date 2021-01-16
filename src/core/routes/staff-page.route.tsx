@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { Route, Switch, useRouteMatch, useLocation } from "react-router-dom"
 
 import StaffLogin from "../components/pages/staff-pages/staff-login"
@@ -19,6 +19,7 @@ import Settings from "../components/pages/staff-pages/settings/Settings"
 
 import AllReservation from "../components/pages/staff-pages/all-reservation-pages/ReservationList"
 import ReservationDetail from "../components/pages/staff-pages/all-reservation-pages/ReservationDetail"
+import { client } from "../../axiosConfig"
 
 const StaffRoute = () => {
   const { path } = useRouteMatch()
@@ -40,6 +41,26 @@ const StaffRoute = () => {
     ["/reservationDetail`", ""],
   ])
 
+  const [type, setType] = useState("staff")
+
+  const fetchType = useCallback(() => {
+    client
+      .get("staffs/profile")
+      .then((res) => {
+        console.log(res.data)
+        console.log(res.data.is_admin)
+        if (res.data.is_admin) setType("admin")
+        else setType("staff")
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [])
+
+  useEffect(() => {
+    fetchType()
+  }, [fetchType])
+
   const StaffRouteWithHeader = () => {
     return (
       <div className="staff background d-block" style={{ backgroundColor: "white", minHeight: "80vh" }}>
@@ -51,7 +72,7 @@ const StaffRoute = () => {
             >
               <div className="row justify-content-center" style={{ minHeight: "80vh" }}>
                 <div className="col-3 justify-content-center" style={{ maxHeight: "800px" }}>
-                  <StaffSidebar />
+                  <StaffSidebar type={type} />
                 </div>
                 <div className="col-9 mt-5" style={{ minHeight: "600px" }}>
                   <h1>

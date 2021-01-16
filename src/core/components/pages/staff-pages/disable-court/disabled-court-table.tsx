@@ -40,7 +40,7 @@ export const ViewRow = ({ time_slot, indx, day, button }: ViewRowProps) => {
   const minute = getMinute(time_slot)
   return (
     <tr>
-      <td>{indx}</td>
+      <td>{indx + 1}</td>
       <td>{dayArr[day]}</td>
       <td>{getTime(minute.startTime)}</td>
       <td className={button ? "d-flex flex-row justify-content-end align-items-center" : ""}>

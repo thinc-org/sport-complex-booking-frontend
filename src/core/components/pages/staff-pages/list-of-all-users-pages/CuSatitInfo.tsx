@@ -73,7 +73,6 @@ const UserInfo: FunctionComponent = () => {
         data.account_type === "CuStudent" ? setUser(data as CuStudent) : setUser(data as SatitCuPersonel)
       })
       .catch(({ response }) => {
-        console.log(response)
         if (response && response.data.statusCode === 401) history.push("/staff")
       })
   }, [_id, history])
@@ -164,7 +163,6 @@ const UserInfo: FunctionComponent = () => {
         setEditing(false)
       })
       .catch(({ response }) => {
-        console.log(response)
         setShowModals({ ...showModals, showSave: false, showErr: true })
       })
   }
@@ -179,7 +177,6 @@ const UserInfo: FunctionComponent = () => {
         setShowModals({ ...showModals, showDelete: false, showComDelete: true })
       })
       .catch(({ response }) => {
-        console.log(response)
         setShowModals({ ...showModals, showDelete: false, showErr: true })
       })
   }
@@ -196,7 +193,6 @@ const UserInfo: FunctionComponent = () => {
         setShowModals({ ...showModals, showConfirmChange: false, showChangePassword: false })
       })
       .catch((err) => {
-        console.log(err)
         setShowModals({ ...showModals, showErr: true })
       })
   }
