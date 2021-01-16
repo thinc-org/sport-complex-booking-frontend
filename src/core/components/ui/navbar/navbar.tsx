@@ -9,12 +9,14 @@ import Exit from "../../../assets/images/icons/exit.svg"
 import { data } from "./sidebarData"
 import { useNavHeader } from "./navbarSideEffect"
 import { useTranslation } from "react-i18next"
+import { useLanguge } from "../../../i18n/i18n"
 
 const Sidebar = () => {
   const [inProp, setInProp] = useState(false)
   const { header, isOnStaffPage } = useNavHeader()
   const { isUser, setToken } = useAuthContext()
   const { t } = useTranslation()
+  const { changeLanguage } = useLanguge()
   const listItems = data.map((item, index) => (
     <li key={index}>
       <Link className="styled-link" to={item.path} onClick={() => setInProp(false)}>
@@ -26,13 +28,6 @@ const Sidebar = () => {
     setToken("")
     setCookie("token", null, 0)
     setInProp(false)
-  }
-
-  const { i18n } = useTranslation()
-
-  const changeLanguage = (language: string) => {
-    setCookie("is_thai_language", language === "th", 999)
-    i18n.changeLanguage(language)
   }
 
   return (

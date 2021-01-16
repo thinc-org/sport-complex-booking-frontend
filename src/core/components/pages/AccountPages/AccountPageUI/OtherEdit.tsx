@@ -32,11 +32,7 @@ export default function OtherAccountEdit() {
   // Handlers
   const handleFileUpload = (formData: FormData) => {
     client
-      .post<DocumentUploadResponse>("/fs/upload", formData)
-      .then(({ data }) => {
-        console.log("RESPONSE DTO IS")
-        console.log(data)
-      })
+      .post<DocumentUploadResponse>("/fs/upload", { ...formData })
       .catch(() => {
         setShowErr(true)
       })
@@ -113,7 +109,7 @@ export default function OtherAccountEdit() {
 
   const postDataToBackend = (data: Other) => {
     client
-      .put<Other>("/account_info/", data)
+      .put<Other>("/account_info/", { ...data, is_thai_language: is_thai_language })
       .then(({ data }) => {
         if (data.verification_status === "Submitted") {
           handleAllFilesUpload(user_photo, national_id_scan, medical_certificate, house_registration_number, relationship_verification_document)

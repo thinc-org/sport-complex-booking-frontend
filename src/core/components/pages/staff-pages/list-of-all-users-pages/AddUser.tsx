@@ -61,7 +61,7 @@ const AddUser: FunctionComponent = () => {
     const { username, name_th, surname_th, name_en, surname_en, phone, password } = rest
     const newUser = data.is_thai_language
       ? { ...rest, membership_type: user.membership_type, personal_email: username }
-      : { ...user, username: username }
+      : { ...user, username: username, password: data.password }
     setUser(newUser)
     if (!validCheck(username)) setShowAlerts({ showAlertPassword: false, showAlertUncom: false, showAlertUsername: true })
     else if (password !== confirmPassword) setShowAlerts({ showAlertUncom: false, showAlertUsername: false, showAlertPassword: true })

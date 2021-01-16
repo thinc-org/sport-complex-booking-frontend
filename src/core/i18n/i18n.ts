@@ -4,6 +4,7 @@ import { initReactI18next, useTranslation } from "react-i18next"
 import en from "../../locales/en/translation.json"
 import th from "../../locales/th/translation.json"
 import { getCookie } from "../../core/contexts/cookieHandler"
+import { client } from "../../axiosConfig"
 
 i18n
   .use(LanguageDetector)
@@ -33,6 +34,9 @@ export const useLanguge = () => {
 
   const changeLanguage = (lang: Language) => {
     i18n.changeLanguage(lang)
+    client.put("users/changeLanguage", { is_thai_language: lang === "th" }).catch((err) => {
+      console.log(err.response.message)
+    })
   }
 
   return { language, changeLanguage }
