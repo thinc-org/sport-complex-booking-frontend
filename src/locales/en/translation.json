@@ -239,5 +239,6 @@
   },
   "noReservation": "You have no any reservation.",
   "qrcodeInvalid": "This QR code will be invalid in",
-  "usernameLabel": "Username"
+  "usernameLabel": "Username",
+  "submitted": "Submitted"
 }

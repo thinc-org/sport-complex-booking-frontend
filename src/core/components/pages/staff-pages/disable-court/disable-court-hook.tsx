@@ -262,7 +262,6 @@ export const seed = () => {
     })
   }
   arr.forEach((val) => {
-    console.log(val)
     client
       .post("/courts/disable-courts", val)
       .then((res) => console.log(res))

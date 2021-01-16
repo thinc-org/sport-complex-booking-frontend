@@ -72,7 +72,6 @@ const ReservationDetail = () => {
   const [modalOpen, setModalOpen] = useState(false)
 
   const triggerModal = () => {
-    console.log("show modal")
     setModalOpen(!modalOpen)
     return modalOpen
   }

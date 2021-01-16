@@ -44,14 +44,12 @@ const ViewCourt = () => {
       starting_date: startDate,
       expired_date: endDate,
     }
-    console.log(formData)
     client
       .put(`/courts/disable-courts/${params.id}`, formData)
       .then((res) => {
         history.goBack()
       })
       .catch((err) => {
-        console.log(err)
         setError(err.response.message)
       })
   }
@@ -107,7 +105,7 @@ const ViewCourt = () => {
         <div>
           {CourtTable<ViewRowProps>({
             data: rowData,
-            header: ["Index", "วัน", "เวลาที่เริ่มปิด", "เวลาสิ้นสุดการปิด"],
+            header: ["ลำดับ", "วัน", "เวลาที่เริ่มปิด", "เวลาสิ้นสุดการปิด"],
             Row: ViewRow,
             Button: isEdit ? withDeletable(DeleteButton, onDeleteRow) : undefined,
           })}

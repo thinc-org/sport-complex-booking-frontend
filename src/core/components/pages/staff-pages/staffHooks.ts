@@ -26,6 +26,7 @@ export const useStaffLogin = (setError: (name: string, error: ErrorOption) => vo
         setCookie("token", res.data.jwt, 1)
         setToken(res.data.jwt)
         history.push("/staff/profile")
+        window.location.reload()
       })
       .catch(() => {
         setError("invalidInput", { type: "async", message: "Username หรือ Password ไม่ถูกต้อง" })

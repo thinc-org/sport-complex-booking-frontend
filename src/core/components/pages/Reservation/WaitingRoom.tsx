@@ -38,7 +38,6 @@ const WaitingRoomPage = () => {
 
   const fetchWaitingRoom = useCallback(async () => {
     try {
-      console.log("fetch data")
       const res: AxiosResponse<WaitingRoomResponse> = await client.get("/mywaitingroom")
       setListMember(res.data.list_member)
       // time sent from backend is UTC before adding 7 for Thailand

@@ -134,7 +134,6 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
         })
       })
       .catch(({ response }) => {
-        console.log(response)
         if (response && response.data.statusCode === 401) history.push("/staff")
       })
   }, [_id, history])
@@ -171,7 +170,6 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
         setShowModalInfo({ ...showModalInfo, showConfirmReject: false, showCompleteReject: true })
       })
       .catch((err) => {
-        console.log(err)
         setShowModalInfo({ ...showModalInfo, showConfirmReject: false, showErr: true })
       })
   }
@@ -193,7 +191,6 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
         setShowModalInfo({ ...showModalInfo, showConfirmAccept: false, showCompleteAccept: true })
       })
       .catch((err) => {
-        console.log(err)
         setShowModalInfo({ ...showModalInfo, showConfirmAccept: false, showErr: true })
       })
   }

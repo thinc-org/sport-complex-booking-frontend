@@ -25,9 +25,6 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = () => {
 
   useEffect(() => {
     if (readingResult) {
-      console.log("current time: " + new Date().getTime())
-      console.log("valid time: " + parseInt(readingResult.slice(0, readingResult.indexOf("/"))))
-      console.log("id: " + readingResult.slice(readingResult.indexOf("/") + 1))
       setCurrentTime(new Date().getTime())
       setValidTime(parseInt(readingResult.slice(0, readingResult.indexOf("/"))))
       setId(readingResult.slice(readingResult.indexOf("/") + 1))
@@ -53,8 +50,6 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = () => {
         }, 3000)
       }
     } catch (err) {
-      console.log("Reservation ID: " + reservationId)
-      console.log(err.name)
       setMessageHeader("เช็คอินไม่สำเร็จ")
       setMessageBody(err.message)
       setModalOpen(true)
@@ -79,7 +74,6 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = () => {
   }, [validTime, id, checkIn, currentTime])
 
   const refresh = () => {
-    console.log("refresh")
     setReadingResult(undefined)
     setCurrentTime(undefined)
     setValidTime(undefined)

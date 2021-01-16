@@ -48,7 +48,6 @@ export default function StaffManagement() {
           },
         })
         .then(({ data }) => {
-          console.log(data)
           setStaffs(data["staff_list"])
           setMaxStaff(data["allStaff_length"])
         })
@@ -84,11 +83,9 @@ export default function StaffManagement() {
 
   const sendNewStaffInfo = (newStaff: AdminAndStaff) => {
     delete newStaff.recheckpasssword
-    console.log("This is newStaff" + newStaff)
     client
       .post<StaffResponse>("/staff-manager/", newStaff)
       .then(({ data }) => {
-        console.log(data)
         setShowAddStaff(false)
         requestStaffs()
       })
@@ -98,7 +95,6 @@ export default function StaffManagement() {
   }
 
   const sendDeleteStaff = (currentStaff: AdminAndStaff) => {
-    console.log(currentStaff["_id"])
     client
       .delete<StaffResponse>("/staff-manager/" + currentStaff["_id"])
       .then(() => {
@@ -168,7 +164,7 @@ export default function StaffManagement() {
                     as="select"
                     custom
                     value={staff.is_admin ? "แอดมิน" : "สตาฟ"}
-                    disabled={staff.name === "first admin"}
+                    disabled={staff.username === "admin"}
                     onChange={(e) => {
                       onSubmitEditStaff(e.target.value, staff)
                       setShowEditStaff(true)
@@ -232,8 +228,6 @@ export default function StaffManagement() {
           key={num}
           onClick={() => {
             setPageNo(num)
-            console.log(pageNo)
-            console.log("GOTO:" + num)
             handlePagination(num)
           }}
         >

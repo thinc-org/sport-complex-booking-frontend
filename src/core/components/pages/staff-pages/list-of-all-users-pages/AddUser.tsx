@@ -108,7 +108,6 @@ const AddUser: FunctionComponent = () => {
         setShowModals({ ...showModals, showAdd: false, showCom: true })
       })
       .catch(({ response }) => {
-        console.log(response)
         if (response && response.data.statusCode === 400) setShowModals({ ...showModals, showAdd: false, showUsernameErr: true })
         else if (response && response.data.statusCode === 401) history.push("/staff")
         else setShowModals({ ...showModals, showAdd: false, showErr: true })

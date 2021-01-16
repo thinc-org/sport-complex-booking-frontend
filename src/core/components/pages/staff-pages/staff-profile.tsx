@@ -10,7 +10,6 @@ function StaffProfile() {
   const [isLoading, setIsLoading] = useState(true)
   const [errMessage, setErrMessage] = useState<string>()
   const [showError, setShowError] = useState(false)
-
   const fetchData = useCallback(async () => {
     try {
       const res: ProfileResponse = (await client.get("staffs/profile")).data
@@ -23,7 +22,6 @@ function StaffProfile() {
       }
       setIsLoading(false)
     } catch (err) {
-      console.log(err)
       setErrMessage("Request Failed. Please make sure you have logged in and try refresh the page.")
       setShowError(true)
     }

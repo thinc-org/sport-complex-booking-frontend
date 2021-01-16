@@ -33,11 +33,9 @@ const ReservationPage = () => {
 
   useEffect(() => {
     fetchData()
-    console.log("fetch data")
   }, [fetchData])
 
   const handleClick = (id: string) => {
-    console.log("button clicked")
     return history.push({
       pathname: `${path}/reservationdetail`,
       state: {
@@ -47,18 +45,13 @@ const ReservationPage = () => {
     })
   }
 
-  useEffect(() => {
-    fetchData()
-    console.log("fetch data")
-  }, [fetchData])
-
   if (lists && lists.length && !isLoading) {
     return (
       <>
         <NavHeader header={t("myReservation")} />
         <div className="container">
           <div className="row justify-content-center mt-5">
-            <div className="col-12">
+            <div className="col-12 animated-card">
               {lists.map((list) => {
                 return (
                   <Button
