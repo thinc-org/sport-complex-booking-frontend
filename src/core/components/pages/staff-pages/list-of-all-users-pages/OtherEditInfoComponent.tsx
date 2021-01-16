@@ -66,7 +66,6 @@ export default function OtherEditInfoComponent({
         data: formData,
       })
         .then(({ data }) => {
-          console.log(data)
           setTempInfo({
             ...tempInfo,
             [Object.keys(data)[0]]: data[Object.keys(data)[0]],

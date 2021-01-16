@@ -30,7 +30,6 @@ const PasswordChangeModal: FunctionComponent<propsInterface> = ({ showModals, se
 
   // handle //
   const handleChangePassword = (data: passwordFormInfo) => {
-    console.log(data)
     const { newPassword, confirmPassword } = data
     if (newPassword !== confirmPassword) setShowModals({ ...showModals, showPasswordErr: true })
     else {
