@@ -1,10 +1,11 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useForm, useWatch } from "react-hook-form"
 import { Container, Row, Col, Button, Form } from "react-bootstrap"
 import { useHistory } from "react-router-dom"
 import { useOption, useDate, withDeletable, useRow } from "./disable-court-hook"
 import { ErrorAlert, FormAlert } from "./modals"
 import DatePicker from "react-datepicker"
+import { format } from "date-fns"
 import { ViewRowProps, AddCourtForm } from "../../../../dto/disableCourt.dto"
 import { CourtTable, ViewRow } from "./disabled-court-table"
 import { client } from "../../../../../axiosConfig"
@@ -18,16 +19,17 @@ const AddCourt = () => {
   const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
   const { option } = useOption()
   const watchSports = useWatch({ control, name: "sportObjId", defaultValue: "" })
-  const onSubmit = async (data: AddCourtForm) => {
+  const onSubmit = (data: AddCourtForm) => {
     const formData = {
       ...data,
       sport_id: data.sportObjId,
       court_num: parseInt(data.court_num),
       disable_time: rowData,
-      starting_date: startDate?.toUTCString(),
-      expired_date: endDate?.toUTCString(),
+      starting_date: startDate ? format(startDate, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd"),
+      expired_date: endDate ? format(endDate, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd"),
     }
-    await client
+    console.log(formData)
+    client
       .post("/courts/disable-courts", formData)
       .then(() => {
         history.goBack()
@@ -39,7 +41,8 @@ const AddCourt = () => {
             message: "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง",
           })
         } else {
-          if (err.response.reason) setOverlapData({ reservation: err.response.overlapReservations, waitingRoom: err.response.overlapWaitings })
+          if (err.response.data.reason)
+            setOverlapData({ reservation: err.response.data.overlapReservations, waitingRoom: err.response.data.overlapWaitingRooms })
           setError("duplicate", {
             type: "manual",
             message: "วันหรือเวลาของการปิดคอร์ดนี้ซ้ำกับการปิดคอร์ดที่มีอยู่แล้ว",
@@ -47,6 +50,9 @@ const AddCourt = () => {
         }
       })
   }
+  useEffect(() => {
+    console.log(overlapData)
+  }, [overlapData])
 
   return (
     <Container fluid>
@@ -141,7 +147,7 @@ const AddCourt = () => {
               className="mr-3"
               type="submit"
               onClick={() => {
-                if (errors.request) clearErrors("request")
+                if (errors) clearErrors()
                 if (overlapData) setOverlapData(undefined)
               }}
             >

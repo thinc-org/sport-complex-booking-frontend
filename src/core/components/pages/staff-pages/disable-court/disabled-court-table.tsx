@@ -2,7 +2,7 @@ import React from "react"
 import { useRouteMatch, useHistory } from "react-router-dom"
 import { Button, Table } from "react-bootstrap"
 import { format } from "date-fns"
-import addDays from "date-fns/addDays"
+import subDays from "date-fns/subDays"
 import { getMinute, getTime, dayArr } from "./mapTime"
 import { RowProps, TableProps, ViewRowProps, ErrorRowProps } from "../../../../dto/disableCourt.dto"
 
@@ -10,17 +10,17 @@ export const CourtRow = ({ _id, starting_date, expired_date, court_num, sport_id
   const { path } = useRouteMatch()
   const history = useHistory()
   const onNavigate = () => history.push(`${path}/${_id}`)
-  const startingDate = addDays(new Date(starting_date), 1)
-  const expiredDate = new Date(expired_date)
+  const startingDate = new Date(starting_date)
+  const expiredDate = subDays(new Date(expired_date), 1)
   return (
     <>
       {_id && court_num ? (
         <tr>
           <td>{court_num}</td>
           <td>{sport_id.sport_name_th}</td>
-          <td>{format(startingDate, "MM/dd/yyyy")}</td>
+          <td>{format(startingDate, "dd/MM/yyyy")}</td>
           <td className="d-flex flex-row justify-content-between align-items-center">
-            {format(expiredDate, "MM/dd/yyyy")}
+            {format(expiredDate, "dd/MM/yyyy")}
             <div className="d-flex flex-row">
               <Button variant="outline-transparent" className="mr-2" onClick={onNavigate}>
                 ดูข้อมูล
@@ -53,11 +53,12 @@ export const ViewRow = ({ time_slot, indx, day, button }: ViewRowProps) => {
 
 export const ErrorRow = ({ date, phone, indx, time_slot }: ErrorRowProps) => {
   const time = getMinute(time_slot)
+  const overlapDate = format(new Date(date), "dd/MM/yyyy")
   return (
     <tr>
       <td>{indx + 1}</td>
       <td>{phone}</td>
-      <td>{date}</td>
+      <td>{overlapDate}</td>
       <td>{`${getTime(time.startTime)}-${getTime(time.endTime)}`}</td>
     </tr>
   )
