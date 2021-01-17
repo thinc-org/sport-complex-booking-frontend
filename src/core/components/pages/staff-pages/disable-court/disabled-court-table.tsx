@@ -4,7 +4,7 @@ import { Button, Table } from "react-bootstrap"
 import { format } from "date-fns"
 import addDays from "date-fns/addDays"
 import { getMinute, getTime, dayArr } from "./mapTime"
-import { RowProps, TableProps, ViewRowProps } from "../../../../dto/disableCourt.dto"
+import { RowProps, TableProps, ViewRowProps, ErrorRowProps } from "../../../../dto/disableCourt.dto"
 
 export const CourtRow = ({ _id, starting_date, expired_date, court_num, sport_id, button }: RowProps) => {
   const { path } = useRouteMatch()
@@ -47,6 +47,18 @@ export const ViewRow = ({ time_slot, indx, day, button }: ViewRowProps) => {
         {getTime(minute.endTime)}
         {button}
       </td>
+    </tr>
+  )
+}
+
+export const ErrorRow = ({ date, phone, indx, time_slot }: ErrorRowProps) => {
+  const time = getMinute(time_slot)
+  return (
+    <tr>
+      <td>{indx + 1}</td>
+      <td>{phone}</td>
+      <td>{date}</td>
+      <td>{`${getTime(time.startTime)}-${getTime(time.endTime)}`}</td>
     </tr>
   )
 }

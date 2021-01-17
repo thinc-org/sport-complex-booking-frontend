@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, ComponentType, useCallback } from "react"
-
+import axios from "axios"
 import {
   RowProps,
   QueryParams,
@@ -10,10 +10,12 @@ import {
   TimeSlotRow,
   DisabledCourtSearchBody,
   DisableCourtBody,
+  OverlapData,
 } from "../../../../dto/disableCourt.dto"
 import { Sport } from "../../../../dto/sport.dto"
 import add from "date-fns/addDays"
 import { client } from "../../../../../axiosConfig"
+import Axios from "axios"
 
 export const toViewRowProps = (data: disable_time[] | undefined): ViewRowProps[] => {
   const result: ViewRowProps[] = []
@@ -27,6 +29,7 @@ export const toViewRowProps = (data: disable_time[] | undefined): ViewRowProps[]
   return result
 }
 export const useRow = (initial: ViewRowProps[] = []) => {
+  const [overlapData, setOverlapData] = useState<OverlapData>()
   const [inProp, setInProp] = useState(false)
   const [rowData, setRowData] = useState<ViewRowProps[]>(initial)
   const validateTimeSlot = (row: TimeSlotRow) => {
@@ -46,7 +49,6 @@ export const useRow = (initial: ViewRowProps[] = []) => {
   const onAddRow = (f: TimeSlotRow) => {
     setRowData((prev) => {
       const timeSlot: number[] = []
-      // for (let i = parseInt(f.timeSlotStart); i <= f.timeSlotEnd; i++) {
       for (let i = parseInt(f.timeSlotStart); i <= parseInt(f.timeSlotEnd); i++) {
         timeSlot.push(i)
       }
@@ -63,7 +65,7 @@ export const useRow = (initial: ViewRowProps[] = []) => {
       return arr
     })
   }
-  return { inProp, rowData, onAddRow, onDeleteRow, setInProp, toViewRowProps, setRowData, validateTimeSlot }
+  return { inProp, rowData, onAddRow, onDeleteRow, setInProp, toViewRowProps, setRowData, validateTimeSlot, setOverlapData, overlapData }
 }
 
 export const useEditCourt = () => {
@@ -115,21 +117,24 @@ export const useViewTable = (params: string) => {
   const [error, setError] = useState<string>()
   const { inProp, rowData, onAddRow, onDeleteRow, setInProp, setRowData, validateTimeSlot } = useRow()
   const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, setStartDate, setEndDate } = useDate()
-
+  const source = axios.CancelToken.source()
   const fetchViewData = useCallback(() => {
     client
-      .get<ViewResponse>(`/courts/disable-courts/${params}`)
+      .get<ViewResponse>(`/courts/disable-courts/${params}`, { cancelToken: source.token })
       .then((res) => {
         setViewData(res.data)
         setRowData(toViewRowProps(res.data.disable_time))
         setStartDate(add(new Date(res.data.starting_date), 1))
         setEndDate(new Date(res.data.expired_date))
       })
-      .catch((err) => setError(err.response.message))
+      .catch((err) => {
+        if (!Axios.isCancel(err)) setError(err.response.message)
+      })
   }, [params, setEndDate, setRowData, setStartDate])
 
   useEffect(() => {
     fetchViewData()
+    return () => source.cancel()
   }, [fetchViewData])
   return {
     viewData,
