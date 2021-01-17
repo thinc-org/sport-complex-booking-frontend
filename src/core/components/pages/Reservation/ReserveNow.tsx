@@ -4,15 +4,16 @@ import { Link } from "react-router-dom"
 import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from "react-i18next"
 import pinkBlob from "../../../assets/images/pinkBlob.svg"
+import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 
 function ReserveNow() {
   const { t } = useTranslation()
 
   return (
     <div className="wrapper">
-      <h4 className="d-flex justify-content-center font-weight-bold mt-3">{t("reserveNow")}</h4>
+      <NavHeader header={t("reserveNow")} />
       <div className="mx-auto col-md-6">
-        <div className="default-mobile-wrapper mt-4 animated-card">
+        <div className="default-mobile-wrapper mt-3 animated-card">
           <span className="row my-3">
             <h6 className="mx-3">{t("chooseReserve")} </h6>
           </span>

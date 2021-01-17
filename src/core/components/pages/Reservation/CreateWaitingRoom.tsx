@@ -11,6 +11,7 @@ import { client } from "../../../../axiosConfig"
 import { WaitingRoomData, CreateResponse } from "../../../dto/waitingRoom.dto"
 import { CreateWaitingRoomErrorMsg, CheckValidityErrorMsg } from "./ReservationComponents"
 import { Sport, Court } from "../../../dto/sport.dto"
+import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 
 function CreateWaitingRoom() {
   // States
@@ -223,7 +224,7 @@ function CreateWaitingRoom() {
 
   return (
     <div className="Orange">
-      <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{t("createWaitingRoom")}</h4>
+      <NavHeader header={t("createWaitingRoom")} />
       <CheckValidityErrorMsg show={showValidityWarningMessage} reason={warningMessage} type={errorType} />
       <CreateWaitingRoomErrorMsg show={showCreateWarningMessage && !showValidityWarningMessage} reason={warningMessage} type={errorType} />
       <div className="mx-auto col-md-6">

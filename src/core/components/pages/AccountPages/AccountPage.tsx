@@ -8,12 +8,14 @@ import { useTranslation } from "react-i18next"
 import { Loading } from "../../ui/loading/loading"
 import { client } from "../../../../axiosConfig"
 import { Account, PenalizeMessageProps } from "../../../dto/account.dto"
+import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 
 function AccountPage() {
   const { setCuStudentAccount, setSatitCuPersonelAccount, setOtherAccount } = useContext(UserContext)
   const [account_type, setAccountType] = useState<string>()
   const [penalizeStatus, setPenalizeStatus] = useState<boolean>()
   const [penalizeEndDate, setPenalizeEndDate] = useState("")
+  const { t } = useTranslation()
 
   const fetch_account_type = useCallback(() => {
     client.get<DefaultAccount>("/account_info/").then(({ data }) => {
@@ -92,6 +94,7 @@ function AccountPage() {
 
   return (
     <>
+      <NavHeader header={t("account")} />
       <PenalizeMessage show={penalizeStatus} penalizeEndDate={penalizeEndDate} />
       {showPage(account_type)}
     </>

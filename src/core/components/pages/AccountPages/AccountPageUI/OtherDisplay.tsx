@@ -11,7 +11,7 @@ export default function OtherAaccountDisplay() {
   return (
     <div className="mx-auto col-md-6">
       {user && <WarningMessage show={user.verification_status !== ""} verification_status={user.verification_status} account={user.account_type} />}
-      <div className="default-mobile-wrapper animated-card">
+      <div className="default-mobile-wrapper mt-3 animated-card">
         <div className="">
           {/* START OF THE FORM */}
           <h4>{t("memberInformation")}</h4>

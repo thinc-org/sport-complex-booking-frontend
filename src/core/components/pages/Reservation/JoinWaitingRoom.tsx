@@ -8,6 +8,7 @@ import { client } from "../../../../axiosConfig"
 import { CustomWaitingRoomModal } from "../../ui/Modals/WaitingRoomModals"
 import { WaitingRoomAccessCode, ValidityMessage } from "../../../dto/waitingRoom.dto"
 import { CheckValidityErrorMsg, JoinWaitingRoomErrorMsg } from "./ReservationComponents"
+import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 
 function JoinWaitingRoom() {
   const { register, handleSubmit, errors } = useForm()
@@ -67,7 +68,7 @@ function JoinWaitingRoom() {
 
   return (
     <div className="wrapper">
-      <h4 className="d-flex justify-content-center font-weight-bold  mt-3">{t("joinWaitingRoom")}</h4>
+      <NavHeader header={t("joinWaitingRoom")} />
       <CheckValidityErrorMsg show={showValidityWarningMessage} reason={warningMessage} type={errorType} />
       <JoinWaitingRoomErrorMsg show={showJoinWarningMessage} reason={warningMessage} type={errorType} />
       <div className="mx-auto col-md-6">

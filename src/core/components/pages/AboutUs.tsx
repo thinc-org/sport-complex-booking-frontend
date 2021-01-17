@@ -10,6 +10,7 @@ import ProjectManager from "../../assets/images/ProjectManager.svg"
 import titleBackground from "../../assets/images/titleBackground.svg"
 import { useTranslation } from "react-i18next"
 import { useLanguage } from "../../utils/language"
+import { NavHeader } from "../ui/navbar/navbarSideEffect"
 
 interface CreditsInfo {
   title: string
@@ -61,7 +62,8 @@ function AboutUs() {
   ]
 
   return (
-    <div className="mx-auto col-md-6 mt-3">
+    <div className="mx-auto col-md-6 mt-3 px-4">
+      <NavHeader header={t("aboutUs")} />
       <div className="description-container">
         <img src={titleBackground} alt="titleBackground" />
         <h3>{t("description")}</h3>

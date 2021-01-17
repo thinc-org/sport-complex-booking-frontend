@@ -133,7 +133,7 @@ export default function OtherAccountEdit() {
     <div className="mx-auto col-md-6">
       {user && <WarningMessage show={user.verification_status !== ""} verification_status={user.verification_status} account={user.account_type} />}
       <form onSubmit={handleSubmit(onSubmit)} className="needs-validation">
-        <div className="default-mobile-wrapper my-3">
+        <div className="default-mobile-wrapper mt-3">
           <h4 className="align-right mb-2">{t("language")}</h4>
           <div className="row mt-2 mx-1">
             {!is_thai_language ? (
@@ -158,7 +158,7 @@ export default function OtherAccountEdit() {
           </div>
         </div>
 
-        <div className="default-mobile-wrapper animated-card">
+        <div className="default-mobile-wrapper mt-3 animated-card">
           <div className="">
             {/* START OF THE FORM */}
             <h4>{t("memberInformation")}</h4>
