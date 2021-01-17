@@ -16,8 +16,7 @@ interface ParamsDataRequest {
   begin: number
   end: number
   name: string
-  surname: string
-  penalize: boolean
+  is_penalize: boolean
 }
 
 const ListOfAllUsers: FunctionComponent = () => {
@@ -39,7 +38,7 @@ const ListOfAllUsers: FunctionComponent = () => {
       end: pageNo * maxUserPerPage,
     }
     if (searchName !== "") param_data.name = searchName
-    if (status !== allStatus.All) param_data.penalize = allStatus.Banned === status
+    if (status !== allStatus.All) param_data.is_penalize = allStatus.Banned === status
     //  request users from server  //
     client({
       method: "GET",
