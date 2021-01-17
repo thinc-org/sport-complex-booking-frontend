@@ -72,7 +72,7 @@
   "password": "Password",
   "hooray": "HOORAY!",
   "reservationSuccess": "Your reservation has successfully been made.",
-  "viewWaitingRoom": "View Waiting Room",
+  "viewReservation": "View Reservation",
   "chooseReserve": "What do you want to do ?",
   "createWaitingRoom": "Create a Waiting Room",
   "joinWaitingRoom": "Join a Waiting Room",

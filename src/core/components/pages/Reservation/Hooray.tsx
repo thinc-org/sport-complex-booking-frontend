@@ -24,7 +24,7 @@ function Hooray() {
           <br />
           <div className="button-group">
             <Link to={"/myreservation"}>
-              <Button variant="pink">{t("viewWaitingRoom")}</Button>
+              <Button variant="pink">{t("viewReservation")}</Button>
             </Link>
           </div>
         </div>

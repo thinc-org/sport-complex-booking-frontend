@@ -1,7 +1,7 @@
 import React from "react"
-import { Modal, Button, Form, Row, Col } from "react-bootstrap"
+import { Modal, Button, Form } from "react-bootstrap"
 import { useForm } from "react-hook-form"
-import { getTimeArr, dayArr, getMinute, getTime } from "./mapTime"
+import { getTimeArr, dayArr } from "./mapTime"
 import { CourtTable, ErrorRow } from "./disabled-court-table"
 import { ModalProps, FormModalProps, TimeSlotRow, ErrorRowProps } from "../../../../dto/disableCourt.dto"
 export const ErrorAlert = ({ inProp, header, message, handleClose, canCancel = false, onCancel, overlapData }: ModalProps) => {
