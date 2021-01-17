@@ -28,7 +28,6 @@ const AddCourt = () => {
       starting_date: startDate ? format(startDate, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd"),
       expired_date: endDate ? format(endDate, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd"),
     }
-    console.log(formData)
     client
       .post("/courts/disable-courts", formData)
       .then(() => {
@@ -50,9 +49,6 @@ const AddCourt = () => {
         }
       })
   }
-  useEffect(() => {
-    console.log(overlapData)
-  }, [overlapData])
 
   return (
     <Container fluid>
@@ -162,5 +158,4 @@ const AddCourt = () => {
     </Container>
   )
 }
-
 export default AddCourt
