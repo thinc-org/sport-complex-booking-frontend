@@ -59,6 +59,10 @@ const ListOfAllUsers: FunctionComponent = () => {
     requestUsers()
   }, [requestUsers])
 
+  useEffect(() => {
+    setPageNo(1)
+  }, [status])
+
   // handles //
   const handleSearch = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault()
