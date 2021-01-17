@@ -13,7 +13,7 @@ import { Court } from "../../../../dto/sport.dto"
 
 const AddCourt = () => {
   const history = useHistory()
-  const { inProp, rowData, onAddRow, onDeleteRow, setInProp, validateTimeSlot } = useRow()
+  const { inProp, rowData, onAddRow, onDeleteRow, setInProp, validateTimeSlot, setOverlapData, overlapData } = useRow()
   const { register, handleSubmit, setError, errors, clearErrors, control } = useForm()
   const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
   const { option } = useOption()
@@ -33,15 +33,30 @@ const AddCourt = () => {
         history.goBack()
       })
       .catch((err) => {
-        setError("request", {
-          type: "manual",
-          message: err.response.status === 409 ? "วันหรือเวลาของการปิดคอร์ดนี้ซ้ำกับการปิดคอร์ดที่มีอยู่แล้ว" : "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง",
-        })
+        if (err.response.status !== 409) {
+          setError("unknown", {
+            type: "manual",
+            message: "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง",
+          })
+        } else {
+          if (err.response.reason) setOverlapData({ reservation: err.response.overlapReservations, waitingRoom: err.response.overlapWaitings })
+          setError("duplicate", {
+            type: "manual",
+            message: "วันหรือเวลาของการปิดคอร์ดนี้ซ้ำกับการปิดคอร์ดที่มีอยู่แล้ว",
+          })
+        }
       })
   }
 
   return (
     <Container fluid>
+      <ErrorAlert
+        inProp={!!overlapData}
+        handleClose={() => setOverlapData(undefined)}
+        header="การปิดคอร์ดชนกับการจอง"
+        message="พบการปิดคอร์ดชนกับการจองดังนี้"
+        overlapData={overlapData}
+      />
       <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} validate={validateTimeSlot} />
       <ErrorAlert inProp={show} handleClose={handleAlert} header={"วันที่ไม่ถูกต้อง"} message={"วันที่ไม่ถูกต้อง"} />
       <div className="default-wrapper pt-3 pb-4" style={{ boxShadow: "0 0 0 0" }}>
@@ -127,6 +142,7 @@ const AddCourt = () => {
               type="submit"
               onClick={() => {
                 if (errors.request) clearErrors("request")
+                if (overlapData) setOverlapData(undefined)
               }}
             >
               บันทึก

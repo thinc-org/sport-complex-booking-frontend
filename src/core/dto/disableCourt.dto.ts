@@ -1,3 +1,4 @@
+import { ReservationResponse } from "./reservation.dto"
 import { Sport } from "./sport.dto"
 export interface DeleteButtonProps {
   onClick?: (indx: number) => void
@@ -69,10 +70,22 @@ export interface AddCourtForm {
   court_num: string
   sportObjId: string
 }
+export interface OverlapData {
+  reservation?: ReservationResponse[]
+  waitingRoom?: any[]
+}
+
+export interface ErrorRowProps {
+  indx: number
+  phone: string
+  date: Date
+  time_slot: number[]
+}
 export interface ModalProps {
   inProp: boolean
   header: string
   message: string
+  overlapData?: OverlapData
   handleClose: (event: React.MouseEvent) => void
   canCancel?: boolean
   onCancel?: (event: React.MouseEvent) => void
