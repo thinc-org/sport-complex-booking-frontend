@@ -15,7 +15,6 @@ import {
 import { Sport } from "../../../../dto/sport.dto"
 import subDays from "date-fns/subDays"
 import { client } from "../../../../../axiosConfig"
-import Axios from "axios"
 
 export const toViewRowProps = (data: disable_time[] | undefined): ViewRowProps[] => {
   const result: ViewRowProps[] = []
