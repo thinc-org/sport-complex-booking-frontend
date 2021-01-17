@@ -236,7 +236,7 @@ label {
 
 .styled-link:hover {
   text-decoration-line: none;
-  color: var(--pink-color);
+  color: var(--darkpink-color);
   font-weight: bold;
   font-size: 18px;
 }
@@ -401,8 +401,9 @@ p.link {
 
 .react-datepicker-wrapper,
 .react-datepicker__input-container {
-  display: block !important;
-  width: 100% !important;
+  display: block;
+  width: 100%;
+  margin: 0;
 }
 
 .select-drop-down {

@@ -122,13 +122,7 @@ export default function OtherAaccountDisplay() {
         <label className="form-label my-2">{t("national_id_photo")}</label>
         <div className="form-file">
           {user?.national_id_photo ? (
-            <a
-              type="button"
-              className="btn-normal btn-secondary"
-              href={"openFile/" + user.national_id_photo}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a className="btn-normal btn-secondary" href={"openFile/" + user.national_id_photo} target="_blank" rel="noopener noreferrer">
               {t("viewFile")}
             </a>
           ) : (
@@ -139,13 +133,7 @@ export default function OtherAaccountDisplay() {
         <label className="form-label my-2">{t("medical_certificate")}</label>
         <div className="form-file">
           {user?.medical_certificate ? (
-            <a
-              type="button"
-              className="btn-normal btn-secondary"
-              href={"openFile/" + user.medical_certificate}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a className="btn-normal btn-secondary" href={"openFile/" + user.medical_certificate} target="_blank" rel="noopener noreferrer">
               {t("viewFile")}
             </a>
           ) : (
@@ -156,13 +144,7 @@ export default function OtherAaccountDisplay() {
         <label className="form-label my-2">{t("house_registration_number")}</label>
         <div className="form-file">
           {user?.house_registration_number ? (
-            <a
-              type="button"
-              className="btn-normal btn-secondary"
-              href={"openFile/" + user.house_registration_number}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a className="btn-normal btn-secondary" href={"openFile/" + user.house_registration_number} target="_blank" rel="noopener noreferrer">
               {t("viewFile")}
             </a>
           ) : (
@@ -174,7 +156,6 @@ export default function OtherAaccountDisplay() {
         <div className="form-file">
           {user?.relationship_verification_document ? (
             <a
-              type="button"
               className="btn-normal btn-secondary"
               href={"openFile/" + user.relationship_verification_document}
               target="_blank"
