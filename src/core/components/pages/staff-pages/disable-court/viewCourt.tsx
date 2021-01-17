@@ -41,8 +41,8 @@ const ViewCourt = () => {
     const formData = {
       sport_id: viewData?.sport_id._id,
       disable_time: rowData,
-      starting_date: startDate,
-      expired_date: endDate,
+      starting_date: startDate?.toUTCString(),
+      expired_date: endDate?.toUTCString(),
     }
     client
       .put(`/courts/disable-courts/${params.id}`, formData)
@@ -50,6 +50,7 @@ const ViewCourt = () => {
         history.goBack()
       })
       .catch((err) => {
+        console.log(err)
         setError(err.response.message)
       })
   }
