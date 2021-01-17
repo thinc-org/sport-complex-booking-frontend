@@ -48,11 +48,7 @@ select {
   border: None;
   border-radius: 5px;
 }
-.react-datepicker-wrapper,
-.react-datepicker__input-container {
-  display: block;
-  width: 100%;
-}
+
 .default-link,
 .default-link:hover {
   text-decoration-line: none;

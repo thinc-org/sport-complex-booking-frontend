@@ -33,6 +33,7 @@ const ReservationDetail = () => {
   const [lateCancellationDay, setLateCancellationDay] = useState<number>()
   const [lateCancellationPunishment, setLateCancellationPunishment] = useState<number>()
   const [validTime, setValidTime] = useState<number>()
+  const [shouldRenderClock, setShouldRenderClock] = useState(true)
 
   const fetchId = useCallback(() => {
     if (location.state) {
@@ -58,7 +59,6 @@ const ReservationDetail = () => {
       setIsLoading(false)
       setCounter(10)
     } catch (err) {
-      console.log(err.message)
       history.push(history.location.state.path)
     }
   }, [id, history])
@@ -102,8 +102,15 @@ const ReservationDetail = () => {
   }, [counter, isCheck])
 
   useEffect(() => {
-    if (!isCheck) countDown()
-  }, [counter, isCheck, countDown])
+    if (!isCheck) {
+      if (shouldRenderClock) {
+        countDown()
+      }
+    }
+    return () => {
+      setShouldRenderClock(false)
+    }
+  }, [counter, isCheck, countDown, shouldRenderClock])
 
   const qrCode = () => {
     if (!isCheck && id) {
