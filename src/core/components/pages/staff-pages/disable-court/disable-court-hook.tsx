@@ -171,7 +171,7 @@ export const useTableWithPagination = () => {
   const nearestFiveFloor = page % 5 === 0 && page !== 1 ? page - 4 : 5 * Math.floor(page / 5) + 1
   const nearestFiveCeil = 5 * Math.ceil(page / 5) > maxPage ? maxPage : 5 * Math.ceil(page / 5)
   const pageArr = Array.from(Array(nearestFiveCeil + 1).keys()).slice(nearestFiveFloor, nearestFiveCeil + 1)
-  const onDelete = (id: number) => {
+  const onDelete = (id: string | number) => {
     client
       .delete(`/courts/disable-courts/${id}`)
       .then(() => {

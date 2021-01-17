@@ -1,8 +1,8 @@
 import { ReservationResponse } from "./reservation.dto"
 import { Sport } from "./sport.dto"
 export interface DeleteButtonProps {
-  onClick?: (indx: number) => void
-  indx: number
+  onClick?: (indx: number | string) => void
+  indx: number | string
 }
 
 export interface RowProps {
@@ -64,7 +64,7 @@ export interface TableProps<T> {
       button?: JSX.Element
     }
   >
-  Button?: React.FC<DeleteButtonProps & { indx: number }>
+  Button?: React.FC<DeleteButtonProps & { indx: number | string }>
 }
 export interface AddCourtForm {
   court_num: string
