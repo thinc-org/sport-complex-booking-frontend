@@ -127,7 +127,7 @@ export const useViewTable = (params: string) => {
         setEndDate(subDays(new Date(res.data.expired_date), 1))
       })
       .catch((err) => {
-        if (!Axios.isCancel(err)) setError(err.response.message)
+        if (!axios.isCancel(err)) setError(err.response.message)
       })
   }, [params, setEndDate, setRowData, setStartDate])
 
@@ -206,7 +206,7 @@ export const useTableWithPagination = () => {
         setData(result)
       })
       .catch((err) => {
-        if (!Axios.isCancel(err)) console.log(err)
+        if (!axios.isCancel(err)) console.log(err)
       })
   }
 
