@@ -448,6 +448,7 @@ export default function OtherAccountEdit() {
                 className="form-file-input form-control"
                 id="user_photo"
                 required
+                accept="image/png, image/jpeg"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("user_photo")}
                 onChange={(e) => e.target.files && assignUserPhoto(e.target.files)}
               />
@@ -466,6 +467,7 @@ export default function OtherAccountEdit() {
                 className="form-file-input  form-control"
                 id="nationID/passport"
                 required
+                accept="application/pdf"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("national_id_photo")}
                 onChange={(e) => e.target.files && assignNationalIdPhoto(e.target.files)}
               />
@@ -484,6 +486,7 @@ export default function OtherAccountEdit() {
                 className="form-file-input  form-control"
                 id="medical_certificate"
                 required
+                accept="application/pdf"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("medical_certificate")}
                 onChange={(e) => e.target.files && assignMedicalCertificate(e.target.files)}
               />
@@ -501,6 +504,7 @@ export default function OtherAccountEdit() {
                 type="file"
                 className="form-file-input  form-control"
                 id="house_registration_number"
+                accept="application/pdf"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("house_registration_number")}
                 onChange={(e) => e.target.files && assignHouseRegistrationNumber(e.target.files)}
               />
@@ -518,6 +522,7 @@ export default function OtherAccountEdit() {
                 type="file"
                 className="form-file-input  form-control"
                 id="relationship_verification_document"
+                accept="application/pdf"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("relationship_verification_document")}
                 onChange={(e) => e.target.files && assignRelationshipVerificationDocument(e.target.files)}
               />
