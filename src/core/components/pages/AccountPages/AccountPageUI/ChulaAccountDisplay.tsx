@@ -15,7 +15,7 @@ export default function ChulaAccountDisplay({ toggleEditButton }: AccountProps) 
   return (
     <div className="mx-auto col-md-6">
       {user && <WarningMessage show={user.is_first_login} account={user.account_type} />}
-      <div className="default-mobile-wrapper animated-card">
+      <div className="default-mobile-wrapper mt-3 animated-card">
         <div className="row mt-2">
           <div className="col-8">{user && <h4 className="align-right">{user[nameLanguage] + " " + user[surnameLanguage]}</h4>}</div>
           <div className="col-4">
