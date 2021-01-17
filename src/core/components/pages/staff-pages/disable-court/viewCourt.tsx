@@ -5,7 +5,8 @@ import { ViewRow, CourtTable } from "./disabled-court-table"
 import { ViewRowProps } from "../../../../dto/disableCourt.dto"
 import { DeleteButton } from "./button"
 
-import { format, add } from "date-fns"
+import { format } from "date-fns"
+import subDays from "date-fns/subDays"
 import { FormAlert, ErrorAlert } from "./modals"
 import { Row, Col, Container, Button, Form } from "react-bootstrap"
 import DatePicker from "react-datepicker"
@@ -31,18 +32,21 @@ const ViewCourt = () => {
     show,
     handleAlert,
     validateTimeSlot,
+    setOverlapData,
+    overlapData,
   } = useViewTable(params.id)
   const { isEdit, setIsEdit, error, setError } = useEditCourt()
   const toggleEdit = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     setIsEdit(true)
     e.preventDefault()
+    e.stopPropagation()
   }
   const onSubmit = () => {
     const formData = {
       sport_id: viewData?.sport_id._id,
       disable_time: rowData,
-      starting_date: startDate?.toUTCString(),
-      expired_date: endDate?.toUTCString(),
+      starting_date: startDate ? format(startDate, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd"),
+      expired_date: endDate ? format(endDate, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd"),
     }
     client
       .put(`/courts/disable-courts/${params.id}`, formData)
@@ -51,11 +55,24 @@ const ViewCourt = () => {
       })
       .catch((err) => {
         console.log(err)
-        setError(err.response.message)
+        if (err.response.status !== 409) {
+          setError("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง")
+        } else {
+          if (err.response.data.reason)
+            setOverlapData({ reservation: err.response.data.overlapReservations, waitingRoom: err.response.data.overlapWaitingRooms })
+          setError("วันหรือเวลาของการปิดคอร์ดนี้ซ้ำกับการปิดคอร์ดที่มีอยู่แล้ว")
+        }
       })
   }
   return (
     <Container fluid>
+      <ErrorAlert
+        inProp={!!overlapData}
+        handleClose={() => setOverlapData(undefined)}
+        header="การปิดคอร์ดชนกับการจอง"
+        message="พบการปิดคอร์ดชนกับการจองดังนี้"
+        overlapData={overlapData}
+      />
       <ErrorAlert inProp={show} handleClose={handleAlert} header={"วันที่ไม่ถูกต้อง"} message={"วันที่ไม่ถูกต้อง"} />
       <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} validate={validateTimeSlot} />
       <Form className="default-wrapper pt-3 pb-4" style={{ boxShadow: "0 0 0 0" }}>
@@ -76,11 +93,11 @@ const ViewCourt = () => {
               <>
                 <Col>
                   <h5>วันเริ่มต้นการปิด</h5>
-                  <p>{viewData?.starting_date ? format(add(new Date(viewData?.starting_date), { days: 1 }), "MM/dd/yyyy") : ""}</p>
+                  <p>{viewData?.starting_date ? format(new Date(viewData?.starting_date), "dd/MM/yyyy") : ""}</p>
                 </Col>
                 <Col>
                   <h5>วันสิ้นสุดการปิด</h5>
-                  <p>{viewData?.expired_date ? format(new Date(viewData?.expired_date), "MM/dd/yyyy") : ""}</p>
+                  <p>{viewData?.expired_date ? format(subDays(new Date(viewData?.expired_date), 1), "dd/MM/yyyy") : ""}</p>
                 </Col>
               </>
             ) : (
@@ -116,6 +133,7 @@ const ViewCourt = () => {
             เพิ่มการปิดคอร์ดใหม่
           </Button>
         )}
+        <div style={{ color: "red" }}>{error}</div>
         <div className="d-flex flex-row justify-content-end">
           {!isEdit ? (
             <>
@@ -131,12 +149,11 @@ const ViewCourt = () => {
               <Button variant="outline-pink mr-2" onClick={() => setIsEdit(false)}>
                 ยกเลิก
               </Button>
-              <Button variant="pink" type="submit" onClick={onSubmit}>
+              <Button variant="pink" onClick={onSubmit}>
                 บันทึก
               </Button>
             </>
           )}
-          {error}
         </div>
       </Form>
     </Container>
