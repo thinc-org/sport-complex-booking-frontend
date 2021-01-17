@@ -75,12 +75,7 @@ export function CourtTable<T>({ data, header, Row, Button }: TableProps<T>) {
       </thead>
       <tbody>
         {data?.map((val, index) => (
-          <Row
-            {...val}
-            indx={index}
-            key={val._id || index}
-            button={Button ? <Button indx={typeof val._id === "number" ? val._id : index} /> : undefined}
-          />
+          <Row {...val} indx={index} key={val._id || index} button={Button ? <Button indx={val._id ?? index} /> : undefined} />
         ))}
       </tbody>
     </Table>
