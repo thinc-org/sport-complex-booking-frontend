@@ -116,8 +116,8 @@ export const useViewTable = (params: string) => {
   const [error, setError] = useState<string>()
   const { inProp, rowData, onAddRow, onDeleteRow, setInProp, setRowData, validateTimeSlot, setOverlapData, overlapData } = useRow()
   const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, setStartDate, setEndDate } = useDate()
-  const source = axios.CancelToken.source()
-  const fetchViewData = useCallback(() => {
+  useEffect(() => {
+    const source = axios.CancelToken.source()
     client
       .get<ViewResponse>(`/courts/disable-courts/${params}`, { cancelToken: source.token })
       .then((res) => {
@@ -129,12 +129,8 @@ export const useViewTable = (params: string) => {
       .catch((err) => {
         if (!axios.isCancel(err)) setError(err.response.message)
       })
-  }, [params, setEndDate, setRowData, setStartDate])
-
-  useEffect(() => {
-    fetchViewData()
     return () => source.cancel()
-  }, [fetchViewData, source])
+  }, [params, setEndDate, setRowData, setStartDate])
   return {
     viewData,
     inProp,
@@ -221,7 +217,6 @@ export const useTableWithPagination = () => {
         end: 10 * page - 1,
       }
     })
-    return () => source.cancel()
   }, [page])
 
   useEffect(() => {
