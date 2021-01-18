@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, ComponentType, useCallback } from "react"
+import React, { useState, useEffect, useRef, ComponentType } from "react"
 import axios from "axios"
 import {
   RowProps,
@@ -116,8 +116,8 @@ export const useViewTable = (params: string) => {
   const [error, setError] = useState<string>()
   const { inProp, rowData, onAddRow, onDeleteRow, setInProp, setRowData, validateTimeSlot, setOverlapData, overlapData } = useRow()
   const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, setStartDate, setEndDate } = useDate()
-  const source = axios.CancelToken.source()
-  const fetchViewData = useCallback(() => {
+  useEffect(() => {
+    const source = axios.CancelToken.source()
     client
       .get<ViewResponse>(`/courts/disable-courts/${params}`, { cancelToken: source.token })
       .then((res) => {
@@ -129,12 +129,8 @@ export const useViewTable = (params: string) => {
       .catch((err) => {
         if (!axios.isCancel(err)) setError(err.response.message)
       })
-  }, [params, setEndDate, setRowData, setStartDate])
-
-  useEffect(() => {
-    fetchViewData()
     return () => source.cancel()
-  }, [fetchViewData, source])
+  }, [params, setEndDate, setRowData, setStartDate])
   return {
     viewData,
     inProp,
@@ -169,7 +165,6 @@ export const useTableWithPagination = () => {
   const [page, setPage] = useState(1)
   const [maxPage, setMaxPage] = useState(1)
   const firstEffect = useRef(true)
-  const source = axios.CancelToken.source()
   const nearestFiveFloor = page % 5 === 0 && page !== 1 ? page - 4 : 5 * Math.floor(page / 5) + 1
   const nearestFiveCeil = 5 * Math.ceil(page / 5) > maxPage ? maxPage : 5 * Math.ceil(page / 5)
   const pageArr = Array.from(Array(nearestFiveCeil + 1).keys()).slice(nearestFiveFloor, nearestFiveCeil + 1)
@@ -197,21 +192,6 @@ export const useTableWithPagination = () => {
     if (currentPage % 5 === 0) setPage(5 * (Math.floor(currentPage / 5) - 1))
     else setPage(5 * Math.floor(currentPage / 5))
   }
-  const fetchData = useCallback(
-    (parameter: DisabledCourtSearchBody) => {
-      client
-        .post("/courts/disable-courts/search", parameter, { cancelToken: source.token })
-        .then((res) => {
-          const result = res.data.sliced_results
-          setMaxPage(Math.ceil(res.data.total_found / 10))
-          setData(result)
-        })
-        .catch((err) => {
-          if (!axios.isCancel(err)) console.log(err)
-        })
-    },
-    [source.token]
-  )
 
   useEffect(() => {
     setParams((prev) => {
@@ -221,7 +201,6 @@ export const useTableWithPagination = () => {
         end: 10 * page - 1,
       }
     })
-    return () => source.cancel()
   }, [page])
 
   useEffect(() => {
@@ -229,16 +208,28 @@ export const useTableWithPagination = () => {
       firstEffect.current = false
       return
     }
-    fetchData({
+    const source = axios.CancelToken.source()
+    const parameter: DisabledCourtSearchBody = {
       sport_id: params.sportObjId,
       starting_date: params.starting_date,
       expired_date: params.expired_date,
       court_num: params.court_num,
       start: params.start,
       end: params.end,
-    })
+    }
+    client
+      .post("/courts/disable-courts/search", parameter, { cancelToken: source.token })
+      .then((res) => {
+        const result = res.data.sliced_results
+        setMaxPage(Math.ceil(res.data.total_found / 10))
+        setData(result)
+      })
+      .catch((err) => {
+        if (!axios.isCancel(err)) console.log(err)
+      })
+
     return () => source.cancel()
-  }, [params, fetchData, source])
+  }, [params])
 
   return { data, page, maxPage, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete, isError, setIsError }
 }
