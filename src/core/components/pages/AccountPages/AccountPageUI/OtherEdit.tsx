@@ -392,7 +392,7 @@ export default function OtherAccountEdit() {
             className="form-control"
           />
           {user?.rejected_info?.includes("contact_person_name") ? <p className="input-error">{t("resubmitField")}</p> : null}
-          {errors.contact_person_name && <p id="input-error">{errors.contact_person_name.message}</p>}
+          {errors.contact_person?.contact_person_name && <p id="input-error">{errors.contact_person?.contact_person_name.message}</p>}
 
           <hr />
           <label className="form-label mt-2">{t("contact_person_surname")}</label>
@@ -406,7 +406,7 @@ export default function OtherAccountEdit() {
             className="form-control"
           />
           {user?.rejected_info?.includes("contact_person_surname") ? <p className="input-error">{t("resubmitField")}</p> : null}
-          {errors.contact_person_surname && <p id="input-error">{errors.contact_person_surname.message}</p>}
+          {errors.contact_person?.contact_person_surname && <p id="input-error">{errors.contact_person?.contact_person_surname.message}</p>}
 
           <hr />
           <label className="form-label mt-2">{t("contact_person_home_phone")}</label>
@@ -420,7 +420,7 @@ export default function OtherAccountEdit() {
             className="form-control"
           />
           {user?.rejected_info?.includes("contact_person_home_phone") ? <p className="input-error">{t("resubmitField")}</p> : null}
-          {errors.contact_person_home_phone && <p id="input-error">{errors.contact_person_home_phone.message}</p>}
+          {errors.contact_person?.contact_person_home_phone && <p id="input-error">{errors.contact_person?.contact_person_home_phone.message}</p>}
           <hr />
           <label className="form-label mt-2">{t("contact_person_phone")}</label>
           <input
@@ -433,7 +433,7 @@ export default function OtherAccountEdit() {
             className="form-control"
           />
           {user?.rejected_info?.includes("contact_person_phone") ? <p className="input-error">{t("resubmitField")}</p> : null}
-          {errors.contact_person_phone && <p id="input-error">{errors.contact_person_phone.message}</p>}
+          {errors.contact_person?.contact_person_phone && <p id="input-error">{errors.contact_person?.contact_person_phone.message}</p>}
         </div>
         <br />
         <div className="default-mobile-wrapper">
