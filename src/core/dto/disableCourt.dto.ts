@@ -1,4 +1,5 @@
 import { ReservationResponse } from "./reservation.dto"
+import { WaitingRoomResponse } from "./waitingRoom.dto"
 import { Sport } from "./sport.dto"
 export interface DeleteButtonProps {
   onClick?: (indx: number | string) => void
@@ -72,7 +73,7 @@ export interface AddCourtForm {
 }
 export interface OverlapData {
   reservation?: ReservationResponse[]
-  waitingRoom?: any[]
+  waitingRoom?: WaitingRoomResponse[]
 }
 
 export interface ErrorRowProps {
