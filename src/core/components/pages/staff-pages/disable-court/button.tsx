@@ -13,7 +13,7 @@ export const DeleteButton = ({ onClick, indx }: DeleteButtonProps) => {
         inProp={show}
         header="กรุณายืนยันการลบ"
         message="ต้องการลบการปิดคอร์ดนี้หรือไม่"
-        handleClose={() => onClick!(indx)}
+        handleClose={() => (onClick ? onClick(indx) : null)}
         onCancel={() => setShow(false)}
       />
       <Button variant="outline-transparent" style={{ color: "red" }} onClick={() => setShow(true)} className="ml-auto">

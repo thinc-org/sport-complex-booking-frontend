@@ -134,7 +134,7 @@ export const useViewTable = (params: string) => {
   useEffect(() => {
     fetchViewData()
     return () => source.cancel()
-  }, [fetchViewData])
+  }, [fetchViewData, source])
   return {
     viewData,
     inProp,
@@ -197,18 +197,21 @@ export const useTableWithPagination = () => {
     if (currentPage % 5 === 0) setPage(5 * (Math.floor(currentPage / 5) - 1))
     else setPage(5 * Math.floor(currentPage / 5))
   }
-  const fetchData = (parameter: DisabledCourtSearchBody) => {
-    client
-      .post("/courts/disable-courts/search", parameter, { cancelToken: source.token })
-      .then((res) => {
-        const result = res.data.sliced_results
-        setMaxPage(Math.ceil(res.data.total_found / 10))
-        setData(result)
-      })
-      .catch((err) => {
-        if (!axios.isCancel(err)) console.log(err)
-      })
-  }
+  const fetchData = useCallback(
+    (parameter: DisabledCourtSearchBody) => {
+      client
+        .post("/courts/disable-courts/search", parameter, { cancelToken: source.token })
+        .then((res) => {
+          const result = res.data.sliced_results
+          setMaxPage(Math.ceil(res.data.total_found / 10))
+          setData(result)
+        })
+        .catch((err) => {
+          if (!axios.isCancel(err)) console.log(err)
+        })
+    },
+    [source.token]
+  )
 
   useEffect(() => {
     setParams((prev) => {
@@ -235,7 +238,7 @@ export const useTableWithPagination = () => {
       end: params.end,
     })
     return () => source.cancel()
-  }, [params])
+  }, [params, fetchData, source])
 
   return { data, page, maxPage, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete, isError, setIsError }
 }

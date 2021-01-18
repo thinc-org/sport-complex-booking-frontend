@@ -33,6 +33,7 @@ const AllReservation: FunctionComponent = () => {
   // Reservation room state
   const [reserveInfo, setReserveInfo] = useState<Room[]>([])
   const [allSports, setAllSports] = useState<Sport[]>([])
+  const everySports = allSports.find((sport: Sport) => sport._id === sportType) ? allSports.find((sport: Sport) => sport._id === sportType) : null
 
   const history = useHistory()
   const { pagename } = useParams<{ pagename: string }>()
@@ -134,9 +135,8 @@ const AllReservation: FunctionComponent = () => {
           เลขคอร์ด
         </option>
         <option value={-1}>ทั้งหมด</option>
-        {allSports
-          .find((sport: Sport) => sport._id === sportType)!
-          .list_court.map((info) => (
+        {everySports &&
+          everySports.list_court.map((info) => (
             <option key={info.court_num} value={info.court_num}>
               {info.court_num}
             </option>
