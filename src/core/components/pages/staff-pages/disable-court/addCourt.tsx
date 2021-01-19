@@ -68,6 +68,7 @@ const AddCourt = () => {
             <Col>
               <Form.Label>ประเภทกีฬา</Form.Label>
               <Form.Control name="sportObjId" as="select" ref={register({ required: true })}>
+                <option value="">เลือกประเภทกีฬา</option>
                 {option ? (
                   option.map((sport) => {
                     return (
