@@ -102,6 +102,7 @@ const ReservationDetail = () => {
   }, [counter, isCheck])
 
   useEffect(() => {
+    setShouldRenderClock(true)
     if (!isCheck) {
       if (shouldRenderClock) {
         countDown()

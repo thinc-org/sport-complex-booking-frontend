@@ -142,7 +142,7 @@ export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSp
         </div>
 
         <div className="card">
-          <h5 className="card-header">จํานวนผู้จองขั้นตั่า</h5>
+          <h5 className="card-header">จํานวนผู้จองขั้นต่ำ</h5>
           <div className="card-body">
             <span className="d-flex justify-content-around">
               <Button
@@ -305,7 +305,7 @@ export const EditSport: React.FC<EditSportProps> = ({ show, setShow, setCurrentS
       </div>
 
       <div className="card">
-        <h5 className="card-header">จํานวนผู้จองขั้นตั่า</h5>
+        <h5 className="card-header">จํานวนผู้จองขั้นต่ำ</h5>
         <div className="card-body">
           <span className="d-flex justify-content-around">
             <Button
