@@ -34,7 +34,8 @@ export const useRow = (initial: ViewRowProps[] = []) => {
   const validateTimeSlot = (row: TimeSlotRow) => {
     const newTimeSlot = [parseInt(row.timeSlotStart), parseInt(row.timeSlotEnd)]
     const rowWithSameDay = rowData.filter((r) => r.day === parseInt(row.day))
-    if (rowWithSameDay.length === 0) return true
+    const timeSlotIsValid = newTimeSlot[0] < newTimeSlot[1]
+    if (rowWithSameDay.length === 0) return timeSlotIsValid
     for (let i = 0; i < rowWithSameDay.length; i++) {
       const currentTimeSlot = rowWithSameDay[i].time_slot
       if (
@@ -43,7 +44,7 @@ export const useRow = (initial: ViewRowProps[] = []) => {
       )
         return false
     }
-    return true
+    return timeSlotIsValid
   }
   const onAddRow = (f: TimeSlotRow) => {
     setRowData((prev) => {
