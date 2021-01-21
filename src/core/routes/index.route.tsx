@@ -1,10 +1,8 @@
-import * as React from "react"
+import React from "react"
 import { Switch } from "react-router-dom"
 import { Route } from "react-router"
 import FrontLoginPage from "../components/pages/front-login"
 import Landing from "../components/pages/LandingComponent"
-
-import StaffRoute from "./staff-page.route"
 import Sidebar from "../components/ui/navbar/navbar"
 import StaffNavbar from "../components/ui/navbar/staff-navbar"
 import AccountPage from "../components/pages/AccountPages/AccountPage"
@@ -18,7 +16,7 @@ import Hooray from "../components/pages/Reservation/Hooray"
 import WaitingRoom from "../components/pages/Reservation/WaitingRoom"
 import AboutUs from "../components/pages/AboutUs"
 import FileOpener from "../components/pages/FileOpener"
-
+const StaffRoute = React.lazy(() => import("./staff-page.route"))
 export default function MainRoute() {
   return (
     <>

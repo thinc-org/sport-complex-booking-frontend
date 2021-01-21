@@ -67,7 +67,7 @@ const AddCourt = () => {
           <Row>
             <Col>
               <Form.Label>ประเภทกีฬา</Form.Label>
-              <Form.Control name="sportObjId" as="select" ref={register({ required: true })}>
+              <Form.Control name="sportObjId" as="select" ref={register({ required: true, validate: (val) => val !== "ประเภทกีฬา" })}>
                 <option value="">เลือกประเภทกีฬา</option>
                 {option ? (
                   option.map((sport) => {
@@ -145,7 +145,6 @@ const AddCourt = () => {
               type="submit"
               onClick={() => {
                 if (errors) clearErrors()
-                if (overlapData) setOverlapData(undefined)
               }}
             >
               บันทึก
