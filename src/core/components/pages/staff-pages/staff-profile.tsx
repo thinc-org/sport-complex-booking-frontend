@@ -56,7 +56,7 @@ function StaffProfile() {
           <div>
             <div style={{ fontWeight: 300, fontSize: "16px", lineHeight: "24px", marginBottom: "10px" }}> ประเภทบัญชี </div>
             <div style={{ fontWeight: 700, fontSize: "24px", lineHeight: "24px" }}> {accountType} </div>
-          </div>
+          </div>{" "}
         </div>
       </div>
 

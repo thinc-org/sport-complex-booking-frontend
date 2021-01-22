@@ -17,7 +17,7 @@ export const ReservationCancellationModal: React.FC<ReservationCancelModalProps>
   lateCancellationDay,
   lateCancellationPunishment,
 }) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   return (
     <Modal
       show={modalOpen}
