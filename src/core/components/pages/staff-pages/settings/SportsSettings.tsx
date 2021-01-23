@@ -33,6 +33,7 @@ export default function SportsSettings() {
           },
         })
         .then(({ data }) => {
+          console.log(data)
           setSports(data["sport_list"])
           setMaxSport(data["allSport_length"])
         })
@@ -89,7 +90,7 @@ export default function SportsSettings() {
   }
 
   const onSubmitAddSport = (data: Sport) => {
-    const newData = { ...data, quota: data.quota / 30, required_user: parseInt(data.required_user + "") }
+    const newData = { ...data, quota: data.quota / 60, required_user: parseInt(data.required_user + "") }
     sendNewSportInfo(newData)
   }
 
@@ -127,7 +128,7 @@ export default function SportsSettings() {
       return (
         <tr key={i} className="tr-normal">
           <td> {sport.sport_name_th} </td>
-          <td> {sport.quota * 30 + " นาที"} </td>
+          <td> {sport.quota * 60 + " นาที"} </td>
           <td> {sport.required_user + " คน"}</td>
           <td>
             <Button

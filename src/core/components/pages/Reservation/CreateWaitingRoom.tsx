@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react"
-import { Button, Row } from "react-bootstrap"
+import { Button, Row, ToggleButton, ToggleButtonGroup } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
@@ -28,6 +28,7 @@ function CreateWaitingRoom() {
   const [sport, setSport] = useState<Sport[]>([])
   const [sportName, setSportName] = useState<string>()
   const [requiredUserCount, setRequiredUserCount] = useState<number>()
+  const [currentSportId, setCurrentSportId] = useState("")
   // Court States
   const [courts, setCourts] = useState<Court[]>([])
   // Time States
@@ -48,6 +49,7 @@ function CreateWaitingRoom() {
   const [showCreateWarningMessage, setShowCreateWarningMessage] = useState(false)
   const [invalidAccount, setInvalidAccount] = useState(false)
   const [errorType, setErrorType] = useState("danger")
+  const [clickedNext, setClickedNext] = useState(false)
 
   // Date difference > 7
   const validDate = (date1: Date, date2: Date) => {
@@ -81,6 +83,7 @@ function CreateWaitingRoom() {
     client
       .get<Sport[]>("/court-manager/sports")
       .then(({ data }) => {
+        console.log(data)
         setSport(data)
       })
       .catch((error) => {
@@ -100,10 +103,11 @@ function CreateWaitingRoom() {
       date: year + "-" + month + "-" + day,
     }
     if (selectedSportID === "") return null
+    console.log(data)
     client
       .post<number>("/reservation/checkquota", data)
       .then(({ data }) => {
-        setquota(data * 30)
+        setquota(data * 60)
       })
       .catch((error) => {
         if (error.response) {
@@ -167,15 +171,7 @@ function CreateWaitingRoom() {
   }
 
   const formatTime = (element: number) => {
-    return (
-      Math.floor((element - 1) / 2) +
-      ":" +
-      ((((element - 1) * 30) % 60).toString() + "0").substring(0, 2) +
-      "-" +
-      Math.floor(element / 2) +
-      ":" +
-      (((element * 30) % 60).toString() + "0").substring(0, 2)
-    )
+    return element - 1 + ":00 - " + element + ":00"
   }
 
   const invalidTimeSlot = (item: number) => {
@@ -192,7 +188,7 @@ function CreateWaitingRoom() {
   const shouldDisable = (item: number) => {
     let disableCheck = false
     if (invalidTimeSlot(item)) disableCheck = true
-    if (quota / 30 <= checkedCount) disableCheck = true
+    if (quota / 60 <= checkedCount) disableCheck = true
     if (times.includes(item + "")) disableCheck = false
     if (quota === 0 && !times.includes(item + "")) disableCheck = true
     if (checkedCount === 0) disableCheck = false
@@ -230,153 +226,168 @@ function CreateWaitingRoom() {
       <div className="mx-auto col-md-6">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="default-mobile-wrapper mt-4 animated-card">
-            <span className="row mt">
-              <label className="form-label mt-2 ml-3">{t("dateSelection")}</label>
-            </span>
-            <div className="d-flex react-datepicker-wrapper">
-              <DatePicker
-                className="form-control date-picker select-drop-down"
-                selected={date}
-                disabled={invalidAccount}
-                onChange={(date: Date) => {
-                  const fixedDate = new Date(date.setHours(0, 0, 0, 0))
-                  setDate(fixedDate)
-                  setShowCourt(false)
-                  setShowTime(false)
-                  setValue("court_number", "")
-                  setValue("sport_id", "")
-                  if (validDate(today, date)) setShowDateWarning(false)
-                  else setShowDateWarning(true)
-                }}
-              />
-            </div>
-            {showDateWarning ? <p className="font-weight-light text-danger">{t("sevenDays")}</p> : null}
-            <div className="mt-2">
-              <label className="form-label mt-2">{t("sportSelection")}</label>
-              <div>
-                <select
-                  name="sport_id"
-                  ref={register}
-                  className="select-drop-down"
-                  disabled={invalidAccount || showDateWarning}
-                  onChange={() => {
-                    setShowCourt(false)
-                    setShowTime(false)
-                    setValue("court_number", "")
-                    setValue("time_slot", [])
-                    fetchQuota(getValues("sport_id"), date)
-                    sport.forEach((sport) => {
-                      if (sport["_id"] === getValues("sport_id")) {
-                        setCourts(sport["list_court"])
-                        setShowCourt(true)
-                        setRequiredUserCount(sport["required_user"])
-                        setSportName(sport[sportLanguage])
-                      }
-                    })
-                  }}
-                >
-                  <option className="dropdown-item" value="">
-                    {t("sportSelection")}
-                  </option>
-                  {sport.map((item, i) => (
-                    <option key={i} value={item["_id"]}>
-                      {item[sportLanguage]}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="form-label mt-2">{t("court")}</label>
-                <div>
-                  <select
-                    name="court_number"
-                    className="select-drop-down"
-                    ref={register}
-                    disabled={!showCourt || invalidAccount}
-                    onChange={() => {
-                      setShowTime(false)
-                      if (getValues("court_number") !== "") {
-                        setValue("time_slot", [])
-                        fetchTime(getValues("court_number"), getValues("sport_id"), date)
-                        fetchQuota(getValues("sport_id"), date)
-                        setShowTime(true)
-                      } else {
+            <label className="form-label my-3">{t("sportSelection")}</label>
+            <div className="button-group sport-radio">
+              {sport.map((item, i) => (
+                <div key={i}>
+                  <label className={item._id === currentSportId ? "box-container-alt" : "box-container"}>
+                    <input
+                      key={i}
+                      name="sport_id"
+                      type="radio"
+                      ref={register}
+                      className="mt-2 sport-radio-element"
+                      onClick={() => {
+                        setShowCourt(false)
                         setShowTime(false)
-                      }
-                    }}
-                  >
-                    <option className="dropdown-item" value="">
-                      {t("courtSelection")}
-                    </option>
-                    {courts.map((item, i) => (
-                      <option key={i} value={item["court_num"]}>
-                        {item["court_num"]}
-                      </option>
-                    ))}
-                  </select>
+                        setValue("court_number", "")
+                        setValue("time_slot", [])
+                        fetchQuota(item["_id"], date)
+                        setCurrentSportId(item["_id"])
+                        sport.forEach((sport) => {
+                          if (sport["_id"] === item["_id"]) {
+                            setCourts(sport["list_court"])
+                            setShowCourt(true)
+                            setRequiredUserCount(sport["required_user"])
+                            setSportName(sport[sportLanguage])
+                          }
+                        })
+                      }}
+                    />
+                    <p>{item[sportLanguage]}</p>
+                  </label>
                 </div>
-              </div>
-              <div className={showTime ? "" : "d-none"}>
-                <div className="mt-3">
-                  <div className="glass">
-                    <div className="glass-contents">
-                      <h6>{t("requiredUserMsg")}</h6>
-                      <h4>
-                        {requiredUserCount ? requiredUserCount : "..."} {t("users")}
-                      </h4>
-                      <h6 className="mt-3">{t("remainingQuota")}</h6>
-                      {quota - checkedCount * 30 < 30 ? (
-                        <h4>{t("usedUpQuota")}</h4>
-                      ) : (
-                        <h4>
-                          {quota - checkedCount * 30} {t("minsRemaining")}
-                        </h4>
-                      )}
+              ))}
+            </div>
+            <div className="button-group mb-0">
+              <hr />
+              {!clickedNext && (
+                <Button className="mb-0" variant="pink" onClick={() => setClickedNext(true)} disabled={currentSportId === ""}>
+                  Next
+                </Button>
+              )}
+            </div>
+
+            {currentSportId !== "" && clickedNext && (
+              <div className="details-zone">
+                <span className="row mt">
+                  <label className="form-label mt-2 ml-3">{t("dateSelection")}</label>
+                </span>
+                <div className="d-flex react-datepicker-wrapper">
+                  <DatePicker
+                    className="form-control date-picker select-drop-down"
+                    selected={date}
+                    disabled={invalidAccount}
+                    onChange={(date: Date) => {
+                      const fixedDate = new Date(date.setHours(0, 0, 0, 0))
+                      setDate(fixedDate)
+                      setShowCourt(false)
+                      setShowTime(false)
+                      setValue("court_number", "")
+                      setValue("sport_id", "")
+                      if (validDate(today, date)) setShowDateWarning(false)
+                      else setShowDateWarning(true)
+                    }}
+                  />
+                </div>
+                {showDateWarning ? <p className="font-weight-light text-danger">{t("sevenDays")}</p> : null}
+                <div className="mt-2">
+                  <div>
+                    <label className="form-label mt-2">{t("court")}</label>
+                    <div>
+                      <select
+                        name="court_number"
+                        className="select-drop-down"
+                        ref={register}
+                        disabled={invalidAccount}
+                        onChange={() => {
+                          setShowTime(false)
+                          if (getValues("court_number") !== "") {
+                            setValue("time_slot", [])
+                            fetchTime(getValues("court_number"), currentSportId, date)
+                            fetchQuota(currentSportId, date)
+                            setShowTime(true)
+                          } else {
+                            setShowTime(false)
+                          }
+                        }}
+                      >
+                        <option className="dropdown-item" value="">
+                          {t("courtSelection")}
+                        </option>
+                        {courts.map((item, i) => (
+                          <option key={i} value={item["court_num"]}>
+                            {item["court_num"]}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <div className={showTime ? "" : "d-none"}>
+                    <div className="mt-3">
+                      <div className="glass">
+                        <div className="glass-contents">
+                          <h6>{t("requiredUserMsg")}</h6>
+                          <h4>
+                            {requiredUserCount ? requiredUserCount : "..."} {t("users")}
+                          </h4>
+                          <h6 className="mt-3">{t("remainingQuota")}</h6>
+                          {quota - checkedCount * 60 < 60 ? (
+                            <h4>{t("usedUpQuota")}</h4>
+                          ) : (
+                            <h4>
+                              {quota - checkedCount * 60} {t("minsRemaining")}
+                            </h4>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <hr />
+                    <label className="form-label mt-2 mb-3">{t("timeSlotSelection")}</label>
+                    {selectTimeWarning ? <p className="alert-warning p-2">{t("pleaseSelectTime")}</p> : null}
+                    {showTimeSlotError ? <p className="alert-warning p-2">{t("timeSlotErrorMsg")}</p> : null}
+                    <div className={showTime ? "d-md-flex time-slot-container" : "d-md-flex time-slot-container-hidden"}>
+                      <Row className="mx-1">
+                        {time.map((item, i) => (
+                          <div className={showTime ? "my-0 time-container" : ""} key={i}>
+                            <label className="ml-2">
+                              <input
+                                className="mr-2 time-checkbox"
+                                type="checkbox"
+                                key={i}
+                                value={item}
+                                ref={register}
+                                name="time_slot"
+                                onClick={() => checkTimeSlotValidity()}
+                                disabled={shouldDisable(item) || quota === 0}
+                              />
+                              {formatTime(item)}
+                            </label>
+                            <hr className="mt-1 p-0" />
+                          </div>
+                        ))}
+                      </Row>
                     </div>
                   </div>
                 </div>
-                <hr />
-                <label className="form-label mt-2 mb-3">{t("timeSlotSelection")}</label>
-                {selectTimeWarning ? <p className="alert-warning p-2">{t("pleaseSelectTime")}</p> : null}
-                {showTimeSlotError ? <p className="alert-warning p-2">{t("timeSlotErrorMsg")}</p> : null}
-                <div className={showTime ? "d-md-flex time-slot-container" : "d-md-flex time-slot-container-hidden"}>
-                  <Row className="mx-1">
-                    {time.map((item, i) => (
-                      <div className={showTime ? "my-0 time-container" : ""} key={i}>
-                        <label className="ml-2">
-                          <input
-                            className="mr-2 time-checkbox"
-                            type="checkbox"
-                            key={i}
-                            value={item}
-                            ref={register}
-                            name="time_slot"
-                            onClick={() => checkTimeSlotValidity()}
-                            disabled={shouldDisable(item) || quota === 0}
-                          />
-                          {formatTime(item)}
-                        </label>
-                        <hr className="mt-1 p-0" />
-                      </div>
-                    ))}
-                  </Row>
-                </div>
               </div>
-            </div>
+            )}
           </div>
           <br />
           <div className="button-group my-2">
-            <Button
-              type="submit"
-              variant="pink"
-              disabled={invalidAccount || showDateWarning || showTimeSlotError || !showCourt || !showTime}
-              onClick={() => {
-                setShow(true)
-              }}
-            >
-              {t("createWaitingRoom")}
-            </Button>
-            <Link to={"/reservenow"}>
+            {clickedNext && (
+              <Button
+                type="submit"
+                variant="pink"
+                disabled={invalidAccount || showDateWarning || showTimeSlotError || !showCourt || !showTime}
+                onClick={() => {
+                  setShow(true)
+                }}
+              >
+                {t("createWaitingRoom")}
+              </Button>
+            )}
+            <Link to={"/home"}>
               <Button className="btn-secondary">{t("cancel")}</Button>
             </Link>
           </div>

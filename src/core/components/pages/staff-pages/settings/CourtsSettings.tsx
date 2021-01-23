@@ -119,8 +119,10 @@ export default function CourtsSettings() {
 
   const renderCourtsTable = () => {
     const courtList = courts.map((court: Court, i) => {
-      const openTime = Math.floor((court["open_time"] - 1) / 2) + ":" + (Math.floor(court["open_time"] % 2) === 0 ? "30" : "00")
-      const closeTime = Math.floor(court["close_time"] / 2) + ":" + (Math.floor((court["close_time"] + 1) % 2) !== 0 ? "00" : "30")
+      //const openTime = Math.floor((court["open_time"] - 1) / 2) + ":" + (Math.floor(court["open_time"] % 2) === 0 ? "30" : "00")
+      const openTime = court["open_time"] - 1 + ":00"
+      //const closeTime = Math.floor(court["close_time"] / 2) + ":" + (Math.floor((court["close_time"] + 1) % 2) !== 0 ? "00" : "30")
+      const closeTime = court["close_time"] + ":00"
 
       return (
         <tr key={i} className="tr-normal">

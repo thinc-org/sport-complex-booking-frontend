@@ -5,18 +5,8 @@ import { Control, useForm, useWatch } from "react-hook-form"
 import { NormalModalProps, EditCourtProps, DeleteCourtModalProps, AddCourtFuncProps } from "../../../../dto/settings.dto"
 import { Court } from "../../../../dto/sport.dto"
 
-const OpenTimeCalculation = (time: string) => {
-  const equation: number = parseInt(time.substring(0, 2)) * 2 + 1 + Math.floor(parseInt(time.substring(3, 5)) / 30)
-  return equation
-}
-
-const CloseTimeCalculation = (time: string) => {
-  const equation: number = parseInt(time.substring(0, 2)) * 2 + 1 + Math.floor(parseInt(time.substring(3, 5)) / 30)
-  return equation - 1
-}
-
 const invalidTime = (openTime: string, closeTime: string): boolean => {
-  return !["00", "30"].includes(openTime.slice(openTime.length - 2)) || !["00", "30"].includes(closeTime.slice(closeTime.length - 2))
+  return !["00"].includes(openTime.slice(openTime.length - 2)) || !["00"].includes(closeTime.slice(closeTime.length - 2))
 }
 const openAfterClose = (formattedOpenTime: number, formattedCloseTime: number): boolean => {
   if (formattedOpenTime >= formattedCloseTime) return true
@@ -24,11 +14,11 @@ const openAfterClose = (formattedOpenTime: number, formattedCloseTime: number): 
 }
 
 const formatOpenTime = (openTime: string) => {
-  return parseInt(openTime.substring(0, 2)) * 2 + 1 + Math.floor(parseInt(openTime.substring(3, 5)) / 30)
+  return parseInt(openTime.substring(0, 2)) + 1
 }
 
 const formatCloseTime = (closeTime: string) => {
-  return parseInt(closeTime.substring(0, 2)) * 2 + Math.floor(parseInt(closeTime.substring(3, 5)) / 30)
+  return parseInt(closeTime.substring(0, 2))
 }
 
 export const NoCourtsModal: React.FC<NormalModalProps> = ({ show, setShow }) => {
@@ -228,8 +218,8 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
   currentSportId,
 }) => {
   const { register, handleSubmit, errors, control } = useForm()
-  const formattedOpenTime = OpenTimeCalculation(openTime)
-  const formattedCloseTime = CloseTimeCalculation(closeTime)
+  const formattedOpenTime = formatOpenTime(openTime)
+  const formattedCloseTime = formatCloseTime(closeTime)
   const onSubmitAddCourt = (data: Court) => {
     const newCourt = { ...data, court_num: parseInt(data.court_num + ""), open_time: formattedOpenTime, close_time: formattedCloseTime }
     courts.push(newCourt)

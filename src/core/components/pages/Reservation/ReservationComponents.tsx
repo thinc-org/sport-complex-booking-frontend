@@ -6,8 +6,8 @@ import { ErrorMsgBannerProps, ErrorMessageBannerProps } from "../../../dto/waiti
 export const ErrorMsgBanner: React.FC<ErrorMsgBannerProps> = ({ errorMsg, type }) => {
   const { t } = useTranslation()
   return (
-    <div className="mx-3 my-3">
-      <div className={`alert alert-${type} col-md-6 mx-auto`}>
+    <div className="my-3">
+      <div className={`alert alert-${type}  mx-auto`}>
         <h4>{t("warning")}</h4>
         <h6>{errorMsg}</h6>
       </div>

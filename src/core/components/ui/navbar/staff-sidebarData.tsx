@@ -47,7 +47,7 @@ function useSidebarData(type: string) {
     },
   ]
   if (type === "admin") return data
-  else return data.filter((link) => link !== data[1])
+  else return data.filter((link) => link !== data[1] && link !== data[6] && link !== data[8])
 }
 
 export default useSidebarData
