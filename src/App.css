@@ -683,3 +683,11 @@ td {
 .box-container-alt {
   width: 100%;
 }
+
+.hint-card-background {
+  padding: 15px;
+  width: 100%;
+  display: block;
+  border-radius: 10px;
+  background: #efefef;
+}

@@ -241,5 +241,20 @@
   "qrcodeInvalid": "This QR code will be invalid in",
   "usernameLabel": "Username",
   "submitted": "Submitted",
-  "joinYourFriends": "Join Your Friends"
+  "joinYourFriends": "Join Your Friends",
+  "reserveHint": {
+    "head1": "Creating a waiting room?",
+    "bullet1":"Create a new CU Sports Center reservation waiting room.",
+    "bullet2":"Once created, your friends can join the room with he generated access code.",
+    "head2":"When to create a waiting room?",
+    "bullet3":"When you are the first person to reserve the court and you friends do not have a waiting room yet."
+  },
+  "joinHint": {
+    "head1": "Joining a waiting room?",
+    "bullet1":"Join an exising CU Sport Center reservation waiting room.",
+    "bullet2":"By joining a waiting room, you can make a court reservation together with your friends.",
+    "head2":"When to join a waiting room?",
+    "bullet3":"When your friend has already created a waiting room and you would like to create a reservation together with them."
+  }
+  
 }

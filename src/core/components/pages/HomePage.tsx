@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { client } from "../../../axiosConfig"
 import { useTranslation } from "react-i18next"
 import { CookieModal } from "../ui/Modals/CookieModal"
-import { PersonCircle, Calendar, PeopleFill, BookmarkFill, QuestionCircle } from "react-bootstrap-icons"
+import { PersonCircle, Calendar, PeopleFill, BookmarkFill, QuestionCircle, QuestionCircleFill } from "react-bootstrap-icons"
 import withUserGuard from "../../guards/user.guard"
 import footer from "../../assets/images/footer.svg"
 import { Loading } from "../ui/loading/loading"
@@ -20,6 +20,8 @@ const HomePage = () => {
   const language = useLanguage()
   const languageName = language === "th" ? "name_th" : "name_en"
   const [isLoading, setIsLoading] = useState(true)
+  const [showReserveNowHint, setShowReserveNowHint] = useState(false)
+  const [showJoinHint, setShowJoinHInt] = useState(false)
 
   const fetchUserName = useCallback(async () => {
     try {
@@ -90,7 +92,30 @@ const HomePage = () => {
           <div className="px-4  my-3 ">
             <Row className="justify-content-between">
               <span className="linkhead font-weight-bold">{t("reserveNow")}</span>
-              <QuestionCircle className="mt-2" size={20} />
+              <span onClick={() => setShowReserveNowHint(!showReserveNowHint)}>
+                {!showReserveNowHint ? <QuestionCircle className="mt-2" size={20} /> : <QuestionCircleFill className="mt-2" size={20} />}
+              </span>
+            </Row>
+            <Row>
+              {showReserveNowHint && (
+                <div className="hint-card-background">
+                  <p className="font-weight-bold">{t("reserveHint.head1")}</p>
+                  <ul>
+                    <li>
+                      <p>{t("reserveHint.bullet1")}</p>
+                    </li>
+                    <li>
+                      <p>{t("reserveHint.bullet2")}</p>
+                    </li>
+                  </ul>
+                  <p className="font-weight-bold">{t("reserveHint.head2")}</p>
+                  <ul>
+                    <li>
+                      <p>{t("reserveHint.bullet3")}</p>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </Row>
           </div>
           <Link to={disable ? "/home" : "/createwaitingroom"} className="box-container btn btn-pink-pink link">
@@ -103,7 +128,30 @@ const HomePage = () => {
           <div className="px-4  my-3 ">
             <Row className="justify-content-between">
               <span className="linkhead font-weight-bold">{t("joinYourFriends")}</span>
-              <QuestionCircle className="mt-2" size={20} />
+              <span onClick={() => setShowJoinHInt(!showJoinHint)}>
+                {!showJoinHint ? <QuestionCircle className="mt-2" size={20} /> : <QuestionCircleFill className="mt-2" size={20} />}
+              </span>
+            </Row>
+            <Row>
+              {showJoinHint && (
+                <div className="hint-card-background">
+                  <p className="font-weight-bold">{t("joinHint.head1")}</p>
+                  <ul>
+                    <li>
+                      <p>{t("joinHint.bullet1")}</p>
+                    </li>
+                    <li>
+                      <p>{t("joinHint.bullet2")}</p>
+                    </li>
+                  </ul>
+                  <p className="font-weight-bold">{t("joinHint.head2")}</p>
+                  <ul>
+                    <li>
+                      <p>{t("joinHint.bullet3")}</p>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </Row>
           </div>
           <div className="higher">
