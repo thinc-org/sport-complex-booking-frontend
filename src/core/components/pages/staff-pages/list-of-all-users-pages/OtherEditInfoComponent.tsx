@@ -10,12 +10,10 @@ import { useFormContext } from "react-hook-form"
 export default function OtherEditInfoComponent({
   tempInfo,
   setTempInfo,
-  setTempUsername,
   handleSave,
 }: {
   tempInfo: Info
   setTempInfo: React.Dispatch<React.SetStateAction<Info>>
-  setTempUsername: React.Dispatch<React.SetStateAction<string>>
   handleSave: () => void
 }) {
   // Page state //
@@ -102,7 +100,6 @@ export default function OtherEditInfoComponent({
         contact_person_phone: data.contact_person_phone,
       },
     })
-    setTempUsername(data.username)
     handleSave()
   }
 

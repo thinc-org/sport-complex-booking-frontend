@@ -18,8 +18,6 @@ import {
 import Info, { ModalUserInfo } from "../interfaces/InfoInterface"
 import format from "date-fns/format"
 import { FormProvider, useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { emailSchema } from "../../../../schemas/editUserInfo"
 
 const UserInfo = () => {
   // page state //
@@ -73,7 +71,6 @@ const UserInfo = () => {
     relationship_verification_document: "",
   })
   // temp data
-  const [tempUsername, setTempUsername] = useState<string>("")
   const [tempMembershipType, setTempMembershipType] = useState<string>("")
   const [tempIsPenalize, setTempPenalize] = useState<boolean>(false)
   const [tempExpiredPenalizeDate, setTempExpiredPenalizeDate] = useState<Date>(new Date())
@@ -82,8 +79,8 @@ const UserInfo = () => {
 
   // react router dom
   const { _id } = useParams<{ _id: string }>()
-  const methods = useForm({ resolver: yupResolver(emailSchema) })
-  const { register, errors } = methods
+  const methods = useForm()
+  const { errors } = methods
   const history = useHistory()
 
   // requests //
@@ -141,7 +138,6 @@ const UserInfo = () => {
   // handles //
   const handleEdit = () => {
     setTempInfo(info)
-    setTempUsername(username)
     setTempMembershipType(membershipType)
     setTempPenalize(isPenalize)
     setTempExpiredPenalizeDate(expiredPenalizeDate)
@@ -225,7 +221,6 @@ const UserInfo = () => {
         contact_person,
         medical_condition,
         // top section //
-        username: tempUsername,
         membership_type: tempMembershipType,
         account_expiration_date: tempAccountExpiredDate,
         is_penalize: tempIsPenalize,
@@ -240,7 +235,6 @@ const UserInfo = () => {
     })
       .then(() => {
         // set temp to data
-        setUsername(tempUsername)
         setMembershipType(tempMembershipType)
         setPenalize(tempIsPenalize)
         setExpiredPenalizeDate(tempExpiredPenalizeDate)
@@ -301,18 +295,7 @@ const UserInfo = () => {
           <div className="row pb-2">
             <div className="col">
               <label className="mt-2">ชื่อผู้ใช้</label>
-              {isEdit ? (
-                <Form.Control
-                  ref={register}
-                  name="username"
-                  className="border"
-                  style={{ backgroundColor: "white" }}
-                  type="text"
-                  defaultValue={username}
-                />
-              ) : (
-                <p className="font-weight-bold">{username}</p>
-              )}
+              <p className="font-weight-bold">{username}</p>
               {errors.username && (
                 <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
                   {errors.username.message}
@@ -491,7 +474,7 @@ const UserInfo = () => {
   const renderEditForm = () => {
     return (
       <div>
-        <OtherEditInfoComponent tempInfo={tempInfo} setTempInfo={setTempInfo} setTempUsername={setTempUsername} handleSave={handleSave} />
+        <OtherEditInfoComponent tempInfo={tempInfo} setTempInfo={setTempInfo} handleSave={handleSave} />
         <div className="mt-5">
           <Button
             variant="pink"

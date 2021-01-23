@@ -39,7 +39,6 @@ export interface EditComponentInfo {
   phone: string
   home_phone: string
   medical_condition: string
-  username: string
   contact_person_prefix: string
   contact_person_name: string
   contact_person_surname: string
