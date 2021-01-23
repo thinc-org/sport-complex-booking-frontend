@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { Button } from "react-bootstrap"
 import { useForm } from "react-hook-form"
-import { Link, useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import withUserGuard from "../../../guards/user.guard"
 import { useTranslation } from "react-i18next"
 import { client } from "../../../../axiosConfig"

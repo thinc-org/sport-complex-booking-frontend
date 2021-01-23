@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react"
-import { Button, Row, ToggleButton, ToggleButtonGroup } from "react-bootstrap"
+import { Button, Form, Row } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
@@ -254,7 +254,7 @@ function CreateWaitingRoom() {
                         })
                       }}
                     />
-                    <p>{item[sportLanguage]}</p>
+                    <p className="font-weight-normal">{item[sportLanguage]}</p>
                   </label>
                 </div>
               ))}
@@ -295,7 +295,9 @@ function CreateWaitingRoom() {
                   <div>
                     <label className="form-label mt-2">{t("court")}</label>
                     <div>
-                      <select
+                      <Form.Control
+                        as="select"
+                        custom
                         name="court_number"
                         className="select-drop-down"
                         ref={register}
@@ -320,7 +322,7 @@ function CreateWaitingRoom() {
                             {item["court_num"]}
                           </option>
                         ))}
-                      </select>
+                      </Form.Control>
                     </div>
                   </div>
                   <div className={showTime ? "" : "d-none"}>
