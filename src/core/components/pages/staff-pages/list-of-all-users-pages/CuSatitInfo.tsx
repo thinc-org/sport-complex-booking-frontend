@@ -116,8 +116,8 @@ const UserInfo: FunctionComponent = () => {
   }
 
   const handleEdit = () => {
-    setEditing(true)
     setTempUser(user)
+    setEditing(true)
   }
 
   const handleCancelChange = () => {
