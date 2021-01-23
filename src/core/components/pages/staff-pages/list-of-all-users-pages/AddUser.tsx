@@ -10,8 +10,6 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { emailSchema } from "../../../../schemas/editUserInfo"
 
 const AddUser: FunctionComponent = () => {
-  // Page states //
-  const [selectingSatit, setSelectingSatit] = useState<boolean>(false)
   // Modals & Alerts //
   const [showModals, setShowModals] = useState<ModalAddUser>({
     showAdd: false,
@@ -27,7 +25,7 @@ const AddUser: FunctionComponent = () => {
 
   // User states //
   const [user, setUser] = useState<AddInfo>({
-    membership_type: "",
+    membership_type: "นักเรียนสาธิตจุฬา / บุคลากรจุฬา",
     is_thai_language: true,
     name_th: "",
     surname_th: "",
@@ -49,26 +47,14 @@ const AddUser: FunctionComponent = () => {
     return false
   }
 
-  // handles //
-  const handleChangeType = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({ ...user, membership_type: e.target.value })
-    if (e.target.value === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" || user.membership_type === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา")
-      setSelectingSatit(!selectingSatit)
-  }
-
   const handleAdd = (data: AddUserComponentInfo) => {
     const { confirmPassword, ...rest } = data
     const { username, name_th, surname_th, name_en, surname_en, phone, password } = rest
-    const newUser = data.is_thai_language
-      ? { ...rest, membership_type: user.membership_type, personal_email: username }
-      : { ...user, username: username, password: data.password }
+    const newUser = { ...rest, membership_type: "นักเรียนสาธิตจุฬา / บุคลากรจุฬา", personal_email: username }
     setUser(newUser)
     if (!validCheck(username)) setShowAlerts({ showAlertPassword: false, showAlertUncom: false, showAlertUsername: true })
     else if (password !== confirmPassword) setShowAlerts({ showAlertUncom: false, showAlertUsername: false, showAlertPassword: true })
-    else if (user.membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && user.membership_type && username !== "" && password !== "")
-      setShowModals({ ...showModals, showAdd: true })
     else if (
-      user.membership_type &&
       username !== "" &&
       password !== "" &&
       name_th !== "" &&
@@ -84,25 +70,10 @@ const AddUser: FunctionComponent = () => {
 
   // requests //
   const requestAdd = () => {
-    let url = "/list-all-user/"
-    let data = {}
-    const { membership_type, username, password, personal_email } = user
-    if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา") {
-      url += "OtherUser"
-      data = {
-        membership_type,
-        personal_email,
-        username,
-        password,
-      }
-    } else {
-      url += "SatitUser"
-      data = user
-    }
     client({
       method: "POST",
-      url,
-      data,
+      url: "/list-all-user/SatitUser",
+      data: user,
     })
       .then(() => {
         setShowModals({ ...showModals, showAdd: false, showCom: true })
@@ -115,57 +86,11 @@ const AddUser: FunctionComponent = () => {
   }
 
   // renders //
-  const renderSelector = (option: number) => {
-    return (
-      <Form.Group>
-        <Form.Label>ประเภท</Form.Label>
-        <Form.Control className="m-0" as="select" onChange={handleChangeType} defaultValue={option}>
-          <option value={0} disabled>
-            เลือกประเภทสมาชิก
-          </option>
-          <option>สมาชิกสามัญ ก (staff membership)</option>
-          <option>สมาชิกสามัญ ข (student membership)</option>
-          <option>สมาชิกสามัญสมทบ ก (staff-spouse membership)</option>
-          <option>สมาชิกสามัญสมทบ ข (alumni membership)</option>
-          <option>สมาชิกวิสามัญ (full membership)</option>
-          <option>สมาชิกวิสามัญสมทบ (full membership-spouse and children)</option>
-          <option>สมาชิกวิสามัญเฉพาะสนามกีฬาในร่ม (indoor stadium)</option>
-          <option>สมาชิกวิสามัญสมทบเฉพาะสนามกีฬาในร่ม (indoor stadium-spouse and children)</option>
-          <option>สมาชิกรายเดือนสนามกีฬาในร่ม (monthly membership-indoor stadium)</option>
-          <option>นักเรียนสาธิตจุฬา / บุคลากรจุฬา</option>
-        </Form.Control>
-      </Form.Group>
-    )
-  }
-
-  const renderNormalForm = () => {
-    return (
-      <FormProvider {...methods}>
-        <Form onSubmit={handleSubmit(handleAdd)}>
-          {renderSelector(0)}
-          <Form.Group>
-            <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
-            <Form.Control ref={register} name="username" defaultValue={user.username} />
-            {errors.username && (
-              <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
-                {errors.username.message}
-              </span>
-            )}
-          </Form.Group>
-          <AlertInvalidUsername show={showAlerts} />
-          <ChangePasswordComponent selectingSatit={selectingSatit} />
-          <AlertErrorPassword show={showAlerts} />
-        </Form>
-      </FormProvider>
-    )
-  }
-
   const renderSatitForm = () => {
     const { name_th, surname_th, name_en, surname_en, phone, username, is_thai_language } = user
     return (
       <FormProvider {...methods}>
         <Form onSubmit={handleSubmit(handleAdd)}>
-          {renderSelector(9)}
           <Form.Group>
             <Form.Label>ภาษา</Form.Label>
             <Form.Control ref={register} name="is_thai_language" className="m-0" as="select" defaultValue={is_thai_language ? 1 : 0}>
@@ -213,7 +138,7 @@ const AddUser: FunctionComponent = () => {
             </Row>
           </Form.Group>
           <Form.Group>
-            <ChangePasswordComponent selectingSatit={selectingSatit} />
+            <ChangePasswordComponent />
             <AlertInvalidUsername show={showAlerts} />
             <AlertErrorPassword show={showAlerts} />
           </Form.Group>
@@ -236,7 +161,7 @@ const AddUser: FunctionComponent = () => {
   return (
     <div className="addUser">
       <Card body border="light" className="shadow px-3 py-3 mb-5 mt-4 mr-4">
-        {selectingSatit ? renderSatitForm() : renderNormalForm()}
+        {renderSatitForm()}
         <AlertUncom show={showAlerts} />
         <Row className="pt-5">
           <Col className="text-right">

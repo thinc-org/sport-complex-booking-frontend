@@ -2,11 +2,7 @@ import React, { useState } from "react"
 import { Row, Col, Form, InputGroup, Button } from "react-bootstrap"
 import { useFormContext } from "react-hook-form"
 
-interface ChangePasswordProps {
-  selectingSatit: boolean
-}
-
-const ChangePasswordComponent: React.FC<ChangePasswordProps> = ({ selectingSatit }) => {
+const ChangePasswordComponent: React.FC = () => {
   // states //
   const { register } = useFormContext()
   const [showPassword, setShowPassword] = useState<boolean>(false)
@@ -16,7 +12,7 @@ const ChangePasswordComponent: React.FC<ChangePasswordProps> = ({ selectingSatit
     <Row>
       <Col>
         <Form.Group>
-          <Form.Label>{selectingSatit ? "รหัสผ่าน" : "รหัสผ่าน (เบอร์โทรศัพท์)"}</Form.Label>
+          <Form.Label>รหัสผ่าน</Form.Label>
           <InputGroup>
             <Form.Control ref={register} name="password" type={showPassword ? "text" : "password"} defaultValue={""} />
             <InputGroup.Append>
