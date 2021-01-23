@@ -8,12 +8,11 @@ import { ConfirmDeleteModal, ErrModal, DeleteSuccessfulModal } from "./DeleteMod
 import { Sport } from "../../../../dto/sport.dto"
 
 export const convertSlotToTime = (slot: number): TimeObject => {
-  const hour = Math.floor(slot / 2)
   return {
-    startHour: slot % 2 === 0 ? `${hour - 1}` : `${hour}`,
-    startMinute: slot % 2 === 0 ? "30" : "00",
-    endHour: `${hour}`,
-    endMinute: slot % 2 === 0 ? "00" : "30",
+    startHour: `${slot - 1}`,
+    startMinute: `00`,
+    endHour: `${slot - 1}`,
+    endMinute: `59`,
   }
 }
 

@@ -166,7 +166,7 @@ const AllReservation: FunctionComponent = () => {
       <option key={0} value={0}>
         ทั้งหมด
       </option>
-      {Array.from(Array(48).keys()).map((i) => (
+      {Array.from(Array(24).keys()).map((i) => (
         <option key={i + 1} value={i + 1}>
           {getTimeText([i + 1])}
         </option>
