@@ -8,7 +8,6 @@ import { client } from "../../../../axiosConfig"
 import { CustomWaitingRoomModal } from "../../ui/Modals/WaitingRoomModals"
 import { WaitingRoomAccessCode, ValidityMessage } from "../../../dto/waitingRoom.dto"
 import { CheckValidityErrorMsg, JoinWaitingRoomErrorMsg } from "./ReservationComponents"
-import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 
 function JoinWaitingRoom() {
   const { register, handleSubmit, errors } = useForm()
@@ -67,14 +66,13 @@ function JoinWaitingRoom() {
   }, [fetchValidity])
 
   return (
-    <div className="wrapper">
-      <NavHeader header={t("joinWaitingRoom")} />
+    <div>
       <CheckValidityErrorMsg show={showValidityWarningMessage} reason={warningMessage} type={errorType} />
       <JoinWaitingRoomErrorMsg show={showJoinWarningMessage} reason={warningMessage} type={errorType} />
-      <div className="mx-auto col-md-6">
+      <div className="mx-auto higher">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="default-mobile-wrapper mt-4 animated-card">
-            <span className="row mt-3">
+            <span className="row">
               <h6 className="mx-3 mt-1 font-weight-bold">{t("waitingRoomPassword")}</h6>
             </span>
             <p className="font-weight-light">{t("waitingRoomHelp")}</p>
@@ -98,17 +96,14 @@ function JoinWaitingRoom() {
                   {errors.access_code.message}
                 </p>
               )}
+              <div className="button-group mt-2">
+                <Button variant="pink" type="submit" className="mb-0 mt-3" disabled={invalidAccount}>
+                  {t("joinWaitingRoom")}
+                </Button>
+              </div>
             </div>
           </div>
           <br />
-          <div className="button-group my-2">
-            <Button variant="pink" type="submit" disabled={invalidAccount}>
-              {t("joinWaitingRoom")}
-            </Button>
-            <Link to={"/reservenow"}>
-              <Button className="btn-secondary">{t("cancel")}</Button>
-            </Link>
-          </div>
         </form>
       </div>
       {/* Wrong Access Code Modal */}

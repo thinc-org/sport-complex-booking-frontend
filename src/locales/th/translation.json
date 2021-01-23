@@ -241,5 +241,6 @@
   "noReservation": "คุณไม่มีการจองในขณะนี้",
   "qrcodeInvalid": "คิวอาร์โค้ดนี้จะหมดเวลาในอีก",
   "usernameLabel": "ชื่อผู้ใช้",
-  "submitted": "ส่งข้อมูลแล้ว"
+  "submitted": "ส่งข้อมูลแล้ว",
+  "joinYourFriends": "ร่วมจองกับเพื่อน"
 }

@@ -58,7 +58,7 @@ export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSp
         <Modal.Header closeButton>
           <Modal.Title>เพิ่มกีฬา</Modal.Title>
         </Modal.Header>
-        <div className="m-4">
+        <div className="mx-4 p-3">
           <Form.Group>
             <Row>
               <Form.Label>ประเภทกีฬา (ภาษาไทย)</Form.Label>
@@ -89,10 +89,10 @@ export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSp
           </Form.Group>
         </div>
 
-        <div className="card">
-          <h5 className="card-header">เวลาการจองมากที่สุด</h5>
+        <div className="card mx-4">
+          <h5 className="card-header">เวลาการจองมากที่สุด (นาที)</h5>
           <div className="card-body">
-            <span className="d-flex justify-content-around">
+            <span className="d-flex justify-content-between">
               <Button
                 variant="pink"
                 className="button"
@@ -104,29 +104,7 @@ export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSp
               >
                 -60
               </Button>
-              <Button
-                variant="pink"
-                className="button"
-                disabled={reservationTime <= 30}
-                onClick={() => {
-                  setValue("quota", parseInt(getValues("quota")) - 30)
-                  setReservationTime(reservationTime - 30)
-                }}
-              >
-                -30
-              </Button>
               <input type="number" readOnly={true} ref={register} name="quota" defaultValue={60} className="form-control square-input" />
-              <span className="mt-3">นาที</span>
-              <Button
-                variant="pink"
-                className="button"
-                onClick={() => {
-                  setValue("quota", parseInt(getValues("quota")) + 30)
-                  setReservationTime(reservationTime + 30)
-                }}
-              >
-                +30
-              </Button>
               <Button
                 variant="pink"
                 className="button"
@@ -141,10 +119,10 @@ export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSp
           </div>
         </div>
 
-        <div className="card">
-          <h5 className="card-header">จํานวนผู้จองขั้นต่ำ</h5>
+        <div className="card mx-4 mt-4">
+          <h5 className="card-header">จํานวนผู้จองขั้นต่ำ (คน)</h5>
           <div className="card-body">
-            <span className="d-flex justify-content-around">
+            <span className="d-flex justify-content-between">
               <Button
                 variant="pink"
                 className="button"
@@ -168,7 +146,6 @@ export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSp
                 -1
               </Button>
               <input type="number" readOnly={true} ref={register} name="required_user" defaultValue="5" className="form-control square-input" />
-              <span className="mt-3"> คน</span>
               <Button
                 variant="pink"
                 className="button"
@@ -260,42 +237,23 @@ export const EditSport: React.FC<EditSportProps> = ({ show, setShow, setCurrentS
       <div className="card">
         <h5 className="card-header">เวลาการจองมากที่สุด</h5>
         <div className="card-body">
-          <span className="d-flex justify-content-around">
+          <span className="d-flex justify-content-between">
             <Button
               variant="pink"
               className="button"
               disabled={currentSport["quota"] <= 2}
               onClick={() => {
-                setCurrentSport({ ...currentSport, quota: currentSport["quota"] - 2 })
+                setCurrentSport({ ...currentSport, quota: currentSport["quota"] - 1 })
               }}
             >
               -60
             </Button>
-            <Button
-              variant="pink"
-              className="button"
-              disabled={currentSport["quota"] <= 1}
-              onClick={() => {
-                setCurrentSport({ ...currentSport, quota: currentSport["quota"] - 1 })
-              }}
-            >
-              -30
-            </Button>
-            <span className="mt-3">{currentSport["quota"] * 30} นาที</span>
+            <span className="mt-3">{currentSport["quota"] * 60} นาที</span>
             <Button
               variant="pink"
               className="button"
               onClick={() => {
                 setCurrentSport({ ...currentSport, quota: currentSport["quota"] + 1 })
-              }}
-            >
-              +30
-            </Button>
-            <Button
-              variant="pink"
-              className="button"
-              onClick={() => {
-                setCurrentSport({ ...currentSport, quota: currentSport["quota"] + 2 })
               }}
             >
               +60
@@ -307,7 +265,7 @@ export const EditSport: React.FC<EditSportProps> = ({ show, setShow, setCurrentS
       <div className="card">
         <h5 className="card-header">จํานวนผู้จองขั้นต่ำ</h5>
         <div className="card-body">
-          <span className="d-flex justify-content-around">
+          <span className="d-flex justify-content-between">
             <Button
               variant="pink"
               className="button"
