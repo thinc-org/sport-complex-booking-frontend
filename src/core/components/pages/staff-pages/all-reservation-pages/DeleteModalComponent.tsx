@@ -1,8 +1,8 @@
 import React from "react"
-import { UserInfo } from "../interfaces/reservationSchemas"
+import { MemberInfoRes } from "../../../../dto/reservation.dto"
 import { CustomModal } from "../list-of-all-users-pages/ListOfAllUserModals"
 
-type ConfirmDelInfo = { members: UserInfo[] | undefined; requestDelete: () => void }
+type ConfirmDelInfo = { members: MemberInfoRes[] | undefined; requestDelete: () => void }
 
 interface ModalInterface {
   show: boolean
@@ -13,8 +13,8 @@ interface ConfirmModalInterface extends ModalInterface {
   info: ConfirmDelInfo
 }
 
-const getAllPhoneNumber = (members: UserInfo[]): string => {
-  let list = members.map((member) => `- ${member.phone}`).join("\n")
+const getAllPhoneNumber = (members: MemberInfoRes[]): string => {
+  const list = members.map((member) => `- ${member.phone}`).join("\n")
   return list
 }
 

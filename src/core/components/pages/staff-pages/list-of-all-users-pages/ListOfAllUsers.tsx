@@ -1,48 +1,10 @@
-import React, { FunctionComponent, useState, useEffect } from "react"
+import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
 import { Table, Form, Row, Col, Button, Modal } from "react-bootstrap"
 import { Link, useHistory } from "react-router-dom"
 import { client } from "../../../../../axiosConfig"
+import { AxiosResponse } from "axios"
+import { Account, UserInfoRes, UserListRes } from "../../../../dto/listOfAllUsers.dto"
 import PaginationComponent from "./PaginationComponent"
-
-interface CUTemplate {
-  account_type: Account
-  is_thai_language: boolean
-  is_first_login: boolean
-  name_th: string
-  surname_th: string
-  name_en: string
-  surname_en: string
-  username: string
-  is_penalize: boolean
-  _id: string
-}
-
-interface OtherTemplate {
-  account_type: Account
-  reject_info: string[]
-  name_th: string
-  surname_th: string
-  name_en: string
-  surname_en: string
-  username: string
-  is_penalize: boolean
-  _id: string
-}
-
-interface SatitTemplate {
-  account_type: Account
-  is_thai_language: boolean
-  name_th: string
-  surname_th: string
-  name_en: string
-  surname_en: string
-  username: string
-  password: string
-  is_penalize: boolean
-  _id: string
-}
-
-type Users = (CUTemplate | SatitTemplate | OtherTemplate)[]
 
 enum allStatus {
   All,
@@ -50,93 +12,77 @@ enum allStatus {
   Banned,
 }
 
-enum Account {
-  CuStudent,
-  SatitAndCuPersonel,
-  Other,
+interface ParamsDataRequest {
+  begin: number
+  end: number
+  name: string
+  is_penalize: boolean
 }
 
 const ListOfAllUsers: FunctionComponent = () => {
   // page state
   const [pageNo, setPageNo] = useState<number>(1)
-  const [maxUser, setMaxUser] = useState<number>(1)
+  const [maxUser, setMaxUser] = useState<number>(1) //fix
   const [maxUserPerPage] = useState<number>(10) // > 1
   const [searchName, setSearchName] = useState<string>("")
   const [status, setStatus] = useState<number>(allStatus.All)
-  // const [jwt, set_jwt] = useState<string>(
-  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyNjY3YjU2ZWVjMDBlZTY3MDQ5NmQiLCJpc1N0YWZmIjp0cnVlLCJpYXQiOjE2MDc2MjQzMTUsImV4cCI6MTYwODg2Njk5Nn0.2WHWeijrF6TC7HWjkjp44wrj5XKEXmuh2_L9lk9zoAM"
-  // )
   const [showNoUser, setShowNoUser] = useState<boolean>(false)
-  const [users, setUsers] = useState<Users>([
-    {
-      account_type: Account.CuStudent,
-      is_thai_language: true,
-      name_th: "",
-      surname_th: "",
-      name_en: "",
-      surname_en: "",
-      username: "",
-      is_penalize: true,
-      is_first_login: false,
-      _id: "",
-    },
-  ])
+  const [users, setUsers] = useState<UserInfoRes[]>([]) //fix
 
   const history = useHistory()
 
-  // useEffect //
-  useEffect(() => {
-    requestUsers()
-  }, [pageNo])
-
-  const requestUsers = () => {
+  const requestUsers = useCallback(() => {
     // get params for request //
-    let param_data = {
+    const param_data: Partial<ParamsDataRequest> = {
       begin: (pageNo - 1) * maxUserPerPage,
       end: pageNo * maxUserPerPage,
     }
-    if (searchName !== "") param_data["name"] = searchName
-    if (status !== allStatus.All) param_data["penalize"] = allStatus.Banned === status
+    if (searchName !== "") param_data.name = searchName
+    if (status !== allStatus.All) param_data.is_penalize = allStatus.Banned === status
     //  request users from server  //
     client({
       method: "GET",
       url: "/list-all-user/filter",
       params: param_data,
     })
-      .then(({ data }) => {
-        let userList = data[1].map((user) => {
-          if (user.account_type === "CuStudent") return { ...user, account_type: Account.CuStudent }
-          else if (user.account_type === "SatitAndCuPersonel") return { ...user, account_type: Account.SatitAndCuPersonel }
-          return { ...user, account_type: Account.Other }
-        })
+      .then(({ data }: AxiosResponse<UserListRes>) => {
         setMaxUser(data[0])
-        setUsers(userList)
+        setUsers(data[1])
       })
       .catch(({ response }) => {
-        console.log(response)
         if (response && response.data.statusCode === 401) history.push("/staff")
       })
-  }
+  }, [history, maxUserPerPage, pageNo, searchName, status])
+
+  // useEffect //
+  useEffect(() => {
+    requestUsers()
+  }, [requestUsers])
+
+  useEffect(() => {
+    setPageNo(1)
+  }, [status])
 
   // handles //
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault()
     if (pageNo !== 1) setPageNo(1)
     else requestUsers()
   }
 
-  const handleInfo = (e) => {
+  const handleInfo = (e: React.MouseEvent<HTMLElement>) => {
     //send username
     // if no data of that user -> show pop up
-    let index = parseInt(e.target.id) - (pageNo - 1) * 10 - 1
-    let _id: String = users[index]._id
+    const target = e.target as HTMLElement
+    const index = parseInt(target.id) - (pageNo - 1) * 10 - 1
+    const _id: string = users[index]._id
     client({
       method: "GET",
       url: "/list-all-user/id/" + _id,
     })
       .then(({ data }) => {
         if (data) {
-          let account_type: Account = users[index].account_type
+          const account_type: Account = users[index].account_type
           if (account_type === Account.CuStudent) {
             history.push(`/staff/userInfo/custudent/${_id}`)
           } else if (account_type === Account.SatitAndCuPersonel) {
@@ -185,8 +131,7 @@ const ListOfAllUsers: FunctionComponent = () => {
 
   const renderUsersTable = () => {
     let index = (pageNo - 1) * 10 + 1
-    // let user
-    let usersList = users.map((user) => {
+    const usersList = users.map((user) => {
       return (
         <tr key={index} className="tr-normal">
           <td className="font-weight-bold"> {index} </td>
@@ -210,7 +155,7 @@ const ListOfAllUsers: FunctionComponent = () => {
       <Form onSubmit={handleSearch} className="mb-2">
         <Form.Row className="justify-content-end align-items-center">
           <Col md="auto">
-            <Form.Label className="mb-0 font-weight-bold"> ค้นหาผู้ใช้ </Form.Label>
+            <Form.Label className="mb-0 font-weight-bold"> ค้นหาชื่อ </Form.Label>
           </Col>
           <Col md="5">
             <Form.Control
@@ -218,7 +163,7 @@ const ListOfAllUsers: FunctionComponent = () => {
               style={{ backgroundColor: "white" }}
               type="text"
               id="searchName"
-              placeholder=" ค้นหา "
+              placeholder=" ค้นหาชื่อจริง "
               onChange={(e) => {
                 setSearchName(e.target.value)
               }}

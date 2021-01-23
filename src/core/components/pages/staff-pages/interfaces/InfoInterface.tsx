@@ -1,10 +1,3 @@
-// enums //
-export enum Account {
-  CuStudent,
-  SatitAndCuPersonel,
-  Other,
-}
-
 // interfaces //
 export default interface Info {
   prefix: string
@@ -54,21 +47,6 @@ export interface EditComponentInfo {
   contact_person_phone: string
 }
 
-export interface CuAndSatitInfo {
-  account_type: Account
-  is_thai_language: boolean
-  name_th: string
-  surname_th: string
-  name_en: string
-  surname_en: string
-  username: string
-  personal_email: string
-  phone: string
-  is_penalize: boolean
-  expired_penalize_date: Date
-  is_first_login: boolean
-}
-
 export interface CuSatitComponentInfo {
   name_th: string
   surname_th: string
@@ -82,15 +60,6 @@ export interface PasswordToggle {
   oldPassword: boolean
   newPassword: boolean
   confirmPassword: boolean
-}
-
-export interface CuSatitComponentInfo {
-  name_th: string
-  surname_th: string
-  name_en: string
-  surname_en: string
-  personal_email: string
-  phone: string
 }
 
 export interface AddInfo {
@@ -113,7 +82,6 @@ export interface AddUserComponentInfo {
   name_en: string
   surname_en: string
   username: string
-  personal_email: string
   phone: string
   password: string
   confirmPassword: string
@@ -165,32 +133,34 @@ export interface RejectInfo {
   relationship_verification_document: boolean
 }
 
-export const RejectInfoLabel = {
-  prefix: "Prefix",
-  gender: "Gender",
-  name_th: "Thai name",
-  surname_th: "Thai surname",
-  name_en: "English name",
-  surname_en: "English surname",
-  birthday: "Birthdate",
-  national_id: "National ID number",
-  marital_status: "Marital status",
-  address: "Address",
-  personal_email: "Email",
-  home_phone: "Home phone",
-  phone: "Mobile phone",
-  medical_condition: "Medical condition",
-  contact_person_prefix: "Contact person's prefix",
-  contact_person_name: "Contact person's name",
-  contact_person_surname: "Contact person's surname",
-  contact_person_home_phone: "Contact person's home phone",
-  contact_person_phone: "Contact person's mobile phone",
-  user_photo: "Photo",
-  medical_certificate: "Medical certificate",
-  national_id_photo: "National ID / Passport photo",
-  house_registration_number: "House registration photo",
-  relationship_verification_document: "Relation verification photo",
+export const RejectInfoLabel: Record<keyof RejectInfo, string> = {
+  prefix: "คำนำหน้าชื่อ",
+  gender: "เพศ",
+  name_th: "ชื่อจริง",
+  surname_th: "นามสกุล",
+  name_en: "ชื่อจริง (ภาษาอังกฤษ)",
+  surname_en: "นามสกุล (ภาษาอังกฤษ)",
+  birthday: "วัน/เดือน/ปี เกิด",
+  national_id: "หมายเลขบัตรประชาชน/พาสปอร์ต",
+  marital_status: "สถานะการสมรส",
+  address: "ที่อยู่",
+  personal_email: "อีเมล",
+  home_phone: "หมายเลขโทรศัพท์บ้าน",
+  phone: "หมายเลขโทรศัพท์มือถือ",
+  medical_condition: "โรคประจำตัวหรือไม่",
+  contact_person_prefix: "คำนำหน้าขื่อ ผู้ติดต่อยามฉุกเฉิน",
+  contact_person_name: "ชื่อ ผู้ติดต่อยามฉุกเฉิน",
+  contact_person_surname: "นามสกุล ผู้ติดต่อยามฉุกเฉิน",
+  contact_person_home_phone: "หมายเลขโทรศัพท์บ้าน ผู้ติดต่อยามฉุกเฉิน",
+  contact_person_phone: "หมายเลขโทรศัพท์มือถือ ผู้ติดต่อยามฉุกเฉิน",
+  user_photo: "รูปภาพ",
+  medical_certificate: "เอกสารใบรับรองแพทย์",
+  national_id_photo: "หมายเลขบัตรประชาชน / พาสปอร์ต",
+  house_registration_number: "สำเนาทะเบียนบ้านที่มีหน้านิสิต",
+  relationship_verification_document: "เอกสารยืนยันตัวตน",
 }
+
+export type RejectInfoLabelKey = keyof RejectInfo
 
 // Modals //
 export interface ModalVerify {
@@ -212,20 +182,6 @@ export interface ModalUserInfo {
   showPasswordErr: boolean
   showConfirmChange: boolean
   showChangePassword: boolean
-}
-
-export interface ModalAddUser {
-  showAdd: boolean
-  showCom: boolean
-  showErr: boolean
-  showUsernameErr: boolean
-}
-
-// Alerts //
-export interface AlertAddUser {
-  showAlertUncom: boolean
-  showAlertUsername: boolean
-  showAlertPassword: boolean
 }
 
 export interface ModalAddUser {

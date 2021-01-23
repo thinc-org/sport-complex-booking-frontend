@@ -1,65 +1,17 @@
-import React,  { useContext,useState, useEffect } from "react"
+import React, { useContext } from "react"
 import { UserContext } from "../../../../contexts/UsersContext"
-import { Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
-import { WarningMessage } from '../../../ui/Modals/AccountPageModals'
-import { useTranslation } from 'react-i18next'
-import { client } from "../../../../../axiosConfig"
+import { WarningMessage } from "../../../ui/Modals/AccountPageModals"
+import { useTranslation } from "react-i18next"
 
 export default function OtherAaccountDisplay() {
-
-  interface Token {
-    token: string
-  }
-
   const { otherAccount: user } = useContext(UserContext)
-  const {t} = useTranslation()
-  const [fileTokens, setFileTokens] = useState ([
-    {fileName: "user_photo", token:""},
-    {fileName: "national_id_photo", token:""},
-    {fileName: "medical_certificate", token:""},
-    {fileName: "house_registration_number", token:""},
-    {fileName: "relationship_verification_document", token:""}
-  ])
-
-  useEffect(()=> {
-    assignFileTokens()
-  }, [])
-
-  const openFile = (token: string) => {
-    let url = process.env.REACT_APP_API_URL + "/api/fs/view?token=" + token
-    let win = window.open(url, '_blank')
-    win? win.focus(): console.log("Error")
-  }
-
-  const getFileToken = async (fileName: string) => {
-    const fileID = user![fileName]
-    if (fileID) {
-      await client
-      .get<Token>("/fs/viewFileToken/" + fileID)
-      .then(({ data }) => {
-        const newTokens = fileTokens
-        newTokens.forEach((file) => {
-          if (file['fileName'] === fileName) {
-            file['token'] = data.token
-          }
-        })
-        setFileTokens(newTokens)
-      })
-      .catch (()=> {})
-    }   
-  }
-
-  const assignFileTokens = () => {
-    fileTokens.forEach((file)=> {
-      getFileToken(file.fileName)
-    })
-  }
+  const { t } = useTranslation()
 
   return (
     <div className="mx-auto col-md-6">
-      <WarningMessage show={user!.verification_status !== ""} verification_status={user!.verification_status} account={user!.account_type}/>            
-      <div className="default-mobile-wrapper animated-card">
+      {user && <WarningMessage show={user.verification_status !== ""} verification_status={user.verification_status} account={user.account_type} />}
+      <div className="default-mobile-wrapper mt-3 animated-card">
         <div className="">
           {/* START OF THE FORM */}
           <h4>{t("memberInformation")}</h4>
@@ -93,7 +45,7 @@ export default function OtherAaccountDisplay() {
           <label className="form-label mt-2">{t("birthday")}</label>
           <div className="row">
             <div className="col-sm-4">
-              <p>{user?.birthday?.toString().substring(0,10)}</p>
+              <p>{user?.birthday?.toString().substring(0, 10)}</p>
               <div className="valid-feedback"></div>
             </div>
           </div>
@@ -122,9 +74,7 @@ export default function OtherAaccountDisplay() {
           <p>{user?.phone}</p>
           <div className="valid-feedback"></div>
           <hr />
-          <label className="form-label mt-2">
-            {t("medical_condition")}
-          </label>
+          <label className="form-label mt-2">{t("medical_condition")}</label>
           <p>{user?.medical_condition}</p>
           <div className="valid-feedback"></div>
         </div>
@@ -159,57 +109,70 @@ export default function OtherAaccountDisplay() {
         <label className="form-label my-2">{t("user_photo")}</label>
         <div className="form-file">
           {user?.user_photo ? (
-            <Button className="btn-normal btn-secondary" onClick={()=>openFile(fileTokens[0]['token'])}>{t("viewFile")}</Button>
+            <div>
+              <a type="button" className="btn-normal btn-secondary" href={"openFile/" + user.user_photo} target="_blank" rel="noopener noreferrer">
+                {t("viewFile")}
+              </a>
+            </div>
           ) : (
             <p>{t("noFile")}</p>
-          )} 
+          )}
         </div>
         <hr />
         <label className="form-label my-2">{t("national_id_photo")}</label>
         <div className="form-file">
           {user?.national_id_photo ? (
-            <Button className="btn-normal btn-secondary" onClick={()=>openFile(fileTokens[1]['token'])}>{t("viewFile")}</Button>
+            <a className="btn-normal btn-secondary" href={"openFile/" + user.national_id_photo} target="_blank" rel="noopener noreferrer">
+              {t("viewFile")}
+            </a>
           ) : (
             <p>{t("noFile")}</p>
-          )} 
+          )}
         </div>
         <hr />
         <label className="form-label my-2">{t("medical_certificate")}</label>
         <div className="form-file">
           {user?.medical_certificate ? (
-            <Button className="btn-normal btn-secondary" onClick={()=>openFile(fileTokens[2]['token'])}>{t("viewFile")}</Button>
+            <a className="btn-normal btn-secondary" href={"openFile/" + user.medical_certificate} target="_blank" rel="noopener noreferrer">
+              {t("viewFile")}
+            </a>
           ) : (
             <p>{t("noFile")}</p>
-          )} 
+          )}
         </div>
         <hr />
-        <label className="form-label my-2">
-          {t("house_registration_number")}
-        </label>
+        <label className="form-label my-2">{t("house_registration_number")}</label>
         <div className="form-file">
           {user?.house_registration_number ? (
-            <Button className="btn-normal btn-secondary" onClick={()=>openFile(fileTokens[3]['token'])}>{t("viewFile")}</Button>
+            <a className="btn-normal btn-secondary" href={"openFile/" + user.house_registration_number} target="_blank" rel="noopener noreferrer">
+              {t("viewFile")}
+            </a>
           ) : (
             <p>{t("noFile")}</p>
-          )} 
+          )}
         </div>
         <hr />
         <label className="form-label my-2">{t("relationship_verification_document")}</label>
         <div className="form-file">
           {user?.relationship_verification_document ? (
-            <Button className="btn-normal btn-secondary" onClick={()=>openFile(fileTokens[4]['token'])}>{t("viewFile")}</Button>
+            <a
+              className="btn-normal btn-secondary"
+              href={"openFile/" + user.relationship_verification_document}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t("viewFile")}
+            </a>
           ) : (
             <p>{t("noFile")}</p>
-          )} 
+          )}
         </div>
       </div>
       {/* END OF FORM */}
       <div className="button-group col-md-12 mt-4">
         <Link to={"/changePassword"}>
-        <button className="btn-normal btn-outline-black">
-          {t("changePassword")}
-        </button>
-      </Link>
+          <button className="btn-normal btn-outline-black">{t("changePassword")}</button>
+        </Link>
       </div>
       <br />
       <br />

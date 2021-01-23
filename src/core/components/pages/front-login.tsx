@@ -1,15 +1,16 @@
 import React from "react"
-import { useEffect, useContext } from 'react'
-import { Switch, Route, useRouteMatch, useHistory } from 'react-router-dom';
-import { getCookie } from '../../contexts/cookieHandler'
-import FrontLoginMain from '../ui/login/login-main'
-import Footer from '../ui/footer/footer'
-import { useAuthContext } from '../../controllers/authContext'
-import PersonalInfo from '../ui/login/personal-info-form';
-const FrontLoginPage = (props: any) => {
-  const { url, path } = useRouteMatch()
+
+import { Switch, Route, useRouteMatch, Redirect } from "react-router-dom"
+import { useAuthContext } from "../../controllers/authContext"
+import FrontLoginMain from "../ui/login/login-main"
+import PersonalInfo from "../ui/login/personal-info-form"
+
+const FrontLoginPage = () => {
+  const { path } = useRouteMatch()
+  const { isUser } = useAuthContext()
   return (
     <>
+      {isUser && <Redirect to="/home" />}
       <Switch>
         <Route path={`${path}/personal`} component={PersonalInfo} />
         <Route exact path={path} component={FrontLoginMain} />
@@ -18,5 +19,4 @@ const FrontLoginPage = (props: any) => {
   )
 }
 
-
-export default FrontLoginPage; 
+export default FrontLoginPage

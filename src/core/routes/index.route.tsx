@@ -1,8 +1,6 @@
 import * as React from "react"
-import { useEffect } from "react"
 import { Switch } from "react-router-dom"
 import { Route } from "react-router"
-import { useAuthContext } from "../controllers/authContext"
 import FrontLoginPage from "../components/pages/front-login"
 import Landing from "../components/pages/LandingComponent"
 
@@ -14,12 +12,12 @@ import ReserveNow from "../components/pages/Reservation/ReserveNow"
 import JoinWaitingRoom from "../components/pages/Reservation/JoinWaitingRoom"
 import CreateWaitingRoom from "../components/pages/Reservation/CreateWaitingRoom"
 import HomePage from "../components/pages/HomePage"
-import MyReservationPage from '../components/pages/Reservation/MyReservationPage';
-import { getCookie } from "../contexts/cookieHandler"
+import MyReservationPage from "../components/pages/Reservation/MyReservationPage"
 import ChangePassword from "../components/pages/AccountPages/AccountPageUI/ChangePassword"
 import Hooray from "../components/pages/Reservation/Hooray"
 import WaitingRoom from "../components/pages/Reservation/WaitingRoom"
 import AboutUs from "../components/pages/AboutUs"
+import FileOpener from "../components/pages/FileOpener"
 
 export default function MainRoute() {
   return (
@@ -47,7 +45,7 @@ export default function MainRoute() {
 
         <Route exact path="/account" component={AccountPage} />
 
-        <Route path='/myreservation' component={MyReservationPage} />
+        <Route path="/myreservation" component={MyReservationPage} />
 
         <Route exact path="/changePassword" component={ChangePassword} />
 
@@ -60,6 +58,8 @@ export default function MainRoute() {
         <Route exact path="/waitingroom" component={WaitingRoom} />
 
         <Route exact path="/aboutus" component={AboutUs} />
+
+        <Route exact path={`/openFile/:fileId`} component={FileOpener} />
       </Switch>
     </>
   )

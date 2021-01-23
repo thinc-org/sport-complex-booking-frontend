@@ -1,53 +1,49 @@
-import React, { ReactPropTypes } from "react"
-import { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback } from "react"
+
 import { Button } from "react-bootstrap"
 import { useHistory, Link } from "react-router-dom"
 import { client } from "../../../../axiosConfig"
 import { NavHeader } from "../../ui/navbar/navbarSideEffect"
-import { timeShift, timeConversion, timeRemainingDisplay } from "./timeFormating"
-import { ConfirmModal } from "../../ui/Modals/CurrentWaitingRoomModal"
-import { TimeOutModal } from "../../ui/Modals/CurrentWaitingRoomModal"
+import { timeShift, timeConversion, TimeRemainingDisplay } from "./timeFormating"
+import { ConfirmModal, TimeOutModal } from "../../ui/Modals/CurrentWaitingRoomModal"
+
 import { useTranslation } from "react-i18next"
 import withUserGuard from "../../../guards/user.guard"
-import Countdown from "react-countdown"
+import Countdown, { CountdownRenderProps } from "react-countdown"
 import { Loading } from "../../ui/loading/loading"
-
-interface SportNameResponse {
-  sportNameth: string
-  sportNameen: string
-}
-
-interface MemberResponse {
-  name_th: string
-  name_en: string
-}
+import { useLanguage, useNameLanguage } from "../../../utils/language"
+import { WaitingRoomResponse } from "../../../dto/waitingRoom.dto"
+import { Sport } from "../../../dto/sport.dto"
+import { AxiosResponse } from "axios"
+import { NameResponse } from "../../../dto/account.dto"
 
 const WaitingRoomPage = () => {
   const [waitingRoomId, setWaitingRoomId] = useState<string>()
-  const [sport, setSport] = useState<SportNameResponse>()
+  const [sport, setSport] = useState<Sport>()
   const [date, setDate] = useState<string>()
   const [timeList, setTimeList] = useState<Array<number>>([])
-  const [listMember, setListMember] = useState<Array<MemberResponse>>([])
+  const [listMember, setListMember] = useState<NameResponse[]>([])
   const [accessCode, setAccessCode] = useState("")
   const [endTime, setEndTime] = useState<number>()
   const [modalConfirmOpen, setModalConfirmOpen] = useState(false)
   const [modalTimeOutOpen, setModalTimeOutOpen] = useState(false)
-  const [requiredUserNumber, setRequiredUserNumber] = useState<Number>(0)
-  const [currentUserNumber, setCurrentUserNumber] = useState<Number>(0)
+  const [requiredUserNumber, setRequiredUserNumber] = useState<number>(0)
+  const [currentUserNumber, setCurrentUserNumber] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(true)
-  const { t, i18n } = useTranslation()
-
+  const { t } = useTranslation()
+  const language = useLanguage()
+  const nameLanguage: "name_en" | "name_th" = useNameLanguage("name") as "name_en" | "name_th"
+  const sportLanguage: "sport_name_th" | "sport_name_en" = language === "th" ? "sport_name_th" : "sport_name_en"
   const history = useHistory()
 
   const fetchWaitingRoom = useCallback(async () => {
     try {
-      console.log("fetch data")
-      const res = await client.get("/mywaitingroom")
-      console.log(res.data.list_member)
+      const res: AxiosResponse<WaitingRoomResponse> = await client.get("/mywaitingroom")
       setListMember(res.data.list_member)
       // time sent from backend is UTC before adding 7 for Thailand
+      // but date adjusts itself according to the local device, so there is no timeshift at the moment
       setEndTime(timeShift(new Date(res.data.expired_date).getTime(), 0))
-      setSport({ sportNameth: res.data.sport_id.sport_name_th, sportNameen: res.data.sport_id.sport_name_en })
+      setSport(res.data.sport_id)
       setDate(new Date(res.data.date).toLocaleDateString())
       setTimeList(res.data.time_slot)
       setRequiredUserNumber(res.data.sport_id.required_user)
@@ -67,16 +63,13 @@ const WaitingRoomPage = () => {
   }, [fetchWaitingRoom])
 
   useEffect(() => {
-    if (currentUserNumber && requiredUserNumber) {
-      if (currentUserNumber === requiredUserNumber) {
-        // successful reservation and redirect to hooray page
-
-        history.push("/hooray")
-      }
+    if (currentUserNumber && requiredUserNumber && currentUserNumber === requiredUserNumber) {
+      // successful reservation and redirect to hooray page
+      history.push("/hooray")
     }
-  }, [currentUserNumber, requiredUserNumber, history])
+  }, [history, currentUserNumber, requiredUserNumber])
 
-  function triggerModal(modal) {
+  function triggerModal(modal: string) {
     if (modal === "confirmModal") {
       setModalConfirmOpen(!modalConfirmOpen)
       return modalConfirmOpen
@@ -84,6 +77,17 @@ const WaitingRoomPage = () => {
       setModalTimeOutOpen(!modalTimeOutOpen)
       return modalTimeOutOpen
     }
+  }
+
+  const closeWaitingRoom = async () => {
+    client
+      .delete("mywaitingroom/cancel/" + waitingRoomId)
+      .then(() => {
+        history.push("/home")
+      })
+      .catch(() => {
+        history.push("/home")
+      })
   }
 
   const timeOut = async () => {
@@ -102,17 +106,6 @@ const WaitingRoomPage = () => {
     triggerModal("confirmModal")
   }
 
-  const closeWaitingRoom = async () => {
-    client
-      .delete("mywaitingroom/cancel/" + waitingRoomId)
-      .then(() => {
-        history.push("/home")
-      })
-      .catch(() => {
-        history.push("/home")
-      })
-  }
-
   const userNumber = () => {
     return (
       <span className="ml-3 grey" style={{ fontSize: "18px", fontWeight: 400 }}>
@@ -121,8 +114,8 @@ const WaitingRoomPage = () => {
     )
   }
 
-  const renderer = ({ minutes, seconds, completed }) => {
-    return timeRemainingDisplay(minutes, seconds, completed, timeOut)
+  const renderer = (props: CountdownRenderProps) => {
+    return <TimeRemainingDisplay onTimeOut={timeOut} {...props} />
   }
 
   if (!isLoading) {
@@ -139,17 +132,15 @@ const WaitingRoomPage = () => {
                 </div>
                 <div className="box-container btn w-100 mb-4">
                   <h6 style={{ fontWeight: 700, fontSize: "14px", marginBottom: "5px" }}> {t("summary")} </h6>
-                  <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}> {sport && sport[`sportName${i18n.language}`]} </h6>
+                  <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}> {sport && sport[sportLanguage]} </h6>
                   <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}>
-                    {" "}
                     {t("date")}: {date}
                   </h6>
                   <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}>
-                    {" "}
                     {t("time")}:
                     {timeList.map((eachTime) => {
                       return timeConversion(eachTime)
-                    })}{" "}
+                    })}
                   </h6>
                 </div>
                 <div className="box-container btn w-100 mb-3">
@@ -169,12 +160,10 @@ const WaitingRoomPage = () => {
                     onClick={fetchWaitingRoom}
                     style={{ fontSize: "15px", fontWeight: 400, float: "right", borderRadius: "15px", padding: "2px 10px" }}
                   >
-                    {" "}
-                    {t("refresh")}{" "}
+                    {t("refresh")}
                   </Button>
                   <div style={{ fontSize: "18px", fontWeight: 400, lineHeight: "26px" }}>
-                    {" "}
-                    {t("users")} {userNumber()}{" "}
+                    {t("users")} {userNumber()}
                   </div>
                 </div>
                 <div className="box-container btn" style={{ width: "100%", marginBottom: "45px" }}>
@@ -188,12 +177,12 @@ const WaitingRoomPage = () => {
                     </thead>
 
                     {listMember &&
-                      listMember.map((eachMember, index) => {
+                      listMember.map((eachMember, index: number) => {
                         return (
-                          <tbody>
+                          <tbody key={index}>
                             <tr>
                               <td> {index + 1} </td>
-                              <td> {eachMember[`name_${i18n.language}`]} </td>
+                              <td> {eachMember[nameLanguage]} </td>
                             </tr>
                           </tbody>
                         )

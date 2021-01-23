@@ -1,7 +1,8 @@
-import React, { FunctionComponent, useState, useEffect } from "react"
+import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
 import { RouteComponentProps, Link, useHistory } from "react-router-dom"
 import { Button, Card, Form, Collapse } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
+import { Other } from "../../../../contexts/UsersContext"
 import OtherViewInfoComponent from "../list-of-all-users-pages/OtherViewInfoComponent"
 import {
   ConfirmRejectModal,
@@ -13,8 +14,7 @@ import {
   ErrorModal,
 } from "./VerifyModalsComopnent"
 import format from "date-fns/format"
-import Info from "../interfaces/InfoInterface"
-import { RejectInfo, ModalVerify, RejectInfoLabel } from "../interfaces/InfoInterface"
+import Info, { RejectInfo, ModalVerify, RejectInfoLabel, RejectInfoLabelKey } from "../interfaces/InfoInterface"
 
 /// start of main function ///
 const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
@@ -94,19 +94,12 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
 
   const history = useHistory()
 
-  // useEffects //
-  useEffect(() => {
-    fetchUserData()
-  }, [])
-
-  const fetchUserData = () => {
-    client({
-      method: "GET",
-      url: "/approval/" + _id,
-    })
+  const fetchUserData = useCallback(() => {
+    client
+      .get<Other>(`/approval/${_id}`)
       .then(({ data }) => {
         setUsername(data.username)
-        setMembershipType(data.membershipType)
+        setMembershipType(data.membership_type)
         setInfo({
           prefix: data.prefix,
           name_th: data.name_th,
@@ -132,7 +125,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
                 contact_person_phone: "",
               },
           // Files //
-          membership_type: data.membershipType,
+          membership_type: data.membership_type,
           user_photo: data.user_photo,
           medical_certificate: data.medical_certificate,
           national_id_photo: data.national_id_photo,
@@ -141,31 +134,30 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
         })
       })
       .catch(({ response }) => {
-        console.log(response)
         if (response && response.data.statusCode === 401) history.push("/staff")
       })
-  }
+  }, [_id, history])
+
+  // useEffects //
+  useEffect(() => {
+    fetchUserData()
+  }, [fetchUserData])
 
   const confirmReject = () => {
     // check if at least one condition is checked
-    let checked: boolean = false
-    for (const key in rejectInfo) {
-      if (rejectInfo[key] === true) {
-        checked = true
-        break
-      }
-    }
+    let checked = false
+    Object.entries(rejectInfo).forEach(([key, val], index) => {
+      if (val) checked = true
+    })
     if (!checked) setShowModalInfo({ ...showModalInfo, showUncomReject: true })
     else setShowModalInfo({ ...showModalInfo, showConfirmReject: true })
   }
 
   const requestReject = () => {
-    // console.log("request rejected!!!")
-    let rejectList: string[] = []
-    for (const name in rejectInfo) {
-      if (rejectInfo[name]) rejectList.push(name)
-    }
-    // send request //
+    const rejectList: string[] = []
+    Object.entries(rejectInfo).forEach(([key, val], index) => {
+      if (val) rejectList.push(key)
+    })
     client({
       method: "PATCH",
       url: "/approval/reject",
@@ -174,20 +166,19 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
         reject_info: rejectList,
       },
     })
-      .then((res) => {
+      .then(() => {
         setShowModalInfo({ ...showModalInfo, showConfirmReject: false, showCompleteReject: true })
       })
       .catch((err) => {
-        console.log(err)
         setShowModalInfo({ ...showModalInfo, showConfirmReject: false, showErr: true })
       })
   }
 
   const requestAccept = () => {
-    let date = accountExpiredDate
+    const date = accountExpiredDate
+    if (!date) return null
     // utc+0: 17.00, utc+7: 0.00
-    let utc7Time = new Date(Date.UTC(date!.getFullYear(), date!.getMonth(), date!.getDate() - 1, 17, 0, 0, 0))
-    // send request //
+    const utc7Time = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate() - 1, 17, 0, 0, 0))
     client({
       method: "PATCH",
       url: "/approval/approve",
@@ -196,18 +187,18 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
         newExpiredDate: utc7Time,
       },
     })
-      .then(({ data }) => {
+      .then(() => {
         setShowModalInfo({ ...showModalInfo, showConfirmAccept: false, showCompleteAccept: true })
       })
       .catch((err) => {
-        console.log(err)
         setShowModalInfo({ ...showModalInfo, showConfirmAccept: false, showErr: true })
       })
   }
 
   // handles //
-  const handleChangeExpire = (e) => {
-    let date = e.target.value
+  const handleChangeExpire = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement
+    const date = target.value
     if (new Date(date) < new Date()) setAccountExpiredDate(new Date())
     else setAccountExpiredDate(new Date(date))
   }
@@ -282,18 +273,19 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   }
 
   const renderRejectionInfo = () => {
-    let infoList = Object.keys(rejectInfo).map((name, index) => {
+    const infoList = Object.keys(rejectInfo).map((name, index) => {
       return (
         <Form.Check
           key={index}
-          label={RejectInfoLabel[name]}
+          label={RejectInfoLabel[name as RejectInfoLabelKey]}
           id={name}
           type="checkbox"
-          defaultChecked={rejectInfo[name]}
-          onChange={(e) => {
+          defaultChecked={rejectInfo[name as keyof RejectInfo]}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const target = e.target as HTMLInputElement
             setRejectInfo({
               ...rejectInfo,
-              [e.target.id]: e.target.checked,
+              [target.id]: e.target.checked,
             })
           }}
         />

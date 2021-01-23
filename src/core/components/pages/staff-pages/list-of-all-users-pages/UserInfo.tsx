@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { Link, useParams, useHistory } from "react-router-dom"
 import { Button, Card, Form } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
+import { Other } from "../../../../contexts/UsersContext"
 import OtherViewInfoComponent from "./OtherViewInfoComponent"
 import OtherEditInfoComponent from "./OtherEditInfoComponent"
 import PasswordChangeModal from "./PasswordChangeModal"
@@ -16,7 +17,9 @@ import {
 } from "./ListOfAllUserModals"
 import Info, { ModalUserInfo } from "../interfaces/InfoInterface"
 import format from "date-fns/format"
-import { useForm } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { emailSchema } from "../../../../schemas/editUserInfo"
 
 const UserInfo = () => {
   // page state //
@@ -79,64 +82,15 @@ const UserInfo = () => {
 
   // react router dom
   const { _id } = useParams<{ _id: string }>()
-  const { register, handleSubmit } = useForm()
+  const methods = useForm({ resolver: yupResolver(emailSchema) })
+  const { register, errors } = methods
   const history = useHistory()
 
-  useEffect(() => {
-    fetchUserData()
-  }, [])
-
-  // handles //
-  const handleEdit = () => {
-    setTempInfo(info)
-    setTempUsername(username)
-    setTempMembershipType(membershipType)
-    setTempPenalize(isPenalize)
-    setTempExpiredPenalizeDate(expiredPenalizeDate)
-    setTempAccountExpiredDate(accountExpiredDate)
-    setEdit(true)
-  }
-
-  const handleSave = () => {
-    setShowModalInfo({ ...showModalInfo, showSave: true })
-  }
-
-  const handleChangeDateTime = (e) => {
-    const id = e.target.id
-    const oldPenExp: Date = tempExpiredPenalizeDate ? new Date(tempExpiredPenalizeDate) : new Date()
-    const oldAcExp: Date = tempAccountExpiredDate ? new Date(tempAccountExpiredDate) : new Date()
-    let incom: Date = new Date(e.target.value)
-    if (id === "expiredPenalizeDate") {
-      let date: Date = new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), oldPenExp.getHours(), oldPenExp.getMinutes())
-      if (date < new Date()) date = new Date()
-      setTempExpiredPenalizeDate(date)
-    } else if (id === "expiredPenalizeTime") {
-      let hour: number = parseInt(e.target.value.slice(0, 2))
-      let minute: number = parseInt(e.target.value.slice(3, 5))
-      let date: Date = new Date(oldPenExp.getFullYear(), oldPenExp.getMonth(), oldPenExp.getDate(), hour, minute, 0)
-      if (date < new Date()) date = new Date()
-      setTempExpiredPenalizeDate(date)
-    } else if (id === "accountExpiredDate") {
-      let date: Date = new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), oldAcExp.getHours(), oldAcExp.getMinutes())
-      if (date < new Date()) date = new Date()
-      setTempAccountExpiredDate(date)
-    } else if (id === "accountExpiredTime") {
-      let hour: number = parseInt(e.target.value.slice(0, 2))
-      let minute: number = parseInt(e.target.value.slice(3, 5))
-      let date: Date = new Date(oldAcExp.getFullYear(), oldAcExp.getMonth(), oldAcExp.getDate(), hour, minute, 0)
-      if (date < new Date()) date = new Date()
-      setTempAccountExpiredDate(date)
-    }
-  }
-
   // requests //
-  const fetchUserData = async () => {
-    await client({
-      method: "GET",
-      url: `/list-all-user/id/${_id}`,
-    })
+  const fetchUserData = useCallback(async () => {
+    await client
+      .get<Other>(`/list-all-user/id/${_id}`)
       .then(({ data }) => {
-        // console.log(data)
         setUsername(data.username)
         setMembershipType(data.membership_type)
         setPenalize(data.is_penalize)
@@ -149,7 +103,7 @@ const UserInfo = () => {
           name_en: data.name_en,
           surname_en: data.surname_en,
           gender: data.gender,
-          birthday: data.birthday,
+          birthday: new Date(data.birthday),
           national_id: data.national_id,
           marital_status: data.marital_status,
           address: data.address,
@@ -179,6 +133,53 @@ const UserInfo = () => {
         console.log(response)
         if (response && response.data.statusCode === 401) history.push("/staff")
       })
+  }, [_id, history])
+
+  useEffect(() => {
+    fetchUserData()
+  }, [fetchUserData])
+
+  // handles //
+  const handleEdit = () => {
+    setTempInfo(info)
+    setTempUsername(username)
+    setTempMembershipType(membershipType)
+    setTempPenalize(isPenalize)
+    setTempExpiredPenalizeDate(expiredPenalizeDate)
+    setTempAccountExpiredDate(accountExpiredDate)
+    setEdit(true)
+  }
+
+  const handleSave = () => {
+    setShowModalInfo({ ...showModalInfo, showSave: true })
+  }
+
+  const handleChangeDateTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const id = e.target.id
+    const oldPenExp: Date = tempExpiredPenalizeDate ? new Date(tempExpiredPenalizeDate) : new Date()
+    const oldAcExp: Date = tempAccountExpiredDate ? new Date(tempAccountExpiredDate) : new Date()
+    const incom: Date = new Date(e.target.value)
+    if (id === "expiredPenalizeDate") {
+      let date: Date = new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), oldPenExp.getHours(), oldPenExp.getMinutes())
+      if (date < new Date()) date = new Date()
+      setTempExpiredPenalizeDate(date)
+    } else if (id === "expiredPenalizeTime") {
+      const hour: number = parseInt(e.target.value.slice(0, 2))
+      const minute: number = parseInt(e.target.value.slice(3, 5))
+      let date: Date = new Date(oldPenExp.getFullYear(), oldPenExp.getMonth(), oldPenExp.getDate(), hour, minute, 0)
+      if (date < new Date()) date = new Date()
+      setTempExpiredPenalizeDate(date)
+    } else if (id === "accountExpiredDate") {
+      let date: Date = new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), oldAcExp.getHours(), oldAcExp.getMinutes())
+      if (date < new Date()) date = new Date()
+      setTempAccountExpiredDate(date)
+    } else if (id === "accountExpiredTime") {
+      const hour: number = parseInt(e.target.value.slice(0, 2))
+      const minute: number = parseInt(e.target.value.slice(3, 5))
+      let date: Date = new Date(oldAcExp.getFullYear(), oldAcExp.getMonth(), oldAcExp.getDate(), hour, minute, 0)
+      if (date < new Date()) date = new Date()
+      setTempAccountExpiredDate(date)
+    }
   }
 
   const requestSave = () => {
@@ -204,7 +205,6 @@ const UserInfo = () => {
       house_registration_number,
       relationship_verification_document,
     } = tempInfo
-    // console.log("saving...")
     client({
       method: "PUT",
       url: `/list-all-user/other/${_id}`,
@@ -239,8 +239,7 @@ const UserInfo = () => {
         relationship_verification_document,
       },
     })
-      .then(({ data }) => {
-        // console.log("Update completed")
+      .then(() => {
         // set temp to data
         setUsername(tempUsername)
         setMembershipType(tempMembershipType)
@@ -267,7 +266,7 @@ const UserInfo = () => {
         password: newPassword,
       },
     })
-      .then(({ data }) => {
+      .then(() => {
         setShowModalInfo({ ...showModalInfo, showChangePassword: false, showConfirmChange: false })
       })
       .catch((err) => {
@@ -277,12 +276,11 @@ const UserInfo = () => {
   }
 
   const requestDelete = () => {
-    // console.log("YEET!!")
     client({
       method: "DELETE",
       url: `/list-all-user/${_id}`,
     })
-      .then(({ data }) => {
+      .then(() => {
         setShowModalInfo({ ...showModalInfo, showDelete: false, showComDelete: true })
       })
       .catch((err) => {
@@ -307,7 +305,7 @@ const UserInfo = () => {
               <label className="mt-2">ชื่อผู้ใช้</label>
               {isEdit ? (
                 <Form.Control
-                  ref={register({ pattern: /.*([A-z])+.*/g })}
+                  ref={register}
                   name="username"
                   className="border"
                   style={{ backgroundColor: "white" }}
@@ -316,6 +314,11 @@ const UserInfo = () => {
                 />
               ) : (
                 <p className="font-weight-bold">{username}</p>
+              )}
+              {errors.username && (
+                <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                  {errors.username.message}
+                </span>
               )}
             </div>
           </div>
@@ -490,14 +493,7 @@ const UserInfo = () => {
   const renderEditForm = () => {
     return (
       <div>
-        <OtherEditInfoComponent
-          tempInfo={tempInfo}
-          setTempInfo={setTempInfo}
-          handleSubmit={handleSubmit}
-          register={register}
-          setTempUsername={setTempUsername}
-          handleSave={handleSave}
-        />
+        <OtherEditInfoComponent tempInfo={tempInfo} setTempInfo={setTempInfo} setTempUsername={setTempUsername} handleSave={handleSave} />
         <div className="mt-5">
           <Button
             variant="pink"
@@ -538,14 +534,16 @@ const UserInfo = () => {
   }
 
   return (
-    <div className="UserInfo mt-4">
-      {renderModals()}
-      {/* Info start here */}
-      <Card body className="mb-5 mr-4">
-        {renderTopSection()}
-        {isEdit ? renderEditForm() : renderViewForm()}
-      </Card>
-    </div>
+    <FormProvider {...methods}>
+      <div className="UserInfo mt-4">
+        {renderModals()}
+        {/* Info start here */}
+        <Card body className="mb-5 mr-4">
+          {renderTopSection()}
+          {isEdit ? renderEditForm() : renderViewForm()}
+        </Card>
+      </div>
+    </FormProvider>
   )
 }
 

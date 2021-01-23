@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { Route, Switch, useRouteMatch, useLocation } from "react-router-dom"
 
 import StaffLogin from "../components/pages/staff-pages/staff-login"
@@ -9,7 +9,7 @@ import ListOfAllUsers from "../components/pages/staff-pages/list-of-all-users-pa
 import AddUser from "../components/pages/staff-pages/list-of-all-users-pages/AddUser"
 import CuSatitInfo from "../components/pages/staff-pages/list-of-all-users-pages/CuSatitInfo"
 import UserInfo from "../components/pages/staff-pages/list-of-all-users-pages/UserInfo"
-import FileOpener from "../components/pages/staff-pages/list-of-all-users-pages/FileOpener"
+import FileOpener from "../components/pages/FileOpener"
 import VeritificationApproval from "../components/pages/staff-pages/verification-approval-pages/VerificationApproval"
 import VerifyInfo from "../components/pages/staff-pages/verification-approval-pages/VerifyInfo"
 import DisableCourt from "../components/pages/staff-pages/disable-court/disable-court.page.main"
@@ -19,8 +19,9 @@ import Settings from "../components/pages/staff-pages/settings/Settings"
 
 import AllReservation from "../components/pages/staff-pages/all-reservation-pages/ReservationList"
 import ReservationDetail from "../components/pages/staff-pages/all-reservation-pages/ReservationDetail"
+import { client } from "../../axiosConfig"
 
-const StaffRoute = (props) => {
+const StaffRoute = () => {
   const { path } = useRouteMatch()
   const location = useLocation()
   const headerMap: Map<string, string> = new Map([
@@ -40,6 +41,26 @@ const StaffRoute = (props) => {
     ["/reservationDetail`", ""],
   ])
 
+  const [type, setType] = useState("staff")
+
+  const fetchType = useCallback(() => {
+    client
+      .get("staffs/profile")
+      .then((res) => {
+        console.log(res.data)
+        console.log(res.data.is_admin)
+        if (res.data.is_admin) setType("admin")
+        else setType("staff")
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [])
+
+  useEffect(() => {
+    fetchType()
+  }, [fetchType])
+
   const StaffRouteWithHeader = () => {
     return (
       <div className="staff background d-block" style={{ backgroundColor: "white", minHeight: "80vh" }}>
@@ -51,7 +72,7 @@ const StaffRoute = (props) => {
             >
               <div className="row justify-content-center" style={{ minHeight: "80vh" }}>
                 <div className="col-3 justify-content-center" style={{ maxHeight: "800px" }}>
-                  <StaffSidebar />
+                  <StaffSidebar type={type} />
                 </div>
                 <div className="col-9 mt-5" style={{ minHeight: "600px" }}>
                   <h1>
@@ -64,7 +85,7 @@ const StaffRoute = (props) => {
                           ? location.pathname.length
                           : location.pathname.lastIndexOf("/")
                       )
-                    )}{" "}
+                    )}
                   </h1>
                   <Switch>
                     <Route path={`${path}/staffProfile`} component={StaffProfile} />

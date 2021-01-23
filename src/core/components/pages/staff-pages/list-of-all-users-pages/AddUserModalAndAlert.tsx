@@ -19,7 +19,7 @@ export const AddModal: React.FC<ModalProps> = ({ show, setShow, requestAdd }) =>
       onCancel={() => {
         setShow({ ...show, showAdd: false })
       }}
-      onConfirm={requestAdd!}
+      onConfirm={requestAdd ? requestAdd : () => console.log("unavailable")}
     />
   )
 }
@@ -57,7 +57,7 @@ export const UsernameErrModal: React.FC<ModalProps> = ({ show, setShow }) => {
     <CustomModal
       title={"เกิดข้อผิดพลาด"}
       show={show.showUsernameErr}
-      body={"ชื่อผู้ใช้หรืออีเมลนี้ถูกใช้ไปแล้ว"}
+      body={"ชื่อผู้ใช้นี้ไม่ใช่อีเมล หรือชื่อผู้ใช้นี้ถูกใช้ไปแล้ว"}
       onConfirm={() => {
         setShow({ ...show, showUsernameErr: false })
       }}

@@ -1,14 +1,10 @@
 import React from "react"
 import "react-datepicker/dist/react-datepicker.css"
 import { useTranslation } from "react-i18next"
+import { ErrorMsgBannerProps, ErrorMessageBannerProps } from "../../../dto/waitingRoom.dto"
 
-export interface ErrorMsgBannerProps {
-  errorMsg: string
-  type: string
-}
-
-export const ErrorMsgBanner:React.FC<ErrorMsgBannerProps> = ({errorMsg, type}) => {
-  const {t} = useTranslation()
+export const ErrorMsgBanner: React.FC<ErrorMsgBannerProps> = ({ errorMsg, type }) => {
+  const { t } = useTranslation()
   return (
     <div className="mx-3 my-3">
       <div className={`alert alert-${type} col-md-6 mx-auto`}>
@@ -19,65 +15,59 @@ export const ErrorMsgBanner:React.FC<ErrorMsgBannerProps> = ({errorMsg, type}) =
   )
 }
 
-export interface ErrorMessageBannerProps {
-  show: boolean
-  reason: string
-  type: string
-}
-
-export const CheckValidityErrorMsg:React.FC<ErrorMessageBannerProps> = ({show, reason, type}) => {
-  const {t} = useTranslation()
+export const CheckValidityErrorMsg: React.FC<ErrorMessageBannerProps> = ({ show, reason, type }) => {
+  const { t } = useTranslation()
   if (!show) return null
-  switch(reason) {
+  switch (reason) {
     case "USER_NOT_FOUND":
-      return(<ErrorMsgBanner errorMsg={t("idDoesNotExist")} type={type} />)
+      return <ErrorMsgBanner errorMsg={t("idDoesNotExist")} type={type} />
     case "NOT_VERIFIED":
-      return(<ErrorMsgBanner errorMsg={t("accountHasToVerify")} type={type} />)
+      return <ErrorMsgBanner errorMsg={t("accountHasToVerify")} type={type} />
     case "ACCOUNT_EXPIRED":
-      return(<ErrorMsgBanner errorMsg={t("alreadyExpired")} type={type} />)
+      return <ErrorMsgBanner errorMsg={t("alreadyExpired")} type={type} />
     case "INFO_NOT_FILLED":
-      return(<ErrorMsgBanner errorMsg={t("haveToFillInfo")} type={type} />)
+      return <ErrorMsgBanner errorMsg={t("haveToFillInfo")} type={type} />
     case "BANNED":
-      return(<ErrorMsgBanner errorMsg={t("accountBanned")} type={type} />)
+      return <ErrorMsgBanner errorMsg={t("accountBanned")} type={type} />
     case "DUPLICATE_ROOM":
-      return(<ErrorMsgBanner errorMsg={t("alreadyHaveWaitingRoom")} type={type} />)
-    default: 
-      return(<ErrorMsgBanner errorMsg={t("errorOccured")}  type={type} />)
+      return <ErrorMsgBanner errorMsg={t("alreadyHaveWaitingRoom")} type={type} />
+    default:
+      return <ErrorMsgBanner errorMsg={t("errorOccured")} type={type} />
   }
 }
 
-export const CreateWaitingRoomErrorMsg:React.FC<ErrorMessageBannerProps> = ({show, reason, type}) => {
-  const {t} = useTranslation()
+export const CreateWaitingRoomErrorMsg: React.FC<ErrorMessageBannerProps> = ({ show, reason, type }) => {
+  const { t } = useTranslation()
   if (!show) return null
-  switch(reason) {
+  switch (reason) {
     case "UNAVAILABLE":
-      return(<ErrorMsgBanner errorMsg={t("chosenTimeUnavailable")} type={type} />)
+      return <ErrorMsgBanner errorMsg={t("chosenTimeUnavailable")} type={type} />
     case "COURT_NOT_FOUND":
-      return(<ErrorMsgBanner errorMsg={t("courtDoesNotExist")} type={type} />)
+      return <ErrorMsgBanner errorMsg={t("courtDoesNotExist")} type={type} />
     case "SPORT_NOT_FOUND":
-      return(<ErrorMsgBanner errorMsg={t("idDoesNotExist.")} type={type} />)
+      return <ErrorMsgBanner errorMsg={t("idDoesNotExist.")} type={type} />
     case "TIME_NOT_CONSECUTIVE":
-      return(<ErrorMsgBanner errorMsg={t("chosenTimeUnavailable")} type={type} />)
+      return <ErrorMsgBanner errorMsg={t("chosenTimeUnavailable")} type={type} />
     case "NOT_ENOUGH_QUOTA":
-      return(<ErrorMsgBanner errorMsg={t("notEnoughQuota.")} type={type} />)
+      return <ErrorMsgBanner errorMsg={t("notEnoughQuota.")} type={type} />
     case "SLOT_UNAVAILABLE":
-      return(<ErrorMsgBanner errorMsg={t("errorOccured.")} type={type} />)
+      return <ErrorMsgBanner errorMsg={t("errorOccured.")} type={type} />
     case "INVALID_DATE":
-      return(<ErrorMsgBanner errorMsg={t("chosenTimeUnavailable")} type={type} />)
-    default: 
-      return(<ErrorMsgBanner errorMsg={t("errorOccured")}  type={type} />)
+      return <ErrorMsgBanner errorMsg={t("chosenTimeUnavailable")} type={type} />
+    default:
+      return <ErrorMsgBanner errorMsg={t("errorOccured")} type={type} />
   }
 }
 
-export const JoinWaitingRoomErrorMsg:React.FC<ErrorMessageBannerProps> = ({show, reason, type}) => {
-  const {t} = useTranslation()
+export const JoinWaitingRoomErrorMsg: React.FC<ErrorMessageBannerProps> = ({ show, reason, type }) => {
+  const { t } = useTranslation()
   if (!show) return null
-  switch(reason) {
+  switch (reason) {
     case "WRONG_CODE":
-      return(<ErrorMsgBanner errorMsg={t("codeIsWrong")} type={type} />)
+      return <ErrorMsgBanner errorMsg={t("codeIsWrong")} type={type} />
     case "NOT_ENOUGH_QUOTA":
-      return(<ErrorMsgBanner errorMsg={t("notEnoughQuota")} type={type} />)
-    default: 
-      return(<ErrorMsgBanner errorMsg={t("errorOccured")}  type={type} />)
+      return <ErrorMsgBanner errorMsg={t("notEnoughQuota")} type={type} />
+    default:
+      return <ErrorMsgBanner errorMsg={t("errorOccured")} type={type} />
   }
 }

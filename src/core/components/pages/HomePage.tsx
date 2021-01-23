@@ -1,5 +1,4 @@
-import React from "react"
-import { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { Link } from "react-router-dom"
 import { client } from "../../../axiosConfig"
 import { useTranslation } from "react-i18next"
@@ -8,23 +7,22 @@ import { PersonCircle, Calendar, PeopleFill, BookmarkFill } from "react-bootstra
 import withUserGuard from "../../guards/user.guard"
 import footer from "../../assets/images/footer.svg"
 import { Loading } from "../ui/loading/loading"
-
-interface NameResponse {
-  nameth: string
-  nameen: string
-}
+import { useLanguage } from "../../utils/language"
+import { NameResponse } from "../../dto/account.dto"
 
 const HomePage = () => {
   const [cookieConsent, setCookieConsent] = useState(() => localStorage.getItem("Cookie Allowance") === "true")
   const [name, setName] = useState<NameResponse>()
   const [disable, setDisable] = useState(true)
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const language = useLanguage()
+  const languageName = language === "th" ? "name_th" : "name_en"
   const [isLoading, setIsLoading] = useState(true)
 
   const fetchUserName = useCallback(async () => {
     try {
       const res = await client.get("/account_info/")
-      setName({ nameth: res.data.name_th, nameen: res.data.name_en })
+      setName(res.data)
       if (res.data.name_en) setDisable(false)
       setIsLoading(false)
     } catch (err) {
@@ -56,7 +54,7 @@ const HomePage = () => {
         <div className="col-12">
           <div style={{ fontSize: "24px", marginBottom: "30px", fontWeight: 400, lineHeight: "17px", textAlign: "center" }}>
             {" "}
-            {t("welcome")}, {name && name[`name${i18n.language}`]}
+            {t("welcome")}, {name && name[languageName]}
           </div>
           {disable && (
             <>

@@ -1,10 +1,11 @@
-import React, { useState, useEffect, FunctionComponent } from "react"
+import React, { useState, useEffect, FunctionComponent, useCallback } from "react"
 import { Row, Col, Button, Form, Card, Alert } from "react-bootstrap"
 import { Link, useHistory, useParams } from "react-router-dom"
 import format from "date-fns/format"
 import { useForm } from "react-hook-form"
 import { client } from "../../../../../axiosConfig"
-import { CuAndSatitInfo, CuSatitComponentInfo, Account, ModalUserInfo } from "../interfaces/InfoInterface"
+import { CuSatitComponentInfo, ModalUserInfo } from "../interfaces/InfoInterface"
+import { CuStudent, SatitCuPersonel } from "../../../../contexts/UsersContext"
 import PasswordChangeModal from "./PasswordChangeModal"
 import {
   DeleteModal,
@@ -17,6 +18,11 @@ import {
 } from "./ListOfAllUserModals"
 import { isValid } from "date-fns"
 import { useTranslation } from "react-i18next"
+import { Account } from "../../../../dto/account.dto"
+import { infoSchema } from "../../../../schemas/editUserInfo"
+import { yupResolver } from "@hookform/resolvers/yup"
+
+type CuSatitType = CuStudent | SatitCuPersonel
 
 const UserInfo: FunctionComponent = () => {
   // page states
@@ -38,8 +44,7 @@ const UserInfo: FunctionComponent = () => {
   const [showAlert, setShowAlert] = useState<boolean>(false)
 
   // user states
-  // const [_id] = useState<string>(props.match.params._id)
-  const [user, setUser] = useState<CuAndSatitInfo>({
+  const [user, setUser] = useState<CuSatitType>({
     account_type: Account.CuStudent,
     is_thai_language: true,
     name_th: "",
@@ -51,48 +56,31 @@ const UserInfo: FunctionComponent = () => {
     phone: "",
     is_penalize: false,
     expired_penalize_date: new Date(),
-    is_first_login: true,
+    is_first_login: false,
   })
-  const [tempUser, setTempUser] = useState<CuAndSatitInfo>(user)
+  const [tempUser, setTempUser] = useState<CuSatitType>(user)
 
   // react router dom //
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit, errors } = useForm({ resolver: yupResolver(infoSchema) })
   const history = useHistory()
   const { accType, _id } = useParams<{ accType: string; _id: string }>()
-  const { i18n, t } = useTranslation()
+  const { t } = useTranslation()
+
+  const getInfo = useCallback(() => {
+    client
+      .get<CuSatitType>(`/list-all-user/id/${_id}`)
+      .then(({ data }) => {
+        data.account_type === "CuStudent" ? setUser(data as CuStudent) : setUser(data as SatitCuPersonel)
+      })
+      .catch(({ response }) => {
+        if (response && response.data.statusCode === 401) history.push("/staff")
+      })
+  }, [_id, history])
 
   // useEffects //
   useEffect(() => {
     getInfo()
-    i18n.changeLanguage("th")
-  }, [])
-
-  const getInfo = () => {
-    client({
-      method: "GET",
-      url: `/list-all-user/id/${_id}`,
-    })
-      .then(({ data }) => {
-        setUser({
-          account_type: data.account_type,
-          is_thai_language: data.is_thai_language,
-          name_th: data.name_th,
-          surname_th: data.surname_th,
-          name_en: data.name_en,
-          surname_en: data.surname_en,
-          username: data.username,
-          personal_email: data.personal_email,
-          phone: data.phone,
-          is_penalize: data.is_penalize,
-          expired_penalize_date: data.expired_penalize_date ? data.expired_penalize_date : new Date(),
-          is_first_login: data.is_first_login,
-        })
-      })
-      .catch(({ response }) => {
-        console.log(response)
-        if (response && response.data.statusCode === 401) history.push("/staff")
-      })
-  }
+  }, [getInfo])
 
   // Alerts & Modals //
   const renderAlert = () => {
@@ -104,23 +92,23 @@ const UserInfo: FunctionComponent = () => {
   }
 
   // handles //
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.id === "is_penalize") {
       // set is_penalize
       if (e.target.value === "1") setTempUser({ ...tempUser, [e.target.id]: true })
       else setTempUser({ ...tempUser, [e.target.id]: false })
     } else if (e.target.id === "expired_penalize_date") {
       // set date
-      let incom: Date = new Date(e.target.value)
-      let old: Date = new Date(tempUser.expired_penalize_date)
+      const incom: Date = new Date(e.target.value)
+      const old: Date = new Date(tempUser.expired_penalize_date)
       let date: Date = new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), old.getHours(), old.getMinutes())
       if (date < new Date()) date = new Date()
       setTempUser({ ...tempUser, expired_penalize_date: date })
     } else if (e.target.id === "expiredPenalizeTime") {
       // set time
-      let date: Date = new Date(tempUser.expired_penalize_date)
-      let hour: number = parseInt(e.target.value.slice(0, 2))
-      let minute: number = parseInt(e.target.value.slice(3, 5))
+      const date: Date = new Date(tempUser.expired_penalize_date)
+      const hour: number = parseInt(e.target.value.slice(0, 2))
+      const minute: number = parseInt(e.target.value.slice(3, 5))
       let newDate: Date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, 0)
       if (newDate < new Date()) newDate = new Date()
       setTempUser({ ...tempUser, expired_penalize_date: newDate })
@@ -142,7 +130,7 @@ const UserInfo: FunctionComponent = () => {
     // if some input is blank -> alert //
     // else -> try change //
     setTempUser({ ...tempUser, ...data })
-    let { name_th, surname_th, name_en, surname_en, personal_email, phone } = data
+    const { name_th, surname_th, name_en, surname_en, personal_email, phone } = data
     if (name_th !== "" && surname_th !== "" && name_en !== "" && surname_en !== "" && personal_email !== "" && phone !== "")
       setShowModals({ ...showModals, showSave: true })
     else setShowAlert(true)
@@ -169,13 +157,12 @@ const UserInfo: FunctionComponent = () => {
         expired_penalize_date,
       },
     })
-      .then(({ data }) => {
+      .then(() => {
         setUser(tempUser)
         setShowModals({ ...showModals, showSave: false, showComSave: true })
         setEditing(false)
       })
       .catch(({ response }) => {
-        console.log(response)
         setShowModals({ ...showModals, showSave: false, showErr: true })
       })
   }
@@ -186,11 +173,10 @@ const UserInfo: FunctionComponent = () => {
       method: "DELETE",
       url: `/list-all-user/${_id}`,
     })
-      .then(({ data }) => {
+      .then(() => {
         setShowModals({ ...showModals, showDelete: false, showComDelete: true })
       })
       .catch(({ response }) => {
-        console.log(response)
         setShowModals({ ...showModals, showDelete: false, showErr: true })
       })
   }
@@ -203,11 +189,10 @@ const UserInfo: FunctionComponent = () => {
         password: newPassword,
       },
     })
-      .then(({ data }) => {
+      .then(() => {
         setShowModals({ ...showModals, showConfirmChange: false, showChangePassword: false })
       })
       .catch((err) => {
-        console.log(err)
         setShowModals({ ...showModals, showErr: true })
       })
   }
@@ -230,7 +215,7 @@ const UserInfo: FunctionComponent = () => {
   }
 
   const renderForm = () => {
-    let date: Date = new Date(user.expired_penalize_date)
+    const date: Date = new Date(user.expired_penalize_date)
     return (
       <div className="userInformation">
         <Row className="py-3">
@@ -324,7 +309,7 @@ const UserInfo: FunctionComponent = () => {
   }
 
   const renderEditingForm = () => {
-    let date: Date = new Date(tempUser.expired_penalize_date)
+    const date: Date = new Date(tempUser.expired_penalize_date)
     return (
       <div className="userInformation">
         <Form onSubmit={handleSubmit(handleConfirmChange)}>
@@ -382,12 +367,22 @@ const UserInfo: FunctionComponent = () => {
               <Form.Control ref={register} name="personal_email" defaultValue={user.personal_email} />
             </Col>
           </Row>
+          {errors.personal_email && (
+            <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+              {errors.personal_email.message}
+            </span>
+          )}
           <Row>
             <Col className="py-3">
               <p>เบอร์โทร</p>
               <Form.Control ref={register} name="phone" defaultValue={user.phone} />
             </Col>
           </Row>
+          {errors.phone && (
+            <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+              {errors.phone.message}
+            </span>
+          )}
           <Row className="py-3">
             <Col>
               <p>สถานะการแบน</p>
@@ -441,7 +436,7 @@ const UserInfo: FunctionComponent = () => {
               <Button className="mr-4 btn-normal btn-outline-pink" variant="outline-secondary" onClick={handleCancelChange}>
                 ยกเลิก
               </Button>
-              <Button variant="pink" className="btn-normal" type="submit" onSubmit={handleSubmit(handleConfirmChange)}>
+              <Button variant="pink" className="btn-normal" type="submit">
                 บันทึก
               </Button>
             </Col>

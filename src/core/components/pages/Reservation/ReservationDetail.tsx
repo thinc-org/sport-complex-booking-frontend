@@ -1,5 +1,5 @@
-import React from "react"
-import { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback } from "react"
+
 import { useHistory, Link } from "react-router-dom"
 import { useLocation } from "react-router"
 import { Button } from "react-bootstrap"
@@ -10,60 +10,44 @@ import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 import { useTranslation } from "react-i18next"
 import { ReservationCancellationModal } from "../../ui/Modals/ReservationCancelModal"
 import { Loading } from "../../ui/loading/loading"
-
-interface LocationResponse {
-  id: string
-  path: string
-}
-
-interface MemberResponse {
-  name_th: string
-  name_en: string
-}
-
-interface SportResponse {
-  sportth: string
-  sporten: string
-}
-
-interface QRValueResponse {
-  id: string
-  time: number
-}
+import { useLanguage, useNameLanguage } from "../../../utils/language"
+import { LocationResponse, SportResponse, ReservationDetailResponse } from "../../../dto/reservation.dto"
+import { NameResponse } from "../../../dto/account.dto"
 
 const ReservationDetail = () => {
   const location = useLocation()
-  const history = useHistory()
-  const { t, i18n } = useTranslation()
-
+  const history = useHistory<LocationResponse>()
+  const { t } = useTranslation()
+  const language = useLanguage()
+  const nameLanguage: "name_en" | "name_th" = useNameLanguage("name") as "name_en" | "name_th"
+  const sportLanguage: "sport_name_th" | "sport_name_en" = language === "th" ? "sport_name_th" : "sport_name_en"
   const [id, setId] = useState<string>()
   const [sport, setSport] = useState<SportResponse>()
-  const [courtNum, setCourtNum] = useState("")
+  const [courtNum, setCourtNum] = useState<number>()
   const [date, setDate] = useState<string>()
   const [timeList, setTimeList] = useState<number[]>()
-  const [memberList, setMemberList] = useState<Array<MemberResponse>>()
-  const [isCheck, setIsCheck] = useState<Boolean>()
-  const [counter, setCounter] = useState<number>()
+  const [memberList, setMemberList] = useState<Array<NameResponse>>()
+  const [isCheck, setIsCheck] = useState<boolean>()
+  const [counter, setCounter] = useState<number>(10)
   const [isLoading, setIsLoading] = useState(true)
   const [lateCancellationDay, setLateCancellationDay] = useState<number>()
   const [lateCancellationPunishment, setLateCancellationPunishment] = useState<number>()
   const [validTime, setValidTime] = useState<number>()
-  const [qrValue, setQRValue] = useState<QRValueResponse>()
+  const [shouldRenderClock, setShouldRenderClock] = useState(true)
 
   const fetchId = useCallback(() => {
     if (location.state) {
-      setId((location.state as LocationResponse).id)
-      setQRValue({ id: (location.state as LocationResponse).id, time: new Date().getTime() })
+      setId(history.location.state.id)
     } else {
-      history.push((location.state as LocationResponse).path)
+      history.push(history.location.state.path)
     }
-  }, [history, location.state])
+  }, [setId, history, location.state])
 
   const fetchData = useCallback(async () => {
     try {
-      const res = (await client.get("myreservation/" + id)).data
+      const res: ReservationDetailResponse = (await client.get(`myreservation/${id}`)).data
       const data = (await client.get("court-manager/setting")).data
-      setSport({ sportth: res.sport_id.sport_name_th, sporten: res.sport_id.sport_name_en })
+      setSport(res.sport_id)
       setCourtNum(res.court_number)
       setDate(new Date(res.date).toLocaleDateString())
       setTimeList(res.time_slot)
@@ -75,10 +59,9 @@ const ReservationDetail = () => {
       setIsLoading(false)
       setCounter(10)
     } catch (err) {
-      console.log(err.message)
-      history.push((location.state as any).path)
+      history.push(history.location.state.path)
     }
-  }, [id, history, location.state])
+  }, [id, history])
   useEffect(() => {
     fetchId()
   }, [fetchId])
@@ -86,19 +69,18 @@ const ReservationDetail = () => {
     if (id) fetchData()
   }, [id, fetchData])
 
+  const [modalOpen, setModalOpen] = useState(false)
+
   const triggerModal = () => {
-    console.log("show modal")
     setModalOpen(!modalOpen)
     return modalOpen
   }
-
-  let [modalOpen, setModalOpen] = useState(false)
 
   const confirmCancellation = () => {
     client
       .delete("myreservation/" + id)
       .then(() => {
-        history.push((location.state as any).path)
+        history.push(history.location.state.path)
       })
       .catch((err) => {
         console.log(err.message)
@@ -120,8 +102,16 @@ const ReservationDetail = () => {
   }, [counter, isCheck])
 
   useEffect(() => {
-    if (!isCheck) countDown()
-  }, [counter, isCheck, countDown])
+    setShouldRenderClock(true)
+    if (!isCheck) {
+      if (shouldRenderClock) {
+        countDown()
+      }
+    }
+    return () => {
+      setShouldRenderClock(false)
+    }
+  }, [counter, isCheck, countDown, shouldRenderClock])
 
   const qrCode = () => {
     if (!isCheck && id) {
@@ -129,15 +119,13 @@ const ReservationDetail = () => {
         <>
           <div className="box-container btn w-100 mb-5" style={{ textAlign: "center" }}>
             <h6 className="mt-2 mb-0" style={{ fontWeight: 400 }}>
-              {" "}
               {t("qrcodeInvalid")}{" "}
             </h6>
             <div style={{ fontSize: "18px", fontWeight: 400 }}> 00:{counter === 10 ? counter : "0" + counter} </div>
             <QRCode className="mb-4 mt-3" value={validTime + "/" + id} renderAs="svg" size={128} fgColor="#333" bgColor="#fff" />
 
             <h5 className="mb-2" style={{ fontWeight: 400 }}>
-              {" "}
-              {t("showQRToStaff")}{" "}
+              {t("showQRToStaff")}
             </h5>
           </div>
           <Button onClick={triggerModal} variant="outline-danger cancel-btn">
@@ -150,12 +138,11 @@ const ReservationDetail = () => {
         <>
           <div className="box-container btn w-100 mb-5" style={{ textAlign: "center" }}>
             <h4 className="m-2" style={{ color: "lightgreen" }}>
-              {" "}
-              {t("youHaveCheckedIn")}{" "}
+              {t("youHaveCheckedIn")}
             </h4>
           </div>
           <div className="container fixed-bottom mt-5">
-            <Link to={(location.state as LocationResponse).path}>
+            <Link to={history.location.state.path /*(location.state as LocationResponse).path*/}>
               <Button variant="outline-dark return-btn" className="w-100">
                 {t("goBack")}
               </Button>
@@ -175,13 +162,11 @@ const ReservationDetail = () => {
             <div className="col-12 h-100">
               <div className="box-container btn mb-4" style={{ width: "100%" }}>
                 <div>
-                  <h4 className="mb-2"> {sport && sport[`sport${i18n.language}`]} </h4>
+                  <h4 className="mb-2"> {sport && sport[sportLanguage]} </h4>
                   <h6 className="mb-0 font-weight-light">
-                    {" "}
                     {t("court")}: {courtNum}
                   </h6>
                   <h6 className="mb-0 font-weight-light">
-                    {" "}
                     {t("bookingDate")}: {date}{" "}
                   </h6>
                   <h6 className="mb-0 font-weight-light">
@@ -194,8 +179,8 @@ const ReservationDetail = () => {
                   {memberList &&
                     memberList.map((eachMember, index) => {
                       return (
-                        <h6 className="mb-0" style={{ fontWeight: 300 }}>
-                          {index + 1}. {eachMember[`name_${i18n.language}`]}
+                        <h6 className="mb-0" style={{ fontWeight: 300 }} key={index}>
+                          {index + 1}. {eachMember[nameLanguage]}
                         </h6>
                       )
                     })}

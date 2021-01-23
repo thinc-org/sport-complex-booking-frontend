@@ -1,7 +1,7 @@
-import React from "react"
-import { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { client } from "../../../../axiosConfig"
 import { HandleErrorModal } from "../staff-pages/staff-management/StaffManagementComponents"
+import { ProfileResponse } from "../../../dto/staffProfile.dto"
 
 function StaffProfile() {
   const [name, setName] = useState<string>()
@@ -10,26 +10,21 @@ function StaffProfile() {
   const [isLoading, setIsLoading] = useState(true)
   const [errMessage, setErrMessage] = useState<string>()
   const [showError, setShowError] = useState(false)
-
-  const fetchData = useCallback(() => {
-    client
-      .get("staffs/profile")
-      .then((res) => {
-        console.log("fetch data")
-        setName(res.data.name)
-        setSurname(res.data.surname)
-        if (res.data.is_admin) {
-          setAccountType("Administration")
-        } else {
-          setAccountType("Staff")
-        }
-        setIsLoading(false)
-      })
-      .catch((err) => {
-        console.log(err)
-        setErrMessage("Request Failed. Please make sure you have logged in and try refresh the page.")
-        setShowError(true)
-      })
+  const fetchData = useCallback(async () => {
+    try {
+      const res: ProfileResponse = (await client.get("staffs/profile")).data
+      setName(res.name)
+      setSurname(res.surname)
+      if (res.is_admin) {
+        setAccountType("Administration")
+      } else {
+        setAccountType("Staff")
+      }
+      setIsLoading(false)
+    } catch (err) {
+      setErrMessage("Request Failed. Please make sure you have logged in and try refresh the page.")
+      setShowError(true)
+    }
   }, [])
 
   useEffect(() => {

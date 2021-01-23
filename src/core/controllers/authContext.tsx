@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useMemo, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import jwt_decode from "jwt-decode"
 import { getCookie } from "../contexts/cookieHandler"
 interface AuthContextConstruct {
   token: string | undefined
-  isUser: Boolean
-  setToken: Function
-  isAdmin: Boolean
+  isUser: boolean
+  setToken: (token: string) => void
+  isAdmin: boolean
 }
 
 export const AuthContext = React.createContext({} as AuthContextConstruct)

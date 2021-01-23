@@ -1,13 +1,14 @@
 import React from "react"
+import { CountdownRenderProps } from "react-countdown"
 
 export const timeConversion = (input: number) => {
-  let start_hour: number = 0
-  let start_min: number = 0
-  let end_hour: number = 0
-  let end_min: number = 0
+  let start_hour = 0
+  let start_min = 0
+  let end_hour = 0
+  let end_min = 0
   let start = ""
   let end = ""
-  let timeFormat: string = ""
+  let timeFormat = ""
   if (input % 2 === 0) {
     end_hour = input / 2
     end_min = 0
@@ -51,40 +52,42 @@ export const timeConversion = (input: number) => {
   return timeFormat
 }
 
-export const timeShift = (time, shiftedHours) => {
+export const timeShift = (time: number, shiftedHours: number) => {
   shiftedHours = shiftedHours * 60 * 60 * 1000
   return time + shiftedHours
 }
 
-export const timeRemainingDisplay = (minutes, seconds, completed, timeOut) => {
+// export const timeRemainingDisplay = (minutes: number, seconds: number, completed: number, timeOut: () => void) => {
+
+interface TimeRemainingDisplayProps extends CountdownRenderProps {
+  onTimeOut: () => void
+}
+export const TimeRemainingDisplay = (props: TimeRemainingDisplayProps) => {
+  const { minutes, seconds, completed, onTimeOut } = props
   if (completed) {
-    timeOut()
+    onTimeOut()
     return <span>00:00</span>
   } else if (minutes < 10 && seconds < 10)
     return (
       <span>
-        {" "}
-        0{minutes}:0{seconds}{" "}
+        0{minutes}:0{seconds}
       </span>
     )
   else if (minutes < 10)
     return (
       <span>
-        {" "}
-        0{minutes}:{seconds}{" "}
+        0{minutes}:{seconds}
       </span>
     )
   else if (seconds < 10)
     return (
       <span>
-        {" "}
-        {minutes}:0{seconds}{" "}
+        {minutes}:0{seconds}
       </span>
     )
   return (
     <span>
-      {" "}
-      {minutes}:{seconds}{" "}
+      {minutes}:{seconds}
     </span>
   )
 }

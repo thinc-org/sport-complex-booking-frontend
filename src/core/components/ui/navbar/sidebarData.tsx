@@ -28,5 +28,5 @@ export const data = [
     icon: "",
     name: "aboutUs",
     path: "/aboutus",
-  }
+  },
 ]

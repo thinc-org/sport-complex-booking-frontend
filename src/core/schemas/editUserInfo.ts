@@ -1,5 +1,9 @@
-import * as yup from 'yup'
-import i18n from '../i18n/i18n'
+import * as yup from "yup"
+import i18n from "../i18n/i18n"
+
+export const emailSchema = yup.object().shape({
+  username: yup.string().required(i18n.t("emailErrorMessage")).email(i18n.t("emailErrorMessage")),
+})
 
 export const infoSchema = yup.object().shape({
   phone: yup.string().required(i18n.t("phoneErrorMessage")),
@@ -23,5 +27,5 @@ export const otherInfoSchema = yup.object().shape({
     contact_person_surname: yup.string().required(i18n.t("fieldIsRequired")),
     contact_person_home_phone: yup.string().required(i18n.t("fieldIsRequired")),
     contact_person_phone: yup.string().required(i18n.t("fieldIsRequired")),
-  })
+  }),
 })

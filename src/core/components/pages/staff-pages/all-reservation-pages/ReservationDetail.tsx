@@ -1,14 +1,13 @@
-import React, { FunctionComponent, useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect, useMemo, useCallback } from "react"
 import { Link, useParams, useHistory } from "react-router-dom"
 import { Table, Row, Col, Button, Card } from "react-bootstrap"
 import format from "date-fns/format"
 import { client } from "../../../../../axiosConfig"
-import SuccessfulReservation, { WaitingRoom, TimeObject } from "../interfaces/reservationSchemas"
+import { Room, TimeObject } from "../../../../dto/reservation.dto"
 import { ConfirmDeleteModal, ErrModal, DeleteSuccessfulModal } from "./DeleteModalComponent"
+import { Sport } from "../../../../dto/sport.dto"
 
 export const convertSlotToTime = (slot: number): TimeObject => {
-  // if (slot % 2 === 0) return String(slot / 2 - 1) + ":30-" + (slot / 2 !== 24 ? String(slot / 2) : "0") + ":00"
-  // return String(Math.floor(slot / 2)) + ":00-" + String(Math.floor(slot / 2)) + ":30"
   const hour = Math.floor(slot / 2)
   return {
     startHour: slot % 2 === 0 ? `${hour - 1}` : `${hour}`,
@@ -22,7 +21,7 @@ export const getTimeText = (timeSlot: number[]): string => {
   let text = ""
   let i = 0
   while (i < timeSlot.length) {
-    let temp = convertSlotToTime(timeSlot[i])
+    const temp = convertSlotToTime(timeSlot[i])
     if (
       (i === 0 && i !== timeSlot.length - 1) ||
       (0 < i && i < timeSlot.length - 1 && timeSlot[i + 1] === timeSlot[i] + 1 && timeSlot[i - 1] !== timeSlot[i] - 1)
@@ -37,7 +36,7 @@ export const getTimeText = (timeSlot: number[]): string => {
   return text
 }
 
-const ReservationDetail: FunctionComponent = () => {
+const ReservationDetail: React.FC = () => {
   // Page state //
   const [showConfirmDel, setShowConfirmDel] = useState<boolean>(false)
   const [showComDel, setShowComDel] = useState<boolean>(false)
@@ -45,7 +44,7 @@ const ReservationDetail: FunctionComponent = () => {
 
   // reservation detail state
   const [sportName, setSportName] = useState<string>("")
-  const [detail, setDetail] = useState<SuccessfulReservation | WaitingRoom | null>(null)
+  const [detail, setDetail] = useState<Room | null>(null)
   const date = useMemo(() => (detail ? new Date(detail.date) : null), [detail])
   const sportId = detail?.sport_id
   const courtNo = detail?.court_number
@@ -55,16 +54,28 @@ const ReservationDetail: FunctionComponent = () => {
   const history = useHistory()
   const { pagename, _id } = useParams<{ pagename: string; _id: string }>()
 
+  // request //
+  const requestInfo = useCallback(() => {
+    const url: string = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + `/${_id}`
+    client
+      .get<Room>(url)
+      .then(({ data }) => {
+        setDetail(data)
+      })
+      .catch(({ response }) => {
+        console.log(response)
+        setShowErr(true)
+      })
+  }, [_id, pagename])
+
   // useEffects //
   useEffect(() => {
     requestInfo()
-  }, [pagename, _id])
+  }, [requestInfo])
 
   useEffect(() => {
-    client({
-      method: "GET",
-      url: "/court-manager/sports/",
-    })
+    client
+      .get<Sport[]>("/court-manager/sports/")
       .then(({ data }) => {
         const sport = data.find((sport) => sport._id === detail?.sport_id)
         setSportName(sport?.sport_name_th || "")
@@ -72,32 +83,15 @@ const ReservationDetail: FunctionComponent = () => {
       .catch(({ response }) => {
         console.log(response)
       })
-  }, [sportId])
-
-  // request //
-  const requestInfo = () => {
-    let url: string = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + `/${_id}`
-    client({
-      method: "GET",
-      url,
-    })
-      .then(({ data }) => {
-        console.log(data)
-        setDetail(data)
-      })
-      .catch(({ response }) => {
-        console.log(response)
-        setShowErr(true)
-      })
-  }
+  }, [sportId, detail])
 
   const requestDelete = () => {
-    let url = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + `/${_id}`
+    const url = (pagename === "success" ? "/all-reservation" : "/all-waiting-room") + `/${_id}`
     client({
       method: "DELETE",
       url,
     })
-      .then(({ data }) => {
+      .then(() => {
         setShowConfirmDel(false)
         setShowComDel(true)
       })
@@ -120,7 +114,9 @@ const ReservationDetail: FunctionComponent = () => {
           <hr style={{ height: "60px", width: "0px", borderWidth: "1px", borderStyle: "ridge" }} />
           <Col className="px-0 pt-3 text-center" style={{ whiteSpace: "pre-wrap" }}>
             วันที่ / เวลา {"\n"}
-            <label style={{ whiteSpace: "pre-wrap" }}>{date ? format(date!, "dd-MM-yyyy") + "\n" + getTimeText(timeSlot!) : ""}</label>
+            {date && timeSlot && (
+              <label style={{ whiteSpace: "pre-wrap" }}>{date ? format(date, "dd-MM-yyyy") + "\n" + getTimeText(timeSlot) : ""}</label>
+            )}
           </Col>
           <hr style={{ height: "60px", width: "0px", borderWidth: "1px", borderStyle: "ridge" }} />
           <Col className="px-0 pt-4 text-center" style={{ whiteSpace: "pre-wrap" }}>

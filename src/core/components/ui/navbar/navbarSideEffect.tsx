@@ -1,54 +1,49 @@
-import withSideEffect from 'react-side-effect';
-import { useState, useEffect } from 'react';
-import { EventEmitter } from 'events';
+import withSideEffect from "react-side-effect"
+import { useState, useEffect } from "react"
+import { EventEmitter } from "events"
 interface navHeaderState {
-    isOnStaffPage: Boolean,
-    header: String,
-
+  isOnStaffPage: boolean
+  header: string
 }
 
 type navHeaderProps = Partial<navHeaderState>
 
-
 const defaultHeader: navHeaderState = {
-    isOnStaffPage: false,
-    header: 'CU Sports Center'
+  isOnStaffPage: false,
+  header: "CU Sports Center",
 }
-const NavHeader: React.FC<navHeaderProps> = () => null;
+const NavHeader: React.FC<navHeaderProps> = () => null
 
 function reducePropsToState(propsList: navHeaderProps[]): navHeaderState {
-    const state = { ...defaultHeader }
-    propsList.forEach((val) => {
-        Object.assign(state, val)
-    })
-    return state;
+  const state = { ...defaultHeader }
+  propsList.forEach((val) => {
+    Object.assign(state, val)
+  })
+  return state
 }
-let currentState: navHeaderState = ({} as navHeaderState)
+let currentState: navHeaderState = {} as navHeaderState
 const emitter = new EventEmitter()
 
 function handleStateChangeOnClient(state: navHeaderState) {
-    currentState = state
-    emitter.emit('change', state)
+  currentState = state
+  emitter.emit("change", state)
 }
 
-const navHeaderSideEffect = withSideEffect(
-    reducePropsToState,
-    handleStateChangeOnClient
-)(NavHeader)
+const navHeaderSideEffect = withSideEffect(reducePropsToState, handleStateChangeOnClient)(NavHeader)
 
 function useNavHeader(): navHeaderState | navHeaderProps {
-    const [state, setState] = useState(currentState);
-    useEffect(() => {
-        setState(currentState)
-        const listener = (newState: navHeaderState) => {
-            console.log(JSON.stringify(newState))
-            setState(newState);
-        }
-        emitter.addListener('change', listener)
-        return () => { emitter.removeListener('change', listener); }
+  const [state, setState] = useState(currentState)
+  useEffect(() => {
+    setState(currentState)
+    const listener = (newState: navHeaderState) => {
+      setState(newState)
     }
-        , [])
-    return state || navHeaderSideEffect.peek();
+    emitter.addListener("change", listener)
+    return () => {
+      emitter.removeListener("change", listener)
+    }
+  }, [])
+  return state || navHeaderSideEffect.peek()
 }
 
 export { navHeaderSideEffect as NavHeader, useNavHeader }

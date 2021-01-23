@@ -1,11 +1,13 @@
 import React, { FunctionComponent, useState } from "react"
 import { Form, Card, Row, Col, Button } from "react-bootstrap"
 import { Link, useHistory } from "react-router-dom"
-import { useForm } from "react-hook-form"
+import { useForm, FormProvider } from "react-hook-form"
 import { AddInfo, ModalAddUser, AlertAddUser, AddUserComponentInfo } from "../interfaces/InfoInterface"
 import { client } from "../../../../../axiosConfig"
 import ChangePasswordComponent from "./AddUserPasswordComponent"
 import { AddModal, ComModal, ErrModal, UsernameErrModal, AlertUncom, AlertErrorPassword, AlertInvalidUsername } from "./AddUserModalAndAlert"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { emailSchema } from "../../../../schemas/editUserInfo"
 
 const AddUser: FunctionComponent = () => {
   // Page states //
@@ -37,13 +39,79 @@ const AddUser: FunctionComponent = () => {
     phone: "",
   })
 
-  const { register, handleSubmit, errors } = useForm()
+  const methods = useForm({ resolver: yupResolver(emailSchema) })
+  const { register, handleSubmit, errors } = methods
   const history = useHistory()
 
   // functions //
   const validCheck = (s: string) => {
     if (s !== "") return s.match(/.*([A-z])+.*/g)
     return false
+  }
+
+  // handles //
+  const handleChangeType = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUser({ ...user, membership_type: e.target.value })
+    if (e.target.value === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" || user.membership_type === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา")
+      setSelectingSatit(!selectingSatit)
+  }
+
+  const handleAdd = (data: AddUserComponentInfo) => {
+    const { confirmPassword, ...rest } = data
+    const { username, name_th, surname_th, name_en, surname_en, phone, password } = rest
+    const newUser = data.is_thai_language
+      ? { ...rest, membership_type: user.membership_type, personal_email: username }
+      : { ...user, username: username, password: data.password }
+    setUser(newUser)
+    if (!validCheck(username)) setShowAlerts({ showAlertPassword: false, showAlertUncom: false, showAlertUsername: true })
+    else if (password !== confirmPassword) setShowAlerts({ showAlertUncom: false, showAlertUsername: false, showAlertPassword: true })
+    else if (user.membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && user.membership_type && username !== "" && password !== "")
+      setShowModals({ ...showModals, showAdd: true })
+    else if (
+      user.membership_type &&
+      username !== "" &&
+      password !== "" &&
+      name_th !== "" &&
+      surname_th !== "" &&
+      name_en !== "" &&
+      surname_en !== "" &&
+      username !== "" &&
+      phone !== ""
+    )
+      setShowModals({ ...showModals, showAdd: true })
+    else setShowAlerts({ showAlertPassword: false, showAlertUsername: false, showAlertUncom: true })
+  }
+
+  // requests //
+  const requestAdd = () => {
+    let url = "/list-all-user/"
+    let data = {}
+    const { membership_type, username, password, personal_email } = user
+    if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา") {
+      url += "OtherUser"
+      data = {
+        membership_type,
+        personal_email,
+        username,
+        password,
+      }
+    } else {
+      url += "SatitUser"
+      data = user
+    }
+    client({
+      method: "POST",
+      url,
+      data,
+    })
+      .then(() => {
+        setShowModals({ ...showModals, showAdd: false, showCom: true })
+      })
+      .catch(({ response }) => {
+        if (response && response.data.statusCode === 400) setShowModals({ ...showModals, showAdd: false, showUsernameErr: true })
+        else if (response && response.data.statusCode === 401) history.push("/staff")
+        else setShowModals({ ...showModals, showAdd: false, showErr: true })
+      })
   }
 
   // renders //
@@ -72,99 +140,85 @@ const AddUser: FunctionComponent = () => {
 
   const renderNormalForm = () => {
     return (
-      <Form onSubmit={handleSubmit(handleAdd)}>
-        {renderSelector(0)}
-        <Form.Group>
-          <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
-          <Form.Control
-            ref={register({
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Invalid email address",
-              },
-            })}
-            name="username"
-            defaultValue={user.username}
-          />
-          {errors.username && (
-            <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
-              {errors.username.message}
-            </span>
-          )}
-        </Form.Group>
-        <AlertInvalidUsername show={showAlerts} />
-        <ChangePasswordComponent selectingSatit={selectingSatit} register={register} />
-        <AlertErrorPassword show={showAlerts} />
-      </Form>
+      <FormProvider {...methods}>
+        <Form onSubmit={handleSubmit(handleAdd)}>
+          {renderSelector(0)}
+          <Form.Group>
+            <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
+            <Form.Control ref={register} name="username" defaultValue={user.username} />
+            {errors.username && (
+              <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                {errors.username.message}
+              </span>
+            )}
+          </Form.Group>
+          <AlertInvalidUsername show={showAlerts} />
+          <ChangePasswordComponent selectingSatit={selectingSatit} />
+          <AlertErrorPassword show={showAlerts} />
+        </Form>
+      </FormProvider>
     )
   }
 
   const renderSatitForm = () => {
-    const { name_th, surname_th, name_en, surname_en, personal_email, phone, username, is_thai_language } = user
+    const { name_th, surname_th, name_en, surname_en, phone, username, is_thai_language } = user
     return (
-      <Form onSubmit={handleSubmit(handleAdd)}>
-        {renderSelector(9)}
-        <Form.Group>
-          <Form.Label>ภาษา</Form.Label>
-          <Form.Control ref={register} name="is_thai_language" className="m-0" as="select" defaultValue={is_thai_language ? 1 : 0}>
-            <option value={1}>ภาษาไทย</option>
-            <option value={0}>English</option>
-          </Form.Control>
-        </Form.Group>
-        <Form.Group>
-          <Row>
-            <Col>
-              <Form.Label>ชื่อ (ภาษาไทย)</Form.Label>
-              <Form.Control ref={register} name="name_th" defaultValue={name_th} />
-            </Col>
-            <Col>
-              <Form.Label>นามสกุล (ภาษาไทย)</Form.Label>
-              <Form.Control ref={register} name="surname_th" defaultValue={surname_th} />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Form.Label>ชื่อ (ภาษาอังกฤษ)</Form.Label>
-              <Form.Control ref={register} name="name_en" defaultValue={name_en} />
-            </Col>
-            <Col>
-              <Form.Label>นามสกุล (ภาษาอังกฤษ)</Form.Label>
-              <Form.Control ref={register} name="surname_en" defaultValue={surname_en} />
-            </Col>
-          </Row>
-        </Form.Group>
-        <Form.Group>
-          <Row className="mb-3">
-            <Col>
-              <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
-              <Form.Control
-                ref={register({
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Invalid email address",
-                  },
-                })}
-                name="username"
-                defaultValue={username}
-              />
-              {errors.username && (
-                <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
-                  {errors.username.message}
-                </span>
-              )}
-            </Col>
-            <Col>
-              <Form.Label>เบอร์โทรศัพท์</Form.Label>
-              <Form.Control ref={register} name="phone" defaultValue={phone} />
-            </Col>
-          </Row>
-        </Form.Group>
-        <Form.Group>
-          <ChangePasswordComponent selectingSatit={selectingSatit} register={register} />
-          <AlertInvalidUsername show={showAlerts} />
-          <AlertErrorPassword show={showAlerts} />
-        </Form.Group>
-      </Form>
+      <FormProvider {...methods}>
+        <Form onSubmit={handleSubmit(handleAdd)}>
+          {renderSelector(9)}
+          <Form.Group>
+            <Form.Label>ภาษา</Form.Label>
+            <Form.Control ref={register} name="is_thai_language" className="m-0" as="select" defaultValue={is_thai_language ? 1 : 0}>
+              <option value={1}>ภาษาไทย</option>
+              <option value={0}>English</option>
+            </Form.Control>
+          </Form.Group>
+          <Form.Group>
+            <Row>
+              <Col>
+                <Form.Label>ชื่อ (ภาษาไทย)</Form.Label>
+                <Form.Control ref={register} name="name_th" defaultValue={name_th} />
+              </Col>
+              <Col>
+                <Form.Label>นามสกุล (ภาษาไทย)</Form.Label>
+                <Form.Control ref={register} name="surname_th" defaultValue={surname_th} />
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Form.Label>ชื่อ (ภาษาอังกฤษ)</Form.Label>
+                <Form.Control ref={register} name="name_en" defaultValue={name_en} />
+              </Col>
+              <Col>
+                <Form.Label>นามสกุล (ภาษาอังกฤษ)</Form.Label>
+                <Form.Control ref={register} name="surname_en" defaultValue={surname_en} />
+              </Col>
+            </Row>
+          </Form.Group>
+          <Form.Group>
+            <Row className="mb-3">
+              <Col>
+                <Form.Label>ชื่อผู้ใช้ (อีเมล)</Form.Label>
+                <Form.Control ref={register} name="username" defaultValue={username} />
+                {errors.username && (
+                  <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                    {errors.username.message}
+                  </span>
+                )}
+              </Col>
+              <Col>
+                <Form.Label>เบอร์โทรศัพท์</Form.Label>
+                <Form.Control ref={register} name="phone" defaultValue={phone} />
+              </Col>
+            </Row>
+          </Form.Group>
+          <Form.Group>
+            <ChangePasswordComponent selectingSatit={selectingSatit} />
+            <AlertInvalidUsername show={showAlerts} />
+            <AlertErrorPassword show={showAlerts} />
+          </Form.Group>
+        </Form>
+      </FormProvider>
     )
   }
 
@@ -177,72 +231,6 @@ const AddUser: FunctionComponent = () => {
         <UsernameErrModal show={showModals} setShow={setShowModals} />
       </div>
     )
-  }
-
-  // handles //
-  const handleChangeType = (e) => {
-    setUser({ ...user, membership_type: e.target.value })
-    if (e.target.value === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" || user.membership_type === "นักเรียนสาธิตจุฬา / บุคลากรจุฬา")
-      setSelectingSatit(!selectingSatit)
-  }
-
-  const handleAdd = (data: AddUserComponentInfo) => {
-    let { username, name_th, surname_th, name_en, surname_en, personal_email, phone, password, confirmPassword } = data
-    let newUser = data.is_thai_language
-      ? { ...data, personal_email: data.username, membership_type: user.membership_type }
-      : { ...user, username: data.username, personal_email: data.username, password:data.password }
-    delete newUser["confirmPassword"]
-    setUser(newUser)
-    if (!validCheck(username)) setShowAlerts({ showAlertPassword: false, showAlertUncom: false, showAlertUsername: true })
-    else if (password !== confirmPassword) setShowAlerts({ showAlertUncom: false, showAlertUsername: false, showAlertPassword: true })
-    else if (user.membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา" && user.membership_type && username !== "" && password !== "")
-      setShowModals({ ...showModals, showAdd: true })
-    else if (
-      user.membership_type &&
-      username !== "" &&
-      password !== "" &&
-      name_th !== "" &&
-      surname_th !== "" &&
-      name_en !== "" &&
-      surname_en !== "" &&
-      personal_email !== "" &&
-      phone !== ""
-    )
-      setShowModals({ ...showModals, showAdd: true })
-    else setShowAlerts({ showAlertPassword: false, showAlertUsername: false, showAlertUncom: true })
-  }
-
-  // requests //
-  const requestAdd = () => {
-    let url = "/list-all-user/"
-    let data = {}
-    let { membership_type, username, password, personal_email } = user
-    if (membership_type !== "นักเรียนสาธิตจุฬา / บุคลากรจุฬา") {
-      url += "OtherUser"
-      data = {
-        membership_type,
-        personal_email,
-        username,
-        password,
-      }
-    } else {
-      url += "SatitUser"
-      data = user
-    }
-    client({
-      method: "POST",
-      url,
-      data,
-    })
-      .then(({ data }) => {
-        setShowModals({ ...showModals, showAdd: false, showCom: true })
-      })
-      .catch(({ response }) => {
-        console.log(response)
-        if (response && response.data.statusCode === 400) setShowModals({ ...showModals, showAdd: false, showUsernameErr: true })
-        else if (response && response.data.statusCode === 401) history.push("/staff")
-        else setShowModals({ ...showModals, showAdd: false, showErr: true })
-      })
   }
 
   return (

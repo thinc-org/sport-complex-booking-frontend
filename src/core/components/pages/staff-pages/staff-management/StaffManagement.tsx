@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { Table, Form, Row, Col, Button, Pagination, Modal } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
-import { admin_and_staff, DeleteStaffModal, EditStaffModal, AddStaffModal, HandleErrorModal } from "./StaffManagementComponents"
+import { AdminAndStaff, StaffResponse } from "../../../../dto/staffManagement.dto"
+import { DeleteStaffModal, EditStaffModal, AddStaffModal, HandleErrorModal } from "./StaffManagementComponents"
 
 export default function StaffManagement() {
   const [type, set_type] = useState("")
@@ -13,93 +14,104 @@ export default function StaffManagement() {
   const [showDeleteStaff, setShowDeleteStaff] = useState(false)
   const [showEditStaff, setShowEditStaff] = useState(false)
   const [showError, setShowError] = useState(false)
+  const [currentStaff, setCurrentStaff] = useState<AdminAndStaff>({
+    _id: "",
+    name: "",
+    surname: "",
+    username: "",
+    is_admin: true,
+  })
 
-  const [currentStaff, setCurrentStaff] = useState<admin_and_staff>(
+  const [staffs, setStaffs] = useState<AdminAndStaff[]>([
     {
+      _id: "",
       name: "",
       surname: "",
       username: "",
       is_admin: true,
-    })
-
-  const [staffs, setStaffs] = useState([{
-    name: "",
-    surname: "",
-    username: "",
-    password: "",
-    recheckpasssword: "",
-    is_admin: true,
-  },
+    },
   ])
+
+  const requestStaffs = useCallback(
+    (query?: string, type?: string) => {
+      const start = (pageNo - 1) * 10
+      const end = pageNo * 10
+      const query_filter = query ? query : "$"
+      const type_filter = type ? type : "all"
+      client
+        .get<StaffResponse>("/staff-manager/admin-and-staff/search", {
+          params: {
+            start: start,
+            end: end,
+            filter: query_filter,
+            type: type_filter,
+          },
+        })
+        .then(({ data }) => {
+          setStaffs(data["staff_list"])
+          setMaxStaff(data["allStaff_length"])
+        })
+        .catch(() => {
+          setShowError(true)
+        })
+    },
+    [pageNo]
+  )
 
   useEffect(() => {
     requestStaffs()
-  }, [pageNo])
+  }, [requestStaffs])
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     requestStaffs(searchName, type)
   }
 
-  const sendEdittedStaffInfo = async (currentStaff: string, staff: admin_and_staff) => {
+  const sendEdittedStaffInfo = (currentStaff: string, staff: AdminAndStaff) => {
     const data = {
-      is_admin: currentStaff === "แอดมิน" ? true : false
+      is_admin: currentStaff === "แอดมิน" ? true : false,
     }
-    await client.put<admin_and_staff[]>('/staff-manager/' + staff['_id'], data)
+    client
+      .put<StaffResponse>("/staff-manager/" + staff["_id"], data)
       .then(() => {
         requestStaffs()
       })
-      .catch(() => { setShowError(true) })
+      .catch(() => {
+        setShowError(true)
+      })
   }
 
-  const sendNewStaffInfo = async (newStaff: admin_and_staff) => {
+  const sendNewStaffInfo = (newStaff: AdminAndStaff) => {
     delete newStaff.recheckpasssword
-    console.log("This is newStaff" + newStaff)
-    await client.post<admin_and_staff[]>('/staff-manager/', newStaff)
-      .then(() => {
+    client
+      .post<StaffResponse>("/staff-manager/", newStaff)
+      .then(({ data }) => {
         setShowAddStaff(false)
         requestStaffs()
       })
-      .catch(() => { setShowError(true) })
+      .catch(() => {
+        setShowError(true)
+      })
   }
 
-  const sendDeleteStaff = async (currentStaff: admin_and_staff) => {
-    console.log(currentStaff['_id'])
-    await client.delete<admin_and_staff[]>('/staff-manager/' + currentStaff['_id'])
+  const sendDeleteStaff = (currentStaff: AdminAndStaff) => {
+    client
+      .delete<StaffResponse>("/staff-manager/" + currentStaff["_id"])
       .then(() => {
         setShowDeleteStaff(false)
         requestStaffs()
       })
-      .catch(() => { setShowError(true) })
-  }
-
-  const requestStaffs = async (query?: string, type?: string) => {
-    const start = (pageNo - 1) * 10
-    const end = pageNo * 10
-    const query_filter = query ? query : "$"
-    const type_filter = type ? type : "all"
-    await client.get<admin_and_staff[]>('/staff-manager/admin-and-staff/search',{
-      params: {
-        start:start,
-        end: end,
-        filter: query_filter,
-        type: type_filter
-      }
-    })
-      .then((data) => {
-        console.log(data)
-        setStaffs(data['data']['staff_list'])
-        setMaxStaff(data['data']['allStaff_length'])
+      .catch(() => {
+        setShowError(true)
       })
-      .catch(() => { setShowError(true) })
   }
 
-  const onSubmitAddStaff = (data: admin_and_staff) => {
+  const onSubmitAddStaff = (data: AdminAndStaff) => {
     const newData = { ...data, is_admin: data.is_admin === "แอดมิน" ? true : false }
     sendNewStaffInfo(newData)
   }
 
-  const onSubmitEditStaff = (newValue: string, staff: admin_and_staff) => {
+  const onSubmitEditStaff = (newValue: string, staff: AdminAndStaff) => {
     sendEdittedStaffInfo(newValue, staff)
     setShowEditStaff(true)
   }
@@ -108,7 +120,9 @@ export default function StaffManagement() {
     return (
       <Modal
         show={showNoStaff}
-        onHide={() => { setShowNoStaff(false) }}
+        onHide={() => {
+          setShowNoStaff(false)
+        }}
         backdrop="static"
         keyboard={false}
       >
@@ -117,9 +131,15 @@ export default function StaffManagement() {
         </Modal.Header>
         <Modal.Body style={{ fontWeight: "lighter" }}>ไม่พบข้อมูลของพนักงานท่านนี้</Modal.Body>
         <Modal.Footer>
-          <Button variant="pink" className="btn-normal"
-            onClick={() => { setShowNoStaff(false) }}
-          >ตกลง</Button>
+          <Button
+            variant="pink"
+            className="btn-normal"
+            onClick={() => {
+              setShowNoStaff(false)
+            }}
+          >
+            ตกลง
+          </Button>
         </Modal.Footer>
       </Modal>
     )
@@ -127,39 +147,49 @@ export default function StaffManagement() {
 
   const renderStaffsTable = () => {
     let index = (pageNo - 1) * 10 + 1
-    let staffsList = staffs.map((staff, i) => {
+    const staffsList = staffs.map((staff) => {
+      if (type === "staff" && staff.is_admin === true) return null
+      if (type === "admin" && staff.is_admin === false) return null
       return (
         <tr key={index} className="tr-normal">
           <td className="font-weight-bold"> {index++} </td>
           <td> {staff.name} </td>
           <td> {staff.surname} </td>
           <td> {staff.username}</td>
-          {/* <td>{JSON.stringify(staff)}</td> */}
-          <td><div>
-            <Form>
-              <Form.Group controlId="exampleForm.ControlSelect1" >
-                <Form.Control
-                  as="select"
-                  custom
-                  defaultValue={staff.is_admin ? "แอดมิน" : "สตาฟ"} onChange={(e) => onSubmitEditStaff(e.target.value, staff)}
-                >
-                  <option value="สตาฟ">สตาฟ</option>
-                  <option value="แอดมิน">แอดมิน</option>
-                </Form.Control>
-              </Form.Group>
-            </Form>
-          </div>
+          <td>
+            <div>
+              <Form>
+                <Form.Group controlId="exampleForm.ControlSelect1">
+                  <Form.Control
+                    as="select"
+                    custom
+                    value={staff.is_admin ? "แอดมิน" : "สตาฟ"}
+                    disabled={staff.username === "admin"}
+                    onChange={(e) => {
+                      onSubmitEditStaff(e.target.value, staff)
+                      setShowEditStaff(true)
+                    }}
+                  >
+                    <option value="สตาฟ">สตาฟ</option>
+                    <option value="แอดมิน">แอดมิน</option>
+                  </Form.Control>
+                </Form.Group>
+              </Form>
+            </div>
           </td>
-          <td><Button
-            className="btn-normal btn-outline-black"
-            variant="outline-danger"
-            onClick={() => {
-              setShowDeleteStaff(true)
-              setCurrentStaff(staff)
-            }}
-          >
-            ลบเจ้าหน้าที่
-          </Button></td>
+          <td>
+            <Button
+              className="btn-normal btn-outline-black"
+              variant="outline-danger"
+              disabled={staff.name === "first admin"}
+              onClick={() => {
+                setShowDeleteStaff(true)
+                setCurrentStaff(staff)
+              }}
+            >
+              ลบเจ้าหน้าที่
+            </Button>
+          </td>
         </tr>
       )
     })
@@ -167,19 +197,18 @@ export default function StaffManagement() {
   }
 
   const handlePagination = (next_page: number) => {
-    let max_page: number = Math.floor((maxStaff + 9) / 10)
+    const max_page: number = Math.floor((maxStaff + 9) / 10)
     if (next_page >= 1 && next_page <= max_page) {
       requestStaffs()
     }
-
   }
 
   const loadPagination = () => {
-    let max_page: number = Math.floor((maxStaff + 9) / 10)
-    let numList: Array<number> = []
+    const max_page: number = Math.floor((maxStaff + 9) / 10)
+    const numList: Array<number> = []
     let i = 0
     while (numList.length < 5) {
-      let page = pageNo + i - 2
+      const page = pageNo + i - 2
       if (page >= 1 && page <= max_page) {
         numList.push(page)
       } else if (page > max_page) {
@@ -187,16 +216,18 @@ export default function StaffManagement() {
       }
       i++
     }
-    let elementList = numList.map((num) => {
+    const elementList = numList.map((num) => {
       if (num === pageNo)
-        return (<Pagination.Item key={num} active={true}>{num}</Pagination.Item>)
+        return (
+          <Pagination.Item key={num} active={true}>
+            {num}
+          </Pagination.Item>
+        )
       return (
         <Pagination.Item
           key={num}
           onClick={() => {
             setPageNo(num)
-            console.log(pageNo)
-            console.log("GOTO:" + num)
             handlePagination(num)
           }}
         >
@@ -206,9 +237,17 @@ export default function StaffManagement() {
     })
     return (
       <Pagination className="justify-content-md-end">
-        <Pagination.Prev onClick={() => { handlePagination(pageNo - 1) }} />
+        <Pagination.Prev
+          onClick={() => {
+            handlePagination(pageNo - 1)
+          }}
+        />
         {elementList}
-        <Pagination.Next onClick={() => { handlePagination(pageNo + 1) }} />
+        <Pagination.Next
+          onClick={() => {
+            handlePagination(pageNo + 1)
+          }}
+        />
       </Pagination>
     )
   }
@@ -235,7 +274,6 @@ export default function StaffManagement() {
           <Col sm="auto">
             <Form.Control
               onChange={(e) => {
-                // set_status(parseInt(e.target.value))
                 set_type(e.target.value)
               }}
               as="select"
@@ -247,8 +285,7 @@ export default function StaffManagement() {
               <option value="admin">แอดมิน</option>
             </Form.Control>
           </Col>
-          <Col sm="auto">
-          </Col>
+          <Col sm="auto"></Col>
           <Button variant="black" className="py-1 btn-outline-dark" onClick={handleSearch}>
             ค้นหา
           </Button>
@@ -273,9 +310,15 @@ export default function StaffManagement() {
       </Table>
       <Row>
         <Col>
-          <Button variant="pink" className="btn-normal" onClick={() => {
-            setShowAddStaff(true)
-          }}>เพิ่มสตาฟ </Button>
+          <Button
+            variant="pink"
+            className="btn-normal"
+            onClick={() => {
+              setShowAddStaff(true)
+            }}
+          >
+            เพิ่มสตาฟ{" "}
+          </Button>
         </Col>
         <Col>{loadPagination()}</Col>
       </Row>

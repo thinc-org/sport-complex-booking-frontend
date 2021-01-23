@@ -72,7 +72,7 @@
   "repeatNewPassword": "กรอกรหัสผ่านใหม่อีกครั้ง",
   "hooray": "ยินดีด้วย!",
   "reservationSuccess": "การจองสำเร็จแล้ว",
-  "viewWaitingRoom": "ดูห้องจอง",
+  "viewReservation": "ดูการจอง",
   "reserveNow": "จองสนาม",
   "chooseReserve": "เลือกเมนู",
   "createWaitingRoom": "สร้างห้องรอการจอง",
@@ -173,7 +173,7 @@
   },
   "editAccountErrorModal": {
     "title": "เกิดข้อผิดพลาด",
-    "body": "ไม่แก้ไขข้อมูลผู้ใช้ได้ในขณะนี้"
+    "body": "ไม่สามมารถแก้ไขข้อมูลผู้ใช้ได้ในขณะนี้"
   },
   "closeWaitingRoom?": "คุณต้องการทำการปิดห้องรอนี้หรือไม่",
   "timeOut": "หมดเวลา",
@@ -206,7 +206,7 @@
   "showQRToStaff": "กรุณาแสดงคิวอาร์โค้ดนี้ให้เจ้าหน้าที่",
   "cancelReservation": "ยกเลิกการจอง",
   "cancelReservationQuestion": "คุณต้องการยกเลิกการจองใช่หรือไม่?",
-  "cancelReservationCondition": "ถ้าทำการยกเลิกการจองภายใน {{lateCancellationDay}} วัน คุณและสมาชิกในการจองจะถูกแบนเป็นเวลา {{lateCancellationPunishment}} วัน",
+  "cancelReservationCondition": "ถ้าทำการยกเลิกการจองล่วงหน้าน้อยกว่า {{lateCancellationDay}} วัน คุณและสมาชิกในการจองจะถูกแบนเป็นเวลา {{lateCancellationPunishment}} วัน",
 
   "sure": "ตกลง",
   "no": "ไม่",
@@ -240,5 +240,6 @@
   },
   "noReservation": "คุณไม่มีการจองในขณะนี้",
   "qrcodeInvalid": "คิวอาร์โค้ดนี้จะหมดเวลาในอีก",
-  "usernameLabel": "ชื่อผู้ใช้"
+  "usernameLabel": "ชื่อผู้ใช้",
+  "submitted": "ส่งข้อมูลแล้ว"
 }
