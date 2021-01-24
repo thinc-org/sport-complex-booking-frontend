@@ -221,8 +221,10 @@ function CreateWaitingRoom() {
   return (
     <div className="Orange">
       <NavHeader header={t("createWaitingRoom")} />
-      <CheckValidityErrorMsg show={showValidityWarningMessage} reason={warningMessage} type={errorType} />
-      <CreateWaitingRoomErrorMsg show={showCreateWarningMessage && !showValidityWarningMessage} reason={warningMessage} type={errorType} />
+      <div className="mx-4">
+        <CheckValidityErrorMsg show={showValidityWarningMessage} reason={warningMessage} type={errorType} />
+        <CreateWaitingRoomErrorMsg show={showCreateWarningMessage && !showValidityWarningMessage} reason={warningMessage} type={errorType} />
+      </div>
       <div className="mx-auto col-md-6">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="default-mobile-wrapper mt-4 animated-card">

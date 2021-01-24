@@ -450,7 +450,12 @@ export default function OtherAccountEdit() {
                 required
                 accept="image/png, image/jpeg"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("user_photo")}
-                onChange={(e) => e.target.files && assignUserPhoto(e.target.files)}
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0].size > 4194304) {
+                    e.target.value = ""
+                    alert("fileTooBig")
+                  } else e.target.files && assignUserPhoto(e.target.files)
+                }}
               />
             ) : (
               <p>{t("submitted")}</p>
@@ -469,7 +474,12 @@ export default function OtherAccountEdit() {
                 required
                 accept="application/pdf"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("national_id_photo")}
-                onChange={(e) => e.target.files && assignNationalIdPhoto(e.target.files)}
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0].size > 4194304) {
+                    e.target.value = ""
+                    alert("fileTooBig")
+                  } else e.target.files && assignNationalIdPhoto(e.target.files)
+                }}
               />
             ) : (
               <p>{t("submitted")}</p>
@@ -488,7 +498,12 @@ export default function OtherAccountEdit() {
                 required
                 accept="application/pdf"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("medical_certificate")}
-                onChange={(e) => e.target.files && assignMedicalCertificate(e.target.files)}
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0].size > 4194304) {
+                    e.target.value = ""
+                    alert("fileTooBig")
+                  } else e.target.files && assignMedicalCertificate(e.target.files)
+                }}
               />
             ) : (
               <p>{t("submitted")}</p>
@@ -506,7 +521,12 @@ export default function OtherAccountEdit() {
                 id="house_registration_number"
                 accept="application/pdf"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("house_registration_number")}
-                onChange={(e) => e.target.files && assignHouseRegistrationNumber(e.target.files)}
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0].size > 4194304) {
+                    e.target.value = ""
+                    alert("fileTooBig")
+                  } else e.target.files && assignHouseRegistrationNumber(e.target.files)
+                }}
               />
             ) : (
               <p>{t("submitted")}</p>
@@ -524,7 +544,12 @@ export default function OtherAccountEdit() {
                 id="relationship_verification_document"
                 accept="application/pdf"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("relationship_verification_document")}
-                onChange={(e) => e.target.files && assignRelationshipVerificationDocument(e.target.files)}
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0].size > 4194304) {
+                    e.target.value = ""
+                    alert("fileTooBig")
+                  } else e.target.files && assignRelationshipVerificationDocument(e.target.files)
+                }}
               />
             ) : (
               <p>{t("submitted")}</p>

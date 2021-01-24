@@ -24,7 +24,7 @@ export default function SatitAndCUPersonelAccountDisplay({ toggleEditButton }: A
           </div>
         </div>
         <div className="row">
-          <h6 className="mx-3 mt-3">{t("satitAccountType")}</h6>
+          <h6 className="mx-3 mt-3">{t(`${user?.account_type}AccountType`)}</h6>
         </div>
         <hr className="mx-1" />
         <div className="">

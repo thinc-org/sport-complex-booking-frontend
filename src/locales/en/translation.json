@@ -6,8 +6,8 @@
   "personalEmailLabel": "Personal Email",
   "CuStudent": "Chulalongkorn University Student",
   "SatitAndCuPersonel": "Satit Chula / CU Personnel",
-  "chulaAccountType": "Chulalongkorn University Student",
-  "satitAccountType": "Satit Chula / CU Personnel",
+  "CuStudentAccountType": "Chulalongkorn University Student",
+  "SatitAndCuPersonelAccountType": "Satit Chula / CU Personnel",
   "edit": "edit",
   "phoneErrorMessage": "Enter a valid phone number",
   "emailErrorMessage": "Enter a valid email",
@@ -255,6 +255,6 @@
     "bullet2":"By joining a waiting room, you can make a court reservation together with your friends.",
     "head2":"When to join a waiting room?",
     "bullet3":"When your friend has already created a waiting room and you would like to create a reservation together with them."
-  }
-  
+  },
+  "fileTooBig": "File size too large. The maximum file size is 4 MB. Please try again."
 }

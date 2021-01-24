@@ -1,9 +1,12 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
+import { UserContext } from "../../../contexts/UsersContext"
+import EditAccount from "./AccountPageUI/EditAccount"
 import SatitAndCUPersonelAccountDisplay from "./AccountPageUI/SatitAndCUPersonelAccountDisplay"
-import SatitAndCUPersonelAccountEdit from "./AccountPageUI/SatitAndCUPersonelAccountEdit"
 
 export default function SatitAndCuPersonel() {
   const [isEditting, setIsEditting] = useState(false)
+
+  const { satitCuPersonelAccount: user } = useContext(UserContext)
 
   const toggleEditButton = () => {
     if (isEditting) {
@@ -16,9 +19,9 @@ export default function SatitAndCuPersonel() {
   return (
     <div>
       {!isEditting ? (
-        <SatitAndCUPersonelAccountDisplay toggleEditButton={toggleEditButton} />
+        <SatitAndCUPersonelAccountDisplay toggleEditButton={toggleEditButton} user={user} />
       ) : (
-        <SatitAndCUPersonelAccountEdit toggleEditButton={toggleEditButton} />
+        <EditAccount toggleEditButton={toggleEditButton} user={user} />
       )}
     </div>
   )
