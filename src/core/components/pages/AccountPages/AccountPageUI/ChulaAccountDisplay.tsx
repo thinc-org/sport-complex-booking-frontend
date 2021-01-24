@@ -1,20 +1,16 @@
-import React, { useContext } from "react"
+import React from "react"
 import { Button } from "react-bootstrap"
-import { UserContext } from "../../../../contexts/UsersContext"
 import { useTranslation } from "react-i18next"
-import { WarningMessage } from "../../../ui/Modals/AccountPageModals"
 import { useNameLanguage } from "../../../../utils/language"
 import { AccountProps } from "../../../../dto/account.dto"
 
-export default function ChulaAccountDisplay({ toggleEditButton }: AccountProps) {
-  const { cuStudentAccount: user } = useContext(UserContext)
+export default function ChulaAccountDisplay({ toggleEditButton, user }: AccountProps) {
   const { t } = useTranslation()
   const nameLanguage = useNameLanguage("name")
   const surnameLanguage = useNameLanguage("surname")
 
   return (
     <div className="mx-auto col-md-6">
-      {user && <WarningMessage show={user.is_first_login} account={user.account_type} />}
       <div className="default-mobile-wrapper mt-3 animated-card">
         <div className="row mt-2">
           <div className="col-8">{user && <h4 className="align-right">{user[nameLanguage] + " " + user[surnameLanguage]}</h4>}</div>
@@ -25,7 +21,7 @@ export default function ChulaAccountDisplay({ toggleEditButton }: AccountProps) 
           </div>
         </div>
         <div className="row">
-          <h6 className="mx-3 mt-3">{t("chulaAccountType")}</h6>
+          <h6 className="mx-3 mt-3">{t(`${user?.account_type}AccountType`)}</h6>
         </div>
         <hr className="mx-1" />
         <div className="">

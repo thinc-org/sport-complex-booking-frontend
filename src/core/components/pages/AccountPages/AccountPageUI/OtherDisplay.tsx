@@ -3,8 +3,10 @@ import { UserContext } from "../../../../contexts/UsersContext"
 import { Link } from "react-router-dom"
 import { WarningMessage } from "../../../ui/Modals/AccountPageModals"
 import { useTranslation } from "react-i18next"
+import { AccountProps } from "../../../../dto/account.dto"
+import Button from "react-bootstrap/esm/Button"
 
-export default function OtherAaccountDisplay() {
+export default function OtherAaccountDisplay({ toggleEditButton }: AccountProps) {
   const { otherAccount: user } = useContext(UserContext)
   const { t } = useTranslation()
 
@@ -14,7 +16,17 @@ export default function OtherAaccountDisplay() {
       <div className="default-mobile-wrapper mt-3 animated-card">
         <div className="">
           {/* START OF THE FORM */}
-          <h4>{t("memberInformation")}</h4>
+          <div className="row">
+            <div className="col-8">
+              <h4>{t("memberInformation")}</h4>
+            </div>
+            <div className="col-4">
+              <Button className="btn-secondary btn-sm float-right" onClick={toggleEditButton}>
+                {t("edit")}
+              </Button>
+            </div>
+          </div>
+
           <div className="row">
             <div className="col-md-6">
               <label className="form-label mt-2">{t("prefix")}</label>

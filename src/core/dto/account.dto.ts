@@ -1,3 +1,5 @@
+import { CuStudent, Other, SatitCuPersonel } from "../contexts/UsersContext"
+
 export enum Account {
   CuStudent = "CuStudent",
   SatitAndCuPersonel = "SatitAndCuPersonel",
@@ -6,6 +8,7 @@ export enum Account {
 
 export interface AccountProps {
   toggleEditButton: () => void
+  user?: CuStudent | SatitCuPersonel | Other
 }
 
 export interface Token {
