@@ -151,10 +151,12 @@ function CreateWaitingRoom() {
     })
     const newData = {
       ...data,
+      sport_id: currentSportId,
       date: year + "-" + month + "-" + day,
       court_number: Number(data.court_number),
       time_slot: formattedTimeSlot.slice(1),
     }
+    console.log(newData)
     client
       .post<CreateResponse>("/reservation/createwaitingroom", newData)
       .then(() => {
@@ -383,7 +385,7 @@ function CreateWaitingRoom() {
               <Button
                 type="submit"
                 variant="pink"
-                disabled={invalidAccount || showDateWarning || showTimeSlotError || !showCourt || !showTime}
+                disabled={invalidAccount || showDateWarning || showTimeSlotError || showCourt || !showTime}
                 onClick={() => {
                   setShow(true)
                 }}
