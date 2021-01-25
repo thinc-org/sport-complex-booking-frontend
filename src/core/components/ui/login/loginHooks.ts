@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useHistory, useRouteMatch } from "react-router-dom"
 import { useAuthContext } from "../../../controllers/authContext"
 import { setCookie } from "../../../contexts/cookieHandler"
 import { setIsFirstLogin, getIsFirstlogin } from "../../../../constant"
-
 import { client } from "../../../../axiosConfig"
 import { AxiosResponse } from "axios"
 import { useTranslation } from "react-i18next"
@@ -21,6 +20,7 @@ interface UserResponse {
 
 export const useLogin = (setError: (name: string, error: ErrorOption) => void) => {
   const { setToken } = useAuthContext()
+  const isMounted = useRef(true)
   const history = useHistory()
   const { path } = useRouteMatch()
   const [isLoading, setLoading] = useState(false)
@@ -57,7 +57,7 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
   }
 
   useEffect(() => {
-    if (history.location.search) {
+    if (history.location.search && isMounted.current) {
       const params = history.location.search
       const ticket = params.slice(params.indexOf("=") + 1)
       setLoading(true)
@@ -83,6 +83,9 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
             message: t("badResponse"),
           })
         })
+    }
+    return () => {
+      isMounted.current = false
     }
   }, [i18n, history, path, setError, setToken, t, changeLanguage])
 
