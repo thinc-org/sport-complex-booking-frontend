@@ -66,7 +66,7 @@ function JoinWaitingRoom() {
   }, [fetchValidity])
 
   return (
-    <div>
+    <div className="unselectable">
       <CheckValidityErrorMsg show={showValidityWarningMessage} reason={warningMessage} type={errorType} />
       <JoinWaitingRoomErrorMsg show={showJoinWarningMessage} reason={warningMessage} type={errorType} />
       <div className="mx-auto higher">

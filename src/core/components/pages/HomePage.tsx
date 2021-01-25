@@ -89,7 +89,7 @@ const HomePage = () => {
               <div className="linkbody darkgrey"> {t("myWaitingRoomDescription")} </div>
             </div>
           </Link>
-          <div className="px-4  my-3 ">
+          <div className="px-4 my-3 unselectable">
             <Row className="justify-content-between">
               <span className="linkhead font-weight-bold">{t("reserveNow")}</span>
               <span onClick={() => setShowReserveNowHint(!showReserveNowHint)}>
@@ -125,7 +125,7 @@ const HomePage = () => {
               <div className="linkbody"> {t("reserveNowDescription")} </div>
             </div>
           </Link>
-          <div className="px-4  my-3 ">
+          <div className="px-4 my-3 unselectable">
             <Row className="justify-content-between">
               <span className="linkhead font-weight-bold">{t("joinYourFriends")}</span>
               <span onClick={() => setShowJoinHInt(!showJoinHint)}>

@@ -691,3 +691,7 @@ td {
   border-radius: 10px;
   background: #efefef;
 }
+
+.unselectable {
+  user-select: none;
+}
