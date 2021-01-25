@@ -221,7 +221,7 @@ function CreateWaitingRoom() {
   }, [fetchValidity, fetchCourts])
 
   return (
-    <div className="Orange">
+    <div className="unselectable">
       <NavHeader header={t("createWaitingRoom")} />
       <div className="mx-4">
         <CheckValidityErrorMsg show={showValidityWarningMessage} reason={warningMessage} type={errorType} />
@@ -231,43 +231,54 @@ function CreateWaitingRoom() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="default-mobile-wrapper mt-4 animated-card">
             <label className="form-label my-3">{t("sportSelection")}</label>
+            {currentSportId !== "" && clickedNext && (
+              <div className="box-container-alt">
+                <p className="mb-0">{sportName}</p>
+              </div>
+            )}
             <div className="button-group sport-radio">
-              {sport.map((item, i) => (
-                <div key={i}>
-                  <label className={item._id === currentSportId ? "box-container-alt" : "box-container"}>
-                    <input
-                      key={i}
-                      name="sport_id"
-                      type="radio"
-                      ref={register}
-                      className="mt-2 sport-radio-element"
-                      onClick={() => {
-                        setShowCourt(false)
-                        setShowTime(false)
-                        setValue("court_number", "")
-                        setValue("time_slot", [])
-                        fetchQuota(item["_id"], date)
-                        setCurrentSportId(item["_id"])
-                        sport.forEach((sport) => {
-                          if (sport["_id"] === item["_id"]) {
-                            setCourts(sport["list_court"])
-                            setShowCourt(true)
-                            setRequiredUserCount(sport["required_user"])
-                            setSportName(sport[sportLanguage])
-                          }
-                        })
-                      }}
-                    />
-                    <p className="font-weight-normal">{item[sportLanguage]}</p>
-                  </label>
-                </div>
-              ))}
+              {!clickedNext &&
+                sport.map((item, i) => (
+                  <div key={i}>
+                    <label className={item._id === currentSportId ? "box-container-alt" : "box-container"}>
+                      <input
+                        key={i}
+                        name="sport_id"
+                        type="radio"
+                        ref={register}
+                        className="mt-2 sport-radio-element"
+                        onClick={() => {
+                          setShowCourt(false)
+                          setShowTime(false)
+                          setValue("court_number", "")
+                          setValue("time_slot", [])
+                          fetchQuota(item["_id"], date)
+                          setCurrentSportId(item["_id"])
+                          sport.forEach((sport) => {
+                            if (sport["_id"] === item["_id"]) {
+                              setCourts(sport["list_court"])
+                              setShowCourt(true)
+                              setRequiredUserCount(sport["required_user"])
+                              setSportName(sport[sportLanguage])
+                            }
+                          })
+                        }}
+                      />
+                      <p className="font-weight-normal">{item[sportLanguage]}</p>
+                    </label>
+                  </div>
+                ))}
             </div>
             <div className="button-group mb-0">
+              {clickedNext && (
+                <Button className="mb-0" variant="light" onClick={() => setClickedNext(false)}>
+                  {t("changeSport")}
+                </Button>
+              )}
               <hr />
               {!clickedNext && (
                 <Button className="mb-0" variant="pink" onClick={() => setClickedNext(true)} disabled={currentSportId === ""}>
-                  Next
+                  {t("next")}
                 </Button>
               )}
             </div>
