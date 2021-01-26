@@ -28,12 +28,11 @@ const ReservationDetail = () => {
   const [timeList, setTimeList] = useState<number[]>()
   const [memberList, setMemberList] = useState<Array<NameResponse>>()
   const [isCheck, setIsCheck] = useState<boolean>()
-  const [counter, setCounter] = useState<number>(10)
+  const [counter, setCounter] = useState<number>()
   const [isLoading, setIsLoading] = useState(true)
   const [lateCancellationDay, setLateCancellationDay] = useState<number>()
   const [lateCancellationPunishment, setLateCancellationPunishment] = useState<number>()
   const [validTime, setValidTime] = useState<number>()
-  const [shouldRenderClock, setShouldRenderClock] = useState(true)
 
   const fetchId = useCallback(() => {
     if (location.state) {
@@ -62,12 +61,30 @@ const ReservationDetail = () => {
       history.push(history.location.state.path)
     }
   }, [id, history])
+
+  const countDown = useCallback(() => {
+    if (!isCheck) {
+      setTimeout(function () {
+        if (counter) {
+          setCounter(counter - 1)
+        } else if (counter === 0) {
+          setValidTime(new Date().getTime() + 10000)
+          setCounter(10)
+        }
+      }, 1000)
+    }
+  }, [counter, isCheck])
   useEffect(() => {
     fetchId()
   }, [fetchId])
   useEffect(() => {
     if (id) fetchData()
   }, [id, fetchData])
+  useEffect(() => {
+    if (!isCheck) {
+      countDown()
+    }
+  }, [isCheck, countDown])
 
   const [modalOpen, setModalOpen] = useState(false)
 
@@ -87,31 +104,6 @@ const ReservationDetail = () => {
         triggerModal()
       })
   }
-
-  const countDown = useCallback(() => {
-    if (!isCheck) {
-      setTimeout(function () {
-        if (counter) {
-          setCounter(counter - 1)
-        } else if (counter === 0) {
-          setValidTime(new Date().getTime() + 10000)
-          setCounter(10)
-        }
-      }, 1000)
-    }
-  }, [counter, isCheck])
-
-  useEffect(() => {
-    setShouldRenderClock(true)
-    if (!isCheck) {
-      if (shouldRenderClock) {
-        countDown()
-      }
-    }
-    return () => {
-      setShouldRenderClock(false)
-    }
-  }, [counter, isCheck, countDown, shouldRenderClock])
 
   const qrCode = () => {
     if (!isCheck && id) {
@@ -142,7 +134,7 @@ const ReservationDetail = () => {
             </h4>
           </div>
           <div className="container fixed-bottom mt-5">
-            <Link to={history.location.state.path /*(location.state as LocationResponse).path*/}>
+            <Link to={history.location.state.path}>
               <Button variant="outline-dark return-btn" className="w-100">
                 {t("goBack")}
               </Button>
