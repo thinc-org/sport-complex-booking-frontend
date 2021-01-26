@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useHistory, useRouteMatch } from "react-router-dom"
 import { useAuthContext } from "../../../controllers/authContext"
 import { setCookie } from "../../../contexts/cookieHandler"
 import { setIsFirstLogin, getIsFirstlogin } from "../../../../constant"
 import { client } from "../../../../axiosConfig"
-import { AxiosResponse } from "axios"
+import axios, { AxiosResponse } from "axios"
+
 import { useTranslation } from "react-i18next"
 import { ErrorOption } from "react-hook-form"
 import { LoginDTO } from "../../pages/staff-pages/staffHooks"
@@ -18,14 +19,17 @@ interface UserResponse {
   jwt: string
 }
 
+const useMemorizedLangauge = () => {
+  const { changeLanguage } = useLanguge()
+  return useCallback(changeLanguage, [])
+}
 export const useLogin = (setError: (name: string, error: ErrorOption) => void) => {
   const { setToken } = useAuthContext()
-  const isMounted = useRef(true)
   const history = useHistory()
   const { path } = useRouteMatch()
   const [isLoading, setLoading] = useState(false)
   const { i18n, t } = useTranslation()
-  const { changeLanguage } = useLanguge()
+  const changeLanguage = useMemorizedLangauge()
 
   const onLogin = (data: LoginDTO) => {
     setLoading(true)
@@ -55,39 +59,48 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
         })
       })
   }
-
   useEffect(() => {
-    if (history.location.search && isMounted.current) {
+    if (history.location.search) {
+      let isMounted = true
+      const source = axios.CancelToken.source()
       const params = history.location.search
       const ticket = params.slice(params.indexOf("=") + 1)
       setLoading(true)
       client
-        .post<UserResponse>(`/users/validation`, {
-          appticket: ticket,
-        })
+        .post<UserResponse>(
+          `/users/validation`,
+          {
+            appticket: ticket,
+          },
+          { cancelToken: source.token }
+        )
         .then((res: AxiosResponse<UserResponse>) => {
-          setLoading(false)
-          setCookie("token", res.data.token, 1)
-          setToken(res.data.token)
-          const first_time_login = res.data.is_first_login
-          setIsFirstLogin(first_time_login)
-          if (res.data.is_first_login) history.push(`${path}/personal`)
-          else history.push("/home")
-          if (res.data.is_thai_language) changeLanguage("th")
-          else changeLanguage("en")
+          if (isMounted) {
+            setLoading(false)
+            setCookie("token", res.data.token, 1)
+            setToken(res.data.token)
+            const first_time_login = res.data.is_first_login
+            setIsFirstLogin(first_time_login)
+            if (res.data.is_first_login) history.push(`${path}/personal`)
+            else history.push("/home")
+            if (res.data.is_thai_language) changeLanguage("th")
+            else changeLanguage("en")
+          }
         })
         .catch((err) => {
+          if (axios.isCancel(err)) console.log("cancelled")
           setLoading(false)
-          setError("invalid", {
+          setError("badResponse", {
             type: "async",
-            message: t("badResponse"),
+            message: "badResponse",
           })
         })
+      return () => {
+        isMounted = false
+        source.cancel()
+      }
     }
-    return () => {
-      isMounted.current = false
-    }
-  }, [i18n, history, path, setError, setToken, t, changeLanguage])
+  }, [i18n, history, path, setError, setToken, changeLanguage])
 
   return { isLoading, onLogin }
 }
