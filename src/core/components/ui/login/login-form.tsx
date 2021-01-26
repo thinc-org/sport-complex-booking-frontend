@@ -32,7 +32,8 @@ const LoginForm = () => {
               <Form.Control type="password" placeholder="Password" name="password" ref={register({ required: true })} onChange={handleBackendError} />
               <Form.Text>{errors.password && t("fieldIsRequired")}</Form.Text>
             </Form.Group>
-            <Form.Text>{errors.invalidInput && errors.invalidInput.message}</Form.Text>
+            <Form.Text>{errors.invalidInput && t(errors.invalidInput.message)}</Form.Text>
+            <Form.Text>{errors.badResponse && t(errors.badResponse.message)}</Form.Text>
           </div>
           <div className="d-flex flex-column align-items-center button-group mb-4">
             <Button variant="pink" type="submit">
