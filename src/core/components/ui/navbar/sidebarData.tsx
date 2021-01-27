@@ -21,8 +21,8 @@ export const data = [
   },
   {
     icon: "",
-    name: "reserveNow",
-    path: "/reservenow",
+    name: "createWaitingRoom",
+    path: "/createwaitingroom",
   },
   {
     icon: "",

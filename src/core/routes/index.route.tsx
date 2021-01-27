@@ -8,7 +8,6 @@ import StaffRoute from "./staff-page.route"
 import Sidebar from "../components/ui/navbar/navbar"
 import StaffNavbar from "../components/ui/navbar/staff-navbar"
 import AccountPage from "../components/pages/AccountPages/AccountPage"
-import ReserveNow from "../components/pages/Reservation/ReserveNow"
 import JoinWaitingRoom from "../components/pages/Reservation/JoinWaitingRoom"
 import CreateWaitingRoom from "../components/pages/Reservation/CreateWaitingRoom"
 import HomePage from "../components/pages/HomePage"
@@ -37,7 +36,7 @@ export default function MainRoute() {
           }}
         />
 
-        <Route exact path="/reservenow" component={ReserveNow} />
+        <Route exact path="/reservenow" component={CreateWaitingRoom} />
 
         <Route exact path="/joinwaitingroom" component={JoinWaitingRoom} />
 
