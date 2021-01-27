@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import { useHistory, useRouteMatch } from "react-router-dom"
 import { useAuthContext } from "../../../controllers/authContext"
 import { setCookie } from "../../../contexts/cookieHandler"
@@ -19,17 +19,13 @@ interface UserResponse {
   jwt: string
 }
 
-const useMemorizedLangauge = () => {
-  const { changeLanguage } = useLanguge()
-  return useCallback(changeLanguage, [])
-}
 export const useLogin = (setError: (name: string, error: ErrorOption) => void) => {
   const { setToken } = useAuthContext()
   const history = useHistory()
   const { path } = useRouteMatch()
   const [isLoading, setLoading] = useState(false)
   const { i18n, t } = useTranslation()
-  const changeLanguage = useMemorizedLangauge()
+  const { changeLanguage } = useLanguge()
 
   const onLogin = (data: LoginDTO) => {
     setLoading(true)

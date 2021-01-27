@@ -1,4 +1,5 @@
 import i18n from "i18next"
+import { useCallback } from "react"
 import LanguageDetector from "i18next-browser-languagedetector"
 import { initReactI18next, useTranslation } from "react-i18next"
 import en from "../../locales/en/translation.json"
@@ -32,12 +33,15 @@ export const useLanguge = () => {
   const { i18n } = useTranslation()
   const language = i18n.language as Language
 
-  const changeLanguage = (lang: Language) => {
-    i18n.changeLanguage(lang)
-    client.put("users/changeLanguage", { is_thai_language: lang === "th" }).catch((err) => {
-      console.log(err.response.message)
-    })
-  }
+  const changeLanguage = useCallback(
+    (lang: Language) => {
+      i18n.changeLanguage(lang)
+      client.put("users/changeLanguage", { is_thai_language: lang === "th" }).catch((err) => {
+        console.log(err.response.message)
+      })
+    },
+    [i18n]
+  )
 
   return { language, changeLanguage }
 }
