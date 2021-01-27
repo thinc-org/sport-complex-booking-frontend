@@ -83,7 +83,6 @@ function CreateWaitingRoom() {
     client
       .get<Sport[]>("/court-manager/sports")
       .then(({ data }) => {
-        console.log(data)
         setSport(data)
       })
       .catch((error) => {
@@ -103,7 +102,6 @@ function CreateWaitingRoom() {
       date: year + "-" + month + "-" + day,
     }
     if (selectedSportID === "") return null
-    console.log(data)
     client
       .post<number>("/reservation/checkquota", data)
       .then(({ data }) => {
@@ -156,7 +154,6 @@ function CreateWaitingRoom() {
       court_number: Number(data.court_number),
       time_slot: formattedTimeSlot.slice(1),
     }
-    console.log(newData)
     client
       .post<CreateResponse>("/reservation/createwaitingroom", newData)
       .then(() => {
@@ -223,11 +220,9 @@ function CreateWaitingRoom() {
   return (
     <div className="unselectable">
       <NavHeader header={t("createWaitingRoom")} />
-      <div className="mx-4">
+      <div className="mx-auto col-md-6">
         <CheckValidityErrorMsg show={showValidityWarningMessage} reason={warningMessage} type={errorType} />
         <CreateWaitingRoomErrorMsg show={showCreateWarningMessage && !showValidityWarningMessage} reason={warningMessage} type={errorType} />
-      </div>
-      <div className="mx-auto col-md-6">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="default-mobile-wrapper mt-4 animated-card">
             <label className="form-label my-3">{t("sportSelection")}</label>
@@ -240,7 +235,7 @@ function CreateWaitingRoom() {
               {!clickedNext &&
                 sport.map((item, i) => (
                   <div key={i}>
-                    <label className={item._id === currentSportId ? "box-container-alt" : "box-container"}>
+                    <label className={item._id === currentSportId ? "box-container-alt mt-0" : "box-container mt-0"}>
                       <input
                         key={i}
                         name="sport_id"
@@ -362,7 +357,9 @@ function CreateWaitingRoom() {
                     <hr />
                     <label className="form-label mt-2 mb-3">{t("timeSlotSelection")}</label>
                     {selectTimeWarning ? <p className="alert-warning p-2">{t("pleaseSelectTime")}</p> : null}
-                    {showTimeSlotError ? <p className="alert-warning p-2">{t("timeSlotErrorMsg")}</p> : null}
+                    {showTimeSlotError && !(getValues("time_slot").length === 0) ? (
+                      <p className="alert-warning p-2">{t("timeSlotErrorMsg")}</p>
+                    ) : null}
                     <div className={showTime ? "d-md-flex time-slot-container" : "d-md-flex time-slot-container-hidden"}>
                       <Row className="mx-1">
                         {time.map((item, i) => (
@@ -396,7 +393,7 @@ function CreateWaitingRoom() {
               <Button
                 type="submit"
                 variant="pink"
-                disabled={invalidAccount || showDateWarning || showTimeSlotError || showCourt || !showTime}
+                disabled={invalidAccount || showDateWarning || showTimeSlotError || !showCourt || !showTime || getValues("time_slot")?.length === 0}
                 onClick={() => {
                   setShow(true)
                 }}

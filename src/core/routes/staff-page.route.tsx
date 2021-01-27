@@ -47,7 +47,6 @@ const StaffRoute = () => {
     client
       .get("staffs/profile")
       .then((res) => {
-        console.log(res.data)
         console.log(res.data.is_admin)
         if (res.data.is_admin) setType("admin")
         else setType("staff")
