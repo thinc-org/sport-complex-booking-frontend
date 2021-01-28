@@ -77,7 +77,7 @@ function AccountPage() {
     const { t } = useTranslation()
     if (!show) return null
     return (
-      <div className="mx-4">
+      <div className="mx-3">
         <div className="alert alert-danger mx-auto col-md-6 mt-3" role="alert">
           <h3>{t("youArePenalized")}</h3>
           <h6>{t("penalizeMessage")}</h6>

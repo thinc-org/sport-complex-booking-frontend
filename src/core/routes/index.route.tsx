@@ -3,7 +3,6 @@ import { Switch } from "react-router-dom"
 import { Route } from "react-router"
 import FrontLoginPage from "../components/pages/front-login"
 import Landing from "../components/pages/LandingComponent"
-
 import StaffRoute from "./staff-page.route"
 import Sidebar from "../components/ui/navbar/navbar"
 import StaffNavbar from "../components/ui/navbar/staff-navbar"
@@ -17,6 +16,7 @@ import Hooray from "../components/pages/Reservation/Hooray"
 import WaitingRoom from "../components/pages/Reservation/WaitingRoom"
 import AboutUs from "../components/pages/AboutUs"
 import FileOpener from "../components/pages/FileOpener"
+import { Register } from "../components/ui/login/register"
 
 export default function MainRoute() {
   return (
@@ -27,14 +27,6 @@ export default function MainRoute() {
         <Route exact path="/" component={Landing} />
 
         <Route path="/login" component={FrontLoginPage} />
-
-        <Route
-          exact
-          path="/register"
-          render={() => {
-            return <div>Under maintenance</div>
-          }}
-        />
 
         <Route exact path="/reservenow" component={CreateWaitingRoom} />
 
@@ -59,6 +51,8 @@ export default function MainRoute() {
         <Route exact path="/aboutus" component={AboutUs} />
 
         <Route exact path={`/openFile/:fileId`} component={FileOpener} />
+
+        <Route exact path={`/register`} component={Register} />
       </Switch>
     </>
   )

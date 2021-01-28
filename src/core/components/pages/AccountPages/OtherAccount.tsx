@@ -21,7 +21,7 @@ export default function OtherAccount() {
           <OtherAaccountDisplay toggleEditButton={toggleEditButton} />
         )
       ) : (
-        <OtherAccountEdit />
+        <OtherAccountEdit isRegister={false} />
       )}
     </div>
   )
