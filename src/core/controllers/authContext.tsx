@@ -6,6 +6,7 @@ interface AuthContextConstruct {
   isUser: boolean
   setToken: (token: string) => void
   isAdmin: boolean
+  setIsAdmin: (isAdmin: boolean) => void
 }
 
 export const AuthContext = React.createContext({} as AuthContextConstruct)
@@ -14,9 +15,9 @@ export const useAuthContext = () => useContext(AuthContext)
 
 const AuthProvider = ({ ...props }) => {
   const [token, setToken] = useState(getCookie("token") ?? "")
+  const [isAdmin, setIsAdmin] = useState(false)
   const isUser = !!(token ? jwt_decode(token) : "")
-  const isAdmin = false // this is currently unused
-  const value = { token, isUser, setToken, isAdmin }
+  const value = { token, isUser, setToken, isAdmin, setIsAdmin }
 
   useEffect(() => {
     const cookieToken = getCookie("token") ?? ""
