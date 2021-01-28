@@ -1,4 +1,19 @@
-function useSidebarData(type: string) {
+import { useEffect } from "react"
+import { useAuthContext } from "../../../controllers/authContext"
+import { client } from "../../../../axiosConfig"
+function useSidebarData() {
+  const { isAdmin, setIsAdmin } = useAuthContext()
+  useEffect(() => {
+    client
+      .get("staffs/profile")
+      .then((res) => {
+        if (res.data.is_admin) setIsAdmin(true)
+        else setIsAdmin(false)
+      })
+      .catch((err) => {
+        setIsAdmin(false)
+      })
+  }, [setIsAdmin])
   const data = [
     {
       icon: "",
@@ -46,9 +61,8 @@ function useSidebarData(type: string) {
       path: "/staff/settings",
     },
   ]
-  // This removes StaffManagement, DisableCourt, and Settings pages from Staff acccount's sidebar
-  if (type === "admin") return data
-  else return data.filter((link) => link !== data[1] && link !== data[6] && link !== data[8])
+  if (isAdmin) return data
+  else return data.filter((link) => link !== data[1])
 }
 
 export default useSidebarData

@@ -6,7 +6,7 @@ import { setCookie } from "../../../contexts/cookieHandler"
 import logo from "../../../assets/images/logo.png"
 
 function StaffNavbar() {
-  const { setToken } = useAuthContext()
+  const { setToken, setIsAdmin } = useAuthContext()
   const location = useLocation()
   const history = useHistory()
   const [hide, setHidden] = useState(false)
@@ -17,6 +17,7 @@ function StaffNavbar() {
   }, [location])
   const onLogout = async () => {
     setToken("")
+    setIsAdmin(false)
     setCookie("token", "", 0)
     history.replace("/staff")
   }

@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React from "react"
 import { Route, Switch, useRouteMatch, useLocation } from "react-router-dom"
 
+import WithAdminGuard from "../guards/admin.guard"
 import StaffLogin from "../components/pages/staff-pages/staff-login"
 import StaffSidebar from "../components/ui/navbar/staff-sidebar"
 import StaffProfile from "../components/pages/staff-pages/staff-profile"
@@ -19,7 +20,6 @@ import Settings from "../components/pages/staff-pages/settings/Settings"
 
 import AllReservation from "../components/pages/staff-pages/all-reservation-pages/ReservationList"
 import ReservationDetail from "../components/pages/staff-pages/all-reservation-pages/ReservationDetail"
-import { client } from "../../axiosConfig"
 
 const StaffRoute = () => {
   const { path } = useRouteMatch()
@@ -40,26 +40,6 @@ const StaffRoute = () => {
     ["/allReservation/waiting", "ห้องรอการจองทั้งหมด"],
     ["/reservationDetail`", ""],
   ])
-
-  const [type, setType] = useState("staff")
-
-  const fetchType = useCallback(() => {
-    client
-      .get("staffs/profile")
-      .then((res) => {
-        console.log(res.data.is_admin)
-        if (res.data.is_admin) setType("admin")
-        else setType("staff")
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [])
-
-  useEffect(() => {
-    fetchType()
-  }, [fetchType])
-
   const StaffRouteWithHeader = () => {
     return (
       <div className="staff background d-block" style={{ backgroundColor: "white", minHeight: "80vh" }}>
@@ -71,7 +51,7 @@ const StaffRoute = () => {
             >
               <div className="row justify-content-center" style={{ minHeight: "80vh" }}>
                 <div className="col-3 justify-content-center" style={{ maxHeight: "800px" }}>
-                  <StaffSidebar type={type} />
+                  <StaffSidebar />
                 </div>
                 <div className="col-9 mt-5" style={{ minHeight: "600px" }}>
                   <h1>
@@ -88,7 +68,7 @@ const StaffRoute = () => {
                   </h1>
                   <Switch>
                     <Route path={`${path}/staffProfile`} component={StaffProfile} />
-                    <Route path={`${path}/disableCourt`} component={DisableCourt} />
+                    <Route path={`${path}/disableCourt`} component={WithAdminGuard(DisableCourt)} />
                     <Route exact path={`${path}/listOfAllUsers`} component={ListOfAllUsers} />
                     <Route exact path={`${path}/addUser`} component={AddUser} />
                     <Route exact path={`${path}/userInfo/other/:_id`} component={UserInfo} />
@@ -97,8 +77,8 @@ const StaffRoute = () => {
                     <Route exact path={`${path}/verifyInfo/:_id`} component={VerifyInfo} />
                     <Route exact path={`${path}/qrcodescanner`} component={QRScannerPage} />
                     <Route exact path={`${path}/profile`} component={StaffProfile} />
-                    <Route exact path={`${path}/management`} component={StaffManagement} />
-                    <Route exact path={`${path}/settings`} component={Settings} />
+                    <Route exact path={`${path}/management`} component={WithAdminGuard(StaffManagement)} />
+                    <Route exact path={`${path}/settings`} component={WithAdminGuard(Settings)} />
                     <Route exact path={`${path}/allReservation/:pagename`} component={AllReservation} />
                     <Route exact path={`${path}/reservationDetail/:pagename/:_id`} component={ReservationDetail} />
                   </Switch>

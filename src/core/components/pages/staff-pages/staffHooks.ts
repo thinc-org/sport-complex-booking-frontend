@@ -9,6 +9,7 @@ interface StaffResponse {
   jwt: string
   message: string
   statusCode: string
+  is_admin: boolean
 }
 
 export interface LoginDTO {

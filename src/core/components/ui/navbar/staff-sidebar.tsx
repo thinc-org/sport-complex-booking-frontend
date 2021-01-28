@@ -2,12 +2,8 @@ import React from "react"
 import { Link } from "react-router-dom"
 import useSidebarData from "./staff-sidebarData"
 
-interface StaffSidebarProps {
-  type: string
-}
-
-const StaffSidebar: React.FC<StaffSidebarProps> = ({ type }) => {
-  const data = useSidebarData(type)
+const StaffSidebar: React.FC = () => {
+  const data = useSidebarData()
 
   const listItems = data.map((item, index) => (
     <li key={index} className="navbar-toggle menu">
