@@ -1,13 +1,15 @@
 import React from "react"
-import { Form, Button } from "react-bootstrap"
+import { Form, Button, Row } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import { useLogin } from "./loginHooks"
 import { useTranslation } from "react-i18next"
+import { useHistory } from "react-router"
 
 const LoginForm = () => {
   const { t } = useTranslation()
   const { register, handleSubmit, setError, errors, clearErrors } = useForm()
   const { isLoading, onLogin } = useLogin(setError)
+  const history = useHistory()
   const SSOLogin = () => {
     window.location.href = `https://account.it.chula.ac.th/html/login.html?service=${process.env.REACT_APP_URL}/login`
   }
@@ -39,10 +41,23 @@ const LoginForm = () => {
             <Button variant="pink" type="submit">
               {t("signIn")}
             </Button>
-            <Button variant="darkpink" onClick={SSOLogin}>
+            <Button variant="darkpink" onClick={SSOLogin} className="mb-0">
               {t("signInAsCu")}
             </Button>
           </div>
+          <hr className="mx-2" />
+          <Row className="button-group justify-content-center">
+            {t("noAccount")}
+            <span
+              role="button"
+              onClick={() => {
+                history.push("/register")
+              }}
+              className="ml-2 text-secondary"
+            >
+              <span style={{ color: "#c94f7c" }}>{t("register")}</span>
+            </span>
+          </Row>
         </div>
       </Form>
       <div style={{ display: isLoading ? "block" : "none" }}>

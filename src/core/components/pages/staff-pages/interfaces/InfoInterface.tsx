@@ -197,3 +197,16 @@ export interface AlertAddUser {
   showAlertUsername: boolean
   showAlertPassword: boolean
 }
+
+// Registration //
+export interface RegistrationInfo {
+  membership_type: string
+  username: string
+  password: string
+  repeat_password?: string
+}
+
+export interface RegistrationProps {
+  registrationInfo?: RegistrationInfo
+  isRegister: boolean
+}

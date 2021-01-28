@@ -243,7 +243,6 @@ function CreateWaitingRoom() {
                         ref={register}
                         className="mt-2 sport-radio-element"
                         onClick={() => {
-                          setShowCourt(false)
                           setShowTime(false)
                           setValue("court_number", "")
                           setValue("time_slot", [])
@@ -291,7 +290,7 @@ function CreateWaitingRoom() {
                     onChange={(date: Date) => {
                       const fixedDate = new Date(date.setHours(0, 0, 0, 0))
                       setDate(fixedDate)
-                      setShowCourt(false)
+
                       setShowTime(false)
                       setValue("court_number", "")
                       setValue("sport_id", "")

@@ -101,7 +101,7 @@ export interface WarningMessageProps {
 
 interface WarningAlertProps {
   title: string
-  message: string
+  message?: string
   category: string
 }
 
@@ -131,7 +131,7 @@ export const WarningMessage: React.FC<WarningMessageProps> = ({ show, verificati
       return <WarningAlert title={t("submittedTitle")} message={t("submittedMessage")} category="info" />
     }
     case "Verified": {
-      return <WarningAlert title={t("approvedTitle")} message={t("approvedMessage")} category="success" />
+      return <WarningAlert title={t("approvedTitle")} category="success" />
     }
     default: {
       return null
