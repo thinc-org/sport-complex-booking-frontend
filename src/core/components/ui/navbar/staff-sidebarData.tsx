@@ -62,7 +62,12 @@ function useSidebarData() {
     },
   ]
   if (isAdmin) return data
-  else return data.filter((link) => link !== data[1])
+  else
+    return data.filter((link) => {
+      const name = link.name
+      if (name === "การตั้งค่า" || name === "การปิดคอร์ด" || name === "จัดการสตาฟ") return false
+      else return true
+    })
 }
 
 export default useSidebarData
