@@ -1,29 +1,10 @@
 import React from "react"
+
 import { Modal, Button, Form } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import { getTimeArr, dayArr } from "./mapTime"
-import { CourtTable, ErrorRow } from "./disabled-court-table"
-import { ModalProps, FormModalProps, TimeSlotRow, ErrorRowProps } from "../../../../dto/disableCourt.dto"
-export const ErrorAlert = ({ inProp, header, message, handleClose, canCancel = false, onCancel, overlapData }: ModalProps) => {
-  const data: ErrorRowProps[] = []
-  if (overlapData) {
-    overlapData.reservation?.forEach((element, indx) => {
-      data.push({
-        indx: indx,
-        date: element.date,
-        phone: element.list_member[0].phone,
-        time_slot: element.time_slot,
-      })
-    })
-    overlapData.waitingRoom?.forEach((element, indx) => {
-      data.push({
-        indx: indx,
-        date: element.date,
-        phone: element.list_member[0].phone,
-        time_slot: element.time_slot,
-      })
-    })
-  }
+import { ModalProps, FormModalProps, TimeSlotRow } from "../../../../dto/disableCourt.dto"
+export const ErrorAlert = ({ inProp, header, message, handleClose, canCancel = false, onCancel, children }: ModalProps) => {
   return (
     <>
       <Modal show={inProp} onHide={onCancel ?? handleClose}>
@@ -32,15 +13,7 @@ export const ErrorAlert = ({ inProp, header, message, handleClose, canCancel = f
         </Modal.Header>
         <Modal.Body>
           <div>{message}</div>
-          {overlapData && (
-            <div>
-              {CourtTable<ErrorRowProps>({
-                data: data,
-                header: ["index", "เบอร์ติดต่อ", "วันที่ทับซ้อน", "เวลาที่ทับซ้อน"],
-                Row: ErrorRow,
-              })}
-            </div>
-          )}
+          {children}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="mediumPink" onClick={handleClose}>

@@ -2,8 +2,9 @@ import { ReservationResponse } from "./reservation.dto"
 import { Sport } from "./sport.dto"
 import { WaitingRoomResponse } from "./waitingRoom.dto"
 export interface DeleteButtonProps {
-  onClick?: (indx: number | string) => void
+  onClick?: (indx: number | string, type: string) => void
   indx: number | string
+  type: string
 }
 
 export interface RowProps {
@@ -57,7 +58,7 @@ export interface ViewResponse extends View {
 }
 
 export interface TableProps<T> {
-  data?: (T & { _id?: number | string })[]
+  data?: (T & { _id?: number | string; type?: string })[]
   header: string[]
   Row: React.FC<
     T & {
@@ -65,7 +66,7 @@ export interface TableProps<T> {
       button?: JSX.Element
     }
   >
-  Button?: React.FC<DeleteButtonProps & { indx: number | string }>
+  Button?: React.FC<DeleteButtonProps & { indx: number | string; type: string }>
 }
 export interface AddCourtForm {
   court_num: string
@@ -77,16 +78,19 @@ export interface OverlapData {
 }
 
 export interface ErrorRowProps {
+  type: string
+  _id: string
   indx: number
   phone: string
   date: Date
   time_slot: number[]
+  button?: JSX.Element
 }
 export interface ModalProps {
   inProp: boolean
   header: string
   message: string
-  overlapData?: OverlapData
+  children?: JSX.Element
   handleClose: (event: React.MouseEvent) => void
   canCancel?: boolean
   onCancel?: (event: React.MouseEvent) => void

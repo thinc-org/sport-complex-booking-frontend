@@ -7,7 +7,7 @@ import { ErrorAlert, FormAlert } from "./modals"
 import DatePicker from "react-datepicker"
 import { format } from "date-fns"
 import { ViewRowProps, AddCourtForm } from "../../../../dto/disableCourt.dto"
-import { CourtTable, ViewRow } from "./disabled-court-table"
+import { CourtTable, ViewRow, OverlapDataTable } from "./disabled-court-table"
 import { client } from "../../../../../axiosConfig"
 import { DeleteButton } from "./button"
 import { Court } from "../../../../dto/sport.dto"
@@ -57,7 +57,7 @@ const AddCourt = () => {
         handleClose={() => setOverlapData(undefined)}
         header="การปิดคอร์ดชนกับการจอง"
         message="พบการปิดคอร์ดชนกับการจองดังนี้"
-        overlapData={overlapData}
+        children={OverlapDataTable(overlapData)}
       />
       <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} validate={validateTimeSlot} />
       <ErrorAlert inProp={show} handleClose={handleAlert} header={"วันที่ไม่ถูกต้อง"} message={"วันที่ไม่ถูกต้อง"} />

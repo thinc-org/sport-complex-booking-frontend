@@ -1,9 +1,10 @@
 import React from "react"
 import { useViewTable, useEditCourt, withDeletable } from "./disable-court-hook"
 import { useParams, useHistory } from "react-router-dom"
-import { ViewRow, CourtTable } from "./disabled-court-table"
+import { ViewRow, CourtTable , OverlapDataTable } from "./disabled-court-table"
 import { ViewRowProps } from "../../../../dto/disableCourt.dto"
 import { DeleteButton } from "./button"
+
 
 import { format } from "date-fns"
 import subDays from "date-fns/subDays"
@@ -41,6 +42,7 @@ const ViewCourt = () => {
     e.preventDefault()
     e.stopPropagation()
   }
+
   const onSubmit = () => {
     const formData = {
       sport_id: viewData?.sport_id._id,
@@ -71,7 +73,7 @@ const ViewCourt = () => {
         handleClose={() => setOverlapData(undefined)}
         header="การปิดคอร์ดชนกับการจอง"
         message="พบการปิดคอร์ดชนกับการจองดังนี้"
-        overlapData={overlapData}
+        children={OverlapDataTable(overlapData)}
       />
       <ErrorAlert inProp={show} handleClose={handleAlert} header={"วันที่ไม่ถูกต้อง"} message={"วันที่ไม่ถูกต้อง"} />
       <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} validate={validateTimeSlot} />
