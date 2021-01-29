@@ -4,7 +4,8 @@ import { WaitingRoomResponse } from "./waitingRoom.dto"
 export interface DeleteButtonProps {
   onClick?: (indx: number | string, type: string) => void
   indx: number | string
-  type: string
+  type?: string
+  phone?: string
 }
 
 export interface RowProps {
@@ -66,7 +67,7 @@ export interface TableProps<T> {
       button?: JSX.Element
     }
   >
-  Button?: React.FC<DeleteButtonProps & { indx: number | string; type: string }>
+  Button?: React.FC<DeleteButtonProps & { indx: number | string }>
 }
 export interface AddCourtForm {
   court_num: string

@@ -1,10 +1,11 @@
-import React from "react"
+import React, { useState } from "react"
 import { useRouteMatch, useHistory } from "react-router-dom"
 import { Button, Table } from "react-bootstrap"
 import { format } from "date-fns"
 import subDays from "date-fns/subDays"
+import { client } from "../../../../../axiosConfig"
 import { getMinute, getTime, dayArr } from "./mapTime"
-import { useDisplayOverlapData, withDeletable } from "./disable-court-hook"
+import { useDisplayOverlapData } from "./disable-court-hook"
 import { DeleteButton } from "./button"
 import { RowProps, TableProps, ViewRowProps, ErrorRowProps, OverlapData } from "../../../../dto/disableCourt.dto"
 
@@ -16,7 +17,7 @@ export const CourtRow = ({ _id, starting_date, expired_date, court_num, sport_id
   const expiredDate = subDays(new Date(expired_date), 1)
   return (
     <>
-      {_id && court_num ? (
+      {_id && (court_num || court_num === 0) ? (
         <tr>
           <td>{court_num}</td>
           <td>{sport_id.sport_name_th}</td>
@@ -53,19 +54,36 @@ export const ViewRow = ({ time_slot, indx, day, button }: ViewRowProps) => {
   )
 }
 
-export const ErrorRow = ({ date, phone, indx, time_slot, button }: ErrorRowProps) => {
+export const ErrorRow = ({ date, phone, indx, time_slot, button, _id, type }: ErrorRowProps) => {
+  const [hidden, setHidden] = useState(false)
+  const onDelete = (id: number | string, type = "") => {
+    const path = type === "reservation" ? "all-reservation" : "all-waiting-room"
+    client
+      .delete(`${path}/${id}`)
+      .then((res) => {
+        console.log(res)
+        setHidden(true)
+      })
+      .catch((err) => console.log(err))
+  }
   const time = getMinute(time_slot)
   const overlapDate = format(new Date(date), "dd/MM/yyyy")
   return (
-    <tr>
-      <td>{indx + 1}</td>
-      <td>{phone}</td>
-      <td>{overlapDate}</td>
-      <td className={button ? "d-flex flex-row justify-content-end align-items-center" : ""}>
-        {`${getTime(time.startTime)}-${getTime(time.endTime)}`}
-        {button}
-      </td>
-    </tr>
+    <>
+      {!hidden && (
+        <tr>
+          <td>{indx + 1}</td>
+          <td>{phone}</td>
+          <td>{overlapDate}</td>
+          <td className={button ? "d-flex flex-row justify-content-end align-items-center" : ""}>
+            <span className="mr-2 d-inline-flex flex-row justify-content-center align-items-center">
+              {`${getTime(time.startTime)}-${getTime(time.endTime)}`}
+            </span>
+            <DeleteButton onClick={onDelete} indx={_id} type={type} phone={phone} />
+          </td>
+        </tr>
+      )}
+    </>
   )
 }
 
@@ -81,26 +99,20 @@ export function CourtTable<T>({ data, header, Row, Button }: TableProps<T>) {
       </thead>
       <tbody>
         {data?.map((val, index) => (
-          <Row
-            {...val}
-            indx={index}
-            key={val._id || index}
-            button={Button ? <Button indx={val._id ?? index} type={val.type ?? "none"} /> : undefined}
-          />
+          <Row {...val} indx={index} key={val._id || index} button={Button ? <Button indx={val._id ?? index} /> : undefined} />
         ))}
       </tbody>
     </Table>
   )
 }
 export const OverlapDataTable = (overlapData: OverlapData | undefined) => {
-  const { data, onDeleteOverlapData } = useDisplayOverlapData(overlapData)
+  const { data } = useDisplayOverlapData(overlapData)
   return (
     <div>
       {CourtTable<ErrorRowProps>({
         data: data,
         header: ["index", "เบอร์ติดต่อ", "วันที่ทับซ้อน", "เวลาที่ทับซ้อน"],
         Row: ErrorRow,
-        Button: withDeletable(DeleteButton, onDeleteOverlapData),
       })}
     </div>
   )

@@ -236,21 +236,6 @@ export const useTableWithPagination = () => {
 }
 export const useDisplayOverlapData = (overlapData: OverlapData | undefined) => {
   const [data, setData] = useState<ErrorRowProps[]>([])
-  const onDeleteOverlapData = (id: string | number, type: string) => {
-    const path = type === "reservation" ? "all-reservation" : "all-waiting-room"
-    client
-      .delete(`${path}/${id}`)
-      .then((res) => {
-        console.log(res)
-        setData((prev) => {
-          const found = data.findIndex((item) => item._id === id)
-          const arr = [...prev]
-          arr.splice(found, 1)
-          return arr
-        })
-      })
-      .catch((err) => console.log(err))
-  }
   useEffect(() => {
     if (overlapData) {
       console.log(overlapData)
@@ -280,7 +265,7 @@ export const useDisplayOverlapData = (overlapData: OverlapData | undefined) => {
       })
     }
   }, [overlapData])
-  return { data, onDeleteOverlapData }
+  return { data }
 }
 
 export const seed = () => {
@@ -323,7 +308,7 @@ export const seed = () => {
   })
 }
 
-export function withDeletable<P>(Component: ComponentType<P>, F: (indx: number | string, type: string) => void): React.FC<P> {
+export function withDeletable<P>(Component: ComponentType<P>, F: (indx: number | string) => void): React.FC<P> {
   return function WithDeletable(props: P) {
     return <Component {...props} onClick={F} />
   }
