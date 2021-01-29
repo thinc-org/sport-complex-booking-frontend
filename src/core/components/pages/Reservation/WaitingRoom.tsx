@@ -130,7 +130,7 @@ const WaitingRoomPage = () => {
                   <h6 style={{ fontSize: "16px", fontWeight: 400, lineHeight: "24px" }}> {t("howWaitingRoomWork?")} </h6>
                   <h6 style={{ fontSize: "12px", fontWeight: 300, lineHeight: "14px" }}> {t("howWaitingRoomWork")} </h6>
                 </div>
-                <div className="box-container btn w-100 mb-4">
+                <div className="box-container w-100 mb-4">
                   <h6 style={{ fontWeight: 700, fontSize: "14px", marginBottom: "5px" }}> {t("summary")} </h6>
                   <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}> {sport && sport[sportLanguage]} </h6>
                   <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}>
@@ -143,13 +143,13 @@ const WaitingRoomPage = () => {
                     })}
                   </h6>
                 </div>
-                <div className="box-container btn w-100 mb-3">
+                <div className="box-container w-100 mb-3">
                   <h6 style={{ fontWeight: 300, fontSize: "12px", lineHeight: "17px", marginBottom: "20px" }}> {t("remainingTime")}: </h6>
                   <h6 style={{ fontWeight: 700, fontSize: "36px", lineHeight: "17px", textAlign: "center", marginBottom: "10px" }}>
                     <Countdown date={endTime} renderer={renderer} />
                   </h6>
                 </div>
-                <div className="box-container btn w-100 mb-5">
+                <div className="box-container w-100 mb-5">
                   <h6 style={{ fontWeight: 300, fontSize: "12px", lineHeight: "17px", marginBottom: "20px" }}> {t("waitingRoomAccessCode")}: </h6>
                   <h6 style={{ fontWeight: 700, fontSize: "36px", lineHeight: "17px", textAlign: "center", marginBottom: "10px" }}> {accessCode} </h6>
                 </div>
@@ -166,7 +166,7 @@ const WaitingRoomPage = () => {
                     {t("users")} {userNumber()}
                   </div>
                 </div>
-                <div className="box-container btn" style={{ width: "100%", marginBottom: "45px" }}>
+                <div className="box-container" style={{ width: "100%", marginBottom: "45px" }}>
                   <table>
                     <thead>
                       <tr style={{ fontSize: "16px", fontWeight: 700, lineHeight: "24px", borderBottom: "1px solid #ddd" }}>
