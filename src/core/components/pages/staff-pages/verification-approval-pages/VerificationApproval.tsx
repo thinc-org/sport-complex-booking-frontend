@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
-import { Table, Form, Col, Button, Modal } from "react-bootstrap"
+import { Table, Form, Row, Col, Button, Modal } from "react-bootstrap"
 import { useHistory } from "react-router-dom"
 import { client } from "../../../../../axiosConfig"
 import { AxiosResponse } from "axios"
@@ -18,6 +18,7 @@ const VeritificationApproval: FunctionComponent = () => {
   const [maxUserPerPage] = useState<number>(10) // > 1
   const [maxUser, setMaxUser] = useState<number>(1)
   const [searchName, setSearchName] = useState<string>("")
+  const [searchType, setSearchType] = useState<string>("ทั้งหมด")
   const [showNoUser, setShowNoUser] = useState<boolean>(false)
   const [users, setUsers] = useState<VerifyInfoRes[]>([])
   const history = useHistory()
@@ -29,7 +30,7 @@ const VeritificationApproval: FunctionComponent = () => {
       start: (pageNo - 1) * maxUserPerPage,
       end: pageNo * maxUserPerPage,
     }
-    if (searchName !== "") params["name"] = searchName
+    if (searchName !== "") params.name = searchName
     client({
       method: "GET",
       url: "/approval",
@@ -42,7 +43,7 @@ const VeritificationApproval: FunctionComponent = () => {
       .catch(({ response }) => {
         if (response && response.data.statusCode === 401) history.push("/staff")
       })
-  }, [history, maxUserPerPage, pageNo, searchName])
+  }, [history, maxUserPerPage, pageNo, searchName, searchType])
 
   /// useEffects ///
   useEffect(() => {
@@ -55,6 +56,12 @@ const VeritificationApproval: FunctionComponent = () => {
     e.preventDefault()
     if (pageNo !== 1) setPageNo(1)
     else requestUsers()
+  }
+
+  const handleSearchType = (e: React.MouseEvent<HTMLElement>) => {
+    const target = e.target as HTMLElement
+    const type = target.id
+    if (searchType !== type) setSearchType(type)
   }
 
   const handleInfo = (e: React.MouseEvent<HTMLElement>) => {
@@ -79,34 +86,85 @@ const VeritificationApproval: FunctionComponent = () => {
   }
 
   // renders //
-  const renderNoUserModal = () => {
-    return (
-      <Modal
-        show={showNoUser}
-        onHide={() => {
-          setShowNoUser(false)
-        }}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>เกิดข้อผิดพลาด</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ fontWeight: "lighter" }}>ไม่พบข้อมูลของผู้ใช้คนนี้</Modal.Body>
-        <Modal.Footer>
+  const renderTopSection = (
+    <Form onSubmit={handleSearch} className="mb-2">
+      <Form.Row className="justify-content-end align-items-center">
+        <Col md="auto">
           <Button
-            variant="pink"
-            className="btn-normal"
-            onClick={() => {
-              setShowNoUser(false)
-            }}
+            id="ทั้งหมด"
+            variant={searchType === "ทั้งหมด" ? "pink" : "light"}
+            className={searchType === "ทั้งหมด" ? "btn-normal mr-2" : "btn-normal btn-outline-black mr-2 border"}
+            onClick={handleSearchType}
           >
-            ตกลง
+            ทั้งหมด
           </Button>
-        </Modal.Footer>
-      </Modal>
-    )
-  }
+          <Button
+            id="ผู้สมัครใหม่"
+            variant={searchType === "ผู้สมัครใหม่" ? "pink" : "light"}
+            className={searchType === "ผู้สมัครใหม่" ? "btn-normal mr-2" : "btn-normal btn-outline-black mr-2 border"}
+            onClick={handleSearchType}
+          >
+            ผู้สมัครใหม่
+          </Button>
+          <Button
+            id="การต่ออายุสมาชิก"
+            variant={searchType === "การต่ออายุสมาชิก" ? "pink" : "light"}
+            className={searchType === "การต่ออายุสมาชิก" ? "btn-normal mr-4" : "btn-normal btn-outline-black mr-4 border"}
+            onClick={handleSearchType}
+          >
+            การต่ออายุสมาชิก
+          </Button>
+        </Col>
+        <Col md="auto">
+          <Form.Label className="mb-0 font-weight-bold"> ค้นหา </Form.Label>
+        </Col>
+        <Col>
+          <Form.Control
+            className="border"
+            style={{ backgroundColor: "white" }}
+            type="text"
+            id="searchName"
+            placeholder=" ค้นหาชื่อ "
+            onChange={(e) => {
+              setSearchName(e.target.value)
+            }}
+          />
+        </Col>
+        <Col md="auto">
+          <Button variant="pink" className="py-1 btn-normal" onClick={handleSearch}>
+            ค้นหา
+          </Button>
+        </Col>
+      </Form.Row>
+    </Form>
+  )
+
+  const renderNoUserModal = (
+    <Modal
+      show={showNoUser}
+      onHide={() => {
+        setShowNoUser(false)
+      }}
+      backdrop="static"
+      keyboard={false}
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>เกิดข้อผิดพลาด</Modal.Title>
+      </Modal.Header>
+      <Modal.Body style={{ fontWeight: "lighter" }}>ไม่พบข้อมูลของผู้ใช้คนนี้</Modal.Body>
+      <Modal.Footer>
+        <Button
+          variant="pink"
+          className="btn-normal"
+          onClick={() => {
+            setShowNoUser(false)
+          }}
+        >
+          ตกลง
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  )
 
   const renderUsersTable = () => {
     let id = 1
@@ -129,29 +187,8 @@ const VeritificationApproval: FunctionComponent = () => {
   }
 
   return (
-    <div className="verifyApp" style={{ margin: "20px" }}>
-      <Form onSubmit={handleSearch} className="mb-2">
-        <Form.Row className="justify-content-end align-items-center">
-          <Col md="auto">
-            <Form.Label className="mb-0 font-weight-bold"> ค้นหาชื่อ </Form.Label>
-          </Col>
-          <Col md="5">
-            <Form.Control
-              className="border"
-              style={{ backgroundColor: "white" }}
-              type="text"
-              id="searchName"
-              placeholder=" ค้นหา "
-              onChange={(e) => {
-                setSearchName(e.target.value)
-              }}
-            />
-          </Col>
-          <Button variant="pink" className="py-1 btn-normal" onClick={handleSearch}>
-            ค้นหา
-          </Button>
-        </Form.Row>
-      </Form>
+    <div className="verifyApp my-4 ml-1 mr-3">
+      {renderTopSection}
       <Table className="text-center" responsive size="md">
         <thead className="bg-light">
           <tr className="tr-pink">
@@ -164,7 +201,7 @@ const VeritificationApproval: FunctionComponent = () => {
         </thead>
         <tbody>
           {renderUsersTable()}
-          {renderNoUserModal()}
+          {renderNoUserModal}
         </tbody>
       </Table>
       <div className="text-right">

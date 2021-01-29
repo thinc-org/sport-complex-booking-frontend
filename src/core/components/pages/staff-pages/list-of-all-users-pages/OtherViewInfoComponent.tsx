@@ -4,13 +4,12 @@ import Info from "../interfaces/InfoInterface"
 import format from "date-fns/format"
 import isValid from "date-fns/isValid"
 
-export default function OtherViewInfoComponent({ info }: { info: Info }) {
-  // handles //
-  const handlePDF = (e: React.MouseEvent<HTMLElement>) => {
-    const fileId = (e.target as HTMLElement).id
-    if (fileId) window.open(`/staff/openFile/${fileId}`, "_blank")
-  }
+export const handlePDF = (e: React.MouseEvent<HTMLElement>) => {
+  const fileId = (e.target as HTMLElement).id
+  if (fileId) window.open(`/staff/openFile/${fileId}`, "_blank")
+}
 
+export default function OtherViewInfoComponent({ info }: { info: Info }) {
   /// JSX Begins here
   const {
     prefix,

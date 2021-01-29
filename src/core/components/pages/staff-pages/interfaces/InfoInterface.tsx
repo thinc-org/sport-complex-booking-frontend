@@ -24,6 +24,14 @@ export default interface Info {
   relationship_verification_document: string
 }
 
+export interface VerifyExtendInfo {
+  account_type: string
+  membership_type: string
+  name_th: string
+  surname_th: string
+  payment_evidence: string
+}
+
 export interface EditComponentInfo {
   prefix: string
   name_th: string

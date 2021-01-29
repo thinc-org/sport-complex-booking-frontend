@@ -13,6 +13,7 @@ import UserInfo from "../components/pages/staff-pages/list-of-all-users-pages/Us
 import FileOpener from "../components/pages/FileOpener"
 import VeritificationApproval from "../components/pages/staff-pages/verification-approval-pages/VerificationApproval"
 import VerifyInfo from "../components/pages/staff-pages/verification-approval-pages/VerifyInfo"
+import VerifyExtend from "../components/pages/staff-pages/verification-approval-pages/VerifyExtend"
 import DisableCourt from "../components/pages/staff-pages/disable-court/disable-court.page.main"
 import QRScannerPage from "../components/pages/staff-pages/staff-qrcode"
 import StaffManagement from "../components/pages/staff-pages/staff-management/StaffManagement"
@@ -34,6 +35,7 @@ const StaffRoute = () => {
     ["/userInfo/satit", "ข้อมูลผู้ใช้"],
     ["/verifyApprove", "รับรองการลงทะเบียน"],
     ["/verifyInfo", "รับรองการลงทะเบียนรายบุคคล"],
+    ["/verifyExtend", "รับรองการต่ออายุ"],
     ["/disableCourt", "การปิดคอร์ด"],
     ["/qrcodescanner", ""],
     ["/allReservation/success", "การจองทั้งหมด"],
@@ -75,6 +77,7 @@ const StaffRoute = () => {
                     <Route exact path={`${path}/userInfo/:accType/:_id`} component={CuSatitInfo} />
                     <Route exact path={`${path}/verifyApprove`} component={VeritificationApproval} />
                     <Route exact path={`${path}/verifyInfo/:_id`} component={VerifyInfo} />
+                    <Route exact path={`${path}/verifyExtend/:_id`} component={VerifyExtend} />
                     <Route exact path={`${path}/qrcodescanner`} component={QRScannerPage} />
                     <Route exact path={`${path}/profile`} component={StaffProfile} />
                     <Route exact path={`${path}/management`} component={WithAdminGuard(StaffManagement)} />
