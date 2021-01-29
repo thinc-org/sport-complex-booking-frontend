@@ -7,7 +7,7 @@ import { client } from "../../../../../axiosConfig"
 import { getMinute, getTime, dayArr } from "./mapTime"
 import { useDisplayOverlapData } from "./disable-court-hook"
 import { DeleteButton } from "./button"
-import { RowProps, TableProps, ViewRowProps, ErrorRowProps, OverlapData } from "../../../../dto/disableCourt.dto"
+import { RowProps, TableProps, ViewRowProps, ErrorRowProps, OverlapDataTableProps } from "../../../../dto/disableCourt.dto"
 
 export const CourtRow = ({ _id, starting_date, expired_date, court_num, sport_id, button }: RowProps) => {
   const { path } = useRouteMatch()
@@ -87,7 +87,7 @@ export const ErrorRow = ({ date, phone, indx, time_slot, button, _id, type }: Er
   )
 }
 
-export function CourtTable<T>({ data, header, Row, Button }: TableProps<T>) {
+export function CourtTable<T>({ data, header, Row, Button }: TableProps<T>): React.ReactElement<TableProps<T>> {
   return (
     <Table className="disable-court-table">
       <thead>
@@ -105,7 +105,7 @@ export function CourtTable<T>({ data, header, Row, Button }: TableProps<T>) {
     </Table>
   )
 }
-export const OverlapDataTable = (overlapData: OverlapData | undefined) => {
+export const OverlapDataTable: React.FC<OverlapDataTableProps> = ({ overlapData }) => {
   const { data } = useDisplayOverlapData(overlapData)
   return (
     <div>

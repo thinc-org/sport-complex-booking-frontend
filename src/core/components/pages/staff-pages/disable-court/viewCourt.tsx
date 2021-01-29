@@ -1,10 +1,9 @@
 import React from "react"
 import { useViewTable, useEditCourt, withDeletable } from "./disable-court-hook"
 import { useParams, useHistory } from "react-router-dom"
-import { ViewRow, CourtTable , OverlapDataTable } from "./disabled-court-table"
+import { ViewRow, CourtTable, OverlapDataTable } from "./disabled-court-table"
 import { ViewRowProps } from "../../../../dto/disableCourt.dto"
 import { DeleteButton } from "./button"
-
 
 import { format } from "date-fns"
 import subDays from "date-fns/subDays"
@@ -73,8 +72,9 @@ const ViewCourt = () => {
         handleClose={() => setOverlapData(undefined)}
         header="การปิดคอร์ดชนกับการจอง"
         message="พบการปิดคอร์ดชนกับการจองดังนี้"
-        children={OverlapDataTable(overlapData)}
-      />
+      >
+        <OverlapDataTable overlapData={overlapData} />
+      </ErrorAlert>
       <ErrorAlert inProp={show} handleClose={handleAlert} header={"วันที่ไม่ถูกต้อง"} message={"วันที่ไม่ถูกต้อง"} />
       <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} validate={validateTimeSlot} />
       <Form className="default-wrapper pt-3 pb-4" style={{ boxShadow: "0 0 0 0" }}>
@@ -123,12 +123,12 @@ const ViewCourt = () => {
           </Row>
         </div>
         <div>
-          {CourtTable<ViewRowProps>({
-            data: rowData,
-            header: ["ลำดับ", "วัน", "เวลาที่เริ่มปิด", "เวลาสิ้นสุดการปิด"],
-            Row: ViewRow,
-            Button: isEdit ? withDeletable(DeleteButton, onDeleteRow) : undefined,
-          })}
+          <CourtTable<ViewRowProps>
+            data={rowData}
+            Row={ViewRow}
+            header={["ลำดับ", "วัน", "เวลาที่เริ่มปิด", "เวลาสิ้นสุดการปิด"]}
+            Button={isEdit ? withDeletable(DeleteButton, onDeleteRow) : undefined}
+          />
         </div>
         {isEdit && (
           <Button className="w-100 mb-2" variant="pink" onClick={() => setInProp(true)}>
