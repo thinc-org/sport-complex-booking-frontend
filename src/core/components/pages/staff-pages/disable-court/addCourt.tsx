@@ -123,7 +123,7 @@ const AddCourt = () => {
             <Col>
               <div style={{ color: "red" }}>
                 {(errors.description || !startDate || !endDate || !rowData || errors.court_num) && "กรุณากรอกข้อมูลให้ครบ"}
-                {errors.request && errors.request.message}
+                {errors.duplicate && errors.duplicate.message}
               </div>
             </Col>
           </Row>

@@ -4,16 +4,19 @@ import { ErrorAlert } from "./modals"
 import { Button } from "react-bootstrap"
 import { DeleteButtonProps } from "../../../../dto/disableCourt.dto"
 
-export const DeleteButton = ({ onClick, indx, type }: DeleteButtonProps) => {
+export const DeleteButton = ({ onClick, indx, type, phone }: DeleteButtonProps) => {
   const [show, setShow] = useState(false)
+  const message = type === "reservation" || type === "waitingRoom" ? "ต้องการลบการจองหรือห้องรอการจองนี้หรือไม่" : "ต้องการลบการปิดคอร์ดนี้หรือไม่"
+  const phoneNum = phone ? <div>เบอร์ผู้จอง: {phone}</div> : undefined
   return (
     <>
       <ErrorAlert
         canCancel={true}
         inProp={show}
         header="กรุณายืนยันการลบ"
-        message="ต้องการลบการปิดคอร์ดนี้หรือไม่"
-        handleClose={() => (onClick ? onClick(indx, type) : null)}
+        message={message}
+        children={phoneNum}
+        handleClose={() => (onClick ? onClick(indx, type ?? "") : null)}
         onCancel={() => setShow(false)}
       />
       <Button variant="outline-transparent" style={{ color: "red" }} onClick={() => setShow(true)} className="ml-auto">
