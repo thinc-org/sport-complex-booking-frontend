@@ -109,7 +109,7 @@ const ReservationDetail = () => {
     if (!isCheck && id) {
       return (
         <>
-          <div className="box-container btn w-100 mb-5" style={{ textAlign: "center" }}>
+          <div className="box-container w-100 mb-5" style={{ textAlign: "center" }}>
             <h6 className="mt-2 mb-0" style={{ fontWeight: 400 }}>
               {t("qrcodeInvalid")}{" "}
             </h6>
@@ -128,7 +128,7 @@ const ReservationDetail = () => {
     } else if (isCheck) {
       return (
         <>
-          <div className="box-container btn w-100 mb-5" style={{ textAlign: "center" }}>
+          <div className="box-container w-100 mb-5" style={{ textAlign: "center" }}>
             <h4 className="m-2" style={{ color: "lightgreen" }}>
               {t("youHaveCheckedIn")}
             </h4>
@@ -152,7 +152,7 @@ const ReservationDetail = () => {
         <div className="container">
           <div className="row justify-content-center mt-5">
             <div className="col-12 h-100">
-              <div className="box-container btn mb-4" style={{ width: "100%" }}>
+              <div className="box-container mb-4" style={{ width: "100%" }}>
                 <div>
                   <h4 className="mb-2"> {sport && sport[sportLanguage]} </h4>
                   <h6 className="mb-0 font-weight-light">
