@@ -4,7 +4,9 @@ import { Button, Table } from "react-bootstrap"
 import { format } from "date-fns"
 import subDays from "date-fns/subDays"
 import { getMinute, getTime, dayArr } from "./mapTime"
-import { RowProps, TableProps, ViewRowProps, ErrorRowProps } from "../../../../dto/disableCourt.dto"
+import { useDisplayOverlapData, withDeletable } from "./disable-court-hook"
+import { DeleteButton } from "./button"
+import { RowProps, TableProps, ViewRowProps, ErrorRowProps, OverlapData } from "../../../../dto/disableCourt.dto"
 
 export const CourtRow = ({ _id, starting_date, expired_date, court_num, sport_id, button }: RowProps) => {
   const { path } = useRouteMatch()
@@ -51,7 +53,7 @@ export const ViewRow = ({ time_slot, indx, day, button }: ViewRowProps) => {
   )
 }
 
-export const ErrorRow = ({ date, phone, indx, time_slot }: ErrorRowProps) => {
+export const ErrorRow = ({ date, phone, indx, time_slot, button }: ErrorRowProps) => {
   const time = getMinute(time_slot)
   const overlapDate = format(new Date(date), "dd/MM/yyyy")
   return (
@@ -59,7 +61,10 @@ export const ErrorRow = ({ date, phone, indx, time_slot }: ErrorRowProps) => {
       <td>{indx + 1}</td>
       <td>{phone}</td>
       <td>{overlapDate}</td>
-      <td>{`${getTime(time.startTime)}-${getTime(time.endTime)}`}</td>
+      <td className={button ? "d-flex flex-row justify-content-end align-items-center" : ""}>
+        {`${getTime(time.startTime)}-${getTime(time.endTime)}`}
+        {button}
+      </td>
     </tr>
   )
 }
@@ -76,9 +81,27 @@ export function CourtTable<T>({ data, header, Row, Button }: TableProps<T>) {
       </thead>
       <tbody>
         {data?.map((val, index) => (
-          <Row {...val} indx={index} key={val._id || index} button={Button ? <Button indx={val._id ?? index} /> : undefined} />
+          <Row
+            {...val}
+            indx={index}
+            key={val._id || index}
+            button={Button ? <Button indx={val._id ?? index} type={val.type ?? "none"} /> : undefined}
+          />
         ))}
       </tbody>
     </Table>
+  )
+}
+export const OverlapDataTable = (overlapData: OverlapData | undefined) => {
+  const { data, onDeleteOverlapData } = useDisplayOverlapData(overlapData)
+  return (
+    <div>
+      {CourtTable<ErrorRowProps>({
+        data: data,
+        header: ["index", "เบอร์ติดต่อ", "วันที่ทับซ้อน", "เวลาที่ทับซ้อน"],
+        Row: ErrorRow,
+        Button: withDeletable(DeleteButton, onDeleteOverlapData),
+      })}
+    </div>
   )
 }

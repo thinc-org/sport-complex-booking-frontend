@@ -11,6 +11,7 @@ import {
   DisabledCourtSearchBody,
   DisableCourtBody,
   OverlapData,
+  ErrorRowProps,
 } from "../../../../dto/disableCourt.dto"
 import { Sport } from "../../../../dto/sport.dto"
 import subDays from "date-fns/subDays"
@@ -56,7 +57,7 @@ export const useRow = (initial: ViewRowProps[] = []) => {
     })
     setInProp(false)
   }
-  const onDeleteRow = (indx: number) => {
+  const onDeleteRow = (indx: number | string, type = "") => {
     setRowData((prev) => {
       const arr = [...prev]
       const found = arr.findIndex((element) => element["indx"] === indx)
@@ -168,7 +169,7 @@ export const useTableWithPagination = () => {
   const nearestFiveFloor = page % 5 === 0 && page !== 1 ? page - 4 : 5 * Math.floor(page / 5) + 1
   const nearestFiveCeil = 5 * Math.ceil(page / 5) > maxPage ? maxPage : 5 * Math.ceil(page / 5)
   const pageArr = Array.from(Array(nearestFiveCeil + 1).keys()).slice(nearestFiveFloor, nearestFiveCeil + 1)
-  const onDelete = (id: string | number) => {
+  const onDelete = (id: string | number, type = "") => {
     client
       .delete(`/courts/disable-courts/${id}`)
       .then(() => {
@@ -233,6 +234,54 @@ export const useTableWithPagination = () => {
 
   return { data, page, maxPage, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete, isError, setIsError }
 }
+export const useDisplayOverlapData = (overlapData: OverlapData | undefined) => {
+  const [data, setData] = useState<ErrorRowProps[]>([])
+  const onDeleteOverlapData = (id: string | number, type: string) => {
+    const path = type === "reservation" ? "all-reservation" : "all-waiting-room"
+    client
+      .delete(`${path}/${id}`)
+      .then((res) => {
+        console.log(res)
+        setData((prev) => {
+          const found = data.findIndex((item) => item._id === id)
+          const arr = [...prev]
+          arr.splice(found, 1)
+          return arr
+        })
+      })
+      .catch((err) => console.log(err))
+  }
+  useEffect(() => {
+    if (overlapData) {
+      console.log(overlapData)
+      setData((prev) => {
+        const dataArr: ErrorRowProps[] = [...prev]
+        overlapData.reservation?.forEach((element, indx) => {
+          dataArr.push({
+            type: "reservation",
+            _id: element._id,
+            indx: indx,
+            date: element.date,
+            phone: element.list_member[0].phone,
+            time_slot: element.time_slot,
+          })
+        })
+        overlapData.waitingRoom?.forEach((element, indx) => {
+          dataArr.push({
+            type: "waitingRoom",
+            _id: element._id,
+            indx: indx,
+            date: element.date,
+            phone: element.list_member[0].phone,
+            time_slot: element.time_slot,
+          })
+        })
+        return dataArr
+      })
+    }
+  }, [overlapData])
+  return { data, onDeleteOverlapData }
+}
 
 export const seed = () => {
   const arr: DisableCourtBody[] = []
@@ -274,7 +323,7 @@ export const seed = () => {
   })
 }
 
-export function withDeletable<P>(Component: ComponentType<P>, F: (indx: number) => void): React.FC<P> {
+export function withDeletable<P>(Component: ComponentType<P>, F: (indx: number | string, type: string) => void): React.FC<P> {
   return function WithDeletable(props: P) {
     return <Component {...props} onClick={F} />
   }
