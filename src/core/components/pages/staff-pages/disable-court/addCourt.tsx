@@ -57,8 +57,9 @@ const AddCourt = () => {
         handleClose={() => setOverlapData(undefined)}
         header="การปิดคอร์ดชนกับการจอง"
         message="พบการปิดคอร์ดชนกับการจองดังนี้"
-        children={OverlapDataTable(overlapData)}
-      />
+      >
+        <OverlapDataTable overlapData={overlapData} />
+      </ErrorAlert>
       <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} validate={validateTimeSlot} />
       <ErrorAlert inProp={show} handleClose={handleAlert} header={"วันที่ไม่ถูกต้อง"} message={"วันที่ไม่ถูกต้อง"} />
       <div className="default-wrapper pt-3 pb-4" style={{ boxShadow: "0 0 0 0" }}>
@@ -128,12 +129,12 @@ const AddCourt = () => {
             </Col>
           </Row>
           <div className="mt-3 small-table">
-            {CourtTable<ViewRowProps>({
-              data: rowData,
-              header: ["ลำดับ", "วัน", "เวลาที่เริ่มปิด", "เวลาสิ้นสุดการปิด"],
-              Row: ViewRow,
-              Button: withDeletable(DeleteButton, onDeleteRow),
-            })}
+            <CourtTable<ViewRowProps>
+              data={rowData}
+              header={["ลำดับ", "วัน", "เวลาที่เริ่มปิด", "เวลาสิ้นสุดการปิด"]}
+              Row={ViewRow}
+              Button={withDeletable(DeleteButton, onDeleteRow)}
+            />
           </div>
           <Button className="w-100 " variant="pink" onClick={() => setInProp(true)}>
             เพิ่มการปิดคอร์ดใหม่

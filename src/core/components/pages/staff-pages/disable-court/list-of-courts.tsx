@@ -104,12 +104,12 @@ const ListOfCourts = () => {
           </div>
         </Form>
       </div>
-      {CourtTable<RowProps>({
-        Row: CourtRow,
-        data: data,
-        header: ["เลขคอร์ด", "ประเภทกีฬา", "วันที่เริ่มปิด", "วันสิ้นสุดการปิด"],
-        Button: withDeletable(DeleteButton, onDelete),
-      })}
+      <CourtTable<RowProps>
+        Row={CourtRow}
+        data={data}
+        header={["เลขคอร์ด", "ประเภทกีฬา", "วันที่เริ่มปิด", "วันสิ้นสุดการปิด"]}
+        Button={withDeletable(DeleteButton, onDelete)}
+      />
       <div className="d-flex flex-row justify-content-between align-content-center">
         <Button variant="pink" className="disable-court-button" onClick={onAdd}>
           เพิ่มการปิดคอร์ด

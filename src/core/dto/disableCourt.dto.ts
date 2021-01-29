@@ -78,6 +78,10 @@ export interface OverlapData {
   waitingRoom?: WaitingRoomResponse[]
 }
 
+export interface OverlapDataTableProps {
+  overlapData?: OverlapData
+}
+
 export interface ErrorRowProps {
   type: string
   _id: string
