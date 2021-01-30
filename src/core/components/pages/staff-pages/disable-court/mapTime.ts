@@ -2,8 +2,8 @@ export const dayArr = ["อาทิตย์", "จันทร์", "อัง
 
 export function getMinute(time_slot: number[]) {
   const sortedTimeSlot = [...time_slot].sort((a, b) => a - b)
-  const startTime = 0 + (30 * sortedTimeSlot[0] - 30)
-  const endTime = 0 + 30 * sortedTimeSlot[sortedTimeSlot.length - 1]
+  const startTime = 0 + (60 * sortedTimeSlot[0] - 60)
+  const endTime = 0 + 60 * sortedTimeSlot[sortedTimeSlot.length - 1]
   return { startTime, endTime }
 }
 
@@ -13,8 +13,8 @@ export function getTime(time: number): string {
 
 export function getTimeArr(): string[] {
   const timeArr: string[] = []
-  for (let i = 1; i <= 48; i++) {
-    timeArr.push(getTime((i - 1) * 30))
+  for (let i = 1; i <= 24; i++) {
+    timeArr.push(getTime((i - 1) * 60))
   }
   return timeArr
 }
