@@ -466,9 +466,11 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           <label className="form-label my-2">{t("user_photo")}</label>
           <div className="form-file">
             <p>{user_photo ? "✓ " + user_photo?.name.substring(0, 30) + "..." : ""}</p>
-            <label htmlFor="user_photo" className="form-file-input form-control text-center">
-              {t("chooseFile")}
-            </label>
+            {!user?.user_photo && (
+              <label htmlFor="user_photo" className="form-file-input form-control text-center">
+                {t("chooseFile")}
+              </label>
+            )}
             {!user?.user_photo ? (
               <input
                 style={{ display: "none" }}
@@ -494,9 +496,11 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           <label className="form-label my-2">{t("national_id_photo")}</label>
           <div className="form-file">
             <p>{national_id_scan ? "✓ " + national_id_scan?.name.substring(0, 30) + "..." : ""}</p>
-            <label htmlFor="nationID/passport" className="form-file-input form-control text-center">
-              {t("chooseFile")}
-            </label>
+            {!user?.national_id_photo && (
+              <label htmlFor="nationID/passport" className="form-file-input form-control text-center">
+                {t("chooseFile")}
+              </label>
+            )}
             {!user?.national_id_photo ? (
               <input
                 style={{ display: "none" }}
@@ -522,9 +526,11 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           <label className="form-label my-2">{t("medical_certificate")}</label>
           <div className="form-file">
             <p>{medical_certificate ? "✓ " + medical_certificate?.name.substring(0, 30) + "..." : ""}</p>
-            <label htmlFor="medical_certificate" className="form-file-input form-control text-center">
-              {t("chooseFile")}
-            </label>
+            {!user?.medical_certificate && (
+              <label htmlFor="medical_certificate" className="form-file-input form-control text-center">
+                {t("chooseFile")}
+              </label>
+            )}
             {!user?.medical_certificate ? (
               <input
                 style={{ display: "none" }}
@@ -550,9 +556,11 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           <label className="form-label my-2">{t("house_registration_number")}</label>
           <div className="form-file">
             <p>{house_registration_number ? "✓ " + house_registration_number?.name.substring(0, 30) + "..." : ""}</p>
-            <label htmlFor="house_registration_number" className="form-file-input form-control text-center">
-              {t("chooseFile")}
-            </label>
+            {!user?.house_registration_number && (
+              <label htmlFor="house_registration_number" className="form-file-input form-control text-center">
+                {t("chooseFile")}
+              </label>
+            )}
             {!user?.house_registration_number ? (
               <input
                 style={{ display: "none" }}
@@ -577,9 +585,11 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           <label className="form-label my-2">{t("relationship_verification_document")}</label>
           <div className="form-file">
             <p>{relationship_verification_document ? "✓ " + relationship_verification_document?.name.substring(0, 30) + "..." : ""}</p>
-            <label htmlFor="relationship_verification_document" className="form-file-input form-control text-center">
-              {t("chooseFile")}
-            </label>
+            {!user?.relationship_verification_document && (
+              <label htmlFor="relationship_verification_document" className="form-file-input form-control text-center">
+                {t("chooseFile")}
+              </label>
+            )}
             {!user?.relationship_verification_document ? (
               <input
                 style={{ display: "none" }}
@@ -606,9 +616,11 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           <label className="form-label my-2">{t("paymentEvidenceLabel")}</label>
           <div className="form-file">
             <p>{payment_evidence ? "✓ " + payment_evidence?.name.substring(0, 30) + "..." : ""}</p>
-            <label htmlFor="paymentEvidence" className="form-file-input form-control text-center">
-              {t("chooseFile")}
-            </label>
+            {!user?.relationship_verification_document && (
+              <label htmlFor="paymentEvidence" className="form-file-input form-control text-center">
+                {t("chooseFile")}
+              </label>
+            )}
             {!user?.relationship_verification_document ? ( // TODO: change this and the DTO when Firm's endpoint is done
               <input
                 style={{ display: "none" }}
