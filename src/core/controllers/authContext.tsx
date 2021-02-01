@@ -39,7 +39,7 @@ const AuthProvider = ({ ...props }) => {
     }
   }, [setIsAdmin, isStaff])
   useEffect(() => {
-    const cookieToken = getCookie("token") ?? ""
+    const cookieToken = getCookie("token") ?? undefined
     setToken(cookieToken)
   }, [isUser])
   return <AuthContext.Provider value={value} {...props} />
