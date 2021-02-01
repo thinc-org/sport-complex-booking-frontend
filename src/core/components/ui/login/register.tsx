@@ -59,42 +59,36 @@ export const Register = () => {
     setCredentials(data)
   }
 
-  const renderDescription = () => {
-    const descriptions = []
-    let i = 1
-    for (i; i < 11; i++) {
-      descriptions.push(
-        <li key={i}>
-          <p>{t(`otherAccountDescription.type${i}`)}</p>
-        </li>
-      )
-    }
-    return descriptions
-  }
-
-  const renderTypeSelect = () => {
-    return (
-      <select className="m-0" ref={register} name="membership_type" disabled={showNextForm}>
-        <option value={0} disabled>
-          {t("otherAccountTypes.question")}
-        </option>
-        <option value={1}>{t("otherAccountTypes.type1")}</option>
-        <option value={2}>{t("otherAccountTypes.type2")}</option>
-        <option value={3}>{t("otherAccountTypes.type3")}</option>
-        <option value={4}>{t("otherAccountTypes.type4")}</option>
-        <option value={5}>{t("otherAccountTypes.type5")}</option>
-        <option value={6}>{t("otherAccountTypes.type6")}</option>
-        <option value={7}>{t("otherAccountTypes.type7")}</option>
-        <option value={8}>{t("otherAccountTypes.type8")}</option>
-        <option value={9}>{t("otherAccountTypes.type9")}</option>
-        <option value={10}>{t("otherAccountTypes.type10")}</option>
-      </select>
+  const descriptions = []
+  for (let i = 1; i <= 10; i++) {
+    descriptions.push(
+      <li key={i}>
+        <p>{t(`otherAccountDescription.type${i}`)}</p>
+      </li>
     )
   }
 
+  const renderTypeSelect = (
+    <select className="m-0" ref={register} name="membership_type" disabled={showNextForm}>
+      <option value={0} disabled>
+        {t("otherAccountTypes.question")}
+      </option>
+      <option value={1}>{t("otherAccountTypes.type1")}</option>
+      <option value={2}>{t("otherAccountTypes.type2")}</option>
+      <option value={3}>{t("otherAccountTypes.type3")}</option>
+      <option value={4}>{t("otherAccountTypes.type4")}</option>
+      <option value={5}>{t("otherAccountTypes.type5")}</option>
+      <option value={6}>{t("otherAccountTypes.type6")}</option>
+      <option value={7}>{t("otherAccountTypes.type7")}</option>
+      <option value={8}>{t("otherAccountTypes.type8")}</option>
+      <option value={9}>{t("otherAccountTypes.type9")}</option>
+      <option value={10}>{t("otherAccountTypes.type10")}</option>
+    </select>
+  )
+
   return (
     <>
-      <NavHeader header={t("Register")} />
+      <NavHeader header={t("register")} />
       <div className="mx-auto col-md-6">
         <div className="default-mobile-wrapper mt-3">
           <h4>{t("accountTypeInfo")}</h4>
@@ -109,15 +103,17 @@ export const Register = () => {
               <Row>
                 {showAccountHint && (
                   <div className="hint-card-background mb-3">
-                    <ol className="pl-3">{renderDescription()}</ol>
+                    <ol className="pl-3">{descriptions}</ol>
                   </div>
                 )}
               </Row>
             </div>
-            {renderTypeSelect()}
+            {renderTypeSelect}
             <hr />
             <label className="form-label mt-2">{t("username") + ` (${t("personalEmailLabel")})`}</label>
-            {!showNextForm && (
+            {showNextForm ? (
+              <p>{credentials?.username}</p>
+            ) : (
               <input
                 name="username"
                 type="text"
@@ -128,10 +124,11 @@ export const Register = () => {
                 readOnly={showNextForm}
               />
             )}
-            {showNextForm && <p>{credentials?.username}</p>}
             {errors.username && <p id="input-error">{errors.username.message}</p>}
             <label className="form-label mt-2">{t("password")}</label>
-            {!showNextForm && (
+            {showNextForm ? (
+              <p>{"•".repeat(credentials ? credentials?.password.length : 8)}</p>
+            ) : (
               <input
                 name="password"
                 type="password"
@@ -142,10 +139,11 @@ export const Register = () => {
                 readOnly={showNextForm}
               />
             )}
-            {showNextForm && <p>{"•".repeat(credentials ? credentials?.password.length : 8)}</p>}
             {errors.password && <p id="input-error">{errors.password.message}</p>}
             <label className="form-label mt-2">{t("repeatPassword")}</label>
-            {!showNextForm && (
+            {showNextForm ? (
+              <p>{"•".repeat(credentials ? credentials?.password.length : 8)}</p>
+            ) : (
               <input
                 name="repeat_password"
                 type="password"
@@ -156,7 +154,6 @@ export const Register = () => {
                 readOnly={showNextForm}
               />
             )}
-            {showNextForm && <p>{"•".repeat(credentials ? credentials?.password.length : 8)}</p>}
             {errors.repeat_password && <p id="input-error">{errors.repeat_password.message}</p>}
             <div className="button-group">
               {showNextForm && (
