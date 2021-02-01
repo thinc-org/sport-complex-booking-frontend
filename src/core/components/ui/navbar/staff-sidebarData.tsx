@@ -46,6 +46,7 @@ function useSidebarData(type: string) {
       path: "/staff/settings",
     },
   ]
+  // This removes StaffManagement, DisableCourt, and Settings pages from Staff acccount's sidebar
   if (type === "admin") return data
   else return data.filter((link) => link !== data[1] && link !== data[6] && link !== data[8])
 }

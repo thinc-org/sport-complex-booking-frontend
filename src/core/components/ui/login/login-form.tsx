@@ -3,13 +3,12 @@ import { Form, Button, Row } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import { useLogin } from "./loginHooks"
 import { useTranslation } from "react-i18next"
-import { useHistory } from "react-router"
+import { Link } from "react-router-dom"
 
 const LoginForm = () => {
   const { t } = useTranslation()
   const { register, handleSubmit, setError, errors, clearErrors } = useForm()
   const { isLoading, onLogin } = useLogin(setError)
-  const history = useHistory()
   const SSOLogin = () => {
     window.location.href = `https://account.it.chula.ac.th/html/login.html?service=${process.env.REACT_APP_URL}/login`
   }
@@ -48,15 +47,9 @@ const LoginForm = () => {
           <hr className="mx-2" />
           <Row className="button-group justify-content-center">
             {t("noAccount")}
-            <span
-              role="button"
-              onClick={() => {
-                history.push("/register")
-              }}
-              className="ml-2 text-secondary"
-            >
+            <Link role="button" to="/register" className="ml-2 text-secondary">
               <span style={{ color: "#c94f7c" }}>{t("register")}</span>
-            </span>
+            </Link>
           </Row>
         </div>
       </Form>
