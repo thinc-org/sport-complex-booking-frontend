@@ -27,6 +27,7 @@ const AuthProvider = ({ ...props }) => {
   const isUser = !!decodedToken
   const isStaff = decodedToken?.isStaff
   const value = { token, isUser, setToken, isAdmin, setIsAdmin }
+  // TODO: Extract isAdmin from token instead
   useEffect(() => {
     if (isStaff) {
       client
@@ -38,6 +39,7 @@ const AuthProvider = ({ ...props }) => {
         .catch((err) => setIsAdmin(false))
     }
   }, [setIsAdmin, isStaff])
+  //
   useEffect(() => {
     const cookieToken = getCookie("token") ?? undefined
     setToken(cookieToken)
