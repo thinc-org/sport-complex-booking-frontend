@@ -4,7 +4,6 @@ import { useAuthContext } from "../../../controllers/authContext"
 import { useHistory } from "react-router-dom"
 import { client } from "../../../../axiosConfig"
 import { ErrorOption } from "react-hook-form"
-
 interface StaffResponse {
   jwt: string
   message: string

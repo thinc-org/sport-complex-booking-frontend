@@ -1,19 +1,6 @@
-import { useEffect } from "react"
 import { useAuthContext } from "../../../controllers/authContext"
-import { client } from "../../../../axiosConfig"
 function useSidebarData() {
-  const { isAdmin, setIsAdmin } = useAuthContext()
-  useEffect(() => {
-    client
-      .get("staffs/profile")
-      .then((res) => {
-        if (res.data.is_admin) setIsAdmin(true)
-        else setIsAdmin(false)
-      })
-      .catch((err) => {
-        setIsAdmin(false)
-      })
-  }, [setIsAdmin])
+  const { isAdmin } = useAuthContext()
   const data = [
     {
       icon: "",

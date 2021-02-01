@@ -47,7 +47,7 @@ function StaffProfile() {
   if (errMessage.badRequest) {
     return (
       <div className="container pl-0" style={{ margin: "50px 10px", color: "red" }}>
-        <h5>{errMessage}</h5>
+        <h5>{errMessage.badRequest}</h5>
         <HandleErrorModal show={showError} setShow={setShowError} />
       </div>
     )
