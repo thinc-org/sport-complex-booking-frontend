@@ -59,7 +59,7 @@ export interface Other extends DefaultAccount {
   house_registration_number: string //with reference person
   relationship_verification_document: string
   national_id_house_registration: string
-  payment_slip: string
+  payment_slip: string[]
   payment_status: string
 }
 
