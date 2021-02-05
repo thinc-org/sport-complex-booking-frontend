@@ -66,12 +66,11 @@ const UserInfo = () => {
     // object id //
     user_photo: "",
     medical_certificate: "",
-    national_id_photo: "",
-    house_registration_number: "",
+    national_id_house_registration: "",
     relationship_verification_document: "",
+    payment_slip: [],
   })
   // temp data
-  const [tempMembershipType, setTempMembershipType] = useState<string>("")
   const [tempIsPenalize, setTempPenalize] = useState<boolean>(false)
   const [tempExpiredPenalizeDate, setTempExpiredPenalizeDate] = useState<Date>(new Date())
   const [tempAccountExpiredDate, setTempAccountExpiredDate] = useState<Date>(new Date())
@@ -80,7 +79,6 @@ const UserInfo = () => {
   // react router dom
   const { _id } = useParams<{ _id: string }>()
   const methods = useForm()
-  const { errors } = methods
   const history = useHistory()
 
   // requests //
@@ -121,9 +119,9 @@ const UserInfo = () => {
           // Files(Object id) //
           user_photo: data.user_photo,
           medical_certificate: data.medical_certificate,
-          national_id_photo: data.national_id_photo,
-          house_registration_number: data.house_registration_number,
+          national_id_house_registration: data.national_id_house_registration,
           relationship_verification_document: data.relationship_verification_document,
+          payment_slip: data.payment_slip,
         })
       })
       .catch(({ response }) => {
@@ -138,7 +136,6 @@ const UserInfo = () => {
   // handles //
   const handleEdit = () => {
     setTempInfo(info)
-    setTempMembershipType(membershipType)
     setTempPenalize(isPenalize)
     setTempExpiredPenalizeDate(expiredPenalizeDate)
     setTempAccountExpiredDate(accountExpiredDate)
@@ -196,8 +193,7 @@ const UserInfo = () => {
       medical_condition,
       user_photo,
       medical_certificate,
-      national_id_photo,
-      house_registration_number,
+      national_id_house_registration,
       relationship_verification_document,
     } = tempInfo
     client({
@@ -221,21 +217,18 @@ const UserInfo = () => {
         contact_person,
         medical_condition,
         // top section //
-        membership_type: tempMembershipType,
         account_expiration_date: tempAccountExpiredDate,
         is_penalize: tempIsPenalize,
         expired_penalize_date: tempExpiredPenalizeDate,
         // files //
         user_photo,
         medical_certificate,
-        national_id_photo,
-        house_registration_number,
+        national_id_house_registration,
         relationship_verification_document,
       },
     })
       .then(() => {
         // set temp to data
-        setMembershipType(tempMembershipType)
         setPenalize(tempIsPenalize)
         setExpiredPenalizeDate(tempExpiredPenalizeDate)
         setAccountExpiredDate(tempAccountExpiredDate)
@@ -296,45 +289,12 @@ const UserInfo = () => {
             <div className="col">
               <label className="mt-2">ชื่อผู้ใช้</label>
               <p className="font-weight-bold">{username}</p>
-              {errors.username && (
-                <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
-                  {errors.username.message}
-                </span>
-              )}
             </div>
           </div>
           <div className="row pb-2">
             <div className="col">
               <label className="mt-2">ประเภทบัญชี</label>
-              {isEdit ? (
-                <div>
-                  <Form.Control
-                    as="select"
-                    className="m-0"
-                    defaultValue={tempMembershipType !== "" ? tempMembershipType : "ไม่มี"}
-                    onChange={(e) => {
-                      setTempMembershipType(e.target.value)
-                    }}
-                  >
-                    <option disabled value="ไม่มี">
-                      เลือกประเภทบัญชี
-                    </option>
-                    <option>สมาชิกสามัญ ก (staff membership)</option>
-                    <option>สมาชิกสามัญ ข (student membership)</option>
-                    <option>สมาชิกสามัญสมทบ ก (staff-spouse membership)</option>
-                    <option>สมาชิกสามัญสมทบ ข (alumni membership)</option>
-                    <option>สมาชิกวิสามัญ (full membership)</option>
-                    <option>สมาชิกวิสามัญสมทบ (full membership-spouse and children)</option>
-                    <option>สมาชิกวิสามัญเฉพาะสนามกีฬาในร่ม (indoor stadium)</option>
-                    <option>สมาชิกวิสามัญสมทบเฉพาะสนามกีฬาในร่ม (indoor stadium-spouse and children)</option>
-                    <option>สมาชิกรายเดือนสนามกีฬาในร่ม (monthly membership-indoor stadium)</option>
-                  </Form.Control>
-                </div>
-              ) : (
-                <div>
-                  <p className="font-weight-bold">{membershipType}</p>
-                </div>
-              )}
+              <p className="font-weight-bold">{membershipType}</p>
             </div>
           </div>
           <div className="row pb-2">

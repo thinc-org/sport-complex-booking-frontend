@@ -380,11 +380,11 @@ export default function OtherEditInfoComponent({
               />
             </div>
             <hr />
-            <label className="form-label my-2">เลขประจำตัวประชาชน / หนังสือเดินทาง (.pdf เท่านั้น)</label>
+            <label className="form-label my-2">เลขประจำตัวประชาชน / ทะเบียนบ้านที่มีหน้าของคุณ (.pdf เท่านั้น)</label>
             <div className="form-file">
               <Form.File
                 label={nationalIdPhotoFile ? (nationalIdPhotoFile as File).name : "Choose File"}
-                id="national_id_photo"
+                id="national_id_photo" // fix
                 custom
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   if (e.target.files && e.target.files[0]) {
@@ -410,7 +410,7 @@ export default function OtherEditInfoComponent({
               />
             </div>
             <hr />
-            <label className="form-label my-2">ไม่บังคับ: ทะเบียนบ้านที่มีหน้าของคุณ (.pdf เท่านั้น)</label>
+            {/* <label className="form-label my-2">ไม่บังคับ: ทะเบียนบ้านที่มีหน้าของคุณ (.pdf เท่านั้น)</label>
             <div className="form-file">
               <Form.File
                 label={houseRegistrationNumberFile ? (houseRegistrationNumberFile as File).name : "Choose File"}
@@ -423,22 +423,26 @@ export default function OtherEditInfoComponent({
                   }
                 }}
               />
-            </div>
-            <hr />
-            <label className="form-label my-2">ไม่บังคับ: เอกสารยืนยันตัวตน (.pdf เท่านั้น)</label>
-            <div className="form-file">
-              <Form.File
-                label={relationshipVerificationDocumentFile ? (relationshipVerificationDocumentFile as File).name : "Choose File"}
-                id="relationship_verification_document"
-                custom
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (e.target.files && e.target.files[0]) {
-                    setRelationshipVerificationDocumentFile(e.target.files[0])
-                    handleUpload(e.target.id, e.target.files[0])
-                  }
-                }}
-              />
-            </div>
+            </div> */}
+            {/* <hr /> */}
+            {membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership)" ? (
+              <div>
+                <label className="form-label my-2">เอกสารยืนยันตัวตน (.pdf เท่านั้น)</label>
+                <div className="form-file">
+                  <Form.File
+                    label={relationshipVerificationDocumentFile ? (relationshipVerificationDocumentFile as File).name : "Choose File"}
+                    id="relationship_verification_document"
+                    custom
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      if (e.target.files && e.target.files[0]) {
+                        setRelationshipVerificationDocumentFile(e.target.files[0])
+                        handleUpload(e.target.id, e.target.files[0])
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            ) : null}
           </Card>
         </div>
       </div>

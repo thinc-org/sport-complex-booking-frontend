@@ -1,5 +1,5 @@
-import React from "react"
-import { Card } from "react-bootstrap"
+import React, { useState } from "react"
+import { Card, Form } from "react-bootstrap"
 import Info from "../interfaces/InfoInterface"
 import format from "date-fns/format"
 import isValid from "date-fns/isValid"
@@ -10,7 +10,9 @@ export const handlePDF = (e: React.MouseEvent<HTMLElement>) => {
 }
 
 export default function OtherViewInfoComponent({ info }: { info: Info }) {
-  /// JSX Begins here
+  // page state
+  const [paymentNo, setPaymentNo] = useState<number>(1)
+
   const {
     prefix,
     gender,
@@ -20,6 +22,7 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
     surname_en,
     national_id,
     marital_status,
+    membership_type,
     birthday,
     address,
     email,
@@ -27,6 +30,10 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
     phone,
     medical_condition,
     contact_person,
+    user_photo,
+    medical_certificate,
+    national_id_photo_or_house_registration_number,
+    relationship_verification_document,
   } = info
   const { contact_person_prefix, contact_person_name, contact_person_surname, contact_person_home_phone, contact_person_phone } = contact_person
 
@@ -111,42 +118,51 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
           <p>{contact_person_phone}</p>
         </Card>
         <br />
+        {/* Upload Section */}
         <Card body className="row shadow dim-white">
           <h4>เกี่ยวกับสมาชิก</h4>
-          <h6 className="form-label my-2">{info.membership_type}</h6>
+          <h6 className="form-label my-2">{membership_type}</h6>
           <label className="form-label my-2">รูปภาพ</label>
           <div className="form-file">
-            <p className={info.user_photo ? "link" : "text-muted"} id={info.user_photo} onClick={handlePDF}>
+            <p className={user_photo ? "link" : "text-muted"} id={user_photo} onClick={handlePDF}>
               ดูเอกสาร
             </p>
           </div>
-          <label className="form-label my-2">หมายเลขบัตรประชาชน / พาสปอร์ต</label>
+          <label className="form-label my-2">หมายเลขบัตรประชาชน / สำเนาทะเบียนบ้านที่มีหน้านิสิต</label>
           <div className="form-file">
-            <p className={info.national_id_photo ? "link" : "text-muted"} id={info.national_id_photo} onClick={handlePDF}>
+            <p
+              className={national_id_photo_or_house_registration_number ? "link" : "text-muted"}
+              id={national_id_photo_or_house_registration_number}
+              onClick={handlePDF}
+            >
               ดูเอกสาร
             </p>
           </div>
           <label className="form-label my-2">เอกสารใบรับรองแพทย์</label>
           <div className="form-file">
-            <p className={info.medical_certificate ? "link" : "text-muted"} id={info.medical_certificate} onClick={handlePDF}>
+            <p className={medical_certificate ? "link" : "text-muted"} id={medical_certificate} onClick={handlePDF}>
               ดูเอกสาร
             </p>
           </div>
-          <label className="form-label my-2">สำเนาทะเบียนบ้านที่มีหน้านิสิต</label>
+          {/* {relationship_verification_document ? (  */}
+          {membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership)" ? (
+            <div>
+              <label className="form-label my-2">เอกสารยืนยันตัวตน</label>
+              <div className="form-file">
+                <p className={relationship_verification_document ? "link" : "text-muted"} id={relationship_verification_document} onClick={handlePDF}>
+                  ดูเอกสาร
+                </p>
+              </div>
+            </div>
+          ) : null}
+          <label className="form-label my-2">หลักฐานการชำระเงิน</label>
           <div className="form-file">
-            <p className={info.house_registration_number ? "link" : "text-muted"} id={info.house_registration_number} onClick={handlePDF}>
+            <Form.Control type="date" onChange={(e) => setPaymentNo(parseInt(e.target.value))}>
+              {/* <option value={1}>{date1}</option> */}
+            </Form.Control>
+            {/* <p className={payment ? "link" : "text-muted"} id={payment} onClick={handlePDF}>
               ดูเอกสาร
-            </p>
-          </div>
-          <label className="form-label my-2">เอกสารยืนยันตัวตน</label>
-          <div className="form-file">
-            <p
-              className={info.relationship_verification_document ? "link" : "text-muted"}
-              id={info.relationship_verification_document}
-              onClick={handlePDF}
-            >
-              ดูเอกสาร
-            </p>
+            </p> */}
           </div>
         </Card>
       </div>
