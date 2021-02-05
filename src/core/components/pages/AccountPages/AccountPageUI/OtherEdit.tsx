@@ -456,11 +456,13 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           <hr />
           <label className="form-label my-2">{t("user_photo")}</label>
           <div className="form-file">
-            <p>{user_photo ? "✓ " + user_photo?.name.substring(0, 30) + "..." : ""}</p>
             {!user?.user_photo && (
-              <label htmlFor="user_photo" className="form-file-input form-control text-center">
-                {t("chooseFile")}
-              </label>
+              <div>
+                <p>{user_photo ? "✓ " + user_photo?.name.substring(0, 30) + "..." : t("noEmpty")}</p>
+                <label htmlFor="user_photo" className="form-file-input form-control text-center">
+                  {t("chooseFile")}
+                </label>
+              </div>
             )}
             {!user?.user_photo ? (
               <input
@@ -486,11 +488,13 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           <hr />
           <label className="form-label my-2">{t("national_id_house_registration")}</label>
           <div className="form-file">
-            <p>{national_id_house_registration ? "✓ " + national_id_house_registration?.name.substring(0, 30) + "..." : ""}</p>
             {!user?.national_id_house_registration && (
-              <label htmlFor="national_id_house_registration" className="form-file-input form-control text-center">
-                {t("chooseFile")}
-              </label>
+              <div>
+                <p>{national_id_house_registration ? "✓ " + national_id_house_registration?.name.substring(0, 30) + "..." : t("noEmpty")}</p>
+                <label htmlFor="national_id_house_registration" className="form-file-input form-control text-center">
+                  {t("chooseFile")}
+                </label>
+              </div>
             )}
             {!user?.national_id_house_registration ? (
               <input
@@ -516,11 +520,13 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           <hr />
           <label className="form-label my-2">{t("medical_certificate")}</label>
           <div className="form-file">
-            <p>{medical_certificate ? "✓ " + medical_certificate?.name.substring(0, 30) + "..." : ""}</p>
             {!user?.medical_certificate && (
-              <label htmlFor="medical_certificate" className="form-file-input form-control text-center">
-                {t("chooseFile")}
-              </label>
+              <div>
+                <p>{medical_certificate ? "✓ " + medical_certificate?.name.substring(0, 30) + "..." : t("noEmpty")}</p>
+                <label htmlFor="medical_certificate" className="form-file-input form-control text-center">
+                  {t("chooseFile")}
+                </label>
+              </div>
             )}
             {!user?.medical_certificate ? (
               <input
@@ -549,16 +555,21 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
             <div>
               <label className="form-label my-2">{t("relationship_verification_document")}</label>
               <div className="form-file">
-                <p>{relationship_verification_document ? "✓ " + relationship_verification_document?.name.substring(0, 30) + "..." : ""}</p>
                 {!user?.relationship_verification_document && (
-                  <label htmlFor="relationship_verification_document" className="form-file-input form-control text-center">
-                    {t("chooseFile")}
-                  </label>
+                  <div>
+                    <p>
+                      {relationship_verification_document ? "✓ " + relationship_verification_document?.name.substring(0, 30) + "..." : t("noEmpty")}
+                    </p>
+                    <label htmlFor="relationship_verification_document" className="form-file-input form-control text-center">
+                      {t("chooseFile")}
+                    </label>
+                  </div>
                 )}
                 {!user?.relationship_verification_document ? (
                   <input
                     style={{ display: "none" }}
                     type="file"
+                    required
                     className="form-control"
                     id="relationship_verification_document"
                     accept="application/pdf"
@@ -582,16 +593,19 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           <h4>{t("paymentSection")}</h4>
           <label className="form-label my-2">{t("paymentEvidenceLabel")}</label>
           <div className="form-file">
-            <p>{payment_slip ? "✓ " + payment_slip?.name.substring(0, 30) + "..." : ""}</p>
             {!user?.payment_slip && (
-              <label htmlFor="paymentEvidence" className="form-file-input form-control text-center">
-                {t("chooseFile")}
-              </label>
+              <div>
+                <p>{payment_slip ? "✓ " + payment_slip?.name.substring(0, 30) + "..." : t("noEmpty")}</p>
+                <label htmlFor="paymentEvidence" className="form-file-input form-control text-center">
+                  {t("chooseFile")}
+                </label>
+              </div>
             )}
             {!user?.payment_slip ? (
               <input
                 style={{ display: "none" }}
                 type="file"
+                required
                 className="form-control"
                 id="paymentEvidence"
                 accept="application/pdf, image/png, image/jpeg"
@@ -607,6 +621,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
               <p>{t("submitted")}</p>
             )}
           </div>
+          {user?.rejected_info.includes("payment_slip") ? <p className="input-error">{t("resubmitField")}</p> : null}
         </div>
         <br />
         <div className="button-group col-md-12">

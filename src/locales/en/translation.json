@@ -314,6 +314,7 @@
   "extendAccount": "Extend Membership",
   "paymentRejectedMessage": "Your payment slip has been rejected. Please re-submit.",
   "paymentSubmittedMessage": "Your payment slip has been submitted",
-  "paymentApproved": "Your payment has been approved."
+  "paymentApproved": "Your payment has been approved.",
+  "noEmpty": "❌ Do not leave this empty."
 
 }
