@@ -2,7 +2,7 @@ import React, { createContext, useState } from "react"
 
 export type AccountType = "CuStudent" | "SatitAndCuPersonel" | "Other"
 
-type OnlyString<P> = { [K in keyof P]: P[K] extends string ? K : never }[keyof P]
+type OnlyString<P> = { [K in keyof P]: P[K] extends string ? K | "payment_slip" : never }[keyof P]
 
 export interface DefaultAccount {
   account_type: AccountType
@@ -51,7 +51,7 @@ export interface Other extends DefaultAccount {
   medical_condition: string
   membership_type: string
   verification_status: string
-  rejected_info: OnlyString<Omit<Other, "payment_slip" | "account_type" | "rejected_info">>[]
+  rejected_info: OnlyString<Omit<Other, "account_type" | "rejected_info">>[]
   account_expiration_date: Date
   user_photo: string //(ของcollectionที่เก็บรูป)
   medical_certificate: string
@@ -59,7 +59,7 @@ export interface Other extends DefaultAccount {
   house_registration_number: string //with reference person
   relationship_verification_document: string
   national_id_house_registration: string
-  payment_slip: string[]
+  payment_slip: string | string[]
   payment_status: string
 }
 
