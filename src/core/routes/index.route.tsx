@@ -17,6 +17,7 @@ import WaitingRoom from "../components/pages/Reservation/WaitingRoom"
 import AboutUs from "../components/pages/AboutUs"
 import FileOpener from "../components/pages/FileOpener"
 import { Register } from "../components/ui/login/register"
+import Payment from "../components/pages/AccountPages/Payment/Payment"
 
 export default function MainRoute() {
   return (
@@ -53,6 +54,8 @@ export default function MainRoute() {
         <Route exact path={`/openFile/:fileId`} component={FileOpener} />
 
         <Route exact path={`/register`} component={Register} />
+
+        <Route exact path={`/payment`} component={Payment} />
       </Switch>
     </>
   )

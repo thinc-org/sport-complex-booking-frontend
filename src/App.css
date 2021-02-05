@@ -45,6 +45,7 @@ html,
   border: transparent;
   border-radius: 15px;
   margin-bottom: 20px;
+  cursor: pointer;
 }
 
 .toggle-button {
@@ -694,4 +695,13 @@ td {
 
 .unselectable {
   user-select: none;
+}
+
+.form-file-input {
+  cursor: pointer;
+}
+
+.spinner {
+  position: absolute;
+  right: 30px;
 }

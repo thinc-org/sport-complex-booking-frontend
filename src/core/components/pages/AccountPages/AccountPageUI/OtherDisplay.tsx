@@ -5,6 +5,7 @@ import { WarningMessage } from "../../../ui/Modals/AccountPageModals"
 import { useTranslation } from "react-i18next"
 import { AccountProps } from "../../../../dto/account.dto"
 import Button from "react-bootstrap/esm/Button"
+import PaymentReminder from "../Payment/PaymentReminder"
 
 export default function OtherAaccountDisplay({ toggleEditButton }: AccountProps) {
   const { otherAccount: user } = useContext(UserContext)
@@ -13,6 +14,7 @@ export default function OtherAaccountDisplay({ toggleEditButton }: AccountProps)
   return (
     <div className="mx-auto col-md-6">
       {user && <WarningMessage show={user.verification_status !== ""} verification_status={user.verification_status} account={user.account_type} />}
+      <PaymentReminder />
       <div className="default-mobile-wrapper mt-3 animated-card">
         <div className="">
           {/* START OF THE FORM */}
@@ -121,20 +123,24 @@ export default function OtherAaccountDisplay({ toggleEditButton }: AccountProps)
         <label className="form-label my-2">{t("user_photo")}</label>
         <div className="form-file">
           {user?.user_photo ? (
-            <div>
-              <a type="button" className="btn-normal btn-secondary" href={"openFile/" + user.user_photo} target="_blank" rel="noopener noreferrer">
-                {t("viewFile")}
-              </a>
-            </div>
+            <a type="button" className="btn-normal btn-secondary" href={"openFile/" + user.user_photo} target="_blank" rel="noopener noreferrer">
+              {t("viewFile")}
+            </a>
           ) : (
             <p>{t("noFile")}</p>
           )}
         </div>
         <hr />
-        <label className="form-label my-2">{t("national_id_photo")}</label>
+        <label className="form-label my-2">{t("national_id_house_registration")}</label>
         <div className="form-file">
-          {user?.national_id_photo ? (
-            <a className="btn-normal btn-secondary" href={"openFile/" + user.national_id_photo} target="_blank" rel="noopener noreferrer">
+          {user?.national_id_house_registration ? (
+            <a
+              type="button"
+              className="btn-normal btn-secondary"
+              href={"openFile/" + user.national_id_house_registration}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {t("viewFile")}
             </a>
           ) : (
@@ -145,31 +151,50 @@ export default function OtherAaccountDisplay({ toggleEditButton }: AccountProps)
         <label className="form-label my-2">{t("medical_certificate")}</label>
         <div className="form-file">
           {user?.medical_certificate ? (
-            <a className="btn-normal btn-secondary" href={"openFile/" + user.medical_certificate} target="_blank" rel="noopener noreferrer">
-              {t("viewFile")}
-            </a>
-          ) : (
-            <p>{t("noFile")}</p>
-          )}
-        </div>
-        <hr />
-        <label className="form-label my-2">{t("house_registration_number")}</label>
-        <div className="form-file">
-          {user?.house_registration_number ? (
-            <a className="btn-normal btn-secondary" href={"openFile/" + user.house_registration_number} target="_blank" rel="noopener noreferrer">
-              {t("viewFile")}
-            </a>
-          ) : (
-            <p>{t("noFile")}</p>
-          )}
-        </div>
-        <hr />
-        <label className="form-label my-2">{t("relationship_verification_document")}</label>
-        <div className="form-file">
-          {user?.relationship_verification_document ? (
             <a
+              type="button"
               className="btn-normal btn-secondary"
-              href={"openFile/" + user.relationship_verification_document}
+              href={"openFile/" + user.medical_certificate}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t("viewFile")}
+            </a>
+          ) : (
+            <p>{t("noFile")}</p>
+          )}
+        </div>
+
+        {user?.membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership" && (
+          <div className="form-file">
+            <hr />
+            <label className="form-label my-2">{t("relationship_verification_document")}</label>
+            {user?.relationship_verification_document ? (
+              <a
+                type="button"
+                className="btn-normal btn-secondary"
+                href={"openFile/" + user.relationship_verification_document}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("viewFile")}
+              </a>
+            ) : (
+              <p>{t("noFile")}</p>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div className="default-mobile-wrapper mt-3">
+        <h4>{t("payment")}</h4>
+        <label className="form-label my-2">{t("medical_certificate")}</label>
+        <div className="form-file">
+          {user?.medical_certificate ? (
+            <a
+              type="button"
+              className="btn-normal btn-secondary"
+              href={"openFile/" + user.medical_certificate}
               target="_blank"
               rel="noopener noreferrer"
             >
