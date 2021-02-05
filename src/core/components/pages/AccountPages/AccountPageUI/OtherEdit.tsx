@@ -108,7 +108,6 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           handleAllFilesUpload(user_photo, national_id_house_registration, medical_certificate, relationship_verification_document, payment_slip)
           setShowRegisterSuccess(true)
           setLoading(false)
-          //history.push("/login")
         })
         .catch((err) => {
           if (err.response) {
@@ -596,7 +595,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                 className="form-control"
                 id="paymentEvidence"
                 accept="application/pdf, image/png, image/jpeg"
-                readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("payment_slip")} // This too
+                readOnly={user?.verification_status === "Rejected"}
                 onChange={(e) => {
                   if (e.target.files && e.target.files[0]?.size > 2097152) {
                     e.target.value = ""
