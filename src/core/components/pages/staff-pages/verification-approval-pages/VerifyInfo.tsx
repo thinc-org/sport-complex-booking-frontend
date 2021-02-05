@@ -52,9 +52,9 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     contact_person_phone: false,
     user_photo: false,
     medical_certificate: false,
-    national_id_photo: false,
-    house_registration_number: false,
+    national_id_house_registration: false,
     relationship_verification_document: false,
+    payment_slip: false,
   })
 
   // Non CU state //
@@ -87,9 +87,9 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     // object id //
     user_photo: "",
     medical_certificate: "",
-    national_id_photo: "",
-    house_registration_number: "",
+    national_id_house_registration: "",
     relationship_verification_document: "",
+    payment_slip: [],
   })
 
   const history = useHistory()
@@ -128,9 +128,9 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
           membership_type: data.membership_type,
           user_photo: data.user_photo,
           medical_certificate: data.medical_certificate,
-          national_id_photo: data.national_id_photo,
-          house_registration_number: data.house_registration_number,
+          national_id_house_registration: data.national_id_house_registration,
           relationship_verification_document: data.relationship_verification_document,
+          payment_slip: data.payment_slip,
         })
       })
       .catch(({ response }) => {

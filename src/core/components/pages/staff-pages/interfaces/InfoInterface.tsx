@@ -19,9 +19,9 @@ export default interface Info {
   // object id //
   user_photo: string
   medical_certificate: string
-  national_id_photo: string
-  house_registration_number: string
-  relationship_verification_document: string
+  national_id_house_registration: string
+  relationship_verification_document?: string // only for สมาชิกสามัญสมทบ ก
+  payment_slip: string[]
 }
 
 export interface VerifyExtendInfo {
@@ -29,7 +29,7 @@ export interface VerifyExtendInfo {
   membership_type: string
   name_th: string
   surname_th: string
-  payment_evidence: string
+  payment_slip: string
 }
 
 export interface EditComponentInfo {
@@ -135,9 +135,9 @@ export interface RejectInfo {
   contact_person_phone: boolean
   user_photo: boolean
   medical_certificate: boolean
-  national_id_photo: boolean
-  house_registration_number: boolean
+  national_id_house_registration: boolean
   relationship_verification_document: boolean
+  payment_slip: boolean
 }
 
 export const RejectInfoLabel: Record<keyof RejectInfo, string> = {
@@ -161,10 +161,11 @@ export const RejectInfoLabel: Record<keyof RejectInfo, string> = {
   contact_person_home_phone: "หมายเลขโทรศัพท์บ้าน ผู้ติดต่อยามฉุกเฉิน",
   contact_person_phone: "หมายเลขโทรศัพท์มือถือ ผู้ติดต่อยามฉุกเฉิน",
   user_photo: "รูปภาพ",
+  ///
   medical_certificate: "เอกสารใบรับรองแพทย์",
-  national_id_photo: "หมายเลขบัตรประชาชน / พาสปอร์ต",
-  house_registration_number: "สำเนาทะเบียนบ้านที่มีหน้านิสิต",
+  national_id_house_registration: "หมายเลขบัตรประชาชน / สำเนาทะเบียนบ้านที่มีหน้านิสิต",
   relationship_verification_document: "เอกสารยืนยันตัวตน",
+  payment_slip: "หลักฐานการชำระเงิน",
 }
 
 export type RejectInfoLabelKey = keyof RejectInfo

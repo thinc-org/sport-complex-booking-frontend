@@ -55,8 +55,7 @@ export interface Other extends DefaultAccount {
   account_expiration_date: Date
   user_photo: string //(ของcollectionที่เก็บรูป)
   medical_certificate: string
-  national_id_photo: string //also passport photo
-  house_registration_number: string //with reference person
+  national_id_house_registration: string // (national_id/passport photo) or house_registration
   relationship_verification_document: string
   national_id_house_registration: string
   payment_slip: string | string[]
