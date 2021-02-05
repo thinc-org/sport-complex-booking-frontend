@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react"
 import { Button } from "react-bootstrap"
 import { useForm } from "react-hook-form"
-import { UserContext, Other } from "../../../../contexts/UsersContext"
+import { UserContext, Other, RegisterResponse } from "../../../../contexts/UsersContext"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { CustomAccountModal, WarningMessage } from "../../../ui/Modals/AccountPageModals"
@@ -12,31 +12,33 @@ import { OtherInfo, RegistrationProps } from "../../staff-pages/interfaces/InfoI
 import { DocumentUploadResponse } from "../../../../dto/account.dto"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { otherInfoSchema } from "../../../../schemas/editUserInfo"
-
-// TODO
-// 1. conditionally display the payment upload input using date
-// 2. fix the input fields according to firm
+import { useHistory } from "react-router"
+import BeatLoader from "react-spinners/BeatLoader"
 
 export default function OtherAccountEdit({ registrationInfo, isRegister }: RegistrationProps) {
   // React Hook Forms
   const { t, i18n } = useTranslation()
   const [is_thai_language, set_is_thai_language] = useState(false)
   const [user_photo, set_user_photo] = useState<File>()
-  const [national_id_scan, set_national_id_scan] = useState<File>()
+  const [national_id_house_registration, set_national_id_house_registration] = useState<File>()
   const [medical_certificate, set_medical_certificate] = useState<File>()
-  const [house_registration_number, set_house_registration_number] = useState<File>()
   const [relationship_verification_document, set_relationship_verification_document] = useState<File>()
-  const [payment_evidence, set_payment_evidence] = useState<File>()
+  const [payment_slip, set_payment_slip] = useState<File>()
   const [date, setDate] = useState(new Date())
   const [show, setShow] = useState(false)
+  const [showRegisterSuccess, setShowRegisterSuccess] = useState(false)
   const [showErr, setShowErr] = useState(false)
+  const [showRegisterErr, setShowRegisterErr] = useState(false)
   const { otherAccount: user } = useContext(UserContext)
   const [formData, setFormData] = useState<OtherInfo>()
   const { register, handleSubmit, errors } = useForm({ resolver: yupResolver(otherInfoSchema) })
+  const history = useHistory()
+  const [loading, setLoading] = useState(false)
 
   // Handlers
   const handleFileUpload = (formData: FormData) => {
     client.post<DocumentUploadResponse>("/fs/upload", formData).catch(() => {
+      setShow(false)
       setShowErr(true)
     })
   }
@@ -46,9 +48,10 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
     formData.append("user_photo", file, file?.name)
     handleFileUpload(formData)
   }
-  const uploadNationalId = (file: File) => {
+
+  const uploadNationalIdHouseRegistration = (file: File) => {
     const formData = new FormData()
-    formData.append("national_id_photo", file, file?.name)
+    formData.append("national_id_house_registration", file, file?.name)
     handleFileUpload(formData)
   }
   const uploadMedicalCertificate = (file: File) => {
@@ -56,11 +59,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
     formData.append("medical_certificate", file, file?.name)
     handleFileUpload(formData)
   }
-  const uploadHouseRegistrationNumber = (file: File) => {
-    const formData = new FormData()
-    formData.append("house_registration_number", file, file?.name)
-    handleFileUpload(formData)
-  }
+
   const uploadRelationshipVerificationDocument = (file: File) => {
     const formData = new FormData()
     formData.append("relationship_verification_document", file, file.name)
@@ -69,43 +68,20 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
 
   const uploadPaymentEvidence = (file: File) => {
     const formData = new FormData()
-    formData.append("payment_evidence", file, file.name)
+    formData.append("payment_slip", file, file.name)
     handleFileUpload(formData)
-  }
-
-  // These functions save the input file to the states
-  const assignUserPhoto = (file: FileList) => {
-    set_user_photo(file[0])
-  }
-  const assignNationalIdPhoto = (file: FileList) => {
-    set_national_id_scan(file[0])
-  }
-  const assignMedicalCertificate = (file: FileList) => {
-    set_medical_certificate(file[0])
-  }
-  const assignHouseRegistrationNumber = (file: FileList) => {
-    set_house_registration_number(file[0])
-  }
-  const assignRelationshipVerificationDocument = (file: FileList) => {
-    set_relationship_verification_document(file[0])
-  }
-
-  const assignPaymentEvidence = (file: FileList) => {
-    set_payment_evidence(file[0])
   }
 
   const handleAllFilesUpload = (
     userPhotoInput: File | undefined,
-    nationalIdInput: File | undefined,
+    nationalIdHouseRegistration: File | undefined,
     medicalCertificateInput: File | undefined,
-    houseRegistrationNumberInput: File | undefined,
     relationshipVerificationDocumentInput: File | undefined,
     paymentEvidence: File | undefined
   ) => {
     if (userPhotoInput) uploadUserPhoto(userPhotoInput)
-    if (nationalIdInput) uploadNationalId(nationalIdInput)
+    if (nationalIdHouseRegistration) uploadNationalIdHouseRegistration(nationalIdHouseRegistration)
     if (medicalCertificateInput) uploadMedicalCertificate(medicalCertificateInput)
-    if (houseRegistrationNumberInput) uploadHouseRegistrationNumber(houseRegistrationNumberInput)
     if (relationshipVerificationDocumentInput) uploadRelationshipVerificationDocument(relationshipVerificationDocumentInput)
     if (paymentEvidence) uploadPaymentEvidence(paymentEvidence)
   }
@@ -123,27 +99,42 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
   }
 
   const postDataToBackend = (data: Other) => {
-    client
-      .put<Other>("/account_info/", { ...data, is_thai_language: is_thai_language })
-      .then(({ data }) => {
-        if (data.verification_status === "Submitted") {
-          handleAllFilesUpload(
-            user_photo,
-            national_id_scan,
-            medical_certificate,
-            house_registration_number,
-            relationship_verification_document,
-            payment_evidence
-          )
-        }
-        window.location.reload()
-      })
-      .catch(function (error) {
-        if (error.response) {
-          setShow(false)
-          setShowErr(true)
-        }
-      })
+    setLoading(true)
+    if (isRegister) {
+      client
+        .post<RegisterResponse>("/users/other", { ...data, is_thai_language: is_thai_language, ...registrationInfo, birthday: date })
+        .then(({ data }) => {
+          setCookie("token", data.jwt, 1)
+          handleAllFilesUpload(user_photo, national_id_house_registration, medical_certificate, relationship_verification_document, payment_slip)
+          setShowRegisterSuccess(true)
+          setLoading(false)
+          //history.push("/login")
+        })
+        .catch((err) => {
+          if (err.response) {
+            setShow(false)
+            setShowRegisterErr(true)
+            setLoading(false)
+          }
+        })
+    } else {
+      client
+        .put<Other>("/account_info/", { ...data, is_thai_language: is_thai_language, birthday: date })
+        .then(({ data }) => {
+          if (data.verification_status === "Submitted") {
+            handleAllFilesUpload(user_photo, national_id_house_registration, medical_certificate, relationship_verification_document, payment_slip)
+          }
+          setLoading(false)
+          window.location.reload()
+        })
+        .catch(function (error) {
+          if (error.response) {
+            setShow(false)
+            setShowErr(true)
+            setLoading(false)
+          }
+        })
+    }
   }
 
   const onSubmit = (data: OtherInfo) => {
@@ -155,7 +146,9 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
   return (
     /// THIS IS THE START OF THE EDITING VIEW
     <div className="mx-auto col-md-6">
-      {user && <WarningMessage show={user.verification_status !== ""} verification_status={user.verification_status} account={user.account_type} />}
+      {!isRegister && user && (
+        <WarningMessage show={user.verification_status !== ""} verification_status={user.verification_status} account={user.account_type} />
+      )}
       <form onSubmit={handleSubmit(onSubmit)} className="needs-validation">
         <div className="default-mobile-wrapper mt-3">
           <h4 className="align-right mb-2">{t("language")}</h4>
@@ -284,6 +277,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                   setDate(date)
                 }}
                 showYearDropdown
+                maxDate={new Date()}
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("birthday")}
               />
             </div>
@@ -389,20 +383,18 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
         <br />
         <div className="default-mobile-wrapper">
           <h4>{t("emergency_contact")}</h4>
-          <div className="col-md-4">
-            <label className="form-label mt-2">{t("contact_person_prefix")}</label>
-            <select
-              name="contact_person.contact_person_prefix"
-              ref={register}
-              defaultValue={user?.contact_person_prefix}
-              disabled={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("contact_person_prefix")}
-            >
-              <option value={t("mr").toString()}>{t("mr")}</option>
-              <option value={t("ms").toString()}>{t("ms")}</option>
-              <option value={t("mrs").toString()}>{t("mrs")}</option>
-            </select>
-            {user?.rejected_info?.includes("contact_person_prefix") ? <p className="input-error">{t("resubmitField")}</p> : null}
-          </div>
+          <label className="form-label mt-2">{t("contact_person_prefix")}</label>
+          <select
+            name="contact_person.contact_person_prefix"
+            ref={register}
+            defaultValue={user?.contact_person_prefix}
+            disabled={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("contact_person_prefix")}
+          >
+            <option value={t("mr").toString()}>{t("mr")}</option>
+            <option value={t("ms").toString()}>{t("ms")}</option>
+            <option value={t("mrs").toString()}>{t("mrs")}</option>
+          </select>
+          {user?.rejected_info?.includes("contact_person_prefix") ? <p className="input-error">{t("resubmitField")}</p> : null}
 
           <hr />
           <label className="form-label mt-2">{t("contact_person_name")}</label>
@@ -481,10 +473,10 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                 accept="image/png, image/jpeg"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("user_photo")}
                 onChange={(e) => {
-                  if (e.target.files && e.target.files[0]?.size > 4194304) {
+                  if (e.target.files && e.target.files[0]?.size > 2097152) {
                     e.target.value = ""
                     alert("fileTooBig")
-                  } else e.target.files && assignUserPhoto(e.target.files)
+                  } else e.target.files && set_user_photo(e.target.files[0])
                 }}
               />
             ) : (
@@ -493,35 +485,35 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           </div>
           {user?.rejected_info?.includes("user_photo") ? <p className="input-error">{t("resubmitField")}</p> : null}
           <hr />
-          <label className="form-label my-2">{t("national_id_photo")}</label>
+          <label className="form-label my-2">{t("national_id_house_registration")}</label>
           <div className="form-file">
-            <p>{national_id_scan ? "✓ " + national_id_scan?.name.substring(0, 30) + "..." : ""}</p>
-            {!user?.national_id_photo && (
-              <label htmlFor="nationID/passport" className="form-file-input form-control text-center">
+            <p>{national_id_house_registration ? "✓ " + national_id_house_registration?.name.substring(0, 30) + "..." : ""}</p>
+            {!user?.national_id_house_registration && (
+              <label htmlFor="national_id_house_registration" className="form-file-input form-control text-center">
                 {t("chooseFile")}
               </label>
             )}
-            {!user?.national_id_photo ? (
+            {!user?.national_id_house_registration ? (
               <input
                 style={{ display: "none" }}
                 type="file"
                 className="form-file-input  form-control"
-                id="nationID/passport"
+                id="national_id_house_registration"
                 required
                 accept="application/pdf"
-                readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("national_id_photo")}
+                readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("national_id_house_registration")}
                 onChange={(e) => {
-                  if (e.target.files && e.target.files[0]?.size > 4194304) {
+                  if (e.target.files && e.target.files[0]?.size > 2097152) {
                     e.target.value = ""
                     alert("fileTooBig")
-                  } else e.target.files && assignNationalIdPhoto(e.target.files)
+                  } else e.target.files && set_national_id_house_registration(e.target.files[0])
                 }}
               />
             ) : (
               <p>{t("submitted")}</p>
             )}
           </div>
-          {user?.rejected_info?.includes("national_id_photo") ? <p className="input-error">{t("resubmitField")}</p> : null}
+          {user?.rejected_info?.includes("national_id_house_registration") ? <p className="input-error">{t("resubmitField")}</p> : null}
           <hr />
           <label className="form-label my-2">{t("medical_certificate")}</label>
           <div className="form-file">
@@ -541,10 +533,10 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                 accept="application/pdf"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("medical_certificate")}
                 onChange={(e) => {
-                  if (e.target.files && e.target.files[0]?.size > 4194304) {
+                  if (e.target.files && e.target.files[0]?.size > 2097152) {
                     e.target.value = ""
                     alert("fileTooBig")
-                  } else e.target.files && assignMedicalCertificate(e.target.files)
+                  } else e.target.files && set_medical_certificate(e.target.files[0])
                 }}
               />
             ) : (
@@ -553,87 +545,63 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           </div>
           {user?.rejected_info?.includes("medical_certificate") ? <p className="input-error">{t("resubmitField")}</p> : null}
           <hr />
-          <label className="form-label my-2">{t("house_registration_number")}</label>
-          <div className="form-file">
-            <p>{house_registration_number ? "✓ " + house_registration_number?.name.substring(0, 30) + "..." : ""}</p>
-            {!user?.house_registration_number && (
-              <label htmlFor="house_registration_number" className="form-file-input form-control text-center">
-                {t("chooseFile")}
-              </label>
-            )}
-            {!user?.house_registration_number ? (
-              <input
-                style={{ display: "none" }}
-                type="file"
-                className="form-file-input  form-control"
-                id="house_registration_number"
-                accept="application/pdf"
-                readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("house_registration_number")}
-                onChange={(e) => {
-                  if (e.target.files && e.target.files[0]?.size > 4194304) {
-                    e.target.value = ""
-                    alert("fileTooBig")
-                  } else e.target.files && assignHouseRegistrationNumber(e.target.files)
-                }}
-              />
-            ) : (
-              <p>{t("submitted")}</p>
-            )}
-          </div>
-          {user?.rejected_info?.includes("house_registration_number") ? <p className="input-error">{t("resubmitField")}</p> : null}
-          <hr />
-          <label className="form-label my-2">{t("relationship_verification_document")}</label>
-          <div className="form-file">
-            <p>{relationship_verification_document ? "✓ " + relationship_verification_document?.name.substring(0, 30) + "..." : ""}</p>
-            {!user?.relationship_verification_document && (
-              <label htmlFor="relationship_verification_document" className="form-file-input form-control text-center">
-                {t("chooseFile")}
-              </label>
-            )}
-            {!user?.relationship_verification_document ? (
-              <input
-                style={{ display: "none" }}
-                type="file"
-                className="form-control"
-                id="relationship_verification_document"
-                accept="application/pdf"
-                readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("relationship_verification_document")}
-                onChange={(e) => {
-                  if (e.target.files && e.target.files[0]?.size > 4194304) {
-                    e.target.value = ""
-                    alert("fileTooBig")
-                  } else e.target.files && assignRelationshipVerificationDocument(e.target.files)
-                }}
-              />
-            ) : (
-              <p>{t("submitted")}</p>
-            )}
-          </div>
+          {(user?.membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership" ||
+            registrationInfo?.membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership") && (
+            <div>
+              <label className="form-label my-2">{t("relationship_verification_document")}</label>
+              <div className="form-file">
+                <p>{relationship_verification_document ? "✓ " + relationship_verification_document?.name.substring(0, 30) + "..." : ""}</p>
+                {!user?.relationship_verification_document && (
+                  <label htmlFor="relationship_verification_document" className="form-file-input form-control text-center">
+                    {t("chooseFile")}
+                  </label>
+                )}
+                {!user?.relationship_verification_document ? (
+                  <input
+                    style={{ display: "none" }}
+                    type="file"
+                    className="form-control"
+                    id="relationship_verification_document"
+                    accept="application/pdf"
+                    readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("relationship_verification_document")}
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]?.size > 2097152) {
+                        e.target.value = ""
+                        alert("fileTooBig")
+                      } else e.target.files && set_relationship_verification_document(e.target.files[0])
+                    }}
+                  />
+                ) : (
+                  <p>{t("submitted")}</p>
+                )}
+              </div>
+            </div>
+          )}
           {user?.rejected_info?.includes("relationship_verification_document") ? <p className="input-error">{t("resubmitField")}</p> : null}
         </div>
         <div className="default-mobile-wrapper mt-3">
           <h4>{t("paymentSection")}</h4>
           <label className="form-label my-2">{t("paymentEvidenceLabel")}</label>
           <div className="form-file">
-            <p>{payment_evidence ? "✓ " + payment_evidence?.name.substring(0, 30) + "..." : ""}</p>
-            {!user?.relationship_verification_document && (
+            <p>{payment_slip ? "✓ " + payment_slip?.name.substring(0, 30) + "..." : ""}</p>
+            {!user?.payment_slip && (
               <label htmlFor="paymentEvidence" className="form-file-input form-control text-center">
                 {t("chooseFile")}
               </label>
             )}
-            {!user?.relationship_verification_document ? ( // TODO: change this and the DTO when Firm's endpoint is done
+            {!user?.payment_slip ? (
               <input
                 style={{ display: "none" }}
                 type="file"
                 className="form-control"
                 id="paymentEvidence"
-                accept="application/pdf"
-                readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("relationship_verification_document")} // This too
+                accept="application/pdf, image/png, image/jpeg"
+                readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("payment_slip")} // This too
                 onChange={(e) => {
-                  if (e.target.files && e.target.files[0]?.size > 4194304) {
+                  if (e.target.files && e.target.files[0]?.size > 2097152) {
                     e.target.value = ""
                     alert("fileTooBig")
-                  } else e.target.files && assignPaymentEvidence(e.target.files)
+                  } else e.target.files && set_payment_slip(e.target.files[0])
                 }}
               />
             ) : (
@@ -644,7 +612,10 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
         <br />
         <div className="button-group col-md-12">
           <Button variant="pink" className="btn-secondary" type="submit">
-            {t("saveAndSubmit")}
+            {isRegister ? t("register") : t("saveAndSubmit")}
+            <span className="ml-3 spinner">
+              <BeatLoader color="#fff" loading={loading} size={12} />
+            </span>
           </Button>
         </div>
 
@@ -652,7 +623,17 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
         <CustomAccountModal type="confirmEditOtherAccountModal" show={show} setShow={setShow} mainFunction={postDataToBackend} data={formData} />
         {/* MODAL ERROR */}
         <CustomAccountModal type="editAccountErrorModal" show={showErr} setShow={setShowErr} />
-        {/* END OF FORM */}
+        {/* REGISTRATION SUCCESS MODAL */}
+        <CustomAccountModal
+          type="registrationSuccessModal"
+          show={showRegisterSuccess}
+          setShow={setShowRegisterSuccess}
+          click={() => {
+            history.push("/login")
+          }}
+        />
+        {/* REGISTRATION SUCCESS MODAL */}
+        <CustomAccountModal type="registrationErrorModal" show={showRegisterErr} setShow={setShowRegisterErr} />
       </form>
     </div>
   )

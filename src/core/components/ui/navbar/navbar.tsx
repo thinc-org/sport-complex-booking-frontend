@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { /*Navbar, Container, Nav,*/ Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import { useAuthContext } from "../../../controllers/authContext"
@@ -10,6 +10,7 @@ import { data } from "./sidebarData"
 import { useNavHeader } from "./navbarSideEffect"
 import { useTranslation } from "react-i18next"
 import { useLanguge } from "../../../i18n/i18n"
+import { UserContext } from "../../../contexts/UsersContext"
 
 const Sidebar = () => {
   const [inProp, setInProp] = useState(false)
@@ -17,6 +18,7 @@ const Sidebar = () => {
   const { isUser, setToken } = useAuthContext()
   const { t } = useTranslation()
   const { changeLanguage } = useLanguge()
+  const { clearUser } = useContext(UserContext)
   const listItems = data.map((item, index) => (
     <li key={index}>
       <Link className="styled-link" to={item.path} onClick={() => setInProp(false)}>
@@ -28,6 +30,7 @@ const Sidebar = () => {
     setToken("")
     setCookie("token", null, 0)
     setInProp(false)
+    clearUser()
   }
 
   return (

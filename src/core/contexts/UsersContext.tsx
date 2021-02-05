@@ -58,6 +58,14 @@ export interface Other extends DefaultAccount {
   national_id_photo: string //also passport photo
   house_registration_number: string //with reference person
   relationship_verification_document: string
+  national_id_house_registration: string
+  payment_slip: string
+  payment_status: string
+}
+
+export interface RegisterResponse {
+  jwt: string
+  user: Other
 }
 
 export type AccountInfo = DefaultAccount | CuStudent | SatitCuPersonel | Other
@@ -69,6 +77,7 @@ export interface UserConstruct {
   setCuStudentAccount: (CuStudent: CuStudent) => void
   setSatitCuPersonelAccount: (SatitCuPersonel: SatitCuPersonel) => void
   setOtherAccount: (Other: Other) => void
+  clearUser: () => void
 }
 
 export const UserContext = createContext({} as UserConstruct)
@@ -77,6 +86,9 @@ export default function UserContextProvider({ ...props }) {
   const [cuStudentAccount, setCuStudentAccount] = useState<CuStudent>()
   const [satitCuPersonelAccount, setSatitCuPersonelAccount] = useState<SatitCuPersonel>()
   const [otherAccount, setOtherAccount] = useState<Other>()
-  const value = { cuStudentAccount, satitCuPersonelAccount, otherAccount, setCuStudentAccount, setSatitCuPersonelAccount, setOtherAccount }
+  const clearUser = () => {
+    setOtherAccount(undefined)
+  }
+  const value = { cuStudentAccount, satitCuPersonelAccount, otherAccount, setCuStudentAccount, setSatitCuPersonelAccount, setOtherAccount, clearUser }
   return <UserContext.Provider value={value} {...props} />
 }

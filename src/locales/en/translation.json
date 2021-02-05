@@ -45,6 +45,7 @@
   "noFile": "No File",
   "user_photo": "Your Photo (Image File)",
   "national_id_photo": "National ID / Passpord (.pdf only)",
+  "national_id_house_registration": "National ID / Passport / House Registration Number (.pdf only)",
   "medical_certificate": "Medical Certificate (private or public hospital only) (.pdf only)",
   "house_registration_number": "Optional: House Registration Document with reference person (.pdf only)",
   "relationship_verification_document": "Optional: Relationship Verification document (.pdf only)",
@@ -172,7 +173,23 @@
   },
   "editAccountErrorModal": {
     "title": "An error has occured",
-    "body": "Cannot edit account information at the moment"
+    "body": "Cannot edit account information at the moment."
+  },
+  "registrationSuccessModal": {
+    "title": "Account Successfully Created",
+    "body": "Please login to continue."
+  },
+  "registrationErrorModal": {
+    "title": "Registration Unsuccessful",
+    "body": "Please try again."
+  },
+  "paymentSuccessModal": {
+    "title":"Submission Successful",
+    "body":"Please wait while your payment is being verified by the staffs."
+  },
+  "paymentErrorModal": {
+    "title":"Submission Error",
+    "body":"Cannot submit your payment slip at the moment. Please try again."
   },
   "closeWaitingRoom?": "Are you sure you want to close the waiting room?",
   "timeOut": "Time out",
@@ -291,5 +308,12 @@
     "type8": "สมาชิกรายเดือนเฉพาะสนามกีฬาในร่ม: 3,000 บาท/ปี/คน [ครอบครัวสมาชิกวิสามัญเฉพาะสนาม]",
     "type9": "สมาชิกรายเดือนสนามกีฬาในร่ม: 1,000 บาท/เดือน/คน",
     "type10": "นักเรียนสาธิตจุฬา / บุคลากรจุฬา"
-  }  
+  },
+  "payment": "Payment",
+  "accountWillExpireOn": "Your account will expire on ",
+  "extendAccount": "Extend Membership",
+  "paymentRejectedMessage": "Your payment slip has been rejected. Please re-submit.",
+  "paymentSubmittedMessage": "Your payment slip has been submitted",
+  "paymentApproved": "Your payment has been approved."
+
 }

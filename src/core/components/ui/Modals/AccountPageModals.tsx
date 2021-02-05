@@ -9,14 +9,22 @@ export interface EdittedData {
 }
 
 interface CustomAccountModalProps {
-  type: "confirmEditAccountModal" | "confirmEditOtherAccountModal" | "editAccountErrorModal"
+  type:
+    | "confirmEditAccountModal"
+    | "confirmEditOtherAccountModal"
+    | "editAccountErrorModal"
+    | "registrationSuccessModal"
+    | "registrationErrorModal"
+    | "paymentSuccessModal"
+    | "paymentErrorModal"
   show: boolean
   setShow: (value: boolean) => void
   mainFunction?: (data: Other) => void
   data?: EdittedData
+  click?: () => void
 }
 
-export const CustomAccountModal: React.FC<CustomAccountModalProps> = ({ type, show, setShow, mainFunction, data }) => {
+export const CustomAccountModal: React.FC<CustomAccountModalProps> = ({ type, show, setShow, mainFunction, data, click }) => {
   const { t } = useTranslation()
   const message: {
     title: string
@@ -38,16 +46,13 @@ export const CustomAccountModal: React.FC<CustomAccountModalProps> = ({ type, sh
       </Modal.Header>
       <Modal.Body style={{ fontWeight: "lighter" }}>{message.body}</Modal.Body>
       <Modal.Footer>
-        <Button
-          className="btn-normal btn-secondary"
-          onClick={() => {
-            setShow(false)
-          }}
-        >
-          {t("cancel")}
-        </Button>
         {data && mainFunction && (
           <Button variant="pink" className="btn-normal" onClick={() => mainFunction(data as Other)}>
+            {t("ok")}
+          </Button>
+        )}
+        {click && (
+          <Button variant="pink" className="btn-normal" onClick={() => click()}>
             {t("ok")}
           </Button>
         )}

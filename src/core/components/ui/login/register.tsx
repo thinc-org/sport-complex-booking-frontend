@@ -7,21 +7,7 @@ import { RegistrationInfo } from "../../pages/staff-pages/interfaces/InfoInterfa
 import { QuestionCircle, QuestionCircleFill } from "react-bootstrap-icons"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { registrationSchema } from "../../../schemas/registrationSchema"
-//import { client } from "../../../../axiosConfig"
 import { NavHeader } from "../navbar/navbarSideEffect"
-
-// TODO
-
-// 6. connect to Firm's new endpoint
-// 7. test submitting information
-// 8. registration success and failure modals
-
-// DONE
-// 1. show account type explanations ok
-// 2. use i18n for account names? ok
-// 3. work on yup validation ok
-// 4. add hints ok
-// 5. add payment upload ok
 
 export const Register = () => {
   const otherAccountTypes = [
@@ -42,19 +28,9 @@ export const Register = () => {
   const { t } = useTranslation()
   const { register, handleSubmit, errors } = useForm({ resolver: yupResolver(registrationSchema) })
   const [showNextForm, setShowNextForm] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const registerUser = (data: RegistrationInfo) => {
-    setLoading(true)
-    console.log(loading)
-    // post to backend
-    setLoading(false)
-  }
-
   const onSubmit = (data: RegistrationInfo) => {
     data.membership_type = otherAccountTypes[parseInt(data.membership_type)]
     delete data.repeat_password
-    console.log(data)
-    registerUser(data)
     setShowNextForm(true)
     setCredentials(data)
   }
