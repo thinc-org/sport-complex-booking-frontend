@@ -235,7 +235,8 @@
   "designer": "UI/UX Designers",
   "specialThanks": "Special Thanks to",
   "team": "Team",
-  "teamMsg": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin eget turpis eros. Suspendisse elit a nisi auctor fermentum. Nunc luctus sed arcu sed bibendum.",
+  "teamMsg1": "This website is a collaboration between Thinc. club and CU Sports Center. The development started on 13/08/2020 and has since been maintained by Thinc.",
+  "teamMsg2": "A group of talented students from Thinc. received requirements from CU Sports Center and developed the platform. Here is the list of those students who were involved with the development of this project:",
   "description": "Description",
   "descriptionMsg": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   "endOfPenalty": "End of penalty period",
@@ -315,6 +316,7 @@
   "paymentRejectedMessage": "Your payment slip has been rejected. Please re-submit.",
   "paymentSubmittedMessage": "Your payment slip has been submitted",
   "paymentApproved": "Your payment has been approved.",
-  "noEmpty": "❌ Do not leave this empty."
+  "noEmpty": "❌ Do not leave this empty.",
+  "landingMessage": "Easily reserve a court online and check-in all in one place."
 
 }

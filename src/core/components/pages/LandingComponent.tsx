@@ -3,7 +3,11 @@ import landing from "../../assets/images/landing.png"
 import { Link } from "react-router-dom"
 import { Button } from "react-bootstrap"
 import { NavHeader } from "../ui/navbar/navbarSideEffect"
+import { useTranslation } from "react-i18next"
+
 function Landing() {
+  const { t } = useTranslation()
+
   return (
     <>
       <NavHeader isOnStaffPage={true} />
@@ -12,8 +16,8 @@ function Landing() {
           <div className="d-none d-sm-block my-auto col-sm-8 textgroup landing">
             <h4> Chulalongkorn University </h4>
             <h4> Sports Center </h4>
-            <h6 className="col-11 pl-0" style={{ paddingTop: "4%" }}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            <h6 className="col-11 pl-0" style={{ paddingTop: "4%", fontSize: "24px" }}>
+              {t("landingMessage")}
             </h6>
             <Link className="d-none d-sm-block col-10 col-md-8 col-lg-6 pl-0 pt-5 btn button" to="/login">
               <Button variant="pink" className="w-100">
