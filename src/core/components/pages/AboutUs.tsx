@@ -38,7 +38,7 @@ function AboutUs() {
     {
       title: "frontendDeveloper",
       team_en: ["Dhanabordee Mekintharanggur", "Veerin Phana-ngam", "Sirathee Koomgreng", "Suparuek Saetoen", "Manapat Weeramongkolkul"],
-      team_th: ["ธนบดี เมฆินทรางกูร", "วีรินทร์ พนางาม", "สิรธีร์ คุ้มเกรง", "ศุภฤกษ์ แซ่เติ้น", "ชมนพัทธ์ วีระมงคลกุล"],
+      team_th: ["ธนบดี เมฆินทรางกูร", "วีรินทร์ พนางาม", "สิรธีร์ คุ้มเกรง", "ศุภฤกษ์ แซ่เติ้น", "มนพัทธ์ วีระมงคลกุล"],
       icon: Frontend,
     },
     {
