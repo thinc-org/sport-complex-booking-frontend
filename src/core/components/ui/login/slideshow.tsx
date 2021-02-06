@@ -12,8 +12,8 @@ const Slide = () => {
   return (
     <div className="default-wrapper w-100">
       <Carousel className="h-100 w-100">
-        {carouselImages.map((image) => (
-          <Carousel.Item>
+        {carouselImages.map((image, i) => (
+          <Carousel.Item key={i}>
             <div style={{ display: "flex", overflow: "hidden", height: "400px", borderRadius: "15px", margin: "0px 5px" }}>
               <img src={image} alt="First slide" style={{ objectFit: "cover", flexShrink: 0, height: "100%" }} />
             </div>
