@@ -111,4 +111,4 @@ function AboutUs() {
   )
 }
 
-export default withUserGuard(AboutUs)
+export default AboutUs
