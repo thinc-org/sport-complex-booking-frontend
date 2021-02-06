@@ -1,33 +1,24 @@
 import React from "react"
 import { Carousel } from "react-bootstrap"
-import Logo from "../../../assets/images/logo.jpg"
+import carousel1 from "../../../assets/images/carousel/carousel1.png"
+import carousel2 from "../../../assets/images/carousel/carousel2.jpg"
+import carousel3 from "../../../assets/images/carousel/carousel3.png"
+import carousel4 from "../../../assets/images/carousel/carousel4.png"
+import carousel5 from "../../../assets/images/carousel/carousel5.png"
+
 const Slide = () => {
+  const carouselImages = [carousel1, carousel2, carousel3, carousel4, carousel5]
+
   return (
     <div className="default-wrapper w-100">
       <Carousel className="h-100 w-100">
-        <Carousel.Item>
-          <img className="d-block w-100" src={Logo} alt="First slide" />
-          <Carousel.Caption>
-            <h3>First slide label</h3>
-            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-          </Carousel.Caption>
-        </Carousel.Item>
-        <Carousel.Item>
-          <img className="d-block w-100" src={Logo} alt="Third slide" />
-
-          <Carousel.Caption>
-            <h3>Second slide label</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          </Carousel.Caption>
-        </Carousel.Item>
-        <Carousel.Item>
-          <img className="d-block w-100" src={Logo} alt="Third slide" />
-
-          <Carousel.Caption>
-            <h3>Third slide label</h3>
-            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-          </Carousel.Caption>
-        </Carousel.Item>
+        {carouselImages.map((image) => (
+          <Carousel.Item>
+            <div style={{ display: "flex", overflow: "hidden", height: "400px", borderRadius: "15px", margin: "0px 5px" }}>
+              <img src={image} alt="First slide" style={{ objectFit: "cover", flexShrink: 0, height: "100%" }} />
+            </div>
+          </Carousel.Item>
+        ))}
       </Carousel>
     </div>
   )

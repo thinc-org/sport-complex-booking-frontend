@@ -236,7 +236,8 @@
   "designer": "นักออกแบบ UI/UX",
   "specialThanks": "ขอขอบคุณ",
   "team": "ทีมงาน",
-  "teamMsg": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin eget turpis eros. Suspendisse elit a nisi auctor fermentum. Nunc luctus sed arcu sed bibendum.",
+  "teamMsg1": "เว็บไซต์นี้เป็นผลของการร่วมมือระหว่างชมรม Thinc. กับศูนย์กีฬาจุฬาลงกรณ์มหาวิทยาลัย เว็บนี้ถูกสร้างขึ้นเมื่อ 13 สิงหาคม 2563 และยังถูกรักษาบำรุงโดยชมรม Thinc. ",
+  "teamMsg2":"นิสิตจุฬาฯหลายคนที่มีความสามารถจากชมรม Thinc. ได้รับข้อกำหนดจากศูนย์กีฬาจุฬาลงกรณ์มหาวิทยาลัย และได้ช่วยกันพัฒนาแพลตฟอร์มนี้ขึ้นมา ด้านล่างนี้คือรายชื่อของนิสิตที่มีความเกี่ยวข้องกับการพัฒนาของโปรเจ็ค",
   "description": "คำอธิบาย",
   "descriptionMsg": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   "endOfPenalty": "สิ้นสุดการโดนลงโทษ",
@@ -316,5 +317,6 @@
   "paymentRejectedMessage": "หลักฐานการชำระถูกปฏิเสธ กรุณาแก้ไขและส่งใหม่",
   "paymentSubmittedMessage": "หลักฐานการชำระถูกส่งเรียบร้อยแล้ว",
   "paymentApproved": "หลักฐานการชำระเงินไ  ด้รับการอนุมัติแล้ว",
-  "noEmpty": "❌ กรุณากรอกข้อมูล"
+  "noEmpty": "❌ กรุณากรอกข้อมูล",
+  "landingMessage": "จองสนามกีฬาออนไลน์และเช็คอินได้ง่ายๆในที่เดียว"
 }

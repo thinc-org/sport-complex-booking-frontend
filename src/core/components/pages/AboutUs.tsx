@@ -25,38 +25,38 @@ function AboutUs() {
   const credits: CreditsInfo[] = [
     {
       title: "productOwner",
-      team_en: ["Name Surname"],
-      team_th: ["ชื่อ นามสกุล"],
+      team_en: ["Kevin Chakornsiri"],
+      team_th: ["กวิน ชาครศิริ"],
       icon: ProductOwner,
     },
     {
       title: "projectManager",
-      team_en: ["Name Surname"],
-      team_th: ["ชื่อ นามสกุล"],
+      team_en: ["Natthorn Suwannapasri"],
+      team_th: ["ณัฐธร สุวรรณนภาศรี"],
       icon: ProjectManager,
     },
     {
       title: "frontendDeveloper",
-      team_en: ["Name Surname1", "Name Surname2", "Name Surname3", "Name Surname4", "Name Surname5"],
-      team_th: ["ชื่อ นามสกุล1", "ชื่อ นามสกุล2", "ชื่อ นามสกุล3", "ชื่อ นามสกุล4", "ชื่อ นามสกุล5"],
+      team_en: ["Dhanabordee Mekintharanggur", "Veerin Phana-ngam", "Sirathee Koomgreng", "Suparuek Saetoen", "Manapat Weeramongkolkul"],
+      team_th: ["ธนบดี เมฆินทรางกูร", "วีรินทร์ พนางาม", "สิรธีร์ คุ้มเกรง", "ศุภฤกษ์ แซ่เติ้น", "ชมนพัทธ์ วีระมงคลกุล"],
       icon: Frontend,
     },
     {
       title: "backendDeveloper",
-      team_en: ["Name Surname1", "Name Surname2", "Name Surname3", "Name Surname4", "Name Surname5"],
-      team_th: ["ชื่อ นามสกุล1", "ชื่อ นามสกุล2", "ชื่อ นามสกุล3", "ชื่อ นามสกุล4", "ชื่อ นามสกุล5"],
+      team_en: ["Natthorn Suwannapasri", "Pattanachai Chonglertvarawong", "Chuwong Kulrattanarak", "Anon Ongsakul", "Chawakorn Phiantham"],
+      team_th: ["ณัฐธร สุวรรณนภาศรี", "พัฒนชัย จงเลิศวราวงศ์", "ชูวงศ์ กุลรัตนรักษ์", "อานนท์ อ๋องสกุล", "ชวกร เพียรทำ"],
       icon: Backend,
     },
     {
       title: "designer",
-      team_en: ["Name Surname1", "Name Surname2", "Name Surname3"],
-      team_th: ["ชื่อ นามสกุล1", "ชื่อ นามสกุล2", "ชื่อ นามสกุล3"],
+      team_en: ["Dhanabordee Mekintharanggur", "Panoj Kamolrattanawech", "Kritasak Udompongsanont"],
+      team_th: ["ธนบดี เมฆินทรางกูร", "ปณต กมลรัตนเวช", "นายกฤตศักดิ์ อุดมพงษานนท์"],
       icon: Design,
     },
     {
       title: "specialThanks",
-      team_en: ["Name Surname1", "Name Surname2", "Name Surname3", "Name Surname4"],
-      team_th: ["ชื่อ นามสกุล1", "ชื่อ นามสกุล2", "ชื่อ นามสกุล3", "ชื่อ นามสกุล4"],
+      team_en: ["Saenyakorn Siangsanoh", "Nut Pinyo", "Witchayut Thongyoi", "Nattamon Ponwichai", "Pipat Saengow", "Suphon Thanakornpakapong"],
+      team_th: ["แสนยากร เสียงเสนาะ", "ณัฎฐ์ ภิญโญ", "วิชยุตม์ ทองย้อย", "ณฐมน พลวิชัย", "พิพัฒน์ แซ่โง้ว", "สุภณ ธนกรภคพงศ์"],
       icon: Mentors,
     },
   ]
@@ -64,20 +64,14 @@ function AboutUs() {
   return (
     <div className="mx-auto col-md-6 mt-3 px-4">
       <NavHeader header={t("aboutUs")} />
-      <div className="description-container">
-        <img src={titleBackground} alt="titleBackground" />
-        <h3>{t("description")}</h3>
-      </div>
-      <div className="description-paragraph">
-        <p>{t("descriptionMsg")} </p>
-        <hr />
-      </div>
+
       <div className="description-container">
         <img src={titleBackground} alt="titleBackground" />
         <h3>{t("team")}</h3>
       </div>
       <div className="description-paragraph mb-4">
-        <p>{t("teamMsg")}</p>
+        <p>{t("teamMsg1")}</p>
+        <p>{t("teamMsg2")}</p>
       </div>
       {credits.map((team, index) => {
         return (
