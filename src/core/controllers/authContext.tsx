@@ -1,16 +1,14 @@
 import React, { useContext, useEffect, useState } from "react"
 import jwt_decode from "jwt-decode"
 import { getCookie } from "../contexts/cookieHandler"
-import { client } from "../../axiosConfig"
 interface AuthContextConstruct {
   token: string | undefined
   isUser: boolean
   setToken: (token: string) => void
-  isAdmin: boolean
-  setIsAdmin: (isAdmin: boolean) => void
+  role?: string
 }
 interface Token {
-  isStaff: boolean
+  role: string
   exp: number
   iat: number
   userId: string
@@ -22,24 +20,10 @@ export const useAuthContext = () => useContext(AuthContext)
 
 const AuthProvider = ({ ...props }) => {
   const [token, setToken] = useState(getCookie("token") ?? undefined)
-  const [isAdmin, setIsAdmin] = useState(false)
   const decodedToken = token ? jwt_decode<Token>(token) : undefined
   const isUser = !!decodedToken
-  const isStaff = decodedToken?.isStaff
-  const value = { token, isUser, setToken, isAdmin, setIsAdmin }
-  // TODO: Extract isAdmin from token instead
-  useEffect(() => {
-    if (isStaff) {
-      client
-        .get("staffs/profile")
-        .then((res) => {
-          if (res.data.is_admin) setIsAdmin(true)
-          else setIsAdmin(false)
-        })
-        .catch((err) => setIsAdmin(false))
-    }
-  }, [setIsAdmin, isStaff])
-  //
+  const role = decodedToken?.role
+  const value = { token, isUser, setToken, role }
   useEffect(() => {
     const cookieToken = getCookie("token") ?? undefined
     setToken(cookieToken)

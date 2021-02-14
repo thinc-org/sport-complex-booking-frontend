@@ -1,6 +1,6 @@
 import { useAuthContext } from "../../../controllers/authContext"
 function useSidebarData() {
-  const { isAdmin } = useAuthContext()
+  const { role } = useAuthContext()
   const data = [
     {
       icon: "",
@@ -48,7 +48,7 @@ function useSidebarData() {
       path: "/staff/settings",
     },
   ]
-  if (isAdmin) return data
+  if (role === "Admin") return data
   else
     return data.filter((link) => {
       const name = link.name
