@@ -4,8 +4,8 @@ import { useAuthContext } from "../controllers/authContext"
 
 function withAdminGuard<P>(Component: ComponentType<P>): FC<P> {
   return function WithAdminGuard(props: P) {
-    const { isAdmin } = useAuthContext()
-    if (!isAdmin) {
+    const { role } = useAuthContext()
+    if (role !== "Admin") {
       return (
         <Redirect
           to={{
