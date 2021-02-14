@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react"
-import { /*Navbar, Container, Nav,*/ Button } from "react-bootstrap"
+import { Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import { useAuthContext } from "../../../controllers/authContext"
 import { setCookie } from "../../../contexts/cookieHandler"
@@ -49,7 +49,7 @@ const Sidebar = () => {
             >
               <img src={Exit} onClick={() => setInProp(false)} alt="" />
             </div>
-            <ul className="sidebar-menu d-flex flex-column justify-content-between h-100">
+            <ul className="sidebar-menu d-flex flex-column justify-content-between">
               <div>{listItems}</div>
               <div>
                 <li className="m-0 p-0">{t("language")}</li>

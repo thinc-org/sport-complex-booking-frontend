@@ -23,6 +23,8 @@
   opacity: 0;
 }
 .sidebar-menu {
+  min-height: 100%;
+  height: 50vw;
   padding: 0 0 52px 0;
   margin: 0;
 }
