@@ -5,10 +5,10 @@ interface AuthContextConstruct {
   token: string | undefined
   isUser: boolean
   setToken: (token: string) => void
-  role?: string
+  role?: "Staff" | "Admin" | "User"
 }
 interface Token {
-  role: string
+  role: "Staff" | "Admin" | "User"
   exp: number
   iat: number
   userId: string
