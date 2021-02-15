@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
-import { RouteComponentProps, Link, useHistory } from "react-router-dom"
+import { Link, useHistory, useParams } from "react-router-dom"
 import { Button, Card, Form } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
-// import { Other } from "../../../../contexts/UsersContext"
+import { Other } from "../../../../contexts/UsersContext"
 import { handlePDF } from "../list-of-all-users-pages/OtherViewInfoComponent"
 import {
   ConfirmRejectModal,
@@ -16,7 +16,7 @@ import format from "date-fns/format"
 import { VerifyExtendInfo, ModalVerify } from "../interfaces/InfoInterface"
 
 /// start of main function ///
-const VerifyExtend: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
+const VerifyExtend: FunctionComponent = () => {
   // page state //
   const [showModalInfo, setShowModalInfo] = useState<ModalVerify>({
     showConfirmAccept: false,
@@ -29,32 +29,40 @@ const VerifyExtend: FunctionComponent<RouteComponentProps<{ _id: string }>> = (p
   })
 
   // Non CU state //
-  const [_id] = useState<string>(props.match.params._id)
   const [accountExpiredDate, setAccountExpiredDate] = useState<Date>()
   const [info, setInfo] = useState<VerifyExtendInfo>({
+    username: "",
     name_th: "",
     surname_th: "",
-    account_type: "",
     membership_type: "",
-    payment_evidence: "",
+    payment_slip: "",
   })
-
+  // router state //
   const history = useHistory()
+  const { _id } = useParams<{ _id: string }>()
 
-  // const fetchUserData = useCallback(() => {
-  //   client
-  //     .get<any>(`/approval/${_id}`)
-  //     .then(({ data }) => {
-  //     })
-  //     .catch(({ response }) => {
-  //       if (response && response.data.statusCode === 401) history.push("/staff")
-  //     })
-  // }, [_id, history])
+  // useCallback //
+  const fetchUserData = useCallback(() => {
+    client
+      .get<Other>(`/approval/${_id}`)
+      .then(({ data }) => {
+        setInfo({
+          username: data.username,
+          name_th: data.name_th,
+          surname_th: data.surname_th,
+          membership_type: data.membership_type,
+          payment_slip: data.payment_slip,
+        })
+      })
+      .catch(({ response }) => {
+        if (response && response.data.statusCode === 401) history.push("/staff")
+      })
+  }, [_id, history])
 
   // useEffects //
-  // useEffect(() => {
-  //   fetchUserData()
-  // }, [fetchUserData])
+  useEffect(() => {
+    fetchUserData()
+  }, [fetchUserData])
 
   // handles //
   const handleAccept = () => {
@@ -73,39 +81,42 @@ const VerifyExtend: FunctionComponent<RouteComponentProps<{ _id: string }>> = (p
 
   // requests //
   const requestReject = () => {
-    console.log("rejected")
-    // client({
-    //   method: "PATCH",
-    //   url: "/approval/reject",
-    //   data: {
-    //     id: _id,
-    //     reject_info: ,
-    //   },
-    // })
-    //   .then(() => {
-    //     setShowModalInfo({ ...showModalInfo, showConfirmReject: false, showCompleteReject: true })
-    //   })
-    //   .catch((err) => {
-    //     setShowModalInfo({ ...showModalInfo, showConfirmReject: false, showErr: true })
-    //   })
+    //console.log("rejected")
+    client({
+      method: "PATCH",
+      url: "/approval/extension/reject",
+      data: {
+        id: _id,
+      },
+    })
+      .then(() => {
+        setShowModalInfo({ ...showModalInfo, showConfirmReject: false, showCompleteReject: true })
+      })
+      .catch((err) => {
+        setShowModalInfo({ ...showModalInfo, showConfirmReject: false, showErr: true })
+      })
   }
 
   const requestAccept = () => {
-    console.log("accepted")
-    // client({
-    //   method: "PATCH",
-    //   url: "/approval/approve",
-    //   data: {
-    //     id: _id,
-    //     newExpiredDate: utc7Time,
-    //   },
-    // })
-    //   .then(() => {
-    //     setShowModalInfo({ ...showModalInfo, showConfirmAccept: false, showCompleteAccept: true })
-    //   })
-    //   .catch((err) => {
-    //     setShowModalInfo({ ...showModalInfo, showConfirmAccept: false, showErr: true })
-    //   })
+    //console.log("accepted")
+    const date = accountExpiredDate
+    if (!date) return null
+    // utc+0: 17.00, utc+7: 0.00
+    const utc7Time = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate() - 1, 17, 0, 0, 0))
+    client({
+      method: "PATCH",
+      url: "/approval/extension/approve",
+      data: {
+        id: _id,
+        newExpiredDate: utc7Time,
+      },
+    })
+      .then(() => {
+        setShowModalInfo({ ...showModalInfo, showConfirmAccept: false, showCompleteAccept: true })
+      })
+      .catch((err) => {
+        setShowModalInfo({ ...showModalInfo, showConfirmAccept: false, showErr: true })
+      })
   }
 
   // renders //
@@ -115,9 +126,8 @@ const VerifyExtend: FunctionComponent<RouteComponentProps<{ _id: string }>> = (p
       <ConfirmAcceptModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ requestAccept }} />
       <UncomAcceptModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
       <ErrorModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
-      {/* FIXXXXXXXX */}
-      <CompleteAcceptModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ username: info.name_th }} />
-      <CompleteRejectModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ username: info.name_th }} />
+      <CompleteAcceptModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ username: info.username }} />
+      <CompleteRejectModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ username: info.username }} />
     </div>
   )
 
@@ -126,7 +136,7 @@ const VerifyExtend: FunctionComponent<RouteComponentProps<{ _id: string }>> = (p
       <div className="row">
         <div className="col">
           <label className="mt-2">ประเภท</label>
-          {/* <p className="font-weight-bold">{info.membershipType}</p> */}
+          <p className="font-weight-bold">{info.membership_type}</p>
         </div>
       </div>
       <div className="row">
@@ -143,7 +153,7 @@ const VerifyExtend: FunctionComponent<RouteComponentProps<{ _id: string }>> = (p
         <div className="col">
           <label className="mt-2">หลักฐานการชำระเงิน</label>
           <div className="form-file">
-            <p className={info.payment_evidence ? "link" : "text-muted"} id={info.payment_evidence} onClick={handlePDF}>
+            <p className={info.payment_slip ? "link" : "text-muted"} id={info.payment_slip} onClick={handlePDF}>
               ดูเอกสาร
             </p>
           </div>

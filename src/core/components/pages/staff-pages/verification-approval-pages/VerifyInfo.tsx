@@ -14,7 +14,7 @@ import {
   ErrorModal,
 } from "./VerifyModalsComopnent"
 import format from "date-fns/format"
-import Info, { RejectInfo, ModalVerify, RejectInfoLabel, RejectInfoLabelKey } from "../interfaces/InfoInterface"
+import { VerifyComponentInfo, RejectInfo, ModalVerify, RejectInfoLabel, RejectInfoLabelKey } from "../interfaces/InfoInterface"
 
 /// start of main function ///
 const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
@@ -61,7 +61,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   const [_id] = useState<string>(props.match.params._id)
   const [username, setUsername] = useState<string>("")
   const [membershipType, setMembershipType] = useState<string>("")
-  const [info, setInfo] = useState<Info>({
+  const [info, setInfo] = useState<VerifyComponentInfo>({
     prefix: "",
     name_th: "",
     surname_th: "",
@@ -89,7 +89,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     medical_certificate: "",
     national_id_house_registration: "",
     relationship_verification_document: "",
-    payment_slip: [],
+    payment_slip: "",
   })
 
   const history = useHistory()
@@ -253,7 +253,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   const renderViewForm = () => {
     return (
       <div>
-        <OtherViewInfoComponent info={info} />
+        <OtherViewInfoComponent info={info} type={"VerifyInfo"} />
         <div className="mt-5 text-center">
           <Button
             variant="danger"

@@ -21,11 +21,18 @@ export default interface Info {
   medical_certificate: string
   national_id_house_registration: string
   relationship_verification_document?: string // only for สมาชิกสามัญสมทบ ก
-  payment_slip: string[]
+}
+
+export interface VerifyComponentInfo extends Info {
+  payment_slip: string
+}
+
+export interface OtherComponentInfo extends Info {
+  previous_payment_slips: string[]
 }
 
 export interface VerifyExtendInfo {
-  account_type: string
+  username: string
   membership_type: string
   name_th: string
   surname_th: string

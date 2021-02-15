@@ -1,15 +1,17 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
-import { Table, Form, Row, Col, Button, Modal } from "react-bootstrap"
+import { Table, Form, Col, Button, Modal } from "react-bootstrap"
 import { useHistory } from "react-router-dom"
+import { Other } from "../../../../contexts/UsersContext"
 import { client } from "../../../../../axiosConfig"
 import { AxiosResponse } from "axios"
 import { VerifyInfoRes, VerifyListRes } from "../../../../dto/verification.dto"
 import PaginationComponent from "../list-of-all-users-pages/PaginationComponent"
 
-interface RejectedInfo {
+interface requestParams {
   start: number
   end: number
   name: string
+  searchType: string | null // extension or approval or null
 }
 
 const VeritificationApproval: FunctionComponent = () => {
@@ -18,7 +20,7 @@ const VeritificationApproval: FunctionComponent = () => {
   const [maxUserPerPage] = useState<number>(10) // > 1
   const [maxUser, setMaxUser] = useState<number>(1)
   const [searchName, setSearchName] = useState<string>("")
-  const [searchType, setSearchType] = useState<string>("ทั้งหมด")
+  const [searchType, setSearchType] = useState<string>("ทั้งหมด") // ทั้งหมด, ผู้สมัครใหม่, การต่ออายุสมาชิก
   const [showNoUser, setShowNoUser] = useState<boolean>(false)
   const [users, setUsers] = useState<VerifyInfoRes[]>([])
   const history = useHistory()
@@ -26,11 +28,22 @@ const VeritificationApproval: FunctionComponent = () => {
   // other functions //
   const requestUsers = useCallback(() => {
     //  request users from server  //
-    const params: Partial<RejectedInfo> = {
+    const params: Partial<requestParams> = {
       start: (pageNo - 1) * maxUserPerPage,
       end: pageNo * maxUserPerPage,
     }
     if (searchName !== "") params.name = searchName
+    switch (searchType) {
+      case "ทั้งหมด":
+        params.searchType = null
+        break
+      case "ผู้สมัครใหม่":
+        params.searchType = "approval"
+        break
+      case "การต่ออายุสมาชิก":
+        params.searchType = "extension"
+        break
+    }
     client({
       method: "GET",
       url: "/approval",
@@ -69,12 +82,12 @@ const VeritificationApproval: FunctionComponent = () => {
     // if no data of that user -> show pop up
     const target = e.target as HTMLElement
     const _id = target.id
-    client({
-      method: "GET",
-      url: "/approval/" + _id,
-    })
-      .then(() => {
-        history.push("/staff/verifyInfo/" + _id)
+    client
+      .get<Other>(`/approval/${_id}`)
+      .then(({ data }) => {
+        if (data.verification_status === "Verified" && data.payment_status === "Submitted") history.push("/staff/verifyExtend/" + _id)
+        // extension
+        else history.push("/staff/verifyInfo/" + _id)
       })
       .catch(({ response }) => {
         if (response.data.message === "User not found") {
