@@ -42,11 +42,7 @@ const Sidebar = () => {
       <CSSTransition in={inProp} timeout={300} classNames="fade">
         <div className="sidebar">
           <nav>
-            <div
-              style={{
-                paddingBottom: "64px",
-              }}
-            >
+            <div className="exit-icon">
               <img src={Exit} onClick={() => setInProp(false)} alt="" />
             </div>
             <ul className="sidebar-menu d-flex flex-column justify-content-between">
