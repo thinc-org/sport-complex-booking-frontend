@@ -18,11 +18,7 @@ function StaffProfile() {
       const res: ProfileResponse = (await client.get("staffs/profile")).data
       setName(res.name)
       setSurname(res.surname)
-      if (res.is_admin) {
-        setAccountType("Administration")
-      } else {
-        setAccountType("Staff")
-      }
+      setAccountType(res.role)
       setIsLoading(false)
     } catch (err) {
       setErrMessage((prev) => ({ ...prev, badRequest: "Request Failed. Please make sure you have logged in and try refresh the page." }))
