@@ -57,8 +57,8 @@ export interface Other extends DefaultAccount {
   medical_certificate: string
   national_id_house_registration: string // (national_id/passport photo) or house_registration
   relationship_verification_document: string
-  national_id_house_registration: string
-  payment_slip: string | string[]
+  payment_slip: string // lastest payment slip (for extension only)
+  previous_payment_slips: string[] // 2 previous payment slips
   payment_status: string
 }
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Card, Form } from "react-bootstrap"
-import Info from "../interfaces/InfoInterface"
+import { OtherComponentInfo, VerifyComponentInfo } from "../interfaces/InfoInterface"
 import format from "date-fns/format"
 import isValid from "date-fns/isValid"
 
@@ -9,9 +9,9 @@ export const handlePDF = (e: React.MouseEvent<HTMLElement>) => {
   if (fileId) window.open(`/staff/openFile/${fileId}`, "_blank")
 }
 
-export default function OtherViewInfoComponent({ info }: { info: Info }) {
+export default function OtherViewInfoComponent({ info, type }: { info: OtherComponentInfo | VerifyComponentInfo; type: string }) {
   // page state
-  const [paymentNo, setPaymentNo] = useState<number>(1)
+  const [paymentNo, setPaymentNo] = useState<number>(2)
 
   const {
     prefix,
@@ -32,10 +32,13 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
     contact_person,
     user_photo,
     medical_certificate,
-    national_id_photo_or_house_registration_number,
+    national_id_house_registration,
     relationship_verification_document,
   } = info
   const { contact_person_prefix, contact_person_name, contact_person_surname, contact_person_home_phone, contact_person_phone } = contact_person
+
+  let prevSlips: string[] = []
+  prevSlips = (info as OtherComponentInfo).previous_payment_slips
 
   return (
     <div className="row mr-4 mt-5">
@@ -130,11 +133,7 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
           </div>
           <label className="form-label my-2">หมายเลขบัตรประชาชน / สำเนาทะเบียนบ้านที่มีหน้านิสิต</label>
           <div className="form-file">
-            <p
-              className={national_id_photo_or_house_registration_number ? "link" : "text-muted"}
-              id={national_id_photo_or_house_registration_number}
-              onClick={handlePDF}
-            >
+            <p className={national_id_house_registration ? "link" : "text-muted"} id={national_id_house_registration} onClick={handlePDF}>
               ดูเอกสาร
             </p>
           </div>
@@ -144,7 +143,6 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
               ดูเอกสาร
             </p>
           </div>
-          {/* {relationship_verification_document ? (  */}
           {membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership)" ? (
             <div>
               <label className="form-label my-2">เอกสารยืนยันตัวตน</label>
@@ -156,14 +154,32 @@ export default function OtherViewInfoComponent({ info }: { info: Info }) {
             </div>
           ) : null}
           <label className="form-label my-2">หลักฐานการชำระเงิน</label>
-          <div className="form-file">
-            <Form.Control type="date" onChange={(e) => setPaymentNo(parseInt(e.target.value))}>
-              {/* <option value={1}>{date1}</option> */}
-            </Form.Control>
-            {/* <p className={payment ? "link" : "text-muted"} id={payment} onClick={handlePDF}>
-              ดูเอกสาร
-            </p> */}
-          </div>
+          {type === "OtherInfo" ? (
+            <div className="form-file">
+              {prevSlips.length !== 0 ? (
+                <Form.Control as="select" defaultValue={2} onChange={(e) => setPaymentNo(parseInt(e.target.value))}>
+                  <option disabled value={2}>
+                    เลือกดูหลักฐานการชำระเงิน
+                  </option>
+                  <option value={prevSlips.length - 1}>ครั้งล่าสุด</option>
+                  <option value={prevSlips.length - 2}>ก่อนหน้าครั้งล่าสุด</option>
+                </Form.Control>
+              ) : (
+                <Form.Control disabled as="select" defaultValue={0}>
+                  <option value={0}>ไม่มีหลักฐานการชำระเงิน</option>
+                </Form.Control>
+              )}
+              <p className={prevSlips[paymentNo] ? "link" : "text-muted"} id={prevSlips[paymentNo]} onClick={handlePDF}>
+                ดูเอกสาร
+              </p>
+            </div>
+          ) : (
+            <div className="form-file">
+              <p className="link" id={(info as VerifyComponentInfo).payment_slip} onClick={handlePDF}>
+                ดูเอกสาร
+              </p>
+            </div>
+          )}
         </Card>
       </div>
 

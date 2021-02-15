@@ -15,7 +15,7 @@ import {
   PasswordErrModal,
   ConfirmChangePasswordModal,
 } from "./ListOfAllUserModals"
-import Info, { ModalUserInfo } from "../interfaces/InfoInterface"
+import { OtherComponentInfo, ModalUserInfo } from "../interfaces/InfoInterface"
 import format from "date-fns/format"
 import { FormProvider, useForm } from "react-hook-form"
 
@@ -40,7 +40,7 @@ const UserInfo = () => {
   const [isPenalize, setPenalize] = useState<boolean>(false)
   const [expiredPenalizeDate, setExpiredPenalizeDate] = useState<Date>(new Date())
   const [accountExpiredDate, setAccountExpiredDate] = useState<Date>(new Date())
-  const [info, setInfo] = useState<Info>({
+  const [info, setInfo] = useState<OtherComponentInfo>({
     prefix: "",
     name_th: "",
     surname_th: "",
@@ -68,13 +68,13 @@ const UserInfo = () => {
     medical_certificate: "",
     national_id_house_registration: "",
     relationship_verification_document: "",
-    payment_slip: [],
+    previous_payment_slips: [],
   })
   // temp data
   const [tempIsPenalize, setTempPenalize] = useState<boolean>(false)
   const [tempExpiredPenalizeDate, setTempExpiredPenalizeDate] = useState<Date>(new Date())
   const [tempAccountExpiredDate, setTempAccountExpiredDate] = useState<Date>(new Date())
-  const [tempInfo, setTempInfo] = useState<Info>(info)
+  const [tempInfo, setTempInfo] = useState<OtherComponentInfo>(info)
 
   // react router dom
   const { _id } = useParams<{ _id: string }>()
@@ -121,7 +121,7 @@ const UserInfo = () => {
           medical_certificate: data.medical_certificate,
           national_id_house_registration: data.national_id_house_registration,
           relationship_verification_document: data.relationship_verification_document,
-          payment_slip: data.payment_slip,
+          previous_payment_slips: data.previous_payment_slips,
         })
       })
       .catch(({ response }) => {
@@ -406,7 +406,7 @@ const UserInfo = () => {
   const renderViewForm = () => {
     return (
       <div>
-        <OtherViewInfoComponent info={info} />
+        <OtherViewInfoComponent info={info} type={"OtherInfo"} />
         <div className="mt-5">
           <Link to="/staff/listOfAllUsers">
             <Button variant="outline-secondary" className="btn-normal btn-outline-pink">

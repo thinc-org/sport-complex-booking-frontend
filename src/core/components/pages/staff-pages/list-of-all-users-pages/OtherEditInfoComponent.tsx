@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { useParams } from "react-router-dom"
 import { Button, Card, Form } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
-import Info, { EditComponentInfo } from "../interfaces/InfoInterface"
+import { OtherComponentInfo, EditComponentInfo } from "../interfaces/InfoInterface"
 import format from "date-fns/format"
 import isValid from "date-fns/isValid"
 import { useFormContext } from "react-hook-form"
@@ -12,8 +12,8 @@ export default function OtherEditInfoComponent({
   setTempInfo,
   handleSave,
 }: {
-  tempInfo: Info
-  setTempInfo: React.Dispatch<React.SetStateAction<Info>>
+  tempInfo: OtherComponentInfo
+  setTempInfo: React.Dispatch<React.SetStateAction<OtherComponentInfo>>
   handleSave: () => void
 }) {
   // Page state //
