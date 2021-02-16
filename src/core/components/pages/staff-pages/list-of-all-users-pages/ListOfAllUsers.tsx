@@ -22,12 +22,13 @@ interface ParamsDataRequest {
 const ListOfAllUsers: FunctionComponent = () => {
   // page state
   const [pageNo, setPageNo] = useState<number>(1)
-  const [maxUser, setMaxUser] = useState<number>(1) //fix
+  const [maxUser, setMaxUser] = useState<number>(1)
   const [maxUserPerPage] = useState<number>(10) // > 1
   const [searchName, setSearchName] = useState<string>("")
   const [status, setStatus] = useState<number>(allStatus.All)
   const [showNoUser, setShowNoUser] = useState<boolean>(false)
-  const [users, setUsers] = useState<UserInfoRes[]>([]) //fix
+  const [users, setUsers] = useState<UserInfoRes[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const history = useHistory()
 
@@ -48,6 +49,7 @@ const ListOfAllUsers: FunctionComponent = () => {
       .then(({ data }: AxiosResponse<UserListRes>) => {
         setMaxUser(data[0])
         setUsers(data[1])
+        setIsLoading(false)
       })
       .catch(({ response }) => {
         if (response && response.data.statusCode === 401) history.push("/staff")
@@ -151,76 +153,81 @@ const ListOfAllUsers: FunctionComponent = () => {
   }
 
   return (
-    <div className="allUsers" style={{ margin: "20px" }}>
-      <Form onSubmit={handleSearch} className="mb-2">
-        <Form.Row className="justify-content-end align-items-center">
-          <Col md="auto">
-            <Form.Label className="mb-0 font-weight-bold"> ค้นหาชื่อ </Form.Label>
-          </Col>
-          <Col md="5">
-            <Form.Control
-              className="border"
-              style={{ backgroundColor: "white" }}
-              type="text"
-              id="searchName"
-              placeholder=" ค้นหาชื่อจริง "
-              onChange={(e) => {
-                setSearchName(e.target.value)
-              }}
-            />
-          </Col>
-          <Col sm="auto">
-            <Form.Control
-              as="select"
-              custom
-              defaultValue={0}
-              style={{ backgroundColor: "white" }}
-              onChange={(e) => {
-                setStatus(parseInt(e.target.value))
-              }}
-            >
-              <option disabled value={allStatus.All}>
-                สถานะ
-              </option>
-              <option value={allStatus.All}>ทั้งหมด</option>
-              <option value={allStatus.Normal}>ปกติ</option>
-              <option value={allStatus.Banned}>โดนแบน</option>
-            </Form.Control>
-          </Col>
-          <Button variant="pink" className="ml-3 py-1 btn-normal" onClick={handleSearch}>
-            ค้นหา
-          </Button>
-        </Form.Row>
-      </Form>
-      <Table responsive className="text-center" size="md">
-        <thead className="bg-light">
-          <tr className="tr-pink">
-            <th>#</th>
-            <th>ชื่อ</th>
-            <th>นามสกุล</th>
-            <th>ชื่อผู้ใช้</th>
-            <th>สถานะ</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {renderUsersTable()}
-          {renderNoUserModal()}
-        </tbody>
-      </Table>
-      <Row>
-        <Col>
-          <Link to="/staff/addUser">
-            <Button variant="pink" className="btn-normal">
-              เพิ่มผู้ใช้
+    <>
+      <div className="allUsers" style={{ display: isLoading ? "none" : "block", margin: "20px" }}>
+        <Form onSubmit={handleSearch} className="mb-2">
+          <Form.Row className="justify-content-end align-items-center">
+            <Col md="auto">
+              <Form.Label className="mb-0 font-weight-bold"> ค้นหาชื่อ </Form.Label>
+            </Col>
+            <Col md="5">
+              <Form.Control
+                className="border"
+                style={{ backgroundColor: "white" }}
+                type="text"
+                id="searchName"
+                placeholder=" ค้นหาชื่อจริง "
+                onChange={(e) => {
+                  setSearchName(e.target.value)
+                }}
+              />
+            </Col>
+            <Col sm="auto">
+              <Form.Control
+                as="select"
+                custom
+                defaultValue={0}
+                style={{ backgroundColor: "white" }}
+                onChange={(e) => {
+                  setStatus(parseInt(e.target.value))
+                }}
+              >
+                <option disabled value={allStatus.All}>
+                  สถานะ
+                </option>
+                <option value={allStatus.All}>ทั้งหมด</option>
+                <option value={allStatus.Normal}>ปกติ</option>
+                <option value={allStatus.Banned}>โดนแบน</option>
+              </Form.Control>
+            </Col>
+            <Button variant="pink" className="ml-3 py-1 btn-normal" onClick={handleSearch}>
+              ค้นหา
             </Button>
-          </Link>
-        </Col>
-        <Col>
-          <PaginationComponent pageNo={pageNo} setPageNo={setPageNo} maxUser={maxUser} maxUserPerPage={maxUserPerPage} />
-        </Col>
-      </Row>
-    </div>
+          </Form.Row>
+        </Form>
+        <Table responsive className="text-center" size="md">
+          <thead className="bg-light">
+            <tr className="tr-pink">
+              <th>#</th>
+              <th>ชื่อ</th>
+              <th>นามสกุล</th>
+              <th>ชื่อผู้ใช้</th>
+              <th>สถานะ</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {renderUsersTable()}
+            {renderNoUserModal()}
+          </tbody>
+        </Table>
+        <Row>
+          <Col>
+            <Link to="/staff/addUser">
+              <Button variant="pink" className="btn-normal">
+                เพิ่มผู้ใช้
+              </Button>
+            </Link>
+          </Col>
+          <Col>
+            <PaginationComponent pageNo={pageNo} setPageNo={setPageNo} maxUser={maxUser} maxUserPerPage={maxUserPerPage} />
+          </Col>
+        </Row>
+      </div>
+      <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
+        <h5> LOADING ... </h5>
+      </div>
+    </>
   )
 }
 

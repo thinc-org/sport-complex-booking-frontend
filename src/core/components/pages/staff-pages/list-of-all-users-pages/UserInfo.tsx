@@ -21,6 +21,7 @@ import { FormProvider, useForm } from "react-hook-form"
 
 const UserInfo = () => {
   // page state //
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isEdit, setEdit] = useState<boolean>(false)
   const [newPassword, setNewPassword] = useState<string>("")
   const [showModalInfo, setShowModalInfo] = useState<ModalUserInfo>({
@@ -123,6 +124,7 @@ const UserInfo = () => {
           relationship_verification_document: data.relationship_verification_document,
           previous_payment_slips: data.previous_payment_slips,
         })
+        setIsLoading(false)
       })
       .catch(({ response }) => {
         if (response && response.data.statusCode === 401) history.push("/staff")
@@ -475,16 +477,21 @@ const UserInfo = () => {
   }
 
   return (
-    <FormProvider {...methods}>
-      <div className="UserInfo mt-4">
-        {renderModals()}
-        {/* Info start here */}
-        <Card body className="mb-5 mr-4">
-          {renderTopSection()}
-          {isEdit ? renderEditForm() : renderViewForm()}
-        </Card>
+    <>
+      <FormProvider {...methods}>
+        <div className="UserInfo mt-4" style={{ display: isLoading ? "none" : "block" }}>
+          {renderModals()}
+          {/* Info start here */}
+          <Card body className="mb-5 mr-4">
+            {renderTopSection()}
+            {isEdit ? renderEditForm() : renderViewForm()}
+          </Card>
+        </div>
+      </FormProvider>
+      <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
+        <h5> LOADING ... </h5>
       </div>
-    </FormProvider>
+    </>
   )
 }
 

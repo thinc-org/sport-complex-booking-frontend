@@ -18,6 +18,7 @@ import { VerifyExtendInfo, ModalVerify } from "../interfaces/InfoInterface"
 /// start of main function ///
 const VerifyExtend: FunctionComponent = () => {
   // page state //
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [showModalInfo, setShowModalInfo] = useState<ModalVerify>({
     showConfirmAccept: false,
     showUncomAccept: false,
@@ -53,6 +54,7 @@ const VerifyExtend: FunctionComponent = () => {
           membership_type: data.membership_type,
           payment_slip: data.payment_slip,
         })
+        setIsLoading(false)
       })
       .catch(({ response }) => {
         if (response && response.data.statusCode === 401) history.push("/staff")
@@ -188,18 +190,23 @@ const VerifyExtend: FunctionComponent = () => {
   )
 
   return (
-    <div className="VerifyExtend mt-4">
-      {renderModal}
-      {/* Info start here */}
-      <Link to="/staff/verifyApprove">
-        <Button variant="pink" className="btn-normal mb-3 px-5">
-          กลับ
-        </Button>
-      </Link>
-      <Card body className="mb-5 mr-4">
-        {renderContent}
-      </Card>
-    </div>
+    <>
+      <div className="VerifyExtend mt-4" style={{ display: isLoading ? "none" : "block" }}>
+        {renderModal}
+        {/* Info start here */}
+        <Link to="/staff/verifyApprove">
+          <Button variant="pink" className="btn-normal mb-3 px-5">
+            กลับ
+          </Button>
+        </Link>
+        <Card body className="mb-5 mr-4">
+          {renderContent}
+        </Card>
+      </div>
+      <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
+        <h5> LOADING ... </h5>
+      </div>
+    </>
   )
 }
 

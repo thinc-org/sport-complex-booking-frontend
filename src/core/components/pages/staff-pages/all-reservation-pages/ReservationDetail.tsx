@@ -37,6 +37,7 @@ export const getTimeText = (timeSlot: number[]): string => {
 
 const ReservationDetail: React.FC = () => {
   // Page state //
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [showConfirmDel, setShowConfirmDel] = useState<boolean>(false)
   const [showComDel, setShowComDel] = useState<boolean>(false)
   const [showErr, setShowErr] = useState<boolean>(false)
@@ -60,6 +61,7 @@ const ReservationDetail: React.FC = () => {
       .get<Room>(url)
       .then(({ data }) => {
         setDetail(data)
+        setIsLoading(false)
       })
       .catch(({ response }) => {
         console.log(response)
@@ -152,40 +154,45 @@ const ReservationDetail: React.FC = () => {
   )
 
   return (
-    <div className="reservationDetail px-5">
-      {renderHeader()}
-      <Table responsive className="text-center">
-        <thead className="bg-light">
-          <tr>
-            <th>ชื่อผู้ใช้</th>
-            <th>อีเมล</th>
-            <th>เบอร์โทรศัพท์</th>
-          </tr>
-        </thead>
-        <tbody>{memberTable}</tbody>
-      </Table>
-      <Row className="mt-4">
-        <Col>
-          <Link to={"/staff/allReservation/" + pagename}>
-            <Button variant="pink" className="btn-normal">
-              กลับ
+    <>
+      <div className="reservationDetail px-5" style={{ display: isLoading ? "none" : "block", margin: "50px 10px" }}>
+        {renderHeader()}
+        <Table responsive className="text-center">
+          <thead className="bg-light">
+            <tr>
+              <th>ชื่อผู้ใช้</th>
+              <th>อีเมล</th>
+              <th>เบอร์โทรศัพท์</th>
+            </tr>
+          </thead>
+          <tbody>{memberTable}</tbody>
+        </Table>
+        <Row className="mt-4">
+          <Col>
+            <Link to={"/staff/allReservation/" + pagename}>
+              <Button variant="pink" className="btn-normal">
+                กลับ
+              </Button>
+            </Link>
+          </Col>
+          <Col>
+            <Button
+              variant="danger"
+              className="float-right btn-normal btn-outline-red"
+              onClick={() => {
+                setShowConfirmDel(true)
+              }}
+            >
+              ลบการจอง
             </Button>
-          </Link>
-        </Col>
-        <Col>
-          <Button
-            variant="danger"
-            className="float-right btn-normal btn-outline-red"
-            onClick={() => {
-              setShowConfirmDel(true)
-            }}
-          >
-            ลบการจอง
-          </Button>
-        </Col>
-      </Row>
-      {modals}
-    </div>
+          </Col>
+        </Row>
+        {modals}
+      </div>
+      <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
+        <h5> LOADING ... </h5>
+      </div>
+    </>
   )
 }
 
