@@ -176,12 +176,22 @@ const AllReservation: FunctionComponent = () => {
 
   const filterSection = (
     <Form.Row className="align-items-center mt-3">
-      <Col>{sportTypeFilter}</Col>
-      <Col>{courtNumberFilter}</Col>
-      <Col>
+      <Col sm={3}>{sportTypeFilter}</Col>
+      <Col sm={2}>{courtNumberFilter}</Col>
+      <Col sm={3}>
         <Form.Control className="form-pink" type="date" value={chooseDate ? format(searchDate, "yyyy-MM-dd") : ""} onChange={handleChangeDate} />
       </Col>
-      <Col>{timeFilter}</Col>
+      <Col sm={1} className="text-center">
+        <Button
+          className="btn-normal btn-outline-black px-3"
+          variant="outline-secondary"
+          style={{ borderRadius: "10px" }}
+          onClick={() => setChooseDate(false)}
+        >
+          ลบ
+        </Button>
+      </Col>
+      <Col sm={3}>{timeFilter}</Col>
     </Form.Row>
   )
 
