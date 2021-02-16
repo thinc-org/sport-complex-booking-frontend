@@ -19,6 +19,7 @@ interface RequestBody {
 
 const AllReservation: FunctionComponent = () => {
   // Page state
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [pageNo, setPageNo] = useState<number>(1)
   const [maxUser, setMaxUser] = useState<number>(1)
   const [maxUserPerPage] = useState<number>(10)
@@ -55,6 +56,7 @@ const AllReservation: FunctionComponent = () => {
       .then(({ data }: AxiosResponse<ReserveListRes>) => {
         setReserveInfo(data[1])
         setMaxUser(data[0])
+        setIsLoading(false)
       })
       .catch(({ response }) => {
         console.log(response)
@@ -213,29 +215,34 @@ const AllReservation: FunctionComponent = () => {
   })
 
   return (
-    <div className="allReservation mr-4">
-      {filterSection}
-      <div className="mt-4">
-        <Table responsive className="text-center" size="md">
-          <thead className="bg-light">
-            <tr className="tr-pink">
-              <th>ประเภทกีฬา</th>
-              <th>เลขคอร์ด</th>
-              <th>วันที่</th>
-              <th>เวลา</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>{table}</tbody>
-        </Table>
-        <Row>
-          <Col>
-            <PaginationComponent pageNo={pageNo} setPageNo={setPageNo} maxUser={maxUser} maxUserPerPage={maxUserPerPage} />
-          </Col>
-        </Row>
+    <>
+      <div className="allReservation mr-4" style={{ display: isLoading ? "none" : "block" }}>
+        {filterSection}
+        <div className="mt-4">
+          <Table responsive className="text-center" size="md">
+            <thead className="bg-light">
+              <tr className="tr-pink">
+                <th>ประเภทกีฬา</th>
+                <th>เลขคอร์ด</th>
+                <th>วันที่</th>
+                <th>เวลา</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>{table}</tbody>
+          </Table>
+          <Row>
+            <Col>
+              <PaginationComponent pageNo={pageNo} setPageNo={setPageNo} maxUser={maxUser} maxUserPerPage={maxUserPerPage} />
+            </Col>
+          </Row>
+        </div>
+        <ErrModal show={showErr} onClose={() => setShowErr(false)} />
       </div>
-      <ErrModal show={showErr} onClose={() => setShowErr(false)} />
-    </div>
+      <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
+        <h5> LOADING ... </h5>
+      </div>
+    </>
   )
 }
 

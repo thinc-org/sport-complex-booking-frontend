@@ -26,6 +26,7 @@ type CuSatitType = CuStudent | SatitCuPersonel
 
 const UserInfo: FunctionComponent = () => {
   // page states
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isEditing, setEditing] = useState<boolean>(false)
   const [newPassword, setNewPassword] = useState<string>("")
 
@@ -71,6 +72,7 @@ const UserInfo: FunctionComponent = () => {
       .get<CuSatitType>(`/list-all-user/id/${_id}`)
       .then(({ data }) => {
         data.account_type === "CuStudent" ? setUser(data as CuStudent) : setUser(data as SatitCuPersonel)
+        setIsLoading(false)
       })
       .catch(({ response }) => {
         if (response && response.data.statusCode === 401) history.push("/staff")
@@ -447,15 +449,20 @@ const UserInfo: FunctionComponent = () => {
   }
 
   return (
-    <div className="UserInfo">
-      <Card body border="light" className="justify-content-center px-3 ml-1 mr-3 my-4 shadow">
-        <Row className="pb-3">
-          <Col>{isEditing ? renderEditingForm() : renderForm()}</Col>
-        </Row>
-        {renderAlert()}
-      </Card>
-      {renderModals()}
-    </div>
+    <>
+      <div className="UserInfo" style={{ display: isLoading ? "none" : "block" }}>
+        <Card body border="light" className="justify-content-center px-3 ml-1 mr-3 my-4 shadow">
+          <Row className="pb-3">
+            <Col>{isEditing ? renderEditingForm() : renderForm()}</Col>
+          </Row>
+          {renderAlert()}
+        </Card>
+        {renderModals()}
+      </div>
+      <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
+        <h5> LOADING ... </h5>
+      </div>
+    </>
   )
 }
 

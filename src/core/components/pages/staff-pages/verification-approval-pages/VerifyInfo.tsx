@@ -19,6 +19,7 @@ import { VerifyComponentInfo, RejectInfo, ModalVerify, RejectInfoLabel, RejectIn
 /// start of main function ///
 const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (props) => {
   // page state //
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [showReject, setShowReject] = useState<boolean>(false)
   const [accountExpiredDate, setAccountExpiredDate] = useState<Date>()
   const [showModalInfo, setShowModalInfo] = useState<ModalVerify>({
@@ -132,6 +133,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
           relationship_verification_document: data.relationship_verification_document,
           payment_slip: data.payment_slip,
         })
+        setIsLoading(false)
       })
       .catch(({ response }) => {
         if (response && response.data.statusCode === 401) history.push("/staff")
@@ -321,20 +323,25 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   }
 
   return (
-    <div className="VerifyInfo mt-4">
-      {renderModal()}
-      {/* Info start here */}
-      <Link to="/staff/verifyApprove">
-        <Button variant="pink" className="btn-normal mb-3 px-5">
-          กลับ
-        </Button>
-      </Link>
-      <Card body className="mb-5 mr-4">
-        {renderTopSection()}
-        {renderViewForm()}
-        {renderRejectionInfo()}
-      </Card>
-    </div>
+    <>
+      <div className="VerifyInfo mt-4" style={{ display: isLoading ? "none" : "block" }}>
+        {renderModal()}
+        {/* Info start here */}
+        <Link to="/staff/verifyApprove">
+          <Button variant="pink" className="btn-normal mb-3 px-5">
+            กลับ
+          </Button>
+        </Link>
+        <Card body className="mb-5 mr-4">
+          {renderTopSection()}
+          {renderViewForm()}
+          {renderRejectionInfo()}
+        </Card>
+      </div>
+      <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
+        <h5> LOADING ... </h5>
+      </div>
+    </>
   )
 }
 

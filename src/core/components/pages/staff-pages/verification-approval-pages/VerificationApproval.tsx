@@ -16,6 +16,7 @@ interface requestParams {
 
 const VeritificationApproval: FunctionComponent = () => {
   // page state
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [pageNo, setPageNo] = useState<number>(1)
   const [maxUserPerPage] = useState<number>(10) // > 1
   const [maxUser, setMaxUser] = useState<number>(1)
@@ -52,6 +53,7 @@ const VeritificationApproval: FunctionComponent = () => {
       .then(({ data }: AxiosResponse<VerifyListRes>) => {
         setUsers(data[1])
         setMaxUser(data[0])
+        setIsLoading(false)
       })
       .catch(({ response }) => {
         if (response && response.data.statusCode === 401) history.push("/staff")
@@ -200,27 +202,32 @@ const VeritificationApproval: FunctionComponent = () => {
   }
 
   return (
-    <div className="verifyApp my-4 ml-1 mr-3">
-      {renderTopSection}
-      <Table className="text-center" responsive size="md">
-        <thead className="bg-light">
-          <tr className="tr-pink">
-            <th>#</th>
-            <th>ชื่อ</th>
-            <th>นามสกุล</th>
-            <th>ชื่อผู้ใช้</th>
-            <th>รายละเอียด</th>
-          </tr>
-        </thead>
-        <tbody>
-          {renderUsersTable()}
-          {renderNoUserModal}
-        </tbody>
-      </Table>
-      <div className="text-right">
-        <PaginationComponent pageNo={pageNo} setPageNo={setPageNo} maxUser={maxUser} maxUserPerPage={maxUserPerPage} />
+    <>
+      <div className="verifyApp my-4 ml-1 mr-3" style={{ display: isLoading ? "none" : "block" }}>
+        {renderTopSection}
+        <Table className="text-center" responsive size="md">
+          <thead className="bg-light">
+            <tr className="tr-pink">
+              <th>#</th>
+              <th>ชื่อ</th>
+              <th>นามสกุล</th>
+              <th>ชื่อผู้ใช้</th>
+              <th>รายละเอียด</th>
+            </tr>
+          </thead>
+          <tbody>
+            {renderUsersTable()}
+            {renderNoUserModal}
+          </tbody>
+        </Table>
+        <div className="text-right">
+          <PaginationComponent pageNo={pageNo} setPageNo={setPageNo} maxUser={maxUser} maxUserPerPage={maxUserPerPage} />
+        </div>
       </div>
-    </div>
+      <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
+        <h5> LOADING ... </h5>
+      </div>
+    </>
   )
 }
 
