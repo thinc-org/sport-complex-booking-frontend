@@ -18,6 +18,7 @@ import AboutUs from "../components/pages/AboutUs"
 import FileOpener from "../components/pages/FileOpener"
 import { Register } from "../components/ui/login/register"
 import Payment from "../components/pages/AccountPages/Payment/Payment"
+import PersonalInfo from "../components/ui/login/personal-info-form"
 
 export default function MainRoute() {
   return (
@@ -56,6 +57,8 @@ export default function MainRoute() {
         <Route exact path={`/register`} component={Register} />
 
         <Route exact path={`/payment`} component={Payment} />
+
+        <Route exact path={`/personal`} component={PersonalInfo} />
       </Switch>
     </>
   )

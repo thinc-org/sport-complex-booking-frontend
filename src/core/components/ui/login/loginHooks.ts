@@ -41,7 +41,7 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
         setCookie("token", res.data.jwt, 1)
         setToken(res.data.token)
         setIsFirstLogin(false)
-        if (res.data.is_first_login) history.push(`${path}/personal`)
+        if (res.data.is_first_login) history.push("/personal")
         else history.push("/home")
         if (res.data.is_thai_language) changeLanguage("th")
         else changeLanguage("en")
@@ -77,7 +77,7 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
             setToken(res.data.token)
             const first_time_login = res.data.is_first_login
             setIsFirstLogin(first_time_login)
-            if (res.data.is_first_login) history.push(`${path}/personal`)
+            if (res.data.is_first_login) history.push("/personal")
             else history.push("/home")
             if (res.data.is_thai_language) changeLanguage("th")
             else changeLanguage("en")

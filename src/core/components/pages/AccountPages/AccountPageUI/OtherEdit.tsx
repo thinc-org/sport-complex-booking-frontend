@@ -14,6 +14,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { otherInfoSchema } from "../../../../schemas/editUserInfo"
 import { useHistory } from "react-router"
 import BeatLoader from "react-spinners/BeatLoader"
+import { useLanguage } from "../../../../utils/language"
 
 export default function OtherAccountEdit({ registrationInfo, isRegister }: RegistrationProps) {
   // React Hook Forms
@@ -34,6 +35,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
   const { register, handleSubmit, errors } = useForm({ resolver: yupResolver(otherInfoSchema) })
   const history = useHistory()
   const [loading, setLoading] = useState(false)
+  const language = useLanguage()
 
   // Handlers
   const handleFileUpload = (formData: FormData) => {
@@ -152,7 +154,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
         <div className="default-mobile-wrapper mt-3">
           <h4 className="align-right mb-2">{t("language")}</h4>
           <div className="row mt-2 mx-1">
-            {!is_thai_language ? (
+            {language !== "th" ? (
               <div>
                 <Button variant="pink" className="btn-outline mr-2" onClick={() => changeLanguage(false)}>
                   EN
@@ -550,7 +552,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           </div>
           {user?.rejected_info?.includes("medical_certificate") ? <p className="input-error">{t("resubmitField")}</p> : null}
           <hr />
-          {(user?.membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership" ||
+          {(user?.membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership)" ||
             registrationInfo?.membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership") && (
             <div>
               <label className="form-label my-2">{t("relationship_verification_document")}</label>
