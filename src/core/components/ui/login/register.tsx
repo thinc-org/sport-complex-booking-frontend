@@ -21,7 +21,6 @@ export const Register = () => {
     "สมาชิกวิสามัญเฉพาะสนามกีฬาในร่ม (indoor stadium)",
     "สมาชิกวิสามัญสมทบเฉพาะสนามกีฬาในร่ม (indoor stadium-spouse and children)",
     "สมาชิกรายเดือนสนามกีฬาในร่ม (monthly membership-indoor stadium)",
-    "นักเรียนสาธิตจุฬา / บุคลากรจุฬา (Satit Chula Student / CU Personnel)",
   ]
   const [credentials, setCredentials] = useState<RegistrationInfo>()
   const [showAccountHint, setShowAccountHint] = useState(false)
@@ -36,7 +35,7 @@ export const Register = () => {
   }
 
   const descriptions = []
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 1; i <= 9; i++) {
     descriptions.push(
       <li key={i}>
         <p>{t(`otherAccountDescription.type${i}`)}</p>
@@ -58,7 +57,6 @@ export const Register = () => {
       <option value={7}>{t("otherAccountTypes.type7")}</option>
       <option value={8}>{t("otherAccountTypes.type8")}</option>
       <option value={9}>{t("otherAccountTypes.type9")}</option>
-      <option value={10}>{t("otherAccountTypes.type10")}</option>
     </select>
   )
 

@@ -47,7 +47,7 @@
   "national_id_photo": "National ID / Passpord (.pdf only)",
   "national_id_house_registration": "National ID / Passport / House Registration Number (.pdf only)",
   "medical_certificate": "Medical Certificate (private or public hospital only) (.pdf only)",
-  "house_registration_number": "Optional: House Registration Document with reference person (.pdf only)",
+  "house_registration_number": "House Registration Document with reference person (.pdf only)",
   "relationship_verification_document": "Optional: Relationship Verification document (.pdf only)",
   "memberInformation": "Member Information",
   "memberDocuments": "Member Documents",
@@ -290,7 +290,7 @@
     "type4": "alumni membership",
     "type5": "full membership",
     "type6": "full membership-spouse and children",
-    "type7": "indoor stadium)",
+    "type7": "indoor stadium",
     "type8": "indoor stadium-spouse and children",
     "type9": "monthly membership-indoor stadium",
     "type10": "Satit Chula Student / CU Personnel"
@@ -317,6 +317,7 @@
   "paymentSubmittedMessage": "Your payment slip has been submitted",
   "paymentApproved": "Your payment has been approved.",
   "noEmpty": "❌ Do not leave this empty.",
-  "landingMessage": "Easily reserve a court online and check-in all in one place."
+  "landingMessage": "Easily reserve a court online and check-in all in one place.",
+  "fillHere": "Fill in your information."
 
 }

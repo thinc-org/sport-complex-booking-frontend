@@ -19,7 +19,7 @@ export default function ChulaAccount() {
 
   return (
     <div>
-      <div className="mx-4">{user && <WarningMessage show={user.is_first_login} account={user.account_type} />}</div>
+      <div className="col-md-6 mx-auto">{user && <WarningMessage show={user.is_first_login} account={user.account_type} />}</div>
       {!isEditting ? (
         <ChulaAccountDisplay toggleEditButton={toggleEditButton} user={user} />
       ) : (

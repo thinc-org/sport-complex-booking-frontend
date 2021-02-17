@@ -1,5 +1,4 @@
 import React from "react"
-import withUserGuard from "../../guards/user.guard"
 import { Row, Col } from "react-bootstrap"
 import ProductOwner from "../../assets/images/productOwner.svg"
 import Backend from "../../assets/images/Backend.svg"
@@ -37,20 +36,32 @@ function AboutUs() {
     },
     {
       title: "frontendDeveloper",
-      team_en: ["Dhanabordee Mekintharanggur", "Veerin Phana-ngam", "Sirathee Koomgreng", "Suparuek Saetoen", "Manapat Weeramongkolkul"],
-      team_th: ["ธนบดี เมฆินทรางกูร", "วีรินทร์ พนางาม", "สิรธีร์ คุ้มเกรง", "ศุภฤกษ์ แซ่เติ้น", "มนพัทธ์ วีระมงคลกุล"],
+      team_en: [
+        "Dhanabordee Mekintharanggur (Team Leader)",
+        "Veerin Phana-ngam",
+        "Sirathee Koomgreng",
+        "Suparuek Saetoen",
+        "Manapat Weeramongkolkul",
+      ],
+      team_th: ["ธนบดี เมฆินทรางกูร (หัวหน้าทีม)", "วีรินทร์ พนางาม", "สิรธีร์ คุ้มเกรง", "ศุภฤกษ์ แซ่เติ้น", "มนพัทธ์ วีระมงคลกุล"],
       icon: Frontend,
     },
     {
       title: "backendDeveloper",
-      team_en: ["Natthorn Suwannapasri", "Pattanachai Chonglertvarawong", "Chuwong Kulrattanarak", "Anon Ongsakul", "Chawakorn Phiantham"],
-      team_th: ["ณัฐธร สุวรรณนภาศรี", "พัฒนชัย จงเลิศวราวงศ์", "ชูวงศ์ กุลรัตนรักษ์", "อานนท์ อ๋องสกุล", "ชวกร เพียรทำ"],
+      team_en: [
+        "Natthorn Suwannapasri (Team Leader)",
+        "Pattanachai Chonglertvarawong",
+        "Chuwong Kulrattanarak",
+        "Anon Ongsakul",
+        "Chawakorn Phiantham",
+      ],
+      team_th: ["ณัฐธร สุวรรณนภาศรี (หัวหน้าทีม)", "พัฒนชัย จงเลิศวราวงศ์", "ชูวงศ์ กุลรัตนรักษ์", "อานนท์ อ๋องสกุล", "ชวกร เพียรทำ"],
       icon: Backend,
     },
     {
       title: "designer",
-      team_en: ["Dhanabordee Mekintharanggur", "Panoj Kamolrattanawech", "Kritasak Udompongsanont"],
-      team_th: ["ธนบดี เมฆินทรางกูร", "ปณต กมลรัตนเวช", "นายกฤตศักดิ์ อุดมพงษานนท์"],
+      team_en: ["Dhanabordee Mekintharanggur (Team Leader)", "Panoj Kamolrattanawech", "Kritasak Udompongsanont"],
+      team_th: ["ธนบดี เมฆินทรางกูร (หัวหน้าทีม)", "ปณต กมลรัตนเวช", "นายกฤตศักดิ์ อุดมพงษานนท์"],
       icon: Design,
     },
     {

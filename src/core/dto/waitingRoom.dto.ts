@@ -9,6 +9,7 @@ export interface ValidityMessage {
 export interface ErrorMsgBannerProps {
   errorMsg: string
   type: string
+  action?: string
 }
 
 export interface ErrorMessageBannerProps {

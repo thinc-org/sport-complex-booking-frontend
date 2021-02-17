@@ -2,6 +2,7 @@ import React from "react"
 import { Button, Modal } from "react-bootstrap"
 import { useTranslation } from "react-i18next"
 import { Other } from "../../../contexts/UsersContext"
+import { CheckValidityErrorMsg } from "../../pages/Reservation/ReservationComponents"
 
 export interface EdittedData {
   personal_email: string
@@ -123,7 +124,8 @@ export const WarningMessage: React.FC<WarningMessageProps> = ({ show, verificati
   const { t } = useTranslation()
   if (!show) return null
   if (account === "CuStudent") {
-    return <WarningAlert title={t("warning")} message={t("pleaseSubmitRegisForm")} category="warning" />
+    //return <WarningAlert title={t("warning")} message={t("pleaseSubmitRegisForm")} category="danger" />
+    return <CheckValidityErrorMsg show={true} reason="INFO_NOT_FILLED" type="danger" />
   }
   switch (verification_status) {
     case "NotSubmitted": {

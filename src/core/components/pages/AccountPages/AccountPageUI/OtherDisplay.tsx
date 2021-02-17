@@ -188,7 +188,7 @@ export default function OtherAaccountDisplay({ toggleEditButton }: AccountProps)
 
       <div className="default-mobile-wrapper mt-3">
         <h4>{t("payment")}</h4>
-        <label className="form-label my-2">{t("medical_certificate")}</label>
+        <label className="form-label my-2">{t("paymentEvidenceLabel")}</label>
         <div className="form-file">
           {user?.medical_certificate ? (
             <a

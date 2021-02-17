@@ -33,7 +33,6 @@ export default function SportsSettings() {
           },
         })
         .then(({ data }) => {
-          console.log(data)
           setSports(data["sport_list"])
           setMaxSport(data["allSport_length"])
         })

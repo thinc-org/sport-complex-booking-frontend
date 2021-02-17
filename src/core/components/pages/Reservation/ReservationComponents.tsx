@@ -1,15 +1,23 @@
 import React from "react"
 import "react-datepicker/dist/react-datepicker.css"
 import { useTranslation } from "react-i18next"
+import { Link } from "react-router-dom"
 import { ErrorMsgBannerProps, ErrorMessageBannerProps } from "../../../dto/waitingRoom.dto"
 
-export const ErrorMsgBanner: React.FC<ErrorMsgBannerProps> = ({ errorMsg, type }) => {
+export const ErrorMsgBanner: React.FC<ErrorMsgBannerProps> = ({ errorMsg, type, action }) => {
   const { t } = useTranslation()
   return (
     <div className="my-3">
       <div className={`alert alert-${type}  mx-auto`}>
         <h4>{t("warning")}</h4>
         <h6>{errorMsg}</h6>
+        {action && (
+          <div className="d-flex justify-content-end mt-2 text-light">
+            <Link to="/personal" className="text-danger">
+              <u>{t(action)}</u>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -26,7 +34,7 @@ export const CheckValidityErrorMsg: React.FC<ErrorMessageBannerProps> = ({ show,
     case "ACCOUNT_EXPIRED":
       return <ErrorMsgBanner errorMsg={t("alreadyExpired")} type={type} />
     case "INFO_NOT_FILLED":
-      return <ErrorMsgBanner errorMsg={t("haveToFillInfo")} type={type} />
+      return <ErrorMsgBanner errorMsg={t("haveToFillInfo")} type={type} action="fillHere" />
     case "BANNED":
       return <ErrorMsgBanner errorMsg={t("accountBanned")} type={type} />
     case "DUPLICATE_ROOM":
