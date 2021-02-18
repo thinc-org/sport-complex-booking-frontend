@@ -18,6 +18,8 @@ import {
 import { OtherComponentInfo, ModalUserInfo } from "../interfaces/InfoInterface"
 import format from "date-fns/format"
 import { FormProvider, useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { editInfoSchema } from "../../../../schemas/editUserInfo"
 
 const UserInfo = () => {
   // page state //
@@ -79,7 +81,7 @@ const UserInfo = () => {
 
   // react router dom
   const { _id } = useParams<{ _id: string }>()
-  const methods = useForm()
+  const methods = useForm({ resolver: yupResolver(editInfoSchema) })
   const history = useHistory()
 
   // requests //
