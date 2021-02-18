@@ -130,7 +130,6 @@ const UserInfo = () => {
         })
       })
       .catch(({ response }) => {
-        console.log(response)
         if (response && response.data.statusCode === 401) history.push("/staff")
       })
   }, [_id, history])
@@ -253,7 +252,6 @@ const UserInfo = () => {
         setEdit(false)
       })
       .catch(({ response }) => {
-        console.log(response)
         setShowModalInfo({ ...showModalInfo, showSave: false, showErr: true })
       })
   }

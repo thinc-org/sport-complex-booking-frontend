@@ -61,7 +61,6 @@ export const ErrorRow = ({ date, phone, indx, time_slot, button, _id, type }: Er
     client
       .delete(`${path}/${id}`)
       .then((res) => {
-        console.log(res)
         setHidden(true)
       })
       .catch((err) => console.log(err))

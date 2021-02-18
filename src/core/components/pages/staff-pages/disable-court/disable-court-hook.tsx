@@ -238,7 +238,6 @@ export const useDisplayOverlapData = (overlapData: OverlapData | undefined) => {
   const [data, setData] = useState<ErrorRowProps[]>([])
   useEffect(() => {
     if (overlapData) {
-      console.log(overlapData)
       setData((prev) => {
         const dataArr: ErrorRowProps[] = [...prev]
         overlapData.reservation?.forEach((element, indx) => {

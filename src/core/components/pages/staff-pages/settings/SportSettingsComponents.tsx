@@ -241,7 +241,7 @@ export const EditSport: React.FC<EditSportProps> = ({ show, setShow, setCurrentS
             <Button
               variant="pink"
               className="button"
-              disabled={currentSport["quota"] <= 2}
+              disabled={currentSport["quota"] <= 1}
               onClick={() => {
                 setCurrentSport({ ...currentSport, quota: currentSport["quota"] - 1 })
               }}
