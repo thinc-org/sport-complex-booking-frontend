@@ -50,7 +50,7 @@ export interface EditComponentInfo {
   national_id: string
   marital_status_text: string
   address: string
-  email: string
+  personal_email: string
   phone: string
   home_phone: string
   medical_condition: string

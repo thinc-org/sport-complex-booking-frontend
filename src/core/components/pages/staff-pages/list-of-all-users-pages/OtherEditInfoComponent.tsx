@@ -17,7 +17,7 @@ export default function OtherEditInfoComponent({
   handleSave: () => void
 }) {
   // Page state //
-  const { register, handleSubmit } = useFormContext()
+  const { register, handleSubmit, errors } = useFormContext()
   const { _id } = useParams<{ _id: string }>()
   const [userPhotoFile, setUserPhotoFile] = useState<File>()
   const [medicalCertificateFile, setMedicalCertificateFile] = useState<File>()
@@ -88,7 +88,7 @@ export default function OtherEditInfoComponent({
       national_id: data.national_id,
       marital_status: marital_status !== "Single" && marital_status !== "Married" ? data.marital_status_text : marital_status,
       address: data.address,
-      email: data.email,
+      email: data.personal_email,
       phone: data.phone,
       home_phone: data.home_phone,
       medical_condition: data.medical_condition,
@@ -159,6 +159,11 @@ export default function OtherEditInfoComponent({
                   type="text"
                   defaultValue={name_th}
                 />
+                {errors.name_th && (
+                  <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                    {errors.name_th.message}
+                  </span>
+                )}
               </div>
               <div className="col">
                 <label className="form-label mt-2">นามสกุล (ภาษาไทย) *</label>
@@ -170,6 +175,11 @@ export default function OtherEditInfoComponent({
                   type="text"
                   defaultValue={surname_th}
                 />
+                {errors.surname_th && (
+                  <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                    {errors.surname_th.message}
+                  </span>
+                )}
               </div>
             </div>
             <div className="row">
@@ -183,6 +193,11 @@ export default function OtherEditInfoComponent({
                   type="text"
                   defaultValue={name_en}
                 />
+                {errors.name_en && (
+                  <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                    {errors.name_en.message}
+                  </span>
+                )}
               </div>
               <div className="col">
                 <label className="form-label mt-2">Surname (English) *</label>
@@ -194,6 +209,11 @@ export default function OtherEditInfoComponent({
                   type="text"
                   defaultValue={surname_en}
                 />
+                {errors.surname_en && (
+                  <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                    {errors.surname_en.message}
+                  </span>
+                )}
               </div>
             </div>
             <hr />
@@ -220,6 +240,11 @@ export default function OtherEditInfoComponent({
               type="text"
               defaultValue={national_id}
             />
+            {errors.national_id && (
+              <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                {errors.national_id.message}
+              </span>
+            )}
             <hr />
             <label className="form-label mt-2">สถานะสมรส</label>
             <Form.Group>
@@ -266,9 +291,26 @@ export default function OtherEditInfoComponent({
             <hr />
             <label className="form-label mt-2">ที่อยู่</label>
             <Form.Control ref={register} name="address" className="border" style={{ backgroundColor: "white" }} type="text" defaultValue={address} />
+            {errors.address && (
+              <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                {errors.address.message}
+              </span>
+            )}
             <hr />
             <label className="form-label mt-2">อีเมล</label>
-            <Form.Control ref={register} name="email" className="border" style={{ backgroundColor: "white" }} type="text" defaultValue={email} />
+            <Form.Control
+              ref={register}
+              name="personal_email"
+              className="border"
+              style={{ backgroundColor: "white" }}
+              type="text"
+              defaultValue={email}
+            />
+            {errors.personal_email && (
+              <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                {errors.personal_email.message}
+              </span>
+            )}
             <hr />
             <label className="form-label mt-2">เบอร์โทรศัพท์ที่บ้าน</label>
             <Form.Control
@@ -279,9 +321,19 @@ export default function OtherEditInfoComponent({
               type="text"
               defaultValue={home_phone}
             />
+            {errors.home_phone && (
+              <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                {errors.home_phone.message}
+              </span>
+            )}
             <hr />
             <label className="form-label mt-2">เบอร์โทรศัพท์มือถือ</label>
             <Form.Control ref={register} name="phone" className="border" style={{ backgroundColor: "white" }} type="text" defaultValue={phone} />
+            {errors.phone && (
+              <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                {errors.phone.message}
+              </span>
+            )}
             <hr />
             <label className="form-label mt-2">คุณมีโรคประจำตัวหรือไม่ (ถ้าไม่มี โปรดเว้นว่างเอาไว้)</label>
             <Form.Control
@@ -292,6 +344,11 @@ export default function OtherEditInfoComponent({
               type="text"
               defaultValue={medical_condition}
             />
+            {errors.medical_condition && (
+              <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                {errors.medical_condition.message}
+              </span>
+            )}
           </Card>
         </div>
         <br />
@@ -327,6 +384,11 @@ export default function OtherEditInfoComponent({
                   type="text"
                   defaultValue={contact_person_name}
                 />
+                {errors.contact_person_name && (
+                  <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                    {errors.contact_person_name.message}
+                  </span>
+                )}
               </div>
             </div>
             <hr />
@@ -339,6 +401,11 @@ export default function OtherEditInfoComponent({
               type="text"
               defaultValue={contact_person_surname}
             />
+            {errors.contact_person_surname && (
+              <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                {errors.contact_person_surname.message}
+              </span>
+            )}
             <hr />
             <label className="form-label mt-2">เบอร์โทรศัพท์ที่บ้าน</label>
             <Form.Control
@@ -349,6 +416,11 @@ export default function OtherEditInfoComponent({
               type="text"
               defaultValue={contact_person_home_phone}
             />
+            {errors.contact_person_home_phone && (
+              <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                {errors.contact_person_home_phone.message}
+              </span>
+            )}
             <hr />
             <label className="form-label mt-2">เบอร์โทรศัพท์มือถือ</label>
             <Form.Control
@@ -359,6 +431,11 @@ export default function OtherEditInfoComponent({
               type="text"
               defaultValue={contact_person_phone}
             />
+            {errors.contact_person_phone && (
+              <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                {errors.contact_person_phone.message}
+              </span>
+            )}
           </Card>
           <br />
           {/* Upload Section */}
