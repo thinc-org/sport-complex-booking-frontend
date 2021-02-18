@@ -468,7 +468,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
             )}
             {!user?.user_photo ? (
               <input
-                style={{ display: "none" }}
+                style={{ opacity: 0, height: 0 }}
                 type="file"
                 className="form-file-input form-control"
                 id="user_photo"
@@ -476,10 +476,8 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                 accept="image/png, image/jpeg"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("user_photo")}
                 onChange={(e) => {
-                  if (e.target.files && e.target.files[0]?.size > 2097152) {
-                    e.target.value = ""
-                    alert(t("fileTooBig"))
-                  } else e.target.files && set_user_photo(e.target.files[0])
+                  if (e.target.files && e.target.files[0]?.size > 2097152) alert(t("fileTooBig"))
+                  else e.target.files && set_user_photo(e.target.files[0])
                 }}
               />
             ) : (
@@ -500,7 +498,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
             )}
             {!user?.national_id_house_registration ? (
               <input
-                style={{ display: "none" }}
+                style={{ opacity: 0, height: 0 }}
                 type="file"
                 className="form-file-input  form-control"
                 id="national_id_house_registration"
@@ -508,10 +506,8 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                 accept="application/pdf"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("national_id_house_registration")}
                 onChange={(e) => {
-                  if (e.target.files && e.target.files[0]?.size > 2097152) {
-                    e.target.value = ""
-                    alert("fileTooBig")
-                  } else e.target.files && set_national_id_house_registration(e.target.files[0])
+                  if (e.target.files && e.target.files[0]?.size > 2097152) alert("fileTooBig")
+                  else e.target.files && set_national_id_house_registration(e.target.files[0])
                 }}
               />
             ) : (
@@ -532,7 +528,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
             )}
             {!user?.medical_certificate ? (
               <input
-                style={{ display: "none" }}
+                style={{ opacity: 0, height: 0 }}
                 type="file"
                 className="form-file-input  form-control"
                 id="medical_certificate"
@@ -540,10 +536,8 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                 accept="application/pdf"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("medical_certificate")}
                 onChange={(e) => {
-                  if (e.target.files && e.target.files[0]?.size > 2097152) {
-                    e.target.value = ""
-                    alert("fileTooBig")
-                  } else e.target.files && set_medical_certificate(e.target.files[0])
+                  if (e.target.files && e.target.files[0]?.size > 2097152) alert("fileTooBig")
+                  else e.target.files && set_medical_certificate(e.target.files[0])
                 }}
               />
             ) : (
@@ -569,7 +563,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                 )}
                 {!user?.relationship_verification_document ? (
                   <input
-                    style={{ display: "none" }}
+                    style={{ opacity: 0, height: 0 }}
                     type="file"
                     required
                     className="form-control"
@@ -577,10 +571,8 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                     accept="application/pdf"
                     readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("relationship_verification_document")}
                     onChange={(e) => {
-                      if (e.target.files && e.target.files[0]?.size > 2097152) {
-                        e.target.value = ""
-                        alert("fileTooBig")
-                      } else e.target.files && set_relationship_verification_document(e.target.files[0])
+                      if (e.target.files && e.target.files[0]?.size > 2097152) alert("fileTooBig")
+                      else e.target.files && set_relationship_verification_document(e.target.files[0])
                     }}
                   />
                 ) : (
@@ -605,7 +597,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
             )}
             {!user?.payment_slip ? (
               <input
-                style={{ display: "none" }}
+                style={{ opacity: 0, height: 0 }}
                 type="file"
                 required
                 className="form-control"
@@ -613,10 +605,8 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                 accept="application/pdf, image/png, image/jpeg"
                 readOnly={user?.verification_status === "Rejected"}
                 onChange={(e) => {
-                  if (e.target.files && e.target.files[0]?.size > 2097152) {
-                    e.target.value = ""
-                    alert("fileTooBig")
-                  } else e.target.files && set_payment_slip(e.target.files[0])
+                  if (e.target.files && e.target.files[0]?.size > 2097152) alert("fileTooBig")
+                  else e.target.files && set_payment_slip(e.target.files[0])
                 }}
               />
             ) : (
