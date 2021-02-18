@@ -171,19 +171,21 @@ export default function OtherAaccountDisplay({ toggleEditButton }: AccountProps)
           <div className="form-file">
             <hr />
             <label className="form-label my-2">{t("relationship_verification_document")}</label>
-            {user?.relationship_verification_document ? (
-              <a
-                type="button"
-                className="btn-normal btn-secondary"
-                href={"openFile/" + user.relationship_verification_document}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {t("viewFile")}
-              </a>
-            ) : (
-              <p>{t("noFile")}</p>
-            )}
+            <div className="form-file">
+              {user?.relationship_verification_document ? (
+                <a
+                  type="button"
+                  className="btn-normal btn-secondary"
+                  href={"openFile/" + user.relationship_verification_document}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t("viewFile")}
+                </a>
+              ) : (
+                <p>{t("noFile")}</p>
+              )}
+            </div>
           </div>
         )}
       </div>
