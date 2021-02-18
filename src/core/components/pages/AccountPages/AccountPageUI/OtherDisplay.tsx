@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next"
 import { AccountProps } from "../../../../dto/account.dto"
 import Button from "react-bootstrap/esm/Button"
 import PaymentReminder from "../Payment/PaymentReminder"
+import { PaymentMessage } from "../Payment/PaymentModals"
 
 export default function OtherAaccountDisplay({ toggleEditButton }: AccountProps) {
   const { otherAccount: user } = useContext(UserContext)
@@ -14,6 +15,7 @@ export default function OtherAaccountDisplay({ toggleEditButton }: AccountProps)
   return (
     <div className="mx-auto col-md-6">
       {user && <WarningMessage show={user.verification_status !== ""} verification_status={user.verification_status} account={user.account_type} />}
+      <PaymentMessage show={true} payment_status={user?.payment_status} />
       <PaymentReminder />
       <div className="default-mobile-wrapper mt-3 animated-card">
         <div className="">

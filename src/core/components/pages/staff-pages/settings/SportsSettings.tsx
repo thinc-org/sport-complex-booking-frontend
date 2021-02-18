@@ -18,6 +18,7 @@ export default function SportsSettings() {
   const [showError, setShowError] = useState(false)
   const [currentSport, setCurrentSport] = useCurrentSportState()
   const [sports, setSports] = useSportState()
+  const [showRepeatSportNameError, setShowRepeatSportNameError] = useState(false)
 
   const requestSports = useCallback(
     (query?: string) => {
@@ -71,8 +72,9 @@ export default function SportsSettings() {
         requestSports()
         setShowAddSport(false)
       })
-      .catch(() => {
-        setShowError(true)
+      .catch((error) => {
+        if (error.response && error.response.status === 400) setShowRepeatSportNameError(true)
+        else setShowError(true)
       })
   }
 
@@ -286,6 +288,7 @@ export default function SportsSettings() {
         currentSport={currentSport}
       />
       <HandleError show={showError} setShow={setShowError} />
+      <HandleError show={showRepeatSportNameError} setShow={setShowRepeatSportNameError} message="ไม่สามารถกำหนดชื่อกีฬาซ้ำได้" />
     </div>
   )
 }

@@ -19,7 +19,7 @@ export const CookieModal: React.FC<CookieModalProps> = ({ show, handleClick }) =
           <div className="modal-body pt-1 pb-0" style={{ fontSize: "14px", fontWeight: 300, lineHeight: "17px" }}>
             {t("cookieDescription")}
           </div>
-          <div className="modal-footer pt-3 pb-0 pr-0">
+          <div className="modal-footer pt-3 pb-0">
             <Button variant="pink" onClick={handleClick} className="btn pt-1 pb-1" data-dismiss="modal" style={{ fontSize: "14px", fontWeight: 400 }}>
               {t("allow")}
             </Button>

@@ -5,6 +5,7 @@ import { Sport, Court } from "./sport.dto"
 export interface NormalModalProps {
   show: boolean
   setShow: (value: boolean) => void
+  message?: string
 }
 
 export interface ListCourts {

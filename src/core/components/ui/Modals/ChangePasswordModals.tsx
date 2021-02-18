@@ -14,9 +14,10 @@ interface CustomPasswordModalProps {
   setShow: (value: boolean) => void
   mainFunction: (value: PasswordData) => void | void
   data?: PasswordData
+  redirect?: () => void
 }
 
-export const CustomPasswordModal: React.FC<CustomPasswordModalProps> = ({ type, show, setShow, mainFunction, data }) => {
+export const CustomPasswordModal: React.FC<CustomPasswordModalProps> = ({ type, show, setShow, mainFunction, data, redirect }) => {
   const { t } = useTranslation()
   const message: {
     title: string
@@ -48,7 +49,7 @@ export const CustomPasswordModal: React.FC<CustomPasswordModalProps> = ({ type, 
             {t("cancel")}
           </Button>
         )}
-        <Button variant="pink" className="btn-normal" onClick={() => (data ? mainFunction(data) : console.log("date unavailable"))}>
+        <Button variant="pink" className="btn-normal" onClick={() => (data ? mainFunction(data) : redirect ? redirect() : setShow(false))}>
           {t("ok")}
         </Button>
       </Modal.Footer>

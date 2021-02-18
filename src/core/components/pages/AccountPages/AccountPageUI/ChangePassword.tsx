@@ -81,6 +81,7 @@ function ChangePassword() {
         show={showChangeSuccess}
         setShow={setShowChangeSuccess}
         mainFunction={returnToAccountPage}
+        redirect={returnToAccountPage}
       />
       {/* Password Change Error */}
       <CustomPasswordModal

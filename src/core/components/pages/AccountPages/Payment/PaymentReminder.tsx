@@ -5,7 +5,6 @@ import withUserGuard from "../../../../guards/user.guard"
 import { useTranslation } from "react-i18next"
 import { ExclamationCircleFill } from "react-bootstrap-icons"
 import { UserContext } from "../../../../contexts/UsersContext"
-import { PaymentMessage } from "./PaymentModals"
 
 export const usePaymentReminder = () => {
   const { otherAccount: user } = useContext(UserContext)
@@ -26,12 +25,11 @@ function PaymentReminder() {
   const { t } = useTranslation()
   const { nearExpiration, user } = usePaymentReminder()
 
-  if ((!nearExpiration() || !user?.account_expiration_date) && user?.payment_status !== "Rejected") return null
+  if (!nearExpiration()) return null
 
   return (
     <div>
-      <PaymentMessage show={true} payment_status={user.payment_status} />
-      {user.payment_status !== "Submitted" && (
+      {user?.payment_status && (
         <div className="default-mobile-wrapper mt-3 animated-card">
           <span className="mb-1 mr-2">
             <ExclamationCircleFill color="#8c8c8c" />
