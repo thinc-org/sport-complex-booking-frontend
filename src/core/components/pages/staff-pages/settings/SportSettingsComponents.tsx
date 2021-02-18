@@ -1,7 +1,9 @@
+import { yupResolver } from "@hookform/resolvers/yup"
 import React, { useState } from "react"
 import { Form, Row, Button, Modal } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import { DeleteSportProps, AddSportProps, NormalModalProps, EditSportProps } from "../../../../dto/settings.dto"
+import { addSportSchema } from "../../../../schemas/addSportSchema"
 
 export const DeleteSport: React.FC<DeleteSportProps> = ({ show, setShow, mainFunction, data }) => {
   return (
@@ -42,7 +44,7 @@ export const DeleteSport: React.FC<DeleteSportProps> = ({ show, setShow, mainFun
 }
 
 export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSport }) => {
-  const { register, handleSubmit, getValues, setValue, errors } = useForm()
+  const { register, handleSubmit, getValues, setValue, errors } = useForm({ resolver: yupResolver(addSportSchema) })
   const [reservationTime, setReservationTime] = useState(60)
   const [minMembers, setMinMembers] = useState(5)
   return (
@@ -62,28 +64,12 @@ export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSp
           <Form.Group>
             <Row>
               <Form.Label>ประเภทกีฬา (ภาษาไทย)</Form.Label>
-              <input
-                type="text"
-                placeholder="ประเภทกีฬาภาษาไทย"
-                ref={register({
-                  required: "กรุณากรอกข้อมูล",
-                })}
-                name="sport_name_th"
-                className="form-control"
-              />
+              <input type="text" placeholder="ประเภทกีฬาภาษาไทย" ref={register} name="sport_name_th" className="form-control" />
             </Row>
             {errors.sport_name_th && <p id="input-error">{errors.sport_name_th.message}</p>}
             <Row>
               <Form.Label>ประเภทกีฬา (ภาษาอังกฤษ)</Form.Label>
-              <input
-                type="text"
-                placeholder="ประเภทกีฬาภาษาอังกฤษ"
-                ref={register({
-                  required: "กรุณากรอกข้อมูล",
-                })}
-                name="sport_name_en"
-                className="form-control"
-              />
+              <input type="text" placeholder="ประเภทกีฬาภาษาอังกฤษ" ref={register} name="sport_name_en" className="form-control" />
             </Row>
             {errors.sport_name_en && <p id="input-error">{errors.sport_name_en.message}</p>}
           </Form.Group>
@@ -190,7 +176,7 @@ export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSp
   )
 }
 
-export const HandleError: React.FC<NormalModalProps> = ({ show, setShow }) => {
+export const HandleError: React.FC<NormalModalProps> = ({ show, setShow, message }) => {
   if (!show) return null
   return (
     <Modal
@@ -204,7 +190,7 @@ export const HandleError: React.FC<NormalModalProps> = ({ show, setShow }) => {
       <Modal.Header closeButton>
         <Modal.Title>คําเตือน: เกิดเหตุขัดข้อง</Modal.Title>
       </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>กรุณาลองใหม่อีกครั้ง</Modal.Body>
+      <Modal.Body style={{ fontWeight: "lighter" }}>{message ? message : "กรุณาลองใหม่อีกครั้ง"}</Modal.Body>
       <Modal.Footer>
         <Button
           variant="pink"

@@ -78,7 +78,7 @@ export default function CourtsSettings() {
         setShowDeleteCourt(false)
         requestCourts(currentSportId)
       })
-      .catch((error) => {
+      .catch(() => {
         setShowError(true)
         requestCourts(currentSportId)
       })

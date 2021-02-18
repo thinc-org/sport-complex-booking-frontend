@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Form, Row, Col, Button, Modal } from "react-bootstrap"
 import TimePicker from "react-time-picker"
 import { Control, useForm, useWatch } from "react-hook-form"
@@ -217,13 +217,30 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
   updateCourt,
   currentSportId,
 }) => {
-  const { register, handleSubmit, errors, control } = useForm()
+  const { register, handleSubmit, errors, control, getValues } = useForm()
+  const [showRepeatCourt, setShowRepeatCourt] = useState(false)
   const formattedOpenTime = formatOpenTime(openTime)
   const formattedCloseTime = formatCloseTime(closeTime)
   const onSubmitAddCourt = (data: Court) => {
-    const newCourt = { ...data, court_num: parseInt(data.court_num + ""), open_time: formattedOpenTime, close_time: formattedCloseTime }
-    courts.push(newCourt)
-    updateCourt(currentSportId)
+    function repeatedCourtNum(num: number) {
+      courts.forEach((court) => {
+        if (court.court_num === num) {
+          setShowRepeatCourt(true)
+          return true
+        }
+      })
+      setShowRepeatCourt(false)
+      return false
+    }
+    const continueSubmission = repeatedCourtNum(parseInt(getValues("court_num")))
+    if (continueSubmission) {
+      setShowRepeatCourt(false)
+      const newCourt = { ...data, court_num: parseInt(data.court_num + ""), open_time: formattedOpenTime, close_time: formattedCloseTime }
+      courts.push(newCourt)
+      updateCourt(currentSportId)
+    } else {
+      setShowRepeatCourt(true)
+    }
   }
   function OpenTimeWatched({ control }: { control: Control }) {
     const open = useWatch({
@@ -272,6 +289,11 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
               />
             </Row>
             {errors.court_num && errors.court_num.type === "min" && <p id="input-error">ไม่สามารถตั้งหมายเลขคอร์ดเป็นเลขติดลบได้</p>}
+            {showRepeatCourt && (
+              <p id="input-error" className="m-1">
+                ไม่สามารถกำหนดหมายเลขสนามซ้ำได้
+              </p>
+            )}
             {errors.court_num && <p id="input-error">{errors.court_num.message}</p>}
             <Row className="mt-3 mx-1">
               <Col className="p-0">

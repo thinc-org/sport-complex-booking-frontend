@@ -6,6 +6,7 @@ export const changePasswordSchema = yup.object().shape({
   newPassword: yup
     .string()
     .required(i18n.t("enterNewPass"))
+    .notOneOf([yup.ref("oldPassword"), null], i18n.t("oldNewPassMustDiff"))
     .oneOf([yup.ref("repeatNewPassword"), null], i18n.t("passMustMatch")),
   repeatNewPassword: yup
     .string()
