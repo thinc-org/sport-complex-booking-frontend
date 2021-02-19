@@ -4,6 +4,7 @@ import { Button, Card, Form, Collapse } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import { Other } from "../../../../contexts/UsersContext"
 import OtherViewInfoComponent from "../list-of-all-users-pages/OtherViewInfoComponent"
+import { renderLoading } from "../list-of-all-users-pages/ListOfAllUsers"
 import {
   ConfirmRejectModal,
   UncomRejectModal,
@@ -338,9 +339,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
           {renderRejectionInfo()}
         </Card>
       </div>
-      <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
-        <h5> LOADING ... </h5>
-      </div>
+      {renderLoading(isLoading)}
     </>
   )
 }

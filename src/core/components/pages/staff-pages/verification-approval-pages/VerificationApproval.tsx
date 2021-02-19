@@ -6,6 +6,7 @@ import { client } from "../../../../../axiosConfig"
 import { AxiosResponse } from "axios"
 import { VerifyInfoRes, VerifyListRes } from "../../../../dto/verification.dto"
 import PaginationComponent from "../list-of-all-users-pages/PaginationComponent"
+import { renderLoading } from "../list-of-all-users-pages/ListOfAllUsers"
 
 interface requestParams {
   start: number
@@ -224,9 +225,7 @@ const VeritificationApproval: FunctionComponent = () => {
           <PaginationComponent pageNo={pageNo} setPageNo={setPageNo} maxUser={maxUser} maxUserPerPage={maxUserPerPage} />
         </div>
       </div>
-      <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
-        <h5> LOADING ... </h5>
-      </div>
+      {renderLoading(isLoading)}
     </>
   )
 }

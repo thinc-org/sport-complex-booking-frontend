@@ -16,6 +16,7 @@ import {
   ConfirmChangePasswordModal,
 } from "./ListOfAllUserModals"
 import { OtherComponentInfo, ModalUserInfo } from "../interfaces/InfoInterface"
+import { renderLoading } from "./ListOfAllUsers"
 import format from "date-fns/format"
 import { FormProvider, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -490,9 +491,7 @@ const UserInfo = () => {
           </Card>
         </div>
       </FormProvider>
-      <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
-        <h5> LOADING ... </h5>
-      </div>
+      {renderLoading(isLoading)}
     </>
   )
 }

@@ -8,6 +8,7 @@ import { getTimeText } from "./ReservationDetail"
 import { client } from "../../../../../axiosConfig"
 import { AxiosResponse } from "axios"
 import PaginationComponent from "../list-of-all-users-pages/PaginationComponent"
+import { renderLoading } from "../list-of-all-users-pages/ListOfAllUsers"
 import { ErrModal } from "./DeleteModalComponent"
 
 interface RequestBody {
@@ -239,9 +240,7 @@ const AllReservation: FunctionComponent = () => {
         </div>
         <ErrModal show={showErr} onClose={() => setShowErr(false)} />
       </div>
-      <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
-        <h5> LOADING ... </h5>
-      </div>
+      {renderLoading(isLoading)}
     </>
   )
 }

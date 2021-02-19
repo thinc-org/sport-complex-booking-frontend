@@ -14,6 +14,7 @@ import {
 } from "./VerifyModalsComopnent"
 import format from "date-fns/format"
 import { VerifyExtendInfo, ModalVerify } from "../interfaces/InfoInterface"
+import { renderLoading } from "../list-of-all-users-pages/ListOfAllUsers"
 
 /// start of main function ///
 const VerifyExtend: FunctionComponent = () => {
@@ -203,9 +204,7 @@ const VerifyExtend: FunctionComponent = () => {
           {renderContent}
         </Card>
       </div>
-      <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
-        <h5> LOADING ... </h5>
-      </div>
+      {renderLoading(isLoading)}
     </>
   )
 }

@@ -5,6 +5,7 @@ import format from "date-fns/format"
 import { client } from "../../../../../axiosConfig"
 import { Room, TimeObject } from "../../../../dto/reservation.dto"
 import { ConfirmDeleteModal, ErrModal, DeleteSuccessfulModal } from "./DeleteModalComponent"
+import { renderLoading } from "../list-of-all-users-pages/ListOfAllUsers"
 import { Sport } from "../../../../dto/sport.dto"
 
 export const convertSlotToTime = (slot: number): TimeObject => {
@@ -189,9 +190,7 @@ const ReservationDetail: React.FC = () => {
         </Row>
         {modals}
       </div>
-      <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
-        <h5> LOADING ... </h5>
-      </div>
+      {renderLoading(isLoading)}
     </>
   )
 }
