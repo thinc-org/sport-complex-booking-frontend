@@ -27,16 +27,7 @@ const UserInfo = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isEdit, setEdit] = useState<boolean>(false)
   const [newPassword, setNewPassword] = useState<string>("")
-  const [showModalInfo, setShowModalInfo] = useState<ModalUserInfo>({
-    showDelete: false,
-    showComDelete: false,
-    showSave: false,
-    showComSave: false,
-    showErr: false,
-    showPasswordErr: false,
-    showConfirmChange: false,
-    showChangePassword: false,
-  })
+  const [showModalInfo, setShowModalInfo] = useState<ModalUserInfo>("")
 
   // Non CU state //
   const [username, setUsername] = useState<string>("")
@@ -148,7 +139,7 @@ const UserInfo = () => {
   }
 
   const handleSave = () => {
-    setShowModalInfo({ ...showModalInfo, showSave: true })
+    setShowModalInfo("showSave")
   }
 
   const handleChangeDateTime = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -239,12 +230,13 @@ const UserInfo = () => {
         setAccountExpiredDate(tempAccountExpiredDate)
         setInfo(tempInfo)
         // show save complete modal
-        setShowModalInfo({ ...showModalInfo, showSave: false, showComSave: true })
+        setShowModalInfo("showComSave")
         // back to view form
         setEdit(false)
       })
       .catch(({ response }) => {
-        setShowModalInfo({ ...showModalInfo, showSave: false, showErr: true })
+        console.log(response)
+        setShowModalInfo("showErr")
       })
   }
 
@@ -257,11 +249,11 @@ const UserInfo = () => {
       },
     })
       .then(() => {
-        setShowModalInfo({ ...showModalInfo, showChangePassword: false, showConfirmChange: false })
+        setShowModalInfo("")
       })
       .catch((err) => {
         console.log(err)
-        setShowModalInfo({ ...showModalInfo, showErr: true })
+        setShowModalInfo("showErr")
       })
   }
 
@@ -271,11 +263,11 @@ const UserInfo = () => {
       url: `/list-all-user/${_id}`,
     })
       .then(() => {
-        setShowModalInfo({ ...showModalInfo, showDelete: false, showComDelete: true })
+        setShowModalInfo("showComDelete")
       })
       .catch((err) => {
         console.log(err)
-        setShowModalInfo({ ...showModalInfo, showDelete: false, showErr: true })
+        setShowModalInfo("showErr")
       })
   }
 
@@ -426,7 +418,7 @@ const UserInfo = () => {
             variant="outline-danger"
             className="float-right btn-normal btn-outline-red mr-3"
             onClick={() => {
-              setShowModalInfo({ ...showModalInfo, showDelete: true })
+              setShowModalInfo("showDelete")
             }}
           >
             ลบผู้ใช้
@@ -445,7 +437,7 @@ const UserInfo = () => {
             variant="pink"
             className="btn-normal"
             onClick={() => {
-              setShowModalInfo({ ...showModalInfo, showChangePassword: true })
+              setShowModalInfo("showChangePassword")
             }}
           >
             เปลี่ยนรหัสผ่าน

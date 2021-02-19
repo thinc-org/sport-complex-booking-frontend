@@ -1,6 +1,7 @@
 import React from "react"
 import { useHistory } from "react-router-dom"
 import { Modal, Button } from "react-bootstrap"
+import { CustomModal } from "../list-of-all-users-pages/ListOfAllUserModals"
 import { ModalVerify } from "../interfaces/InfoInterface"
 
 type ConReject = { requestReject: () => void }
@@ -18,9 +19,9 @@ export const ConfirmRejectModal: React.FC<ModalProps> = ({ showModalInfo, setSho
   const { requestReject } = info as ConReject
   return (
     <Modal
-      show={showModalInfo.showConfirmReject}
+      show={showModalInfo === "showConfirmReject"}
       onHide={() => {
-        setShowModalInfo({ ...showModalInfo, showConfirmReject: false })
+        setShowModalInfo("")
       }}
       backdrop="static"
       keyboard={false}
@@ -35,7 +36,7 @@ export const ConfirmRejectModal: React.FC<ModalProps> = ({ showModalInfo, setSho
           variant="outline-secondary"
           className="btn-normal btn-outline-pink"
           onClick={() => {
-            setShowModalInfo({ ...showModalInfo, showConfirmReject: false })
+            setShowModalInfo("")
           }}
         >
           ยกเลิก
@@ -50,30 +51,12 @@ export const ConfirmRejectModal: React.FC<ModalProps> = ({ showModalInfo, setSho
 
 export const UncomRejectModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo }) => {
   return (
-    <Modal
-      show={showModalInfo.showUncomReject}
-      onHide={() => {
-        setShowModalInfo({ ...showModalInfo, showUncomReject: false })
-      }}
-      backdrop="static"
-      keyboard={false}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>คำเตือน</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>กรุณาเลือกข้อมูลที่ถูกปฏิเสธ</Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="pink"
-          className="btn-normal"
-          onClick={() => {
-            setShowModalInfo({ ...showModalInfo, showUncomReject: false })
-          }}
-        >
-          ยืนยัน
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <CustomModal
+      title={"คำเตือน"}
+      show={showModalInfo === "showUncomReject"}
+      body="กรุณาเลือกข้อมูลที่ถูกปฏิเสธ"
+      onConfirm={() => setShowModalInfo("")}
+    />
   )
 }
 
@@ -81,32 +64,15 @@ export const CompleteRejectModal: React.FC<ModalProps> = ({ showModalInfo, setSh
   const history = useHistory()
   const { username } = info as Username
   return (
-    <Modal
-      show={showModalInfo.showCompleteReject}
-      onHide={() => {
-        setShowModalInfo({ ...showModalInfo, showCompleteReject: false })
+    <CustomModal
+      title={"การปฏิเสธการลงทะเบียนสำเร็จ"}
+      show={showModalInfo === "showCompleteReject"}
+      body={`ปฏิเสธการลงทะเบียนของ ${username} เรียบร้อยแล้ว`}
+      onConfirm={() => {
+        setShowModalInfo("")
         history.push("/staff/verifyApprove")
       }}
-      backdrop="static"
-      keyboard={false}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>การปฏิเสธการลงทะเบียนสำเร็จ</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>{"ปฏิเสธการลงทะเบียนของ " + username + " เรียบร้อยแล้ว"}</Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="pink"
-          className="btn-normal"
-          onClick={() => {
-            setShowModalInfo({ ...showModalInfo, showCompleteReject: false })
-            history.push("/staff/verifyApprove")
-          }}
-        >
-          ตกลง
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    />
   )
 }
 
@@ -114,62 +80,24 @@ export const CompleteRejectModal: React.FC<ModalProps> = ({ showModalInfo, setSh
 export const ConfirmAcceptModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo, info }) => {
   const { requestAccept } = info as ConAccept
   return (
-    <Modal
-      show={showModalInfo.showConfirmAccept}
-      onHide={() => {
-        setShowModalInfo({ ...showModalInfo, showConfirmAccept: false })
-      }}
-      backdrop="static"
-      keyboard={false}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>คำเตือน</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>คุณต้องการยอมรับการลงทะเบียนนี้ใช่หรือไม่</Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="outline-secondary"
-          className="btn-normal btn-outline-pink"
-          onClick={() => {
-            setShowModalInfo({ ...showModalInfo, showConfirmAccept: false })
-          }}
-        >
-          ยกเลิก
-        </Button>
-        <Button variant="pink" className="btn-normal" onClick={requestAccept}>
-          ยืนยัน
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <CustomModal
+      title={"คำเตือน"}
+      show={showModalInfo === "showConfirmAccept"}
+      body="คุณต้องการยอมรับการลงทะเบียนนี้ใช่หรือไม่"
+      onCancel={() => setShowModalInfo("")}
+      onConfirm={requestAccept}
+    />
   )
 }
 
 export const UncomAcceptModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo }) => {
   return (
-    <Modal
-      show={showModalInfo.showUncomAccept}
-      onHide={() => {
-        setShowModalInfo({ ...showModalInfo, showUncomAccept: false })
-      }}
-      backdrop="static"
-      keyboard={false}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>คำเตือน</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>กรุณาระบุวันหมดอายุสมาชิกก่อนกดยอมรับ</Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="pink"
-          className="btn-normal"
-          onClick={() => {
-            setShowModalInfo({ ...showModalInfo, showUncomAccept: false })
-          }}
-        >
-          ยืนยัน
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <CustomModal
+      title={"คำเตือน"}
+      show={showModalInfo === "showUncomAccept"}
+      body="กรุณาระบุวันหมดอายุสมาชิกก่อนกดยอมรับ"
+      onConfirm={() => setShowModalInfo("")}
+    />
   )
 }
 
@@ -177,61 +105,26 @@ export const CompleteAcceptModal: React.FC<ModalProps> = ({ showModalInfo, setSh
   const { username } = info as Username
   const history = useHistory()
   return (
-    <Modal
-      show={showModalInfo.showCompleteAccept}
-      onHide={() => {
-        setShowModalInfo({ ...showModalInfo, showCompleteAccept: false })
+    <CustomModal
+      title={"การยอมรับการลงทะเบียนสำเร็จ"}
+      show={showModalInfo === "showCompleteAccept"}
+      body={`ยอมรับการลงทะเบียนของ ${username} เรียบร้อยแล้ว`}
+      onConfirm={() => {
+        setShowModalInfo("")
         history.push("/staff/verifyApprove")
       }}
-      backdrop="static"
-      keyboard={false}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>การยอมรับการลงทะเบียนสำเร็จ</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>{"ยอมรับการลงทะเบียนของ " + username + " เรียบร้อยแล้ว"}</Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="pink"
-          className="btn-normal"
-          onClick={() => {
-            setShowModalInfo({ ...showModalInfo, showCompleteAccept: false })
-            history.push("/staff/verifyApprove")
-          }}
-        >
-          ตกลง
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    />
   )
 }
 
 // Error Modal //
 export const ErrorModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo }) => {
   return (
-    <Modal
-      show={showModalInfo.showErr}
-      onHide={() => {
-        setShowModalInfo({ ...showModalInfo, showErr: false })
-      }}
-      backdrop="static"
-      keyboard={false}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>เกิดข้อผิดพลาด</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>ไม่สามารถ ยอมรับ/ปฏิเสธ การลงทะเบียนได้ในขณะนี้</Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="pink"
-          className="btn-normal"
-          onClick={() => {
-            setShowModalInfo({ ...showModalInfo, showErr: false })
-          }}
-        >
-          ตกลง
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <CustomModal
+      title={"เกิดข้อผิดพลาด"}
+      show={showModalInfo === "showErr"}
+      body="ไม่สามารถ ยอมรับ/ปฏิเสธ การลงทะเบียนได้ในขณะนี้"
+      onConfirm={() => setShowModalInfo("")}
+    />
   )
 }

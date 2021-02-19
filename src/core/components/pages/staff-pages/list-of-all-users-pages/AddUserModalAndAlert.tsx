@@ -14,10 +14,10 @@ export const AddModal: React.FC<ModalProps> = ({ show, setShow, requestAdd }) =>
   return (
     <CustomModal
       title={"คำเตือน"}
-      show={show.showAdd}
+      show={show === "showAdd"}
       body={"ต้องการเพิ่มผู้ใช้หรือไม่"}
       onCancel={() => {
-        setShow({ ...show, showAdd: false })
+        setShow("")
       }}
       onConfirm={requestAdd ? requestAdd : () => console.log("unavailable")}
     />
@@ -29,10 +29,10 @@ export const ComModal: React.FC<ModalProps> = ({ show, setShow }) => {
   return (
     <CustomModal
       title={"เสร็จสิ้น"}
-      show={show.showCom}
+      show={show === "showCom"}
       body={"การเพิ่มผู้ใช้เสร็จสมบูรณ์"}
       onConfirm={() => {
-        setShow({ ...show, showCom: false })
+        setShow("")
         history.push("/staff/listOfAllUsers")
       }}
     />
@@ -43,10 +43,10 @@ export const ErrModal: React.FC<ModalProps> = ({ show, setShow }) => {
   return (
     <CustomModal
       title={"เกิดข้อผิดพลาด"}
-      show={show.showErr}
+      show={show === "showErr"}
       body={"ไม่สามารถเพิ่มผู้ใช้ได้ในขณะนี้"}
       onConfirm={() => {
-        setShow({ ...show, showErr: false })
+        setShow("")
       }}
     />
   )
@@ -56,10 +56,10 @@ export const UsernameErrModal: React.FC<ModalProps> = ({ show, setShow }) => {
   return (
     <CustomModal
       title={"เกิดข้อผิดพลาด"}
-      show={show.showUsernameErr}
+      show={show === "showUsernameErr"}
       body={"ชื่อผู้ใช้นี้ไม่ใช่อีเมล หรือชื่อผู้ใช้นี้ถูกใช้ไปแล้ว"}
       onConfirm={() => {
-        setShow({ ...show, showUsernameErr: false })
+        setShow("")
       }}
     />
   )
@@ -67,7 +67,7 @@ export const UsernameErrModal: React.FC<ModalProps> = ({ show, setShow }) => {
 
 export const AlertUncom: React.FC<{ show: AlertAddUser }> = ({ show }) => {
   return (
-    <Alert show={show.showAlertUncom} variant="danger" style={{ fontWeight: "lighter" }}>
+    <Alert show={show === "showAlertUncom"} variant="danger" style={{ fontWeight: "lighter" }}>
       กรุณากรอกรายละเอียดให้ครบ
     </Alert>
   )
@@ -75,7 +75,7 @@ export const AlertUncom: React.FC<{ show: AlertAddUser }> = ({ show }) => {
 
 export const AlertInvalidUsername: React.FC<{ show: AlertAddUser }> = ({ show }) => {
   return (
-    <Alert show={show.showAlertUsername} variant="danger" style={{ fontWeight: "lighter" }}>
+    <Alert show={show === "showAlertUsername"} variant="danger" style={{ fontWeight: "lighter" }}>
       ชื่อผู้ใช้ (Username) ต้องมีตัวอักษรอย่างน้อย 1 ตัว
     </Alert>
   )
@@ -83,7 +83,7 @@ export const AlertInvalidUsername: React.FC<{ show: AlertAddUser }> = ({ show })
 
 export const AlertErrorPassword: React.FC<{ show: AlertAddUser }> = ({ show }) => {
   return (
-    <Alert show={show.showAlertPassword} variant="danger" style={{ fontWeight: "lighter" }}>
+    <Alert show={show === "showAlertPassword"} variant="danger" style={{ fontWeight: "lighter" }}>
       รหัสผ่านไม่ตรงกัน
     </Alert>
   )

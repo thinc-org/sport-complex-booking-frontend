@@ -178,40 +178,31 @@ export const RejectInfoLabel: Record<keyof RejectInfo, string> = {
 export type RejectInfoLabelKey = keyof RejectInfo
 
 // Modals //
-export interface ModalVerify {
-  showConfirmAccept: boolean
-  showUncomAccept: boolean
-  showCompleteAccept: boolean
-  showUncomReject: boolean
-  showConfirmReject: boolean
-  showCompleteReject: boolean
-  showErr: boolean
-}
+export type ModalVerify =
+  | ""
+  | "showConfirmAccept"
+  | "showUncomAccept"
+  | "showCompleteAccept"
+  | "showUncomReject"
+  | "showConfirmReject"
+  | "showCompleteReject"
+  | "showErr"
 
-export interface ModalUserInfo {
-  showDelete: boolean
-  showComDelete: boolean
-  showSave: boolean
-  showComSave: boolean
-  showErr: boolean
-  showPasswordErr: boolean
-  showConfirmChange: boolean
-  showChangePassword: boolean
-}
+export type ModalUserInfo =
+  | ""
+  | "showDelete"
+  | "showComDelete"
+  | "showSave"
+  | "showComSave"
+  | "showErr"
+  | "showPasswordErr"
+  | "showConfirmChange"
+  | "showChangePassword"
 
-export interface ModalAddUser {
-  showAdd: boolean
-  showCom: boolean
-  showErr: boolean
-  showUsernameErr: boolean
-}
+export type ModalAddUser = "" | "showAdd" | "showCom" | "showErr" | "showUsernameErr"
 
 // Alerts //
-export interface AlertAddUser {
-  showAlertUncom: boolean
-  showAlertUsername: boolean
-  showAlertPassword: boolean
-}
+export type AlertAddUser = "" | "showAlertUncom" | "showAlertUsername" | "showAlertPassword"
 
 // Registration //
 export interface RegistrationInfo {

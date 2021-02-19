@@ -23,15 +23,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [showReject, setShowReject] = useState<boolean>(false)
   const [accountExpiredDate, setAccountExpiredDate] = useState<Date>()
-  const [showModalInfo, setShowModalInfo] = useState<ModalVerify>({
-    showConfirmAccept: false,
-    showUncomAccept: false,
-    showCompleteAccept: false,
-    showConfirmReject: false,
-    showUncomReject: false,
-    showCompleteReject: false,
-    showErr: false,
-  })
+  const [showModalInfo, setShowModalInfo] = useState<ModalVerify>("")
   const [rejectInfo, setRejectInfo] = useState<RejectInfo>({
     prefix: false,
     gender: false,
@@ -152,8 +144,8 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     Object.entries(rejectInfo).forEach(([key, val], index) => {
       if (val) checked = true
     })
-    if (!checked) setShowModalInfo({ ...showModalInfo, showUncomReject: true })
-    else setShowModalInfo({ ...showModalInfo, showConfirmReject: true })
+    if (!checked) setShowModalInfo("showUncomReject")
+    else setShowModalInfo("showConfirmReject")
   }
 
   const requestReject = () => {
@@ -170,10 +162,10 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
       },
     })
       .then(() => {
-        setShowModalInfo({ ...showModalInfo, showConfirmReject: false, showCompleteReject: true })
+        setShowModalInfo("showCompleteReject")
       })
       .catch((err) => {
-        setShowModalInfo({ ...showModalInfo, showConfirmReject: false, showErr: true })
+        setShowModalInfo("showErr")
       })
   }
 
@@ -191,10 +183,10 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
       },
     })
       .then(() => {
-        setShowModalInfo({ ...showModalInfo, showConfirmAccept: false, showCompleteAccept: true })
+        setShowModalInfo("showCompleteAccept")
       })
       .catch((err) => {
-        setShowModalInfo({ ...showModalInfo, showConfirmAccept: false, showErr: true })
+        setShowModalInfo("showErr")
       })
   }
 
@@ -208,8 +200,8 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
 
   const handleAccept = () => {
     if (accountExpiredDate && !isNaN(accountExpiredDate.getDate())) {
-      setShowModalInfo({ ...showModalInfo, showConfirmAccept: true })
-    } else setShowModalInfo({ ...showModalInfo, showUncomAccept: true })
+      setShowModalInfo("showConfirmAccept")
+    } else setShowModalInfo("showUncomAccept")
   }
 
   // renders //

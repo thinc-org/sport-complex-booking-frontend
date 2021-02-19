@@ -32,16 +32,7 @@ const UserInfo: FunctionComponent = () => {
   const [newPassword, setNewPassword] = useState<string>("")
 
   // Modals & Alert //
-  const [showModals, setShowModals] = useState<ModalUserInfo>({
-    showSave: false,
-    showComSave: false,
-    showDelete: false,
-    showComDelete: false,
-    showErr: false,
-    showPasswordErr: false,
-    showConfirmChange: false,
-    showChangePassword: false,
-  })
+  const [showModals, setShowModals] = useState<ModalUserInfo>("")
   // Alert //
   const [showAlert, setShowAlert] = useState<boolean>(false)
 
@@ -134,8 +125,7 @@ const UserInfo: FunctionComponent = () => {
     // else -> try change //
     setTempUser({ ...tempUser, ...data })
     const { name_th, surname_th, name_en, surname_en, personal_email, phone } = data
-    if (name_th !== "" && surname_th !== "" && name_en !== "" && surname_en !== "" && personal_email !== "" && phone !== "")
-      setShowModals({ ...showModals, showSave: true })
+    if (name_th !== "" && surname_th !== "" && name_en !== "" && surname_en !== "" && personal_email !== "" && phone !== "") setShowModals("showSave")
     else setShowAlert(true)
   }
 
@@ -144,7 +134,6 @@ const UserInfo: FunctionComponent = () => {
     // if change complete -> pop up "ok" //
     // if change error -> pop up "not complete" -> back to old data //
     const { name_th, surname_th, name_en, surname_en, personal_email, phone, is_penalize, expired_penalize_date } = tempUser
-    setShowModals({ ...showModals, showSave: false })
     setShowAlert(false)
     client({
       method: "PUT",
@@ -162,11 +151,11 @@ const UserInfo: FunctionComponent = () => {
     })
       .then(() => {
         setUser(tempUser)
-        setShowModals({ ...showModals, showSave: false, showComSave: true })
+        setShowModals("showComSave")
         setEditing(false)
       })
-      .catch(({ response }) => {
-        setShowModals({ ...showModals, showSave: false, showErr: true })
+      .catch(() => {
+        setShowModals("showErr")
       })
   }
 
@@ -177,10 +166,10 @@ const UserInfo: FunctionComponent = () => {
       url: `/list-all-user/${_id}`,
     })
       .then(() => {
-        setShowModals({ ...showModals, showDelete: false, showComDelete: true })
+        setShowModals("showComDelete")
       })
-      .catch(({ response }) => {
-        setShowModals({ ...showModals, showDelete: false, showErr: true })
+      .catch(() => {
+        setShowModals("showErr")
       })
   }
 
@@ -193,10 +182,10 @@ const UserInfo: FunctionComponent = () => {
       },
     })
       .then(() => {
-        setShowModals({ ...showModals, showConfirmChange: false, showChangePassword: false })
+        setShowModals("")
       })
-      .catch((err) => {
-        setShowModals({ ...showModals, showErr: true })
+      .catch(() => {
+        setShowModals("showErr")
       })
   }
 
@@ -297,7 +286,7 @@ const UserInfo: FunctionComponent = () => {
               variant="outline-danger"
               className="btn-normal btn-outline-red mr-3"
               onClick={() => {
-                setShowModals({ ...showModals, showDelete: true })
+                setShowModals("showDelete")
               }}
             >
               ลบผู้ใช้
@@ -428,7 +417,7 @@ const UserInfo: FunctionComponent = () => {
                   variant="pink"
                   className="btn-normal"
                   onClick={() => {
-                    setShowModals({ ...showModals, showChangePassword: true })
+                    setShowModals("showChangePassword")
                   }}
                 >
                   เปลี่ยนรหัสผ่าน

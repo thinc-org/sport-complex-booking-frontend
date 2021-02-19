@@ -20,15 +20,7 @@ import { renderLoading } from "../list-of-all-users-pages/ListOfAllUsers"
 const VerifyExtend: FunctionComponent = () => {
   // page state //
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [showModalInfo, setShowModalInfo] = useState<ModalVerify>({
-    showConfirmAccept: false,
-    showUncomAccept: false,
-    showCompleteAccept: false,
-    showConfirmReject: false,
-    showUncomReject: false,
-    showCompleteReject: false,
-    showErr: false,
-  })
+  const [showModalInfo, setShowModalInfo] = useState<ModalVerify>("")
 
   // Non CU state //
   const [accountExpiredDate, setAccountExpiredDate] = useState<Date>()
@@ -69,8 +61,8 @@ const VerifyExtend: FunctionComponent = () => {
 
   // handles //
   const handleAccept = () => {
-    if (accountExpiredDate) setShowModalInfo({ ...showModalInfo, showConfirmAccept: true })
-    else setShowModalInfo({ ...showModalInfo, showUncomAccept: true })
+    if (accountExpiredDate) setShowModalInfo("showConfirmAccept")
+    else setShowModalInfo("showUncomAccept")
   }
 
   const handleChangeExpire = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,10 +85,10 @@ const VerifyExtend: FunctionComponent = () => {
       },
     })
       .then(() => {
-        setShowModalInfo({ ...showModalInfo, showConfirmReject: false, showCompleteReject: true })
+        setShowModalInfo("showCompleteReject")
       })
       .catch((err) => {
-        setShowModalInfo({ ...showModalInfo, showConfirmReject: false, showErr: true })
+        setShowModalInfo("showErr")
       })
   }
 
@@ -115,10 +107,10 @@ const VerifyExtend: FunctionComponent = () => {
       },
     })
       .then(() => {
-        setShowModalInfo({ ...showModalInfo, showConfirmAccept: false, showCompleteAccept: true })
+        setShowModalInfo("showCompleteAccept")
       })
       .catch((err) => {
-        setShowModalInfo({ ...showModalInfo, showConfirmAccept: false, showErr: true })
+        setShowModalInfo("showErr")
       })
   }
 
@@ -178,7 +170,7 @@ const VerifyExtend: FunctionComponent = () => {
           variant="danger"
           className="btn-normal btn-outline-red px-5 mr-5"
           onClick={() => {
-            setShowModalInfo({ ...showModalInfo, showConfirmReject: true })
+            setShowModalInfo("showConfirmReject")
           }}
         >
           ปฏิเสธ
