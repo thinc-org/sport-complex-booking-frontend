@@ -5,6 +5,7 @@ import { client } from "../../../../../axiosConfig"
 import { AxiosResponse } from "axios"
 import { Account, UserInfoRes, UserListRes } from "../../../../dto/listOfAllUsers.dto"
 import PaginationComponent from "./PaginationComponent"
+import { Loading } from "../../../ui/loading/loading"
 
 enum allStatus {
   All,
@@ -21,8 +22,8 @@ interface ParamsDataRequest {
 
 export const renderLoading = (isLoading: boolean) => {
   return (
-    <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
-      <h5> LOADING ... </h5>
+    <div style={{ display: isLoading ? "block" : "none", textAlign: "center", marginTop: "10%" }}>
+      <Loading />
     </div>
   )
 }
