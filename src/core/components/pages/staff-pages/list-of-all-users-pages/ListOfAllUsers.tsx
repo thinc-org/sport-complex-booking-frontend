@@ -6,6 +6,8 @@ import { AxiosResponse } from "axios"
 import { Account, UserInfoRes, UserListRes } from "../../../../dto/listOfAllUsers.dto"
 import PaginationComponent from "./PaginationComponent"
 import { Loading } from "../../../ui/loading/loading"
+import { ErrModal } from "./ListOfAllUserModals"
+import { ModalUserInfo } from "../interfaces/InfoInterface"
 
 enum allStatus {
   All,
@@ -36,6 +38,7 @@ const ListOfAllUsers: FunctionComponent = () => {
   const [searchName, setSearchName] = useState<string>("")
   const [status, setStatus] = useState<number>(allStatus.All)
   const [showNoUser, setShowNoUser] = useState<boolean>(false)
+  const [showModal, setShowModal] = useState<ModalUserInfo>("") // use only showErr in this page
   const [users, setUsers] = useState<UserInfoRes[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
@@ -105,8 +108,8 @@ const ListOfAllUsers: FunctionComponent = () => {
           setShowNoUser(true)
         }
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
+        setShowModal("showErr")
       })
   }
 
@@ -218,6 +221,7 @@ const ListOfAllUsers: FunctionComponent = () => {
           <tbody>
             {renderUsersTable()}
             {renderNoUserModal()}
+            <ErrModal showModalInfo={showModal} setShowModalInfo={setShowModal} />
           </tbody>
         </Table>
         <Row>

@@ -64,8 +64,7 @@ const ReservationDetail: React.FC = () => {
         setDetail(data)
         setIsLoading(false)
       })
-      .catch(({ response }) => {
-        console.log(response)
+      .catch(() => {
         setShowErr(true)
       })
   }, [_id, pagename])
@@ -97,8 +96,7 @@ const ReservationDetail: React.FC = () => {
         setShowConfirmDel(false)
         setShowComDel(true)
       })
-      .catch(({ response }) => {
-        console.log(response)
+      .catch(() => {
         setShowConfirmDel(false)
         setShowErr(true)
       })

@@ -234,8 +234,7 @@ const UserInfo = () => {
         // back to view form
         setEdit(false)
       })
-      .catch(({ response }) => {
-        console.log(response)
+      .catch(() => {
         setShowModalInfo("showErr")
       })
   }
@@ -251,8 +250,7 @@ const UserInfo = () => {
       .then(() => {
         setShowModalInfo("")
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
         setShowModalInfo("showErr")
       })
   }
@@ -265,8 +263,7 @@ const UserInfo = () => {
       .then(() => {
         setShowModalInfo("showComDelete")
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
         setShowModalInfo("showErr")
       })
   }
