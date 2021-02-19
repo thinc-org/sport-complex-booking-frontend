@@ -19,6 +19,14 @@ interface ParamsDataRequest {
   is_penalize: boolean
 }
 
+export const renderLoading = (isLoading: boolean) => {
+  return (
+    <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
+      <h5> LOADING ... </h5>
+    </div>
+  )
+}
+
 const ListOfAllUsers: FunctionComponent = () => {
   // page state
   const [pageNo, setPageNo] = useState<number>(1)
@@ -224,9 +232,7 @@ const ListOfAllUsers: FunctionComponent = () => {
           </Col>
         </Row>
       </div>
-      <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
-        <h5> LOADING ... </h5>
-      </div>
+      {renderLoading(isLoading)}
     </>
   )
 }

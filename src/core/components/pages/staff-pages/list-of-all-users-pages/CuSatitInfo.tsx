@@ -5,6 +5,7 @@ import format from "date-fns/format"
 import { useForm } from "react-hook-form"
 import { client } from "../../../../../axiosConfig"
 import { CuSatitComponentInfo, ModalUserInfo } from "../interfaces/InfoInterface"
+import { renderLoading } from "./ListOfAllUsers"
 import { CuStudent, SatitCuPersonel } from "../../../../contexts/UsersContext"
 import PasswordChangeModal from "./PasswordChangeModal"
 import {
@@ -459,9 +460,7 @@ const UserInfo: FunctionComponent = () => {
         </Card>
         {renderModals()}
       </div>
-      <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
-        <h5> LOADING ... </h5>
-      </div>
+      {renderLoading(isLoading)}
     </>
   )
 }
