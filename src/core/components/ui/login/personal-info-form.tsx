@@ -33,7 +33,7 @@ const PersonalInfo = () => {
                 <Form.Text>{errors.personal_email && t("fieldIsRequired")}</Form.Text>
               </Form.Group>
               <Form.Group>
-                <Form.Label>{t("mobile_phone")}</Form.Label>
+                <Form.Label>{t("phoneLabel")}</Form.Label>
                 <Form.Control type="text" name="phone" placeholder="Mobile Number" ref={register({ required: true, minLength: 10, maxLength: 15 })} />
                 <Form.Text>{errors.phone && t("invalidLength")}</Form.Text>
               </Form.Group>

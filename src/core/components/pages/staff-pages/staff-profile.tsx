@@ -18,10 +18,10 @@ function StaffProfile() {
       const res: ProfileResponse = (await client.get("staffs/profile")).data
       setName(res.name)
       setSurname(res.surname)
-      setAccountType(res.role)
+      setAccountType(res.is_admin ? "Admin" : "Staff")
       setIsLoading(false)
     } catch (err) {
-      setErrMessage((prev) => ({ ...prev, badRequest: "Request Failed. Please make sure you have logged in and try refresh the page." }))
+      setErrMessage((prev) => ({ ...prev, badRequest: "เกิดเหตุขัดข้อง: กรุณาตรวจสอบว่าเข้าสู่ระบบเรียบร้อยแล้ว และรีเฟรชหน้านี้อีกครั้ง" }))
       setShowError(true)
     }
   }, [])

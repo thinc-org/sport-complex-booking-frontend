@@ -11,7 +11,7 @@ export const data = [
   },
   {
     icon: "",
-    name: "waitingRoom",
+    name: "myWaitingRoom",
     path: "/waitingroom",
   },
   {
