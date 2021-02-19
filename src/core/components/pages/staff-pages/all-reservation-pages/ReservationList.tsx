@@ -59,8 +59,7 @@ const AllReservation: FunctionComponent = () => {
         setMaxUser(data[0])
         setIsLoading(false)
       })
-      .catch(({ response }) => {
-        console.log(response)
+      .catch(() => {
         setShowErr(true)
       })
   }, [chooseDate, courtNo, pagename, searchDate, searchTime, sportType])
