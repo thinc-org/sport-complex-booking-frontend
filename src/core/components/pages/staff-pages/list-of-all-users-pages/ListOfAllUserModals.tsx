@@ -57,10 +57,10 @@ export const DeleteModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalI
   return (
     <CustomModal
       title={"คำเตือน"}
-      show={showModalInfo.showDelete}
+      show={showModalInfo === "showDelete"}
       body={`ท่านกำลังจะลบผู้ใช้ ${username} ออกจากระบบ\nต้องการดำเนินการต่อหรือไม่`}
       onCancel={() => {
-        setShowModalInfo({ ...showModalInfo, showDelete: false })
+        setShowModalInfo("")
       }}
       onConfirm={requestDelete}
     />
@@ -73,10 +73,10 @@ export const CompleteDeleteModal: React.FC<ModalProps> = ({ showModalInfo, setSh
   return (
     <CustomModal
       title={"เสร็จสิ้น"}
-      show={showModalInfo.showComDelete}
+      show={showModalInfo === "showComDelete"}
       body={`ลบผู้ใช้ ${username} ออกจากระบบเรียบร้อยแล้ว`}
       onConfirm={() => {
-        setShowModalInfo({ ...showModalInfo, showComDelete: false })
+        setShowModalInfo("")
         history.push("/staff/listOfAllUsers")
       }}
     />
@@ -89,10 +89,10 @@ export const SaveModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInf
   return (
     <CustomModal
       title={"คำเตือน"}
-      show={showModalInfo.showSave}
+      show={showModalInfo === "showSave"}
       body={"ต้องการบันทึกการเปลี่ยนแปลงหรือไม่"}
       onCancel={() => {
-        setShowModalInfo({ ...showModalInfo, showSave: false })
+        setShowModalInfo("")
       }}
       onConfirm={requestSave}
     />
@@ -103,10 +103,10 @@ export const CompleteSaveModal: React.FC<ModalProps> = ({ showModalInfo, setShow
   return (
     <CustomModal
       title={"เสร็จสิ้น"}
-      show={showModalInfo.showComSave}
+      show={showModalInfo === "showComSave"}
       body={"บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว"}
       onConfirm={() => {
-        setShowModalInfo({ ...showModalInfo, showComSave: false })
+        setShowModalInfo("")
       }}
     />
   )
@@ -117,10 +117,10 @@ export const ErrModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo
   return (
     <CustomModal
       title={"เกิดข้อผิดพลาด"}
-      show={showModalInfo.showErr}
+      show={showModalInfo === "showErr"}
       body={"ไม่สามารถทำได้ในขณะนี้"}
       onConfirm={() => {
-        setShowModalInfo({ ...showModalInfo, showErr: false })
+        setShowModalInfo("")
       }}
     />
   )
@@ -130,10 +130,10 @@ export const PasswordErrModal: React.FC<ModalProps> = ({ showModalInfo, setShowM
   return (
     <CustomModal
       title={"เกิดข้อผิดพลาด"}
-      show={showModalInfo.showPasswordErr}
+      show={showModalInfo === "showPasswordErr"}
       body={"รหัสผ่านเก่าไม่ถูกต้อง หรือรหัสผ่านใหม่ไม่ตรงกัน"}
       onConfirm={() => {
-        setShowModalInfo({ ...showModalInfo, showPasswordErr: false })
+        setShowModalInfo("")
       }}
     />
   )
@@ -144,10 +144,10 @@ export const ConfirmChangePasswordModal: React.FC<ModalProps> = ({ showModalInfo
   return (
     <CustomModal
       title={"คำเตือน"}
-      show={showModalInfo.showConfirmChange}
+      show={showModalInfo === "showConfirmChange"}
       body={"ต้องการเปลี่ยนรหัสผ่านหรือไม่"}
       onCancel={() => {
-        setShowModalInfo({ ...showModalInfo, showConfirmChange: false })
+        setShowModalInfo("")
       }}
       onConfirm={requestChangePassword}
     />

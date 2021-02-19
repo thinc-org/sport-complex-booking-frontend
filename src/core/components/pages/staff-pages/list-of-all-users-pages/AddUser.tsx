@@ -11,17 +11,8 @@ import { emailSchema } from "../../../../schemas/editUserInfo"
 
 const AddUser: FunctionComponent = () => {
   // Modals & Alerts //
-  const [showModals, setShowModals] = useState<ModalAddUser>({
-    showAdd: false,
-    showCom: false,
-    showErr: false,
-    showUsernameErr: false,
-  })
-  const [showAlerts, setShowAlerts] = useState<AlertAddUser>({
-    showAlertUncom: false,
-    showAlertUsername: false,
-    showAlertPassword: false,
-  })
+  const [showModals, setShowModals] = useState<ModalAddUser>("")
+  const [showAlerts, setShowAlerts] = useState<AlertAddUser>("")
 
   // User states //
   const [user, setUser] = useState<AddInfo>({
@@ -52,8 +43,8 @@ const AddUser: FunctionComponent = () => {
     const { username, name_th, surname_th, name_en, surname_en, phone, password } = rest
     const newUser = { ...rest, membership_type: "นักเรียนสาธิตจุฬา / บุคลากรจุฬา", personal_email: username }
     setUser(newUser)
-    if (!validCheck(username)) setShowAlerts({ showAlertPassword: false, showAlertUncom: false, showAlertUsername: true })
-    else if (password !== confirmPassword) setShowAlerts({ showAlertUncom: false, showAlertUsername: false, showAlertPassword: true })
+    if (!validCheck(username)) setShowAlerts("showAlertUsername")
+    else if (password !== confirmPassword) setShowAlerts("showAlertPassword")
     else if (
       username !== "" &&
       password !== "" &&
@@ -64,8 +55,8 @@ const AddUser: FunctionComponent = () => {
       username !== "" &&
       phone !== ""
     )
-      setShowModals({ ...showModals, showAdd: true })
-    else setShowAlerts({ showAlertPassword: false, showAlertUsername: false, showAlertUncom: true })
+      setShowModals("showAdd")
+    else setShowAlerts("showAlertUncom")
   }
 
   // requests //
@@ -76,12 +67,12 @@ const AddUser: FunctionComponent = () => {
       data: user,
     })
       .then(() => {
-        setShowModals({ ...showModals, showAdd: false, showCom: true })
+        setShowModals("showCom")
       })
       .catch(({ response }) => {
-        if (response && response.data.statusCode === 400) setShowModals({ ...showModals, showAdd: false, showUsernameErr: true })
+        if (response && response.data.statusCode === 400) setShowModals("showUsernameErr")
         else if (response && response.data.statusCode === 401) history.push("/staff")
-        else setShowModals({ ...showModals, showAdd: false, showErr: true })
+        else setShowModals("showErr")
       })
   }
 

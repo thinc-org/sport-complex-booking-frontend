@@ -31,19 +31,19 @@ const PasswordChangeModal: FunctionComponent<propsInterface> = ({ showModals, se
   // handle //
   const handleChangePassword = (data: passwordFormInfo) => {
     const { newPassword, confirmPassword } = data
-    if (newPassword !== confirmPassword) setShowModals({ ...showModals, showPasswordErr: true })
+    if (newPassword !== confirmPassword) setShowModals("showPasswordErr")
     else {
       setNewPassword(data.newPassword)
-      setShowModals({ ...showModals, showConfirmChange: true })
+      setShowModals("showConfirmChange")
     }
   }
 
   return (
     <Form onSubmit={handleSubmit(handleChangePassword)}>
       <Modal
-        show={showModals.showChangePassword}
+        show={showModals === "showChangePassword"}
         onHide={() => {
-          setShowModals({ ...showModals, showChangePassword: false })
+          setShowModals("")
         }}
         backdrop="static"
         keyboard={false}
@@ -90,7 +90,7 @@ const PasswordChangeModal: FunctionComponent<propsInterface> = ({ showModals, se
             variant="outline-secondary"
             className="btn-normal btn-outline-pink"
             onClick={() => {
-              setShowModals({ ...showModals, showChangePassword: false })
+              setShowModals("")
             }}
           >
             ยกเลิก
