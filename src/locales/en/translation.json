@@ -44,10 +44,8 @@
   "viewFile": "View File",
   "noFile": "No File",
   "user_photo": "Your Photo (Image File)",
-  "national_id_photo": "National ID / Passport (.pdf only)",
   "national_id_house_registration": "National ID / Passport / House Registration Number (.pdf only)",
   "medical_certificate": "Medical Certificate (private or public hospitals only) (.pdf only)",
-  "house_registration_number": "House Registration Document with reference person (.pdf only)",
   "relationship_verification_document": "Optional: Relationship Verification document (.pdf only)",
   "memberInformation": "Member Information",
   "memberDocuments": "Member Documents",
@@ -291,8 +289,7 @@
     "type6": "full membership-spouse and children",
     "type7": "indoor stadium",
     "type8": "indoor stadium-spouse and children",
-    "type9": "monthly membership-indoor stadium",
-    "type10": "Satit Chula Student / CU Personnel"
+    "type9": "monthly membership-indoor stadium"
   },
   "chooseFile": "Choose File",
   "paymentSection": "Payment",
@@ -306,8 +303,7 @@
     "type6": "full membership-spouse and children: 8,000 Baht/year/person [General Public - Family]",
     "type7": "indoor stadium: 5,000 Baht/year/person [General Public]",
     "type8": "indoor stadium-spouse and children: 3,000 Baht/year/person [General Public - Family (per court)]",
-    "type9": "monthly membership-indoor stadium: 1,000 Baht/month/person",
-    "type10": "นักเรียนสาธิตจุฬา / บุคลากรจุฬา"
+    "type9": "monthly membership-indoor stadium: 1,000 Baht/month/person"
   },
   "payment": "Payment",
   "accountWillExpireOn": "Your account will expire on ",
