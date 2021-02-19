@@ -124,7 +124,6 @@ export const WarningMessage: React.FC<WarningMessageProps> = ({ show, verificati
   const { t } = useTranslation()
   if (!show) return null
   if (account === "CuStudent") {
-    //return <WarningAlert title={t("warning")} message={t("pleaseSubmitRegisForm")} category="danger" />
     return <CheckValidityErrorMsg show={true} reason="INFO_NOT_FILLED" type="danger" />
   }
   switch (verification_status) {
