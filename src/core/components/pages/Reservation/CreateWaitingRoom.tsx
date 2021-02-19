@@ -34,7 +34,7 @@ function CreateWaitingRoom() {
   // Time States
   const [time, setTime] = useState([1, 2])
   const times = watch("time_slot", [])
-  const checkedCount = times.filter(Boolean).length
+  const checkedCount = times ? times.filter(Boolean).length : 0
   // Selection
   const [showCourt, setShowCourt] = useState(false)
   const [showTime, setShowTime] = useState(false)
@@ -188,7 +188,7 @@ function CreateWaitingRoom() {
     let disableCheck = false
     if (invalidTimeSlot(item)) disableCheck = true
     if (quota / 60 <= checkedCount) disableCheck = true
-    if (times.includes(item + "")) disableCheck = false
+    if (times && times.includes(item + "")) disableCheck = false
     if (quota === 0 && !times.includes(item + "")) disableCheck = true
     if (checkedCount === 0) disableCheck = false
     return disableCheck
@@ -356,7 +356,7 @@ function CreateWaitingRoom() {
                     <hr />
                     <label className="form-label mt-2 mb-3">{t("timeSlotSelection")}</label>
                     {selectTimeWarning ? <p className="alert-warning p-2">{t("pleaseSelectTime")}</p> : null}
-                    {showTimeSlotError && !(getValues("time_slot").length === 0) ? (
+                    {showTimeSlotError && getValues("time_slot") && !(getValues("time_slot").length === 0) ? (
                       <p className="alert-warning p-2">{t("timeSlotErrorMsg")}</p>
                     ) : null}
                     <div className={showTime ? "d-md-flex time-slot-container" : "d-md-flex time-slot-container-hidden"}>

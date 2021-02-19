@@ -159,7 +159,7 @@ export default function StaffManagement() {
           <td>
             <div>
               <Form>
-                <Form.Group controlId="exampleForm.ControlSelect1">
+                <Form.Group>
                   <Form.Control
                     as="select"
                     custom

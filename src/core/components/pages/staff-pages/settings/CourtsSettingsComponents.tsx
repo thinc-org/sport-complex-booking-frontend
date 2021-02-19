@@ -138,7 +138,7 @@ export const EditCourt: React.FC<EditCourtProps> = ({
               <CloseTimeWatched control={control} />
             </Col>
           </Row>
-          {invalidTime(openTime, closeTime) && <p className="input-error">กรุณากำหนดเวลาเป็นช่วงละครึ่งชั่วโมง</p>}
+          {invalidTime(openTime, closeTime) && <p className="input-error">กรุณากำหนดเวลาเป็นช่วงละ 1 ชั่วโมง</p>}
           {openAfterClose(formatOpenTime(openTime), formatCloseTime(closeTime)) && <p className="input-error">กรุณากำหนดเวลาปิดหลังเวลาเปิด</p>}
         </Modal.Body>
         <Modal.Footer>
@@ -223,16 +223,17 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
   const formattedCloseTime = formatCloseTime(closeTime)
   const onSubmitAddCourt = (data: Court) => {
     function repeatedCourtNum(num: number) {
+      let repeatExists = false
       courts.forEach((court) => {
         if (court.court_num === num) {
           setShowRepeatCourt(true)
-          return true
+          repeatExists = true
         }
       })
       setShowRepeatCourt(false)
-      return false
+      return repeatExists
     }
-    const continueSubmission = repeatedCourtNum(parseInt(getValues("court_num")))
+    const continueSubmission = !repeatedCourtNum(parseInt(getValues("court_num")))
     if (continueSubmission) {
       setShowRepeatCourt(false)
       const newCourt = { ...data, court_num: parseInt(data.court_num + ""), open_time: formattedOpenTime, close_time: formattedCloseTime }
@@ -281,7 +282,7 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
                 id="court_num"
                 type="number"
                 ref={register({
-                  min: 1,
+                  min: 0,
                   required: "กรุณากรอกข้อมูล",
                 })}
                 name="court_num"
@@ -294,7 +295,11 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
                 ไม่สามารถกำหนดหมายเลขสนามซ้ำได้
               </p>
             )}
-            {errors.court_num && <p id="input-error">{errors.court_num.message}</p>}
+            {errors.court_num && (
+              <p id="input-error" className="m-1">
+                {errors.court_num.message}
+              </p>
+            )}
             <Row className="mt-3 mx-1">
               <Col className="p-0">
                 <p className="font-weight-bold">เวลาเปิด</p>
@@ -319,7 +324,7 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
                 <CloseTimeWatched control={control} />
               </Col>
             </Row>
-            {invalidTime(openTime, closeTime) && <p className="input-error">กรุณากำหนดเวลาเป็นช่วงละครึ่งชั่วโมง</p>}
+            {invalidTime(openTime, closeTime) && <p className="input-error">กรุณากำหนดเวลาเป็นช่วงละ 1 ชั่วโมง</p>}
             {openAfterClose(formattedOpenTime, formattedCloseTime) && <p className="input-error">กรุณากำหนดเวลาปิดหลังเวลาเปิด</p>}
           </Form.Group>
         </div>

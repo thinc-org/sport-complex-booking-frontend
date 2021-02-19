@@ -46,7 +46,7 @@ export const DeleteSport: React.FC<DeleteSportProps> = ({ show, setShow, mainFun
 export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSport }) => {
   const { register, handleSubmit, getValues, setValue, errors } = useForm({ resolver: yupResolver(addSportSchema) })
   const [reservationTime, setReservationTime] = useState(60)
-  const [minMembers, setMinMembers] = useState(5)
+  const [minMembers, setMinMembers] = useState(2)
   return (
     <Modal
       show={show}
@@ -78,7 +78,7 @@ export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSp
         <div className="card mx-4">
           <h5 className="card-header">เวลาการจองมากที่สุด (นาที)</h5>
           <div className="card-body">
-            <span className="d-flex justify-content-between">
+            <span className="d-flex justify-content-around">
               <Button
                 variant="pink"
                 className="button"
@@ -90,7 +90,7 @@ export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSp
               >
                 -60
               </Button>
-              <input type="number" readOnly={true} ref={register} name="quota" defaultValue={60} className="form-control square-input" />
+              <input type="number" readOnly={true} ref={register} name="quota" defaultValue={reservationTime} className="form-control square-input" />
               <Button
                 variant="pink"
                 className="button"
@@ -131,7 +131,14 @@ export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSp
               >
                 -1
               </Button>
-              <input type="number" readOnly={true} ref={register} name="required_user" defaultValue="5" className="form-control square-input" />
+              <input
+                type="number"
+                readOnly={true}
+                ref={register}
+                name="required_user"
+                defaultValue={minMembers}
+                className="form-control square-input"
+              />
               <Button
                 variant="pink"
                 className="button"

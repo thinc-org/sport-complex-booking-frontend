@@ -75,18 +75,18 @@ const HomePage = () => {
             </div>
           </Link>
 
-          <Link to={disable ? "/home" : "/myreservation"} className="box-container btn link">
-            <div>
-              <Calendar className="homepage-icon darkgrey pl-3 pt-2 pb-2" color="black" size={40} />
-              <div className="linkhead"> {t("myReservation")} </div>
-              <div className="linkbody darkgrey"> {t("myReservationDescription")} </div>
-            </div>
-          </Link>
           <Link to={disable ? "/home" : "/waitingroom"} className="box-container btn link">
             <div>
               <PeopleFill className="homepage-icon darkgrey pl-3 pt-2 pb-2" color="black" size={40} />
               <div className="linkhead"> {t("myWaitingRoom")} </div>
               <div className="linkbody darkgrey"> {t("myWaitingRoomDescription")} </div>
+            </div>
+          </Link>
+          <Link to={disable ? "/home" : "/myreservation"} className="box-container btn link">
+            <div>
+              <Calendar className="homepage-icon darkgrey pl-3 pt-2 pb-2" color="black" size={40} />
+              <div className="linkhead"> {t("myReservation")} </div>
+              <div className="linkbody darkgrey"> {t("myReservationDescription")} </div>
             </div>
           </Link>
           <div className="px-4 my-3 unselectable">
@@ -122,7 +122,7 @@ const HomePage = () => {
             <div>
               <BookmarkFill className="homepage-icon pl-3 pt-2 pb-2" color="white" size={40} />
               <div className="linkhead"> {t("reserveNow")} </div>
-              <div className="linkbody"> {t("reserveNowDescription")} </div>
+              <div className="linkbody"> {t("createWaitingRoom")} </div>
             </div>
           </Link>
           <div className="px-4 my-3 unselectable">
