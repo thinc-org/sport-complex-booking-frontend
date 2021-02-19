@@ -4,6 +4,7 @@ import { client } from "../../../../axiosConfig"
 import { HandleErrorModal } from "../staff-pages/staff-management/StaffManagementComponents"
 import { ProfileResponse, Error } from "../../../dto/staffProfile.dto"
 import { ErrorAlert } from "../staff-pages/disable-court/modals"
+import { useAuthContext } from "../../../controllers/authContext"
 function StaffProfile() {
   const history = useHistory<{ invalidAccess: boolean }>()
   const location = useLocation<{ invalidAccess: boolean }>()
@@ -13,18 +14,19 @@ function StaffProfile() {
   const [isLoading, setIsLoading] = useState(true)
   const [errMessage, setErrMessage] = useState<Error>({ badRequest: "", invalidAccess: "" })
   const [showError, setShowError] = useState(false)
+  const { role } = useAuthContext()
   const fetchData = useCallback(async () => {
     try {
       const res: ProfileResponse = (await client.get("staffs/profile")).data
       setName(res.name)
       setSurname(res.surname)
-      setAccountType(res.is_admin ? "Admin" : "Staff")
+      if (role) setAccountType(role)
       setIsLoading(false)
     } catch (err) {
       setErrMessage((prev) => ({ ...prev, badRequest: "เกิดเหตุขัดข้อง: กรุณาตรวจสอบว่าเข้าสู่ระบบเรียบร้อยแล้ว และรีเฟรชหน้านี้อีกครั้ง" }))
       setShowError(true)
     }
-  }, [])
+  }, [role])
   const clearInvalidAcessError = () => {
     setErrMessage((prev) => ({ ...prev, invalidAccess: "" }))
     history.replace("/staff/profile", {
