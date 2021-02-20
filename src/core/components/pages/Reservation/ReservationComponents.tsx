@@ -59,7 +59,7 @@ export const CreateWaitingRoomErrorMsg: React.FC<ErrorMessageBannerProps> = ({ s
     case "NOT_ENOUGH_QUOTA":
       return <ErrorMsgBanner errorMsg={t("notEnoughQuota.")} type={type} />
     case "SLOT_UNAVAILABLE":
-      return <ErrorMsgBanner errorMsg={t("errorOccured.")} type={type} />
+      return <ErrorMsgBanner errorMsg={t("chosenTimeUnavailable")} type={type} />
     case "INVALID_DATE":
       return <ErrorMsgBanner errorMsg={t("chosenTimeUnavailable")} type={type} />
     default:
