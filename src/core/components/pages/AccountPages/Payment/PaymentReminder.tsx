@@ -25,7 +25,7 @@ function PaymentReminder() {
   const { t } = useTranslation()
   const { nearExpiration, user } = usePaymentReminder()
 
-  if (!nearExpiration()) return null
+  if (!nearExpiration() || !user?.account_expiration_date) return null
 
   return (
     <div>
