@@ -78,7 +78,7 @@ export default function EditAccount({ toggleEditButton, user }: AccountProps) {
           <hr />
           <div className="row mt-3">
             <div className="button-group col-md-12">
-              <Button variant="pink" className="btn-secondary" type="submit" onClick={() => setShow(true)}>
+              <Button variant="pink" className="btn-secondary" type="submit">
                 {t("saveAndSubmit")}
               </Button>
               <Button variant="gray" className="btn-secondary" onClick={handleCancel}>
