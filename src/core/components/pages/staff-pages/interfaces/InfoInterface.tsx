@@ -179,7 +179,7 @@ export type RejectInfoLabelKey = keyof RejectInfo
 
 // Modals //
 export type ModalVerify =
-  | ""
+  | "none"
   | "showConfirmAccept"
   | "showUncomAccept"
   | "showCompleteAccept"
@@ -189,7 +189,7 @@ export type ModalVerify =
   | "showErr"
 
 export type ModalUserInfo =
-  | ""
+  | "none"
   | "showDelete"
   | "showComDelete"
   | "showSave"
@@ -199,10 +199,10 @@ export type ModalUserInfo =
   | "showConfirmChange"
   | "showChangePassword"
 
-export type ModalAddUser = "" | "showAdd" | "showCom" | "showErr" | "showUsernameErr"
+export type ModalAddUser = "none" | "showAdd" | "showCom" | "showErr" | "showUsernameErr"
 
 // Alerts //
-export type AlertAddUser = "" | "showAlertUncom" | "showAlertUsername" | "showAlertPassword"
+export type AlertAddUser = "none" | "showAlertUncom" | "showAlertUsername" | "showAlertPassword"
 
 // Registration //
 export interface RegistrationInfo {

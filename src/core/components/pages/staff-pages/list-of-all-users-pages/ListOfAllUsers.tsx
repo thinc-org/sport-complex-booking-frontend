@@ -38,7 +38,7 @@ const ListOfAllUsers: FunctionComponent = () => {
   const [searchName, setSearchName] = useState<string>("")
   const [status, setStatus] = useState<number>(allStatus.All)
   const [showNoUser, setShowNoUser] = useState<boolean>(false)
-  const [showModal, setShowModal] = useState<ModalUserInfo>("") // use only showErr in this page
+  const [showModal, setShowModal] = useState<ModalUserInfo>("none") // use only showErr in this page
   const [users, setUsers] = useState<UserInfoRes[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
 

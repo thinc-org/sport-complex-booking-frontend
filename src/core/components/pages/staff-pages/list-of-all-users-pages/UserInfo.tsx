@@ -27,7 +27,7 @@ const UserInfo = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isEdit, setEdit] = useState<boolean>(false)
   const [newPassword, setNewPassword] = useState<string>("")
-  const [showModalInfo, setShowModalInfo] = useState<ModalUserInfo>("")
+  const [showModalInfo, setShowModalInfo] = useState<ModalUserInfo>("none")
 
   // Non CU state //
   const [username, setUsername] = useState<string>("")
@@ -248,7 +248,7 @@ const UserInfo = () => {
       },
     })
       .then(() => {
-        setShowModalInfo("")
+        setShowModalInfo("none")
       })
       .catch(() => {
         setShowModalInfo("showErr")

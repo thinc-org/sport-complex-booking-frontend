@@ -32,7 +32,7 @@ const UserInfo: FunctionComponent = () => {
   const [newPassword, setNewPassword] = useState<string>("")
 
   // Modals & Alert //
-  const [showModals, setShowModals] = useState<ModalUserInfo>("")
+  const [showModals, setShowModals] = useState<ModalUserInfo>("none")
   // Alert //
   const [showAlert, setShowAlert] = useState<boolean>(false)
 
@@ -182,7 +182,7 @@ const UserInfo: FunctionComponent = () => {
       },
     })
       .then(() => {
-        setShowModals("")
+        setShowModals("none")
       })
       .catch(() => {
         setShowModals("showErr")
