@@ -21,7 +21,7 @@ export const ConfirmRejectModal: React.FC<ModalProps> = ({ showModalInfo, setSho
     <Modal
       show={showModalInfo === "showConfirmReject"}
       onHide={() => {
-        setShowModalInfo("")
+        setShowModalInfo("none")
       }}
       backdrop="static"
       keyboard={false}
@@ -36,7 +36,7 @@ export const ConfirmRejectModal: React.FC<ModalProps> = ({ showModalInfo, setSho
           variant="outline-secondary"
           className="btn-normal btn-outline-pink"
           onClick={() => {
-            setShowModalInfo("")
+            setShowModalInfo("none")
           }}
         >
           ยกเลิก
@@ -55,7 +55,7 @@ export const UncomRejectModal: React.FC<ModalProps> = ({ showModalInfo, setShowM
       title={"คำเตือน"}
       show={showModalInfo === "showUncomReject"}
       body="กรุณาเลือกข้อมูลที่ถูกปฏิเสธ"
-      onConfirm={() => setShowModalInfo("")}
+      onConfirm={() => setShowModalInfo("none")}
     />
   )
 }
@@ -69,7 +69,7 @@ export const CompleteRejectModal: React.FC<ModalProps> = ({ showModalInfo, setSh
       show={showModalInfo === "showCompleteReject"}
       body={`ปฏิเสธการลงทะเบียนของ ${username} เรียบร้อยแล้ว`}
       onConfirm={() => {
-        setShowModalInfo("")
+        setShowModalInfo("none")
         history.push("/staff/verifyApprove")
       }}
     />
@@ -84,7 +84,7 @@ export const ConfirmAcceptModal: React.FC<ModalProps> = ({ showModalInfo, setSho
       title={"คำเตือน"}
       show={showModalInfo === "showConfirmAccept"}
       body="คุณต้องการยอมรับการลงทะเบียนนี้ใช่หรือไม่"
-      onCancel={() => setShowModalInfo("")}
+      onCancel={() => setShowModalInfo("none")}
       onConfirm={requestAccept}
     />
   )
@@ -96,7 +96,7 @@ export const UncomAcceptModal: React.FC<ModalProps> = ({ showModalInfo, setShowM
       title={"คำเตือน"}
       show={showModalInfo === "showUncomAccept"}
       body="กรุณาระบุวันหมดอายุสมาชิกก่อนกดยอมรับ"
-      onConfirm={() => setShowModalInfo("")}
+      onConfirm={() => setShowModalInfo("none")}
     />
   )
 }
@@ -110,7 +110,7 @@ export const CompleteAcceptModal: React.FC<ModalProps> = ({ showModalInfo, setSh
       show={showModalInfo === "showCompleteAccept"}
       body={`ยอมรับการลงทะเบียนของ ${username} เรียบร้อยแล้ว`}
       onConfirm={() => {
-        setShowModalInfo("")
+        setShowModalInfo("none")
         history.push("/staff/verifyApprove")
       }}
     />
@@ -124,7 +124,7 @@ export const ErrorModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalIn
       title={"เกิดข้อผิดพลาด"}
       show={showModalInfo === "showErr"}
       body="ไม่สามารถ ยอมรับ/ปฏิเสธ การลงทะเบียนได้ในขณะนี้"
-      onConfirm={() => setShowModalInfo("")}
+      onConfirm={() => setShowModalInfo("none")}
     />
   )
 }

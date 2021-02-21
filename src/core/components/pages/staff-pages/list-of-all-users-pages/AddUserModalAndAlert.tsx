@@ -17,7 +17,7 @@ export const AddModal: React.FC<ModalProps> = ({ show, setShow, requestAdd }) =>
       show={show === "showAdd"}
       body={"ต้องการเพิ่มผู้ใช้หรือไม่"}
       onCancel={() => {
-        setShow("")
+        setShow("none")
       }}
       onConfirm={requestAdd ? requestAdd : () => console.log("unavailable")}
     />
@@ -32,7 +32,7 @@ export const ComModal: React.FC<ModalProps> = ({ show, setShow }) => {
       show={show === "showCom"}
       body={"การเพิ่มผู้ใช้เสร็จสมบูรณ์"}
       onConfirm={() => {
-        setShow("")
+        setShow("none")
         history.push("/staff/listOfAllUsers")
       }}
     />
@@ -46,7 +46,7 @@ export const ErrModal: React.FC<ModalProps> = ({ show, setShow }) => {
       show={show === "showErr"}
       body={"ไม่สามารถเพิ่มผู้ใช้ได้ในขณะนี้"}
       onConfirm={() => {
-        setShow("")
+        setShow("none")
       }}
     />
   )
@@ -59,7 +59,7 @@ export const UsernameErrModal: React.FC<ModalProps> = ({ show, setShow }) => {
       show={show === "showUsernameErr"}
       body={"ชื่อผู้ใช้นี้ไม่ใช่อีเมล หรือชื่อผู้ใช้นี้ถูกใช้ไปแล้ว"}
       onConfirm={() => {
-        setShow("")
+        setShow("none")
       }}
     />
   )

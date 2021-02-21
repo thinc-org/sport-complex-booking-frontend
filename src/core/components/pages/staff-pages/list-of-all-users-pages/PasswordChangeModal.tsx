@@ -43,7 +43,7 @@ const PasswordChangeModal: FunctionComponent<propsInterface> = ({ showModals, se
       <Modal
         show={showModals === "showChangePassword"}
         onHide={() => {
-          setShowModals("")
+          setShowModals("none")
         }}
         backdrop="static"
         keyboard={false}
@@ -90,7 +90,7 @@ const PasswordChangeModal: FunctionComponent<propsInterface> = ({ showModals, se
             variant="outline-secondary"
             className="btn-normal btn-outline-pink"
             onClick={() => {
-              setShowModals("")
+              setShowModals("none")
             }}
           >
             ยกเลิก

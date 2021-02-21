@@ -60,7 +60,7 @@ export const DeleteModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalI
       show={showModalInfo === "showDelete"}
       body={`ท่านกำลังจะลบผู้ใช้ ${username} ออกจากระบบ\nต้องการดำเนินการต่อหรือไม่`}
       onCancel={() => {
-        setShowModalInfo("")
+        setShowModalInfo("none")
       }}
       onConfirm={requestDelete}
     />
@@ -76,7 +76,7 @@ export const CompleteDeleteModal: React.FC<ModalProps> = ({ showModalInfo, setSh
       show={showModalInfo === "showComDelete"}
       body={`ลบผู้ใช้ ${username} ออกจากระบบเรียบร้อยแล้ว`}
       onConfirm={() => {
-        setShowModalInfo("")
+        setShowModalInfo("none")
         history.push("/staff/listOfAllUsers")
       }}
     />
@@ -92,7 +92,7 @@ export const SaveModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInf
       show={showModalInfo === "showSave"}
       body={"ต้องการบันทึกการเปลี่ยนแปลงหรือไม่"}
       onCancel={() => {
-        setShowModalInfo("")
+        setShowModalInfo("none")
       }}
       onConfirm={requestSave}
     />
@@ -106,7 +106,7 @@ export const CompleteSaveModal: React.FC<ModalProps> = ({ showModalInfo, setShow
       show={showModalInfo === "showComSave"}
       body={"บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว"}
       onConfirm={() => {
-        setShowModalInfo("")
+        setShowModalInfo("none")
       }}
     />
   )
@@ -120,7 +120,7 @@ export const ErrModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo
       show={showModalInfo === "showErr"}
       body={"ไม่สามารถทำได้ในขณะนี้"}
       onConfirm={() => {
-        setShowModalInfo("")
+        setShowModalInfo("none")
       }}
     />
   )
@@ -133,7 +133,7 @@ export const PasswordErrModal: React.FC<ModalProps> = ({ showModalInfo, setShowM
       show={showModalInfo === "showPasswordErr"}
       body={"รหัสผ่านเก่าไม่ถูกต้อง หรือรหัสผ่านใหม่ไม่ตรงกัน"}
       onConfirm={() => {
-        setShowModalInfo("")
+        setShowModalInfo("none")
       }}
     />
   )
@@ -147,7 +147,7 @@ export const ConfirmChangePasswordModal: React.FC<ModalProps> = ({ showModalInfo
       show={showModalInfo === "showConfirmChange"}
       body={"ต้องการเปลี่ยนรหัสผ่านหรือไม่"}
       onCancel={() => {
-        setShowModalInfo("")
+        setShowModalInfo("none")
       }}
       onConfirm={requestChangePassword}
     />

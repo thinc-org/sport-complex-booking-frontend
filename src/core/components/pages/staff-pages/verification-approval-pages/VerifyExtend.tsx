@@ -20,7 +20,7 @@ import { renderLoading } from "../list-of-all-users-pages/ListOfAllUsers"
 const VerifyExtend: FunctionComponent = () => {
   // page state //
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [showModalInfo, setShowModalInfo] = useState<ModalVerify>("")
+  const [showModalInfo, setShowModalInfo] = useState<ModalVerify>("none")
 
   // Non CU state //
   const [accountExpiredDate, setAccountExpiredDate] = useState<Date>()

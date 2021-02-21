@@ -23,7 +23,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [showReject, setShowReject] = useState<boolean>(false)
   const [accountExpiredDate, setAccountExpiredDate] = useState<Date>()
-  const [showModalInfo, setShowModalInfo] = useState<ModalVerify>("")
+  const [showModalInfo, setShowModalInfo] = useState<ModalVerify>("none")
   const [rejectInfo, setRejectInfo] = useState<RejectInfo>({
     prefix: false,
     gender: false,

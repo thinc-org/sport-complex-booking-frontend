@@ -11,8 +11,8 @@ import { emailSchema } from "../../../../schemas/editUserInfo"
 
 const AddUser: FunctionComponent = () => {
   // Modals & Alerts //
-  const [showModals, setShowModals] = useState<ModalAddUser>("")
-  const [showAlerts, setShowAlerts] = useState<AlertAddUser>("")
+  const [showModals, setShowModals] = useState<ModalAddUser>("none")
+  const [showAlerts, setShowAlerts] = useState<AlertAddUser>("none")
 
   // User states //
   const [user, setUser] = useState<AddInfo>({
