@@ -12,8 +12,10 @@ interface requestParams {
   start: number
   end: number
   name: string
-  searchType: string | null // extension or approval or null
+  searchType: string // extension or approval
 }
+
+type SearchType = "ทั้งหมด" | "ผู้สมัครใหม่" | "การต่ออายุสมาชิก"
 
 const VeritificationApproval: FunctionComponent = () => {
   // page state
@@ -22,7 +24,7 @@ const VeritificationApproval: FunctionComponent = () => {
   const [maxUserPerPage] = useState<number>(10) // > 1
   const [maxUser, setMaxUser] = useState<number>(1)
   const [searchName, setSearchName] = useState<string>("")
-  const [searchType, setSearchType] = useState<string>("ทั้งหมด") // ทั้งหมด, ผู้สมัครใหม่, การต่ออายุสมาชิก
+  const [searchType, setSearchType] = useState<SearchType>("ทั้งหมด")
   const [showNoUser, setShowNoUser] = useState<boolean>(false)
   const [users, setUsers] = useState<VerifyInfoRes[]>([])
   const history = useHistory()
@@ -36,9 +38,6 @@ const VeritificationApproval: FunctionComponent = () => {
     }
     if (searchName !== "") params.name = searchName
     switch (searchType) {
-      case "ทั้งหมด":
-        params.searchType = null
-        break
       case "ผู้สมัครใหม่":
         params.searchType = "approval"
         break
@@ -77,7 +76,7 @@ const VeritificationApproval: FunctionComponent = () => {
   const handleSearchType = (e: React.MouseEvent<HTMLElement>) => {
     const target = e.target as HTMLElement
     const type = target.id
-    if (searchType !== type) setSearchType(type)
+    if (searchType !== type) setSearchType(type as SearchType)
   }
 
   const handleInfo = (e: React.MouseEvent<HTMLElement>) => {
