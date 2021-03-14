@@ -35,9 +35,11 @@ export const useRow = (initial: ViewRowProps[] = []) => {
   const validateTimeSlot = (row: TimeSlotRow) => {
     const newTimeSlot = [parseInt(row.timeSlotStart), parseInt(row.timeSlotEnd)]
     const rowWithSameDay = rowData.filter((r) => r.day === parseInt(row.day))
+    if (newTimeSlot[0] >= newTimeSlot[1]) return false
     if (rowWithSameDay.length === 0) return true
     for (let i = 0; i < rowWithSameDay.length; i++) {
       const currentTimeSlot = rowWithSameDay[i].time_slot
+      console.log({ currentTime: currentTimeSlot, newTimeSlot: newTimeSlot })
       if (
         (newTimeSlot[0] >= currentTimeSlot[0] && newTimeSlot[0] <= currentTimeSlot[currentTimeSlot.length - 1]) ||
         (newTimeSlot[0] <= currentTimeSlot[0] && newTimeSlot[1] >= currentTimeSlot[0])
@@ -83,13 +85,12 @@ export const useDate = (initialStartDate: Date | undefined = undefined, initialE
   const handleAlert = () => setShow(false)
   const onStartDateChange = (date: Date) => {
     date.setHours(0, 0, 0, 0)
-    if (date < currentDate || (endDate && date > endDate)) {
-      setShow(true)
-    } else setStartDate(date)
+    if (date < currentDate || (endDate && date >= endDate)) setShow(true)
+    else setStartDate(date)
   }
   const onEndDateChange = (date: Date) => {
     date.setHours(0, 0, 0, 0)
-    if (startDate && date < startDate) setShow(true)
+    if (startDate && date <= startDate) setShow(true)
     else setEndDate(date)
   }
   return { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, setStartDate, setEndDate }
@@ -212,8 +213,8 @@ export const useTableWithPagination = () => {
     const source = axios.CancelToken.source()
     const parameter: DisabledCourtSearchBody = {
       sport_id: params.sportObjId,
-      starting_date: params.starting_date ? format(params.starting_date, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd"),
-      expired_date: params.expired_date ? format(params.expired_date, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd"),
+      starting_date: params.starting_date ? format(params.starting_date, "yyyy-MM-dd") : undefined,
+      expired_date: params.expired_date ? format(params.expired_date, "yyyy-MM-dd") : undefined,
       court_num: params.court_num,
       start: params.start,
       end: params.end,

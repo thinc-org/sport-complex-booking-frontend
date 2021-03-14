@@ -1,4 +1,4 @@
-export const dayArr = ["อาทิตย์", "จันทร์", "อังคาร", "พุทธ", "พฤหัสบดี", "ศุกร์", "เสาร์"]
+export const dayArr = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"]
 
 export function getMinute(time_slot: number[]): { startTime: number; endTime: number } {
   const sortedTimeSlot = [...time_slot].sort((a, b) => a - b)
