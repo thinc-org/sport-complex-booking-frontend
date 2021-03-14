@@ -9,10 +9,10 @@ import {
   View,
   TimeSlotRow,
   DisabledCourtSearchBody,
-  DisableCourtBody,
   OverlapData,
   ErrorRowProps,
 } from "../../../../dto/disableCourt.dto"
+import { format } from "date-fns"
 import { Sport } from "../../../../dto/sport.dto"
 import subDays from "date-fns/subDays"
 import { client } from "../../../../../axiosConfig"
@@ -212,8 +212,8 @@ export const useTableWithPagination = () => {
     const source = axios.CancelToken.source()
     const parameter: DisabledCourtSearchBody = {
       sport_id: params.sportObjId,
-      starting_date: params.starting_date,
-      expired_date: params.expired_date,
+      starting_date: params.starting_date ? format(params.starting_date, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd"),
+      expired_date: params.expired_date ? format(params.expired_date, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd"),
       court_num: params.court_num,
       start: params.start,
       end: params.end,
@@ -265,46 +265,6 @@ export const useDisplayOverlapData = (overlapData: OverlapData | undefined) => {
     }
   }, [overlapData])
   return { data }
-}
-
-export const seed = () => {
-  const arr: DisableCourtBody[] = []
-  for (let i = 1; i < 40; i++) {
-    arr.push({
-      sport_id: "5fe45df25f8cc3264d3a8895",
-      court_num: i,
-      starting_date: new Date(),
-      expired_date: new Date(),
-      description: "hello",
-      disable_time: [
-        {
-          day: 4,
-          time_slot: [i, i + 1],
-        },
-      ],
-    })
-  }
-  for (let k = 1; k < 40; k++) {
-    arr.push({
-      sport_id: "5fe45df25f8cc3264d3a8895",
-      court_num: k + 40,
-      starting_date: new Date(),
-      expired_date: new Date(),
-      description: "hello",
-      disable_time: [
-        {
-          day: 3,
-          time_slot: [k, k + 1],
-        },
-      ],
-    })
-  }
-  arr.forEach((val) => {
-    client
-      .post("/courts/disable-courts", val)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err))
-  })
 }
 
 export function withDeletable<P>(Component: ComponentType<P>, F: (indx: number | string) => void): React.FC<P> {

@@ -128,8 +128,8 @@ export interface DisableCourtBody {
 }
 
 export interface DisabledCourtSearchBody {
-  starting_date?: Date
-  expired_date?: Date
+  starting_date?: string
+  expired_date?: string
   sport_id?: string
   court_num?: number
   start?: number
