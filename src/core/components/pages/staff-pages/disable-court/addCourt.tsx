@@ -25,8 +25,8 @@ const AddCourt = () => {
       sport_id: data.sportObjId,
       court_num: parseInt(data.court_num),
       disable_time: rowData,
-      starting_date: startDate ? format(startDate, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd"),
-      expired_date: endDate ? format(endDate, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd"),
+      starting_date: startDate ? format(startDate, "yyyy-MM-dd") : undefined,
+      expired_date: endDate ? format(endDate, "yyyy-MM-dd") : undefined,
     }
     client
       .post("/courts/disable-courts", formData)
