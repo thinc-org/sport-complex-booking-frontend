@@ -30,14 +30,16 @@
 .exit-icon {
   padding-bottom: 64px;
 }
-@media (max-width: 640px) {
-  .sidebar-menu {
-    height: 50vw;
-  }
-}
-@media (max-width: 320px) {
+
+
+
+@media (max-height: 640px) {
   .exit-icon {
-    padding-bottom: 32px;
+    padding-bottom: 20px;
+  }
+    .sidebar-menu {
+    height: 50vh;
+    padding: 0 0 0 0px;
   }
 }
 
