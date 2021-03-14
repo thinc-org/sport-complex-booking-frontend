@@ -39,7 +39,6 @@ export const useRow = (initial: ViewRowProps[] = []) => {
     if (rowWithSameDay.length === 0) return true
     for (let i = 0; i < rowWithSameDay.length; i++) {
       const currentTimeSlot = rowWithSameDay[i].time_slot
-      console.log({ currentTime: currentTimeSlot, newTimeSlot: newTimeSlot })
       if (
         (newTimeSlot[0] >= currentTimeSlot[0] && newTimeSlot[0] <= currentTimeSlot[currentTimeSlot.length - 1]) ||
         (newTimeSlot[0] <= currentTimeSlot[0] && newTimeSlot[1] >= currentTimeSlot[0])
