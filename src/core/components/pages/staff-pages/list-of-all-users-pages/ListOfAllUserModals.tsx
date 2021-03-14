@@ -112,6 +112,19 @@ export const CompleteSaveModal: React.FC<ModalProps> = ({ showModalInfo, setShow
   )
 }
 
+export const UncomExpireDateModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo }) => {
+  return (
+    <CustomModal
+      title={"เกิดข้อผิดพลาด"}
+      show={showModalInfo === "showUncomExpire"}
+      body={"กรุณาเลือกวันหมดอายุก่อนกดยืนยัน"}
+      onConfirm={() => {
+        setShowModalInfo("none")
+      }}
+    />
+  )
+}
+
 // Error Modal //
 export const ErrModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo }) => {
   return (

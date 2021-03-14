@@ -22,7 +22,6 @@ export default function OtherEditInfoComponent({
   const [userPhotoFile, setUserPhotoFile] = useState<File>()
   const [medicalCertificateFile, setMedicalCertificateFile] = useState<File>()
   const [nationalIdPhotoFile, setNationalIdPhotoFile] = useState<File>()
-  const [houseRegistrationNumberFile, setHouseRegistrationNumberFile] = useState<File>()
   const [relationshipVerificationDocumentFile, setRelationshipVerificationDocumentFile] = useState<File>()
 
   const {

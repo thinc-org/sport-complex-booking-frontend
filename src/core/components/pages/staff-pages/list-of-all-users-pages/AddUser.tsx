@@ -40,8 +40,13 @@ const AddUser: FunctionComponent = () => {
 
   const handleAdd = (data: AddUserComponentInfo) => {
     const { confirmPassword, ...rest } = data
-    const { username, name_th, surname_th, name_en, surname_en, phone, password } = rest
-    const newUser = { ...rest, membership_type: "นักเรียนสาธิตจุฬา / บุคลากรจุฬา", personal_email: username }
+    const { username, name_th, surname_th, name_en, surname_en, phone, password, is_thai_language } = rest
+    const newUser = {
+      ...rest,
+      membership_type: "นักเรียนสาธิตจุฬา / บุคลากรจุฬา",
+      personal_email: username,
+      is_thai_language: is_thai_language ? true : false,
+    }
     setUser(newUser)
     if (!validCheck(username)) setShowAlerts("showAlertUsername")
     else if (password !== confirmPassword) setShowAlerts("showAlertPassword")
