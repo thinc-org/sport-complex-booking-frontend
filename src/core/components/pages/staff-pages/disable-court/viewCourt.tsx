@@ -55,7 +55,6 @@ const ViewCourt = () => {
         history.goBack()
       })
       .catch((err) => {
-        console.log(err)
         if (err.response.status !== 409) {
           setError("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง")
         } else {
