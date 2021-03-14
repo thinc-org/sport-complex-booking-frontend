@@ -13,6 +13,7 @@ import {
   SaveModal,
   CompleteDeleteModal,
   CompleteSaveModal,
+  UncomExpireDateModal,
   ErrModal,
   PasswordErrModal,
   ConfirmChangePasswordModal,
@@ -63,7 +64,11 @@ const UserInfo: FunctionComponent = () => {
     client
       .get<CuSatitType>(`/list-all-user/id/${_id}`)
       .then(({ data }) => {
-        data.account_type === "CuStudent" ? setUser(data as CuStudent) : setUser(data as SatitCuPersonel)
+        if (data.expired_penalize_date !== null) data.account_type === "CuStudent" ? setUser(data as CuStudent) : setUser(data as SatitCuPersonel)
+        else
+          data.account_type === "CuStudent"
+            ? setUser({ ...data, expired_penalize_date: new Date() } as CuStudent)
+            : setUser({ ...data, expired_penalize_date: new Date() } as SatitCuPersonel)
         setIsLoading(false)
       })
       .catch(({ response }) => {
@@ -123,10 +128,14 @@ const UserInfo: FunctionComponent = () => {
   const handleConfirmChange = (data: CuSatitComponentInfo) => {
     // if some input is blank -> alert //
     // else -> try change //
-    setTempUser({ ...tempUser, ...data })
-    const { name_th, surname_th, name_en, surname_en, personal_email, phone } = data
-    if (name_th !== "" && surname_th !== "" && name_en !== "" && surname_en !== "" && personal_email !== "" && phone !== "") setShowModals("showSave")
-    else setShowAlert(true)
+    if (tempUser.is_penalize && new Date(tempUser.expired_penalize_date).getDate() === new Date().getDate()) setShowModals("showUncomExpire")
+    else {
+      setTempUser({ ...tempUser, ...data })
+      const { name_th, surname_th, name_en, surname_en, personal_email, phone } = data
+      if (name_th !== "" && surname_th !== "" && name_en !== "" && surname_en !== "" && personal_email !== "" && phone !== "")
+        setShowModals("showSave")
+      else setShowAlert(true)
+    }
   }
 
   // requests //
@@ -198,6 +207,7 @@ const UserInfo: FunctionComponent = () => {
         <CompleteDeleteModal showModalInfo={showModals} setShowModalInfo={setShowModals} info={{ username }} />
         <SaveModal showModalInfo={showModals} setShowModalInfo={setShowModals} info={{ requestSave }} />
         <CompleteSaveModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
+        <UncomExpireDateModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
         <ErrModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
         <PasswordErrModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
         <ConfirmChangePasswordModal showModalInfo={showModals} setShowModalInfo={setShowModals} info={{ requestChangePassword }} />
@@ -394,7 +404,7 @@ const UserInfo: FunctionComponent = () => {
                     disabled={tempUser.is_penalize ? false : true}
                     type="date"
                     onChange={handleChange}
-                    value={tempUser.is_penalize && isValid(date) ? format(date, "yyyy-MM-dd") : ""}
+                    value={tempUser.is_penalize && date.getDate() !== new Date().getDate() ? format(date, "yyyy-MM-dd") : ""}
                   />
                 </Col>
                 <Col>
@@ -404,7 +414,7 @@ const UserInfo: FunctionComponent = () => {
                     disabled={tempUser.is_penalize ? false : true}
                     type="time"
                     onChange={handleChange}
-                    value={tempUser.is_penalize && isValid(date) ? format(date, "HH:mm") : ""}
+                    value={tempUser.is_penalize && date.getDate() !== new Date().getDate() ? format(date, "HH:mm") : ""}
                   />
                 </Col>
               </Row>

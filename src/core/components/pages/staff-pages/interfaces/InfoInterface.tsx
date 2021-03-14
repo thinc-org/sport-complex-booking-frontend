@@ -194,6 +194,7 @@ export type ModalUserInfo =
   | "showComDelete"
   | "showSave"
   | "showComSave"
+  | "showUncomExpire"
   | "showErr"
   | "showPasswordErr"
   | "showConfirmChange"
