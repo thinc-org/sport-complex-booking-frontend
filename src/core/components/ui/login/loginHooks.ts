@@ -74,6 +74,7 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
           if (isMounted) {
             setLoading(false)
             setCookie("token", res.data.token, 1)
+            setCookie("type", "CUStudent", 1)
             setToken(res.data.token)
             const first_time_login = res.data.is_first_login
             setIsFirstLogin(first_time_login)
