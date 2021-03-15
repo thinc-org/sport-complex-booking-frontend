@@ -12,8 +12,6 @@ import { useTranslation } from "react-i18next"
 import { useLanguge } from "../../../i18n/i18n"
 import { UserContext } from "../../../contexts/UsersContext"
 
-import { clientSSO } from "../../../../axiosConfig"
-
 const Sidebar = () => {
   const [inProp, setInProp] = useState(false)
   const { header, isOnStaffPage } = useNavHeader()
@@ -31,6 +29,7 @@ const Sidebar = () => {
   const onLogOut = () => {
     setToken("")
     setCookie("token", null, 0)
+    setCookie("type", null, 0)
     setInProp(false)
     if (getCookie("type") === "CUStudent") {
       window.location.href = `https://account.it.chula.ac.th/logout?service=${process.env.REACT_APP_URL}`
