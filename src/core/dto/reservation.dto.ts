@@ -70,3 +70,8 @@ export interface ReservationResponse {
   day_of_week: number
   list_member: (CuStudent | SatitCuPersonel | Other)[]
 }
+
+export interface CancellationDataResponse {
+  late_cancelation_day: number
+  late_cancelation_punishment: number
+}

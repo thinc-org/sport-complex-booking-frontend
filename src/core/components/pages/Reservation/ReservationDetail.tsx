@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next"
 import { ReservationCancellationModal } from "../../ui/Modals/ReservationCancelModal"
 import { Loading } from "../../ui/loading/loading"
 import { useLanguage, useNameLanguage } from "../../../utils/language"
-import { LocationResponse, SportResponse, ReservationDetailResponse } from "../../../dto/reservation.dto"
+import { LocationResponse, SportResponse, ReservationDetailResponse, CancellationDataResponse } from "../../../dto/reservation.dto"
 import { NameResponse } from "../../../dto/account.dto"
 
 const ReservationDetail = () => {
@@ -61,7 +61,7 @@ const ReservationDetail = () => {
 
   const fetchCancellationData = useCallback(async () => {
     try {
-      const data = (await client.get("court-manager/setting")).data
+      const data: CancellationDataResponse = (await client.get("court-manager/setting")).data
       setLateCancellationDay(data.late_cancelation_day)
       setLateCancellationPunishment(data.late_cancelation_punishment)
     } catch (err) {
