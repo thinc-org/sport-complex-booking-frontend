@@ -34,10 +34,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     birthday: false,
     national_id: false,
     marital_status: false,
-    address: false,
-    personal_email: false,
     home_phone: false,
-    phone: false,
     medical_condition: false,
     contact_person_prefix: false,
     contact_person_name: false,
@@ -47,7 +44,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
     user_photo: false,
     medical_certificate: false,
     national_id_house_registration: false,
-    relationship_verification_document: false,
+    relationship_verification_document: false, // only for "สมาชิกสามัญสมทบ ก (staff-spouse membership)"
     payment_slip: false,
   })
 
@@ -269,22 +266,23 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
 
   const renderRejectionInfo = () => {
     const infoList = Object.keys(rejectInfo).map((name, index) => {
-      return (
-        <Form.Check
-          key={index}
-          label={RejectInfoLabel[name as RejectInfoLabelKey]}
-          id={name}
-          type="checkbox"
-          defaultChecked={rejectInfo[name as keyof RejectInfo]}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            const target = e.target as HTMLInputElement
-            setRejectInfo({
-              ...rejectInfo,
-              [target.id]: e.target.checked,
-            })
-          }}
-        />
-      )
+      if (info.membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership)" || name !== "relationship_verification_document")
+        return (
+          <Form.Check
+            key={index}
+            label={RejectInfoLabel[name as RejectInfoLabelKey]}
+            id={name}
+            type="checkbox"
+            defaultChecked={rejectInfo[name as keyof RejectInfo]}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const target = e.target as HTMLInputElement
+              setRejectInfo({
+                ...rejectInfo,
+                [target.id]: e.target.checked,
+              })
+            }}
+          />
+        )
     })
     return (
       <Collapse in={showReject} className="mt-3 mx-5">

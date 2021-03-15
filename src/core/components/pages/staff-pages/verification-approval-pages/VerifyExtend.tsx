@@ -30,6 +30,7 @@ const VerifyExtend: FunctionComponent = () => {
     surname_th: "",
     membership_type: "",
     payment_slip: "",
+    account_expiration_date: new Date(),
   })
   // router state //
   const history = useHistory()
@@ -46,6 +47,7 @@ const VerifyExtend: FunctionComponent = () => {
           surname_th: data.surname_th,
           membership_type: data.membership_type,
           payment_slip: data.payment_slip,
+          account_expiration_date: new Date(data.account_expiration_date),
         })
         setIsLoading(false)
       })
@@ -152,6 +154,10 @@ const VerifyExtend: FunctionComponent = () => {
               ดูเอกสาร
             </p>
           </div>
+        </div>
+        <div className="col">
+          <label className="mt-2">วันหมดอายุเดิม</label>
+          <p className="font-weight-bold">{format(info.account_expiration_date, "HH:mm yyyy-MM-dd")}</p>
         </div>
       </div>
       <div className="row">
