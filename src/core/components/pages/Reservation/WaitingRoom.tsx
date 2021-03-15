@@ -137,10 +137,10 @@ const WaitingRoomPage = () => {
                     {t("date")}: {date}
                   </h6>
                   <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}>
-                    {t("time")}:
-                    {timeList.map((eachTime) => {
+                    {t("time")}:{/* {timeList.map((eachTime) => {
                       return timeConversion(eachTime)
-                    })}
+                    })} */}
+                    {timeConversion(timeList)}
                   </h6>
                 </div>
                 <div className="box-container w-100 mb-3">

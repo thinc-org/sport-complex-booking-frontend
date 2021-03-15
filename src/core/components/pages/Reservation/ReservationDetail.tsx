@@ -45,15 +45,12 @@ const ReservationDetail = () => {
   const fetchData = useCallback(async () => {
     try {
       const res: ReservationDetailResponse = (await client.get(`myreservation/${id}`)).data
-      const data = (await client.get("court-manager/setting")).data
       setSport(res.sport_id)
       setCourtNum(res.court_number)
       setDate(new Date(res.date).toLocaleDateString())
       setTimeList(res.time_slot)
       setMemberList(res.list_member)
       setIsCheck(res.is_check)
-      setLateCancellationDay(data.late_cancelation_day)
-      setLateCancellationPunishment(data.late_cancelation_punishment)
       setValidTime(new Date().getTime() + 10000)
       setIsLoading(false)
       setCounter(10)
@@ -61,6 +58,17 @@ const ReservationDetail = () => {
       history.push(history.location.state.path)
     }
   }, [id, history])
+
+  const fetchCancellationData = useCallback(async () => {
+    try {
+      const data = (await client.get("court-manager/setting")).data
+      setLateCancellationDay(data.late_cancelation_day)
+      setLateCancellationPunishment(data.late_cancelation_punishment)
+    } catch (err) {
+      setLateCancellationDay(undefined)
+      setLateCancellationPunishment(undefined)
+    }
+  }, [])
 
   const countDown = useCallback(() => {
     if (!isCheck) {
@@ -89,6 +97,7 @@ const ReservationDetail = () => {
   const [modalOpen, setModalOpen] = useState(false)
 
   const triggerModal = () => {
+    fetchCancellationData()
     setModalOpen(!modalOpen)
     return modalOpen
   }
@@ -161,8 +170,11 @@ const ReservationDetail = () => {
                   <h6 className="mb-0 font-weight-light">
                     {t("bookingDate")}: {date}{" "}
                   </h6>
-                  <h6 className="mb-0 font-weight-light">
+                  {/* <h6 className="mb-0 font-weight-light">
                     {t("bookingTime")}: {timeList && timeList.map((time) => timeConversion(time))}{" "}
+                  </h6> */}
+                  <h6 className="mb-0 font-weight-light">
+                    {t("bookingTime")}: {timeList && timeConversion(timeList)}{" "}
                   </h6>
                 </div>
                 <hr />
