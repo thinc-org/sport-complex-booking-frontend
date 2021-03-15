@@ -14,3 +14,7 @@ client.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 )
+
+export const clientSSO = Axios.create({
+  baseURL: "https://account.it.chula.ac.th",
+})
