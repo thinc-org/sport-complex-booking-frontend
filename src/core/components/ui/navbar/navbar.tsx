@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react"
 import { Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import { useAuthContext } from "../../../controllers/authContext"
-import { setCookie , getCookie } from "../../../contexts/cookieHandler"
+import { setCookie, getCookie } from "../../../contexts/cookieHandler"
 import Toggler from "../../../assets/images/icons/hamburger.svg"
 import { CSSTransition } from "react-transition-group"
 import Exit from "../../../assets/images/icons/exit.svg"
@@ -33,7 +33,7 @@ const Sidebar = () => {
     setCookie("token", null, 0)
     setInProp(false)
     if (getCookie("type") === "CUStudent") {
-      clientSSO.post("/logout", { service: process.env.REACT_APP_URL }).catch((err) => console.log(err))
+      window.location.href = `https://account.it.chula.ac.th/logout?service=${process.env.REACT_APP_URL}`
     }
     clearUser()
   }
