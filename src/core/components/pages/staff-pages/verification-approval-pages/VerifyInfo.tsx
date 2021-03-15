@@ -283,6 +283,7 @@ const VerifyInfo: FunctionComponent<RouteComponentProps<{ _id: string }>> = (pro
             }}
           />
         )
+      return null
     })
     return (
       <Collapse in={showReject} className="mt-3 mx-5">
