@@ -70,8 +70,12 @@ const ReservationPage = () => {
                       <h6 className="mb-0 font-weight-light">
                         {t("bookingDate")}: {new Date(list.date).toLocaleDateString()}
                       </h6>
-                      <h6 className="mb-0 font-weight-light">
+                      {/* <h6 className="mb-0 font-weight-light">
                         {t("bookingTime")}: {list.time_slot.map((eachTimeSlot) => timeConversion(eachTimeSlot))}
+                      </h6> */}
+                      <h6 className="mb-0 font-weight-light">
+                        {t("bookingTime")}: {timeConversion(list.time_slot)}
+                        {console.log(timeConversion(list.time_slot))}
                       </h6>
                     </div>
                   </Button>
