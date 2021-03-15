@@ -3,7 +3,7 @@ import { Table, Form, Col, Button, Modal } from "react-bootstrap"
 import { useHistory } from "react-router-dom"
 import { Other } from "../../../../contexts/UsersContext"
 import { client } from "../../../../../axiosConfig"
-import { AxiosResponse } from "axios"
+import { AxiosError, AxiosResponse } from "axios"
 import { VerifyInfoRes, VerifyListRes } from "../../../../dto/verification.dto"
 import PaginationComponent from "../list-of-all-users-pages/PaginationComponent"
 import { renderLoading } from "../list-of-all-users-pages/ListOfAllUsers"
@@ -55,7 +55,7 @@ const VeritificationApproval: FunctionComponent = () => {
         setMaxUser(data[0])
         setIsLoading(false)
       })
-      .catch(({ response }) => {
+      .catch(({ response }: AxiosError) => {
         if (response && response.data.statusCode === 401) history.push("/staff")
       })
   }, [history, maxUserPerPage, pageNo, searchName, searchType])
@@ -91,8 +91,8 @@ const VeritificationApproval: FunctionComponent = () => {
         // extension
         else history.push("/staff/verifyInfo/" + _id)
       })
-      .catch(({ response }) => {
-        if (response.data.message === "User not found") {
+      .catch(({ response }: AxiosError) => {
+        if (response && response.data.message === "User not found") {
           setShowNoUser(true)
         } else {
           console.log(response)

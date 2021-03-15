@@ -37,6 +37,7 @@ export interface VerifyExtendInfo {
   name_th: string
   surname_th: string
   payment_slip: string
+  account_expiration_date: Date
 }
 
 export interface EditComponentInfo {
@@ -130,10 +131,7 @@ export interface RejectInfo {
   birthday: boolean
   national_id: boolean
   marital_status: boolean
-  address: boolean
-  personal_email: boolean
   home_phone: boolean
-  phone: boolean
   medical_condition: boolean
   contact_person_prefix: boolean
   contact_person_name: boolean
@@ -143,7 +141,7 @@ export interface RejectInfo {
   user_photo: boolean
   medical_certificate: boolean
   national_id_house_registration: boolean
-  relationship_verification_document: boolean
+  relationship_verification_document?: boolean // only for "สมาชิกสามัญสมทบ ก (staff-spouse membership)"
   payment_slip: boolean
 }
 
@@ -157,10 +155,7 @@ export const RejectInfoLabel: Record<keyof RejectInfo, string> = {
   birthday: "วัน/เดือน/ปี เกิด",
   national_id: "หมายเลขบัตรประชาชน/พาสปอร์ต",
   marital_status: "สถานะการสมรส",
-  address: "ที่อยู่",
-  personal_email: "อีเมล",
   home_phone: "หมายเลขโทรศัพท์บ้าน",
-  phone: "หมายเลขโทรศัพท์มือถือ",
   medical_condition: "โรคประจำตัวหรือไม่",
   contact_person_prefix: "คำนำหน้าขื่อ ผู้ติดต่อยามฉุกเฉิน",
   contact_person_name: "ชื่อ ผู้ติดต่อยามฉุกเฉิน",

@@ -125,24 +125,28 @@ export default function OtherViewInfoComponent({ info, type }: { info: OtherComp
         <Card body className="row shadow dim-white">
           <h4>เกี่ยวกับสมาชิก</h4>
           <h6 className="form-label my-2">{membership_type}</h6>
+          {/* User Photo */}
           <label className="form-label my-2">รูปภาพ</label>
           <div className="form-file">
             <p className={user_photo ? "link" : "text-muted"} id={user_photo} onClick={handlePDF}>
               ดูเอกสาร
             </p>
           </div>
+          {/* National Id or House Registration */}
           <label className="form-label my-2">หมายเลขบัตรประชาชน / สำเนาทะเบียนบ้านที่มีหน้านิสิต</label>
           <div className="form-file">
             <p className={national_id_house_registration ? "link" : "text-muted"} id={national_id_house_registration} onClick={handlePDF}>
               ดูเอกสาร
             </p>
           </div>
+          {/* Medical Certificate */}
           <label className="form-label my-2">เอกสารใบรับรองแพทย์</label>
           <div className="form-file">
             <p className={medical_certificate ? "link" : "text-muted"} id={medical_certificate} onClick={handlePDF}>
               ดูเอกสาร
             </p>
           </div>
+          {/* Relationship Verification Document */}
           {membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership)" ? (
             <div>
               <label className="form-label my-2">เอกสารยืนยันตัวตน</label>
@@ -153,39 +157,32 @@ export default function OtherViewInfoComponent({ info, type }: { info: OtherComp
               </div>
             </div>
           ) : null}
+          {/* Payment Evidence */}
           <label className="form-label my-2">หลักฐานการชำระเงิน</label>
-          {type === "OtherInfo" ? (
-            <div className="form-file">
-              {prevSlips.length !== 0 ? (
-                <Form.Control as="select" defaultValue={2} onChange={(e) => setPaymentNo(parseInt(e.target.value))}>
-                  <option disabled value={2}>
-                    เลือกดูหลักฐานการชำระเงิน
-                  </option>
-                  <option value={prevSlips.length - 1}>ครั้งล่าสุด</option>
-                  <option value={prevSlips.length - 2}>ก่อนหน้าครั้งล่าสุด</option>
-                </Form.Control>
-              ) : (
-                <Form.Control disabled as="select" defaultValue={0}>
-                  <option value={0}>ไม่มีหลักฐานการชำระเงิน</option>
-                </Form.Control>
-              )}
-              <p className={prevSlips[paymentNo] ? "link" : "text-muted"} id={prevSlips[paymentNo]} onClick={handlePDF}>
-                ดูเอกสาร
-              </p>
-            </div>
-          ) : (
-            <div className="form-file">
-              <p className="link" id={(info as VerifyComponentInfo).payment_slip} onClick={handlePDF}>
-                ดูเอกสาร
-              </p>
-            </div>
-          )}
+          <div className="form-file">
+            {prevSlips && prevSlips.length !== 0 ? (
+              <Form.Control as="select" defaultValue={2} onChange={(e) => setPaymentNo(parseInt(e.target.value))}>
+                <option disabled value={2}>
+                  เลือกดูหลักฐานการชำระเงิน
+                </option>
+                <option value={prevSlips.length - 1}>ครั้งล่าสุด</option>
+                <option value={prevSlips.length - 2}>ก่อนหน้าครั้งล่าสุด</option>
+              </Form.Control>
+            ) : (
+              <Form.Control disabled as="select" defaultValue={0}>
+                <option value={0}>ไม่มีหลักฐานการชำระเงิน</option>
+              </Form.Control>
+            )}
+            <p
+              className={prevSlips && prevSlips[paymentNo] ? "link" : "text-muted"}
+              id={prevSlips ? prevSlips[paymentNo] : undefined}
+              onClick={handlePDF}
+            >
+              ดูเอกสาร
+            </p>
+          </div>
         </Card>
       </div>
-
-      {/* END OF FORM */}
-      <br />
-      <br />
     </div>
   )
 }
