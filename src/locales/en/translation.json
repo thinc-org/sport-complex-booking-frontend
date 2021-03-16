@@ -2,7 +2,7 @@
   "cuSportCenter": "CU Sports Center",
   "th": "Thai",
   "en": "English",
-  "phoneLabel": "Mobile",
+  "phoneLabel": "Mobile Phone Number",
   "personalEmailLabel": "Personal Email",
   "CuStudent": "Chulalongkorn University Student",
   "SatitAndCuPersonel": "Satit Chula / CU Personnel",
@@ -188,6 +188,10 @@
   "paymentErrorModal": {
     "title":"Submission Error",
     "body":"Cannot submit your payment slip at the moment. Please try again."
+  },
+  "repeatedUsernameErrorModal": {
+    "title":"Registration Unsuccessful",
+    "body":"This username has already been taken. Please choose a new one."
   },
   "closeWaitingRoom?": "Are you sure you want to close the waiting room?",
   "timeOut": "Time out",

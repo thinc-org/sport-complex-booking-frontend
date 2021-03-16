@@ -19,7 +19,6 @@ import { useLanguage } from "../../../../utils/language"
 export default function OtherAccountEdit({ registrationInfo, isRegister }: RegistrationProps) {
   // React Hook Forms
   const { t, i18n } = useTranslation()
-  const [is_thai_language, set_is_thai_language] = useState(false)
   const [user_photo, set_user_photo] = useState<File>()
   const [national_id_house_registration, set_national_id_house_registration] = useState<File>()
   const [medical_certificate, set_medical_certificate] = useState<File>()
@@ -36,6 +35,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
   const history = useHistory()
   const [loading, setLoading] = useState(false)
   const language = useLanguage()
+  const [showUsernameRepeatErr, setShowUsernameRepeatErr] = useState(false)
 
   // Handlers
   const handleFileUpload = (formData: FormData) => {
@@ -92,11 +92,9 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
     if (is_thai_language) {
       setCookie("is_thai_language", true, 999)
       i18n.changeLanguage("th")
-      set_is_thai_language(true)
     } else {
       setCookie("is_thai_language", false, 999)
       i18n.changeLanguage("en")
-      set_is_thai_language(false)
     }
   }
 
@@ -104,7 +102,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
     setLoading(true)
     if (isRegister) {
       client
-        .post<RegisterResponse>("/users/other", { ...data, is_thai_language: is_thai_language, ...registrationInfo, birthday: date })
+        .post<RegisterResponse>("/users/other", { ...data, is_thai_language: language === "th", ...registrationInfo, birthday: date })
         .then(({ data }) => {
           setCookie("token", data.jwt, 1)
           handleAllFilesUpload(user_photo, national_id_house_registration, medical_certificate, relationship_verification_document, payment_slip)
@@ -113,14 +111,14 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
         })
         .catch((err) => {
           if (err.response) {
-            setShow(false)
-            setShowRegisterErr(true)
+            if (err.response.status === 400) setShowUsernameRepeatErr(true)
+            else setShowRegisterErr(true)
             setLoading(false)
           }
         })
     } else {
       client
-        .put<Other>("/account_info/", { ...data, is_thai_language: is_thai_language, birthday: date })
+        .put<Other>("/account_info/", { ...data, is_thai_language: language === "th", birthday: date })
         .then(({ data }) => {
           if (data.verification_status === "Submitted") {
             handleAllFilesUpload(user_photo, national_id_house_registration, medical_certificate, relationship_verification_document, payment_slip)
@@ -638,8 +636,9 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
             history.push("/login")
           }}
         />
-        {/* REGISTRATION SUCCESS MODAL */}
+        {/* REGISTRATION ERROR MODAL */}
         <CustomAccountModal type="registrationErrorModal" show={showRegisterErr} setShow={setShowRegisterErr} />
+        <CustomAccountModal type="repeatedUsernameErrorModal" show={showUsernameRepeatErr} setShow={setShowUsernameRepeatErr} />
       </form>
     </div>
   )

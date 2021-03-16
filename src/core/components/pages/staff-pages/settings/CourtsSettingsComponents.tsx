@@ -9,7 +9,7 @@ const invalidTime = (openTime: string, closeTime: string): boolean => {
   return !["00"].includes(openTime.slice(openTime.length - 2)) || !["00"].includes(closeTime.slice(closeTime.length - 2))
 }
 const openAfterClose = (formattedOpenTime: number, formattedCloseTime: number): boolean => {
-  if (formattedOpenTime >= formattedCloseTime) return true
+  if (formattedOpenTime > formattedCloseTime) return true
   else return false
 }
 

@@ -159,9 +159,9 @@ export const HandleErrorModal: React.FC<NormalModalProps> = ({ show, setShow }) 
       keyboard={false}
     >
       <Modal.Header closeButton>
-        <Modal.Title>คําเตือน: เกิดเหตุขัดข้อง</Modal.Title>
+        <Modal.Title>เกิดเหตุขัดข้อง: ไม่สามารถเพิ่มสตาฟฟ์ได้ </Modal.Title>
       </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>กรุณาลองใหม่อีกครั้ง</Modal.Body>
+      <Modal.Body style={{ fontWeight: "lighter" }}>กรุณาตรวจสอบว่าไม่มีการเพิ่มชื่อสตาฟฟ์ซ้ำและลองใหม่อีกครั้ง</Modal.Body>
       <Modal.Footer>
         <Button
           variant="pink"

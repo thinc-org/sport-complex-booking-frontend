@@ -26,7 +26,7 @@ function PaymentReminder() {
   const { nearExpiration, user } = usePaymentReminder()
 
   if (!nearExpiration() || !user?.account_expiration_date) return null
-
+  if (user.payment_status === "Submitted") return null
   return (
     <div>
       {user?.payment_status && (

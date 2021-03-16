@@ -77,7 +77,7 @@ export default function TimeSettings() {
             type={"lateCancelDay"}
             set={setLateCancellationDay}
             value={lateCancellationDay}
-            cardTitle={"อนุญาติการยกเลิกก่อนวันจอง"}
+            cardTitle={"ไม่อนุญาตให้ยกเลิกการจองก่อนวันจอง"}
             unit={"วัน"}
           />
         </div>

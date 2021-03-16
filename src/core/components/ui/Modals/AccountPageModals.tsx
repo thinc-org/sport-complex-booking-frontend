@@ -18,6 +18,7 @@ interface CustomAccountModalProps {
     | "registrationErrorModal"
     | "paymentSuccessModal"
     | "paymentErrorModal"
+    | "repeatedUsernameErrorModal"
   show: boolean
   setShow: (value: boolean) => void
   mainFunction?: (data: Other) => void
@@ -48,12 +49,26 @@ export const CustomAccountModal: React.FC<CustomAccountModalProps> = ({ type, sh
       <Modal.Body style={{ fontWeight: "lighter" }}>{message.body}</Modal.Body>
       <Modal.Footer>
         {data && mainFunction && (
-          <Button variant="pink" className="btn-normal" onClick={() => mainFunction(data as Other)}>
+          <Button
+            variant="pink"
+            className="btn-normal"
+            onClick={() => {
+              setShow(false)
+              mainFunction(data as Other)
+            }}
+          >
             {t("ok")}
           </Button>
         )}
         {click && (
-          <Button variant="pink" className="btn-normal" onClick={() => click()}>
+          <Button
+            variant="pink"
+            className="btn-normal"
+            onClick={() => {
+              setShow(false)
+              click()
+            }}
+          >
             {t("ok")}
           </Button>
         )}
