@@ -144,7 +144,10 @@ export const Register = () => {
           </Form>
         </div>
       </div>
-      {showNextForm && <OtherAccountEdit registrationInfo={credentials} isRegister={true} />}
+      <div className={showNextForm ? "" : "invisible"}>
+        <OtherAccountEdit registrationInfo={credentials} isRegister={true} />
+      </div>
+      {/* {showNextForm && <OtherAccountEdit registrationInfo={credentials} isRegister={true} />} */}
     </>
   )
 }
