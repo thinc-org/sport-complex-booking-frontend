@@ -29,11 +29,11 @@ const Sidebar = () => {
   const onLogOut = () => {
     setToken("")
     setCookie("token", null, 0)
-    setCookie("type", null, 0)
     setInProp(false)
     if (getCookie("type") === "CUStudent") {
       window.location.href = `https://account.it.chula.ac.th/logout?service=${process.env.REACT_APP_URL}`
     }
+    setCookie('type',null,0)
     clearUser()
   }
 
