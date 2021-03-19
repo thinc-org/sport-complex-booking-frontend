@@ -14,7 +14,7 @@ export const Register = () => {
     "",
     "สมาชิกสามัญ ก (staff membership)",
     "สมาชิกสามัญ ข (student membership)",
-    "สมาชิกสามัญสมทบ ก (staff-spouse membership",
+    "สมาชิกสามัญสมทบ ก (staff-spouse membership)",
     "สมาชิกสามัญสมทบ ข (alumni membership)",
     "สมาชิกวิสามัญ (full membership)",
     "สมาชิกวิสามัญสมทบ (full membership-spouse and children)",

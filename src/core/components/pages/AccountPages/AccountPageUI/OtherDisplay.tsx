@@ -33,6 +33,9 @@ export default function OtherAaccountDisplay({ toggleEditButton }: AccountProps)
           <label className="form-label mt-4">{t("username")}</label>
           <p>{user?.username}</p>
           <hr />
+          <label className="form-label mt-2">{t("accountType")}</label>
+          <p>{user?.membership_type}</p>
+          <hr />
           <div className="row">
             <div className="col-md-6">
               <label className="form-label mt-2">{t("prefix")}</label>
@@ -169,7 +172,7 @@ export default function OtherAaccountDisplay({ toggleEditButton }: AccountProps)
           )}
         </div>
 
-        {user?.membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership" && (
+        {user?.membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership)" && (
           <div className="form-file">
             <hr />
             <label className="form-label my-2">{t("relationship_verification_document")}</label>

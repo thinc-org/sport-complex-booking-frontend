@@ -20,7 +20,10 @@ function AccountPage() {
   const fetch_account_type = useCallback(() => {
     client.get<DefaultAccount>("/account_info/").then(({ data }) => {
       setPenalizeStatus(data.is_penalize)
-      if (data.expired_penalize_date) setPenalizeEndDate(data.expired_penalize_date.toString().substring(0, 10)) // date-fns
+      if (data.expired_penalize_date)
+        setPenalizeEndDate(
+          new Date(data.expired_penalize_date).toLocaleTimeString() + ", " + new Date(data.expired_penalize_date).toLocaleDateString()
+        ) // date-fns
       if (data.account_type === "CuStudent") {
         setCuStudentAccount(data as CuStudent)
       } else if (data.account_type === "SatitAndCuPersonel") {
