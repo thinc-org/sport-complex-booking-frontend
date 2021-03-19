@@ -12,12 +12,13 @@ import {
   SaveModal,
   CompleteSaveModal,
   ErrModal,
+  UncomExpireDateModal,
   PasswordErrModal,
   ConfirmChangePasswordModal,
 } from "./ListOfAllUserModals"
 import { OtherComponentInfo, ModalUserInfo } from "../interfaces/InfoInterface"
 import { renderLoading } from "./ListOfAllUsers"
-import format from "date-fns/format"
+import { format, isValid } from "date-fns"
 import { FormProvider, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { editInfoSchema } from "../../../../schemas/editUserInfo"
@@ -33,8 +34,8 @@ const UserInfo = () => {
   const [username, setUsername] = useState<string>("")
   const [membershipType, setMembershipType] = useState<string>("")
   const [isPenalize, setPenalize] = useState<boolean>(false)
-  const [expiredPenalizeDate, setExpiredPenalizeDate] = useState<Date>(new Date())
-  const [accountExpiredDate, setAccountExpiredDate] = useState<Date>(new Date())
+  const [expiredPenalizeDate, setExpiredPenalizeDate] = useState<Date | null>(new Date())
+  const [accountExpiredDate, setAccountExpiredDate] = useState<Date | null>(new Date())
   const [info, setInfo] = useState<OtherComponentInfo>({
     prefix: "",
     name_th: "",
@@ -67,13 +68,14 @@ const UserInfo = () => {
   })
   // temp data
   const [tempIsPenalize, setTempPenalize] = useState<boolean>(false)
-  const [tempExpiredPenalizeDate, setTempExpiredPenalizeDate] = useState<Date>(new Date())
-  const [tempAccountExpiredDate, setTempAccountExpiredDate] = useState<Date>(new Date())
+  const [tempExpiredPenalizeDate, setTempExpiredPenalizeDate] = useState<Date | null>(null)
+  const [tempAccountExpiredDate, setTempAccountExpiredDate] = useState<Date | null>(null)
   const [tempInfo, setTempInfo] = useState<OtherComponentInfo>(info)
 
   // react router dom
   const { _id } = useParams<{ _id: string }>()
   const methods = useForm({ resolver: yupResolver(editInfoSchema) })
+  const { register } = methods
   const history = useHistory()
 
   // requests //
@@ -84,8 +86,12 @@ const UserInfo = () => {
         setUsername(data.username)
         setMembershipType(data.membership_type)
         setPenalize(data.is_penalize)
-        setExpiredPenalizeDate(data.expired_penalize_date)
-        setAccountExpiredDate(data.account_expiration_date)
+        setExpiredPenalizeDate(
+          data.expired_penalize_date === null || new Date(data.expired_penalize_date) < new Date() ? null : new Date(data.expired_penalize_date)
+        )
+        setAccountExpiredDate(
+          data.account_expiration_date === null || new Date(data.account_expiration_date) < new Date() ? null : new Date(data.account_expiration_date)
+        )
         setInfo({
           prefix: data.prefix,
           name_th: data.name_th,
@@ -138,36 +144,12 @@ const UserInfo = () => {
     setEdit(true)
   }
 
-  const handleSave = () => {
-    setShowModalInfo("showSave")
-  }
-
-  const handleChangeDateTime = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const id = e.target.id
-    const oldPenExp: Date = tempExpiredPenalizeDate ? new Date(tempExpiredPenalizeDate) : new Date()
-    const oldAcExp: Date = tempAccountExpiredDate ? new Date(tempAccountExpiredDate) : new Date()
-    const incom: Date = new Date(e.target.value)
-    if (id === "expiredPenalizeDate") {
-      let date: Date = new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), oldPenExp.getHours(), oldPenExp.getMinutes())
-      if (date < new Date()) date = new Date()
-      setTempExpiredPenalizeDate(date)
-    } else if (id === "expiredPenalizeTime") {
-      const hour: number = parseInt(e.target.value.slice(0, 2))
-      const minute: number = parseInt(e.target.value.slice(3, 5))
-      let date: Date = new Date(oldPenExp.getFullYear(), oldPenExp.getMonth(), oldPenExp.getDate(), hour, minute, 0)
-      if (date < new Date()) date = new Date()
-      setTempExpiredPenalizeDate(date)
-    } else if (id === "accountExpiredDate") {
-      let date: Date = new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), oldAcExp.getHours(), oldAcExp.getMinutes())
-      if (date < new Date()) date = new Date()
-      setTempAccountExpiredDate(date)
-    } else if (id === "accountExpiredTime") {
-      const hour: number = parseInt(e.target.value.slice(0, 2))
-      const minute: number = parseInt(e.target.value.slice(3, 5))
-      let date: Date = new Date(oldAcExp.getFullYear(), oldAcExp.getMonth(), oldAcExp.getDate(), hour, minute, 0)
-      if (date < new Date()) date = new Date()
-      setTempAccountExpiredDate(date)
-    }
+  const handleSave = (canSave: boolean, newPenExp: Date, newAccExp: Date) => {
+    if (!tempIsPenalize || canSave) {
+      setTempExpiredPenalizeDate(newPenExp ? newPenExp : null)
+      setTempAccountExpiredDate(newAccExp ? newAccExp : null)
+      setShowModalInfo("showSave")
+    } else setShowModalInfo("showUncomExpire")
   }
 
   const requestSave = () => {
@@ -226,8 +208,8 @@ const UserInfo = () => {
       .then(() => {
         // set temp to data
         setPenalize(tempIsPenalize)
-        setExpiredPenalizeDate(tempExpiredPenalizeDate)
-        setAccountExpiredDate(tempAccountExpiredDate)
+        setExpiredPenalizeDate(tempExpiredPenalizeDate!)
+        setAccountExpiredDate(tempAccountExpiredDate!)
         setInfo(tempInfo)
         // show save complete modal
         setShowModalInfo("showComSave")
@@ -318,36 +300,36 @@ const UserInfo = () => {
               <div className="row">
                 <div className="col pr-0" style={{ width: "60%" }}>
                   <Form.Control
+                    ref={register}
+                    name="tempExpiredPenalizeDate"
                     type="date"
-                    id="expiredPenalizeDate"
                     disabled={!isEdit || !tempIsPenalize}
-                    value={
+                    defaultValue={
                       isEdit
-                        ? tempExpiredPenalizeDate && tempIsPenalize
-                          ? format(new Date(tempExpiredPenalizeDate), "yyyy-MM-dd")
+                        ? isValid(tempExpiredPenalizeDate) && tempIsPenalize
+                          ? format(new Date(tempExpiredPenalizeDate!), "yyyy-MM-dd")
                           : ""
-                        : isPenalize
-                        ? format(new Date(expiredPenalizeDate), "yyyy-MM-dd")
+                        : isValid(expiredPenalizeDate) && isPenalize
+                        ? format(new Date(expiredPenalizeDate!), "yyyy-MM-dd")
                         : ""
                     }
-                    onChange={handleChangeDateTime}
                   />
                 </div>
                 <div className="col" style={{ width: "40%" }}>
                   <Form.Control
+                    ref={register}
+                    name="tempExpiredPenalizeTime"
                     type="time"
-                    id="expiredPenalizeTime"
                     disabled={!isEdit || !tempIsPenalize}
-                    value={
+                    defaultValue={
                       isEdit
-                        ? tempExpiredPenalizeDate && tempIsPenalize
-                          ? format(new Date(tempExpiredPenalizeDate), "HH:mm")
+                        ? isValid(tempExpiredPenalizeDate) && tempIsPenalize
+                          ? format(new Date(tempExpiredPenalizeDate!), "HH:mm")
                           : ""
-                        : isPenalize
-                        ? format(new Date(expiredPenalizeDate), "HH:mm")
+                        : isValid(expiredPenalizeDate) && isPenalize
+                        ? format(new Date(expiredPenalizeDate!), "HH:mm")
                         : ""
                     }
-                    onChange={handleChangeDateTime}
                   />
                 </div>
               </div>
@@ -357,36 +339,36 @@ const UserInfo = () => {
               <div className="row">
                 <div className="col pr-0" style={{ width: "60%" }}>
                   <Form.Control
+                    ref={register}
+                    name="tempAccountExpiredDate"
                     type="date"
-                    id="accountExpiredDate"
                     disabled={!isEdit}
-                    value={
+                    defaultValue={
                       isEdit
-                        ? tempAccountExpiredDate
-                          ? format(new Date(tempAccountExpiredDate), "yyyy-MM-dd")
+                        ? isValid(tempAccountExpiredDate)
+                          ? format(new Date(tempAccountExpiredDate!), "yyyy-MM-dd")
                           : ""
-                        : accountExpiredDate
-                        ? format(new Date(accountExpiredDate), "yyyy-MM-dd")
+                        : isValid(accountExpiredDate)
+                        ? format(new Date(accountExpiredDate!), "yyyy-MM-dd")
                         : ""
                     }
-                    onChange={handleChangeDateTime}
                   />
                 </div>
                 <div className="col" style={{ width: "40%" }}>
                   <Form.Control
+                    ref={register}
+                    name="tempAccountExpiredTime"
                     type="time"
-                    id="accountExpiredTime"
                     disabled={!isEdit}
-                    value={
+                    defaultValue={
                       isEdit
-                        ? tempAccountExpiredDate
-                          ? format(new Date(tempAccountExpiredDate), "HH:mm")
+                        ? isValid(tempAccountExpiredDate)
+                          ? format(new Date(tempAccountExpiredDate!), "HH:mm")
                           : ""
-                        : accountExpiredDate
-                        ? format(new Date(accountExpiredDate), "HH:mm")
+                        : isValid(accountExpiredDate)
+                        ? format(new Date(accountExpiredDate!), "HH:mm")
                         : ""
                     }
-                    onChange={handleChangeDateTime}
                   />
                 </div>
               </div>
@@ -461,6 +443,7 @@ const UserInfo = () => {
         <SaveModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ requestSave }} />
         <CompleteSaveModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
         <ErrModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
+        <UncomExpireDateModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
         <PasswordErrModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
         <ConfirmChangePasswordModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ requestChangePassword }} />
         <PasswordChangeModal showModals={showModalInfo} setShowModals={setShowModalInfo} setNewPassword={setNewPassword} />

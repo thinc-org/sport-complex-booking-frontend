@@ -60,6 +60,10 @@ export interface EditComponentInfo {
   contact_person_surname: string
   contact_person_home_phone: string
   contact_person_phone: string
+  tempExpiredPenalizeDate: string
+  tempExpiredPenalizeTime: string
+  tempAccountExpiredDate: string
+  tempAccountExpiredTime: string
 }
 
 export interface CuSatitComponentInfo {
