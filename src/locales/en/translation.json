@@ -311,6 +311,7 @@
   },
   "payment": "Payment",
   "accountWillExpireOn": "Your account will expire on ",
+  "accountHasExpiredOn": "Your account has expired on ",
   "extendAccount": "Extend Membership",
   "paymentRejectedMessage": "Your payment slip has been rejected. Please re-submit.",
   "paymentSubmittedMessage": "Your payment slip has been submitted",
@@ -319,6 +320,8 @@
   "landingMessage": "Easily reserve a court online and check-in all in one place.",
   "fillHere": "Fill in your information.",
   "reminder": "Reminder",
-  "cancellationWarning": "If cancellation is confirmed now, you and your team members will be banned for {{lateCancellationPunishment}} day(s)"
-
+  "cancellationWarning": "If cancellation is confirmed now, you and your team members will be banned for {{lateCancellationPunishment}} day(s)",
+  "OtherAccountType": "Other Account Type",
+  "accountExpiredTitle": "Your account has expired.",
+  "accountExpiredMessage": "You can no longer create or join a reservation. You can extend your membership by submitting your payment evidence below and wait for staff's approval."
 }

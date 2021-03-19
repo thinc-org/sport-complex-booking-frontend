@@ -545,7 +545,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           {user?.rejected_info?.includes("medical_certificate") ? <p className="input-error">{t("resubmitField")}</p> : null}
           <hr />
           {(user?.membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership)" ||
-            registrationInfo?.membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership") && (
+            registrationInfo?.membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership)") && (
             <div>
               <label className="form-label my-2">{t("relationship_verification_document")}</label>
               <div className="form-file">

@@ -2,6 +2,7 @@ import React from "react"
 import { Button, Modal } from "react-bootstrap"
 import { useTranslation } from "react-i18next"
 import { Other } from "../../../contexts/UsersContext"
+import { usePaymentReminder } from "../../pages/AccountPages/Payment/PaymentReminder"
 import { CheckValidityErrorMsg } from "../../pages/Reservation/ReservationComponents"
 
 export interface EdittedData {
@@ -137,9 +138,13 @@ const WarningAlert: React.FC<WarningAlertProps> = ({ title, message, category })
 
 export const WarningMessage: React.FC<WarningMessageProps> = ({ show, verification_status, account }) => {
   const { t } = useTranslation()
+  const { isExpired } = usePaymentReminder()
   if (!show) return null
   if (account === "CuStudent") {
     return <CheckValidityErrorMsg show={true} reason="INFO_NOT_FILLED" type="danger" />
+  }
+  if (account === "Other" && isExpired()) {
+    return <WarningAlert title={t("accountExpiredTitle")} message={t("accountExpiredMessage")} category="danger" />
   }
   switch (verification_status) {
     case "NotSubmitted": {
