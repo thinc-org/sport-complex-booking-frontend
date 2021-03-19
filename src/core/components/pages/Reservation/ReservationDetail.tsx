@@ -170,9 +170,6 @@ const ReservationDetail = () => {
                   <h6 className="mb-0 font-weight-light">
                     {t("bookingDate")}: {date}{" "}
                   </h6>
-                  {/* <h6 className="mb-0 font-weight-light">
-                    {t("bookingTime")}: {timeList && timeList.map((time) => timeConversion(time))}{" "}
-                  </h6> */}
                   <h6 className="mb-0 font-weight-light">
                     {t("bookingTime")}: {timeList && timeConversion(timeList)}{" "}
                   </h6>
