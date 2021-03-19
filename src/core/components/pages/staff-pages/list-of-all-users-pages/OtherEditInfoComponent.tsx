@@ -14,7 +14,7 @@ export default function OtherEditInfoComponent({
 }: {
   tempInfo: OtherComponentInfo
   setTempInfo: React.Dispatch<React.SetStateAction<OtherComponentInfo>>
-  handleSave: () => void
+  handleSave: (canSave: boolean, newPenExp: Date, newAccExp: Date) => void
 }) {
   // Page state //
   const { register, handleSubmit, errors } = useFormContext()
@@ -99,7 +99,14 @@ export default function OtherEditInfoComponent({
         contact_person_phone: data.contact_person_phone,
       },
     })
-    handleSave()
+    if (!data.tempExpiredPenalizeDate || !data.tempExpiredPenalizeTime || !data.tempAccountExpiredDate || !data.tempAccountExpiredTime)
+      handleSave(false, new Date(), new Date())
+    else
+      handleSave(
+        true,
+        new Date(`${data.tempExpiredPenalizeDate} ${data.tempExpiredPenalizeTime}`),
+        new Date(`${data.tempAccountExpiredDate} ${data.tempAccountExpiredTime}`)
+      )
   }
 
   const errorMassage = (msg: string) => {
