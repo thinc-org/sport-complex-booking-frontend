@@ -95,7 +95,7 @@ export const UncomAcceptModal: React.FC<ModalProps> = ({ showModalInfo, setShowM
     <CustomModal
       title={"คำเตือน"}
       show={showModalInfo === "showUncomAccept"}
-      body="กรุณาระบุวันหมดอายุสมาชิกก่อนกดยอมรับ"
+      body="กรุณาระบุวันหมดอายุสมาชิกก่อนกดยอมรับ หรือวันหมดอายุไม่ถูกต้อง"
       onConfirm={() => setShowModalInfo("none")}
     />
   )
