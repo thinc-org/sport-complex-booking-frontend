@@ -159,28 +159,36 @@ export default function OtherViewInfoComponent({ info, type }: { info: OtherComp
           ) : null}
           {/* Payment Evidence */}
           <label className="form-label my-2">หลักฐานการชำระเงิน</label>
-          <div className="form-file">
-            {prevSlips && prevSlips.length !== 0 ? (
-              <Form.Control as="select" defaultValue={2} onChange={(e) => setPaymentNo(parseInt(e.target.value))}>
-                <option disabled value={2}>
-                  เลือกดูหลักฐานการชำระเงิน
-                </option>
-                <option value={prevSlips.length - 1}>ครั้งล่าสุด</option>
-                <option value={prevSlips.length - 2}>ก่อนหน้าครั้งล่าสุด</option>
-              </Form.Control>
-            ) : (
-              <Form.Control disabled as="select" defaultValue={0}>
-                <option value={0}>ไม่มีหลักฐานการชำระเงิน</option>
-              </Form.Control>
-            )}
-            <p
-              className={prevSlips && prevSlips[paymentNo] ? "link" : "text-muted"}
-              id={prevSlips ? prevSlips[paymentNo] : undefined}
-              onClick={handlePDF}
-            >
+          {type === "VerifyInfo" ? (
+            <p className="link" id={(info as VerifyComponentInfo).payment_slip} onClick={handlePDF}>
               ดูเอกสาร
             </p>
-          </div>
+          ) : (
+            <div className="form-file">
+              {prevSlips && prevSlips.length !== 0 ? (
+                <Form.Control as="select" defaultValue={2} onChange={(e) => setPaymentNo(parseInt(e.target.value))}>
+                  <option disabled value={2}>
+                    เลือกดูหลักฐานการชำระเงิน
+                  </option>
+                  <option value={prevSlips.length - 1}>ครั้งล่าสุด</option>
+                  <option disabled={prevSlips.length - 2 < 0} value={prevSlips.length - 2}>
+                    ก่อนหน้าครั้งล่าสุด
+                  </option>
+                </Form.Control>
+              ) : (
+                <Form.Control disabled as="select" defaultValue={0}>
+                  <option value={0}>ไม่มีหลักฐานการชำระเงิน</option>
+                </Form.Control>
+              )}
+              <p
+                className={prevSlips && prevSlips[paymentNo] ? "link" : "text-muted"}
+                id={prevSlips ? prevSlips[paymentNo] : undefined}
+                onClick={handlePDF}
+              >
+                ดูเอกสาร
+              </p>
+            </div>
+          )}
         </Card>
       </div>
     </div>
