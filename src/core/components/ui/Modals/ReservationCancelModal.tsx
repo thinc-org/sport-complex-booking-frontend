@@ -5,16 +5,16 @@ import { useTranslation } from "react-i18next"
 export interface ReservationCancelModalProps {
   modalOpen: boolean
   triggerModal: (event: React.MouseEvent) => void
+  punishment: boolean
   confirmCancellation: (event: React.MouseEvent) => void
-  lateCancellationDay: number
   lateCancellationPunishment: number
 }
 
 export const ReservationCancellationModal: React.FC<ReservationCancelModalProps> = ({
   modalOpen,
   triggerModal,
+  punishment,
   confirmCancellation,
-  lateCancellationDay,
   lateCancellationPunishment,
 }) => {
   const { t } = useTranslation()
@@ -39,10 +39,9 @@ export const ReservationCancellationModal: React.FC<ReservationCancelModalProps>
             {t("cancelReservationQuestion")}
             <br />
             <br />{" "}
-            {t("cancelReservationCondition", {
-              lateCancellationDay: lateCancellationDay.toString(),
-              lateCancellationPunishment: lateCancellationPunishment.toString(),
-            })}
+            {punishment &&
+              lateCancellationPunishment !== 0 &&
+              t("cancellationWarning", { lateCancellationPunishment: lateCancellationPunishment.toString() })}
           </div>
           <div className="modal-footer pt-0 pb-0">
             <button type="button" onClick={triggerModal} className="btn" data-dismiss="modal" style={{ fontSize: "14px", fontWeight: 400 }}>

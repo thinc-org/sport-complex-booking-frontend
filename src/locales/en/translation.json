@@ -224,7 +224,7 @@
   "showQRToStaff": "Please show this QR code to the sport center staff",
   "cancelReservation": "Cancel Reservation",
   "cancelReservationQuestion": "Are you sure to cancel this reservation?",
-  "cancelReservationCondition": "If you cancel within {{lateCancellationDay}} days of reservation, you and the waiting room members will be banned for {{lateCancellationPunishment}} days.",
+  "cancelReservationCondition": "If you cancel within {{lateCancellationDay}} day(s) of reservation, you and the waiting room members will be banned for {{lateCancellationPunishment}} day(s).",
   "sure": "Sure",
   "no": "No",
   "youHaveCheckedIn": "You have checked in!",
@@ -317,6 +317,8 @@
   "paymentApproved": "Your payment has been approved.",
   "noEmpty": "❌ Do not leave this empty.",
   "landingMessage": "Easily reserve a court online and check-in all in one place.",
-  "fillHere": "Fill in your information."
+  "fillHere": "Fill in your information.",
+  "reminder": "Reminder",
+  "cancellationWarning": "If cancellation is confirmed now, you and your team members will be banned for {{lateCancellationPunishment}} day(s)"
 
 }
