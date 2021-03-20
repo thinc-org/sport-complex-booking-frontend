@@ -15,7 +15,7 @@ export interface DefaultAccount {
   personal_email: string
   phone: string
   is_penalize: boolean
-  expired_penalize_date: Date
+  expired_penalize_date: Date | null
 }
 
 export interface CuStudent extends DefaultAccount {

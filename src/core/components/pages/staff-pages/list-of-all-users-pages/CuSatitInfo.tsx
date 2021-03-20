@@ -1,7 +1,7 @@
 import React, { useState, useEffect, FunctionComponent, useCallback } from "react"
 import { Row, Col, Button, Form, Card, Alert } from "react-bootstrap"
 import { Link, useHistory, useParams } from "react-router-dom"
-import format from "date-fns/format"
+import { format, isValid } from "date-fns"
 import { useForm } from "react-hook-form"
 import { client } from "../../../../../axiosConfig"
 import { CuSatitComponentInfo, ModalUserInfo } from "../interfaces/InfoInterface"
@@ -18,7 +18,6 @@ import {
   PasswordErrModal,
   ConfirmChangePasswordModal,
 } from "./ListOfAllUserModals"
-import { isValid } from "date-fns"
 import { useTranslation } from "react-i18next"
 import { Account } from "../../../../dto/account.dto"
 import { infoSchema } from "../../../../schemas/editUserInfo"
@@ -49,7 +48,7 @@ const UserInfo: FunctionComponent = () => {
     personal_email: "",
     phone: "",
     is_penalize: false,
-    expired_penalize_date: new Date(),
+    expired_penalize_date: null,
     is_first_login: false,
   })
   const [tempUser, setTempUser] = useState<CuSatitType>(user)
@@ -64,11 +63,11 @@ const UserInfo: FunctionComponent = () => {
     client
       .get<CuSatitType>(`/list-all-user/id/${_id}`)
       .then(({ data }) => {
-        if (data.expired_penalize_date !== null) data.account_type === "CuStudent" ? setUser(data as CuStudent) : setUser(data as SatitCuPersonel)
+        if (data.expired_penalize_date === null) data.account_type === "CuStudent" ? setUser(data as CuStudent) : setUser(data as SatitCuPersonel)
         else
           data.account_type === "CuStudent"
-            ? setUser({ ...data, expired_penalize_date: new Date() } as CuStudent)
-            : setUser({ ...data, expired_penalize_date: new Date() } as SatitCuPersonel)
+            ? setUser({ ...data, expired_penalize_date: new Date(data.expired_penalize_date!) } as CuStudent)
+            : setUser({ ...data, expired_penalize_date: new Date(data.expired_penalize_date!) } as SatitCuPersonel)
         setIsLoading(false)
       })
       .catch(({ response }) => {
@@ -96,22 +95,7 @@ const UserInfo: FunctionComponent = () => {
       // set is_penalize
       if (e.target.value === "1") setTempUser({ ...tempUser, [e.target.id]: true })
       else setTempUser({ ...tempUser, [e.target.id]: false })
-    } else if (e.target.id === "expired_penalize_date") {
-      // set date
-      const incom: Date = new Date(e.target.value)
-      const old: Date = new Date(tempUser.expired_penalize_date)
-      let date: Date = new Date(incom.getFullYear(), incom.getMonth(), incom.getDate(), old.getHours(), old.getMinutes())
-      if (date < new Date()) date = new Date()
-      setTempUser({ ...tempUser, expired_penalize_date: date })
-    } else if (e.target.id === "expiredPenalizeTime") {
-      // set time
-      const date: Date = new Date(tempUser.expired_penalize_date)
-      const hour: number = parseInt(e.target.value.slice(0, 2))
-      const minute: number = parseInt(e.target.value.slice(3, 5))
-      let newDate: Date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, 0)
-      if (newDate < new Date()) newDate = new Date()
-      setTempUser({ ...tempUser, expired_penalize_date: newDate })
-    } else setTempUser({ ...tempUser, [e.target.id]: e.target.value })
+    }
   }
 
   const handleEdit = () => {
@@ -128,10 +112,13 @@ const UserInfo: FunctionComponent = () => {
   const handleConfirmChange = (data: CuSatitComponentInfo) => {
     // if some input is blank -> alert //
     // else -> try change //
-    if (tempUser.is_penalize && new Date(tempUser.expired_penalize_date).getDate() === new Date().getDate()) setShowModals("showUncomExpire")
+    const newPenExp: Date = new Date(`${data.expired_penalize_date} ${data.expired_penalize_time}`)
+    if (tempUser.is_penalize && (!data.expired_penalize_date || !data.expired_penalize_time || !isValid(newPenExp) || newPenExp < new Date()))
+      setShowModals("showUncomExpire")
     else {
-      setTempUser({ ...tempUser, ...data })
-      const { name_th, surname_th, name_en, surname_en, personal_email, phone } = data
+      const { expired_penalize_date, expired_penalize_time, ...rest } = data
+      const { name_th, surname_th, name_en, surname_en, personal_email, phone } = rest
+      setTempUser({ ...tempUser, expired_penalize_date: newPenExp, ...rest })
       if (name_th !== "" && surname_th !== "" && name_en !== "" && surname_en !== "" && personal_email !== "" && phone !== "")
         setShowModals("showSave")
       else setShowAlert(true)
@@ -217,7 +204,6 @@ const UserInfo: FunctionComponent = () => {
   }
 
   const renderForm = () => {
-    const date: Date = new Date(user.expired_penalize_date)
     return (
       <div className="userInformation">
         <Row className="py-3">
@@ -275,10 +261,19 @@ const UserInfo: FunctionComponent = () => {
             <p>สิ้นสุดการแบน</p>
             <Row>
               <Col sm={4}>
-                <Form.Control disabled type="date" value={user.is_penalize && isValid(date) ? format(date, "yyyy-MM-dd") : ""} />
+                <Form.Control
+                  disabled
+                  type="date"
+                  value={user.is_penalize && isValid(user.expired_penalize_date) ? format(user.expired_penalize_date!, "yyyy-MM-dd") : ""}
+                />
               </Col>
               <Col>
-                <Form.Control disabled style={{ width: "25%" }} type="time" value={user.is_penalize && isValid(date) ? format(date, "HH:mm") : ""} />
+                <Form.Control
+                  disabled
+                  type="time"
+                  style={{ maxWidth: "25%" }}
+                  value={user.is_penalize && isValid(user.expired_penalize_date) ? format(user.expired_penalize_date!, "HH:mm") : ""}
+                />
               </Col>
             </Row>
           </Col>
@@ -311,7 +306,6 @@ const UserInfo: FunctionComponent = () => {
   }
 
   const renderEditingForm = () => {
-    const date: Date = new Date(tempUser.expired_penalize_date)
     return (
       <div className="userInformation">
         <Form onSubmit={handleSubmit(handleConfirmChange)}>
@@ -400,21 +394,25 @@ const UserInfo: FunctionComponent = () => {
               <Row>
                 <Col sm={4}>
                   <Form.Control
-                    id="expired_penalize_date"
-                    disabled={tempUser.is_penalize ? false : true}
+                    ref={register}
+                    name="expired_penalize_date"
+                    disabled={!tempUser.is_penalize}
                     type="date"
-                    onChange={handleChange}
-                    value={tempUser.is_penalize && date.getDate() !== new Date().getDate() ? format(date, "yyyy-MM-dd") : ""}
+                    defaultValue={
+                      tempUser.is_penalize && isValid(tempUser.expired_penalize_date) ? format(tempUser.expired_penalize_date!, "yyyy-MM-dd") : ""
+                    }
                   />
                 </Col>
                 <Col>
                   <Form.Control
-                    id="expiredPenalizeTime"
-                    style={{ width: "25%" }}
-                    disabled={tempUser.is_penalize ? false : true}
+                    ref={register}
+                    name="expired_penalize_time"
+                    disabled={!tempUser.is_penalize}
                     type="time"
-                    onChange={handleChange}
-                    value={tempUser.is_penalize && date.getDate() !== new Date().getDate() ? format(date, "HH:mm") : ""}
+                    style={{ maxWidth: "25%" }}
+                    defaultValue={
+                      tempUser.is_penalize && isValid(tempUser.expired_penalize_date) ? format(tempUser.expired_penalize_date!, "HH:mm") : ""
+                    }
                   />
                 </Col>
               </Row>

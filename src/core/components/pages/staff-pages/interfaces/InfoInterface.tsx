@@ -73,6 +73,8 @@ export interface CuSatitComponentInfo {
   surname_en: string
   personal_email: string
   phone: string
+  expired_penalize_date: string
+  expired_penalize_time: string
 }
 
 export interface PasswordToggle {
