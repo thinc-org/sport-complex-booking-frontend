@@ -34,8 +34,8 @@ const UserInfo = () => {
   const [username, setUsername] = useState<string>("")
   const [membershipType, setMembershipType] = useState<string>("")
   const [isPenalize, setPenalize] = useState<boolean>(false)
-  const [expiredPenalizeDate, setExpiredPenalizeDate] = useState<Date | null>(new Date())
-  const [accountExpiredDate, setAccountExpiredDate] = useState<Date | null>(new Date())
+  const [expiredPenalizeDate, setExpiredPenalizeDate] = useState<Date | null>(null)
+  const [accountExpiredDate, setAccountExpiredDate] = useState<Date | null>(null)
   const [info, setInfo] = useState<OtherComponentInfo>({
     prefix: "",
     name_th: "",
@@ -145,7 +145,7 @@ const UserInfo = () => {
   }
 
   const handleSave = (canSave: boolean, newPenExp: Date, newAccExp: Date) => {
-    if (!tempIsPenalize || canSave) {
+    if (!tempIsPenalize || (canSave && newPenExp >= new Date() && newAccExp >= new Date())) {
       setTempExpiredPenalizeDate(newPenExp ? newPenExp : null)
       setTempAccountExpiredDate(newAccExp ? newAccExp : null)
       setShowModalInfo("showSave")
