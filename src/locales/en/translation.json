@@ -92,7 +92,7 @@
   "submittedTitle": "Registration form submitted.",
   "submittedMessage": "Please wait for approval.",
   "approvedTitle": "Registration form approved.",
-  "approvedMessage": "To edit your personal information, please contact CU Sports Complex.",
+  "approvedMessage": "To edit your personal information, please contact CU Sports Center.",
   "create": "Create",
   "sport": "Sport",
   "court": "Court",
@@ -143,7 +143,7 @@
   "surnamePlaceHolder": "Surname",
   "passwordChangeConfirm": {
     "title": "Confirmation",
-    "body": "Do you want to confirm password change"
+    "body": "Do you want to confirm password change?"
   },
   "passwordChangeSuccess": {
     "title": "Success",
@@ -301,7 +301,7 @@
   "otherAccountDescription": {
     "type1": "staff membership: 200 Baht/year/person [CU Personnel, Retired CU Personnel]",
     "type2": "student membership: 420 Baht/year/person [CU Student/CU Exchange Students]",
-    "type3": "staff-spouse membership: 2,000 Baht/year/person [Staff's family/ Alumnis and Family]",
+    "type3": "staff-spouse membership: 2,000 Baht/year/person [Staff's family/ Alumni and Family]",
     "type4": "alumni membership: 1,500 Baht/year/person [Current CU Student]",
     "type5": "full membership: 10,000 Baht/year/person [General Public]",
     "type6": "full membership-spouse and children: 8,000 Baht/year/person [General Public - Family]",
