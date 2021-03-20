@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
 import { Link, useHistory, useParams } from "react-router-dom"
+import { useForm } from "react-hook-form"
 import { Button, Card, Form } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
 import { Other } from "../../../../contexts/UsersContext"
@@ -12,7 +13,7 @@ import {
   CompleteAcceptModal,
   ErrorModal,
 } from "./VerifyModalsComopnent"
-import format from "date-fns/format"
+import { format, isValid } from "date-fns"
 import { VerifyExtendInfo, ModalVerify } from "../interfaces/InfoInterface"
 import { renderLoading } from "../list-of-all-users-pages/ListOfAllUsers"
 
@@ -35,6 +36,8 @@ const VerifyExtend: FunctionComponent = () => {
   // router state //
   const history = useHistory()
   const { _id } = useParams<{ _id: string }>()
+  const methods = useForm()
+  const { register, handleSubmit } = methods
 
   // useCallback //
   const fetchUserData = useCallback(() => {
@@ -62,18 +65,12 @@ const VerifyExtend: FunctionComponent = () => {
   }, [fetchUserData])
 
   // handles //
-  const handleAccept = () => {
-    if (accountExpiredDate) setShowModalInfo("showConfirmAccept")
-    else setShowModalInfo("showUncomAccept")
-  }
-
-  const handleChangeExpire = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement
-    const date = new Date(target.value)
-    const current_date = new Date()
-    // date must not be past
-    if (date < current_date) setAccountExpiredDate(current_date)
-    else setAccountExpiredDate(date)
+  const onSubmit = (data: { accountExpiredDate: string }) => {
+    if (!data.accountExpiredDate || new Date(data.accountExpiredDate) < new Date()) setShowModalInfo("showUncomAccept")
+    else {
+      setAccountExpiredDate(new Date(data.accountExpiredDate))
+      setShowModalInfo("showConfirmAccept")
+    }
   }
 
   // requests //
@@ -89,7 +86,7 @@ const VerifyExtend: FunctionComponent = () => {
       .then(() => {
         setShowModalInfo("showCompleteReject")
       })
-      .catch((err) => {
+      .catch(() => {
         setShowModalInfo("showErr")
       })
   }
@@ -111,7 +108,7 @@ const VerifyExtend: FunctionComponent = () => {
       .then(() => {
         setShowModalInfo("showCompleteAccept")
       })
-      .catch((err) => {
+      .catch(() => {
         setShowModalInfo("showErr")
       })
   }
@@ -129,7 +126,7 @@ const VerifyExtend: FunctionComponent = () => {
   )
 
   const renderContent = (
-    <div className="topSection px-4 pt-2">
+    <Form className="topSection px-4 pt-2" onSubmit={handleSubmit(onSubmit)}>
       <div className="row">
         <div className="col">
           <label className="mt-2">ประเภท</label>
@@ -164,10 +161,11 @@ const VerifyExtend: FunctionComponent = () => {
         <div className="col">
           <label className="mt-2">วันหมดอายุสมาชิก</label>
           <Form.Control
+            ref={register}
+            name="accountExpiredDate"
             type="date"
             style={{ width: "40%" }}
-            value={accountExpiredDate ? format(new Date(accountExpiredDate), "yyyy-MM-dd") : ""}
-            onChange={handleChangeExpire}
+            defaultValue={isValid(accountExpiredDate) ? format(new Date(accountExpiredDate!), "yyyy-MM-dd") : ""}
           />
         </div>
       </div>
@@ -181,11 +179,11 @@ const VerifyExtend: FunctionComponent = () => {
         >
           ปฏิเสธ
         </Button>
-        <Button variant="success" className="btn-normal btn-outline-green px-5 ml-5" onClick={handleAccept}>
+        <Button variant="success" className="btn-normal btn-outline-green px-5 ml-5" type="submit">
           ยอมรับ
         </Button>
       </div>
-    </div>
+    </Form>
   )
 
   return (
