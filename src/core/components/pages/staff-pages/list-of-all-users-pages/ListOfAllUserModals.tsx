@@ -117,7 +117,7 @@ export const UncomExpireDateModal: React.FC<ModalProps> = ({ showModalInfo, setS
     <CustomModal
       title={"เกิดข้อผิดพลาด"}
       show={showModalInfo === "showUncomExpire"}
-      body={"กรุณาเลือกวันหมดอายุก่อนกดยืนยัน หรือวันหมดอายุไม่ถูกต้อง"}
+      body={"กรุณาเลือกวันหมดอายุที่ถูกต้องก่อนกดยืนยัน"}
       onConfirm={() => {
         setShowModalInfo("none")
       }}
