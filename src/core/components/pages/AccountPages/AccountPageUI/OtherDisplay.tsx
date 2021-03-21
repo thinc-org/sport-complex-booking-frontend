@@ -199,14 +199,8 @@ export default function OtherAaccountDisplay({ toggleEditButton }: AccountProps)
         <h4>{t("payment")}</h4>
         <label className="form-label my-2">{t("paymentEvidenceLabel")}</label>
         <div className="form-file">
-          {user?.medical_certificate ? (
-            <a
-              type="button"
-              className="btn-normal btn-secondary"
-              href={"openFile/" + user.medical_certificate}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+          {user?.payment_slip ? (
+            <a type="button" className="btn-normal btn-secondary" href={"openFile/" + user.payment_slip} target="_blank" rel="noopener noreferrer">
               {t("viewFile")}
             </a>
           ) : (
