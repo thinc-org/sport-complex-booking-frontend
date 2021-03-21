@@ -304,6 +304,8 @@ const UserInfo = () => {
                     name="tempExpiredPenalizeDate"
                     type="date"
                     disabled={!isEdit || !tempIsPenalize}
+                    max={"9999-12-31"}
+                    style={{ width: "min-content" }}
                     defaultValue={
                       isEdit
                         ? isValid(tempExpiredPenalizeDate) && tempIsPenalize
@@ -321,6 +323,7 @@ const UserInfo = () => {
                     name="tempExpiredPenalizeTime"
                     type="time"
                     disabled={!isEdit || !tempIsPenalize}
+                    style={{ width: "min-content" }}
                     defaultValue={
                       isEdit
                         ? isValid(tempExpiredPenalizeDate) && tempIsPenalize
@@ -343,6 +346,8 @@ const UserInfo = () => {
                     name="tempAccountExpiredDate"
                     type="date"
                     disabled={!isEdit}
+                    max={"9999-12-31"}
+                    style={{ width: "min-content" }}
                     defaultValue={
                       isEdit
                         ? isValid(tempAccountExpiredDate)
@@ -360,6 +365,7 @@ const UserInfo = () => {
                     name="tempAccountExpiredTime"
                     type="time"
                     disabled={!isEdit}
+                    style={{ width: "min-content" }}
                     defaultValue={
                       isEdit
                         ? isValid(tempAccountExpiredDate)

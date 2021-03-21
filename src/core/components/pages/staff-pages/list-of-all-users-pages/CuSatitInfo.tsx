@@ -260,10 +260,11 @@ const UserInfo: FunctionComponent = () => {
           <Col>
             <p>สิ้นสุดการแบน</p>
             <Row>
-              <Col sm={4}>
+              <Col sm={4} className="mr-3">
                 <Form.Control
                   disabled
                   type="date"
+                  style={{ width: "min-content" }}
                   value={user.is_penalize && isValid(user.expired_penalize_date) ? format(user.expired_penalize_date!, "yyyy-MM-dd") : ""}
                 />
               </Col>
@@ -271,7 +272,7 @@ const UserInfo: FunctionComponent = () => {
                 <Form.Control
                   disabled
                   type="time"
-                  style={{ maxWidth: "25%" }}
+                  style={{ width: "min-content" }}
                   value={user.is_penalize && isValid(user.expired_penalize_date) ? format(user.expired_penalize_date!, "HH:mm") : ""}
                 />
               </Col>
@@ -392,12 +393,14 @@ const UserInfo: FunctionComponent = () => {
             <Col>
               <p>สิ้นสุดการแบน</p>
               <Row>
-                <Col sm={4}>
+                <Col sm={4} className="mr-3">
                   <Form.Control
                     ref={register}
                     name="expired_penalize_date"
                     disabled={!tempUser.is_penalize}
                     type="date"
+                    max={"9999-12-31"}
+                    style={{ width: "min-content" }}
                     defaultValue={
                       tempUser.is_penalize && isValid(tempUser.expired_penalize_date) ? format(tempUser.expired_penalize_date!, "yyyy-MM-dd") : ""
                     }
@@ -409,7 +412,7 @@ const UserInfo: FunctionComponent = () => {
                     name="expired_penalize_time"
                     disabled={!tempUser.is_penalize}
                     type="time"
-                    style={{ maxWidth: "25%" }}
+                    style={{ width: "min-content" }}
                     defaultValue={
                       tempUser.is_penalize && isValid(tempUser.expired_penalize_date) ? format(tempUser.expired_penalize_date!, "HH:mm") : ""
                     }

@@ -164,7 +164,8 @@ const VerifyExtend: FunctionComponent = () => {
             ref={register}
             name="accountExpiredDate"
             type="date"
-            style={{ width: "40%" }}
+            style={{ width: "fit-content" }}
+            max={"9999-12-31"}
             defaultValue={isValid(accountExpiredDate) ? format(new Date(accountExpiredDate!), "yyyy-MM-dd") : ""}
           />
         </div>
