@@ -99,8 +99,12 @@ export default function OtherEditInfoComponent({
         contact_person_phone: data.contact_person_phone,
       },
     })
-    if (!data.tempExpiredPenalizeDate || !data.tempExpiredPenalizeTime || !data.tempAccountExpiredDate || !data.tempAccountExpiredTime)
+    if ((!data.tempExpiredPenalizeDate || !data.tempExpiredPenalizeTime) && (!data.tempAccountExpiredDate || !data.tempAccountExpiredTime))
       handleSave(false, new Date(), new Date())
+    else if (!data.tempExpiredPenalizeDate || !data.tempExpiredPenalizeTime)
+      handleSave(false, new Date(), new Date(`${data.tempAccountExpiredDate} ${data.tempAccountExpiredTime}`))
+    else if (!data.tempExpiredPenalizeDate || !data.tempExpiredPenalizeTime)
+      handleSave(false, new Date(`${data.tempExpiredPenalizeDate} ${data.tempExpiredPenalizeTime}`), new Date())
     else
       handleSave(
         true,
