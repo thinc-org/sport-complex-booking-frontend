@@ -80,19 +80,19 @@ export const useDate = (initialStartDate: Date | undefined = undefined, initialE
   currentDate.setHours(0, 0, 0, 0)
   const [startDate, setStartDate] = useState<Date | undefined>(initialStartDate)
   const [endDate, setEndDate] = useState<Date | undefined>(initialEndDate)
-  const [show, setShow] = useState(false)
-  const handleAlert = () => setShow(false)
+  const [showDateError, setShowDateError] = useState(false)
+  const handleAlert = () => setShowDateError(false)
   const onStartDateChange = (date: Date) => {
     date.setHours(0, 0, 0, 0)
-    if (date < currentDate || (endDate && date >= endDate)) setShow(true)
+    if (endDate && date >= endDate) setShowDateError(true)
     else setStartDate(date)
   }
   const onEndDateChange = (date: Date) => {
     date.setHours(0, 0, 0, 0)
-    if (startDate && date <= startDate) setShow(true)
+    if (startDate && date <= startDate) setShowDateError(true)
     else setEndDate(date)
   }
-  return { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, setStartDate, setEndDate }
+  return { startDate, endDate, onStartDateChange, onEndDateChange, showDateError, handleAlert, setStartDate, setEndDate }
 }
 
 export const useOption = () => {
@@ -116,7 +116,7 @@ export const useViewTable = (params: string) => {
   const [viewData, setViewData] = useState<View>()
   const [error, setError] = useState<string>()
   const { inProp, rowData, onAddRow, onDeleteRow, setInProp, setRowData, validateTimeSlot, setOverlapData, overlapData } = useRow()
-  const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, setStartDate, setEndDate } = useDate()
+  const { startDate, endDate, onStartDateChange, onEndDateChange, showDateError, handleAlert, setStartDate, setEndDate } = useDate()
   useEffect(() => {
     const source = axios.CancelToken.source()
     client
@@ -144,7 +144,7 @@ export const useViewTable = (params: string) => {
     endDate,
     onStartDateChange,
     onEndDateChange,
-    show,
+    showDateError,
     handleAlert,
     validateTimeSlot,
     setOverlapData,

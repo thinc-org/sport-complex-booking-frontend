@@ -16,7 +16,7 @@ const AddCourt = () => {
   const history = useHistory()
   const { inProp, rowData, onAddRow, onDeleteRow, setInProp, validateTimeSlot, setOverlapData, overlapData } = useRow()
   const { register, handleSubmit, setError, errors, clearErrors, control } = useForm()
-  const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert } = useDate()
+  const { startDate, endDate, onStartDateChange, onEndDateChange, showDateError, handleAlert } = useDate()
   const { option } = useOption()
   const watchSports = useWatch({ control, name: "sportObjId", defaultValue: "" })
   const onSubmit = (data: AddCourtForm) => {
@@ -61,7 +61,7 @@ const AddCourt = () => {
         <OverlapDataTable overlapData={overlapData} />
       </ErrorAlert>
       <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} validate={validateTimeSlot} />
-      <ErrorAlert inProp={show} handleClose={handleAlert} header={"วันที่ไม่ถูกต้อง"} message={"วันที่ไม่ถูกต้อง"} />
+      <ErrorAlert inProp={showDateError} handleClose={handleAlert} header={"วันที่ไม่ถูกต้อง"} message={"วันที่ไม่ถูกต้อง"} />
       <div className="default-wrapper pt-3 pb-4" style={{ boxShadow: "0 0 0 0" }}>
         <h4 style={{ paddingBottom: "15px" }}>เพิ่มการปิดคอร์ด</h4>
         <Form className="disable-court-form" onSubmit={handleSubmit(onSubmit)}>

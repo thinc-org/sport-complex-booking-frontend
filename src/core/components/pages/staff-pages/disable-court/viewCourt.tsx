@@ -29,7 +29,7 @@ const ViewCourt = () => {
     endDate,
     onStartDateChange,
     onEndDateChange,
-    show,
+    showDateError,
     handleAlert,
     validateTimeSlot,
     setOverlapData,
@@ -74,7 +74,7 @@ const ViewCourt = () => {
       >
         <OverlapDataTable overlapData={overlapData} />
       </ErrorAlert>
-      <ErrorAlert inProp={show} handleClose={handleAlert} header={"วันที่ไม่ถูกต้อง"} message={"วันที่ไม่ถูกต้อง"} />
+      <ErrorAlert inProp={showDateError} handleClose={handleAlert} header={"วันที่ไม่ถูกต้อง"} message={"วันที่ไม่ถูกต้อง"} />
       <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} validate={validateTimeSlot} />
       <Form className="default-wrapper pt-3 pb-4" style={{ boxShadow: "0 0 0 0" }}>
         <h4 style={{ paddingBottom: "15px" }}>ฟิลเตอร์</h4>
