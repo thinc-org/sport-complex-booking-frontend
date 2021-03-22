@@ -282,6 +282,7 @@
   "register": "Register Now",
   "repeatPassword":"Repeat Password",
   "accountType": "Account Type",
+  "membershipType": "Membership Type",
   "accountTypeInfo": "Account Information",
   "otherAccountTypes": {
     "question": "Select a membership type",

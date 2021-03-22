@@ -282,8 +282,9 @@
   "noAccount": "ไม่มีบัญชี? ",
   "register": "สมัครสมาชิก",
   "repeatPassword": "กรอกรหัสผ่านอีกครั้ง",
-  "accountType": "ประเภทสมาชิก",
-  "accountTypeInfo": "ข้อมูลสมาชิก",
+  "accountType": "ประเภทบัญชี",
+  "membershipType": "ประเภทสมาชิก",
+  "accountTypeInfo": "ข้อมูลบัญชีสมาชิก",
   "otherAccountTypes": {
     "question": "เลือกประเภทสมาชิก",
     "type1": "สมาชิกสามัญ ก",

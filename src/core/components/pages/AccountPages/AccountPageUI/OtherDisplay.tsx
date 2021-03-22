@@ -34,6 +34,9 @@ export default function OtherAaccountDisplay({ toggleEditButton }: AccountProps)
           <p>{user?.username}</p>
           <hr />
           <label className="form-label mt-2">{t("accountType")}</label>
+          <p>{t("OtherAccountType")}</p>
+          <hr />
+          <label className="form-label mt-2">{t("membershipType")}</label>
           <p>{user?.membership_type}</p>
           <hr />
           <div className="row">
