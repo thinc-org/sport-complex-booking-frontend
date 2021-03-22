@@ -69,7 +69,7 @@ export const Register = () => {
           <Form onSubmit={handleSubmit(onSubmit)}>
             <div className="px-3 unselectable">
               <Row className="justify-content-between">
-                <label className="form-label mt-2">{t("accountType")}</label>
+                <label className="form-label mt-2">{t("membershipType")}</label>
                 <span onClick={() => setShowAccountHint(!showAccountHint)}>
                   {!showAccountHint ? <QuestionCircle className="mt-2" size={20} /> : <QuestionCircleFill className="mt-2" size={20} />}
                 </span>

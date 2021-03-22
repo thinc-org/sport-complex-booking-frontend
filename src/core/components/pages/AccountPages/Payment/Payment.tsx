@@ -77,7 +77,7 @@ function Payment() {
             onChange={(e) => {
               if (e.target.files && e.target.files[0]?.size > 2097152) {
                 e.target.value = ""
-                alert("fileTooBig")
+                alert(t("fileTooBig"))
               } else e.target.files && set_payment_slip(e.target.files[0])
             }}
           />
