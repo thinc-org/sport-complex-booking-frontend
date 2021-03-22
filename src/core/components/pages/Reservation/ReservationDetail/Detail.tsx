@@ -2,8 +2,6 @@ import React from "react"
 import { useTranslation } from "react-i18next"
 
 import { timeConversion } from "../timeFormating"
-import { SportResponse } from "../../../../dto/reservation.dto"
-import { NameResponse } from "../../../../dto/account.dto"
 import { useLanguage, useNameLanguage } from "../../../../utils/language"
 import { DetailProps } from "./PropsInterface"
 
