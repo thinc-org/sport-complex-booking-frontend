@@ -504,7 +504,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                 accept="application/pdf"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("national_id_house_registration")}
                 onChange={(e) => {
-                  if (e.target.files && e.target.files[0]?.size > 2097152) alert("fileTooBig")
+                  if (e.target.files && e.target.files[0]?.size > 2097152) alert(t("fileTooBig"))
                   else e.target.files && set_national_id_house_registration(e.target.files[0])
                 }}
               />
@@ -534,7 +534,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                 accept="application/pdf"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("medical_certificate")}
                 onChange={(e) => {
-                  if (e.target.files && e.target.files[0]?.size > 2097152) alert("fileTooBig")
+                  if (e.target.files && e.target.files[0]?.size > 2097152) alert(t("fileTooBig"))
                   else e.target.files && set_medical_certificate(e.target.files[0])
                 }}
               />
@@ -569,7 +569,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                     accept="application/pdf"
                     readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("relationship_verification_document")}
                     onChange={(e) => {
-                      if (e.target.files && e.target.files[0]?.size > 2097152) alert("fileTooBig")
+                      if (e.target.files && e.target.files[0]?.size > 2097152) alert(t("fileTooBig"))
                       else e.target.files && set_relationship_verification_document(e.target.files[0])
                     }}
                   />
@@ -603,7 +603,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                 accept="application/pdf, image/png, image/jpeg"
                 readOnly={user?.verification_status === "Rejected"}
                 onChange={(e) => {
-                  if (e.target.files && e.target.files[0]?.size > 2097152) alert("fileTooBig")
+                  if (e.target.files && e.target.files[0]?.size > 2097152) alert(t("fileTooBig"))
                   else e.target.files && set_payment_slip(e.target.files[0])
                 }}
               />
