@@ -17,7 +17,7 @@ const ListOfCourts = () => {
   const { path } = useRouteMatch()
   const { data, maxPage, page, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete, isError, setIsError } = useTableWithPagination()
   const { register, handleSubmit, control, setValue } = useForm<ListOfCourtsForm>()
-  const { startDate, endDate, onStartDateChange, onEndDateChange, show, handleAlert, setStartDate, setEndDate } = useDate()
+  const { startDate, endDate, onStartDateChange, onEndDateChange, showDateError, handleAlert, setStartDate, setEndDate } = useDate()
   const watchSports = useWatch({ control, name: "sports", defaultValue: "" })
   const { option } = useOption()
 
@@ -47,7 +47,7 @@ const ListOfCourts = () => {
   return (
     <>
       <ErrorAlert inProp={isError} handleClose={() => setIsError(false)} header="การลบคอร์ด" message="ไม่สามารถลบคอร์ดได้ กรุณาลองอีกครั้ง" />
-      <ErrorAlert inProp={show} handleClose={handleAlert} header="วันที่ไม่ถูกต้อง" message="วันที่ไม่ถูกต้อง" />
+      <ErrorAlert inProp={showDateError} handleClose={handleAlert} header="วันที่ไม่ถูกต้อง" message="วันที่ไม่ถูกต้อง" />
       <div className="disable-court-wrapper px-1 py-2 mt-3">
         <Form className="disable-court-filter" onSubmit={handleSubmit(onSubmit)}>
           <div className="d-flex flex-row align-items-center justify-content-between">
