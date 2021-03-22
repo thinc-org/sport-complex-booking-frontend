@@ -3,7 +3,7 @@ import { useHistory, useParams } from "react-router-dom"
 import { Row, Col, Form, Button, Table } from "react-bootstrap"
 import { ReserveListRes, Room } from "../../../../dto/reservation.dto"
 import { Sport } from "../../../../dto/sport.dto"
-import format from "date-fns/format"
+import { format, isValid } from "date-fns"
 import { getTimeText } from "./ReservationDetail"
 import { client } from "../../../../../axiosConfig"
 import { AxiosResponse } from "axios"
@@ -29,8 +29,7 @@ const AllReservation: FunctionComponent = () => {
   const [sportType, setSportType] = useState<string>("") // id
   const [sportIdx, setSportIdx] = useState<string>("-2")
   const [courtNo, setCourtNo] = useState<number>(-2) // -2 is default
-  const [chooseDate, setChooseDate] = useState<boolean>(false)
-  const [searchDate, setSearchDate] = useState<Date>(new Date())
+  const [searchDate, setSearchDate] = useState<Date | null>(null)
   const [searchTime, setSearchTime] = useState<number>(-1)
   // Reservation room state
   const [reserveInfo, setReserveInfo] = useState<Room[]>([])
@@ -47,7 +46,7 @@ const AllReservation: FunctionComponent = () => {
     const data: Partial<RequestBody> = {}
     if (sportType !== "") data["sportId"] = sportType
     if (courtNo >= 0) data["courtNumber"] = courtNo
-    if (chooseDate) data["date"] = searchDate
+    if (searchDate) data["date"] = searchDate
     if (searchTime !== -1) data["timeSlot"] = searchTime
     client({
       method: "POST",
@@ -62,7 +61,7 @@ const AllReservation: FunctionComponent = () => {
       .catch(() => {
         setShowErr(true)
       })
-  }, [chooseDate, courtNo, pagename, searchDate, searchTime, sportType])
+  }, [courtNo, pagename, searchDate, searchTime, sportType])
 
   // useEffects
   useEffect(() => {
@@ -95,10 +94,9 @@ const AllReservation: FunctionComponent = () => {
   }
 
   const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChooseDate(true)
-    const today = new Date()
+    if (!isValid(new Date(e.target.value))) setSearchDate(null)
     const incom = new Date(e.target.value)
-    setSearchDate(incom < today ? today : incom)
+    setSearchDate(incom < new Date() ? null : incom)
   }
 
   // other functions //
@@ -181,14 +179,19 @@ const AllReservation: FunctionComponent = () => {
       <Col sm={3}>{sportTypeFilter}</Col>
       <Col sm={2}>{courtNumberFilter}</Col>
       <Col sm={3}>
-        <Form.Control className="form-pink" type="date" value={chooseDate ? format(searchDate, "yyyy-MM-dd") : ""} onChange={handleChangeDate} />
+        <Form.Control
+          className="form-pink"
+          type="date"
+          value={isValid(searchDate) ? format(searchDate!, "yyyy-MM-dd") : ""}
+          onChange={handleChangeDate}
+        />
       </Col>
       <Col sm={1} className="text-center">
         <Button
           className="btn-normal btn-outline-black px-3"
           variant="outline-secondary"
           style={{ borderRadius: "10px" }}
-          onClick={() => setChooseDate(false)}
+          onClick={() => setSearchDate(null)}
         >
           ลบ
         </Button>
