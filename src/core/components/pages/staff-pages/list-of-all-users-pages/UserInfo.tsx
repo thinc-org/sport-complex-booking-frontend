@@ -257,7 +257,7 @@ const UserInfo = () => {
         <Form>
           <div className="row">
             <div className="col">
-              <label className="mt-2">ประเภท</label>
+              <label className="mt-2">ประเภทบัญชี</label>
               <p className="font-weight-bold">อื่นๆ</p>
             </div>
           </div>
@@ -269,7 +269,7 @@ const UserInfo = () => {
           </div>
           <div className="row pb-2">
             <div className="col">
-              <label className="mt-2">ประเภทบัญชี</label>
+              <label className="mt-2">ประเภทสมาชิก</label>
               <p className="font-weight-bold">{membershipType}</p>
             </div>
           </div>
