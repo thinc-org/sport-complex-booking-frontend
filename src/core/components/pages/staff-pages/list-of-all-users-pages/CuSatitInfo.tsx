@@ -208,7 +208,7 @@ const UserInfo: FunctionComponent = () => {
       <div className="userInformation">
         <Row className="py-3">
           <Col>
-            <p>ประเภท</p>
+            <p>ประเภทบัญชี</p>
             <p className="font-weight-bold mb-0">{t(user.account_type.toString())}</p>
           </Col>
         </Row>
