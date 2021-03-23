@@ -5,11 +5,10 @@ import { setCookie } from "../../../contexts/cookieHandler"
 import { setIsFirstLogin, getIsFirstlogin } from "../../../../constant"
 import { client } from "../../../../axiosConfig"
 import axios, { AxiosResponse } from "axios"
-
+import { PersonalInfo } from "../../../dto/account.dto"
 import { useTranslation } from "react-i18next"
 import { ErrorOption } from "react-hook-form"
 import { LoginDTO } from "../../pages/staff-pages/staffHooks"
-import { DefaultAccount } from "../../../contexts/UsersContext"
 import { useLanguge } from "../../../i18n/i18n"
 
 interface UserResponse {
@@ -110,14 +109,15 @@ export const usePreventUserFromSignIn = () => {
   }, [history, isUser])
 }
 export const usePersonalInfo = () => {
+  const { changeLanguage } = useLanguge()
   const { token } = useAuthContext()
   const history = useHistory()
-  const onSubmit = (data: DefaultAccount) => {
+  const onSubmit = (data: PersonalInfo) => {
     client
       .put(
         `/users/validation`,
         {
-          is_thai_language: data.is_thai_language,
+          is_thai_language: data.is_thai_language === "true",
           personal_email: data.personal_email,
           phone: data.phone,
         },
@@ -129,6 +129,7 @@ export const usePersonalInfo = () => {
       )
       .then(() => {
         setIsFirstLogin(false)
+        changeLanguage(data.is_thai_language === "true" ? "th" : "en")
         history.push("/home")
       })
       .catch((err) => console.log(err))
