@@ -1,5 +1,8 @@
-import { CuStudent, Other, SatitCuPersonel } from "../contexts/UsersContext"
+import { CuStudent, Other, SatitCuPersonel, DefaultAccount } from "../contexts/UsersContext"
 
+export interface PersonalInfo extends Omit<DefaultAccount, "is_thai_language"> {
+  is_thai_language: string
+}
 export enum Account {
   CuStudent = "CuStudent",
   SatitAndCuPersonel = "SatitAndCuPersonel",
