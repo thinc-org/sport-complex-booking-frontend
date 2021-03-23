@@ -3,6 +3,7 @@ import { Form, Button, Navbar, NavbarBrand } from "react-bootstrap"
 import logo from "../../../assets/images/logo.png"
 import { useForm } from "react-hook-form"
 import { useStaffLogin } from "./staffHooks"
+import { NavHeader } from "../../ui/navbar/navbarSideEffect"
 
 function StaffLogin() {
   const { register, handleSubmit, setError, errors, clearErrors } = useForm()
@@ -12,6 +13,7 @@ function StaffLogin() {
   }
   return (
     <React.Fragment>
+      <NavHeader isOnStaffLoginPage={true} />
       <Navbar style={{ backgroundColor: "#F1E2E3" }}>
         <NavbarBrand className="mr-auto">
           <img className="logo" src={logo} alt="" />

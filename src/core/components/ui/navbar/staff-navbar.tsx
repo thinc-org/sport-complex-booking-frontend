@@ -1,20 +1,17 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { Navbar, NavbarBrand, Button } from "react-bootstrap"
 import { Link, useLocation, useHistory } from "react-router-dom"
 import { useAuthContext } from "../../../controllers/authContext"
 import { setCookie } from "../../../contexts/cookieHandler"
+import { useNavHeader } from "./navbarSideEffect"
 import logo from "../../../assets/images/logo.png"
 
 function StaffNavbar() {
+  const { isOnStaffLoginPage, isOnStaffPage } = useNavHeader()
   const { setToken } = useAuthContext()
   const location = useLocation()
   const history = useHistory()
-  const [hide, setHidden] = useState(false)
 
-  useEffect(() => {
-    if (location.pathname.toLowerCase() === "/staff" || !location.pathname.toLowerCase().includes("/staff")) setHidden(true)
-    else setHidden(false)
-  }, [location])
   const onLogout = async () => {
     setToken("")
     setCookie("token", "", 0)
@@ -22,7 +19,7 @@ function StaffNavbar() {
   }
 
   return (
-    <Navbar style={{ display: hide ? "none" : "" }}>
+    <Navbar style={{ display: isOnStaffLoginPage || !isOnStaffPage ? "none" : "" }}>
       <NavbarBrand className="mr-auto">
         <img className="logo" src={logo} alt="" />
       </NavbarBrand>

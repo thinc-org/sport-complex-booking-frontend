@@ -10,7 +10,7 @@ function Landing() {
 
   return (
     <>
-      <NavHeader isOnStaffPage={true} />
+      <NavHeader isOnStaffPage={true} isOnStaffLoginPage={true} />
       <div className="container landing" style={{ backgroundColor: "var(--bg-color)" }}>
         <div className="row landing" style={{ height: "100vh" }}>
           <div className="d-none d-sm-block my-auto col-sm-8 textgroup landing">
