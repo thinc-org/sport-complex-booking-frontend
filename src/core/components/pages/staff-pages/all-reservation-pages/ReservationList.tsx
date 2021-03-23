@@ -95,8 +95,7 @@ const AllReservation: FunctionComponent = () => {
 
   const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!isValid(new Date(e.target.value))) setSearchDate(null)
-    const incom = new Date(e.target.value)
-    setSearchDate(incom < new Date() ? null : incom)
+    else setSearchDate(new Date(e.target.value))
   }
 
   // other functions //
