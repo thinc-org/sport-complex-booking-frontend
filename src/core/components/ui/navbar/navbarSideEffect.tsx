@@ -3,12 +3,14 @@ import { useState, useEffect } from "react"
 import { EventEmitter } from "events"
 interface navHeaderState {
   isOnStaffPage: boolean
+  isOnStaffLoginPage: boolean
   header: string
 }
 
 type navHeaderProps = Partial<navHeaderState>
 
 const defaultHeader: navHeaderState = {
+  isOnStaffLoginPage: false,
   isOnStaffPage: false,
   header: "CU Sports Center",
 }
