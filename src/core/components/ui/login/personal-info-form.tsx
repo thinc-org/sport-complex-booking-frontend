@@ -29,8 +29,19 @@ const PersonalInfo = () => {
             <div style={{ marginBottom: "40px" }}>
               <Form.Group>
                 <Form.Label>{t("personalEmailLabel")}</Form.Label>
-                <Form.Control type="email" name="personal_email" placeholder="Email" ref={register({ required: true })} />
-                <Form.Text>{errors.personal_email && t("fieldIsRequired")}</Form.Text>
+                <Form.Control
+                  type="email"
+                  name="personal_email"
+                  placeholder="Email"
+                  ref={register({
+                    required: t("invalidLength").toString(),
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                      message: t("invalidEmail"),
+                    },
+                  })}
+                />
+                <Form.Text>{errors.personal_email && errors.personal_email.message}</Form.Text>
               </Form.Group>
               <Form.Group>
                 <Form.Label>{t("phoneLabel")}</Form.Label>
