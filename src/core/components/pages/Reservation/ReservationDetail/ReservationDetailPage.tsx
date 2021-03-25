@@ -30,11 +30,7 @@ const ReservationDetail = () => {
   const [validTime, setValidTime] = useState<number>()
 
   const fetchId = useCallback(() => {
-    if (location.state) {
-      setId(history.location.state.id)
-    } else {
-      history.push(history.location.state.path)
-    }
+    location.state ? setId(history.location.state.id) : history.push(history.location.state.path)
   }, [setId, history, location.state])
 
   const fetchData = useCallback(async () => {
@@ -45,7 +41,7 @@ const ReservationDetail = () => {
       setSport(reservation.sport_id)
       setCourtNum(reservation.court_number)
       setDate(new Date(reservation.date).toLocaleDateString())
-      setReservedTimeInMillisecond(new Date(reservation.date).getTime() + reservation.time_slot[0] * 3600000) //1hr = 3600000ms
+      setReservedTimeInMillisecond(new Date(reservation.date).setHours(0, 0, 0, 0) + (reservation.time_slot[0] - 1) * 3600000) //1hr = 3600000ms
       setTimeList(reservation.time_slot)
       setMemberList(reservation.list_member)
       setIsCheck(reservation.is_check)

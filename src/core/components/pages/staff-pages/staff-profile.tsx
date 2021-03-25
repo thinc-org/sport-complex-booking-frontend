@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { useLocation, useHistory } from "react-router-dom"
+
 import { client } from "../../../../axiosConfig"
 import { HandleErrorModal } from "../staff-pages/staff-management/StaffManagementComponents"
 import { ProfileResponse, Error } from "../../../dto/staffProfile.dto"
 import { ErrorAlert } from "../staff-pages/disable-court/modals"
 import { useAuthContext } from "../../../controllers/authContext"
+import { Loading } from "../../ui/loading/loading"
+
 function StaffProfile() {
   const history = useHistory<{ invalidAccess: boolean }>()
   const location = useLocation<{ invalidAccess: boolean }>()
@@ -25,8 +28,13 @@ function StaffProfile() {
     } catch (err) {
       setErrMessage((prev) => ({ ...prev, badRequest: "เกิดเหตุขัดข้อง: กรุณาตรวจสอบว่าเข้าสู่ระบบเรียบร้อยแล้ว และรีเฟรชหน้านี้อีกครั้ง" }))
       setShowError(true)
+      if (err.response.status === 401 || err.response.status === 403) {
+        setTimeout(function () {
+          history.push("/staff")
+        }, 2000)
+      }
     }
-  }, [role])
+  }, [role, history])
   const clearInvalidAcessError = () => {
     setErrMessage((prev) => ({ ...prev, invalidAccess: "" }))
     history.replace("/staff/profile", {
@@ -78,8 +86,8 @@ function StaffProfile() {
           </div>
         </div>
 
-        <div style={{ display: isLoading ? "block" : "none", margin: "50px 10px" }}>
-          <h5> LOADING ... </h5>
+        <div style={{ display: isLoading ? "block" : "none", textAlign: "center", marginTop: "10%" }}>
+          <Loading />
         </div>
       </div>
     </>
