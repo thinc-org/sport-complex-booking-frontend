@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react"
+import React, { useState, useCallback, useEffect } from "react"
 
 import { Link, useHistory } from "react-router-dom"
 import { Button } from "react-bootstrap"
@@ -22,6 +22,7 @@ const ButtonAndWarning: React.FC<ButtonAndWarningProps> = ({
   const history = useHistory<LocationResponse>()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [cancellationAllowance, setCancellationAllowance] = useState(true)
   const [punishment, setPunishment] = useState(false)
 
   const fetchCancellationData = useCallback(async () => {
@@ -35,25 +36,26 @@ const ButtonAndWarning: React.FC<ButtonAndWarningProps> = ({
     }
   }, [setLateCancellationDay, setLateCancellationPunishment])
 
-  const cancelValidation = (reservedTime: number) => {
-    if (lateCancellationPunishment === 0) {
-      setPunishment(false)
-      return
-    }
-    const currentTime = new Date().getTime()
-    const differenceHour = Math.floor((reservedTime - currentTime) / 3600000) // 1 hour = 3600000 millisecond
-    if (lateCancellationDay) {
+  const cancelValidation = useCallback(
+    (reservedTime: number) => {
+      if (lateCancellationPunishment === 0) return setPunishment(false)
+
+      const currentTime = new Date().getTime()
+      const differenceHour = (reservedTime - currentTime) / 3600000 // 1 hour = 3600000 milliseconds
+      const differenceMinute = (reservedTime - currentTime) / 60000 // 1 minute = 60000 milliseconds
+      if (lateCancellationDay === undefined) return
       const lateCancellationHour = lateCancellationDay * 24
-      console.log("late cancellation hours:" + lateCancellationHour)
-      if (differenceHour < lateCancellationHour) {
-        setPunishment(true)
-        return
-      } else {
-        setPunishment(false)
-        return
-      }
-    }
-  }
+      if (differenceMinute < 121) return setCancellationAllowance(false)
+      if (differenceHour < lateCancellationHour) return setPunishment(true)
+
+      return setPunishment(false)
+    },
+    [lateCancellationDay, lateCancellationPunishment]
+  )
+
+  useEffect(() => {
+    reservedTime && cancelValidation(reservedTime)
+  }, [cancelValidation, reservedTime])
 
   const triggerModal = () => {
     fetchCancellationData()
@@ -67,8 +69,7 @@ const ButtonAndWarning: React.FC<ButtonAndWarningProps> = ({
       .then(() => {
         history.push(history.location.state.path)
       })
-      .catch((err) => {
-        console.log(err.message)
+      .catch(() => {
         triggerModal()
       })
   }
@@ -96,21 +97,26 @@ const ButtonAndWarning: React.FC<ButtonAndWarningProps> = ({
           modalOpen={isModalOpen}
           triggerModal={triggerModal}
           punishment={punishment}
+          cancellationAllowance={cancellationAllowance}
           confirmCancellation={confirmCancellation}
           lateCancellationPunishment={lateCancellationPunishment}
         />
       )}
 
-      {!isCheck && lateCancellationPunishment !== 0 && (
-        <div className="mb-5" style={{ fontSize: "14px", fontWeight: 300 }}>
-          <span> {t("reminder")} </span>
-          <br />{" "}
-          {t("cancelReservationCondition", {
-            lateCancellationDay: lateCancellationDay?.toString(),
-            lateCancellationPunishment: lateCancellationPunishment?.toString(),
-          })}
-        </div>
-      )}
+      <div className="mb-5" style={{ fontSize: "14px", fontWeight: 300 }}>
+        <span> {t("reminder")} </span>
+        <br />{" "}
+        {!isCheck && lateCancellationPunishment !== 0 && lateCancellationDay !== 0 && (
+          <>
+            {t("cancelReservationCondition", {
+              lateCancellationDay: lateCancellationDay?.toString(),
+              lateCancellationPunishment: lateCancellationPunishment?.toString(),
+            })}
+            <br />
+          </>
+        )}
+        {t("cancellationUnallowed")}
+      </div>
     </>
   )
 }

@@ -14,7 +14,7 @@ const Detail: React.FC<DetailProps> = ({ sport, courtNum, date, timeList, member
   return (
     <div className="box-container mb-4" style={{ width: "100%" }}>
       <div>
-        <h4 className="mb-2"> {sport && sport[sportLanguage]} </h4>
+        <h4 className="mb-2"> {sport?.[sportLanguage]} </h4>
         <h6 className="mb-0 font-weight-light">
           {t("court")}: {courtNum}
         </h6>
@@ -28,14 +28,13 @@ const Detail: React.FC<DetailProps> = ({ sport, courtNum, date, timeList, member
       <hr />
       <div>
         <h6 className="mb-2"> {t("members")} </h6>
-        {memberList &&
-          memberList.map((eachMember, index) => {
-            return (
-              <h6 className="mb-0" style={{ fontWeight: 300 }} key={index}>
-                {index + 1}. {eachMember[nameLanguage]}
-              </h6>
-            )
-          })}
+        {memberList?.map((eachMember, index) => {
+          return (
+            <h6 className="mb-0" style={{ fontWeight: 300 }} key={index}>
+              {index + 1}. {eachMember[nameLanguage]}
+            </h6>
+          )
+        })}
       </div>
     </div>
   )
