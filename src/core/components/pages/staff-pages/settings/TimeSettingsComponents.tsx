@@ -68,7 +68,7 @@ export const EditTime: React.FC<NormalModalProps> = ({ show, setShow }) => {
       <Modal.Header closeButton>
         <Modal.Title>สําเร็จ</Modal.Title>
       </Modal.Header>
-      <Modal.Body style={{ fontWeight: "lighter" }}>ระบบได้ทําการเปลี่ยนเวลารียบร้อยแล้ว</Modal.Body>
+      <Modal.Body style={{ fontWeight: "lighter" }}>ระบบได้ทําการเปลี่ยนเวลาเรียบร้อยแล้ว</Modal.Body>
       <Modal.Footer>
         <Button
           variant="pink"

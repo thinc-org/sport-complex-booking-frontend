@@ -107,17 +107,15 @@ const ButtonAndWarning: React.FC<ButtonAndWarningProps> = ({
         <span style={{ fontSize: "18px" }}> {t("reminder")} </span>
         <br />{" "}
         <ul>
-          <li>
-            {!isCheck && lateCancellationPunishment !== 0 && lateCancellationDay !== 0 && (
-              <>
-                {t("cancelReservationCondition", {
-                  lateCancellationDay: lateCancellationDay?.toString(),
-                  lateCancellationPunishment: lateCancellationPunishment?.toString(),
-                })}
-                <br />
-              </>
-            )}
-          </li>
+          {!isCheck && lateCancellationPunishment !== 0 && lateCancellationDay !== 0 && (
+            <li>
+              {t("cancelReservationCondition", {
+                lateCancellationDay: lateCancellationDay?.toString(),
+                lateCancellationPunishment: lateCancellationPunishment?.toString(),
+              })}
+              <br />
+            </li>
+          )}
           <li>{t("cancellationUnallowed")}</li>
         </ul>
       </div>
