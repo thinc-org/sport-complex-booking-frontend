@@ -121,7 +121,6 @@ export const usePersonalInfo = () => {
         }
       )
       .then(() => {
-        console.log(data)
         setIsFirstLogin(false)
         changeLanguage(data.is_thai_language === "true" ? "th" : "en")
         history.push("/home")
