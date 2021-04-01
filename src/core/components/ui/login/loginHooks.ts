@@ -101,13 +101,6 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
   return { isLoading, onLogin }
 }
 
-export const usePreventUserFromSignIn = () => {
-  const history = useHistory()
-  const { isUser } = useAuthContext()
-  useEffect(() => {
-    if (isUser) history.push("/home")
-  }, [history, isUser])
-}
 export const usePersonalInfo = () => {
   const { changeLanguage } = useLanguge()
   const { token } = useAuthContext()
