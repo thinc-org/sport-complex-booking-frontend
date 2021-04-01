@@ -8,7 +8,8 @@ import { useTranslation } from "react-i18next"
 const PersonalInfo = () => {
   const { t } = useTranslation()
   const { onSubmit, changeLanguage } = usePersonalInfo()
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit, errors, watch } = useForm()
+  const watchIsThaiLanguage = watch("is_thai_language")
   return (
     <>
       <NavHeader header="Tell us about yourself" />
@@ -17,11 +18,23 @@ const PersonalInfo = () => {
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Form.Label>{t("language")}</Form.Label>
             <div style={{ marginBottom: "24px" }}>
-              <ToggleButtonGroup type="radio" name="is_thai_language" defaultValue={false}>
-                <ToggleButton variant="toggle" inputRef={register} value={"true"} onClick={() => changeLanguage("th")}>
+              <ToggleButtonGroup type="radio" name="is_thai_language" defaultValue={"false"}>
+                <ToggleButton
+                  className={watchIsThaiLanguage === "true" ? "toggled" : ""}
+                  variant="toggle"
+                  inputRef={register}
+                  value={"true"}
+                  onClick={() => changeLanguage("th")}
+                >
                   {t("th")}
                 </ToggleButton>
-                <ToggleButton variant="toggle" inputRef={register} value={"false"} onClick={() => changeLanguage("en")}>
+                <ToggleButton
+                  className={watchIsThaiLanguage === "false" ? "toggled" : ""}
+                  variant="toggle"
+                  inputRef={register}
+                  value={"false"}
+                  onClick={() => changeLanguage("en")}
+                >
                   {t("en")}
                 </ToggleButton>
               </ToggleButtonGroup>

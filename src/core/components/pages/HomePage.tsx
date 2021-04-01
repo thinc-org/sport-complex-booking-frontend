@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react"
-import { Link } from "react-router-dom"
+import { Link , useHistory } from "react-router-dom"
 import { client } from "../../../axiosConfig"
 import { useTranslation } from "react-i18next"
 import { CookieModal } from "../ui/Modals/CookieModal"
@@ -10,6 +10,7 @@ import { Loading } from "../ui/loading/loading"
 import { useLanguage } from "../../utils/language"
 import { NameResponse } from "../../dto/account.dto"
 import JoinWaitingRoom from "./Reservation/JoinWaitingRoom"
+
 import { Row } from "react-bootstrap"
 
 const HomePage = () => {
@@ -18,6 +19,7 @@ const HomePage = () => {
   const [disable, setDisable] = useState(true)
   const { t } = useTranslation()
   const language = useLanguage()
+  const history = useHistory()
   const languageName = language === "th" ? "name_th" : "name_en"
   const [isLoading, setIsLoading] = useState(true)
   const [showReserveNowHint, setShowReserveNowHint] = useState(false)
@@ -26,13 +28,14 @@ const HomePage = () => {
   const fetchUserName = useCallback(async () => {
     try {
       const res = await client.get("/account_info/")
+      if (res.data.is_first_login) history.replace("/personal")
       setName(res.data)
       if (res.data.name_en) setDisable(false)
       setIsLoading(false)
     } catch (err) {
       console.log(err)
     }
-  }, [])
+  }, [history])
 
   useEffect(() => {
     fetchUserName()
