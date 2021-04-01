@@ -11,3 +11,9 @@ p {
   font-weight: bold;
   font-size: 2rem;
 }
+.toggled {
+  background-color: var(--pink-color) !important;
+  outline: 0;
+  color: white;
+  box-shadow: 0 0 0;
+}
