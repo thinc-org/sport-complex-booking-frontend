@@ -1,0 +1,18 @@
+version: "3"
+services:
+  app:
+    image: ghcr.io/thinc-org/sport-complex-booking-frontend:master
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=shared"
+      - "traefik.http.routers.frontend-master.entrypoints=websecure"
+      - "traefik.http.routers.frontend-master.rule=Host(`book.cusc.chula.ac.th`)"
+      - "traefik.http.routers.frontend-master.tls=true"
+      - "traefik.http.routers.frontend-master.tls.certresolver=letsencrypt"
+    networks:
+      - shared
+networks:
+  shared:
+    external:
+      name: shared
