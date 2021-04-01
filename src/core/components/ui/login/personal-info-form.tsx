@@ -12,7 +12,7 @@ const PersonalInfo = () => {
   const watchIsThaiLanguage = watch("is_thai_language")
   return (
     <>
-      <NavHeader header="Tell us about yourself" />
+      <NavHeader header={t("personalInfo")} />
       <Container>
         <div className="page-wrap">
           <Form onSubmit={handleSubmit(onSubmit)}>
