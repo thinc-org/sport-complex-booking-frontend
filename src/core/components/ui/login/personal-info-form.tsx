@@ -7,7 +7,7 @@ import { usePersonalInfo } from "./loginHooks"
 import { useTranslation } from "react-i18next"
 const PersonalInfo = () => {
   const { t } = useTranslation()
-  const { onSubmit } = usePersonalInfo()
+  const { onSubmit, changeLanguage } = usePersonalInfo()
   const { register, handleSubmit, errors } = useForm()
   return (
     <>
@@ -18,10 +18,10 @@ const PersonalInfo = () => {
             <Form.Label>{t("language")}</Form.Label>
             <div style={{ marginBottom: "24px" }}>
               <ToggleButtonGroup type="radio" name="is_thai_language" defaultValue={false}>
-                <ToggleButton variant="toggle" inputRef={register} value={"true"}>
+                <ToggleButton variant="toggle" inputRef={register} value={"true"} onClick={() => changeLanguage("th")}>
                   {t("th")}
                 </ToggleButton>
-                <ToggleButton variant="toggle" inputRef={register} value={"false"}>
+                <ToggleButton variant="toggle" inputRef={register} value={"false"} onClick={() => changeLanguage("en")}>
                   {t("en")}
                 </ToggleButton>
               </ToggleButtonGroup>
