@@ -102,7 +102,7 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
 }
 
 export const usePersonalInfo = () => {
-  const { changeLanguage } = useLanguge()
+  const { changeLanguage, language } = useLanguge()
   const { token } = useAuthContext()
   const history = useHistory()
   const onSubmit = (data: PersonalInfo) => {
