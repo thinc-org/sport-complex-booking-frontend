@@ -7,7 +7,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=shared"
       - "traefik.http.routers.frontend-staging.entrypoints=websecure"
-      - "traefik.http.routers.frontend-staging.rule=Host(`staging.sc.suphon.dev`)"
+      - "traefik.http.routers.frontend-staging.rule=Host(`staging.sc-prod.suphon.dev`)"
       - "traefik.http.routers.frontend-staging.tls=true"
       - "traefik.http.routers.frontend-staging.tls.certresolver=letsencrypt"
     networks:

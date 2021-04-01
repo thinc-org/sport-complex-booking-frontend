@@ -1,9 +1,10 @@
-name: Staging deployment
+name: Deployment
 
 on:
   push:
     branches:
       - dev
+      - master
 
 jobs:
   build-and-deploy:
@@ -31,10 +32,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          host: ${{ secrets.VM_HOST }}
-          username: ${{ secrets.VM_USER }}
-          key: ${{ secrets.VM_KEY }}
-          port: ${{ secrets.VM_PORT }}
+          host: ${{ secrets.PROD_VM_HOST }}
+          username: ${{ secrets.PROD_VM_USER }}
+          key: ${{ secrets.PROD_VM_KEY }}
+          port: ${{ secrets.PROD_VM_PORT }}
           envs: GITHUB_TOKEN, GITHUB_REPOSITORY, PROJECT, BRANCH, STAGE
           script: |
             set -e
