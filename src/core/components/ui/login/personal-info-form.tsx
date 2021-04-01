@@ -5,11 +5,12 @@ import { useForm } from "react-hook-form"
 import withUserGuard from "../../../guards/user.guard"
 import { usePersonalInfo } from "./loginHooks"
 import { useTranslation } from "react-i18next"
+import { useLanguage } from "../../../utils/language"
 const PersonalInfo = () => {
   const { t } = useTranslation()
   const { onSubmit, changeLanguage } = usePersonalInfo()
   const { register, handleSubmit, errors, watch } = useForm()
-  const watchIsThaiLanguage = watch("is_thai_language")
+  const language = useLanguage()
   return (
     <>
       <NavHeader header={t("personalInfo")} />
@@ -18,9 +19,9 @@ const PersonalInfo = () => {
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Form.Label>{t("language")}</Form.Label>
             <div style={{ marginBottom: "24px" }}>
-              <ToggleButtonGroup type="radio" name="is_thai_language" defaultValue={"false"}>
+              <ToggleButtonGroup type="radio" name="is_thai_language" defaultValue={language === "en" ? "false" : "true"}>
                 <ToggleButton
-                  className={watchIsThaiLanguage === "true" ? "toggled" : ""}
+                  className={language === "th" ? "toggled" : ""}
                   variant="toggle"
                   inputRef={register}
                   value={"true"}
@@ -29,7 +30,7 @@ const PersonalInfo = () => {
                   {t("th")}
                 </ToggleButton>
                 <ToggleButton
-                  className={watchIsThaiLanguage === "false" ? "toggled" : ""}
+                  className={language === "en" ? "toggled" : ""}
                   variant="toggle"
                   inputRef={register}
                   value={"false"}
