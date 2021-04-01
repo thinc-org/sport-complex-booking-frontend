@@ -326,5 +326,6 @@
   "accountExpiredTitle": "Your account has expired.",
   "accountExpiredMessage": "You can no longer create or join a reservation. You can extend your membership by submitting your payment evidence below and wait for staff's approval.",
   "cancellationUnallowed": "Cancellation within 2 hours is not allowed.",
-  "personalInfo": "Tell us about yourself"
+  "personalInfo": "Tell us about yourself",
+  "cuHedaer": "CU Sports Center"
 }
