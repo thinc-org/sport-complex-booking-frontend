@@ -129,7 +129,7 @@ const AddUser: FunctionComponent = () => {
               </Col>
               <Col>
                 <Form.Label>เบอร์โทรศัพท์</Form.Label>
-                <Form.Control ref={register} name="phone" defaultValue={phone} />
+                <Form.Control ref={register} name="phone" defaultValue={phone} type="number" />
               </Col>
             </Row>
           </Form.Group>

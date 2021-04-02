@@ -644,6 +644,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           setShow={setShowRegisterSuccess}
           click={() => {
             history.push("/login")
+            setCookie("token", null, 0)
           }}
         />
         {/* REGISTRATION ERROR MODAL */}

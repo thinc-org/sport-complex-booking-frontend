@@ -9,7 +9,7 @@ import Exit from "../../../assets/images/icons/exit.svg"
 import { data } from "./sidebarData"
 import { useNavHeader } from "./navbarSideEffect"
 import { useTranslation } from "react-i18next"
-import { useLanguge } from "../../../i18n/i18n"
+import { useLanguage } from "../../../i18n/i18n"
 import { UserContext } from "../../../contexts/UsersContext"
 
 const Sidebar = () => {
@@ -17,7 +17,7 @@ const Sidebar = () => {
   const { header, isOnStaffPage } = useNavHeader()
   const { isUser, setToken } = useAuthContext()
   const { t } = useTranslation()
-  const { changeLanguage } = useLanguge()
+  const { changeLanguage } = useLanguage()
   const { clearUser } = useContext(UserContext)
   const listItems = data.map((item, index) => (
     <li key={index}>
@@ -33,7 +33,7 @@ const Sidebar = () => {
     if (getCookie("type") === "CUStudent") {
       window.location.href = `https://account.it.chula.ac.th/logout?service=${process.env.REACT_APP_URL}`
     }
-    setCookie('type',null,0)
+    setCookie("type", null, 0)
     clearUser()
   }
 

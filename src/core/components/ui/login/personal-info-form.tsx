@@ -9,7 +9,7 @@ import { useLanguage } from "../../../utils/language"
 const PersonalInfo = () => {
   const { t } = useTranslation()
   const { onSubmit, changeLanguage } = usePersonalInfo()
-  const { register, handleSubmit, errors, watch } = useForm()
+  const { register, handleSubmit, errors } = useForm()
   const language = useLanguage()
   return (
     <>
@@ -19,7 +19,7 @@ const PersonalInfo = () => {
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Form.Label>{t("language")}</Form.Label>
             <div style={{ marginBottom: "24px" }}>
-              <ToggleButtonGroup type="radio" name="is_thai_language" defaultValue={language === "en" ? "false" : "true"}>
+              <ToggleButtonGroup type="radio" name="is_thai_language" value={language === "en" ? "false" : "true"}>
                 <ToggleButton
                   className={language === "th" ? "toggled" : ""}
                   variant="toggle"

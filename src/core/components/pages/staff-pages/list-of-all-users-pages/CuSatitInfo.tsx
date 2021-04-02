@@ -372,7 +372,7 @@ const UserInfo: FunctionComponent = () => {
           <Row>
             <Col className="py-3">
               <p>เบอร์โทร</p>
-              <Form.Control ref={register} name="phone" defaultValue={user.phone} />
+              <Form.Control ref={register} name="phone" defaultValue={user.phone} type="number" />
             </Col>
           </Row>
           {errors.phone && (
