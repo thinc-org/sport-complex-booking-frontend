@@ -1,6 +1,6 @@
 {
   "cuSportCenter": "CU Sports Center",
-  "th": "Thai",
+  "th": "ไทย",
   "en": "English",
   "phoneLabel": "Mobile Phone Number",
   "personalEmailLabel": "Personal Email",
@@ -43,7 +43,7 @@
   "contact_person_phone": "Mobile Phone Number *",
   "viewFile": "View File",
   "noFile": "No File",
-  "user_photo": "Your Photo (Image File)",
+  "user_photo": "Your Photo (image file)",
   "national_id_house_registration": "National ID / Passport / House Registration Number (.pdf only)",
   "medical_certificate": "Medical Certificate (private or public hospitals only) (.pdf only)",
   "relationship_verification_document": "Optional: Relationship Verification document (.pdf only)",
