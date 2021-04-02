@@ -29,7 +29,7 @@ i18n
 
 type Language = "th" | "en"
 
-export const useLanguge = () => {
+export const useLanguage = () => {
   const { i18n } = useTranslation()
   const language = i18n.language as Language
 

@@ -9,7 +9,7 @@ import { PersonalInfo } from "../../../dto/account.dto"
 import { useTranslation } from "react-i18next"
 import { ErrorOption } from "react-hook-form"
 import { LoginDTO } from "../../pages/staff-pages/staffHooks"
-import { useLanguge } from "../../../i18n/i18n"
+import { useLanguage } from "../../../i18n/i18n"
 
 interface UserResponse {
   token: string
@@ -24,7 +24,7 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
   const { path } = useRouteMatch()
   const [isLoading, setLoading] = useState(false)
   const { i18n, t } = useTranslation()
-  const { changeLanguage } = useLanguge()
+  const { changeLanguage } = useLanguage()
 
   const onLogin = (data: LoginDTO) => {
     setLoading(true)
@@ -79,6 +79,7 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
             setIsFirstLogin(first_time_login)
             if (res.data.is_first_login) history.push("/personal")
             else history.push("/home")
+            console.log("register and log in: ", res.data.is_thai_language)
             if (res.data.is_thai_language) changeLanguage("th")
             else changeLanguage("en")
           }
@@ -102,7 +103,7 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
 }
 
 export const usePersonalInfo = () => {
-  const { changeLanguage, language } = useLanguge()
+  const { changeLanguage, language } = useLanguage()
   const { token } = useAuthContext()
   const history = useHistory()
   const onSubmit = (data: PersonalInfo) => {
@@ -110,7 +111,7 @@ export const usePersonalInfo = () => {
       .put(
         `/users/validation`,
         {
-          is_thai_language: data.is_thai_language === "true",
+          is_thai_language: language === "th",
           personal_email: data.personal_email,
           phone: data.phone,
         },
