@@ -84,7 +84,7 @@ export const Register = () => {
             </div>
             {renderTypeSelect}
             <hr />
-            <label className="form-label mt-2">{t("username") + ` (${t("personalEmailLabel")})`}</label>
+            <label className="form-label mt-2">{t("username")}</label>
             {showNextForm ? (
               <p>{credentials?.username}</p>
             ) : (
