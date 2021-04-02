@@ -54,10 +54,10 @@ const Sidebar = () => {
               <div>
                 <li className="m-0 p-0">{t("language")}</li>
                 <Button variant="pink" size="sm" className="btn" onClick={() => changeLanguage("en")}>
-                  en
+                  {t("en")}
                 </Button>
                 <Button variant="pink" size="sm" className="btn" onClick={() => changeLanguage("th")}>
-                  th
+                  {t("th")}
                 </Button>
                 <li>
                   {!isUser ? (

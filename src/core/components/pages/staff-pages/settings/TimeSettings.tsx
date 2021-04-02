@@ -82,7 +82,7 @@ export default function TimeSettings() {
           />
         </div>
         <div>
-          <h5 className="card-title font-weight-bold">ห้องรอ</h5>
+          <h5 className="card-title font-weight-bold">ห้องรอการจอง</h5>
         </div>
         <div className="my-3">
           <SettingsCard
