@@ -130,6 +130,11 @@ const AddUser: FunctionComponent = () => {
               <Col>
                 <Form.Label>เบอร์โทรศัพท์</Form.Label>
                 <Form.Control ref={register} name="phone" defaultValue={phone} type="tel" />
+                {errors.phone && (
+                  <span role="alert" style={{ fontWeight: "lighter", color: "red" }}>
+                    {errors.phone.message}
+                  </span>
+                )}
               </Col>
             </Row>
           </Form.Group>
