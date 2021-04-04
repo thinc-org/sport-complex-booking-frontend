@@ -308,13 +308,13 @@ export default function OtherEditInfoComponent({
               name="home_phone"
               className="border"
               style={{ backgroundColor: "white" }}
-              type="number"
+              type="tel"
               defaultValue={home_phone}
             />
             {errors.home_phone && errorMassage(errors.home_phone.message)}
             <hr />
             <label className="form-label mt-2">เบอร์โทรศัพท์มือถือ</label>
-            <Form.Control ref={register} name="phone" className="border" style={{ backgroundColor: "white" }} type="number" defaultValue={phone} />
+            <Form.Control ref={register} name="phone" className="border" style={{ backgroundColor: "white" }} type="tel" defaultValue={phone} />
             {errors.phone && errorMassage(errors.phone.message)}
             <hr />
             <label className="form-label mt-2">คุณมีโรคประจำตัวหรือไม่ (ถ้าไม่มี โปรดเว้นว่างเอาไว้)</label>
@@ -383,7 +383,7 @@ export default function OtherEditInfoComponent({
               name="contact_person_home_phone"
               className="border"
               style={{ backgroundColor: "white" }}
-              type="number"
+              type="tel"
               defaultValue={contact_person_home_phone}
             />
             {errors.contact_person_home_phone && errorMassage(errors.contact_person_home_phone.message)}
@@ -394,7 +394,7 @@ export default function OtherEditInfoComponent({
               name="contact_person_phone"
               className="border"
               style={{ backgroundColor: "white" }}
-              type="number"
+              type="tel"
               defaultValue={contact_person_phone}
             />
             {errors.contact_person_phone && errorMassage(errors.contact_person_phone.message)}
