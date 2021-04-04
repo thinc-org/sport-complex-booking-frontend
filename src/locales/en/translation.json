@@ -327,5 +327,6 @@
   "accountExpiredMessage": "You can no longer create or join a reservation. You can extend your membership by submitting your payment evidence below and wait for staff's approval.",
   "cancellationUnallowed": "Cancellation within 2 hours is not allowed.",
   "personalInfo": "Tell us about yourself",
-  "cuHeader": "CU Sports Center"
+  "cuHeader": "CU Sports Center",
+  "invalidPhoneNum": "Invalid phone number."
 }
