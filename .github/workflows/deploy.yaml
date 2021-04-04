@@ -26,7 +26,7 @@ jobs:
           username: sport-complex-booking
           password: "${{ secrets.GHCR_PAT }}"
           registry: ghcr.io
-          build_extra_args: "--build-arg=stage=dev"
+          build_extra_args: "--build-arg=stage=${{ env.STAGE }}"
       - uses: appleboy/ssh-action@master
         name: Deploy to VM
         env:
