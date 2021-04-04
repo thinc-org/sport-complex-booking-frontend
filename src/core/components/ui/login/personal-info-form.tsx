@@ -6,10 +6,13 @@ import withUserGuard from "../../../guards/user.guard"
 import { usePersonalInfo } from "./loginHooks"
 import { useTranslation } from "react-i18next"
 import { useLanguage } from "../../../utils/language"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { infoSchema } from "../../../schemas/editUserInfo"
+
 const PersonalInfo = () => {
   const { t } = useTranslation()
   const { onSubmit, changeLanguage } = usePersonalInfo()
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit, errors } = useForm({ resolver: yupResolver(infoSchema) })
   const language = useLanguage()
   return (
     <>
