@@ -342,7 +342,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           <label className="form-label mt-2">{t("home_phone")}</label>
           <input
             name="home_phone"
-            type="number"
+            type="tel"
             ref={register}
             readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("home_phone")}
             placeholder="02xxxxxxx"
@@ -356,7 +356,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           <label className="form-label mt-2">{t("mobile_phone")}</label>
           <input
             name="phone"
-            type="number"
+            type="tel"
             ref={register}
             readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("phone")}
             placeholder="0xxxxxxxxx"
@@ -427,7 +427,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           <label className="form-label mt-2">{t("contact_person_home_phone")}</label>
           <input
             name="contact_person.contact_person_home_phone"
-            type="number"
+            type="tel"
             ref={register}
             readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("contact_person_home_phone")}
             placeholder="0xxxxxxxx"
@@ -440,7 +440,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
           <label className="form-label mt-2">{t("contact_person_phone")}</label>
           <input
             name="contact_person.contact_person_phone"
-            type="number"
+            type="tel"
             ref={register}
             readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("contact_person_phone")}
             placeholder="0xxxxxxxxx"

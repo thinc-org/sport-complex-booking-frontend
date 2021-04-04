@@ -41,7 +41,7 @@ const Sidebar = () => {
     <div style={{ display: isOnStaffPage ? "none" : "" }}>
       <div className="sidebar-toggler d-flex flex-row justify-content-center">
         <img src={Toggler} onClick={() => setInProp(true)} alt="" />
-        <h1 className="d-flex flex-row justify-content-center w-100">{header ? header : t("cuSportCenter")}</h1>
+        <h1 className="d-flex flex-row justify-content-center w-100">{header ? header : t("cuHeader")}</h1>
       </div>
       <CSSTransition in={inProp} timeout={300} classNames="fade">
         <div className="sidebar">
