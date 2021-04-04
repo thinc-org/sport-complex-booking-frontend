@@ -79,7 +79,6 @@ export const useLogin = (setError: (name: string, error: ErrorOption) => void) =
             setIsFirstLogin(first_time_login)
             if (res.data.is_first_login) history.push("/personal")
             else history.push("/home")
-            console.log("register and log in: ", res.data.is_thai_language)
             if (res.data.is_thai_language) changeLanguage("th")
             else changeLanguage("en")
           }

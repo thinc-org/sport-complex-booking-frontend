@@ -59,7 +59,7 @@ const PersonalInfo = () => {
               </Form.Group>
               <Form.Group>
                 <Form.Label>{t("phoneLabel")}</Form.Label>
-                <Form.Control type="text" name="phone" placeholder="Mobile Number" ref={register({ required: true, minLength: 10, maxLength: 15 })} />
+                <Form.Control type="tel" name="phone" placeholder="Mobile Number" ref={register({ required: true, minLength: 10, maxLength: 15 })} />
                 <Form.Text>{errors.phone && t("invalidLength")}</Form.Text>
               </Form.Group>
             </div>

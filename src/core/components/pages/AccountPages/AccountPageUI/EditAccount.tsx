@@ -55,7 +55,7 @@ export default function EditAccount({ toggleEditButton, user }: AccountProps) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="">
             <label className="form-label mt-2">{t("phoneLabel")}</label>
-            <input name="phone" type="number" ref={register} placeholder="0xxxxxxxxx" defaultValue={user?.phone} className="form-control" />
+            <input name="phone" type="tel" ref={register} placeholder="0xxxxxxxxx" defaultValue={user?.phone} className="form-control" />
             {errors.mobile && <p id="input-error">{errors.mobile.message}</p>}
 
             <label className="form-label mt-2">{t("personalEmailLabel")}</label>
