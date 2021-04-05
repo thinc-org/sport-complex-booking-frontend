@@ -5,7 +5,7 @@ import { EdittedData, CustomAccountModal } from "../../../ui/Modals/AccountPageM
 import { useTranslation } from "react-i18next"
 import { client } from "../../../../../axiosConfig"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { infoSchema } from "../../../../schemas/editUserInfo"
+import { infoWithAddressSchema } from "../../../../schemas/editUserInfo"
 import { useNameLanguage } from "../../../../utils/language"
 import { AccountProps } from "../../../../dto/account.dto"
 
@@ -19,7 +19,7 @@ export default function EditAccount({ toggleEditButton, user }: AccountProps) {
   const surnameLanguage = useNameLanguage("surname")
 
   // React Hook Forms
-  const { register, handleSubmit, errors } = useForm({ resolver: yupResolver(infoSchema) })
+  const { register, handleSubmit, errors } = useForm({ resolver: yupResolver(infoWithAddressSchema) })
 
   const onSubmit = (data: EdittedData) => {
     setShow(true)

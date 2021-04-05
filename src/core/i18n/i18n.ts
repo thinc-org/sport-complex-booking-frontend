@@ -11,7 +11,7 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: getCookie("is_thai_language") === "true" ? "th" : "en",
+    fallbackLng: getCookie("is_thai_language") === "false" ? "en" : "th",
     debug: process.env.NODE_ENV === "development",
     resources: {
       th: { common: th },
