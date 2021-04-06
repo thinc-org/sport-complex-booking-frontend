@@ -2,7 +2,8 @@ import React, { useState } from "react"
 import { useParams } from "react-router-dom"
 import { Button, Card, Form } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
-import { OtherComponentInfo, EditComponentInfo } from "../interfaces/InfoInterface"
+import { OtherComponentInfo, EditComponentInfo, ModalUserInfo } from "../interfaces/InfoInterface"
+import { UploadErrModal } from "./ListOfAllUserModals"
 import format from "date-fns/format"
 import isValid from "date-fns/isValid"
 import { useFormContext } from "react-hook-form"
@@ -18,9 +19,11 @@ export default function OtherEditInfoComponent({
   handleSave: (canSave: boolean, newPenExp: Date, newAccExp: Date) => void
 }) {
   // Page state //
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { register, handleSubmit, errors } = useFormContext()
   const { _id } = useParams<{ _id: string }>()
+
+  const [showUploadErr, setShowUploadErr] = useState<ModalUserInfo>("none") // use only "none" && "showUploadErr"
   const [userPhotoFile, setUserPhotoFile] = useState<File>()
   const [medicalCertificateFile, setMedicalCertificateFile] = useState<File>()
   const [nationalIdPhotoFile, setNationalIdPhotoFile] = useState<File>()
@@ -71,6 +74,7 @@ export default function OtherEditInfoComponent({
           })
         })
         .catch(({ response }) => {
+          setShowUploadErr("showUploadErr")
           console.log(response)
         })
     }
@@ -477,6 +481,7 @@ export default function OtherEditInfoComponent({
           บันทึก
         </Button>
       </div>
+      <UploadErrModal showModalInfo={showUploadErr} setShowModalInfo={setShowUploadErr} />
     </Form>
   )
 }

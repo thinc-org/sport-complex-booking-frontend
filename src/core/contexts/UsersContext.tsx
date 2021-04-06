@@ -25,6 +25,12 @@ export interface CuStudent extends DefaultAccount {
 
 export interface SatitCuPersonel extends DefaultAccount {
   account_type: "SatitAndCuPersonel"
+  account_expiration_date: Date
+  verification_status: string
+  rejected_info: string
+  student_card_photo_status: string
+  student_card_photo: string
+  previous_student_card_photo: string[]
 }
 
 export interface Other extends DefaultAccount {
