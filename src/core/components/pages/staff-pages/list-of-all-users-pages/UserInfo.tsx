@@ -145,7 +145,7 @@ const UserInfo = () => {
   }
 
   const handleSave = (canSave: boolean, newPenExp: Date, newAccExp: Date) => {
-    if (!tempIsPenalize || (canSave && newPenExp >= new Date() && newAccExp >= new Date())) {
+    if ((!tempIsPenalize && canSave) || (canSave && newPenExp >= new Date() && newAccExp >= new Date())) {
       setTempExpiredPenalizeDate(newPenExp ? newPenExp : null)
       setTempAccountExpiredDate(newAccExp ? newAccExp : null)
       setShowModalInfo("showSave")

@@ -165,6 +165,7 @@ const UserInfo: FunctionComponent = () => {
     // if change complete -> pop up "ok" //
     // if change error -> pop up "not complete" -> back to old data //
     const { name_th, surname_th, name_en, surname_en, personal_email, phone, is_penalize, expired_penalize_date } = tempUser
+    if (studentCardPhotoFile) handleUpload("student_card_photo", studentCardPhotoFile)
     setShowAlert(false)
     client({
       method: "PUT",
@@ -437,12 +438,10 @@ const UserInfo: FunctionComponent = () => {
                 <p>รูปภาพบัตรนักเรียน</p>
                 <Form.File
                   label={studentCardPhotoFile ? (studentCardPhotoFile as File).name : "Choose File"}
-                  id="student_card_photo"
                   custom
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     if (e.target.files && e.target.files[0]?.size <= 2097152) {
                       setStudentCardPhotoFile(e.target.files[0])
-                      handleUpload(e.target.id, e.target.files[0])
                     } else alert(t("fileTooBig"))
                   }}
                 />

@@ -80,6 +80,31 @@ export default function OtherEditInfoComponent({
     }
   }
 
+  const uploadAllFile = () => {
+    for (const fileName of ["user_photo", "medical_certificate", "national_id_house_registration", "relationship_verification_document"]) {
+      let file: File | undefined
+      switch (fileName) {
+        case "user_photo": {
+          file = userPhotoFile
+          break
+        }
+        case "medical_certificate": {
+          file = medicalCertificateFile
+          break
+        }
+        case "national_id_house_registration": {
+          file = nationalIdPhotoFile
+          break
+        }
+        case "relationship_verification_document": {
+          file = relationshipVerificationDocumentFile
+          break
+        }
+      }
+      if (file) handleUpload(fileName, file)
+    }
+  }
+
   const onSubmit = (data: EditComponentInfo) => {
     setTempInfo({
       ...tempInfo,
@@ -107,16 +132,19 @@ export default function OtherEditInfoComponent({
     })
     if ((!data.tempExpiredPenalizeDate || !data.tempExpiredPenalizeTime) && (!data.tempAccountExpiredDate || !data.tempAccountExpiredTime))
       handleSave(false, new Date(), new Date())
-    else if (!data.tempExpiredPenalizeDate || !data.tempExpiredPenalizeTime)
-      handleSave(false, new Date(), new Date(`${data.tempAccountExpiredDate} ${data.tempAccountExpiredTime}`))
-    else if (!data.tempExpiredPenalizeDate || !data.tempExpiredPenalizeTime)
+    else if (!data.tempAccountExpiredDate || !data.tempAccountExpiredTime)
       handleSave(false, new Date(`${data.tempExpiredPenalizeDate} ${data.tempExpiredPenalizeTime}`), new Date())
-    else
+    else if (!data.tempExpiredPenalizeDate || !data.tempExpiredPenalizeTime) {
+      uploadAllFile()
+      handleSave(true, new Date(), new Date(`${data.tempAccountExpiredDate} ${data.tempAccountExpiredTime}`))
+    } else {
+      uploadAllFile()
       handleSave(
         true,
         new Date(`${data.tempExpiredPenalizeDate} ${data.tempExpiredPenalizeTime}`),
         new Date(`${data.tempAccountExpiredDate} ${data.tempAccountExpiredTime}`)
       )
+    }
   }
 
   const errorMassage = (msg: string) => {
@@ -419,7 +447,6 @@ export default function OtherEditInfoComponent({
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   if (e.target.files && e.target.files[0]?.size <= 2097152) {
                     setUserPhotoFile(e.target.files[0])
-                    handleUpload(e.target.id, e.target.files[0])
                   } else alert(t("fileTooBig"))
                 }}
               />
@@ -434,7 +461,6 @@ export default function OtherEditInfoComponent({
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   if (e.target.files && e.target.files[0]?.size <= 2097152) {
                     setNationalIdPhotoFile(e.target.files[0])
-                    handleUpload(e.target.id, e.target.files[0])
                   } else alert(t("fileTooBig"))
                 }}
               />
@@ -449,7 +475,6 @@ export default function OtherEditInfoComponent({
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   if (e.target.files && e.target.files[0]?.size <= 2097152) {
                     setMedicalCertificateFile(e.target.files[0])
-                    handleUpload(e.target.id, e.target.files[0])
                   } else alert(t("fileTooBig"))
                 }}
               />
@@ -466,7 +491,6 @@ export default function OtherEditInfoComponent({
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       if (e.target.files && e.target.files[0]?.size <= 2097152) {
                         setRelationshipVerificationDocumentFile(e.target.files[0])
-                        handleUpload(e.target.id, e.target.files[0])
                       } else alert(t("fileTooBig"))
                     }}
                   />
