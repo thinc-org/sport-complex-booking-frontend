@@ -226,13 +226,6 @@ const ListOfAllUsers: FunctionComponent = () => {
         </Table>
         <Row>
           <Col>
-            <Link to="/staff/addUser">
-              <Button variant="pink" className="btn-normal">
-                เพิ่มผู้ใช้
-              </Button>
-            </Link>
-          </Col>
-          <Col>
             <PaginationComponent pageNo={pageNo} setPageNo={setPageNo} maxUser={maxUser} maxUserPerPage={maxUserPerPage} />
           </Col>
         </Row>
