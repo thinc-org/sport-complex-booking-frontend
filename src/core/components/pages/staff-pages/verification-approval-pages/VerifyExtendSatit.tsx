@@ -3,7 +3,7 @@ import { Link, useHistory, useParams } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { Button, Card, Form } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
-import { Other } from "../../../../contexts/UsersContext"
+import { SatitCuPersonel } from "../../../../contexts/UsersContext"
 import { handlePDF } from "../list-of-all-users-pages/OtherViewInfoComponent"
 import {
   ConfirmRejectModal,
@@ -14,25 +14,24 @@ import {
   ErrorModal,
 } from "./VerifyModalsComopnent"
 import { format, isValid } from "date-fns"
-import { VerifyExtendInfoOther, ModalVerify } from "../interfaces/InfoInterface"
+import { VerifyExtendInfoSatit, ModalVerify } from "../interfaces/InfoInterface"
 import { renderLoading } from "../list-of-all-users-pages/ListOfAllUsers"
 
 /// start of main function ///
-const VerifyExtend: FunctionComponent = () => {
+const VerifyExtendSatit: FunctionComponent = () => {
   // page state //
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [showModalInfo, setShowModalInfo] = useState<ModalVerify>("none")
 
   // Non CU state //
   const [accountExpiredDate, setAccountExpiredDate] = useState<Date>()
-  const [info, setInfo] = useState<VerifyExtendInfoOther>({
+  const [info, setInfo] = useState<VerifyExtendInfoSatit>({
     username: "",
     name_th: "",
     surname_th: "",
     name_en: "",
     surname_en: "",
-    membership_type: "",
-    payment_slip: "",
+    student_card_photo: "",
     account_expiration_date: new Date(),
   })
   // router state //
@@ -44,7 +43,7 @@ const VerifyExtend: FunctionComponent = () => {
   // useCallback //
   const fetchUserData = useCallback(() => {
     client
-      .get<Other>(`/approval/${_id}`)
+      .get<SatitCuPersonel>(`/satit-approval/${_id}`)
       .then(({ data }) => {
         setInfo({
           username: data.username,
@@ -52,8 +51,7 @@ const VerifyExtend: FunctionComponent = () => {
           surname_th: data.surname_th,
           name_en: data.name_en,
           surname_en: data.surname_en,
-          membership_type: data.membership_type,
-          payment_slip: data.payment_slip,
+          student_card_photo: data.student_card_photo,
           account_expiration_date: new Date(data.account_expiration_date),
         })
         setIsLoading(false)
@@ -82,7 +80,7 @@ const VerifyExtend: FunctionComponent = () => {
     //console.log("rejected")
     client({
       method: "PATCH",
-      url: "/approval/extension/reject",
+      url: "/satit-approval/extension/reject",
       data: {
         id: _id,
       },
@@ -103,7 +101,7 @@ const VerifyExtend: FunctionComponent = () => {
     const utc7Time = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate() - 1, 17, 0, 0, 0))
     client({
       method: "PATCH",
-      url: "/approval/extension/approve",
+      url: "/satit-approval/extension/approve",
       data: {
         id: _id,
         newExpiredDate: utc7Time,
@@ -133,12 +131,6 @@ const VerifyExtend: FunctionComponent = () => {
     <Form className="topSection px-4 pt-2" onSubmit={handleSubmit(onSubmit)}>
       <div className="row">
         <div className="col">
-          <label className="mt-2">ประเภท</label>
-          <p className="font-weight-bold">{info.membership_type}</p>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col">
           <label className="mt-2">ชื่อ</label>
           <p className="font-weight-bold">{info.name_th}</p>
         </div>
@@ -159,9 +151,9 @@ const VerifyExtend: FunctionComponent = () => {
       </div>
       <div className="row">
         <div className="col">
-          <label className="mt-2">หลักฐานการชำระเงิน</label>
+          <label className="mt-2">รูปภาพบัตรนักเรียน</label>
           <div className="form-file">
-            <p className={info.payment_slip ? "link" : "text-muted"} id={info.payment_slip} onClick={handlePDF}>
+            <p className={info.student_card_photo ? "link" : "text-muted"} id={info.student_card_photo} onClick={handlePDF}>
               ดูเอกสาร
             </p>
           </div>
@@ -206,7 +198,7 @@ const VerifyExtend: FunctionComponent = () => {
       <div className="VerifyExtend mt-4" style={{ display: isLoading ? "none" : "block" }}>
         {renderModal}
         {/* Info start here */}
-        <Link to="/staff/verifyApprove">
+        <Link to="/staff/verifyApproveSatit">
           <Button variant="pink" className="btn-normal mb-3 px-5">
             กลับ
           </Button>
@@ -220,4 +212,4 @@ const VerifyExtend: FunctionComponent = () => {
   )
 }
 
-export default VerifyExtend
+export default VerifyExtendSatit

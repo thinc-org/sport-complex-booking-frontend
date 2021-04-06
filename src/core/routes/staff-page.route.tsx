@@ -13,6 +13,9 @@ import FileOpener from "../components/pages/FileOpener"
 import VeritificationApproval from "../components/pages/staff-pages/verification-approval-pages/VerificationApproval"
 import VerifyInfo from "../components/pages/staff-pages/verification-approval-pages/VerifyInfo"
 import VerifyExtend from "../components/pages/staff-pages/verification-approval-pages/VerifyExtend"
+import VerificationApprovalSatit from "../components/pages/staff-pages/verification-approval-pages/VerificationApprovalSatit"
+import VerifyInfoSatit from "../components/pages/staff-pages/verification-approval-pages/VerifyInfoSatit"
+import VerifyExtendSatit from "../components/pages/staff-pages/verification-approval-pages/VerifyExtendSatit"
 import DisableCourt from "../components/pages/staff-pages/disable-court/disable-court.page.main"
 import QRScannerPage from "../components/pages/staff-pages/staff-qrcode"
 import StaffManagement from "../components/pages/staff-pages/staff-management/StaffManagement"
@@ -34,6 +37,9 @@ const StaffRoute = () => {
     ["/verifyApprove", "รับรองการลงทะเบียน"],
     ["/verifyInfo", "รับรองการลงทะเบียนรายบุคคล"],
     ["/verifyExtend", "รับรองการต่ออายุ"],
+    ["/verifyApproveSatit", "รับรองการลงทะเบียนนักเรียนสาธิต"],
+    ["/verifyInfoSatit", "รับรองการลงทะเบียนรายบุคคลนักเรียนสาธิต"],
+    ["/verifyExtendSatit", "รับรองการต่ออายุนักเรียนสาธิต"],
     ["/disableCourt", "การปิดคอร์ด"],
     ["/qrcodescanner", ""],
     ["/allReservation/success", "การจองทั้งหมด"],
@@ -75,6 +81,9 @@ const StaffRoute = () => {
                     <Route exact path={`${path}/verifyApprove`} component={VeritificationApproval} />
                     <Route exact path={`${path}/verifyInfo/:_id`} component={VerifyInfo} />
                     <Route exact path={`${path}/verifyExtend/:_id`} component={VerifyExtend} />
+                    <Route exact path={`${path}/verifyApproveSatit`} component={VerificationApprovalSatit} />
+                    <Route exact path={`${path}/verifyInfoSatit/:_id`} component={VerifyInfoSatit} />
+                    <Route exact path={`${path}/verifyExtendSatit/:_id`} component={VerifyExtendSatit} />
                     <Route exact path={`${path}/qrcodescanner`} component={QRScannerPage} />
                     <Route exact path={`${path}/profile`} component={StaffProfile} />
                     <Route exact path={`${path}/management`} component={WithAdminGuard(StaffManagement)} />
