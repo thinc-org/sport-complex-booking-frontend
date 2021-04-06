@@ -1,10 +1,10 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
 import { Link, useHistory, useParams } from "react-router-dom"
 import { useForm } from "react-hook-form"
-import { Button, Card, Form, Collapse } from "react-bootstrap"
+import { Button, Card, Form, Collapse, Row, Col } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
-import { Other } from "../../../../contexts/UsersContext"
-import OtherViewInfoComponent from "../list-of-all-users-pages/OtherViewInfoComponent"
+import { SatitCuPersonel } from "../../../../contexts/UsersContext"
+import { handlePDF } from "../list-of-all-users-pages/OtherViewInfoComponent"
 import { renderLoading } from "../list-of-all-users-pages/ListOfAllUsers"
 import {
   ConfirmRejectModal,
@@ -16,72 +16,35 @@ import {
   ErrorModal,
 } from "./VerifyModalsComopnent"
 import { format, isValid } from "date-fns"
-import { VerifyComponentInfo, RejectInfoOther, ModalVerify, RejectInfoOtherLabel, RejectInfoOtherLabelKey } from "../interfaces/InfoInterface"
+import { VerifyComponentSatitInfo, RejectInfoSatit, ModalVerify, RejectInfoSatitLabel, RejectInfoSatitLabelKey } from "../interfaces/InfoInterface"
 
 /// start of main function ///
-const VerifyInfo: FunctionComponent = () => {
+const VerifyInfoSatit: FunctionComponent = () => {
   // page state //
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [showReject, setShowReject] = useState<boolean>(false)
   const [accountExpiredDate, setAccountExpiredDate] = useState<Date>()
   const [showModalInfo, setShowModalInfo] = useState<ModalVerify>("none")
-  const [rejectInfo, setRejectInfo] = useState<RejectInfoOther>({
-    prefix: false,
-    gender: false,
+  const [rejectInfo, setRejectInfo] = useState<RejectInfoSatit>({
     name_th: false,
     surname_th: false,
     name_en: false,
     surname_en: false,
-    birthday: false,
-    national_id: false,
-    marital_status: false,
-    home_phone: false,
-    medical_condition: false,
-    contact_person_prefix: false,
-    contact_person_name: false,
-    contact_person_surname: false,
-    contact_person_home_phone: false,
-    contact_person_phone: false,
-    user_photo: false,
-    medical_certificate: false,
-    national_id_house_registration: false,
-    relationship_verification_document: false, // only for "สมาชิกสามัญสมทบ ก (staff-spouse membership)"
-    payment_slip: false,
+    student_card_photo: false,
   })
 
   // Non CU state //
   const { _id } = useParams<{ _id: string }>()
   const [username, setUsername] = useState<string>("")
-  const [membershipType, setMembershipType] = useState<string>("")
-  const [info, setInfo] = useState<VerifyComponentInfo>({
-    prefix: "",
+  const [info, setInfo] = useState<VerifyComponentSatitInfo>({
     name_th: "",
     surname_th: "",
     name_en: "",
     surname_en: "",
-    gender: "",
-    birthday: new Date(),
-    national_id: "",
-    marital_status: "",
-    address: "",
-    email: "",
+    username: "",
+    personal_email: "",
     phone: "",
-    home_phone: "",
-    medical_condition: "",
-    contact_person: {
-      contact_person_prefix: "",
-      contact_person_name: "",
-      contact_person_surname: "",
-      contact_person_home_phone: "",
-      contact_person_phone: "",
-    },
-    membership_type: membershipType,
-    // object id //
-    user_photo: "",
-    medical_certificate: "",
-    national_id_house_registration: "",
-    relationship_verification_document: "",
-    payment_slip: "",
+    student_card_photo: "",
   })
 
   const history = useHistory()
@@ -90,41 +53,19 @@ const VerifyInfo: FunctionComponent = () => {
 
   const fetchUserData = useCallback(() => {
     client
-      .get<Other>(`/approval/${_id}`)
+      .get<SatitCuPersonel>(`/satit-approval/${_id}`)
       .then(({ data }) => {
         setUsername(data.username)
-        setMembershipType(data.membership_type)
         setInfo({
-          prefix: data.prefix,
           name_th: data.name_th,
           surname_th: data.surname_th,
           name_en: data.name_en,
           surname_en: data.surname_en,
-          gender: data.gender,
-          birthday: new Date(data.birthday),
-          national_id: data.national_id,
-          marital_status: data.marital_status,
-          address: data.address,
-          email: data.personal_email,
+          personal_email: data.personal_email,
           phone: data.phone,
-          home_phone: data.home_phone,
-          medical_condition: data.medical_condition,
-          contact_person: data.contact_person
-            ? data.contact_person
-            : {
-                contact_person_prefix: "",
-                contact_person_name: "",
-                contact_person_surname: "",
-                contact_person_home_phone: "",
-                contact_person_phone: "",
-              },
+          username: data.username,
           // Files //
-          membership_type: data.membership_type,
-          user_photo: data.user_photo,
-          medical_certificate: data.medical_certificate,
-          national_id_house_registration: data.national_id_house_registration,
-          relationship_verification_document: data.relationship_verification_document,
-          payment_slip: data.payment_slip,
+          student_card_photo: data.student_card_photo,
         })
         setIsLoading(false)
       })
@@ -155,7 +96,7 @@ const VerifyInfo: FunctionComponent = () => {
     })
     client({
       method: "PATCH",
-      url: "/approval/reject",
+      url: "/satit-approval/reject",
       data: {
         id: _id,
         reject_info: rejectList,
@@ -176,7 +117,7 @@ const VerifyInfo: FunctionComponent = () => {
     const utc7Time = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate() - 1, 17, 0, 0, 0))
     client({
       method: "PATCH",
-      url: "/approval/approve",
+      url: "/satit-approval/approve",
       data: {
         id: _id,
         newExpiredDate: utc7Time,
@@ -200,33 +141,55 @@ const VerifyInfo: FunctionComponent = () => {
   }
 
   // renders //
-  const renderTopSection = () => {
+  const renderForm = () => {
     return (
-      <div className="topSection px-4 pt-2">
-        <div className="row">
-          <div className="col">
-            <label className="mt-2">ประเภท</label>
-            <p className="font-weight-bold">{membershipType}</p>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col">
-            <label className="mt-2">ชื่อ</label>
-            <p className="font-weight-bold">{info.name_th}</p>
-          </div>
-          <div className="col">
-            <label className="mt-2">นามสกุล</label>
-            <p className="font-weight-bold">{info.surname_th}</p>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col">
-            <label className="mt-2">ชื่อผู้ใช้</label>
-            {<p className="font-weight-bold">{username}</p>}
-          </div>
-        </div>
-        <div className="row">
-          <div className="col">
+      <>
+        <Row>
+          <Col className="py-3">
+            <p>ชื่อ (อังกฤษ)</p>
+            <p className="font-weight-bold mb-0">{info.name_en}</p>
+          </Col>
+          <Col className="py-3">
+            <p>นามสกุล (อังกฤษ)</p>
+            <p className="font-weight-bold mb-0">{info.surname_en}</p>
+          </Col>
+        </Row>
+        <Row>
+          <Col className="py-3">
+            <p>ชื่อ (ไทย)</p>
+            <p className="font-weight-bold mb-0">{info.name_th}</p>
+          </Col>
+          <Col className="py-3">
+            <p>นามสกุล (ไทย)</p>
+            <p className="font-weight-bold mb-0">{info.surname_th}</p>
+          </Col>
+        </Row>
+        <Row className="py-3">
+          <Col>
+            <p>ชื่อผู้ใช้</p>
+            <p className="font-weight-bold mb-0">{info.username}</p>
+          </Col>
+          <Col>
+            <p>รูปภาพบัตรนักเรียน</p>
+            <p className="link" id={(info as SatitCuPersonel).student_card_photo} onClick={handlePDF}>
+              ดูเอกสาร
+            </p>
+          </Col>
+        </Row>
+        <Row className="py-3">
+          <Col>
+            <p>อีเมลส่วนตัว</p>
+            <p className="font-weight-bold mb-0">{info.personal_email}</p>
+          </Col>
+        </Row>
+        <Row className="py-3">
+          <Col>
+            <p>เบอร์โทร</p>
+            <p className="font-weight-bold mb-0">{info.phone}</p>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
             <label className="mt-2">วันหมดอายุสมาชิก</label>
             <Form.Control
               ref={register}
@@ -236,16 +199,8 @@ const VerifyInfo: FunctionComponent = () => {
               max={"9999-12-31"}
               defaultValue={isValid(accountExpiredDate) ? format(new Date(accountExpiredDate!), "yyyy-MM-dd") : ""}
             />
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  const renderViewForm = () => {
-    return (
-      <div>
-        <OtherViewInfoComponent info={info} type={"VerifyInfo"} />
+          </Col>
+        </Row>
         <div className="mt-5 text-center">
           <Button
             variant="danger"
@@ -260,30 +215,28 @@ const VerifyInfo: FunctionComponent = () => {
             ยอมรับ
           </Button>
         </div>
-      </div>
+      </>
     )
   }
 
   const renderRejectionInfo = () => {
     const infoList = Object.keys(rejectInfo).map((name, index) => {
-      if (info.membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership)" || name !== "relationship_verification_document")
-        return (
-          <Form.Check
-            key={index}
-            label={RejectInfoOtherLabel[name as RejectInfoOtherLabelKey]}
-            id={name}
-            type="checkbox"
-            defaultChecked={rejectInfo[name as keyof RejectInfoOther]}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              const target = e.target as HTMLInputElement
-              setRejectInfo({
-                ...rejectInfo,
-                [target.id]: e.target.checked,
-              })
-            }}
-          />
-        )
-      return null
+      return (
+        <Form.Check
+          key={index}
+          label={RejectInfoSatitLabel[name as RejectInfoSatitLabelKey]}
+          id={name}
+          type="checkbox"
+          defaultChecked={rejectInfo[name as keyof RejectInfoSatit]}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const target = e.target as HTMLInputElement
+            setRejectInfo({
+              ...rejectInfo,
+              [target.id]: e.target.checked,
+            })
+          }}
+        />
+      )
     })
     return (
       <Collapse in={showReject} className="mt-3 mx-5">
@@ -319,15 +272,14 @@ const VerifyInfo: FunctionComponent = () => {
       <div className="VerifyInfo mt-4" style={{ display: isLoading ? "none" : "block" }}>
         {renderModal()}
         {/* Info start here */}
-        <Link to="/staff/verifyApprove">
+        <Link to="/staff/verifyApproveSatit">
           <Button variant="pink" className="btn-normal mb-3 px-5">
             กลับ
           </Button>
         </Link>
         <Card body className="mb-5 mr-4">
           <Form onSubmit={handleSubmit(onSubmit)}>
-            {renderTopSection()}
-            {renderViewForm()}
+            {renderForm()}
             {renderRejectionInfo()}
           </Form>
         </Card>
@@ -337,4 +289,4 @@ const VerifyInfo: FunctionComponent = () => {
   )
 }
 
-export default VerifyInfo
+export default VerifyInfoSatit
