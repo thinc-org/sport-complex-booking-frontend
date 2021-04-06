@@ -3,10 +3,11 @@ import QRCode from "qrcode.react"
 import { useTranslation } from "react-i18next"
 import { QRCodeProps } from "./PropsInterface"
 
-export const QrCode: React.FC<QRCodeProps> = ({ isCheck, id, validTime, setValidTime }) => {
+export const QrCode: React.FC<QRCodeProps> = ({ isCheck, id, validTime, setValidTime, reservedTimeInMillisecond }) => {
   const { t } = useTranslation()
 
   const [counter, setCounter] = useState<number>(10)
+  const [allowCheckin, setAllowCheckin] = useState<boolean>(false)
 
   const countDown = useCallback(() => {
     if (!isCheck) {
@@ -27,7 +28,29 @@ export const QrCode: React.FC<QRCodeProps> = ({ isCheck, id, validTime, setValid
     }
   }, [isCheck, countDown])
 
-  if (!isCheck && id) {
+  useEffect(() => {
+    const currentTimeInMillisecond = new Date().getTime()
+    if (reservedTimeInMillisecond) reservedTimeInMillisecond - currentTimeInMillisecond > 3600000 ? setAllowCheckin(false) : setAllowCheckin(true)
+  }, [reservedTimeInMillisecond])
+
+  if (isCheck) {
+    return (
+      <div className="box-container w-100 mb-5" style={{ textAlign: "center" }}>
+        <h4 className="m-2" style={{ color: "lightgreen" }}>
+          {t("youHaveCheckedIn")}
+        </h4>
+      </div>
+    )
+  } else if (!allowCheckin) {
+    return (
+      <div className="box-container w-100 mb-5" style={{ textAlign: "center" }}>
+        <h4 className="m-2" style={{ color: "grey" }}>
+          {t("checkinNotAllowed")}
+        </h4>
+      </div>
+    )
+  }
+  if (id && allowCheckin) {
     return (
       <div className="box-container w-100 mb-5" style={{ textAlign: "center" }}>
         <h6 className="mt-2 mb-0" style={{ fontWeight: 400 }}>
@@ -39,14 +62,6 @@ export const QrCode: React.FC<QRCodeProps> = ({ isCheck, id, validTime, setValid
         <h5 className="mb-2" style={{ fontWeight: 400 }}>
           {t("showQRToStaff")}
         </h5>
-      </div>
-    )
-  } else if (isCheck) {
-    return (
-      <div className="box-container w-100 mb-5" style={{ textAlign: "center" }}>
-        <h4 className="m-2" style={{ color: "lightgreen" }}>
-          {t("youHaveCheckedIn")}
-        </h4>
       </div>
     )
   }
