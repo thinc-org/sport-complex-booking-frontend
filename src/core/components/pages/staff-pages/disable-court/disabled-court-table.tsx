@@ -1,13 +1,14 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
+import { usePagination } from "./disable-court-hook"
 import { useRouteMatch, useHistory } from "react-router-dom"
-import { Button, Table } from "react-bootstrap"
+import { Pagination , Button, Table } from "react-bootstrap"
+
 import { format } from "date-fns"
 import subDays from "date-fns/subDays"
 import { client } from "../../../../../axiosConfig"
 import { getMinute, getTime, dayArr } from "./mapTime"
-import { useDisplayOverlapData } from "./disable-court-hook"
 import { DeleteButton } from "./button"
-import { RowProps, TableProps, ViewRowProps, ErrorRowProps, OverlapDataTableProps } from "../../../../dto/disableCourt.dto"
+import { RowProps, TableProps, ViewRowProps, ConflictRowProps, OverlapDataTableProps } from "../../../../dto/disableCourt.dto"
 
 export const CourtRow = ({ _id, starting_date, expired_date, court_num, sport_id, button }: RowProps) => {
   const { path } = useRouteMatch()
@@ -54,7 +55,7 @@ export const ViewRow = ({ time_slot, indx, day, button }: ViewRowProps) => {
   )
 }
 
-export const ErrorRow = ({ date, phone, indx, time_slot, button, _id, type, name_th, name_en }: ErrorRowProps) => {
+export const ErrorRow = ({ date, phone, indx, time_slot, button, _id, type, name_th, name_en }: ConflictRowProps) => {
   const [hidden, setHidden] = useState(false)
   const onDelete = (id: number | string, type = "") => {
     const path = type === "reservation" ? "all-reservation" : "all-waiting-room"
@@ -106,15 +107,46 @@ export function CourtTable<T>({ data, header, Row, Button }: TableProps<T>): Rea
     </Table>
   )
 }
-export const OverlapDataTable: React.FC<OverlapDataTableProps> = ({ overlapData }) => {
-  const { data } = useDisplayOverlapData(overlapData)
+export const OverlapDataTable: React.FC<OverlapDataTableProps> = ({ data }) => {
+  const { page, setPage, maxPage, setMaxPage, pageArr, jumpDown, jumpUp } = usePagination()
+  const [displayData, setDisplayData] = useState<ConflictRowProps[]>(data ? data.slice(0, 10) : [])
+  useEffect(() => {
+    setMaxPage(Math.ceil(data ? data.length / 10 : 0))
+  }, [setMaxPage, data])
+  useEffect(() => {
+    setDisplayData(data ? data.slice(10 * page - 10, 10 * page - 1) : [])
+  }, [page, setDisplayData, data])
   return (
     <div>
-      {CourtTable<ErrorRowProps>({
-        data: data,
+      {CourtTable<ConflictRowProps>({
+        data: displayData,
         header: ["index", "ชื่อไทย", "ชื่ออังกฤษ", "เบอร์ติดต่อ", "วันที่ทับซ้อน", "เวลาที่ทับซ้อน"],
         Row: ErrorRow,
       })}
+      <Pagination>
+        <Pagination.Prev
+          onClick={() => {
+            if (page > 1) setPage((prev) => prev - 1)
+          }}
+        />
+        {page > 5 && <Pagination.Ellipsis onClick={jumpDown} />}
+        {pageArr.map((val) => (
+          <Pagination.Item
+            key={val}
+            onClick={() => {
+              setPage(val)
+            }}
+          >
+            {val}
+          </Pagination.Item>
+        ))}
+        {page > Math.floor(maxPage / 5) * 5 || page === maxPage || maxPage <= 5 ? "" : <Pagination.Ellipsis onClick={jumpUp} />}
+        <Pagination.Next
+          onClick={() => {
+            if (page < maxPage) setPage((prev) => prev + 1)
+          }}
+        />
+      </Pagination>
     </div>
   )
 }

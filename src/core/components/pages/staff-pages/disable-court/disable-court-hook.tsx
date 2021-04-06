@@ -10,7 +10,6 @@ import {
   TimeSlotRow,
   DisabledCourtSearchBody,
   OverlapData,
-  ErrorRowProps,
 } from "../../../../dto/disableCourt.dto"
 import { format } from "date-fns"
 import { Sport } from "../../../../dto/sport.dto"
@@ -151,7 +150,23 @@ export const useViewTable = (params: string) => {
     overlapData,
   }
 }
-
+export const usePagination = () => {
+  const [page, setPage] = useState(1)
+  const [maxPage, setMaxPage] = useState(1)
+  const nearestFiveFloor = page % 5 === 0 && page !== 1 ? page - 4 : 5 * Math.floor(page / 5) + 1
+  const nearestFiveCeil = 5 * Math.ceil(page / 5) > maxPage ? maxPage : 5 * Math.ceil(page / 5)
+  const pageArr = Array.from(Array(nearestFiveCeil + 1).keys()).slice(nearestFiveFloor, nearestFiveCeil + 1)
+  function jumpUp() {
+    const currentPage = page ?? 0
+    setPage(5 * Math.ceil(currentPage / 5) + 1)
+  }
+  function jumpDown() {
+    const currentPage = page ?? 0
+    if (currentPage % 5 === 0) setPage(5 * (Math.floor(currentPage / 5) - 1))
+    else setPage(5 * Math.floor(currentPage / 5))
+  }
+  return { page, setPage, maxPage, setMaxPage, nearestFiveCeil, nearestFiveFloor, pageArr, jumpDown, jumpUp }
+}
 export const useTableWithPagination = () => {
   const [params, setParams] = useState<QueryParams>({
     sportObjId: undefined,
@@ -233,42 +248,6 @@ export const useTableWithPagination = () => {
   }, [params])
 
   return { data, page, maxPage, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete, isError, setIsError }
-}
-export const useDisplayOverlapData = (overlapData: OverlapData | undefined) => {
-  const [data, setData] = useState<ErrorRowProps[]>([])
-  useEffect(() => {
-    if (overlapData) {
-      setData((prev) => {
-        const dataArr: ErrorRowProps[] = [...prev]
-        overlapData.reservation?.forEach((element, indx) => {
-          dataArr.push({
-            type: "reservation",
-            _id: element._id,
-            indx: indx,
-            date: element.date,
-            phone: element.list_member[0].phone,
-            time_slot: element.time_slot,
-            name_en: element.list_member[0].name_en,
-            name_th: element.list_member[0].name_th,
-          })
-        })
-        overlapData.waitingRoom?.forEach((element, indx) => {
-          dataArr.push({
-            type: "waitingRoom",
-            _id: element._id,
-            indx: indx,
-            date: element.date,
-            phone: element.list_member[0].phone,
-            time_slot: element.time_slot,
-            name_en: element.list_member[0].name_en,
-            name_th: element.list_member[0].name_th,
-          })
-        })
-        return dataArr
-      })
-    }
-  }, [overlapData])
-  return { data }
 }
 
 export function withDeletable<P>(Component: ComponentType<P>, F: (indx: number | string) => void): React.FC<P> {

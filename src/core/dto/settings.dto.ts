@@ -1,3 +1,4 @@
+import { OverlapData, OverlapDataTableProps } from "./disableCourt.dto"
 import { Sport, Court } from "./sport.dto"
 
 // Court settings DTO
@@ -71,4 +72,10 @@ export interface SettingsCardProps {
   value: number
   cardTitle: string
   unit: string
+}
+
+export interface ConflictModalProps {
+  overlapData?: OverlapData
+  inProp: boolean
+  handleClose: () => void
 }

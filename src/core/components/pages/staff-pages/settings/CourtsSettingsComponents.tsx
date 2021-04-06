@@ -2,8 +2,13 @@ import React, { useState } from "react"
 import { Form, Row, Col, Button, Modal } from "react-bootstrap"
 import TimePicker from "react-time-picker"
 import { Control, useForm, useWatch } from "react-hook-form"
-import { NormalModalProps, EditCourtProps, DeleteCourtModalProps, AddCourtFuncProps } from "../../../../dto/settings.dto"
+import { NormalModalProps, EditCourtProps, DeleteCourtModalProps, AddCourtFuncProps , ConflictModalProps } from "../../../../dto/settings.dto"
+import { ErrorAlert } from "../disable-court/modals"
+import { OverlapDataTable } from "../disable-court/disabled-court-table"
+
 import { Court } from "../../../../dto/sport.dto"
+import { formatOverlapData } from "../disable-court/conflictManager"
+import { client } from "../../../../../axiosConfig"
 
 const invalidTime = (openTime: string, closeTime: string): boolean => {
   return !["00"].includes(openTime.slice(openTime.length - 2)) || !["00"].includes(closeTime.slice(closeTime.length - 2))
@@ -349,5 +354,42 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
         </Modal.Footer>
       </Form>
     </Modal>
+  )
+}
+
+export const ConflictModal: React.FC<ConflictModalProps> = ({ overlapData, inProp, handleClose }) => {
+  const waitingRoomConflict = formatOverlapData(overlapData?.waitingRoom, "waitingRoom")
+  const reservationConflict = formatOverlapData(overlapData?.reservation, "reservation")
+  const onDeleteBatch = () => {
+    overlapData?.disableCourt?.forEach((disableCourt) => {
+      client
+        .delete("/courts/disable-courts", { data: { sport_id: disableCourt.sport_id, court_num: disableCourt.court_num } })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err))
+    })
+  }
+  return (
+    <ErrorAlert inProp={inProp} handleClose={handleClose} header="พบการชนกันกับการลบครั้งนี้" message="">
+      <div>
+        {waitingRoomConflict.length !== 0 && (
+          <div>
+            <h5>ห้องรอที่ชน</h5>
+            <OverlapDataTable data={waitingRoomConflict} />
+          </div>
+        )}
+        {reservationConflict.length !== 0 && (
+          <div>
+            <h5>การจองที่ชน</h5>
+            <OverlapDataTable data={reservationConflict} />
+          </div>
+        )}
+        {overlapData?.disableCourt && (
+          <div className="d-flex flex-column">
+            <h5>จำนวนการปิดคอร์ดที่ชน: {overlapData.disableCourt.length}</h5>
+            <Button onClick={onDeleteBatch}>ลบการปิดคอร์ดทั้งหมด</Button>
+          </div>
+        )}
+      </div>
+    </ErrorAlert>
   )
 }

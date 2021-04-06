@@ -38,7 +38,6 @@ export interface disable_time {
   day: number
   time_slot: number[]
 }
-
 export interface ViewRowProps {
   indx: number
   day: number
@@ -76,13 +75,14 @@ export interface AddCourtForm {
 export interface OverlapData {
   reservation?: ReservationResponse[]
   waitingRoom?: WaitingRoomResponse[]
+  disableCourt?: DisableCourtBody[]
 }
 
 export interface OverlapDataTableProps {
-  overlapData?: OverlapData
+  data?: ConflictRowProps[]
 }
 
-export interface ErrorRowProps {
+export interface ConflictRowProps {
   type: string
   _id: string
   indx: number
