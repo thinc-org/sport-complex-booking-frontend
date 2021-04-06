@@ -1,7 +1,5 @@
 import React, { useState } from "react"
-import { useParams } from "react-router-dom"
 import { Button, Card, Form } from "react-bootstrap"
-import { client } from "../../../../../axiosConfig"
 import { OtherComponentInfo, EditComponentInfo, ModalUserInfo } from "../interfaces/InfoInterface"
 import { UploadErrModal } from "./ListOfAllUserModals"
 import format from "date-fns/format"
@@ -16,12 +14,11 @@ export default function OtherEditInfoComponent({
 }: {
   tempInfo: OtherComponentInfo
   setTempInfo: React.Dispatch<React.SetStateAction<OtherComponentInfo>>
-  handleSave: (canSave: boolean, newPenExp: Date, newAccExp: Date) => void
+  handleSave: (canSave: boolean, newPenExp: Date, newAccExp: Date, newFileList: (File | undefined)[]) => void
 }) {
   // Page state //
   const { t } = useTranslation()
   const { register, handleSubmit, errors } = useFormContext()
-  const { _id } = useParams<{ _id: string }>()
 
   const [showUploadErr, setShowUploadErr] = useState<ModalUserInfo>("none") // use only "none" && "showUploadErr"
   const [userPhotoFile, setUserPhotoFile] = useState<File>()
@@ -55,56 +52,6 @@ export default function OtherEditInfoComponent({
   } = tempInfo.contact_person
 
   // handles //
-  const handleUpload = (typename: string, file: File) => {
-    const formData = new FormData()
-    const selectedFile = file
-    // Update the formData object
-    if (selectedFile) {
-      formData.append(typename, selectedFile, selectedFile.name)
-      // Request made to the backend api
-      client({
-        method: "POST",
-        url: `/fs/admin/upload/${_id}`,
-        data: formData,
-      })
-        .then(({ data }) => {
-          setTempInfo({
-            ...tempInfo,
-            [Object.keys(data)[0]]: data[Object.keys(data)[0]],
-          })
-        })
-        .catch(({ response }) => {
-          setShowUploadErr("showUploadErr")
-          console.log(response)
-        })
-    }
-  }
-
-  const uploadAllFile = () => {
-    for (const fileName of ["user_photo", "medical_certificate", "national_id_house_registration", "relationship_verification_document"]) {
-      let file: File | undefined
-      switch (fileName) {
-        case "user_photo": {
-          file = userPhotoFile
-          break
-        }
-        case "medical_certificate": {
-          file = medicalCertificateFile
-          break
-        }
-        case "national_id_house_registration": {
-          file = nationalIdPhotoFile
-          break
-        }
-        case "relationship_verification_document": {
-          file = relationshipVerificationDocumentFile
-          break
-        }
-      }
-      if (file) handleUpload(fileName, file)
-    }
-  }
-
   const onSubmit = (data: EditComponentInfo) => {
     setTempInfo({
       ...tempInfo,
@@ -130,21 +77,20 @@ export default function OtherEditInfoComponent({
         contact_person_phone: data.contact_person_phone,
       },
     })
+    const newFileList: (File | undefined)[] = [userPhotoFile, medicalCertificateFile, nationalIdPhotoFile, relationshipVerificationDocumentFile]
     if ((!data.tempExpiredPenalizeDate || !data.tempExpiredPenalizeTime) && (!data.tempAccountExpiredDate || !data.tempAccountExpiredTime))
-      handleSave(false, new Date(), new Date())
+      handleSave(false, new Date(), new Date(), newFileList)
     else if (!data.tempAccountExpiredDate || !data.tempAccountExpiredTime)
-      handleSave(false, new Date(`${data.tempExpiredPenalizeDate} ${data.tempExpiredPenalizeTime}`), new Date())
-    else if (!data.tempExpiredPenalizeDate || !data.tempExpiredPenalizeTime) {
-      uploadAllFile()
-      handleSave(true, new Date(), new Date(`${data.tempAccountExpiredDate} ${data.tempAccountExpiredTime}`))
-    } else {
-      uploadAllFile()
+      handleSave(false, new Date(`${data.tempExpiredPenalizeDate} ${data.tempExpiredPenalizeTime}`), new Date(), newFileList)
+    else if (!data.tempExpiredPenalizeDate || !data.tempExpiredPenalizeTime)
+      handleSave(true, new Date(), new Date(`${data.tempAccountExpiredDate} ${data.tempAccountExpiredTime}`), newFileList)
+    else
       handleSave(
         true,
         new Date(`${data.tempExpiredPenalizeDate} ${data.tempExpiredPenalizeTime}`),
-        new Date(`${data.tempAccountExpiredDate} ${data.tempAccountExpiredTime}`)
+        new Date(`${data.tempAccountExpiredDate} ${data.tempAccountExpiredTime}`),
+        newFileList
       )
-    }
   }
 
   const errorMassage = (msg: string) => {
