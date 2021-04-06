@@ -162,7 +162,7 @@ export const RejectInfoLabel: Record<keyof RejectInfo, string> = {
   national_id: "หมายเลขบัตรประชาชน/พาสปอร์ต",
   marital_status: "สถานะการสมรส",
   home_phone: "หมายเลขโทรศัพท์บ้าน",
-  medical_condition: "โรคประจำตัวหรือไม่",
+  medical_condition: "โรคประจำตัว",
   contact_person_prefix: "คำนำหน้าขื่อ ผู้ติดต่อยามฉุกเฉิน",
   contact_person_name: "ชื่อ ผู้ติดต่อยามฉุกเฉิน",
   contact_person_surname: "นามสกุล ผู้ติดต่อยามฉุกเฉิน",
