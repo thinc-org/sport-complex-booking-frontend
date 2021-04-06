@@ -3,6 +3,7 @@ import React, { createContext, useState } from "react"
 export type AccountType = "CuStudent" | "SatitAndCuPersonel" | "Other"
 
 type OnlyString<P> = { [K in keyof P]: P[K] extends string ? K | "payment_slip" : never }[keyof P]
+type SatitOnlyString<P> = { [K in keyof P]: P[K] extends string ? K : never }[keyof P]
 
 export interface DefaultAccount {
   account_type: AccountType
@@ -29,8 +30,9 @@ export interface SatitCuPersonel extends DefaultAccount {
   previous_student_card_photo: string[]
   verification_status: string
   student_card_photo: string
-  rejected_info: OnlyString<Omit<SatitCuPersonel, "account_type" | "rejected_info">>[]
+  rejected_info: SatitOnlyString<Omit<SatitCuPersonel, "account_type" | "rejected_info">>[]
   account_expiration_date: string
+  student_card_photo_status: string
 }
 
 export interface Other extends DefaultAccount {
