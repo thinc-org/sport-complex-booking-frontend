@@ -24,4 +24,5 @@ export interface QRCodeProps {
   id: string | undefined
   validTime: number | undefined
   setValidTime: (num: number) => void
+  reservedTimeInMillisecond: number | undefined
 }

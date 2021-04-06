@@ -69,7 +69,13 @@ const ReservationDetail = () => {
           <div className="row justify-content-center mt-5">
             <div className="col-12 h-100">
               <Detail sport={sport} courtNum={courtNum} date={date} timeList={timeList} memberList={memberList} />
-              <QrCode isCheck={isCheck} id={id} validTime={validTime} setValidTime={setValidTime} />
+              <QrCode
+                isCheck={isCheck}
+                id={id}
+                validTime={validTime}
+                setValidTime={setValidTime}
+                reservedTimeInMillisecond={reservedTimeInMillisecond}
+              />
               <ButtonAndWarning
                 isCheck={isCheck}
                 id={id}

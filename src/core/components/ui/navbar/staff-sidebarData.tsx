@@ -34,6 +34,11 @@ function useSidebarData() {
     },
     {
       icon: "",
+      name: "รับรองนักเรียนสาธิต",
+      path: "/staffverifyApproveSatit",
+    },
+    {
+      icon: "",
       name: "การปิดคอร์ด",
       path: "/staff/disableCourt",
     },
