@@ -139,6 +139,19 @@ export const ErrModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo
   )
 }
 
+export const UploadErrModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo }) => {
+  return (
+    <CustomModal
+      title={"เกิดข้อผิดพลาด"}
+      show={showModalInfo === "showUploadErr"}
+      body={"ไม่สามารถอัพโหลดไฟล์ได้ในขณะนี้"}
+      onConfirm={() => {
+        setShowModalInfo("none")
+      }}
+    />
+  )
+}
+
 export const PasswordErrModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo }) => {
   return (
     <CustomModal
