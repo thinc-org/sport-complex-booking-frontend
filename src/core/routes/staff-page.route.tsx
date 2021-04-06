@@ -7,7 +7,6 @@ import StaffSidebar from "../components/ui/navbar/staff-sidebar"
 import StaffProfile from "../components/pages/staff-pages/staff-profile"
 import { NavHeader } from "../components/ui/navbar/navbarSideEffect"
 import ListOfAllUsers from "../components/pages/staff-pages/list-of-all-users-pages/ListOfAllUsers"
-import AddUser from "../components/pages/staff-pages/list-of-all-users-pages/AddUser"
 import CuSatitInfo from "../components/pages/staff-pages/list-of-all-users-pages/CuSatitInfo"
 import UserInfo from "../components/pages/staff-pages/list-of-all-users-pages/UserInfo"
 import FileOpener from "../components/pages/FileOpener"
@@ -29,7 +28,6 @@ const StaffRoute = () => {
     ["/profile", "ยินดีต้อนรับ"],
     ["/management", "การจัดการสตาฟ"], // เปลี่ยนเอา
     ["/listOfAllUsers", "รายชื่อผู้ใช้"],
-    ["/addUser", "เพิ่มผู้ใช้"],
     ["/userInfo/other", "ข้อมูลผู้ใช้"],
     ["/userInfo/custudent", "ข้อมูลผู้ใช้"],
     ["/userInfo/satit", "ข้อมูลผู้ใช้"],
@@ -72,7 +70,6 @@ const StaffRoute = () => {
                     <Route path={`${path}/staffProfile`} component={StaffProfile} />
                     <Route path={`${path}/disableCourt`} component={WithAdminGuard(DisableCourt)} />
                     <Route exact path={`${path}/listOfAllUsers`} component={ListOfAllUsers} />
-                    <Route exact path={`${path}/addUser`} component={AddUser} />
                     <Route exact path={`${path}/userInfo/other/:_id`} component={UserInfo} />
                     <Route exact path={`${path}/userInfo/:accType/:_id`} component={CuSatitInfo} />
                     <Route exact path={`${path}/verifyApprove`} component={VeritificationApproval} />
