@@ -31,6 +31,7 @@ const UserInfo = () => {
   const [showModalInfo, setShowModalInfo] = useState<ModalUserInfo>("none")
 
   // Non CU state //
+  const [fileList, setFileList] = useState<(File | undefined)[]>()
   const [username, setUsername] = useState<string>("")
   const [membershipType, setMembershipType] = useState<string>("")
   const [isPenalize, setPenalize] = useState<boolean>(false)
@@ -144,15 +145,68 @@ const UserInfo = () => {
     setEdit(true)
   }
 
-  const handleSave = (canSave: boolean, newPenExp: Date, newAccExp: Date) => {
-    if ((!tempIsPenalize && canSave) || (canSave && newPenExp >= new Date() && newAccExp >= new Date())) {
+  const handleSave = (canSave: boolean, newPenExp: Date, newAccExp: Date, newFileList: (File | undefined)[]) => {
+    if (canSave && (!tempIsPenalize || (newPenExp >= new Date() && newAccExp >= new Date()))) {
       setTempExpiredPenalizeDate(newPenExp ? newPenExp : null)
       setTempAccountExpiredDate(newAccExp ? newAccExp : null)
+      setFileList(newFileList)
       setShowModalInfo("showSave")
     } else setShowModalInfo("showUncomExpire")
   }
 
+  const handleUpload = (typename: string, file: File) => {
+    const formData = new FormData()
+    const selectedFile = file
+    // Update the formData object
+    if (selectedFile) {
+      formData.append(typename, selectedFile, selectedFile.name)
+      // Request made to the backend api
+      client({
+        method: "POST",
+        url: `/fs/admin/upload/${_id}`,
+        data: formData,
+      })
+        .then(({ data }) => {
+          setTempInfo({
+            ...tempInfo,
+            [Object.keys(data)[0]]: data[Object.keys(data)[0]],
+          })
+        })
+        .catch(({ response }) => {
+          setShowModalInfo("showUploadErr")
+          console.log(response)
+        })
+    }
+  }
+
+  const uploadAllFile = () => {
+    if (fileList)
+      for (const fileName of ["user_photo", "medical_certificate", "national_id_house_registration", "relationship_verification_document"]) {
+        let file: File | undefined
+        switch (fileName) {
+          case "user_photo": {
+            file = fileList[0]
+            break
+          }
+          case "medical_certificate": {
+            file = fileList[1]
+            break
+          }
+          case "national_id_house_registration": {
+            file = fileList[2]
+            break
+          }
+          case "relationship_verification_document": {
+            file = fileList[3]
+            break
+          }
+        }
+        if (file) handleUpload(fileName, file)
+      }
+  }
+
   const requestSave = () => {
+    uploadAllFile()
     const {
       email,
       phone,
