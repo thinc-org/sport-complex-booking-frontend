@@ -31,13 +31,33 @@ export interface OtherComponentInfo extends Info {
   previous_payment_slips: string[]
 }
 
-export interface VerifyExtendInfo {
+export interface VerifyComponentSatitInfo {
   username: string
-  membership_type: string
   name_th: string
   surname_th: string
-  payment_slip: string
+  name_en: string
+  surname_en: string
+  personal_email: string
+  phone: string
+  student_card_photo: string
+}
+
+export interface VerifyExtendInfo {
+  username: string
+  name_th: string
+  surname_th: string
+  name_en: string
+  surname_en: string
   account_expiration_date: Date
+}
+
+export interface VerifyExtendInfoOther extends VerifyExtendInfo {
+  membership_type: string
+  payment_slip: string
+}
+
+export interface VerifyExtendInfoSatit extends VerifyExtendInfo {
+  student_card_photo: string
 }
 
 export interface EditComponentInfo {
@@ -133,12 +153,15 @@ export interface ContactPerson {
 }
 
 export interface RejectInfo {
-  prefix: boolean
-  gender: boolean
   name_th: boolean
   surname_th: boolean
   name_en: boolean
   surname_en: boolean
+}
+
+export interface RejectInfoOther extends RejectInfo {
+  prefix: boolean
+  gender: boolean
   birthday: boolean
   national_id: boolean
   marital_status: boolean
@@ -156,7 +179,11 @@ export interface RejectInfo {
   payment_slip: boolean
 }
 
-export const RejectInfoLabel: Record<keyof RejectInfo, string> = {
+export interface RejectInfoSatit extends RejectInfo {
+  student_card_photo: boolean
+}
+
+export const RejectInfoOtherLabel: Record<keyof RejectInfoOther, string> = {
   prefix: "คำนำหน้าชื่อ",
   gender: "เพศ",
   name_th: "ชื่อจริง",
@@ -181,7 +208,17 @@ export const RejectInfoLabel: Record<keyof RejectInfo, string> = {
   payment_slip: "หลักฐานการชำระเงิน",
 }
 
-export type RejectInfoLabelKey = keyof RejectInfo
+export const RejectInfoSatitLabel: Record<keyof RejectInfoSatit, string> = {
+  name_th: "ชื่อจริง",
+  surname_th: "นามสกุล",
+  name_en: "ชื่อจริง (ภาษาอังกฤษ)",
+  surname_en: "นามสกุล (ภาษาอังกฤษ)",
+  student_card_photo: "รูปภาพบัตรนักเรียน",
+}
+
+export type RejectInfoOtherLabelKey = keyof RejectInfoOther
+
+export type RejectInfoSatitLabelKey = keyof RejectInfoSatit
 
 // Modals //
 export type ModalVerify =
