@@ -9,12 +9,12 @@ import { useTranslation } from "react-i18next"
 import { setCookie } from "../../../../contexts/cookieHandler"
 import { client } from "../../../../../axiosConfig"
 import { OtherInfo, RegistrationProps } from "../../staff-pages/interfaces/InfoInterface"
-import { DocumentUploadResponse } from "../../../../dto/account.dto"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { otherInfoSchema } from "../../../../schemas/editUserInfo"
 import { useHistory } from "react-router"
 import BeatLoader from "react-spinners/BeatLoader"
 import { useLanguage } from "../../../../utils/language"
+import { DocumentUploadResponse } from "../../../../dto/account.dto"
 
 export default function OtherAccountEdit({ registrationInfo, isRegister }: RegistrationProps) {
   // React Hook Forms
@@ -38,57 +38,6 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
   const language = useLanguage()
   const [showUsernameRepeatErr, setShowUsernameRepeatErr] = useState(false)
 
-  // Handlers
-  const handleFileUpload = (formData: FormData) => {
-    client.post<DocumentUploadResponse>("/fs/upload", formData).catch(() => {
-      setShow(false)
-      setShowFileErr(true)
-    })
-  }
-
-  const uploadUserPhoto = (file: File) => {
-    const formData = new FormData()
-    formData.append("user_photo", file, file?.name)
-    handleFileUpload(formData)
-  }
-
-  const uploadNationalIdHouseRegistration = (file: File) => {
-    const formData = new FormData()
-    formData.append("national_id_house_registration", file, file?.name)
-    handleFileUpload(formData)
-  }
-  const uploadMedicalCertificate = (file: File) => {
-    const formData = new FormData()
-    formData.append("medical_certificate", file, file?.name)
-    handleFileUpload(formData)
-  }
-
-  const uploadRelationshipVerificationDocument = (file: File) => {
-    const formData = new FormData()
-    formData.append("relationship_verification_document", file, file.name)
-    handleFileUpload(formData)
-  }
-
-  const uploadPaymentEvidence = (file: File) => {
-    const formData = new FormData()
-    formData.append("payment_slip", file, file.name)
-    handleFileUpload(formData)
-  }
-
-  const handleAllFilesUpload = (
-    userPhotoInput: File | undefined,
-    nationalIdHouseRegistration: File | undefined,
-    medicalCertificateInput: File | undefined,
-    relationshipVerificationDocumentInput: File | undefined,
-    paymentEvidence: File | undefined
-  ) => {
-    if (userPhotoInput) uploadUserPhoto(userPhotoInput)
-    if (nationalIdHouseRegistration) uploadNationalIdHouseRegistration(nationalIdHouseRegistration)
-    if (medicalCertificateInput) uploadMedicalCertificate(medicalCertificateInput)
-    if (relationshipVerificationDocumentInput) uploadRelationshipVerificationDocument(relationshipVerificationDocumentInput)
-    if (paymentEvidence) uploadPaymentEvidence(paymentEvidence)
-  }
-
   const changeLanguage = (is_thai_language: boolean) => {
     if (is_thai_language) {
       setCookie("is_thai_language", true, 999)
@@ -100,13 +49,22 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
   }
 
   const postDataToBackend = (data: Other) => {
+    data = { ...data, is_thai_language: language === "th", ...registrationInfo, birthday: date.toString() }
+    const formData = new FormData()
+    formData.append("data", JSON.stringify(data))
+    if (user_photo) formData.append("user_photo", user_photo, user_photo.name)
+    if (national_id_house_registration)
+      formData.append("national_id_house_registration", national_id_house_registration, national_id_house_registration.name)
+    if (medical_certificate) formData.append("medical_certificate", medical_certificate, medical_certificate.name)
+    if (relationship_verification_document)
+      formData.append("relationship_verification_document", relationship_verification_document, relationship_verification_document.name)
+    if (payment_slip) formData.append("payment_slip", payment_slip, payment_slip.name)
     setLoading(true)
     if (isRegister) {
       client
-        .post<RegisterResponse>("/users/other", { ...data, is_thai_language: language === "th", ...registrationInfo, birthday: date })
+        .post<RegisterResponse>("/users/other", formData)
         .then(({ data }) => {
           setCookie("token", data.jwt, 1)
-          handleAllFilesUpload(user_photo, national_id_house_registration, medical_certificate, relationship_verification_document, payment_slip)
           setShowRegisterSuccess(true)
           setLoading(false)
         })
@@ -119,10 +77,14 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
         })
     } else {
       client
-        .put<Other>("/account_info/", { ...data, is_thai_language: language === "th", birthday: date })
+        .put<Other>("/account_info/", { ...data, is_thai_language: language === "th", ...registrationInfo, birthday: date.toString() })
         .then(({ data }) => {
           if (data.verification_status === "Submitted") {
-            handleAllFilesUpload(user_photo, national_id_house_registration, medical_certificate, relationship_verification_document, payment_slip)
+            formData.delete("data")
+            client.post<DocumentUploadResponse>("/fs/upload", formData).catch(() => {
+              setShow(false)
+              setShowFileErr(true)
+            })
           }
           setLoading(false)
           window.location.reload()

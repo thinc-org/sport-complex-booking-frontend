@@ -27,7 +27,13 @@ function AccountPage() {
       if (data.account_type === "CuStudent") {
         setCuStudentAccount(data as CuStudent)
       } else if (data.account_type === "SatitAndCuPersonel") {
-        setSatitCuPersonelAccount(data as SatitCuPersonel)
+        const satit = data as SatitCuPersonel
+        if (satit.rejected_info && satit.verification_status === "Rejected") {
+          satit.rejected_info.forEach((field) => {
+            satit[field] = ""
+          })
+        }
+        setSatitCuPersonelAccount(satit as SatitCuPersonel)
       } else if (data.account_type === "Other") {
         const other = data as Other
         const newOther = other.contact_person
@@ -40,7 +46,7 @@ function AccountPage() {
               contact_person_phone: other.contact_person.contact_person_phone,
             }
           : { ...other }
-        other.rejected_info
+        other.rejected_info && other.verification_status === "Rejected"
           ? other.rejected_info.forEach((field) => {
               newOther[field] = ""
             })
