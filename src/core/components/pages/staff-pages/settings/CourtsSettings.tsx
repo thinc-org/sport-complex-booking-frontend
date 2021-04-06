@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { Table, Form, Row, Col, Button } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
-import { NoCourtsModal, EditCourt, DeleteCourtModal, AddCourtFunc } from "./CourtsSettingsComponents"
+import { NoCourtsModal, EditCourt, DeleteCourtModal, AddCourtFunc , ConflictModal } from "./CourtsSettingsComponents"
 import { HandleError } from "./SportSettingsComponents"
 import { AxiosResponse } from "axios"
 import { ListCourts } from "../../../../dto/settings.dto"
@@ -9,8 +9,11 @@ import { Sport, Court } from "../../../../dto/sport.dto"
 import useSportState from "./SettingsHooks/useSportState"
 import useCourtState from "./SettingsHooks/useCourtState"
 import useCurrentCourtState from "./SettingsHooks/useCurrentCourtStates"
+import { OverlapData } from "../../../../dto/disableCourt.dto"
+
 
 export default function CourtsSettings() {
+  const [conflictData, setConflictData] = useState<OverlapData>()
   const [showAddCourt, setShowAddCourt] = useState(false)
   const [showNoCourt, setShowNoCourt] = useState(false)
   const [showEditCourt, setShowEditCourt] = useState(false)
@@ -78,8 +81,14 @@ export default function CourtsSettings() {
         setShowDeleteCourt(false)
         requestCourts(currentSportId)
       })
-      .catch(() => {
-        setShowError(true)
+      .catch((err) => {
+        if (err.response.status === 409) {
+          setConflictData({
+            waitingRoom: err.response.data.overlapWaitingRooms,
+            reservation: err.response.data.overlapReservations,
+            disableCourt: err.response.data.overlapDisableCourts,
+          })
+        } else setShowError(true)
         requestCourts(currentSportId)
       })
   }
@@ -123,38 +132,40 @@ export default function CourtsSettings() {
       const closeTime = court["close_time"] + ":00"
 
       return (
-        <tr key={i} className="tr-normal">
-          <td> {court["court_num"]} </td>
-          <td> {currentSportName}</td>
-          <td> {openTime} </td>
-          <td> {closeTime}</td>
-          <td>
-            <Button
-              className="btn-normal btn-outline-dark"
-              variant="outline-black"
-              onClick={() => {
-                setCurrentCourt(court)
-                setShowEditCourt(true)
-                onChangeOpenTime(openTime)
-                onChangeCloseTime(closeTime)
-              }}
-            >
-              แก้ไข
-            </Button>
-          </td>
-          <td>
-            <Button
-              className="btn-normal btn-outline-black"
-              variant="outline-danger"
-              onClick={() => {
-                setCurrentCourt(court)
-                setShowDeleteCourt(true)
-              }}
-            >
-              ลบคอร์ด
-            </Button>
-          </td>
-        </tr>
+        <>
+          <tr key={i} className="tr-normal">
+            <td> {court["court_num"]} </td>
+            <td> {currentSportName}</td>
+            <td> {openTime} </td>
+            <td> {closeTime}</td>
+            <td>
+              <Button
+                className="btn-normal btn-outline-dark"
+                variant="outline-black"
+                onClick={() => {
+                  setCurrentCourt(court)
+                  setShowEditCourt(true)
+                  onChangeOpenTime(openTime)
+                  onChangeCloseTime(closeTime)
+                }}
+              >
+                แก้ไข
+              </Button>
+            </td>
+            <td>
+              <Button
+                className="btn-normal btn-outline-black"
+                variant="outline-danger"
+                onClick={() => {
+                  setCurrentCourt(court)
+                  setShowDeleteCourt(true)
+                }}
+              >
+                ลบคอร์ด
+              </Button>
+            </td>
+          </tr>
+        </>
       )
     })
     return courtList
@@ -162,6 +173,7 @@ export default function CourtsSettings() {
 
   return (
     <div>
+      <ConflictModal overlapData={conflictData} inProp={!!conflictData} handleClose={() => setConflictData(undefined)} />
       <Form.Group controlId="exampleForm.ControlSelect1">
         <Form.Label>ประเภทกีฬา</Form.Label>
         <Form.Control as="select" custom defaultValue={0} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeSport(e)}>
