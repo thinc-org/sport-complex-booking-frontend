@@ -90,6 +90,8 @@ export interface ErrorRowProps {
   date: Date
   time_slot: number[]
   button?: JSX.Element
+  name_th: string
+  name_en: string
 }
 export interface ModalProps {
   inProp: boolean

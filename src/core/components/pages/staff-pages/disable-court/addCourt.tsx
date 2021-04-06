@@ -40,8 +40,10 @@ const AddCourt = () => {
             message: "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง",
           })
         } else {
-          if (err.response.data.reason)
+          if (err.response.data.reason) {
+            console.log(err.response.data)
             setOverlapData({ reservation: err.response.data.overlapReservations, waitingRoom: err.response.data.overlapWaitingRooms })
+          }
           setError("duplicate", {
             type: "manual",
             message: "วันหรือเวลาของการปิดคอร์ดนี้ซ้ำกับการปิดคอร์ดที่มีอยู่แล้ว",
