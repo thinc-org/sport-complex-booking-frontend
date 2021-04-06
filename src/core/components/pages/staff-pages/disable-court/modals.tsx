@@ -7,7 +7,7 @@ import { ModalProps, FormModalProps, TimeSlotRow } from "../../../../dto/disable
 export const ErrorAlert = ({ inProp, header, message, handleClose, canCancel = false, onCancel, children }: ModalProps) => {
   return (
     <>
-      <Modal show={inProp} onHide={onCancel ?? handleClose}>
+      <Modal className="wide-modal" show={inProp} onHide={onCancel ?? handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>{header}</Modal.Title>
         </Modal.Header>
