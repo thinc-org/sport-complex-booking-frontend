@@ -73,8 +73,11 @@ export interface CuSatitComponentInfo {
   surname_en: string
   personal_email: string
   phone: string
+  student_card_photo: string
   expired_penalize_date: string
   expired_penalize_time: string
+  account_expiration_date: string
+  account_expiration_time: string
 }
 
 export interface PasswordToggle {
@@ -83,6 +86,7 @@ export interface PasswordToggle {
   confirmPassword: boolean
 }
 
+/*
 export interface AddInfo {
   membership_type: string
   is_thai_language: boolean
@@ -95,6 +99,7 @@ export interface AddInfo {
   personal_email: string
   phone: string
 }
+*/
 
 export interface AddUserComponentInfo {
   is_thai_language: boolean
@@ -197,14 +202,15 @@ export type ModalUserInfo =
   | "showComSave"
   | "showUncomExpire"
   | "showErr"
+  | "showUploadErr"
   | "showPasswordErr"
   | "showConfirmChange"
   | "showChangePassword"
 
-export type ModalAddUser = "none" | "showAdd" | "showCom" | "showErr" | "showUsernameErr"
+//export type ModalAddUser = "none" | "showAdd" | "showCom" | "showErr" | "showUsernameErr"
 
 // Alerts //
-export type AlertAddUser = "none" | "showAlertUncom" | "showAlertUsername" | "showAlertPassword"
+//export type AlertAddUser = "none" | "showAlertUncom" | "showAlertUsername" | "showAlertPassword"
 
 // Registration //
 export interface RegistrationInfo {

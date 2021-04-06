@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from "react"
 import { Table, Form, Row, Col, Button, Modal } from "react-bootstrap"
-import { Link, useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { client } from "../../../../../axiosConfig"
 import { AxiosResponse } from "axios"
 import { Account, UserInfoRes, UserListRes } from "../../../../dto/listOfAllUsers.dto"

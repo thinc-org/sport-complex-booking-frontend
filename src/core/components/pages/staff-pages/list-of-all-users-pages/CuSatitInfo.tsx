@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form"
 import { client } from "../../../../../axiosConfig"
 import { CuSatitComponentInfo, ModalUserInfo } from "../interfaces/InfoInterface"
 import { renderLoading } from "./ListOfAllUsers"
+import { handlePDF } from "./OtherViewInfoComponent"
 import { CuStudent, SatitCuPersonel } from "../../../../contexts/UsersContext"
 import PasswordChangeModal from "./PasswordChangeModal"
 import {
@@ -15,6 +16,7 @@ import {
   CompleteSaveModal,
   UncomExpireDateModal,
   ErrModal,
+  UploadErrModal,
   PasswordErrModal,
   ConfirmChangePasswordModal,
 } from "./ListOfAllUserModals"
@@ -37,6 +39,7 @@ const UserInfo: FunctionComponent = () => {
   const [showAlert, setShowAlert] = useState<boolean>(false)
 
   // user states
+  const [studentCardPhotoFile, setStudentCardPhotoFile] = useState<File>()
   const [user, setUser] = useState<CuSatitType>({
     account_type: Account.CuStudent,
     is_thai_language: true,
@@ -90,6 +93,31 @@ const UserInfo: FunctionComponent = () => {
   }
 
   // handles //
+  const handleUpload = (typename: string, file: File) => {
+    const formData = new FormData()
+    const selectedFile = file
+    // Update the formData object
+    if (selectedFile) {
+      formData.append(typename, selectedFile, selectedFile.name)
+      // Request made to the backend api
+      client({
+        method: "POST",
+        url: `/fs/admin/upload/${_id}`,
+        data: formData,
+      })
+        .then(({ data }) => {
+          setTempUser({
+            ...(tempUser as SatitCuPersonel),
+            student_card_photo: data[Object.keys(data)[0]],
+          })
+        })
+        .catch(({ response }) => {
+          setShowModals("showUploadErr")
+          console.log(response)
+        })
+    }
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.id === "is_penalize") {
       // set is_penalize
@@ -113,12 +141,19 @@ const UserInfo: FunctionComponent = () => {
     // if some input is blank -> alert //
     // else -> try change //
     const newPenExp: Date = new Date(`${data.expired_penalize_date} ${data.expired_penalize_time}`)
+    const newAccExp: Date = new Date(`${data.account_expiration_date} ${data.account_expiration_time}`)
     if (tempUser.is_penalize && (!data.expired_penalize_date || !data.expired_penalize_time || !isValid(newPenExp) || newPenExp < new Date()))
       setShowModals("showUncomExpire")
+    else if (
+      user.account_type === "SatitAndCuPersonel" &&
+      (!data.account_expiration_date || !data.account_expiration_time || !isValid(newAccExp) || newAccExp < new Date())
+    )
+      setShowModals("showUncomExpire")
     else {
-      const { expired_penalize_date, expired_penalize_time, ...rest } = data
+      const { expired_penalize_date, expired_penalize_time, account_expiration_date, account_expiration_time, ...rest } = data
       const { name_th, surname_th, name_en, surname_en, personal_email, phone } = rest
-      setTempUser({ ...tempUser, expired_penalize_date: newPenExp, ...rest })
+      if (user.account_type === "CuStudent") setTempUser({ ...(tempUser as CuStudent), expired_penalize_date: newPenExp, ...rest })
+      else setTempUser({ ...(tempUser as SatitCuPersonel), expired_penalize_date: newPenExp, account_expiration_date: newAccExp, ...rest })
       if (name_th !== "" && surname_th !== "" && name_en !== "" && surname_en !== "" && personal_email !== "" && phone !== "")
         setShowModals("showSave")
       else setShowAlert(true)
@@ -196,6 +231,7 @@ const UserInfo: FunctionComponent = () => {
         <CompleteSaveModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
         <UncomExpireDateModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
         <ErrModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
+        <UploadErrModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
         <PasswordErrModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
         <ConfirmChangePasswordModal showModalInfo={showModals} setShowModalInfo={setShowModals} info={{ requestChangePassword }} />
         <PasswordChangeModal showModals={showModals} setShowModals={setShowModals} setNewPassword={setNewPassword} />
@@ -237,6 +273,14 @@ const UserInfo: FunctionComponent = () => {
             <p>ชื่อผู้ใช้</p>
             <p className="font-weight-bold mb-0">{user.username}</p>
           </Col>
+          {user.account_type === "SatitAndCuPersonel" ? (
+            <Col>
+              <p>รูปภาพบัตรนักเรียน</p>
+              <p className="link" id={(user as SatitCuPersonel).student_card_photo} onClick={handlePDF}>
+                ดูเอกสาร
+              </p>
+            </Col>
+          ) : null}
         </Row>
         <Row className="py-3">
           <Col>
@@ -260,7 +304,7 @@ const UserInfo: FunctionComponent = () => {
           <Col>
             <p>สิ้นสุดการแบน</p>
             <Row>
-              <Col sm={4} className="mr-3">
+              <Col style={{ width: "60%" }}>
                 <Form.Control
                   disabled
                   type="date"
@@ -268,7 +312,7 @@ const UserInfo: FunctionComponent = () => {
                   value={user.is_penalize && isValid(user.expired_penalize_date) ? format(user.expired_penalize_date!, "yyyy-MM-dd") : ""}
                 />
               </Col>
-              <Col>
+              <Col style={{ width: "40%" }}>
                 <Form.Control
                   disabled
                   type="time"
@@ -278,6 +322,37 @@ const UserInfo: FunctionComponent = () => {
               </Col>
             </Row>
           </Col>
+          {user.account_type === "SatitAndCuPersonel" ? (
+            <Col>
+              <p>วันหมดอายุสมาชิก</p>
+              <Row>
+                <Col style={{ width: "60%" }}>
+                  <Form.Control
+                    disabled
+                    type="date"
+                    style={{ width: "min-content" }}
+                    value={
+                      isValid((user as SatitCuPersonel).account_expiration_date)
+                        ? format((user as SatitCuPersonel).account_expiration_date!, "yyyy-MM-dd")
+                        : ""
+                    }
+                  />
+                </Col>
+                <Col>
+                  <Form.Control
+                    disabled
+                    type="time"
+                    style={{ width: "min-content" }}
+                    value={
+                      isValid((user as SatitCuPersonel).account_expiration_date)
+                        ? format((user as SatitCuPersonel).account_expiration_date!, "HH:mm")
+                        : ""
+                    }
+                  />
+                </Col>
+              </Row>
+            </Col>
+          ) : null}
         </Row>
         <Row className="mt-4">
           <Col>
@@ -352,11 +427,27 @@ const UserInfo: FunctionComponent = () => {
               )}
             </Col>
           </Row>
-          <Row>
-            <Col className="py-3">
+          <Row className="py-3">
+            <Col>
               <p>ชื่อผู้ใช้</p>
               <Form.Label className="font-weight-bold">{user.username}</Form.Label>
             </Col>
+            {user.account_type === "SatitAndCuPersonel" ? (
+              <Col>
+                <p>รูปภาพบัตรนักเรียน</p>
+                <Form.File
+                  label={studentCardPhotoFile ? (studentCardPhotoFile as File).name : "Choose File"}
+                  id="student_card_photo"
+                  custom
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    if (e.target.files && e.target.files[0]?.size <= 2097152) {
+                      setStudentCardPhotoFile(e.target.files[0])
+                      handleUpload(e.target.id, e.target.files[0])
+                    } else alert(t("fileTooBig"))
+                  }}
+                />
+              </Col>
+            ) : null}
           </Row>
           <Row className="py-3">
             <Col>
@@ -393,7 +484,7 @@ const UserInfo: FunctionComponent = () => {
             <Col>
               <p>สิ้นสุดการแบน</p>
               <Row>
-                <Col sm={4} className="mr-3">
+                <Col style={{ width: "60%" }}>
                   <Form.Control
                     ref={register}
                     name="expired_penalize_date"
@@ -406,7 +497,7 @@ const UserInfo: FunctionComponent = () => {
                     }
                   />
                 </Col>
-                <Col>
+                <Col style={{ width: "40%" }}>
                   <Form.Control
                     ref={register}
                     name="expired_penalize_time"
@@ -420,6 +511,39 @@ const UserInfo: FunctionComponent = () => {
                 </Col>
               </Row>
             </Col>
+            {user.account_type === "SatitAndCuPersonel" ? (
+              <Col>
+                <p>วันหมดอายุสมาชิก</p>
+                <Row>
+                  <Col style={{ width: "60%" }}>
+                    <Form.Control
+                      ref={register}
+                      name="account_expiration_date"
+                      type="date"
+                      style={{ width: "min-content" }}
+                      defaultValue={
+                        isValid((user as SatitCuPersonel).account_expiration_date)
+                          ? format((user as SatitCuPersonel).account_expiration_date!, "yyyy-MM-dd")
+                          : ""
+                      }
+                    />
+                  </Col>
+                  <Col>
+                    <Form.Control
+                      ref={register}
+                      name="account_expiration_time"
+                      type="time"
+                      style={{ width: "min-content" }}
+                      defaultValue={
+                        isValid((user as SatitCuPersonel).account_expiration_date)
+                          ? format((user as SatitCuPersonel).account_expiration_date!, "HH:mm")
+                          : ""
+                      }
+                    />
+                  </Col>
+                </Row>
+              </Col>
+            ) : null}
           </Row>
           <Row className="mt-5">
             {String(user.account_type) !== Account[Account.CuStudent] ? (
