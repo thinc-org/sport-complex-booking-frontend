@@ -12,7 +12,7 @@ import { client } from "../../../../axiosConfig"
 import { RegisterResponse, SatitCuPersonel } from "../../../contexts/UsersContext"
 import { setCookie } from "../../../contexts/cookieHandler"
 import { DocumentUploadResponse } from "../../../dto/account.dto"
-import { CustomAccountModal } from "../Modals/AccountPageModals"
+import { CustomAccountModal, WarningMessage } from "../Modals/AccountPageModals"
 import { useHistory } from "react-router"
 import BeatLoader from "react-spinners/BeatLoader"
 
@@ -30,7 +30,7 @@ export const RegisterSatit = ({ user }: satitRejectedProps) => {
   const history = useHistory()
 
   const handleFileUpload = (formData: FormData) => {
-    client.post<DocumentUploadResponse>("/fs/uploadSatit", formData).catch((err) => {
+    client.post<DocumentUploadResponse>("/fs/uploadSatit", formData).catch(() => {
       setShowFileErr(true)
     })
   }
@@ -42,10 +42,14 @@ export const RegisterSatit = ({ user }: satitRejectedProps) => {
   }
 
   const postDataToBackend = (data: satitRegistrationInfo) => {
+    const formData = new FormData()
+    formData.append("data", JSON.stringify(data))
+    if (student_card_photo) formData.append("student_card_photo", student_card_photo, student_card_photo.name)
     setLoading(true)
+    console.log({ ...data, personal_email: user?.username })
     user
       ? client
-          .put<SatitCuPersonel>("/account_info", data)
+          .put<SatitCuPersonel>("/account_info", { ...data, personal_email: user.username })
           .then(() => {
             if (student_card_photo) uploadStudentCardPhoto(student_card_photo)
             setLoading(false)
@@ -59,7 +63,7 @@ export const RegisterSatit = ({ user }: satitRejectedProps) => {
             }
           })
       : client
-          .post<RegisterResponse>("/users/satit", data)
+          .post<RegisterResponse>("/users/satit", formData)
           .then(({ data }) => {
             setCookie("token", data.jwt, 1)
             if (student_card_photo) uploadStudentCardPhoto(student_card_photo)
@@ -85,102 +89,14 @@ export const RegisterSatit = ({ user }: satitRejectedProps) => {
     <>
       <NavHeader header={t("register")} />
       <div className="mx-auto col-md-6">
-        <div className="default-mobile-wrapper mt-3">
-          <h4>{t("accountTypeInfo")}</h4>
+        {user && <WarningMessage show={user.verification_status !== ""} verification_status={user.verification_status} account={user.account_type} />}
+      </div>
+      <div className="mx-auto col-md-6">
+        <div className="mt-3">
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <label className="form-label mt-2">{t("language")}</label>
-            <div className="row mt-2 mx-1">
-              {language !== "th" ? (
-                <div>
-                  <Button variant="pink" className="btn-outline mr-2" onClick={() => changeLanguage("en")}>
-                    EN
-                  </Button>
-                  <Button variant="gray" className="btn-outline mr-2" onClick={() => changeLanguage("th")}>
-                    TH
-                  </Button>
-                </div>
-              ) : (
-                <div>
-                  <Button variant="gray" className="btn-outline mr-2" onClick={() => changeLanguage("en")}>
-                    EN
-                  </Button>
-                  <Button variant="pink" className="btn-outline mr-2" onClick={() => changeLanguage("th")}>
-                    TH
-                  </Button>
-                </div>
-              )}
-            </div>
-            <hr />
-
-            <label className="form-label mt-2">{t("name_en")}</label>
-            <input
-              name="name_en"
-              type="text"
-              ref={register}
-              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("name_en")}
-              defaultValue={user?.name_en}
-              placeholder={t("name_en")}
-              className="form-control"
-            />
-            {user?.rejected_info?.includes("name_en") ? <p className="input-error">{t("resubmitField")}</p> : null}
-            {errors.name_en && <p id="input-error">{errors.name_en.message}</p>}
-
-            <label className="form-label mt-2">{t("surname_en")}</label>
-            <input
-              name="surname_en"
-              type="text"
-              ref={register}
-              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("surname_en")}
-              defaultValue={user?.surname_en}
-              placeholder={t("surname_en")}
-              className="form-control"
-            />
-            {user?.rejected_info?.includes("surname_en") ? <p className="input-error">{t("resubmitField")}</p> : null}
-            {errors.surname_en && <p id="input-error">{errors.surname_en.message}</p>}
-
-            <label className="form-label mt-2">{t("name_th")}</label>
-            <input
-              name="name_th"
-              type="text"
-              ref={register}
-              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("name_th")}
-              defaultValue={user?.name_th}
-              placeholder={t("name_th")}
-              className="form-control"
-            />
-            {user?.rejected_info?.includes("name_th") ? <p className="input-error">{t("resubmitField")}</p> : null}
-            {errors.name_th && <p id="input-error">{errors.name_th.message}</p>}
-
-            <label className="form-label mt-2">{t("surname_th")}</label>
-            <input
-              name="surname_th"
-              type="text"
-              ref={register}
-              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("surname_th")}
-              defaultValue={user?.surname_th}
-              placeholder={t("surname_th")}
-              className="form-control"
-            />
-            {user?.rejected_info?.includes("surname_th") ? <p className="input-error">{t("resubmitField")}</p> : null}
-            {errors.surname_th && <p id="input-error">{errors.surname_th.message}</p>}
-
-            <label className="form-label mt-2">{t("mobile_phone")}</label>
-            <input
-              name="phone"
-              type="tel"
-              ref={register}
-              readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("phone")}
-              defaultValue={user?.phone}
-              placeholder="0xxxxxxxxx *"
-              className="form-control"
-            />
-            {user?.rejected_info?.includes("phone") ? <p className="input-error">{t("resubmitField")}</p> : null}
-            {errors.phone && <p id="input-error">{errors.phone.message}</p>}
-
-            <hr className="mt-4" />
-
             {!user && (
-              <div>
+              <div className="default-mobile-wrapper mt-3">
+                <h4>{t("accountTypeInfo")}</h4>
                 <label className="form-label mt-2">{t("username*")}</label>
                 <input name="username" type="text" ref={register} placeholder="example@email.com *" className="form-control" />
                 {errors.username && <p id="input-error">{errors.username.message}</p>}
@@ -193,39 +109,132 @@ export const RegisterSatit = ({ user }: satitRejectedProps) => {
                 <hr />
               </div>
             )}
-            <label className="form-label my-2">{t("studentCardPhotoLabel")}</label>
 
-            {!user?.student_card_photo && (
-              <div>
-                <p>{student_card_photo ? "✓ " + student_card_photo?.name.substring(0, 30) + "..." : t("noEmpty")}</p>
-                <label htmlFor="student_card_photo" className="form-file-input form-control text-center">
-                  {t("chooseFile")}
-                </label>
+            <div className="default-mobile-wrapper mt-3">
+              <h4 className="align-right mb-2">{t("language")}</h4>
+              <div className="row mt-2 mx-1">
+                {language !== "th" ? (
+                  <div>
+                    <Button variant="pink" className="btn-outline mr-2" onClick={() => changeLanguage("en")}>
+                      EN
+                    </Button>
+                    <Button variant="gray" className="btn-outline mr-2" onClick={() => changeLanguage("th")}>
+                      TH
+                    </Button>
+                  </div>
+                ) : (
+                  <div>
+                    <Button variant="gray" className="btn-outline mr-2" onClick={() => changeLanguage("en")}>
+                      EN
+                    </Button>
+                    <Button variant="pink" className="btn-outline mr-2" onClick={() => changeLanguage("th")}>
+                      TH
+                    </Button>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
 
-            {!user?.student_card_photo ? (
+            <div className="default-mobile-wrapper mt-3">
+              <h4>{t("memberInformation")}</h4>
+              <label className="form-label mt-2">{t("name_en")}</label>
               <input
-                style={{ opacity: 0, height: 0 }}
-                type="file"
-                className="form-file-input form-control"
-                id="student_card_photo"
-                required
-                accept="image/png, image/jpeg"
-                onChange={(e) => {
-                  if (e.target.files && e.target.files[0]?.size > 2097152) {
-                    alert(t("fileTooBig"))
-                    e.target.value = ""
-                  } else e.target.files && set_student_card_photo(e.target.files[0])
-                }}
+                name="name_en"
+                type="text"
+                ref={register}
+                readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("name_en")}
+                defaultValue={user?.name_en}
+                placeholder={t("name_en")}
+                className="form-control"
               />
-            ) : (
-              <p>{t("submitted")}</p>
-            )}
-            {user?.rejected_info?.includes("student_card_photo") ? <p className="input-error">{t("resubmitField")}</p> : null}
+              {user?.rejected_info?.includes("name_en") ? <p className="input-error">{t("resubmitField")}</p> : null}
+              {errors.name_en && <p id="input-error">{errors.name_en.message}</p>}
 
+              <label className="form-label mt-2">{t("surname_en")}</label>
+              <input
+                name="surname_en"
+                type="text"
+                ref={register}
+                readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("surname_en")}
+                defaultValue={user?.surname_en}
+                placeholder={t("surname_en")}
+                className="form-control"
+              />
+              {user?.rejected_info?.includes("surname_en") ? <p className="input-error">{t("resubmitField")}</p> : null}
+              {errors.surname_en && <p id="input-error">{errors.surname_en.message}</p>}
+
+              <label className="form-label mt-2">{t("name_th")}</label>
+              <input
+                name="name_th"
+                type="text"
+                ref={register}
+                readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("name_th")}
+                defaultValue={user?.name_th}
+                placeholder={t("name_th")}
+                className="form-control"
+              />
+              {user?.rejected_info?.includes("name_th") ? <p className="input-error">{t("resubmitField")}</p> : null}
+              {errors.name_th && <p id="input-error">{errors.name_th.message}</p>}
+
+              <label className="form-label mt-2">{t("surname_th")}</label>
+              <input
+                name="surname_th"
+                type="text"
+                ref={register}
+                readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("surname_th")}
+                defaultValue={user?.surname_th}
+                placeholder={t("surname_th")}
+                className="form-control"
+              />
+              {user?.rejected_info?.includes("surname_th") ? <p className="input-error">{t("resubmitField")}</p> : null}
+              {errors.surname_th && <p id="input-error">{errors.surname_th.message}</p>}
+
+              <label className="form-label mt-2">{t("mobile_phone")}</label>
+              <input
+                name="phone"
+                type="tel"
+                ref={register}
+                readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("phone")}
+                defaultValue={user?.phone}
+                placeholder="0xxxxxxxxx *"
+                className="form-control"
+              />
+              {user?.rejected_info?.includes("phone") ? <p className="input-error">{t("resubmitField")}</p> : null}
+              {errors.phone && <p id="input-error">{errors.phone.message}</p>}
+            </div>
+
+            <div className="default-mobile-wrapper mt-3">
+              <label className="form-label my-2">{t("studentCardPhotoLabel")}</label>
+              {!user?.student_card_photo && (
+                <div>
+                  <p>{student_card_photo ? "✓ " + student_card_photo?.name.substring(0, 30) + "..." : t("noEmpty")}</p>
+                  <label htmlFor="student_card_photo" className="form-file-input form-control text-center">
+                    {t("chooseFile")}
+                  </label>
+                </div>
+              )}
+              {!user?.student_card_photo ? (
+                <input
+                  style={{ opacity: 0, height: 0 }}
+                  type="file"
+                  className="form-file-input form-control"
+                  id="student_card_photo"
+                  required
+                  accept="image/png, image/jpeg"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]?.size > 2097152) {
+                      alert(t("fileTooBig"))
+                      e.target.value = ""
+                    } else e.target.files && set_student_card_photo(e.target.files[0])
+                  }}
+                />
+              ) : (
+                <p>{t("submitted")}</p>
+              )}
+              {user?.rejected_info?.includes("student_card_photo") ? <p className="input-error">{t("resubmitField")}</p> : null}
+            </div>
             <div className="button-group">
-              <Button type="submit" variant="pink" className="mt-4 mb-0">
+              <Button type="submit" variant="pink" className="my-4 mb-0">
                 {t("submit")}
                 <span className="ml-3 spinner">
                   <BeatLoader color="#fff" loading={loading} size={12} />
