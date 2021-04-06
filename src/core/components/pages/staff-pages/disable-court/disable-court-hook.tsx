@@ -248,6 +248,8 @@ export const useDisplayOverlapData = (overlapData: OverlapData | undefined) => {
             date: element.date,
             phone: element.list_member[0].phone,
             time_slot: element.time_slot,
+            name_en: element.list_member[0].name_en,
+            name_th: element.list_member[0].name_th,
           })
         })
         overlapData.waitingRoom?.forEach((element, indx) => {
@@ -258,6 +260,8 @@ export const useDisplayOverlapData = (overlapData: OverlapData | undefined) => {
             date: element.date,
             phone: element.list_member[0].phone,
             time_slot: element.time_slot,
+            name_en: element.list_member[0].name_en,
+            name_th: element.list_member[0].name_th,
           })
         })
         return dataArr
