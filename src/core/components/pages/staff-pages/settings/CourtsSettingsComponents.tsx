@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Form, Row, Col, Button, Modal } from "react-bootstrap"
 import TimePicker from "react-time-picker"
 import { Control, useForm, useWatch } from "react-hook-form"
-import { NormalModalProps, EditCourtProps, DeleteCourtModalProps, AddCourtFuncProps , ConflictModalProps } from "../../../../dto/settings.dto"
+import { NormalModalProps, EditCourtProps, DeleteCourtModalProps, AddCourtFuncProps, ConflictModalProps } from "../../../../dto/settings.dto"
 import { ErrorAlert } from "../disable-court/modals"
 import { OverlapDataTable } from "../disable-court/disabled-court-table"
 
@@ -386,7 +386,9 @@ export const ConflictModal: React.FC<ConflictModalProps> = ({ overlapData, inPro
         {overlapData?.disableCourt && (
           <div className="d-flex flex-column">
             <h5>จำนวนการปิดคอร์ดที่ชน: {overlapData.disableCourt.length}</h5>
-            <Button onClick={onDeleteBatch}>ลบการปิดคอร์ดทั้งหมด</Button>
+            <Button variant="pink" style={{ color: "red" }} onClick={onDeleteBatch}>
+              ลบการปิดคอร์ดทั้งหมด
+            </Button>
           </div>
         )}
       </div>
