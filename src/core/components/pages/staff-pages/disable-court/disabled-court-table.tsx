@@ -54,7 +54,7 @@ export const ViewRow = ({ time_slot, indx, day, button }: ViewRowProps) => {
   )
 }
 
-export const ErrorRow = ({ date, phone, indx, time_slot, button, _id, type }: ErrorRowProps) => {
+export const ErrorRow = ({ date, phone, indx, time_slot, button, _id, type, name_th, name_en }: ErrorRowProps) => {
   const [hidden, setHidden] = useState(false)
   const onDelete = (id: number | string, type = "") => {
     const path = type === "reservation" ? "all-reservation" : "all-waiting-room"
@@ -72,6 +72,8 @@ export const ErrorRow = ({ date, phone, indx, time_slot, button, _id, type }: Er
       {!hidden && (
         <tr>
           <td>{indx + 1}</td>
+          <td>{name_th}</td>
+          <td>{name_en}</td>
           <td>{phone}</td>
           <td>{overlapDate}</td>
           <td className={button ? "d-flex flex-row justify-content-end align-items-center" : ""}>
@@ -110,7 +112,7 @@ export const OverlapDataTable: React.FC<OverlapDataTableProps> = ({ overlapData 
     <div>
       {CourtTable<ErrorRowProps>({
         data: data,
-        header: ["index", "เบอร์ติดต่อ", "วันที่ทับซ้อน", "เวลาที่ทับซ้อน"],
+        header: ["index", "ชื่อไทย", "ชื่ออังกฤษ", "เบอร์ติดต่อ", "วันที่ทับซ้อน", "เวลาที่ทับซ้อน"],
         Row: ErrorRow,
       })}
     </div>
