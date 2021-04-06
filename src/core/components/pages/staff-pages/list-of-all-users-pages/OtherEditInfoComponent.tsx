@@ -6,6 +6,7 @@ import { OtherComponentInfo, EditComponentInfo } from "../interfaces/InfoInterfa
 import format from "date-fns/format"
 import isValid from "date-fns/isValid"
 import { useFormContext } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 
 export default function OtherEditInfoComponent({
   tempInfo,
@@ -17,6 +18,7 @@ export default function OtherEditInfoComponent({
   handleSave: (canSave: boolean, newPenExp: Date, newAccExp: Date) => void
 }) {
   // Page state //
+  const { t, i18n } = useTranslation()
   const { register, handleSubmit, errors } = useFormContext()
   const { _id } = useParams<{ _id: string }>()
   const [userPhotoFile, setUserPhotoFile] = useState<File>()
@@ -411,10 +413,10 @@ export default function OtherEditInfoComponent({
                 id="user_photo"
                 custom
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (e.target.files && e.target.files[0]) {
+                  if (e.target.files && e.target.files[0]?.size <= 2097152) {
                     setUserPhotoFile(e.target.files[0])
                     handleUpload(e.target.id, e.target.files[0])
-                  }
+                  } else alert(t("fileTooBig"))
                 }}
               />
             </div>
@@ -426,10 +428,10 @@ export default function OtherEditInfoComponent({
                 id="national_id_house_registration"
                 custom
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (e.target.files && e.target.files[0]) {
+                  if (e.target.files && e.target.files[0]?.size <= 2097152) {
                     setNationalIdPhotoFile(e.target.files[0])
                     handleUpload(e.target.id, e.target.files[0])
-                  }
+                  } else alert(t("fileTooBig"))
                 }}
               />
             </div>
@@ -441,10 +443,10 @@ export default function OtherEditInfoComponent({
                 id="medical_certificate"
                 custom
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (e.target.files && e.target.files[0]) {
+                  if (e.target.files && e.target.files[0]?.size <= 2097152) {
                     setMedicalCertificateFile(e.target.files[0])
                     handleUpload(e.target.id, e.target.files[0])
-                  }
+                  } else alert(t("fileTooBig"))
                 }}
               />
             </div>
@@ -458,10 +460,10 @@ export default function OtherEditInfoComponent({
                     id="relationship_verification_document"
                     custom
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      if (e.target.files && e.target.files[0]) {
+                      if (e.target.files && e.target.files[0]?.size <= 2097152) {
                         setRelationshipVerificationDocumentFile(e.target.files[0])
                         handleUpload(e.target.id, e.target.files[0])
-                      }
+                      } else alert(t("fileTooBig"))
                     }}
                   />
                 </div>
