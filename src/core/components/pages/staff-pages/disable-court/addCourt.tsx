@@ -3,6 +3,7 @@ import { useForm, useWatch } from "react-hook-form"
 import { Container, Row, Col, Button, Form } from "react-bootstrap"
 import { useHistory } from "react-router-dom"
 import { useOption, useDate, withDeletable, useRow } from "./disable-court-hook"
+import { reduceOverlapData } from "./conflictManager"
 import { ErrorAlert, FormAlert } from "./modals"
 import DatePicker from "react-datepicker"
 import { format } from "date-fns"
@@ -60,7 +61,7 @@ const AddCourt = () => {
         header="การปิดคอร์ดชนกับการจอง"
         message="พบการปิดคอร์ดชนกับการจองดังนี้"
       >
-        <OverlapDataTable overlapData={overlapData} />
+        <OverlapDataTable data={reduceOverlapData(overlapData)} />
       </ErrorAlert>
       <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} validate={validateTimeSlot} />
       <ErrorAlert inProp={showDateError} handleClose={handleAlert} header={"วันที่ไม่ถูกต้อง"} message={"วันที่ไม่ถูกต้อง"} />
