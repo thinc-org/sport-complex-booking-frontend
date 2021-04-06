@@ -181,8 +181,6 @@ const VerifyInfoSatit: FunctionComponent = () => {
             <p>อีเมลส่วนตัว</p>
             <p className="font-weight-bold mb-0">{info.personal_email}</p>
           </Col>
-        </Row>
-        <Row className="py-3">
           <Col>
             <p>เบอร์โทร</p>
             <p className="font-weight-bold mb-0">{info.phone}</p>
