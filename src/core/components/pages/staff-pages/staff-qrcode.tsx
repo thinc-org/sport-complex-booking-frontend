@@ -7,6 +7,9 @@ import QrReader from "react-qr-reader"
 import { ReservationDetailResponse } from "../../../dto/reservation.dto"
 
 const QRScannerPage: FunctionComponent<RouteComponentProps> = () => {
+  const soundPath = require("../../../assets/soundEffects/DingSoundEffect.mp3")
+
+  const [audio] = useState<HTMLAudioElement>(new Audio(soundPath))
   const [readingResult, setReadingResult] = useState<string>()
   const [messageHeader, setMessageHeader] = useState<string>("")
   const [messageBody, setMessageBody] = useState<string>("")
@@ -14,6 +17,7 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = () => {
   const [id, setId] = useState<string>()
   const [currentTime, setCurrentTime] = useState<number>()
   const [validTime, setValidTime] = useState<number>()
+  const [isSuccessful, setIsSuccessful] = useState<boolean>()
 
   const handleScan = (data: string | null) => {
     if (data) setReadingResult(data)
@@ -22,6 +26,17 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = () => {
   const handleError = (err: string | null) => {
     console.log(err)
   }
+
+  // const playSound = () => {
+  //   audio.currentTime = 0
+  //   audio.play()
+  // }
+
+  useEffect(() => {
+    if (isSuccessful && modalOpen) {
+      audio.play()
+    }
+  }, [isSuccessful, audio, modalOpen])
 
   useEffect(() => {
     if (readingResult) {
@@ -36,6 +51,7 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = () => {
       const res: ReservationDetailResponse = (await client.patch("myreservation/" + reservationId)).data
       if (res.is_check) {
         setMessageHeader("เช็คอินซ้ำ")
+        setIsSuccessful(false)
         setMessageBody(res.sport_id.sport_name_th + " ID: " + reservationId)
         setModalOpen(true)
         setTimeout(function () {
@@ -43,6 +59,7 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = () => {
         }, 3000)
       } else {
         setMessageHeader("เช็คอินสำเร็จ")
+        setIsSuccessful(true)
         setMessageBody(res.sport_id.sport_name_th + " ID: " + reservationId)
         setModalOpen(true)
         setTimeout(function () {
@@ -64,6 +81,7 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = () => {
       if (currentTime <= validTime) checkIn(id)
       else {
         setMessageHeader("คิวอาร์โค้ดหมดเวลา")
+        setIsSuccessful(false)
         setMessageBody("ID: " + id)
         setModalOpen(true)
         setTimeout(function () {
