@@ -4,10 +4,13 @@ import { client } from "../../../../../axiosConfig"
 import { DeleteSport, AddSport, HandleError, EditSport } from "./SportSettingsComponents"
 import { ListCourts } from "../../../../dto/settings.dto"
 import { Sport } from "../../../../dto/sport.dto"
+import { ConflictModal } from "./CourtsSettingsComponents"
 import useSportState from "./SettingsHooks/useSportState"
 import useCurrentSportState from "./SettingsHooks/useCurrentSportStates"
+import { OverlapData } from "../../../../dto/disableCourt.dto"
 
 export default function SportsSettings() {
+  const [conflictData, setConflictData] = useState<OverlapData>()
   const [pageNo, setPageNo] = useState(1)
   const [maxSport, setMaxSport] = useState<number>(1)
   const [searchName, setSearchName] = useState<string>("")
@@ -85,8 +88,14 @@ export default function SportsSettings() {
         setShowDeleteSport(false)
         requestSports()
       })
-      .catch(() => {
-        setShowError(true)
+      .catch((err) => {
+        if (err.response.status === 409) {
+          setConflictData({
+            waitingRoom: err.response.data.overlapWaitingRooms,
+            reservation: err.response.data.overlapReservations,
+            disableCourt: err.response.data.overlapDisableCourts,
+          })
+        } else setShowError(true)
       })
   }
 
@@ -225,6 +234,7 @@ export default function SportsSettings() {
 
   return (
     <div>
+      <ConflictModal overlapData={conflictData} inProp={!!conflictData} handleClose={() => setConflictData(undefined)} />
       <Form onSubmit={handleSearch} className="mb-2">
         <Form.Row className="justify-content-end align-items-center">
           <Col md="auto">

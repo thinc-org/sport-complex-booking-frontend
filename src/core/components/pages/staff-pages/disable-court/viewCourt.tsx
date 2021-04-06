@@ -11,6 +11,7 @@ import { FormAlert, ErrorAlert } from "./modals"
 import { Row, Col, Container, Button, Form } from "react-bootstrap"
 import DatePicker from "react-datepicker"
 import { client } from "../../../../../axiosConfig"
+import { reduceOverlapData } from "./conflictManager"
 
 interface Params {
   id: string
@@ -72,7 +73,7 @@ const ViewCourt = () => {
         header="การปิดคอร์ดชนกับการจอง"
         message="พบการปิดคอร์ดชนกับการจองดังนี้"
       >
-        <OverlapDataTable overlapData={overlapData} />
+        <OverlapDataTable data={reduceOverlapData(overlapData)} />
       </ErrorAlert>
       <ErrorAlert inProp={showDateError} handleClose={handleAlert} header={"วันที่ไม่ถูกต้อง"} message={"วันที่ไม่ถูกต้อง"} />
       <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} validate={validateTimeSlot} />
