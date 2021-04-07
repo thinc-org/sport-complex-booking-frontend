@@ -164,6 +164,7 @@ export const RegisterSatit = ({ user }: satitRejectedProps) => {
               {errors.surname_en && <p id="input-error">{errors.surname_en.message}</p>}
 
               <label className="form-label mt-2">{t("name_th")}</label>
+              <h6 className="font-weight-light">{t("noThaiName")}</h6>
               <input
                 name="name_th"
                 type="text"
@@ -177,6 +178,7 @@ export const RegisterSatit = ({ user }: satitRejectedProps) => {
               {errors.name_th && <p id="input-error">{errors.name_th.message}</p>}
 
               <label className="form-label mt-2">{t("surname_th")}</label>
+              <h6 className="font-weight-light">{t("noThaiSurname")}</h6>
               <input
                 name="surname_th"
                 type="text"
