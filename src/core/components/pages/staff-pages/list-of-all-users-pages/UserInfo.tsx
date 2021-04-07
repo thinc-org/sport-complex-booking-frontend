@@ -154,14 +154,14 @@ const UserInfo = () => {
     } else setShowModalInfo("showUncomExpire")
   }
 
-  const handleUpload = (typename: string, file: File) => {
+  const handleUpload = async (typename: string, file: File) => {
     const formData = new FormData()
     const selectedFile = file
     // Update the formData object
     if (selectedFile) {
       formData.append(typename, selectedFile, selectedFile.name)
       // Request made to the backend api
-      client({
+      await client({
         method: "POST",
         url: `/fs/admin/upload/${_id}`,
         data: formData,
@@ -179,34 +179,25 @@ const UserInfo = () => {
     }
   }
 
-  const uploadAllFile = () => {
-    if (fileList)
+  const uploadAllFile = async () => {
+    type fileType = "user_photo" | "medical_certificate" | "national_id_house_registration" | "relationship_verification_document"
+    const fileMapping = {
+      user_photo: 0,
+      medical_certificate: 1,
+      national_id_house_registration: 2,
+      relationship_verification_document: 3,
+    }
+    if (fileList) {
       for (const fileName of ["user_photo", "medical_certificate", "national_id_house_registration", "relationship_verification_document"]) {
         let file: File | undefined
-        switch (fileName) {
-          case "user_photo": {
-            file = fileList[0]
-            break
-          }
-          case "medical_certificate": {
-            file = fileList[1]
-            break
-          }
-          case "national_id_house_registration": {
-            file = fileList[2]
-            break
-          }
-          case "relationship_verification_document": {
-            file = fileList[3]
-            break
-          }
-        }
-        if (file) handleUpload(fileName, file)
+        if (fileName in fileMapping) file = fileList[fileMapping[fileName as fileType]]
+        if (file) await handleUpload(fileName, file)
       }
+    }
   }
 
-  const requestSave = () => {
-    uploadAllFile()
+  const requestSave = async () => {
+    await uploadAllFile()
     const {
       email,
       phone,
@@ -223,15 +214,9 @@ const UserInfo = () => {
       home_phone,
       contact_person,
       medical_condition,
-      user_photo,
-      medical_certificate,
-      national_id_house_registration,
-      relationship_verification_document,
     } = tempInfo
-    client({
-      method: "PUT",
-      url: `/list-all-user/other/${_id}`,
-      data: {
+    client
+      .put<Other>(`/list-all-user/other/${_id}`, {
         personal_email: email,
         phone,
         is_thai_language: true,
@@ -252,19 +237,19 @@ const UserInfo = () => {
         account_expiration_date: tempAccountExpiredDate,
         is_penalize: tempIsPenalize,
         expired_penalize_date: tempExpiredPenalizeDate,
-        // files //
-        user_photo,
-        medical_certificate,
-        national_id_house_registration,
-        relationship_verification_document,
-      },
-    })
-      .then(() => {
+      })
+      .then(({ data }) => {
         // set temp to data
         setPenalize(tempIsPenalize)
         setExpiredPenalizeDate(tempExpiredPenalizeDate!)
         setAccountExpiredDate(tempAccountExpiredDate!)
-        setInfo(tempInfo)
+        setInfo({
+          ...tempInfo,
+          user_photo: data.user_photo,
+          medical_certificate: data.medical_certificate,
+          national_id_house_registration: data.national_id_house_registration,
+          relationship_verification_document: data.relationship_verification_document,
+        })
         // show save complete modal
         setShowModalInfo("showComSave")
         // back to view form
