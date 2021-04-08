@@ -34,12 +34,7 @@ function useSidebarData() {
     },
     {
       icon: "",
-      name: "รับรองนักเรียนสาธิต",
-      path: "/staff/verifyApproveSatit",
-    },
-    {
-      icon: "",
-      name: "การปิดคอร์ด",
+      name: "การล็อคคอร์ด",
       path: "/staff/disableCourt",
     },
     {
@@ -57,7 +52,7 @@ function useSidebarData() {
   else
     return data.filter((link) => {
       const name = link.name
-      if (name === "การตั้งค่า" || name === "การปิดคอร์ด" || name === "จัดการสตาฟ") return false
+      if (name === "การตั้งค่า" || name === "การล็อคคอร์ด" || name === "จัดการสตาฟ") return false
       else return true
     })
 }
