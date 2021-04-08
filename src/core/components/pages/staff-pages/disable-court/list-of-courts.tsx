@@ -81,7 +81,7 @@ const ListOfCourts = () => {
               </Form.Control>
               <div className="d-flex flex-row position-relative mr-3">
                 <label className="floating-label" onClick={onSelectStartDate} style={{ display: startDate ? "none" : "" }}>
-                  วันเริ่มต้นการปิด
+                  วันเริ่มต้นการล็อค
                 </label>
                 <DatePicker className="form-control" selected={startDate} onChange={onStartDateChange} name="somw" ref={startDateRef} />
                 <Button variant="outline-transparent" onClick={() => setStartDate(undefined)}>
@@ -90,7 +90,7 @@ const ListOfCourts = () => {
               </div>
               <div className="d-flex flex-row position-relative mr-3">
                 <label className="floating-label" onClick={onSelectEndDate} style={{ display: endDate ? "none" : "" }}>
-                  วันสิ้นสุดการปิด
+                  วันสิ้นสุดการล็อค
                 </label>
                 <DatePicker className="form-control" selected={endDate} onChange={onEndDateChange} ref={endDateRef} />
                 <Button variant="outline-transparent" onClick={() => setEndDate(undefined)}>
@@ -107,12 +107,12 @@ const ListOfCourts = () => {
       <CourtTable<RowProps>
         Row={CourtRow}
         data={data}
-        header={["เลขคอร์ด", "ประเภทกีฬา", "วันที่เริ่มปิด", "วันสิ้นสุดการปิด"]}
+        header={["เลขคอร์ด", "ประเภทกีฬา", "วันที่เริ่มล็อค", "วันสิ้นสุดการล็อค"]}
         Button={withDeletable(DeleteButton, onDelete)}
       />
       <div className="d-flex flex-row justify-content-between align-content-center">
         <Button variant="pink" className="disable-court-button" onClick={onAdd}>
-          เพิ่มการปิดคอร์ด
+          เพิ่มการล็อคคอร์ด
         </Button>
         <Pagination>
           <Pagination.Prev

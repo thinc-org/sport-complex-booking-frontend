@@ -47,7 +47,7 @@ const AddCourt = () => {
           }
           setError("duplicate", {
             type: "manual",
-            message: "วันหรือเวลาของการปิดคอร์ดนี้ซ้ำกับการปิดคอร์ดที่มีอยู่แล้ว",
+            message: "วันหรือเวลาของการล็อคคอร์ดนี้ซ้ำกับการล็อคคอร์ดที่มีอยู่แล้ว",
           })
         }
       })
@@ -58,15 +58,15 @@ const AddCourt = () => {
       <ErrorAlert
         inProp={!!overlapData}
         handleClose={() => setOverlapData(undefined)}
-        header="การปิดคอร์ดชนกับการจอง"
-        message="พบการปิดคอร์ดชนกับการจองดังนี้"
+        header="การล็อคคอร์ดชนกับการจอง"
+        message="พบการล็อคคอร์ดชนกับการจองดังนี้"
       >
         <OverlapDataTable data={reduceOverlapData(overlapData)} />
       </ErrorAlert>
       <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} validate={validateTimeSlot} />
       <ErrorAlert inProp={showDateError} handleClose={handleAlert} header={"วันที่ไม่ถูกต้อง"} message={"วันที่ไม่ถูกต้อง"} />
       <div className="default-wrapper pt-3 pb-4" style={{ boxShadow: "0 0 0 0" }}>
-        <h4 style={{ paddingBottom: "15px" }}>เพิ่มการปิดคอร์ด</h4>
+        <h4 style={{ paddingBottom: "15px" }}>เพิ่มการล็อคคอร์ด</h4>
         <Form className="disable-court-form" onSubmit={handleSubmit(onSubmit)}>
           <Row>
             <Col>
@@ -109,11 +109,11 @@ const AddCourt = () => {
           </Row>
           <Row>
             <Col className="d-flex flex-column">
-              <Form.Label>วันที่เริ่มปิด</Form.Label>
+              <Form.Label>วันที่เริ่มล็อค</Form.Label>
               <DatePicker className="form-control" selected={startDate} onChange={onStartDateChange} required />
             </Col>
             <Col className="d-flex flex-column">
-              <Form.Label>วันสิ้นสุดการปิด</Form.Label>
+              <Form.Label>วันสิ้นสุดการล็อค</Form.Label>
               <DatePicker className="form-control" selected={endDate} onChange={onEndDateChange} required />
             </Col>
           </Row>
@@ -134,13 +134,13 @@ const AddCourt = () => {
           <div className="mt-3 small-table">
             <CourtTable<ViewRowProps>
               data={rowData}
-              header={["ลำดับ", "วัน", "เวลาที่เริ่มปิด", "เวลาสิ้นสุดการปิด"]}
+              header={["ลำดับ", "วัน", "เวลาที่เริ่มล็อค", "เวลาสิ้นสุดการล็อค"]}
               Row={ViewRow}
               Button={withDeletable(DeleteButton, onDeleteRow)}
             />
           </div>
           <Button className="w-100 " variant="pink" onClick={() => setInProp(true)}>
-            เพิ่มการปิดคอร์ดใหม่
+            เพิ่มการล็อคคอร์ดใหม่
           </Button>
           <div className="d-flex flex-row justify-content-end w-100 mt-3">
             <Button
