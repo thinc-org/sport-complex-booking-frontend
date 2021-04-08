@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { Table, Form, Row, Col, Button } from "react-bootstrap"
 import { client } from "../../../../../axiosConfig"
-import { NoCourtsModal, EditCourt, DeleteCourtModal, AddCourtFunc , ConflictModal } from "./CourtsSettingsComponents"
+import { NoCourtsModal, EditCourt, DeleteCourtModal, AddCourtFunc, ConflictModal } from "./CourtsSettingsComponents"
 import { HandleError } from "./SportSettingsComponents"
 import { AxiosResponse } from "axios"
 import { ListCourts } from "../../../../dto/settings.dto"
@@ -10,7 +10,6 @@ import useSportState from "./SettingsHooks/useSportState"
 import useCourtState from "./SettingsHooks/useCourtState"
 import useCurrentCourtState from "./SettingsHooks/useCurrentCourtStates"
 import { OverlapData } from "../../../../dto/disableCourt.dto"
-
 
 export default function CourtsSettings() {
   const [conflictData, setConflictData] = useState<OverlapData>()
@@ -180,7 +179,7 @@ export default function CourtsSettings() {
           <option value={"$"}>เลือกประเภทกีฬา</option>
           {sports.map((sport, i) => {
             return (
-              <option key={i} value={sport._id}>
+              <option key={sport.sport_name_en} value={sport._id}>
                 {sport.sport_name_th}
               </option>
             )
