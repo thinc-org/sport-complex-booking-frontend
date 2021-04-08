@@ -385,9 +385,9 @@ export const ConflictModal: React.FC<ConflictModalProps> = ({ overlapData, inPro
         )}
         {overlapData?.disableCourt && (
           <div className="d-flex flex-column">
-            <h5>จำนวนการปิดคอร์ดที่ชน: {overlapData.disableCourt.length}</h5>
-            <Button variant="pink" style={{ color: "red" }} onClick={onDeleteBatch}>
-              ลบการปิดคอร์ดทั้งหมด
+            <h5>จำนวนการล็อคคอร์ดที่ชน: {overlapData.disableCourt.length}</h5>
+            <Button variant="pink" style={{ color: "#c40d00" }} onClick={onDeleteBatch}>
+              ลบการล็อคคอร์ดทั้งหมด
             </Button>
           </div>
         )}

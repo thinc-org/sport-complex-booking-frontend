@@ -51,7 +51,7 @@ export const FormAlert = ({ inProp, handleClose, onSubmit, validate }: FormModal
             </Form.Control>
           </div>
           <div>
-            <Form.Label>เวลาที่เริ่มปิด</Form.Label>
+            <Form.Label>เวลาที่เริ่มล็อค</Form.Label>
             <Form.Control name="timeSlotStart" as="select" ref={register({ required: true, validate: () => validate(getValues()) })}>
               {timeArr.map((val, indx) => (
                 <option value={indx + 1} key={val}>
@@ -61,7 +61,7 @@ export const FormAlert = ({ inProp, handleClose, onSubmit, validate }: FormModal
             </Form.Control>
           </div>
           <div>
-            <Form.Label>เวลาสิ้นสุดการปิด</Form.Label>
+            <Form.Label>เวลาสิ้นสุดการล็อค</Form.Label>
             <Form.Control name="timeSlotEnd" as="select" ref={register({ required: true, validate: () => validate(getValues()) })}>
               {timeArr.map((val, indx) => (
                 <option value={indx} key={val}>
