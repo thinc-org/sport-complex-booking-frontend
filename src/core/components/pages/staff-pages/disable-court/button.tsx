@@ -6,7 +6,7 @@ import { DeleteButtonProps } from "../../../../dto/disableCourt.dto"
 
 export const DeleteButton = ({ onClick, indx, type, phone }: DeleteButtonProps) => {
   const [show, setShow] = useState(false)
-  const message = type === "reservation" || type === "waitingRoom" ? "ต้องการลบการจองหรือห้องรอการจองนี้หรือไม่" : "ต้องการลบการปิดคอร์ดนี้หรือไม่"
+  const message = type === "reservation" || type === "waitingRoom" ? "ต้องการลบการจองหรือห้องรอการจองนี้หรือไม่" : "ต้องการลบการล็อคคอร์ดนี้หรือไม่"
   const phoneNum = phone ? <div>เบอร์ผู้จอง: {phone}</div> : undefined
   return (
     <>
