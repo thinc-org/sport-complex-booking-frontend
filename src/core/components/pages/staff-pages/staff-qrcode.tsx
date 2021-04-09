@@ -27,11 +27,6 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = () => {
     console.log(err)
   }
 
-  // const playSound = () => {
-  //   audio.currentTime = 0
-  //   audio.play()
-  // }
-
   useEffect(() => {
     if (isSuccessful && modalOpen) {
       audio.play()
