@@ -5,6 +5,9 @@ import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useNameLanguage } from "../../../../utils/language"
 import { AccountProps } from "../../../../dto/account.dto"
+import { WarningMessage } from "../../../ui/Modals/AccountPageModals"
+import { PaymentMessage } from "../Payment/PaymentModals"
+import ExtensionReminder from "../Payment/PaymentReminder"
 
 export default function SatitAndCUPersonelAccountDisplay({ toggleEditButton }: AccountProps) {
   const { satitCuPersonelAccount: user } = useContext(UserContext)
@@ -14,6 +17,9 @@ export default function SatitAndCUPersonelAccountDisplay({ toggleEditButton }: A
 
   return (
     <div className="mx-auto col-md-6">
+      {user && <WarningMessage show={user.verification_status !== ""} verification_status={user.verification_status} account={user.account_type} />}
+      <PaymentMessage show={true} />
+      <ExtensionReminder />
       <div className="default-mobile-wrapper mt-3 animated-card">
         <div className="row mt-2">
           <div className="col-8">{user && <h4 className="align-right">{user[nameLanguage] + " " + user[surnameLanguage]}</h4>}</div>
@@ -38,6 +44,23 @@ export default function SatitAndCUPersonelAccountDisplay({ toggleEditButton }: A
           <label className="form-label mt-2">{t("personalEmailLabel")}</label>
           <p>{user?.personal_email}</p>
           <div className="valid-feedback"></div>
+          <hr />
+          <label className="form-label my-2">{t("studentCardPhoto")}</label>
+          <div className="form-file">
+            {user?.student_card_photo ? (
+              <a
+                type="button"
+                className="btn-normal btn-secondary"
+                href={"openFile/" + user.student_card_photo}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("viewFile")}
+              </a>
+            ) : (
+              <p>{t("noFile")}</p>
+            )}
+          </div>
         </div>
       </div>
 

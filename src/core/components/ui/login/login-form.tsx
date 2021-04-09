@@ -1,5 +1,5 @@
 import React from "react"
-import { Form, Button, Row } from "react-bootstrap"
+import { Form, Button } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import { useLogin } from "./loginHooks"
 import { useTranslation } from "react-i18next"
@@ -44,13 +44,16 @@ const LoginForm = () => {
               {t("signInAsCu")}
             </Button>
           </div>
-          <hr className="mx-2" />
-          <Row className="button-group justify-content-center">
+          <hr className="mx-1" />
+          <div className="button-group mx-1">
             {t("noAccount")}
-            <Link role="button" to="/register" className="ml-2 text-secondary">
-              <span style={{ color: "#c94f7c" }}>{t("register")}</span>
+            <Link role="button" to="/register" className="text-secondary">
+              <div style={{ color: "#c94f7c", marginTop: "10px" }}>{t("registerAsOther")}</div>
             </Link>
-          </Row>
+            <Link role="button" to="/registerSatit" className=" text-secondary">
+              <div style={{ color: "#c94f7c" }}>{t("registerAsSatit")}</div>
+            </Link>
+          </div>
         </div>
       </Form>
       <div style={{ display: isLoading ? "block" : "none" }}>

@@ -1,6 +1,7 @@
 import withSideEffect from "react-side-effect"
 import { useState, useEffect } from "react"
 import { EventEmitter } from "events"
+import i18n from "../../../i18n/i18n"
 interface navHeaderState {
   isOnStaffPage: boolean
   isOnStaffLoginPage: boolean
@@ -12,7 +13,7 @@ type navHeaderProps = Partial<navHeaderState>
 const defaultHeader: navHeaderState = {
   isOnStaffLoginPage: false,
   isOnStaffPage: false,
-  header: "CU Sports Center",
+  header: i18n.t("cuHeader"),
 }
 const NavHeader: React.FC<navHeaderProps> = () => null
 
