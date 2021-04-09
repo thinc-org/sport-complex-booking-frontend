@@ -28,7 +28,7 @@ export interface SatitCuPersonel extends DefaultAccount {
   account_expiration_date: Date
   verification_status: string
   rejected_info: string
-  student_card_photo_status: string
+  document_status: string
   student_card_photo: string
   previous_student_card_photo: string[]
 }
@@ -65,7 +65,7 @@ export interface Other extends DefaultAccount {
   relationship_verification_document: string
   payment_slip: string // lastest payment slip (for extension only)
   previous_payment_slips: string[] // 2 previous payment slips
-  payment_status: string
+  document_status: string
 }
 
 export interface RegisterResponse {

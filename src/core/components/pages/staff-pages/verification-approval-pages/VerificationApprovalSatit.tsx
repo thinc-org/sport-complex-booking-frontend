@@ -87,7 +87,7 @@ const VeritificationApprovalSatit: FunctionComponent = () => {
     client
       .get<SatitCuPersonel>(`/satit-approval/${_id}`)
       .then(({ data }) => {
-        if (data.verification_status === "Verified" && data.student_card_photo_status === "Submitted") history.push("/staff/verifyExtendSatit/" + _id)
+        if (data.verification_status === "Verified" && data.document_status === "Submitted") history.push("/staff/verifyExtendSatit/" + _id)
         // extension
         else history.push("/staff/verifyInfoSatit/" + _id)
       })
