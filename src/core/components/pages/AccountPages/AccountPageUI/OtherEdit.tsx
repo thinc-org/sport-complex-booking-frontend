@@ -28,6 +28,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
   const [show, setShow] = useState(false)
   const [showRegisterSuccess, setShowRegisterSuccess] = useState(false)
   const [showErr, setShowErr] = useState(false)
+  const [showFileErr, setShowFileErr] = useState(false)
   const [showRegisterErr, setShowRegisterErr] = useState(false)
   const { otherAccount: user } = useContext(UserContext)
   const [formData, setFormData] = useState<OtherInfo>()
@@ -41,7 +42,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
   const handleFileUpload = (formData: FormData) => {
     client.post<DocumentUploadResponse>("/fs/upload", formData).catch(() => {
       setShow(false)
-      setShowErr(true)
+      setShowFileErr(true)
     })
   }
 
@@ -637,14 +638,15 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
         <CustomAccountModal type="confirmEditOtherAccountModal" show={show} setShow={setShow} mainFunction={postDataToBackend} data={formData} />
         {/* MODAL ERROR */}
         <CustomAccountModal type="editAccountErrorModal" show={showErr} setShow={setShowErr} />
+        <CustomAccountModal type="fileUploadError" show={showFileErr} setShow={setShowFileErr} />
         {/* REGISTRATION SUCCESS MODAL */}
         <CustomAccountModal
           type="registrationSuccessModal"
           show={showRegisterSuccess}
           setShow={setShowRegisterSuccess}
           click={() => {
-            history.push("/login")
-            setCookie("token", null, 0)
+            history.push("/home")
+            window.location.reload()
           }}
         />
         {/* REGISTRATION ERROR MODAL */}

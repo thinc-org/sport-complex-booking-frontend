@@ -2,7 +2,7 @@ import React from "react"
 import { Button, Modal } from "react-bootstrap"
 import { useTranslation } from "react-i18next"
 import { Other } from "../../../contexts/UsersContext"
-import { usePaymentReminder } from "../../pages/AccountPages/Payment/PaymentReminder"
+import { useExtensionReminder } from "../../pages/AccountPages/Payment/PaymentReminder"
 import { CheckValidityErrorMsg } from "../../pages/Reservation/ReservationComponents"
 
 export interface EdittedData {
@@ -20,6 +20,7 @@ interface CustomAccountModalProps {
     | "paymentSuccessModal"
     | "paymentErrorModal"
     | "repeatedUsernameErrorModal"
+    | "fileUploadError"
   show: boolean
   setShow: (value: boolean) => void
   mainFunction?: (data: Other) => void
@@ -138,12 +139,12 @@ const WarningAlert: React.FC<WarningAlertProps> = ({ title, message, category })
 
 export const WarningMessage: React.FC<WarningMessageProps> = ({ show, verification_status, account }) => {
   const { t } = useTranslation()
-  const { isExpired } = usePaymentReminder()
+  const { isExpired } = useExtensionReminder()
   if (!show) return null
   if (account === "CuStudent") {
     return <CheckValidityErrorMsg show={true} reason="INFO_NOT_FILLED" type="danger" />
   }
-  if (account === "Other" && isExpired()) {
+  if ((account === "Other" || account === "SatitAndCuPersonel") && isExpired()) {
     return <WarningAlert title={t("accountExpiredTitle")} message={t("accountExpiredMessage")} category="danger" />
   }
   switch (verification_status) {

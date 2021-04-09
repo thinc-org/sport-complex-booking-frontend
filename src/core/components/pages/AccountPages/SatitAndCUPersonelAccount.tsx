@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react"
 import { UserContext } from "../../../contexts/UsersContext"
+import { RegisterSatit } from "../../ui/login/registerSatit"
 import EditAccount from "./AccountPageUI/EditAccount"
 import SatitAndCUPersonelAccountDisplay from "./AccountPageUI/SatitAndCUPersonelAccountDisplay"
 
@@ -18,10 +19,14 @@ export default function SatitAndCuPersonel() {
 
   return (
     <div>
-      {!isEditting ? (
-        <SatitAndCUPersonelAccountDisplay toggleEditButton={toggleEditButton} user={user} />
+      {user?.verification_status === "Submitted" || user?.verification_status === "Verified" ? (
+        !isEditting ? (
+          <SatitAndCUPersonelAccountDisplay toggleEditButton={toggleEditButton} user={user} />
+        ) : (
+          <EditAccount toggleEditButton={toggleEditButton} user={user} />
+        )
       ) : (
-        <EditAccount toggleEditButton={toggleEditButton} user={user} />
+        <RegisterSatit user={user} />
       )}
     </div>
   )

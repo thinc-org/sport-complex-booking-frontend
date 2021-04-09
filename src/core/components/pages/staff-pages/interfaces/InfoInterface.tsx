@@ -1,3 +1,5 @@
+import { SatitCuPersonel } from "../../../../contexts/UsersContext"
+
 // interfaces //
 export default interface Info {
   prefix: string
@@ -260,4 +262,22 @@ export interface RegistrationInfo {
 export interface RegistrationProps {
   registrationInfo?: RegistrationInfo
   isRegister: boolean
+}
+
+export interface satitRegistrationInfo {
+  name_en: string
+  surname_en: string
+  name_th: string
+  surname_th: string
+  username: string
+  password: string
+  repeat_password?: string
+  is_thai_language: boolean
+  personal_email: string
+  phone: string
+  rejected_info: string[]
+}
+
+export interface satitRejectedProps {
+  user?: SatitCuPersonel
 }

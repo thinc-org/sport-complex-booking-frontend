@@ -84,7 +84,7 @@ export const Register = () => {
             </div>
             {renderTypeSelect}
             <hr />
-            <label className="form-label mt-2">{t("username")}</label>
+            <label className="form-label mt-2">{t("username*")}</label>
             {showNextForm ? (
               <p>{credentials?.username}</p>
             ) : (
@@ -93,13 +93,13 @@ export const Register = () => {
                 type="text"
                 ref={register}
                 defaultValue={credentials?.username}
-                placeholder={t("username")}
+                placeholder="example@email.com *"
                 className="form-control"
                 readOnly={showNextForm}
               />
             )}
             {errors.username && <p id="input-error">{errors.username.message}</p>}
-            <label className="form-label mt-2">{t("password")}</label>
+            <label className="form-label mt-2">{t("password*")}</label>
             {showNextForm ? (
               <p>{"•".repeat(credentials ? credentials?.password.length : 8)}</p>
             ) : (
@@ -108,13 +108,13 @@ export const Register = () => {
                 type="password"
                 ref={register}
                 defaultValue={credentials?.password}
-                placeholder={t("password")}
+                placeholder={t("password*")}
                 className="form-control"
                 readOnly={showNextForm}
               />
             )}
             {errors.password && <p id="input-error">{errors.password.message}</p>}
-            <label className="form-label mt-2">{t("repeatPassword")}</label>
+            <label className="form-label mt-2">{t("repeatPassword*")}</label>
             {showNextForm ? (
               <p>{"•".repeat(credentials ? credentials?.password.length : 8)}</p>
             ) : (
@@ -123,7 +123,7 @@ export const Register = () => {
                 type="password"
                 ref={register}
                 defaultValue={credentials?.password}
-                placeholder={t("repeatPassword")}
+                placeholder={t("repeatPassword*")}
                 className="form-control"
                 readOnly={showNextForm}
               />
@@ -144,7 +144,7 @@ export const Register = () => {
           </Form>
         </div>
       </div>
-      <div className={showNextForm ? "" : "invisible"}>
+      <div className={showNextForm ? "d-block" : "d-none"}>
         <OtherAccountEdit registrationInfo={credentials} isRegister={true} />
       </div>
     </>
