@@ -182,10 +182,11 @@ const VeritificationApprovalSatit: FunctionComponent = () => {
   )
 
   const renderUsersTable = () => {
-    const usersList = users.map((user) => {
+    const index = (pageNo - 1) * 10 + 1
+    const usersList = users.map((user, i) => {
       return (
         <tr key={user._id} className="tr-normal">
-          <td className="font-weight-bold"> {user._id} </td>
+          <td className="font-weight-bold"> {index + i} </td>
           <td> {user.name_th} </td>
           <td> {user.surname_th} </td>
           <td> {user.username} </td>

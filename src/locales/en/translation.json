@@ -334,9 +334,7 @@
   "personalInfo": "Tell us about yourself",
   "cuHeader": "CU Sports Center",
   "invalidPhoneNum": "Invalid phone number.",
-<<<<<<< HEAD
-  "checkinNotAllowed": "Check-in QR Code is only available 60 minutes before the booking."
-=======
+  "checkinNotAllowed": "Check-in QR Code is only available 60 minutes before the booking.",
   "username*": "Username *",
   "password*":"Password *",
   "repeatPassword*":"Repeat Password *",
@@ -344,5 +342,4 @@
   "studentCardPhoto": "Student ID Card Photo",
   "registerAsOther":"Register",
   "registerAsSatit":"Register as a Satit Chula Student"
->>>>>>> create registration page, account page, account extension page for the new Satit Chula account
 }
