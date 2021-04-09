@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import withUserGuard from "../../../../guards/user.guard"
 import { useTranslation } from "react-i18next"
 import { CustomAccountModal } from "../../../ui/Modals/AccountPageModals"
@@ -8,22 +8,31 @@ import { Button, Row } from "react-bootstrap"
 import { QuestionCircle, QuestionCircleFill } from "react-bootstrap-icons"
 import { Redirect, useHistory } from "react-router"
 import { useExtensionReminder } from "./PaymentReminder"
+import { UserContext } from "../../../../contexts/UsersContext"
 
 function Payment() {
-  const [payment_slip, set_payment_slip] = useState<File>()
+  const [document, set_document] = useState<File>()
   const { t } = useTranslation()
   const [showPaymentSuccessModal, setShowPaymentSuccessModal] = useState(false)
   const [showPaymentErrorModal, setShowPaymentErrorModal] = useState(false)
   const [showAccountHint, setShowAccountHint] = useState(false)
   const history = useHistory()
   const { nearExpiration } = useExtensionReminder()
+  const user = useContext(UserContext)
+  const userAccountType: "SatitAndCuPersonel" | "Other" | undefined = user.otherAccount
+    ? user.otherAccount.account_type
+    : user.satitCuPersonelAccount?.account_type
 
   const submitPayment = () => {
-    if (payment_slip) {
+    if (document) {
       const formData = new FormData()
-      formData.append("payment_slip", payment_slip, payment_slip?.name)
+      if (userAccountType === "Other") formData.append("payment_slip", document, document?.name)
+      else if (userAccountType === "SatitAndCuPersonel") formData.append("student_card_photo", document, document?.name)
+      else return
+      const endpointName: string = userAccountType === "Other" ? "upload" : "uploadSatit"
+
       client
-        .post<DocumentUploadResponse>("/fs/upload", formData)
+        .post<DocumentUploadResponse>(`/fs/${endpointName}`, formData)
         .then(() => {
           setShowPaymentSuccessModal(true)
         })
@@ -46,13 +55,15 @@ function Payment() {
     <div className="mx-auto col-md-6">
       {!nearExpiration() && <Redirect to="/account" />}
       <div className="default-mobile-wrapper mt-3 animated-card">
-        <h4>{t("paymentSection")}</h4>
+        <h4>{userAccountType === "Other" ? t("paymentSection") : t("extendAccount")}</h4>
         <div className="mx-3">
           <Row className="justify-content-between">
-            <label className="form-label my-2">{t("paymentEvidenceLabel")}</label>
-            <span onClick={() => setShowAccountHint(!showAccountHint)}>
-              {!showAccountHint ? <QuestionCircle className="mt-2" size={20} /> : <QuestionCircleFill className="mt-2" size={20} />}
-            </span>
+            <label className="form-label my-2">{userAccountType === "Other" ? t("paymentEvidenceLabel") : t("studentCardPhotoLabel")}</label>
+            {userAccountType === "Other" && (
+              <span onClick={() => setShowAccountHint(!showAccountHint)}>
+                {!showAccountHint ? <QuestionCircle className="mt-2" size={20} /> : <QuestionCircleFill className="mt-2" size={20} />}
+              </span>
+            )}
           </Row>
           <Row>
             {showAccountHint && (
@@ -63,28 +74,52 @@ function Payment() {
           </Row>
         </div>
 
-        <div className="form-file">
-          <p>{payment_slip ? "✓ " + payment_slip?.name.substring(0, 30) + "..." : ""}</p>
-          <label htmlFor="paymentEvidence" className="form-file-input form-control text-center">
-            {t("chooseFile")}
-          </label>
-          <input
-            style={{ display: "none" }}
-            type="file"
-            className="form-control"
-            id="paymentEvidence"
-            accept="application/pdf, image/png, image/jpeg"
-            onChange={(e) => {
-              if (e.target.files && e.target.files[0]?.size > 2097152) {
-                e.target.value = ""
-                alert(t("fileTooBig"))
-              } else e.target.files && set_payment_slip(e.target.files[0])
-            }}
-          />
-        </div>
+        {userAccountType === "Other" && (
+          <div className="form-file">
+            <p>{document ? "✓ " + document?.name.substring(0, 30) + "..." : ""}</p>
+            <label htmlFor="paymentEvidence" className="form-file-input form-control text-center">
+              {t("chooseFile")}
+            </label>
+            <input
+              style={{ display: "none" }}
+              type="file"
+              className="form-control"
+              id="paymentEvidence"
+              accept="application/pdf, image/png, image/jpeg"
+              onChange={(e) => {
+                if (e.target.files && e.target.files[0]?.size > 2097152) {
+                  e.target.value = ""
+                  alert(t("fileTooBig"))
+                } else e.target.files && set_document(e.target.files[0])
+              }}
+            />
+          </div>
+        )}
+
+        {userAccountType === "SatitAndCuPersonel" && (
+          <div className="form-file">
+            <p>{document ? "✓ " + document?.name.substring(0, 30) + "..." : ""}</p>
+            <label htmlFor="paymentEvidence" className="form-file-input form-control text-center">
+              {t("chooseFile")}
+            </label>
+            <input
+              style={{ display: "none" }}
+              type="file"
+              className="form-control"
+              id="paymentEvidence"
+              accept="application/pdf, image/png, image/jpeg"
+              onChange={(e) => {
+                if (e.target.files && e.target.files[0]?.size > 2097152) {
+                  e.target.value = ""
+                  alert(t("fileTooBig"))
+                } else e.target.files && set_document(e.target.files[0])
+              }}
+            />
+          </div>
+        )}
       </div>
       <div className="button-group">
-        <Button variant="pink" className="mt-3" disabled={!payment_slip || !nearExpiration()} onClick={() => submitPayment()}>
+        <Button variant="pink" className="mt-3" disabled={!document || !nearExpiration()} onClick={() => submitPayment()}>
           {t("submit")}
         </Button>
       </div>

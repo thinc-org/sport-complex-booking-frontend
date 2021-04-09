@@ -32,10 +32,10 @@ function ExtensionReminder() {
   const { nearExpiration, isExpired, user } = useExtensionReminder()
 
   if (!nearExpiration() || !user?.account_expiration_date) return null
-  if (user?.account_type === "Other" && user?.payment_status === "Submitted") return null
-  if (user?.account_type === "Other" && !user?.payment_status) return null
-  if (user?.account_type === "SatitAndCuPersonel" && user?.student_card_photo_status === "Submitted") return null
-  if (user?.account_type === "SatitAndCuPersonel" && !user?.student_card_photo_status) return null
+  if (user?.account_type === "Other" && user?.document_status === "Submitted") return null
+  if (user?.account_type === "Other" && !user?.document_status) return null
+  if (user?.account_type === "SatitAndCuPersonel" && user?.document_status === "Submitted") return null
+  if (user?.account_type === "SatitAndCuPersonel" && !user?.document_status) return null
   return (
     <div>
       <div className="default-mobile-wrapper mt-3 animated-card">

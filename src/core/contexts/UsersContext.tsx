@@ -32,7 +32,7 @@ export interface SatitCuPersonel extends DefaultAccount {
   student_card_photo: string
   rejected_info: SatitOnlyString<Omit<SatitCuPersonel, "account_type" | "rejected_info">>[]
   account_expiration_date: string
-  student_card_photo_status: string
+  document_status: string
 }
 
 export interface Other extends DefaultAccount {
