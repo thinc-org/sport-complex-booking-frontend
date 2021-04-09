@@ -20,7 +20,6 @@ import { Register } from "../components/ui/login/register"
 import Payment from "../components/pages/AccountPages/Payment/Payment"
 import PersonalInfo from "../components/ui/login/personal-info-form"
 import { RegisterSatit } from "../components/ui/login/registerSatit"
-import SatitAccountExtension from "../components/pages/AccountPages/Payment/SatitAccountExtension"
 
 export default function MainRoute() {
   return (
@@ -64,7 +63,7 @@ export default function MainRoute() {
 
         <Route exact path={`/personal`} component={PersonalInfo} />
 
-        <Route exact path={`/satitAccountExtension`} component={SatitAccountExtension} />
+        <Route exact path={`/satitAccountExtension`} component={Payment} />
       </Switch>
     </>
   )
