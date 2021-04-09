@@ -75,7 +75,7 @@ export interface AddCourtForm {
 export interface OverlapData {
   reservation?: ReservationResponse[]
   waitingRoom?: WaitingRoomResponse[]
-  disableCourt?: DisableCourtBody[]
+  disableCourt?: View[]
 }
 
 export interface OverlapDataTableProps {
