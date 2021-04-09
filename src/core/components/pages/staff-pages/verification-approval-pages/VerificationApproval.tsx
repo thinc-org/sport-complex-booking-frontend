@@ -87,7 +87,7 @@ const VeritificationApproval: FunctionComponent = () => {
     client
       .get<Other>(`/approval/${_id}`)
       .then(({ data }) => {
-        if (data.verification_status === "Verified" && data.payment_status === "Submitted") history.push("/staff/verifyExtend/" + _id)
+        if (data.verification_status === "Verified" && data.document_status === "Submitted") history.push("/staff/verifyExtend/" + _id)
         // extension
         else history.push("/staff/verifyInfo/" + _id)
       })
