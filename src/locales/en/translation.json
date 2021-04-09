@@ -5,10 +5,10 @@
   "en": "English",
   "phoneLabel": "Mobile Phone Number",
   "personalEmailLabel": "Personal Email",
-  "CuStudent": "Chulalongkorn University Student",
-  "SatitAndCuPersonel": "Satit Chula / CU Personnel",
-  "CuStudentAccountType": "Chulalongkorn University Student",
-  "SatitAndCuPersonelAccountType": "Satit Chula / CU Personnel",
+  "CuStudent": "Chulalongkorn University Student / Personnel",
+  "SatitAndCuPersonel": "Satit Chula Student",
+  "CuStudentAccountType": "Chulalongkorn University Student / Personnel",
+  "SatitAndCuPersonelAccountType": "Satit Chula Student",
   "edit": "Edit",
   "phoneErrorMessage": "Enter a valid phone number",
   "emailErrorMessage": "Enter a valid email",
@@ -176,7 +176,7 @@
   },
   "registrationSuccessModal": {
     "title": "Account Successfully Created",
-    "body": "Please login to continue."
+    "body": "Please press ok to continue."
   },
   "registrationErrorModal": {
     "title": "Registration Unsuccessful",
@@ -194,6 +194,10 @@
     "title":"Registration Unsuccessful",
     "body":"This username has already been taken. Please choose a new one."
   },
+  "fileUploadError":{
+     "title": "Submission Error",
+     "body": "An error occured while uploading your file. Please try again."
+  },  
   "closeWaitingRoom?": "Are you sure you want to close the waiting room?",
   "timeOut": "Time out",
   "createNewWaitingRoom": "Please create new waiting room.",
@@ -330,5 +334,15 @@
   "personalInfo": "Tell us about yourself",
   "cuHeader": "CU Sports Center",
   "invalidPhoneNum": "Invalid phone number.",
+<<<<<<< HEAD
   "checkinNotAllowed": "Check-in QR Code is only available 60 minutes before the booking."
+=======
+  "username*": "Username *",
+  "password*":"Password *",
+  "repeatPassword*":"Repeat Password *",
+  "studentCardPhotoLabel": "Student ID Card Photo (image only)",
+  "studentCardPhoto": "Student ID Card Photo",
+  "registerAsOther":"Register",
+  "registerAsSatit":"Register as a Satit Chula Student"
+>>>>>>> create registration page, account page, account extension page for the new Satit Chula account
 }

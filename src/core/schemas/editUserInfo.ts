@@ -1,19 +1,19 @@
 import * as yup from "yup"
 import i18n from "../i18n/i18n"
 
-const phoneValidation = (requiredMessage: string, errorMessage: string) =>
+export const phoneValidation = (requiredMessage: string, errorMessage: string) =>
   yup
     .string()
     .required(requiredMessage)
     .matches(/^((((\+66|66|0)\d{2})-?\d{3}-?\d{4})|(-))$/, errorMessage)
 
-const homePhoneValidation = (requiredMessage: string, errorMessage: string) =>
+export const homePhoneValidation = (requiredMessage: string, errorMessage: string) =>
   yup
     .string()
     .required(requiredMessage)
     .matches(/^(((\d{2})-?\d{3}-?\d{4})|(-))$/, errorMessage)
 
-const requiredValidation = (requiredMessage: string) => yup.string().required(requiredMessage)
+export const requiredValidation = (requiredMessage: string) => yup.string().required(requiredMessage)
 
 export const emailSchema = yup.object().shape({
   username: yup.string().required(i18n.t("emailErrorMessage")).email(i18n.t("emailErrorMessage")),
@@ -69,4 +69,12 @@ export const otherInfoSchema = yup.object().shape({
     contact_person_home_phone: homePhoneValidation(i18n.t("phoneErrorMessage"), i18n.t("invalidPhoneNum")),
     contact_person_phone: phoneValidation(i18n.t("phoneErrorMessage"), i18n.t("invalidPhoneNum")),
   }),
+})
+
+export const satitInfoSchema = yup.object().shape({
+  name_th: requiredValidation(i18n.t("fieldIsRequired")),
+  surname_th: requiredValidation(i18n.t("fieldIsRequired")),
+  name_en: requiredValidation(i18n.t("fieldIsRequired")),
+  surname_en: requiredValidation(i18n.t("fieldIsRequired")),
+  phone: phoneValidation(i18n.t("phoneErrorMessage"), i18n.t("invalidPhoneNum")),
 })

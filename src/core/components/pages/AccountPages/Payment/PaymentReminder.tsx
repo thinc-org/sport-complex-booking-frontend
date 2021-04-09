@@ -6,8 +6,10 @@ import { useTranslation } from "react-i18next"
 import { ExclamationCircleFill } from "react-bootstrap-icons"
 import { UserContext } from "../../../../contexts/UsersContext"
 
-export const usePaymentReminder = () => {
-  const { otherAccount: user } = useContext(UserContext)
+export const useExtensionReminder = () => {
+  const { otherAccount } = useContext(UserContext)
+  const { satitCuPersonelAccount } = useContext(UserContext)
+  const user = satitCuPersonelAccount ? satitCuPersonelAccount : otherAccount
   const expirationDate = (expirationDate: string | Date | undefined): Date => {
     if (expirationDate) return new Date(expirationDate.toString())
     else return new Date()
@@ -25,34 +27,33 @@ export const usePaymentReminder = () => {
   return { nearExpiration, isExpired, user }
 }
 
-function PaymentReminder() {
+function ExtensionReminder() {
   const { t } = useTranslation()
-  const { nearExpiration, isExpired, user } = usePaymentReminder()
+  const { nearExpiration, isExpired, user } = useExtensionReminder()
 
   if (!nearExpiration() || !user?.account_expiration_date) return null
-  if (user.payment_status === "Submitted") return null
+  if (user?.account_type === "Other" && user?.payment_status === "Submitted") return null
+  if (user?.account_type === "Other" && !user?.payment_status) return null
   return (
     <div>
-      {user?.payment_status && (
-        <div className="default-mobile-wrapper mt-3 animated-card">
-          <span className="mb-1 mr-2">
-            <ExclamationCircleFill color="#8c8c8c" />
-          </span>{" "}
-          <span>
-            {(isExpired() ? t("accountHasExpiredOn") : t("accountWillExpireOn")) +
-              new Date(user?.account_expiration_date).toLocaleDateString() +
-              ", " +
-              new Date(user?.account_expiration_date).toLocaleTimeString()}
-          </span>
-          <div className="button-group">
-            <Link to="/payment">
-              <Button className="mb-0 mt-3 btn-sm btn-info">{t("extendAccount")}</Button>
-            </Link>
-          </div>
+      <div className="default-mobile-wrapper mt-3 animated-card">
+        <span className="mb-1 mr-2">
+          <ExclamationCircleFill color="#8c8c8c" />
+        </span>{" "}
+        <span>
+          {(isExpired() ? t("accountHasExpiredOn") : t("accountWillExpireOn")) +
+            new Date(user?.account_expiration_date).toLocaleDateString() +
+            ", " +
+            new Date(user?.account_expiration_date).toLocaleTimeString()}
+        </span>
+        <div className="button-group">
+          <Link to={user.account_type === "Other" ? "/payment" : "/satitAccountExtension"}>
+            <Button className="mb-0 mt-3 btn-sm btn-info">{t("extendAccount")}</Button>
+          </Link>
         </div>
-      )}
+      </div>
     </div>
   )
 }
 
-export default withUserGuard(PaymentReminder)
+export default withUserGuard(ExtensionReminder)
