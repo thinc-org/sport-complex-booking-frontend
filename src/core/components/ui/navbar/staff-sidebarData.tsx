@@ -35,7 +35,7 @@ function useSidebarData() {
     {
       icon: "",
       name: "รับรองนักเรียนสาธิต",
-      path: "/staffverifyApproveSatit",
+      path: "/staff/verifyApproveSatit",
     },
     {
       icon: "",
