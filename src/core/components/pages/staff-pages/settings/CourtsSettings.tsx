@@ -131,40 +131,38 @@ export default function CourtsSettings() {
       const closeTime = court["close_time"] + ":00"
 
       return (
-        <>
-          <tr key={i} className="tr-normal">
-            <td> {court["court_num"]} </td>
-            <td> {currentSportName}</td>
-            <td> {openTime} </td>
-            <td> {closeTime}</td>
-            <td>
-              <Button
-                className="btn-normal btn-outline-dark"
-                variant="outline-black"
-                onClick={() => {
-                  setCurrentCourt(court)
-                  setShowEditCourt(true)
-                  onChangeOpenTime(openTime)
-                  onChangeCloseTime(closeTime)
-                }}
-              >
-                แก้ไข
-              </Button>
-            </td>
-            <td>
-              <Button
-                className="btn-normal btn-outline-black"
-                variant="outline-danger"
-                onClick={() => {
-                  setCurrentCourt(court)
-                  setShowDeleteCourt(true)
-                }}
-              >
-                ลบคอร์ด
-              </Button>
-            </td>
-          </tr>
-        </>
+        <tr key={court._id} className="tr-normal">
+          <td> {court["court_num"]} </td>
+          <td> {currentSportName}</td>
+          <td> {openTime} </td>
+          <td> {closeTime}</td>
+          <td>
+            <Button
+              className="btn-normal btn-outline-dark"
+              variant="outline-black"
+              onClick={() => {
+                setCurrentCourt(court)
+                setShowEditCourt(true)
+                onChangeOpenTime(openTime)
+                onChangeCloseTime(closeTime)
+              }}
+            >
+              แก้ไข
+            </Button>
+          </td>
+          <td>
+            <Button
+              className="btn-normal btn-outline-black"
+              variant="outline-danger"
+              onClick={() => {
+                setCurrentCourt(court)
+                setShowDeleteCourt(true)
+              }}
+            >
+              ลบคอร์ด
+            </Button>
+          </td>
+        </tr>
       )
     })
     return courtList
