@@ -5,10 +5,10 @@ import { Control, useForm, useWatch } from "react-hook-form"
 import { NormalModalProps, EditCourtProps, DeleteCourtModalProps, AddCourtFuncProps, ConflictModalProps } from "../../../../dto/settings.dto"
 import { ErrorAlert } from "../disable-court/modals"
 import { OverlapDataTable } from "../disable-court/disabled-court-table"
-
+import Axios from "axios"
 import { Court } from "../../../../dto/sport.dto"
 import { formatOverlapData } from "../disable-court/conflictManager"
-import { client } from "../../../../../axiosConfig"
+import { getCookie } from "../../../../contexts/cookieHandler"
 
 const invalidTime = (openTime: string, closeTime: string): boolean => {
   return !["00"].includes(openTime.slice(openTime.length - 2)) || !["00"].includes(closeTime.slice(closeTime.length - 2))
@@ -358,40 +358,56 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
 }
 
 export const ConflictModal: React.FC<ConflictModalProps> = ({ overlapData, inProp, handleClose }) => {
+  const [showSuccess, setShowSuccess] = useState(false)
   const waitingRoomConflict = formatOverlapData(overlapData?.waitingRoom, "waitingRoom")
   const reservationConflict = formatOverlapData(overlapData?.reservation, "reservation")
-  const onDeleteBatch = () => {
-    overlapData?.disableCourt?.forEach((disableCourt) => {
-      client
-        .delete("/courts/disable-courts", { data: { sport_id: disableCourt.sport_id, court_num: disableCourt.court_num } })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err))
-    })
+  const onDeleteBatch = async () => {
+    if (overlapData?.disableCourt) {
+      const payload = { sport_id: overlapData?.disableCourt[0].sport_id._id.toString(), court_num: overlapData?.disableCourt[0].court_num }
+      const token = getCookie("token")
+      const res = await Axios({
+        method: "DELETE",
+        url: process.env.REACT_APP_API_URL + "/courts/disable-courts",
+        data: payload,
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (res) {
+        setShowSuccess(true)
+      }
+    }
   }
   return (
     <ErrorAlert inProp={inProp} handleClose={handleClose} header="พบการชนกันกับการลบครั้งนี้" message="">
-      <div>
-        {waitingRoomConflict.length !== 0 && (
-          <div>
-            <h5>ห้องรอที่ชน</h5>
-            <OverlapDataTable data={waitingRoomConflict} />
-          </div>
-        )}
-        {reservationConflict.length !== 0 && (
-          <div>
-            <h5>การจองที่ชน</h5>
-            <OverlapDataTable data={reservationConflict} />
-          </div>
-        )}
-        {overlapData?.disableCourt && (
-          <div className="d-flex flex-column">
-            <h5>จำนวนการล็อคคอร์ดที่ชน: {overlapData.disableCourt.length}</h5>
-            <Button variant="pink" style={{ color: "#c40d00" }} onClick={onDeleteBatch}>
-              ลบการล็อคคอร์ดทั้งหมด
-            </Button>
-          </div>
-        )}
-      </div>
+      <>
+        <ErrorAlert
+          inProp={showSuccess}
+          header="การลบการล็อคคอร์ดสำเร็จ"
+          message="คุณได้ลบการล็อคคอร์ดเรียบร้อยแล้ว"
+          handleClose={() => setShowSuccess(false)}
+        />
+        <div>
+          {waitingRoomConflict.length !== 0 && (
+            <div>
+              <h5>ห้องรอที่ชน</h5>
+              <OverlapDataTable data={waitingRoomConflict} />
+            </div>
+          )}
+          {reservationConflict.length !== 0 && (
+            <div>
+              <h5>การจองที่ชน</h5>
+              <OverlapDataTable data={reservationConflict} />
+            </div>
+          )}
+          {overlapData?.disableCourt && overlapData.disableCourt.length !== 0 && (
+            <div className="d-flex flex-column">
+              <h5>จำนวนการล็อคคอร์ดที่ชน: {overlapData.disableCourt.length}</h5>
+              <Button variant="pink" style={{ color: "#c40d00" }} onClick={onDeleteBatch}>
+                ลบการล็อคคอร์ดทั้งหมด
+              </Button>
+            </div>
+          )}
+        </div>
+      </>
     </ErrorAlert>
   )
 }
