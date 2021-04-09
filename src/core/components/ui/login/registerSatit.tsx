@@ -106,7 +106,6 @@ export const RegisterSatit = ({ user }: satitRejectedProps) => {
                 <label className="form-label mt-2">{t("repeatPassword*")}</label>
                 <input name="repeat_password" type="password" ref={register} placeholder={t("repeatPassword*")} className="form-control" />
                 {errors.repeat_password && <p id="input-error">{errors.repeat_password.message}</p>}
-                <hr />
               </div>
             )}
 

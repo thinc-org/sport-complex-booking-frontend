@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 
 export interface PaymentMessageProps {
   show: boolean
-  payment_status?: string
+  document_status?: string
 }
 
 interface PaymentAlertProps {
@@ -21,10 +21,10 @@ const PaymentAlert: React.FC<PaymentAlertProps> = ({ title, message, category })
   )
 }
 
-export const PaymentMessage: React.FC<PaymentMessageProps> = ({ show, payment_status }) => {
+export const PaymentMessage: React.FC<PaymentMessageProps> = ({ show, document_status }) => {
   const { t } = useTranslation()
   if (!show) return null
-  switch (payment_status) {
+  switch (document_status) {
     case "Rejected": {
       return <PaymentAlert message={t("paymentRejectedMessage")} category="danger" />
     }

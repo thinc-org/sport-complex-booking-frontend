@@ -18,7 +18,7 @@ export default function SatitAndCUPersonelAccountDisplay({ toggleEditButton }: A
   return (
     <div className="mx-auto col-md-6">
       {user && <WarningMessage show={user.verification_status !== ""} verification_status={user.verification_status} account={user.account_type} />}
-      <PaymentMessage show={true} payment_status={user?.student_card_photo_status} />
+      <PaymentMessage show={true} document_status={user?.document_status} />
       <ExtensionReminder />
       <div className="default-mobile-wrapper mt-3 animated-card">
         <div className="row mt-2">
