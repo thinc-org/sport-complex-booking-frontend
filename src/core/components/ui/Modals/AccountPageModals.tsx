@@ -40,6 +40,7 @@ export const CustomAccountModal: React.FC<CustomAccountModalProps> = ({ type, sh
       show={show}
       onHide={() => {
         setShow(false)
+        if (type === "registrationSuccessModal") window.location.reload()
       }}
       backdrop="static"
       keyboard={false}

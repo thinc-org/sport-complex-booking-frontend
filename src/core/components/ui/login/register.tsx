@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Button, Form, Row } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
@@ -8,6 +8,8 @@ import { QuestionCircle, QuestionCircleFill } from "react-bootstrap-icons"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { registrationSchema } from "../../../schemas/registrationSchema"
 import { NavHeader } from "../navbar/navbarSideEffect"
+import { getCookie } from "../../../contexts/cookieHandler"
+import { useHistory } from "react-router"
 
 export const Register = () => {
   const otherAccountTypes = [
@@ -27,6 +29,8 @@ export const Register = () => {
   const { t } = useTranslation()
   const { register, handleSubmit, errors } = useForm({ resolver: yupResolver(registrationSchema) })
   const [showNextForm, setShowNextForm] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const history = useHistory()
   const onSubmit = (data: RegistrationInfo) => {
     data.membership_type = otherAccountTypes[parseInt(data.membership_type)]
     delete data.repeat_password
@@ -59,6 +63,13 @@ export const Register = () => {
       <option value={9}>{t("otherAccountTypes.type9")}</option>
     </select>
   )
+
+  useEffect(() => {
+    if (getCookie("token") !== undefined) setIsAuthenticated(true)
+    else setIsAuthenticated(false)
+    if (isAuthenticated) history.push("/home")
+    return
+  }, [isAuthenticated, history])
 
   return (
     <>
