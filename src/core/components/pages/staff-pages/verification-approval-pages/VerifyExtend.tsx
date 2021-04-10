@@ -124,8 +124,16 @@ const VerifyExtend: FunctionComponent = () => {
       <ConfirmAcceptModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ requestAccept }} />
       <UncomAcceptModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
       <ErrorModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
-      <CompleteAcceptModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ username: info.username }} />
-      <CompleteRejectModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ username: info.username }} />
+      <CompleteAcceptModal
+        showModalInfo={showModalInfo}
+        setShowModalInfo={setShowModalInfo}
+        info={{ username: info.username, accountType: `Other` }}
+      />
+      <CompleteRejectModal
+        showModalInfo={showModalInfo}
+        setShowModalInfo={setShowModalInfo}
+        info={{ username: info.username, accountType: `Other` }}
+      />
     </div>
   )
 
