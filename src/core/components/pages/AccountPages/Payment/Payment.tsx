@@ -56,7 +56,7 @@ function Payment() {
     if (!user.otherAccount && !user.satitCuPersonelAccount) history.push("/account")
     if (user.cuStudentAccount) history.push("/account")
     return
-  }, [history])
+  }, [history, user])
 
   return (
     <div className="mx-auto col-md-6">
