@@ -37,10 +37,10 @@ const LoginForm = () => {
             <Form.Text>{errors.badResponse && t(errors.badResponse.message)}</Form.Text>
           </div>
           <div className="d-flex flex-column align-items-center button-group mb-4">
-            <Button variant="pink" type="submit">
+            <Button variant="pink" type="submit" style={{ fontSize: "15px" }}>
               {t("signIn")}
             </Button>
-            <Button variant="darkpink" onClick={SSOLogin} className="mb-0">
+            <Button variant="darkpink" onClick={SSOLogin} className="mb-0" style={{ fontSize: "15px" }}>
               {t("signInAsCu")}
             </Button>
           </div>
