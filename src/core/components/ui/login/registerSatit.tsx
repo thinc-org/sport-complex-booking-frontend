@@ -264,7 +264,6 @@ export const RegisterSatit = ({ user }: satitRejectedProps) => {
         click={() => {
           history.push("/home")
           window.location.reload()
-          //setCookie("token", null, 0)
         }}
       />
       {/* REGISTRATION ERROR MODAL */}
