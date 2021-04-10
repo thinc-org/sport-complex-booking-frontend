@@ -329,7 +329,7 @@
   "cancellationWarning": "If cancellation is confirmed now, you and your team members will be banned for {{lateCancellationPunishment}} day(s)",
   "OtherAccountType": "Other Account Type",
   "accountExpiredTitle": "Your account has expired.",
-  "accountExpiredMessage": "You can no longer create or join a reservation. You can extend your membership by submitting your payment evidence below and wait for staff's approval.",
+  "accountExpiredMessage": "You can no longer create or join a reservation. You can extend your membership by submitting your membership extension document below and wait for staff's approval.",
   "cancellationUnallowed": "Cancellation within 2 hours is not allowed.",
   "personalInfo": "Tell us about yourself",
   "cuHeader": "CU Sports Center",
