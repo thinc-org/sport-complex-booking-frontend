@@ -283,7 +283,7 @@ const UserInfo: FunctionComponent = () => {
                     style={{ width: "min-content" }}
                   >
                     <option disabled value={2}>
-                      เลือกดูหลักฐานการชำระเงิน
+                      เลือกรูป
                     </option>
                     <option value={prevSlips.length - 1}>ครั้งล่าสุด</option>
                     <option disabled={prevSlips.length - 2 < 0} value={prevSlips.length - 2}>
@@ -292,7 +292,7 @@ const UserInfo: FunctionComponent = () => {
                   </Form.Control>
                 ) : (
                   <Form.Control disabled as="select" defaultValue={0}>
-                    <option value={0}>ไม่มีหลักฐานการชำระเงิน</option>
+                    <option value={0}>ไม่มีรูปถ่ายบัตรประจำตัวนักเรียน</option>
                   </Form.Control>
                 )}
                 <p
@@ -328,19 +328,19 @@ const UserInfo: FunctionComponent = () => {
           <Col>
             <p>สิ้นสุดการแบน</p>
             <Row>
-              <Col style={{ width: "60%" }}>
+              <Col sm={7}>
                 <Form.Control
                   disabled
                   type="date"
-                  style={{ width: "min-content" }}
+                  style={{ width: "fit-content" }}
                   value={user.is_penalize && isValid(user.expired_penalize_date) ? format(user.expired_penalize_date!, "yyyy-MM-dd") : ""}
                 />
               </Col>
-              <Col style={{ width: "40%" }}>
+              <Col sm={1}>
                 <Form.Control
                   disabled
                   type="time"
-                  style={{ width: "min-content" }}
+                  style={{ width: "fit-content" }}
                   value={user.is_penalize && isValid(user.expired_penalize_date) ? format(user.expired_penalize_date!, "HH:mm") : ""}
                 />
               </Col>
@@ -350,11 +350,11 @@ const UserInfo: FunctionComponent = () => {
             <Col>
               <p>วันหมดอายุสมาชิก</p>
               <Row>
-                <Col style={{ width: "60%" }}>
+                <Col sm={7}>
                   <Form.Control
                     disabled
                     type="date"
-                    style={{ width: "min-content" }}
+                    style={{ width: "fit-content" }}
                     value={
                       isValid((user as SatitCuPersonel).account_expiration_date)
                         ? format((user as SatitCuPersonel).account_expiration_date!, "yyyy-MM-dd")
@@ -362,11 +362,11 @@ const UserInfo: FunctionComponent = () => {
                     }
                   />
                 </Col>
-                <Col>
+                <Col sm={1}>
                   <Form.Control
                     disabled
                     type="time"
-                    style={{ width: "min-content" }}
+                    style={{ width: "fit-content" }}
                     value={
                       isValid((user as SatitCuPersonel).account_expiration_date)
                         ? format((user as SatitCuPersonel).account_expiration_date!, "HH:mm")

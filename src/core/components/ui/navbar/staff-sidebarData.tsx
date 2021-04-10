@@ -29,16 +29,6 @@ function useSidebarData() {
     },
     {
       icon: "",
-      name: "รับรองการลงทะเบียน",
-      path: "/staff/verifyApprove",
-    },
-    {
-      icon: "",
-      name: "รับรองนักเรียนสาธิต",
-      path: "/staff/verifyApproveSatit",
-    },
-    {
-      icon: "",
       name: "การล็อคคอร์ด",
       path: "/staff/disableCourt",
     },
