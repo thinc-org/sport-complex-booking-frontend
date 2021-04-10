@@ -6,12 +6,12 @@ import { ModalVerify } from "../interfaces/InfoInterface"
 
 type ConReject = { requestReject: () => void }
 type ConAccept = { requestAccept: () => void }
-type Username = { username: string }
+type Complete = { username: string; accountType: "Other" | "Satit" }
 
 interface ModalProps {
   showModalInfo: ModalVerify
   setShowModalInfo: React.Dispatch<React.SetStateAction<ModalVerify>>
-  info?: ConReject | ConAccept | Username
+  info?: ConReject | ConAccept | Complete
 }
 
 // Reject Modal //
@@ -62,7 +62,8 @@ export const UncomRejectModal: React.FC<ModalProps> = ({ showModalInfo, setShowM
 
 export const CompleteRejectModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo, info }) => {
   const history = useHistory()
-  const { username } = info as Username
+  const { username, accountType } = info as Complete
+  const link = accountType === "Other" ? `/staff/verifyApprove` : `/staff/verifyApproveSatit`
   return (
     <CustomModal
       title={"การปฏิเสธการลงทะเบียนสำเร็จ"}
@@ -70,7 +71,7 @@ export const CompleteRejectModal: React.FC<ModalProps> = ({ showModalInfo, setSh
       body={`ปฏิเสธการลงทะเบียนของ ${username} เรียบร้อยแล้ว`}
       onConfirm={() => {
         setShowModalInfo("none")
-        history.push("/staff/verifyApprove")
+        history.push(link)
       }}
     />
   )
@@ -102,8 +103,9 @@ export const UncomAcceptModal: React.FC<ModalProps> = ({ showModalInfo, setShowM
 }
 
 export const CompleteAcceptModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo, info }) => {
-  const { username } = info as Username
+  const { username, accountType } = info as Complete
   const history = useHistory()
+  const link = accountType === "Other" ? `/staff/verifyApprove` : `/staff/verifyApproveSatit`
   return (
     <CustomModal
       title={"การยอมรับการลงทะเบียนสำเร็จ"}
@@ -111,7 +113,7 @@ export const CompleteAcceptModal: React.FC<ModalProps> = ({ showModalInfo, setSh
       body={`ยอมรับการลงทะเบียนของ ${username} เรียบร้อยแล้ว`}
       onConfirm={() => {
         setShowModalInfo("none")
-        history.push("/staff/verifyApprove")
+        history.push(link)
       }}
     />
   )

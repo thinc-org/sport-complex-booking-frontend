@@ -259,8 +259,8 @@ const VerifyInfoSatit: FunctionComponent = () => {
         <UncomAcceptModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
         <UncomRejectModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
         <ErrorModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
-        <CompleteAcceptModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ username }} />
-        <CompleteRejectModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ username }} />
+        <CompleteAcceptModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ username, accountType: `Satit` }} />
+        <CompleteRejectModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ username, accountType: `Satit` }} />
       </div>
     )
   }
