@@ -11,7 +11,7 @@ export const homePhoneValidation = (requiredMessage: string, errorMessage: strin
   yup
     .string()
     .required(requiredMessage)
-    .matches(/^(((\d{2})-?\d{3}-?\d{4})|(-))$/, errorMessage)
+    .matches(/^(((\d{2}|\d{3})-?\d{3}-?\d{4})|(-))$/, errorMessage)
 
 export const requiredValidation = (requiredMessage: string) => yup.string().required(requiredMessage)
 
