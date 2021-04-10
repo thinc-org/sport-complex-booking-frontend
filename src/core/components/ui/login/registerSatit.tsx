@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Button, Form } from "react-bootstrap"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
@@ -10,7 +10,7 @@ import { NavHeader } from "../navbar/navbarSideEffect"
 import { useLanguage } from "../../../i18n/i18n"
 import { client } from "../../../../axiosConfig"
 import { RegisterResponse, SatitCuPersonel } from "../../../contexts/UsersContext"
-import { setCookie } from "../../../contexts/cookieHandler"
+import { getCookie, setCookie } from "../../../contexts/cookieHandler"
 import { DocumentUploadResponse } from "../../../dto/account.dto"
 import { CustomAccountModal, WarningMessage } from "../Modals/AccountPageModals"
 import { useHistory } from "react-router"
@@ -28,6 +28,7 @@ export const RegisterSatit = ({ user }: satitRejectedProps) => {
   const [showFileErr, setShowFileErr] = useState(false)
   const [showErr, setShowErr] = useState(false)
   const history = useHistory()
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   const handleFileUpload = (formData: FormData) => {
     client.post<DocumentUploadResponse>("/fs/uploadSatit", formData).catch(() => {
@@ -83,6 +84,13 @@ export const RegisterSatit = ({ user }: satitRejectedProps) => {
     data = { ...data, is_thai_language: language === "th", personal_email: data.username }
     postDataToBackend(data)
   }
+
+  useEffect(() => {
+    if (getCookie("token") !== undefined) setIsAuthenticated(true)
+    else setIsAuthenticated(false)
+    if (isAuthenticated) history.push("/home")
+    return
+  }, [isAuthenticated, history])
 
   return (
     <>
