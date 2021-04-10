@@ -284,7 +284,13 @@ export default function OtherEditInfoComponent({
             <hr />
             <label className="form-label mt-2">เบอร์โทรศัพท์ที่บ้าน</label>
             <Form.Control
-              ref={register}
+              ref={register({
+                required: t("invalidLength").toString(),
+                pattern: {
+                  value: /^(((\d{2}|\d{3})-?\d{3}-?\d{4})|(-))$/,
+                  message: t("invalidPhoneNum"),
+                },
+              })}
               name="home_phone"
               className="border"
               style={{ backgroundColor: "white" }}
@@ -359,7 +365,13 @@ export default function OtherEditInfoComponent({
             <hr />
             <label className="form-label mt-2">เบอร์โทรศัพท์ที่บ้าน</label>
             <Form.Control
-              ref={register}
+              ref={register({
+                required: t("invalidLength").toString(),
+                pattern: {
+                  value: /^(((\d{2}|\d{3})-?\d{3}-?\d{4})|(-))$/,
+                  message: t("invalidPhoneNum"),
+                },
+              })}
               name="contact_person_home_phone"
               className="border"
               style={{ backgroundColor: "white" }}
