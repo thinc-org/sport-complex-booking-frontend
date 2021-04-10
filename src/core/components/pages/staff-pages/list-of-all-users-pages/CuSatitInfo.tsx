@@ -69,8 +69,12 @@ const UserInfo: FunctionComponent = () => {
         if (data.expired_penalize_date === null) data.account_type === "CuStudent" ? setUser(data as CuStudent) : setUser(data as SatitCuPersonel)
         else
           data.account_type === "CuStudent"
-            ? setUser({ ...data, expired_penalize_date: new Date(data.expired_penalize_date!) } as CuStudent)
-            : setUser({ ...data, expired_penalize_date: new Date(data.expired_penalize_date!) } as SatitCuPersonel)
+            ? setUser({ ...(data as CuStudent), expired_penalize_date: new Date(data.expired_penalize_date!) })
+            : setUser({
+                ...(data as SatitCuPersonel),
+                expired_penalize_date: new Date(data.expired_penalize_date!),
+                account_expiration_date: new Date(data.account_expiration_date!),
+              })
         setIsLoading(false)
       })
       .catch(({ response }) => {
@@ -164,22 +168,12 @@ const UserInfo: FunctionComponent = () => {
   const requestSave = () => {
     // if change complete -> pop up "ok" //
     // if change error -> pop up "not complete" -> back to old data //
-    const { name_th, surname_th, name_en, surname_en, personal_email, phone, is_penalize, expired_penalize_date } = tempUser
     if (studentCardPhotoFile) handleUpload("student_card_photo", studentCardPhotoFile)
     setShowAlert(false)
     client({
       method: "PUT",
       url: `/list-all-user/${accType}/${_id}`,
-      data: {
-        name_th,
-        name_en,
-        surname_th,
-        surname_en,
-        phone,
-        personal_email,
-        is_penalize,
-        expired_penalize_date,
-      },
+      data: tempUser,
     })
       .then(() => {
         setUser(tempUser)
