@@ -32,10 +32,10 @@ const UserInfo: FunctionComponent = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isEditing, setEditing] = useState<boolean>(false)
   const [newPassword, setNewPassword] = useState<string>("")
+  const [paymentNo, setPaymentNo] = useState<number>(2)
 
   // Modals & Alert //
   const [showModals, setShowModals] = useState<ModalUserInfo>("none")
-  // Alert //
   const [showAlert, setShowAlert] = useState<boolean>(false)
 
   // user states
@@ -59,7 +59,7 @@ const UserInfo: FunctionComponent = () => {
   // react router dom //
   const { register, handleSubmit, errors } = useForm({ resolver: yupResolver(infoSchema) })
   const history = useHistory()
-  const { accType, _id } = useParams<{ accType: string; _id: string }>()
+  const { accType, _id } = useParams<{ accType: "satit" | "other"; _id: string }>()
   const { t } = useTranslation()
 
   const getInfo = useCallback(() => {
@@ -234,6 +234,9 @@ const UserInfo: FunctionComponent = () => {
     )
   }
 
+  let prevSlips: string[] = []
+  if (accType === "satit") prevSlips = (user as SatitCuPersonel).previous_student_card_photo
+
   const renderForm = () => {
     return (
       <div className="userInformation">
@@ -271,9 +274,35 @@ const UserInfo: FunctionComponent = () => {
           {user.account_type === "SatitAndCuPersonel" ? (
             <Col>
               <p>รูปภาพบัตรนักเรียน</p>
-              <p className="link" id={(user as SatitCuPersonel).student_card_photo} onClick={handlePDF}>
-                ดูเอกสาร
-              </p>
+              <div className="form-file">
+                {prevSlips && prevSlips.length !== 0 ? (
+                  <Form.Control
+                    as="select"
+                    defaultValue={2}
+                    onChange={(e) => setPaymentNo(parseInt(e.target.value))}
+                    style={{ width: "min-content" }}
+                  >
+                    <option disabled value={2}>
+                      เลือกดูหลักฐานการชำระเงิน
+                    </option>
+                    <option value={prevSlips.length - 1}>ครั้งล่าสุด</option>
+                    <option disabled={prevSlips.length - 2 < 0} value={prevSlips.length - 2}>
+                      ก่อนหน้าครั้งล่าสุด
+                    </option>
+                  </Form.Control>
+                ) : (
+                  <Form.Control disabled as="select" defaultValue={0}>
+                    <option value={0}>ไม่มีหลักฐานการชำระเงิน</option>
+                  </Form.Control>
+                )}
+                <p
+                  className={prevSlips && prevSlips[paymentNo] ? "link" : "text-muted"}
+                  id={prevSlips ? prevSlips[paymentNo] : undefined}
+                  onClick={handlePDF}
+                >
+                  ดูเอกสาร
+                </p>
+              </div>
             </Col>
           ) : null}
         </Row>
