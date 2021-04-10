@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import withUserGuard from "../../../../guards/user.guard"
 import { useTranslation } from "react-i18next"
 import { CustomAccountModal } from "../../../ui/Modals/AccountPageModals"
@@ -50,6 +50,13 @@ function Payment() {
       </li>
     )
   }
+
+  useEffect(() => {
+    // if the user did not land on this page by clicking a button on the warning, redirect them back
+    if (!user.otherAccount && !user.satitCuPersonelAccount) history.push("/account")
+    if (user.cuStudentAccount) history.push("/account")
+    return
+  }, [history])
 
   return (
     <div className="mx-auto col-md-6">
