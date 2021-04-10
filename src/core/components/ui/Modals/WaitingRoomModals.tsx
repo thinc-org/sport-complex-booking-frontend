@@ -45,15 +45,15 @@ export const DetailsModal: React.FC<DetailsModalProps> = ({ show, setShow, sport
               {t("court")}: {details["court_number"]}
             </li>
             <li>
-              {t("bookingDate")}: {date.toString().substring(0, 10)}
+              {t("bookingDate")}: {date.toLocaleDateString()}
             </li>
             <li>
               {t("bookingTime")}:{" "}
-              <ul>
-                {times.map((element) => {
-                  return <li key={element.toString()}>{formatTime(element)}</li>
-                })}
-              </ul>
+              {formatTime(times[0]).toString().substring(0, 5) +
+                " - " +
+                formatTime(times[times.length - 1])
+                  .toString()
+                  .substring(7, 13)}
             </li>
           </ul>
         </div>
