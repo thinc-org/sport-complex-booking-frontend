@@ -78,10 +78,10 @@ const StaffRoute = () => {
                     <Route exact path={`${path}/listOfAllUsers`} component={ListOfAllUsers} />
                     <Route exact path={`${path}/userInfo/other/:_id`} component={UserInfo} />
                     <Route exact path={`${path}/userInfo/:accType/:_id`} component={CuSatitInfo} />
-                    <Route exact path={`${path}/verifyApprove`} component={VeritificationApproval} />
+                    <Route exact path={`${path}/verifyApprove`} component={WithAdminGuard(VeritificationApproval)} />
                     <Route exact path={`${path}/verifyInfo/:_id`} component={VerifyInfo} />
                     <Route exact path={`${path}/verifyExtend/:_id`} component={VerifyExtend} />
-                    <Route exact path={`${path}/verifyApproveSatit`} component={VerificationApprovalSatit} />
+                    <Route exact path={`${path}/verifyApproveSatit`} component={WithAdminGuard(VerificationApprovalSatit)} />
                     <Route exact path={`${path}/verifyInfoSatit/:_id`} component={VerifyInfoSatit} />
                     <Route exact path={`${path}/verifyExtendSatit/:_id`} component={VerifyExtendSatit} />
                     <Route exact path={`${path}/qrcodescanner`} component={QRScannerPage} />
