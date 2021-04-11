@@ -234,7 +234,7 @@ export default function SportsSettings() {
 
   return (
     <div>
-      <ConflictModal overlapData={conflictData} inProp={!!conflictData} handleClose={() => setConflictData(undefined)} />
+      <ConflictModal overlapData={conflictData} inProp={!!conflictData} handleClose={() => setConflictData(undefined)} withCourtNum={true} />
       <Form onSubmit={handleSearch} className="mb-2">
         <Form.Row className="justify-content-end align-items-center">
           <Col md="auto">

@@ -55,7 +55,7 @@ export const ViewRow = ({ time_slot, indx, day, button }: ViewRowProps) => {
   )
 }
 
-export const ErrorRow = ({ date, phone, indx, time_slot, button, _id, type, name_th, name_en }: ConflictRowProps) => {
+export const ErrorRow = ({ date, phone, indx, time_slot, button, _id, type, name_th, name_en, court_num }: ConflictRowProps) => {
   const [hidden, setHidden] = useState(false)
   const onDelete = (id: number | string, type = "") => {
     const path = type === "reservation" ? "all-reservation" : "all-waiting-room"
@@ -77,6 +77,7 @@ export const ErrorRow = ({ date, phone, indx, time_slot, button, _id, type, name
           <td>{name_en}</td>
           <td>{phone}</td>
           <td>{overlapDate}</td>
+          {court_num && <td>{court_num}</td>}
           <td className={button ? "d-flex flex-row justify-content-end align-items-center" : ""}>
             <span className="mr-2 d-inline-flex flex-row justify-content-center align-items-center">
               {`${getTime(time.startTime)}-${getTime(time.endTime)}`}
@@ -107,9 +108,9 @@ export function CourtTable<T>({ data, header, Row, Button }: TableProps<T>): Rea
     </Table>
   )
 }
-export const OverlapDataTable: React.FC<OverlapDataTableProps> = ({ data }) => {
+export function OverlapDataTable<T>({ data, header, Row }: OverlapDataTableProps<T>): React.ReactElement<OverlapDataTableProps<T>> {
   const { page, setPage, maxPage, setMaxPage, pageArr, jumpDown, jumpUp } = usePagination()
-  const [displayData, setDisplayData] = useState<ConflictRowProps[]>(data ? data.slice(0, 10) : [])
+  const [displayData, setDisplayData] = useState<T[]>(data ? data.slice(0, 10) : [])
   useEffect(() => {
     setMaxPage(Math.ceil(data ? data.length / 10 : 0))
   }, [setMaxPage, data])
@@ -118,10 +119,10 @@ export const OverlapDataTable: React.FC<OverlapDataTableProps> = ({ data }) => {
   }, [page, setDisplayData, data])
   return (
     <div>
-      {CourtTable<ConflictRowProps>({
+      {CourtTable<T>({
         data: displayData,
-        header: ["index", "ชื่อไทย", "ชื่ออังกฤษ", "เบอร์ติดต่อ", "วันที่ทับซ้อน", "เวลาที่ทับซ้อน"],
-        Row: ErrorRow,
+        header: header,
+        Row: Row,
       })}
       <Pagination>
         <Pagination.Prev

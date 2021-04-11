@@ -11,12 +11,12 @@ import {
   DisableCourtConflictStatus,
 } from "../../../../dto/settings.dto"
 import { ErrorAlert } from "../disable-court/modals"
-import { OverlapDataTable } from "../disable-court/disabled-court-table"
+import { ErrorRow, OverlapDataTable } from "../disable-court/disabled-court-table"
 import Axios from "axios"
 import { Court } from "../../../../dto/sport.dto"
 import { formatOverlapData } from "../disable-court/conflictManager"
 import { getCookie } from "../../../../contexts/cookieHandler"
-import { OverlapData } from "../../../../dto/disableCourt.dto"
+import { ConflictRowProps } from "../../../../dto/disableCourt.dto"
 
 const invalidTime = (openTime: string, closeTime: string): boolean => {
   return !["00"].includes(openTime.slice(openTime.length - 2)) || !["00"].includes(closeTime.slice(closeTime.length - 2))
@@ -365,11 +365,14 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
   )
 }
 
-export const ConflictModal: React.FC<ConflictModalProps> = ({ overlapData, inProp, handleClose }) => {
+export const ConflictModal: React.FC<ConflictModalProps> = ({ overlapData, inProp, handleClose, withCourtNum = false }) => {
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [disableCourtConflictStatus, setDisableCourtConflictStatus] = useState<DisableCourtConflictStatus>("UNDONE")
-  const waitingRoomConflict = formatOverlapData(overlapData?.waitingRoom, "waitingRoom")
-  const reservationConflict = formatOverlapData(overlapData?.reservation, "reservation")
+  const waitingRoomConflict = formatOverlapData(overlapData?.waitingRoom, "waitingRoom", withCourtNum)
+  const reservationConflict = formatOverlapData(overlapData?.reservation, "reservation", withCourtNum)
+  const header = withCourtNum
+    ? ["index", "ชื่อไทย", "ชื่ออังกฤษ", "เบอร์ติดต่อ", "วันที่ทับซ้อน", "เลขคอร์ด", "เวลาที่ทับซ้อน"]
+    : ["index", "ชื่อไทย", "ชื่ออังกฤษ", "เบอร์ติดต่อ", "วันที่ทับซ้อน", "เวลาที่ทับซ้อน"]
   const onDeleteBatch = async () => {
     if (overlapData?.disableCourt) {
       const payload = { sport_id: overlapData?.disableCourt[0].sport_id._id.toString(), court_num: overlapData?.disableCourt[0].court_num }
@@ -407,13 +410,13 @@ export const ConflictModal: React.FC<ConflictModalProps> = ({ overlapData, inPro
           {waitingRoomConflict.length !== 0 && (
             <div>
               <h5>ห้องรอที่ชน</h5>
-              <OverlapDataTable data={waitingRoomConflict} />
+              <OverlapDataTable<ConflictRowProps> Row={ErrorRow} header={header} data={waitingRoomConflict} />
             </div>
           )}
           {reservationConflict.length !== 0 && (
             <div>
               <h5>การจองที่ชน</h5>
-              <OverlapDataTable data={reservationConflict} />
+              <OverlapDataTable<ConflictRowProps> Row={ErrorRow} header={header} data={reservationConflict} />
             </div>
           )}
           {overlapData?.disableCourt && overlapData.disableCourt.length !== 0 && disableCourtConflictStatus !== "DONE" && (

@@ -78,9 +78,7 @@ export interface OverlapData {
   disableCourt?: View[]
 }
 
-export interface OverlapDataTableProps {
-  data?: ConflictRowProps[]
-}
+export type OverlapDataTableProps<T> = Omit<TableProps<T>, "Button">
 
 export interface ConflictRowProps {
   type: string
@@ -92,6 +90,7 @@ export interface ConflictRowProps {
   button?: JSX.Element
   name_th: string
   name_en: string
+  court_num?: number
 }
 export interface ModalProps {
   inProp: boolean
