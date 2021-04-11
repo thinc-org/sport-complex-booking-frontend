@@ -8,7 +8,6 @@ export const formatOverlapData = (
 ): ConflictRowProps[] => {
   const dataArr: ConflictRowProps[] = []
   if (overlapData) {
-    console.log(overlapData)
     overlapData.forEach((element: WaitingRoomResponse | ReservationResponse, indx: number) => {
       const cleanData = {
         type: type,
