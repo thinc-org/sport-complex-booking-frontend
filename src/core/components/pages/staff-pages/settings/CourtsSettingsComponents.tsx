@@ -2,7 +2,14 @@ import React, { useState } from "react"
 import { Form, Row, Col, Button, Modal } from "react-bootstrap"
 import TimePicker from "react-time-picker"
 import { Control, useForm, useWatch } from "react-hook-form"
-import { NormalModalProps, EditCourtProps, DeleteCourtModalProps, AddCourtFuncProps, ConflictModalProps } from "../../../../dto/settings.dto"
+import {
+  NormalModalProps,
+  EditCourtProps,
+  DeleteCourtModalProps,
+  AddCourtFuncProps,
+  ConflictModalProps,
+  DisableCourtConflictStatus,
+} from "../../../../dto/settings.dto"
 import { ErrorAlert } from "../disable-court/modals"
 import { OverlapDataTable } from "../disable-court/disabled-court-table"
 import Axios from "axios"
@@ -359,32 +366,42 @@ export const AddCourtFunc: React.FC<AddCourtFuncProps> = ({
 }
 
 export const ConflictModal: React.FC<ConflictModalProps> = ({ overlapData, inProp, handleClose }) => {
-  const [showSuccess, setShowSuccess] = useState(false)
+  const [showConfirmation, setShowConfirmation] = useState(false)
+  const [disableCourtConflictStatus, setDisableCourtConflictStatus] = useState<DisableCourtConflictStatus>("UNDONE")
   const waitingRoomConflict = formatOverlapData(overlapData?.waitingRoom, "waitingRoom")
   const reservationConflict = formatOverlapData(overlapData?.reservation, "reservation")
   const onDeleteBatch = async () => {
     if (overlapData?.disableCourt) {
       const payload = { sport_id: overlapData?.disableCourt[0].sport_id._id.toString(), court_num: overlapData?.disableCourt[0].court_num }
       const token = getCookie("token")
-      const res = await Axios({
+      await Axios({
         method: "DELETE",
         url: process.env.REACT_APP_API_URL + "/courts/disable-courts",
         data: payload,
         headers: { Authorization: `Bearer ${token}` },
       })
-      if (res) {
-        setShowSuccess(true)
-      }
+        .then(() => setDisableCourtConflictStatus("DONE"))
+        .catch(() => setDisableCourtConflictStatus("ERROR"))
     }
   }
   return (
     <ErrorAlert inProp={inProp} handleClose={handleClose} header="พบการชนกันกับการลบครั้งนี้" message="">
       <>
         <ErrorAlert
-          inProp={showSuccess}
-          header="การลบการล็อคคอร์ดสำเร็จ"
-          message="คุณได้ลบการล็อคคอร์ดเรียบร้อยแล้ว"
-          handleClose={() => setShowSuccess(false)}
+          inProp={disableCourtConflictStatus === "ERROR"}
+          header="การลบการล็อคคอร์ดไม่สำเร็จ"
+          message="การลบการล็อคคอร์ดไม่สำเร็จ กรุณาลองใหม่อีกครั้ง"
+          handleClose={() => setDisableCourtConflictStatus("UNDONE")}
+        />
+        <ErrorAlert
+          inProp={showConfirmation}
+          header="ลบการล็อคคอร์ด"
+          message="คุณต้องการลบการล็อคคอร์ดทั้งหมดที่ชนหรือไม่"
+          canCancel={true}
+          handleClose={() => {
+            onDeleteBatch()
+            setShowConfirmation(false)
+          }}
         />
         <div>
           {waitingRoomConflict.length !== 0 && (
@@ -399,10 +416,10 @@ export const ConflictModal: React.FC<ConflictModalProps> = ({ overlapData, inPro
               <OverlapDataTable data={reservationConflict} />
             </div>
           )}
-          {overlapData?.disableCourt && overlapData.disableCourt.length !== 0 && (
+          {overlapData?.disableCourt && overlapData.disableCourt.length !== 0 && disableCourtConflictStatus !== "DONE" && (
             <div className="d-flex flex-column">
               <h5>จำนวนการล็อคคอร์ดที่ชน: {overlapData.disableCourt.length}</h5>
-              <Button variant="pink" style={{ color: "#c40d00" }} onClick={onDeleteBatch}>
+              <Button variant="pink" style={{ color: "#c40d00" }} onClick={() => setShowConfirmation(true)}>
                 ลบการล็อคคอร์ดทั้งหมด
               </Button>
             </div>
