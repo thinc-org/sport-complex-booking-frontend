@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { usePagination } from "./disable-court-hook"
 import { useRouteMatch, useHistory } from "react-router-dom"
-import { Pagination , Button, Table } from "react-bootstrap"
+import { Pagination, Button, Table } from "react-bootstrap"
 
 import { format } from "date-fns"
 import subDays from "date-fns/subDays"

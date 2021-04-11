@@ -2,7 +2,7 @@ import { OverlapData, OverlapDataTableProps } from "./disableCourt.dto"
 import { Sport, Court } from "./sport.dto"
 
 // Court settings DTO
-
+export type DisableCourtConflictStatus = "DONE" | "UNDONE" | "ERROR"
 export interface NormalModalProps {
   show: boolean
   setShow: (value: boolean) => void
