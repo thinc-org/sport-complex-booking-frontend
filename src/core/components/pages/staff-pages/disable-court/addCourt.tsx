@@ -7,8 +7,8 @@ import { reduceOverlapData } from "./conflictManager"
 import { ErrorAlert, FormAlert } from "./modals"
 import DatePicker from "react-datepicker"
 import { format } from "date-fns"
-import { ViewRowProps, AddCourtForm } from "../../../../dto/disableCourt.dto"
-import { CourtTable, ViewRow, OverlapDataTable } from "./disabled-court-table"
+import { ViewRowProps, AddCourtForm, ConflictRowProps } from "../../../../dto/disableCourt.dto"
+import { CourtTable, ViewRow, OverlapDataTable, ErrorRow } from "./disabled-court-table"
 import { client } from "../../../../../axiosConfig"
 import { DeleteButton } from "./button"
 import { Court } from "../../../../dto/sport.dto"
@@ -61,7 +61,11 @@ const AddCourt = () => {
         header="การล็อคคอร์ดชนกับการจอง"
         message="พบการล็อคคอร์ดชนกับการจองดังนี้"
       >
-        <OverlapDataTable data={reduceOverlapData(overlapData)} />
+        <OverlapDataTable<ConflictRowProps>
+          Row={ErrorRow}
+          data={reduceOverlapData(overlapData)}
+          header={["index", "ชื่อไทย", "ชื่ออังกฤษ", "เบอร์ติดต่อ", "วันที่ทับซ้อน", "เวลาที่ทับซ้อน"]}
+        />
       </ErrorAlert>
       <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} validate={validateTimeSlot} />
       <ErrorAlert inProp={showDateError} handleClose={handleAlert} header={"วันที่ไม่ถูกต้อง"} message={"วันที่ไม่ถูกต้อง"} />

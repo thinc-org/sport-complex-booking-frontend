@@ -46,6 +46,7 @@ export interface WaitingRoomAccessCode {
 export interface WaitingRoomResponse {
   list_member: (CuStudent | SatitCuPersonel | Other)[]
   expired_date: Date
+  court_number: number
   sport_id: Sport
   date: Date
   time_slot: number[]

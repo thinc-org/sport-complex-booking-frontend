@@ -180,7 +180,7 @@ export default function CourtsSettings() {
 
   return (
     <div>
-      <ConflictModal overlapData={conflictData} inProp={!!conflictData} handleClose={() => setConflictData(undefined)} />
+      <ConflictModal overlapData={conflictData} inProp={!!conflictData} handleClose={() => setConflictData(undefined)} withCourtNum={false} />
       <Form.Group controlId="exampleForm.ControlSelect1">
         <Form.Label>ประเภทกีฬา</Form.Label>
         <Form.Control as="select" custom defaultValue={0} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeSport(e)}>
