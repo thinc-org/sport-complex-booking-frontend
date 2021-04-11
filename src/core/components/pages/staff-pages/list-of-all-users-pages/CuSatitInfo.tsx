@@ -170,10 +170,16 @@ const UserInfo: FunctionComponent = () => {
     // if change error -> pop up "not complete" -> back to old data //
     if (studentCardPhotoFile) handleUpload("student_card_photo", studentCardPhotoFile)
     setShowAlert(false)
+    let data
+    if (user.account_type === "CuStudent") data = tempUser
+    else {
+      const { previous_student_card_photo, rejected_info, ...rest } = tempUser as SatitCuPersonel
+      data = rest
+    }
     client({
       method: "PUT",
       url: `/list-all-user/${accType}/${_id}`,
-      data: tempUser,
+      data,
     })
       .then(() => {
         setUser(tempUser)
