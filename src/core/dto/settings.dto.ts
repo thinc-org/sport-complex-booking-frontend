@@ -77,5 +77,6 @@ export interface SettingsCardProps {
 export interface ConflictModalProps {
   overlapData?: OverlapData
   inProp: boolean
+  withCourtNum: boolean
   handleClose: () => void
 }

@@ -1,8 +1,8 @@
 import React from "react"
 import { useViewTable, useEditCourt, withDeletable } from "./disable-court-hook"
 import { useParams, useHistory } from "react-router-dom"
-import { ViewRow, CourtTable, OverlapDataTable } from "./disabled-court-table"
-import { ViewRowProps } from "../../../../dto/disableCourt.dto"
+import { ViewRow, CourtTable, OverlapDataTable, ErrorRow } from "./disabled-court-table"
+import { ConflictRowProps, ViewRowProps } from "../../../../dto/disableCourt.dto"
 import { DeleteButton } from "./button"
 
 import { format } from "date-fns"
@@ -73,7 +73,11 @@ const ViewCourt = () => {
         header="การปิดคอร์ดชนกับการจอง"
         message="พบการปิดคอร์ดชนกับการจองดังนี้"
       >
-        <OverlapDataTable data={reduceOverlapData(overlapData)} />
+        <OverlapDataTable<ConflictRowProps>
+          Row={ErrorRow}
+          data={reduceOverlapData(overlapData)}
+          header={["index", "ชื่อไทย", "ชื่ออังกฤษ", "เบอร์ติดต่อ", "วันที่ทับซ้อน", "เวลาที่ทับซ้อน"]}
+        />
       </ErrorAlert>
       <ErrorAlert inProp={showDateError} handleClose={handleAlert} header={"วันที่ไม่ถูกต้อง"} message={"วันที่ไม่ถูกต้อง"} />
       <FormAlert inProp={inProp} handleClose={() => setInProp(false)} onSubmit={onAddRow} validate={validateTimeSlot} />
