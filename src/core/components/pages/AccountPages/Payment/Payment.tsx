@@ -114,7 +114,7 @@ function Payment() {
               type="file"
               className="form-control"
               id="paymentEvidence"
-              accept="application/pdf, image/png, image/jpeg"
+              accept="image/png, image/jpeg"
               onChange={(e) => {
                 if (e.target.files && e.target.files[0]?.size > 2097152) {
                   e.target.value = ""
