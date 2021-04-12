@@ -60,7 +60,7 @@ const Sidebar = () => {
                   {t("th")}
                 </Button>
                 <li>
-                  {!isUser ? (
+                  {!isUser && getCookie("token") === undefined ? (
                     <Link to="/login" className="styled-link" onClick={() => setInProp(false)}>
                       {t("signIn")}
                     </Link>
