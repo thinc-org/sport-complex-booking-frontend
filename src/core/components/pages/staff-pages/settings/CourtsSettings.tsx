@@ -99,14 +99,24 @@ export default function CourtsSettings() {
     }
     client
       .put<AxiosResponse>("/court-manager/court-setting/update", data)
-      .then(() => {
+      .then((res) => {
+        console.log(res)
         requestCourts(currentSportId)
         setShowEditCourt(false)
         setShowAddCourt(false)
       })
-      .catch(() => {
-        setShowError(true)
-        requestCourts(currentSportId)
+      .catch((err) => {
+        console.log(err)
+        if (err.response.status === 409) {
+          setConflictData({
+            waitingRoom: err.response.data.overlapWaitingRooms,
+            reservation: err.response.data.overlapReservations,
+            disableCourt: err.response.data.overlapDisableCourts,
+          })
+        } else {
+          setShowError(true)
+          requestCourts(currentSportId)
+        }
       })
   }
 
@@ -131,7 +141,7 @@ export default function CourtsSettings() {
       const closeTime = court["close_time"] + ":00"
 
       return (
-        <tr key={court._id} className="tr-normal">
+        <tr key={court._id ?? i} className="tr-normal">
           <td> {court["court_num"]} </td>
           <td> {currentSportName}</td>
           <td> {openTime} </td>

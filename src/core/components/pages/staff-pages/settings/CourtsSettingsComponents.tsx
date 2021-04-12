@@ -9,6 +9,7 @@ import Axios from "axios"
 import { Court } from "../../../../dto/sport.dto"
 import { formatOverlapData } from "../disable-court/conflictManager"
 import { getCookie } from "../../../../contexts/cookieHandler"
+import { OverlapData } from "../../../../dto/disableCourt.dto"
 
 const invalidTime = (openTime: string, closeTime: string): boolean => {
   return !["00"].includes(openTime.slice(openTime.length - 2)) || !["00"].includes(closeTime.slice(closeTime.length - 2))
