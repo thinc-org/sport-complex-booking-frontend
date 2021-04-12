@@ -31,6 +31,7 @@ const UserInfo: FunctionComponent = () => {
   // page states
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isEditing, setEditing] = useState<boolean>(false)
+  const [uploadComplete, setUploadComplete] = useState<boolean>(false)
   const [newPassword, setNewPassword] = useState<string>("")
   const [paymentNo, setPaymentNo] = useState<number>(2)
 
@@ -90,6 +91,30 @@ const UserInfo: FunctionComponent = () => {
     getInfo()
   }, [getInfo])
 
+  useEffect(() => {
+    if (uploadComplete) {
+      let data
+      if (user.account_type === "CuStudent") data = tempUser
+      else {
+        const { previous_student_card_photo, rejected_info, ...rest } = tempUser as SatitCuPersonel
+        data = rest
+      }
+      client({
+        method: "PUT",
+        url: `/list-all-user/${accType}/${_id}`,
+        data,
+      })
+        .then(() => {
+          setUser(tempUser)
+          setShowModals("showComSave")
+          setEditing(false)
+        })
+        .catch(() => {
+          setShowModals("showErr")
+        })
+    }
+  }, [_id, uploadComplete, accType, tempUser, user.account_type])
+
   // Alerts & Modals //
   const renderAlert = () => {
     return (
@@ -109,7 +134,7 @@ const UserInfo: FunctionComponent = () => {
       // Request made to the backend api
       client({
         method: "POST",
-        url: `/fs/admin/upload/${_id}`,
+        url: `/fs/admin/uploadSatit/${_id}`,
         data: formData,
       })
         .then(({ data }) => {
@@ -117,8 +142,10 @@ const UserInfo: FunctionComponent = () => {
             ...(tempUser as SatitCuPersonel),
             student_card_photo: data[Object.keys(data)[0]],
           })
+          setUploadComplete(true)
         })
         .catch(({ response }) => {
+          setUploadComplete(false)
           setShowModals("showUploadErr")
           console.log(response)
         })
@@ -173,25 +200,6 @@ const UserInfo: FunctionComponent = () => {
     // if change error -> pop up "not complete" -> back to old data //
     if (studentCardPhotoFile) handleUpload("student_card_photo", studentCardPhotoFile)
     setShowAlert(false)
-    let data
-    if (user.account_type === "CuStudent") data = tempUser
-    else {
-      const { previous_student_card_photo, rejected_info, ...rest } = tempUser as SatitCuPersonel
-      data = rest
-    }
-    client({
-      method: "PUT",
-      url: `/list-all-user/${accType}/${_id}`,
-      data,
-    })
-      .then(() => {
-        setUser(tempUser)
-        setShowModals("showComSave")
-        setEditing(false)
-      })
-      .catch(() => {
-        setShowModals("showErr")
-      })
   }
 
   const requestDelete = () => {
