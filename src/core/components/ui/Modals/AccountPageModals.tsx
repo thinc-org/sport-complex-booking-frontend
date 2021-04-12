@@ -1,6 +1,7 @@
 import React from "react"
 import { Button, Modal } from "react-bootstrap"
 import { useTranslation } from "react-i18next"
+import { useHistory } from "react-router"
 import { Other } from "../../../contexts/UsersContext"
 import { useExtensionReminder } from "../../pages/AccountPages/Payment/PaymentReminder"
 import { CheckValidityErrorMsg } from "../../pages/Reservation/ReservationComponents"
@@ -30,6 +31,7 @@ interface CustomAccountModalProps {
 
 export const CustomAccountModal: React.FC<CustomAccountModalProps> = ({ type, show, setShow, mainFunction, data, click }) => {
   const { t } = useTranslation()
+  const history = useHistory()
   const message: {
     title: string
     body: string
@@ -40,7 +42,7 @@ export const CustomAccountModal: React.FC<CustomAccountModalProps> = ({ type, sh
       show={show}
       onHide={() => {
         setShow(false)
-        if (type === "registrationSuccessModal") window.location.reload()
+        if (type === "registrationSuccessModal") history.push("/home")
       }}
       backdrop="static"
       keyboard={false}
