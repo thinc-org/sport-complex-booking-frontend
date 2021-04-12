@@ -27,6 +27,7 @@ const UserInfo = () => {
   // page state //
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isEdit, setEdit] = useState<boolean>(false)
+  const [uploadComplete, setUploadComplete] = useState<boolean>(false)
   const [newPassword, setNewPassword] = useState<string>("")
   const [showModalInfo, setShowModalInfo] = useState<ModalUserInfo>("none")
 
@@ -136,6 +137,71 @@ const UserInfo = () => {
     fetchUserData()
   }, [fetchUserData])
 
+  useEffect(() => {
+    if (uploadComplete) {
+      const {
+        email,
+        phone,
+        prefix,
+        name_th,
+        surname_th,
+        name_en,
+        surname_en,
+        birthday,
+        national_id,
+        gender,
+        marital_status,
+        address,
+        home_phone,
+        contact_person,
+        medical_condition,
+      } = tempInfo
+      client
+        .put<Other>(`/list-all-user/other/${_id}`, {
+          personal_email: email,
+          phone,
+          is_thai_language: true,
+          prefix,
+          name_th,
+          surname_th,
+          name_en,
+          surname_en,
+          birthday,
+          national_id,
+          gender,
+          marital_status,
+          address,
+          home_phone,
+          contact_person,
+          medical_condition,
+          // top section //
+          account_expiration_date: tempAccountExpiredDate,
+          is_penalize: tempIsPenalize,
+          expired_penalize_date: tempExpiredPenalizeDate,
+        })
+        .then(({ data }) => {
+          // set temp to data
+          setPenalize(tempIsPenalize)
+          setExpiredPenalizeDate(tempExpiredPenalizeDate!)
+          setAccountExpiredDate(tempAccountExpiredDate!)
+          setInfo({
+            ...tempInfo,
+            user_photo: data.user_photo,
+            medical_certificate: data.medical_certificate,
+            national_id_house_registration: data.national_id_house_registration,
+            relationship_verification_document: data.relationship_verification_document,
+          })
+          // show save complete modal
+          setShowModalInfo("showComSave")
+          // back to view form
+          setEdit(false)
+        })
+        .catch(() => {
+          setShowModalInfo("showErr")
+        })
+    }
+  }, [uploadComplete, _id, tempAccountExpiredDate, tempExpiredPenalizeDate, tempInfo, tempIsPenalize])
+
   // handles //
   const handleEdit = () => {
     setTempInfo(info)
@@ -167,12 +233,14 @@ const UserInfo = () => {
         data: formData,
       })
         .then(({ data }) => {
+          setUploadComplete(true)
           setTempInfo({
             ...tempInfo,
             [Object.keys(data)[0]]: data[Object.keys(data)[0]],
           })
         })
         .catch(({ response }) => {
+          setUploadComplete(false)
           setShowModalInfo("showUploadErr")
           console.log(response)
         })
@@ -196,68 +264,8 @@ const UserInfo = () => {
     }
   }
 
-  const requestSave = async () => {
-    await uploadAllFile()
-    const {
-      email,
-      phone,
-      prefix,
-      name_th,
-      surname_th,
-      name_en,
-      surname_en,
-      birthday,
-      national_id,
-      gender,
-      marital_status,
-      address,
-      home_phone,
-      contact_person,
-      medical_condition,
-    } = tempInfo
-    client
-      .put<Other>(`/list-all-user/other/${_id}`, {
-        personal_email: email,
-        phone,
-        is_thai_language: true,
-        prefix,
-        name_th,
-        surname_th,
-        name_en,
-        surname_en,
-        birthday,
-        national_id,
-        gender,
-        marital_status,
-        address,
-        home_phone,
-        contact_person,
-        medical_condition,
-        // top section //
-        account_expiration_date: tempAccountExpiredDate,
-        is_penalize: tempIsPenalize,
-        expired_penalize_date: tempExpiredPenalizeDate,
-      })
-      .then(({ data }) => {
-        // set temp to data
-        setPenalize(tempIsPenalize)
-        setExpiredPenalizeDate(tempExpiredPenalizeDate!)
-        setAccountExpiredDate(tempAccountExpiredDate!)
-        setInfo({
-          ...tempInfo,
-          user_photo: data.user_photo,
-          medical_certificate: data.medical_certificate,
-          national_id_house_registration: data.national_id_house_registration,
-          relationship_verification_document: data.relationship_verification_document,
-        })
-        // show save complete modal
-        setShowModalInfo("showComSave")
-        // back to view form
-        setEdit(false)
-      })
-      .catch(() => {
-        setShowModalInfo("showErr")
-      })
+  const requestSave = () => {
+    uploadAllFile()
   }
 
   const requestChangePassword = () => {
