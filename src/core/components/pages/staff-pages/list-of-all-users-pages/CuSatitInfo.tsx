@@ -66,14 +66,17 @@ const UserInfo: FunctionComponent = () => {
     client
       .get<CuSatitType>(`/list-all-user/id/${_id}`)
       .then(({ data }) => {
-        if (data.expired_penalize_date === null) data.account_type === "CuStudent" ? setUser(data as CuStudent) : setUser(data as SatitCuPersonel)
+        if (data.expired_penalize_date === null)
+          data.account_type === "CuStudent"
+            ? setUser(data as CuStudent)
+            : setUser({ ...(data as SatitCuPersonel), account_expiration_date: new Date(data.account_expiration_date) })
         else
           data.account_type === "CuStudent"
             ? setUser({ ...(data as CuStudent), expired_penalize_date: new Date(data.expired_penalize_date!) })
             : setUser({
                 ...(data as SatitCuPersonel),
                 expired_penalize_date: new Date(data.expired_penalize_date!),
-                account_expiration_date: new Date(data.account_expiration_date!),
+                account_expiration_date: new Date(data.account_expiration_date),
               })
         setIsLoading(false)
       })
