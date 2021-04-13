@@ -224,16 +224,12 @@ export type ModalUserInfo =
   | "showSave"
   | "showComSave"
   | "showUncomExpire"
+  | "showNotVerified"
   | "showErr"
   | "showUploadErr"
   | "showPasswordErr"
   | "showConfirmChange"
   | "showChangePassword"
-
-//export type ModalAddUser = "none" | "showAdd" | "showCom" | "showErr" | "showUsernameErr"
-
-// Alerts //
-//export type AlertAddUser = "none" | "showAlertUncom" | "showAlertUsername" | "showAlertPassword"
 
 // Registration //
 export interface RegistrationInfo {

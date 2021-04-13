@@ -13,6 +13,7 @@ import {
   CompleteSaveModal,
   ErrModal,
   UncomExpireDateModal,
+  NotVerifiedModal,
   PasswordErrModal,
   ConfirmChangePasswordModal,
 } from "./ListOfAllUserModals"
@@ -221,7 +222,8 @@ const UserInfo = () => {
   }
 
   const handleSave = (canSave: boolean, newPenExp: Date, newAccExp: Date, newFileList: (File | undefined)[]) => {
-    if (canSave && (!tempIsPenalize || (newPenExp >= new Date() && newAccExp >= new Date()))) {
+    if (accountExpiredDate === null && info.verification_status === "Submitted") setShowModalInfo("showNotVerified")
+    else if (canSave && (!tempIsPenalize || (newPenExp >= new Date() && newAccExp >= new Date()))) {
       setTempExpiredPenalizeDate(newPenExp ? newPenExp : null)
       setTempAccountExpiredDate(newAccExp ? newAccExp : null)
       setFileList(newFileList)
@@ -513,6 +515,7 @@ const UserInfo = () => {
         <CompleteSaveModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
         <ErrModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
         <UncomExpireDateModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
+        <NotVerifiedModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
         <PasswordErrModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} />
         <ConfirmChangePasswordModal showModalInfo={showModalInfo} setShowModalInfo={setShowModalInfo} info={{ requestChangePassword }} />
         <PasswordChangeModal showModals={showModalInfo} setShowModals={setShowModalInfo} setNewPassword={setNewPassword} />
