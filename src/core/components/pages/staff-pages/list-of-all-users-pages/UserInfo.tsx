@@ -238,7 +238,7 @@ const UserInfo = () => {
         .then(({ data }) => {
           setTempInfo({
             ...tempInfo,
-            [Object.keys(data)[0]]: data[Object.keys(data)[0]],
+            [Object.keys(data)[0]]: [info.previous_payment_slips[info.previous_payment_slips.length - 1], data[Object.keys(data)[0]]],
           })
         })
         .catch(({ response }) => {

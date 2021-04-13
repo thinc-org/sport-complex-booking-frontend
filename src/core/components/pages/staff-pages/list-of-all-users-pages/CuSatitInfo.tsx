@@ -141,10 +141,12 @@ const UserInfo: FunctionComponent = () => {
         data: formData,
       })
         .then(({ data }) => {
-          console.log(data)
           setTempUser({
             ...(tempUser as SatitCuPersonel),
-            previous_student_card_photo: [(user as SatitCuPersonel).previous_student_card_photo[0], data[Object.keys(data)[0]]],
+            previous_student_card_photo: [
+              (user as SatitCuPersonel).previous_student_card_photo[(user as SatitCuPersonel).previous_student_card_photo.length - 1],
+              data[Object.keys(data)[0]],
+            ],
           })
         })
         .catch(({ response }) => {
