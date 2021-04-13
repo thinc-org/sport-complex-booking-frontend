@@ -421,10 +421,15 @@ export const ConflictModal: React.FC<ConflictModalProps> = ({ overlapData, inPro
               <OverlapDataTable<ConflictRowProps> Row={ErrorRow} header={header} data={reservationConflict} />
             </div>
           )}
-          {overlapData?.disableCourt && overlapData.disableCourt.length !== 0 && disableCourtConflictStatus !== "DONE" && (
+          {overlapData?.disableCourt && overlapData.disableCourt.length !== 0 && (
             <div className="d-flex flex-column">
-              <h5>จำนวนการล็อคคอร์ดที่ชน: {overlapData.disableCourt.length}</h5>
-              <Button variant="pink" style={{ color: "#c40d00" }} onClick={() => setShowConfirmation(true)}>
+              <h5>จำนวนการล็อคคอร์ดที่ชน: {disableCourtConflictStatus === "DONE" ? 0 : overlapData.disableCourt.length}</h5>
+              <Button
+                variant="pink"
+                style={{ color: "#c40d00" }}
+                onClick={() => setShowConfirmation(true)}
+                disabled={disableCourtConflictStatus === "DONE"}
+              >
                 ลบการล็อคคอร์ดทั้งหมด
               </Button>
             </div>
