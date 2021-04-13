@@ -18,14 +18,13 @@ export default interface Info {
   medical_condition: string
   contact_person: ContactPerson
   membership_type: string
+  verification_status: string
+  document_status: string
   // object id //
   user_photo: string
   medical_certificate: string
   national_id_house_registration: string
   relationship_verification_document?: string // only for สมาชิกสามัญสมทบ ก
-}
-
-export interface VerifyComponentInfo extends Info {
   payment_slip: string
 }
 
@@ -107,21 +106,6 @@ export interface PasswordToggle {
   newPassword: boolean
   confirmPassword: boolean
 }
-
-/*
-export interface AddInfo {
-  membership_type: string
-  is_thai_language: boolean
-  name_th: string
-  surname_th: string
-  name_en: string
-  surname_en: string
-  username: string
-  password: string
-  personal_email: string
-  phone: string
-}
-*/
 
 export interface AddUserComponentInfo {
   is_thai_language: boolean
