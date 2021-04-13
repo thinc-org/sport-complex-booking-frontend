@@ -125,6 +125,19 @@ export const UncomExpireDateModal: React.FC<ModalProps> = ({ showModalInfo, setS
   )
 }
 
+export const NotVerifiedModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo }) => {
+  return (
+    <CustomModal
+      title={"เกิดข้อผิดพลาด"}
+      show={showModalInfo === "showNotVerified"}
+      body={"กรุณายืนยันการลงทะเบียนของผู้สมัครก่อนการเปลี่ยนวันหมดอายุบัญชี"}
+      onConfirm={() => {
+        setShowModalInfo("none")
+      }}
+    />
+  )
+}
+
 // Error Modal //
 export const ErrModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalInfo }) => {
   return (
