@@ -9,6 +9,7 @@ import {
   AddCourtFuncProps,
   ConflictModalProps,
   DisableCourtConflictStatus,
+  DeleteConflictPayload,
 } from "../../../../dto/settings.dto"
 import { ErrorAlert } from "../disable-court/modals"
 import { ErrorRow, OverlapDataTable } from "../disable-court/disabled-court-table"
@@ -375,8 +376,12 @@ export const ConflictModal: React.FC<ConflictModalProps> = ({ overlapData, inPro
     : ["index", "ชื่อไทย", "ชื่ออังกฤษ", "เบอร์ติดต่อ", "วันที่ทับซ้อน", "เวลาที่ทับซ้อน"]
   const onDeleteBatch = async () => {
     if (overlapData?.disableCourt) {
-      const payload = { sport_id: overlapData?.disableCourt[0].sport_id._id.toString(), court_num: overlapData?.disableCourt[0].court_num }
+      const payload: DeleteConflictPayload = {
+        sport_id: overlapData?.disableCourt[0].sport_id._id.toString(),
+        court_num: overlapData?.disableCourt[0].court_num,
+      }
       const token = getCookie("token")
+      if (withCourtNum) delete payload.court_num
       await Axios({
         method: "DELETE",
         url: process.env.REACT_APP_API_URL + "/courts/disable-courts",
