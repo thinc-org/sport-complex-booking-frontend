@@ -463,6 +463,7 @@ export default function OtherEditInfoComponent({
                 <hr />
               </>
             ) : null}
+            <label className="form-label my-2">หลักฐานการชำระเงิน</label>
             <div className="form-file">
               <Form.File
                 label={paymentSlip ? (paymentSlip as File).name : "Choose File"}
