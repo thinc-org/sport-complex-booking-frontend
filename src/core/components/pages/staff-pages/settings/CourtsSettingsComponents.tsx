@@ -78,7 +78,7 @@ export const EditCourt: React.FC<EditCourtProps> = ({
   updateCourt,
 }) => {
   const { register, handleSubmit, control } = useForm()
-  const onSubmitEditCourt = (data: Court) => {
+  const onSubmitEditCourt = async (data: Court) => {
     if (!currentCourt) return null
     const formattedOpenTime = formatOpenTime(openTime)
     const formattedCloseTime = formatCloseTime(closeTime)
@@ -88,7 +88,7 @@ export const EditCourt: React.FC<EditCourtProps> = ({
         courts[i] = newCourt
       }
     })
-    updateCourt(currentSportId)
+    if (await updateCourt(currentSportId)) setShow(false)
   }
 
   function OpenTimeWatched({ control }: { control: Control }) {
@@ -170,9 +170,6 @@ export const EditCourt: React.FC<EditCourtProps> = ({
             variant="pink"
             className="btn-normal"
             disabled={invalidTime(openTime, closeTime) || openAfterClose(formatOpenTime(openTime), formatCloseTime(closeTime))}
-            onClick={() => {
-              setShow(false)
-            }}
           >
             บันทึก
           </Button>

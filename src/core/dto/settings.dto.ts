@@ -23,7 +23,7 @@ export interface EditCourtProps extends NormalModalProps {
   currentCourt: Court | undefined
   currentSportName: string | undefined
   currentSportId: string
-  updateCourt: (value: string) => void
+  updateCourt: (value: string) => Promise<boolean>
 }
 
 export interface DeleteCourtModalProps extends NormalModalProps {

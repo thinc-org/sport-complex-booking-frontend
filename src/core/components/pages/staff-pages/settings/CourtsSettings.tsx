@@ -92,18 +92,19 @@ export default function CourtsSettings() {
       })
   }
 
-  const updateCourt = (sportId: string) => {
+  const updateCourt = async (sportId: string) => {
     const data = {
       sport_id: sportId,
       new_setting: courts,
     }
-    client
+    const isSuccess = await client
       .put<AxiosResponse>("/court-manager/court-setting/update", data)
       .then((res) => {
         console.log(res)
         requestCourts(currentSportId)
         setShowEditCourt(false)
         setShowAddCourt(false)
+        return true
       })
       .catch((err) => {
         console.log(err)
@@ -117,7 +118,9 @@ export default function CourtsSettings() {
           setShowError(true)
           requestCourts(currentSportId)
         }
+        return false
       })
+    return isSuccess
   }
 
   const handleChangeSport = (e: React.ChangeEvent<HTMLInputElement>) => {
