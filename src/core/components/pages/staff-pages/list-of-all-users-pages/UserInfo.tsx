@@ -250,15 +250,22 @@ const UserInfo = () => {
   }
 
   const uploadAllFile = async () => {
-    type fileType = "user_photo" | "medical_certificate" | "national_id_house_registration" | "relationship_verification_document"
+    type fileType = "user_photo" | "medical_certificate" | "national_id_house_registration" | "relationship_verification_document" | "payment_slip"
     const fileMapping = {
       user_photo: 0,
       medical_certificate: 1,
       national_id_house_registration: 2,
       relationship_verification_document: 3,
+      payment_slip: 4,
     }
     if (fileList) {
-      for (const fileName of ["user_photo", "medical_certificate", "national_id_house_registration", "relationship_verification_document"]) {
+      for (const fileName of [
+        "user_photo",
+        "medical_certificate",
+        "national_id_house_registration",
+        "relationship_verification_document",
+        "payment_slip",
+      ]) {
         let file: File | undefined
         if (fileName in fileMapping) file = fileList[fileMapping[fileName as fileType]]
         if (file) await handleUpload(fileName, file)

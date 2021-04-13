@@ -25,6 +25,7 @@ export default function OtherEditInfoComponent({
   const [medicalCertificateFile, setMedicalCertificateFile] = useState<File>()
   const [nationalIdPhotoFile, setNationalIdPhotoFile] = useState<File>()
   const [relationshipVerificationDocumentFile, setRelationshipVerificationDocumentFile] = useState<File>()
+  const [paymentSlip, setPaymentSlip] = useState<File>()
 
   const {
     prefix,
@@ -77,7 +78,13 @@ export default function OtherEditInfoComponent({
         contact_person_phone: data.contact_person_phone,
       },
     })
-    const newFileList: (File | undefined)[] = [userPhotoFile, medicalCertificateFile, nationalIdPhotoFile, relationshipVerificationDocumentFile]
+    const newFileList: (File | undefined)[] = [
+      userPhotoFile,
+      medicalCertificateFile,
+      nationalIdPhotoFile,
+      relationshipVerificationDocumentFile,
+      paymentSlip,
+    ]
     if ((!data.tempExpiredPenalizeDate || !data.tempExpiredPenalizeTime) && (!data.tempAccountExpiredDate || !data.tempAccountExpiredTime))
       handleSave(false, new Date(), new Date(), newFileList)
     else if (!data.tempAccountExpiredDate || !data.tempAccountExpiredTime)
@@ -439,7 +446,7 @@ export default function OtherEditInfoComponent({
             </div>
             <hr />
             {membership_type === "สมาชิกสามัญสมทบ ก (staff-spouse membership)" ? (
-              <div>
+              <>
                 <label className="form-label my-2">เอกสารยืนยันตัวตน (.pdf เท่านั้น)</label>
                 <div className="form-file">
                   <Form.File
@@ -453,8 +460,21 @@ export default function OtherEditInfoComponent({
                     }}
                   />
                 </div>
-              </div>
+                <hr />
+              </>
             ) : null}
+            <div className="form-file">
+              <Form.File
+                label={paymentSlip ? (paymentSlip as File).name : "Choose File"}
+                id="payment_slip"
+                custom
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.files && e.target.files[0]?.size <= 2097152) {
+                    setPaymentSlip(e.target.files[0])
+                  } else alert(t("fileTooBig"))
+                }}
+              />
+            </div>
           </Card>
         </div>
       </div>
