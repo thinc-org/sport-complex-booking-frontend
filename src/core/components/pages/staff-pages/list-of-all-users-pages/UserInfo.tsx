@@ -62,11 +62,14 @@ const UserInfo = () => {
       contact_person_phone: "",
     },
     membership_type: membershipType,
+    document_status: "",
+    verification_status: "",
     // object id //
     user_photo: "",
     medical_certificate: "",
     national_id_house_registration: "",
     relationship_verification_document: "",
+    payment_slip: "",
     previous_payment_slips: [],
   })
   // temp data
@@ -120,11 +123,14 @@ const UserInfo = () => {
                 contact_person_phone: "",
               },
           membership_type: data.membership_type,
+          document_status: data.document_status,
+          verification_status: data.verification_status,
           // Files(Object id) //
           user_photo: data.user_photo,
           medical_certificate: data.medical_certificate,
           national_id_house_registration: data.national_id_house_registration,
           relationship_verification_document: data.relationship_verification_document,
+          payment_slip: data.payment_slip,
           previous_payment_slips: data.previous_payment_slips,
         })
         setIsLoading(false)
