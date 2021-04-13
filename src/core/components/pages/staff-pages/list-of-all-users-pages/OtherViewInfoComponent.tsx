@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Card, Form } from "react-bootstrap"
-import { OtherComponentInfo, VerifyComponentInfo } from "../interfaces/InfoInterface"
+import Info, { OtherComponentInfo } from "../interfaces/InfoInterface"
 import format from "date-fns/format"
 import isValid from "date-fns/isValid"
 
@@ -9,7 +9,7 @@ export const handlePDF = (e: React.MouseEvent<HTMLElement>) => {
   if (fileId) window.open(`/staff/openFile/${fileId}`, "_blank")
 }
 
-export default function OtherViewInfoComponent({ info, type }: { info: OtherComponentInfo | VerifyComponentInfo; type: string }) {
+export default function OtherViewInfoComponent({ info, type }: { info: OtherComponentInfo | Info; type: string }) {
   // page state
   const [paymentNo, setPaymentNo] = useState<number>(2)
 
@@ -34,11 +34,25 @@ export default function OtherViewInfoComponent({ info, type }: { info: OtherComp
     medical_certificate,
     national_id_house_registration,
     relationship_verification_document,
+    document_status,
+    verification_status,
+    payment_slip,
   } = info
   const { contact_person_prefix, contact_person_name, contact_person_surname, contact_person_home_phone, contact_person_phone } = contact_person
 
   let prevSlips: string[] = []
   prevSlips = (info as OtherComponentInfo).previous_payment_slips
+
+  const waitingForVerify = (): boolean => {
+    if (
+      verification_status === "Submitted" ||
+      verification_status === "Rejected" ||
+      document_status === "Submitted" ||
+      document_status === "Rejected"
+    )
+      return true
+    return false
+  }
 
   return (
     <div className="row mr-4 mt-5">
@@ -157,10 +171,21 @@ export default function OtherViewInfoComponent({ info, type }: { info: OtherComp
               </div>
             </div>
           ) : null}
+          {/* Payment Evidence waiting for verify */}
+          {type !== "VerifyInfo" && waitingForVerify() ? (
+            <div>
+              <label className="form-label my-2">เอกสารรอการยืนยัน</label>
+              <div className="form-file">
+                <p className={payment_slip ? "link" : "text-muted"} id={payment_slip} onClick={handlePDF}>
+                  ดูเอกสาร
+                </p>
+              </div>
+            </div>
+          ) : null}
           {/* Payment Evidence */}
           <label className="form-label my-2">หลักฐานการชำระเงิน</label>
           {type === "VerifyInfo" ? (
-            <p className="link" id={(info as VerifyComponentInfo).payment_slip} onClick={handlePDF}>
+            <p className="link" id={(info as Info).payment_slip} onClick={handlePDF}>
               ดูเอกสาร
             </p>
           ) : (

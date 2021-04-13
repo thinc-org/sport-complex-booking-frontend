@@ -16,7 +16,7 @@ import {
   ErrorModal,
 } from "./VerifyModalsComopnent"
 import { format, isValid } from "date-fns"
-import { VerifyComponentInfo, RejectInfoOther, ModalVerify, RejectInfoOtherLabel, RejectInfoOtherLabelKey } from "../interfaces/InfoInterface"
+import Info, { RejectInfoOther, ModalVerify, RejectInfoOtherLabel, RejectInfoOtherLabelKey } from "../interfaces/InfoInterface"
 
 /// start of main function ///
 const VerifyInfo: FunctionComponent = () => {
@@ -53,7 +53,7 @@ const VerifyInfo: FunctionComponent = () => {
   const { _id } = useParams<{ _id: string }>()
   const [username, setUsername] = useState<string>("")
   const [membershipType, setMembershipType] = useState<string>("")
-  const [info, setInfo] = useState<VerifyComponentInfo>({
+  const [info, setInfo] = useState<Info>({
     prefix: "",
     name_th: "",
     surname_th: "",
@@ -76,6 +76,8 @@ const VerifyInfo: FunctionComponent = () => {
       contact_person_phone: "",
     },
     membership_type: membershipType,
+    document_status: "",
+    verification_status: "",
     // object id //
     user_photo: "",
     medical_certificate: "",
@@ -118,8 +120,10 @@ const VerifyInfo: FunctionComponent = () => {
                 contact_person_home_phone: "",
                 contact_person_phone: "",
               },
-          // Files //
           membership_type: data.membership_type,
+          document_status: "",
+          verification_status: "",
+          // Files //
           user_photo: data.user_photo,
           medical_certificate: data.medical_certificate,
           national_id_house_registration: data.national_id_house_registration,
