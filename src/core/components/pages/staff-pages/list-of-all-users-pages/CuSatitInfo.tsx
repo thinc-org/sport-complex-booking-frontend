@@ -31,7 +31,8 @@ const UserInfo: FunctionComponent = () => {
   // page states
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isEditing, setEditing] = useState<boolean>(false)
-  const [uploadComplete, setUploadComplete] = useState<boolean>(false)
+  const [uploadComplete, setUploadComplete] = useState<boolean>(true)
+  const [uploaded, setUploaded] = useState<boolean>(false)
   const [newPassword, setNewPassword] = useState<string>("")
   const [paymentNo, setPaymentNo] = useState<number>(2)
 
@@ -92,7 +93,9 @@ const UserInfo: FunctionComponent = () => {
   }, [getInfo])
 
   useEffect(() => {
-    if (uploadComplete) {
+    // if change complete -> pop up "ok" //
+    // if change error -> pop up "not complete" -> back to old data //
+    if (uploaded) {
       let data
       if (user.account_type === "CuStudent") data = tempUser
       else {
@@ -113,7 +116,7 @@ const UserInfo: FunctionComponent = () => {
           setShowModals("showErr")
         })
     }
-  }, [_id, uploadComplete, accType, tempUser, user.account_type])
+  }, [_id, uploaded, accType, tempUser, user.account_type])
 
   // Alerts & Modals //
   const renderAlert = () => {
@@ -138,11 +141,11 @@ const UserInfo: FunctionComponent = () => {
         data: formData,
       })
         .then(({ data }) => {
+          console.log(data)
           setTempUser({
             ...(tempUser as SatitCuPersonel),
-            student_card_photo: data[Object.keys(data)[0]],
+            previous_student_card_photo: [(user as SatitCuPersonel).previous_student_card_photo[0], data[Object.keys(data)[0]]],
           })
-          setUploadComplete(true)
         })
         .catch(({ response }) => {
           setUploadComplete(false)
@@ -163,6 +166,8 @@ const UserInfo: FunctionComponent = () => {
   const handleEdit = () => {
     setTempUser(user)
     setEditing(true)
+    setUploaded(false)
+    setUploadComplete(true)
   }
 
   const handleCancelChange = () => {
@@ -196,9 +201,8 @@ const UserInfo: FunctionComponent = () => {
 
   // requests //
   const requestSave = () => {
-    // if change complete -> pop up "ok" //
-    // if change error -> pop up "not complete" -> back to old data //
     if (studentCardPhotoFile) handleUpload("student_card_photo", studentCardPhotoFile)
+    if (uploadComplete) setUploaded(true)
     setShowAlert(false)
   }
 
