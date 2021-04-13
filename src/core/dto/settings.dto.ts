@@ -66,6 +66,10 @@ export interface TimeSettingsData {
   late_cancelation_day: number
 }
 
+export interface DeleteConflictPayload {
+  sport_id: string
+  court_num?: number
+}
 export interface SettingsCardProps {
   type: "absencePunishment" | "lateCancelPunishment" | "lateCancelDay" | "waitingRooomDuration"
   set: (value: number) => void
