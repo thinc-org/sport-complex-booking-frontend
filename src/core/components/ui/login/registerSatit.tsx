@@ -88,9 +88,9 @@ export const RegisterSatit = ({ user }: satitRejectedProps) => {
   useEffect(() => {
     if (getCookie("token") !== undefined) setIsAuthenticated(true)
     else setIsAuthenticated(false)
-    if (isAuthenticated) history.push("/home")
+    if (isAuthenticated && !user) history.push("/home")
     return
-  }, [isAuthenticated, history])
+  }, [isAuthenticated, history, user])
 
   return (
     <>
