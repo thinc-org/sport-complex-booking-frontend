@@ -27,7 +27,8 @@ const UserInfo = () => {
   // page state //
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isEdit, setEdit] = useState<boolean>(false)
-  const [uploadComplete, setUploadComplete] = useState<boolean>(false)
+  const [uploadComplete, setUploadComplete] = useState<boolean>(true)
+  const [uploaded, setUploaded] = useState<boolean>(false)
   const [newPassword, setNewPassword] = useState<string>("")
   const [showModalInfo, setShowModalInfo] = useState<ModalUserInfo>("none")
 
@@ -138,7 +139,7 @@ const UserInfo = () => {
   }, [fetchUserData])
 
   useEffect(() => {
-    if (uploadComplete) {
+    if (uploaded) {
       const {
         email,
         phone,
@@ -200,7 +201,7 @@ const UserInfo = () => {
           setShowModalInfo("showErr")
         })
     }
-  }, [uploadComplete, _id, tempAccountExpiredDate, tempExpiredPenalizeDate, tempInfo, tempIsPenalize])
+  }, [uploaded, _id, tempAccountExpiredDate, tempExpiredPenalizeDate, tempInfo, tempIsPenalize])
 
   // handles //
   const handleEdit = () => {
@@ -209,6 +210,8 @@ const UserInfo = () => {
     setTempExpiredPenalizeDate(expiredPenalizeDate)
     setTempAccountExpiredDate(accountExpiredDate)
     setEdit(true)
+    setUploaded(false)
+    setUploadComplete(true)
   }
 
   const handleSave = (canSave: boolean, newPenExp: Date, newAccExp: Date, newFileList: (File | undefined)[]) => {
@@ -233,7 +236,6 @@ const UserInfo = () => {
         data: formData,
       })
         .then(({ data }) => {
-          setUploadComplete(true)
           setTempInfo({
             ...tempInfo,
             [Object.keys(data)[0]]: data[Object.keys(data)[0]],
@@ -262,6 +264,7 @@ const UserInfo = () => {
         if (file) await handleUpload(fileName, file)
       }
     }
+    if (uploadComplete) setUploaded(true)
   }
 
   const requestSave = () => {
