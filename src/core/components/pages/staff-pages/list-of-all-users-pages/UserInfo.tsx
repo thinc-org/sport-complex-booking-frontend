@@ -222,7 +222,7 @@ const UserInfo = () => {
   }
 
   const handleSave = (canSave: boolean, newPenExp: Date, newAccExp: Date, newFileList: (File | undefined)[]) => {
-    if (accountExpiredDate === null && info.verification_status === "Submitted") setShowModalInfo("showNotVerified")
+    if (!accountExpiredDate && info.verification_status === "Submitted") setShowModalInfo("showNotVerified")
     else if (canSave && (!tempIsPenalize || (newPenExp >= new Date() && newAccExp >= new Date()))) {
       setTempExpiredPenalizeDate(newPenExp ? newPenExp : null)
       setTempAccountExpiredDate(newAccExp ? newAccExp : null)

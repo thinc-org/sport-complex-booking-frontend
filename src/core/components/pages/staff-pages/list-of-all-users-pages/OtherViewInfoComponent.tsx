@@ -9,6 +9,12 @@ export const handlePDF = (e: React.MouseEvent<HTMLElement>) => {
   if (fileId) window.open(`/staff/openFile/${fileId}`, "_blank")
 }
 
+export const waitingForVerify = (verification_status: string, document_status: string): boolean => {
+  if (verification_status === "Submitted" || verification_status === "Rejected" || document_status === "Submitted" || document_status === "Rejected")
+    return true
+  return false
+}
+
 export default function OtherViewInfoComponent({ info, type }: { info: OtherComponentInfo | Info; type: string }) {
   // page state
   const [paymentNo, setPaymentNo] = useState<number>(2)
@@ -42,17 +48,6 @@ export default function OtherViewInfoComponent({ info, type }: { info: OtherComp
 
   let prevSlips: string[] = []
   prevSlips = (info as OtherComponentInfo).previous_payment_slips
-
-  const waitingForVerify = (): boolean => {
-    if (
-      verification_status === "Submitted" ||
-      verification_status === "Rejected" ||
-      document_status === "Submitted" ||
-      document_status === "Rejected"
-    )
-      return true
-    return false
-  }
 
   return (
     <div className="row mr-4 mt-5">
@@ -172,7 +167,7 @@ export default function OtherViewInfoComponent({ info, type }: { info: OtherComp
             </div>
           ) : null}
           {/* Payment Evidence waiting for verify */}
-          {type !== "VerifyInfo" && waitingForVerify() ? (
+          {type !== "VerifyInfo" && waitingForVerify(verification_status, document_status) ? (
             <div>
               <label className="form-label my-2">เอกสารรอการยืนยัน</label>
               <div className="form-file">
