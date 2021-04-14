@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import { client } from "../../../../../axiosConfig"
 import { CuSatitComponentInfo, ModalUserInfo } from "../interfaces/InfoInterface"
 import { renderLoading } from "./ListOfAllUsers"
-import { handlePDF } from "./OtherViewInfoComponent"
+import { handlePDF, waitingForVerify } from "./OtherViewInfoComponent"
 import { CuStudent, SatitCuPersonel } from "../../../../contexts/UsersContext"
 import PasswordChangeModal from "./PasswordChangeModal"
 import {
@@ -294,6 +294,28 @@ const UserInfo: FunctionComponent = () => {
             <p>ชื่อผู้ใช้</p>
             <p className="font-weight-bold mb-0">{user.username}</p>
           </Col>
+          {user.account_type === "SatitAndCuPersonel" && waitingForVerify(user.verification_status, user.document_status) ? (
+            <Col>
+              <div>
+                <label className="form-label my-2">เอกสารรอการยืนยัน</label>
+                <div className="form-file">
+                  <p
+                    className={(user as SatitCuPersonel).student_card_photo ? "link" : "text-muted"}
+                    id={(user as SatitCuPersonel).student_card_photo}
+                    onClick={handlePDF}
+                  >
+                    ดูเอกสาร
+                  </p>
+                </div>
+              </div>
+            </Col>
+          ) : null}
+        </Row>
+        <Row className="py-3">
+          <Col>
+            <p>อีเมลส่วนตัว</p>
+            <p className="font-weight-bold mb-0">{user.personal_email}</p>
+          </Col>
           {user.account_type === "SatitAndCuPersonel" ? (
             <Col>
               <p>รูปภาพบัตรนักเรียน</p>
@@ -328,12 +350,6 @@ const UserInfo: FunctionComponent = () => {
               </div>
             </Col>
           ) : null}
-        </Row>
-        <Row className="py-3">
-          <Col>
-            <p>อีเมลส่วนตัว</p>
-            <p className="font-weight-bold mb-0">{user.personal_email}</p>
-          </Col>
         </Row>
         <Row className="py-3">
           <Col>
