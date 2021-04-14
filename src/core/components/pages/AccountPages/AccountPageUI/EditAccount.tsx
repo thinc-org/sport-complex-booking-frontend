@@ -34,8 +34,10 @@ export default function EditAccount({ toggleEditButton, user }: AccountProps) {
   }
 
   const postDataToBackend = (data: EdittedData) => {
+    const formData = new FormData()
+    formData.append("data", JSON.stringify({ ...data }))
     client
-      .put<EdittedData>("/account_info", data)
+      .put<EdittedData>("/account_info", formData)
       .then(() => {
         window.location.reload()
       })
