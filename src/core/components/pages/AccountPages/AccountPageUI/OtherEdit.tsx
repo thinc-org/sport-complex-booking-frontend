@@ -77,7 +77,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
         })
     } else {
       client
-        .put<Other>("/account_info/", { ...data, is_thai_language: language === "th", ...registrationInfo, birthday: date.toString() })
+        .put<Other>("/account_info/", formData)
         .then(({ data }) => {
           if (data.verification_status === "Submitted") {
             formData.delete("data")

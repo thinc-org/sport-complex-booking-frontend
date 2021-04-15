@@ -72,6 +72,7 @@ const UserInfo = () => {
     relationship_verification_document: "",
     payment_slip: "",
     previous_payment_slips: [],
+    account_expiration_date: "",
   })
   // temp data
   const [tempIsPenalize, setTempPenalize] = useState<boolean>(false)
@@ -82,7 +83,7 @@ const UserInfo = () => {
   // react router dom
   const { _id } = useParams<{ _id: string }>()
   const methods = useForm({ resolver: yupResolver(editInfoSchema) })
-  const { register } = methods
+  const { register, getValues } = methods
   const history = useHistory()
 
   // requests //
@@ -133,6 +134,7 @@ const UserInfo = () => {
           relationship_verification_document: data.relationship_verification_document,
           payment_slip: data.payment_slip,
           previous_payment_slips: data.previous_payment_slips,
+          account_expiration_date: data.account_expiration_date,
         })
         setIsLoading(false)
       })
@@ -222,13 +224,23 @@ const UserInfo = () => {
   }
 
   const handleSave = (canSave: boolean, newPenExp: Date, newAccExp: Date, newFileList: (File | undefined)[]) => {
-    if (!accountExpiredDate && info.verification_status === "Submitted") setShowModalInfo("showNotVerified")
-    else if (canSave && (!tempIsPenalize || (newPenExp >= new Date() && newAccExp >= new Date()))) {
+    if (
+      (getValues("tempAccountExpiredDate") !== "" || getValues("tempAccountExpiredTime")) !== "" &&
+      (info.verification_status === "Rejected" || info.verification_status === "Submitted")
+    ) {
+      setShowModalInfo("showNotVerified")
+    } else if (canSave && (!tempIsPenalize || (newPenExp >= new Date() && newAccExp >= new Date()))) {
       setTempExpiredPenalizeDate(newPenExp ? newPenExp : null)
       setTempAccountExpiredDate(newAccExp ? newAccExp : null)
       setFileList(newFileList)
       setShowModalInfo("showSave")
-    } else setShowModalInfo("showUncomExpire")
+    } else {
+      if (info.verification_status === "Verified") setShowModalInfo("showUncomExpire")
+      else {
+        setFileList(newFileList)
+        setShowModalInfo("showSave")
+      }
+    }
   }
 
   const handleUpload = async (typename: string, file: File) => {

@@ -30,6 +30,7 @@ export default interface Info {
 
 export interface OtherComponentInfo extends Info {
   previous_payment_slips: string[]
+  account_expiration_date: Date | string
 }
 
 export interface VerifyComponentSatitInfo {
