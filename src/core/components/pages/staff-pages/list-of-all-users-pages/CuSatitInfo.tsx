@@ -19,6 +19,7 @@ import {
   UploadErrModal,
   PasswordErrModal,
   ConfirmChangePasswordModal,
+  NotVerifiedModal,
 } from "./ListOfAllUserModals"
 import { useTranslation } from "react-i18next"
 import { Account } from "../../../../dto/account.dto"
@@ -71,7 +72,11 @@ const UserInfo: FunctionComponent = () => {
         if (data.expired_penalize_date === null)
           data.account_type === "CuStudent"
             ? setUser(data as CuStudent)
-            : setUser({ ...(data as SatitCuPersonel), account_expiration_date: new Date(data.account_expiration_date) })
+            : setUser({
+                ...(data as SatitCuPersonel),
+                account_expiration_date: new Date(data.account_expiration_date),
+                verification_status: data.verification_status,
+              })
         else
           data.account_type === "CuStudent"
             ? setUser({ ...(data as CuStudent), expired_penalize_date: new Date(data.expired_penalize_date!) })
@@ -79,6 +84,7 @@ const UserInfo: FunctionComponent = () => {
                 ...(data as SatitCuPersonel),
                 expired_penalize_date: new Date(data.expired_penalize_date!),
                 account_expiration_date: new Date(data.account_expiration_date),
+                verification_status: data.verification_status,
               })
         setIsLoading(false)
       })
@@ -188,15 +194,26 @@ const UserInfo: FunctionComponent = () => {
     else if (
       user.account_type === "SatitAndCuPersonel" &&
       (!data.account_expiration_date || !data.account_expiration_time || !isValid(newAccExp) || newAccExp < new Date())
-    )
-      setShowModals("showUncomExpire")
-    else {
+    ) {
+      if (user.verification_status !== "Submitted" && user.verification_status !== "Rejected") setShowModals("showUncomExpire")
+      else if (data.account_expiration_date || data.account_expiration_time) setShowModals("showNotVerified")
+      else {
+        const { expired_penalize_date, expired_penalize_time, account_expiration_date, account_expiration_time, ...rest } = data
+        setTempUser({ ...(tempUser as SatitCuPersonel), expired_penalize_date: newPenExp, account_expiration_date: newAccExp, ...rest })
+        setShowModals("showSave")
+      }
+    } else {
       const { expired_penalize_date, expired_penalize_time, account_expiration_date, account_expiration_time, ...rest } = data
       const { name_th, surname_th, name_en, surname_en, personal_email, phone } = rest
       if (user.account_type === "CuStudent") setTempUser({ ...(tempUser as CuStudent), expired_penalize_date: newPenExp, ...rest })
-      else setTempUser({ ...(tempUser as SatitCuPersonel), expired_penalize_date: newPenExp, account_expiration_date: newAccExp, ...rest })
+      else {
+        if (user.account_type === "SatitAndCuPersonel" && user.verification_status !== "Verified")
+          setTempUser({ ...(tempUser as SatitCuPersonel), ...rest })
+        else setTempUser({ ...(tempUser as SatitCuPersonel), expired_penalize_date: newPenExp, account_expiration_date: newAccExp, ...rest })
+      }
       if (name_th !== "" && surname_th !== "" && name_en !== "" && surname_en !== "" && personal_email !== "" && phone !== "")
-        setShowModals("showSave")
+        if (user.account_type === "SatitAndCuPersonel" && user.verification_status === "Verified") setShowModals("showSave")
+        else setShowModals("showNotVerified")
       else setShowAlert(true)
     }
   }
@@ -248,6 +265,7 @@ const UserInfo: FunctionComponent = () => {
         <SaveModal showModalInfo={showModals} setShowModalInfo={setShowModals} info={{ requestSave }} />
         <CompleteSaveModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
         <UncomExpireDateModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
+        <NotVerifiedModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
         <ErrModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
         <UploadErrModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
         <PasswordErrModal showModalInfo={showModals} setShowModalInfo={setShowModals} />
@@ -394,8 +412,8 @@ const UserInfo: FunctionComponent = () => {
                     disabled
                     type="date"
                     style={{ width: "fit-content" }}
-                    value={
-                      isValid((user as SatitCuPersonel).account_expiration_date)
+                    defaultValue={
+                      isValid((user as SatitCuPersonel).account_expiration_date) && user.verification_status === "Verified"
                         ? format((user as SatitCuPersonel).account_expiration_date!, "yyyy-MM-dd")
                         : ""
                     }
@@ -406,8 +424,8 @@ const UserInfo: FunctionComponent = () => {
                     disabled
                     type="time"
                     style={{ width: "fit-content" }}
-                    value={
-                      isValid((user as SatitCuPersonel).account_expiration_date)
+                    defaultValue={
+                      isValid((user as SatitCuPersonel).account_expiration_date) && user.verification_status === "Verified"
                         ? format((user as SatitCuPersonel).account_expiration_date!, "HH:mm")
                         : ""
                     }
@@ -583,7 +601,7 @@ const UserInfo: FunctionComponent = () => {
                       type="date"
                       style={{ width: "min-content" }}
                       defaultValue={
-                        isValid((user as SatitCuPersonel).account_expiration_date)
+                        isValid((user as SatitCuPersonel).account_expiration_date) && user.verification_status === "Verified"
                           ? format((user as SatitCuPersonel).account_expiration_date!, "yyyy-MM-dd")
                           : ""
                       }
@@ -596,7 +614,7 @@ const UserInfo: FunctionComponent = () => {
                       type="time"
                       style={{ width: "min-content" }}
                       defaultValue={
-                        isValid((user as SatitCuPersonel).account_expiration_date)
+                        isValid((user as SatitCuPersonel).account_expiration_date) && user.verification_status === "Verified"
                           ? format((user as SatitCuPersonel).account_expiration_date!, "HH:mm")
                           : ""
                       }
