@@ -43,13 +43,14 @@ export const RegisterSatit = ({ user }: satitRejectedProps) => {
   }
 
   const postDataToBackend = (data: satitRegistrationInfo) => {
+    data["personal_email"] = data.username
     const formData = new FormData()
     formData.append("data", JSON.stringify(data))
     if (student_card_photo) formData.append("student_card_photo", student_card_photo, student_card_photo.name)
     setLoading(true)
     user
       ? client
-          .put<SatitCuPersonel>("/account_info", { ...data, personal_email: user.username })
+          .put<SatitCuPersonel>("/account_info", formData)
           .then(() => {
             if (student_card_photo) uploadStudentCardPhoto(student_card_photo)
             setLoading(false)
