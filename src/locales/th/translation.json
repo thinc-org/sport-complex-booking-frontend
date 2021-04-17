@@ -339,7 +339,7 @@
   "username*": "ชื่อสมาชิกผู้ใช้ *",
   "password*":"รหัสผ่าน *",
   "repeatPassword*":"กรอกรหัสผ่านอีกครั้ง *",
-  "studentCardPhotoLabel": "รูปถ่ายบัตรประจำตัวนักเรียน (ไฟล์รูปเท่านั้น)",
+  "studentCardPhotoLabel": "รูปถ่ายบัตรประจำตัวนักเรียน (ไฟล์รูป / .pdf เท่านั้น)",
   "studentCardPhoto":"รูปถ่ายบัตรประจำตัวนักเรียน",
   "registerAsOther":"สมัครสมาชิก",
   "registerAsSatit":"สมัครสมาชิกสำหรับนักเรียนสาธิตจุฬาฯ"
