@@ -30,6 +30,7 @@ const WaitingRoomPage = () => {
   const [requiredUserNumber, setRequiredUserNumber] = useState<number>(0)
   const [currentUserNumber, setCurrentUserNumber] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(true)
+  const [courtNumber, setCourtNumber] = useState(0)
   const { t } = useTranslation()
   const language = useLanguage()
   const nameLanguage: "name_en" | "name_th" = useNameLanguage("name") as "name_en" | "name_th"
@@ -51,6 +52,7 @@ const WaitingRoomPage = () => {
       setWaitingRoomId(res.data._id)
       setAccessCode(res.data.access_code)
       setIsLoading(false)
+      setCourtNumber(res.data.court_number)
     } catch (err) {
       console.log(err.name)
       setWaitingRoomId(undefined)
@@ -135,6 +137,9 @@ const WaitingRoomPage = () => {
                   <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}> {sport && sport[sportLanguage]} </h6>
                   <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}>
                     {t("date")}: {date}
+                  </h6>
+                  <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}>
+                    {t("court")}: {courtNumber}
                   </h6>
                   <h6 style={{ fontWeight: 300, fontSize: "14px", margin: "0" }}>
                     {t("time")}: {timeConversion(timeList)}
