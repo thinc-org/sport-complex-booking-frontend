@@ -229,7 +229,6 @@ const UserInfo = () => {
       setTempExpiredPenalizeDate(tempIsPenalize && newPenExp ? newPenExp : null)
       setTempAccountExpiredDate(newAccExp ? newAccExp : null)
       setFileList(newFileList)
-      console.log(tempExpiredPenalizeDate)
       setShowModalInfo("showSave")
     } else {
       if (info.verification_status === "Verified") setShowModalInfo("showUncomExpire")
@@ -253,10 +252,23 @@ const UserInfo = () => {
         data: formData,
       })
         .then(({ data }) => {
-          setTempInfo({
-            ...tempInfo,
-            [Object.keys(data)[0]]: [info.previous_payment_slips[info.previous_payment_slips.length - 1], data[Object.keys(data)[0]]],
-          })
+          if (Object.keys(data)[0] !== "payment_slip")
+            setTempInfo({
+              ...tempInfo,
+              [Object.keys(data)[0]]: data[Object.keys(data)[0]],
+            })
+          else
+            client
+              .get<Other>(`/list-all-user/id/${_id}`)
+              .then(({ data }) => {
+                setTempInfo({
+                  ...tempInfo,
+                  previous_payment_slips: data.previous_payment_slips,
+                })
+              })
+              .catch(({ response }) => {
+                console.log(response)
+              })
         })
         .catch(({ response }) => {
           setUploadComplete(false)

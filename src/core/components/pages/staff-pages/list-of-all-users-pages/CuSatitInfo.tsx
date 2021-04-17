@@ -135,6 +135,7 @@ const UserInfo: FunctionComponent = () => {
 
   // handles //
   const handleUpload = (typename: string, file: File) => {
+    // only use for satit and cu personel //
     const formData = new FormData()
     const selectedFile = file
     // Update the formData object
@@ -146,14 +147,18 @@ const UserInfo: FunctionComponent = () => {
         url: `/fs/admin/uploadSatit/${_id}`,
         data: formData,
       })
-        .then(({ data }) => {
-          setTempUser({
-            ...(tempUser as SatitCuPersonel),
-            previous_student_card_photo: [
-              (user as SatitCuPersonel).previous_student_card_photo[(user as SatitCuPersonel).previous_student_card_photo.length - 1],
-              data[Object.keys(data)[0]],
-            ],
-          })
+        .then(() => {
+          client
+            .get<SatitCuPersonel>(`/list-all-user/id/${_id}`)
+            .then(({ data }) => {
+              setTempUser({
+                ...(tempUser as SatitCuPersonel),
+                previous_student_card_photo: data.previous_student_card_photo,
+              })
+            })
+            .catch(({ response }) => {
+              console.log(response)
+            })
         })
         .catch(({ response }) => {
           setUploadComplete(false)
