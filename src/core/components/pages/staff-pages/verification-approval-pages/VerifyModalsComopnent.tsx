@@ -125,7 +125,7 @@ export const ErrorModal: React.FC<ModalProps> = ({ showModalInfo, setShowModalIn
     <CustomModal
       title={"เกิดข้อผิดพลาด"}
       show={showModalInfo === "showErr"}
-      body="ไม่สามารถ ยอมรับ/ปฏิเสธ การลงทะเบียนได้ในขณะนี้"
+      body="ไม่สามารถยอมรับหรือปฏิเสธการลงทะเบียนได้ในขณะนี้"
       onConfirm={() => setShowModalInfo("none")}
     />
   )
