@@ -338,7 +338,7 @@
   "username*": "Username *",
   "password*":"Password *",
   "repeatPassword*":"Repeat Password *",
-  "studentCardPhotoLabel": "Student ID Card Photo (image only)",
+  "studentCardPhotoLabel": "Student ID Card Photo (image or .pdf only)",
   "studentCardPhoto": "Student ID Card Photo",
   "registerAsOther":"Register",
   "registerAsSatit":"Register as a Satit Chula Student"
