@@ -107,6 +107,7 @@ export const CompleteSaveModal: React.FC<ModalProps> = ({ showModalInfo, setShow
       body={"บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว"}
       onConfirm={() => {
         setShowModalInfo("none")
+        window.location.reload()
       }}
     />
   )
@@ -117,7 +118,7 @@ export const UncomExpireDateModal: React.FC<ModalProps> = ({ showModalInfo, setS
     <CustomModal
       title={"เกิดข้อผิดพลาด"}
       show={showModalInfo === "showUncomExpire"}
-      body={"กรุณาเลือกวันหมดอายุที่ถูกต้องก่อนกดยืนยัน"}
+      body={"กรุณาเลือกวันที่และเวลาที่ถูกต้องก่อนกดยืนยัน"}
       onConfirm={() => {
         setShowModalInfo("none")
       }}

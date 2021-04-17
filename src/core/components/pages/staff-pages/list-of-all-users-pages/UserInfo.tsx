@@ -94,12 +94,8 @@ const UserInfo = () => {
         setUsername(data.username)
         setMembershipType(data.membership_type)
         setPenalize(data.is_penalize)
-        setExpiredPenalizeDate(
-          data.expired_penalize_date === null || new Date(data.expired_penalize_date) < new Date() ? null : new Date(data.expired_penalize_date)
-        )
-        setAccountExpiredDate(
-          data.account_expiration_date === null || new Date(data.account_expiration_date) < new Date() ? null : new Date(data.account_expiration_date)
-        )
+        setExpiredPenalizeDate(data.expired_penalize_date === null ? null : new Date(data.expired_penalize_date))
+        setAccountExpiredDate(data.account_expiration_date === null ? null : new Date(data.account_expiration_date))
         setInfo({
           prefix: data.prefix,
           name_th: data.name_th,
@@ -229,10 +225,11 @@ const UserInfo = () => {
       (info.verification_status === "Rejected" || info.verification_status === "Submitted")
     ) {
       setShowModalInfo("showNotVerified")
-    } else if (canSave && (!tempIsPenalize || (newPenExp >= new Date() && newAccExp >= new Date()))) {
-      setTempExpiredPenalizeDate(newPenExp ? newPenExp : null)
+    } else if (canSave) {
+      setTempExpiredPenalizeDate(tempIsPenalize && newPenExp ? newPenExp : null)
       setTempAccountExpiredDate(newAccExp ? newAccExp : null)
       setFileList(newFileList)
+      console.log(tempExpiredPenalizeDate)
       setShowModalInfo("showSave")
     } else {
       if (info.verification_status === "Verified") setShowModalInfo("showUncomExpire")
@@ -430,8 +427,10 @@ const UserInfo = () => {
                         ? isValid(tempAccountExpiredDate)
                           ? format(new Date(tempAccountExpiredDate!), "yyyy-MM-dd")
                           : ""
-                        : isValid(accountExpiredDate)
-                        ? format(new Date(accountExpiredDate!), "yyyy-MM-dd")
+                        : isValid(accountExpiredDate) && accountExpiredDate
+                        ? accountExpiredDate
+                          ? format(new Date(accountExpiredDate!), "yyyy-MM-dd")
+                          : ""
                         : ""
                     }
                   />
@@ -509,6 +508,7 @@ const UserInfo = () => {
             className="float-right btn-normal btn-outline-pink mr-3"
             onClick={() => {
               setEdit(false)
+              window.location.reload()
             }}
           >
             ยกเลิก

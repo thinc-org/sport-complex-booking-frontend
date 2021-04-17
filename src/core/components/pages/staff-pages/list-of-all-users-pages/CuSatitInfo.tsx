@@ -189,12 +189,8 @@ const UserInfo: FunctionComponent = () => {
     // else -> try change //
     const newPenExp: Date = new Date(`${data.expired_penalize_date} ${data.expired_penalize_time}`)
     const newAccExp: Date = new Date(`${data.account_expiration_date} ${data.account_expiration_time}`)
-    if (tempUser.is_penalize && (!data.expired_penalize_date || !data.expired_penalize_time || !isValid(newPenExp) || newPenExp < new Date()))
-      setShowModals("showUncomExpire")
-    else if (
-      user.account_type === "SatitAndCuPersonel" &&
-      (!data.account_expiration_date || !data.account_expiration_time || !isValid(newAccExp) || newAccExp < new Date())
-    ) {
+    if (tempUser.is_penalize && (!data.expired_penalize_date || !data.expired_penalize_time)) setShowModals("showUncomExpire")
+    else if (user.account_type === "SatitAndCuPersonel" && (!data.account_expiration_date || !data.account_expiration_time || !isValid(newAccExp))) {
       if (user.verification_status !== "Submitted" && user.verification_status !== "Rejected") setShowModals("showUncomExpire")
       else if (data.account_expiration_date || data.account_expiration_time) setShowModals("showNotVerified")
       else {
@@ -518,6 +514,7 @@ const UserInfo: FunctionComponent = () => {
                 <p>รูปภาพบัตรนักเรียน</p>
                 <Form.File
                   label={studentCardPhotoFile ? (studentCardPhotoFile as File).name : "Choose File"}
+                  accept="image/jpeg"
                   custom
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     if (e.target.files && e.target.files[0]?.size <= 2097152) {
