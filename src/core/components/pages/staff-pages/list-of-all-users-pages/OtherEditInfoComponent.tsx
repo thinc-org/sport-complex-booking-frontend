@@ -408,6 +408,7 @@ export default function OtherEditInfoComponent({
               <Form.File
                 label={userPhotoFile ? (userPhotoFile as File).name : "Choose File"}
                 id="user_photo"
+                accept="image/png, image/jpeg"
                 custom
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   if (e.target.files && e.target.files[0]?.size <= 2097152) {
@@ -422,6 +423,7 @@ export default function OtherEditInfoComponent({
               <Form.File
                 label={nationalIdPhotoFile ? (nationalIdPhotoFile as File).name : "Choose File"}
                 id="national_id_house_registration"
+                accept="application/pdf"
                 custom
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   if (e.target.files && e.target.files[0]?.size <= 2097152) {
@@ -436,6 +438,7 @@ export default function OtherEditInfoComponent({
               <Form.File
                 label={medicalCertificateFile ? (medicalCertificateFile as File).name : "Choose File"}
                 id="medical_certificate"
+                accept="application/pdf"
                 custom
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   if (e.target.files && e.target.files[0]?.size <= 2097152) {
@@ -452,6 +455,7 @@ export default function OtherEditInfoComponent({
                   <Form.File
                     label={relationshipVerificationDocumentFile ? (relationshipVerificationDocumentFile as File).name : "Choose File"}
                     id="relationship_verification_document"
+                    accept="application/pdf"
                     custom
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       if (e.target.files && e.target.files[0]?.size <= 2097152) {
@@ -468,6 +472,7 @@ export default function OtherEditInfoComponent({
               <Form.File
                 label={paymentSlip ? (paymentSlip as File).name : "Choose File"}
                 id="payment_slip"
+                accept="application/pdf, image/png, image/jpeg"
                 custom
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   if (e.target.files && e.target.files[0]?.size <= 2097152) {
