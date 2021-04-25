@@ -337,18 +337,18 @@ function CreateWaitingRoom() {
                   <div className={showTime ? "" : "d-none"}>
                     <div className="mt-3">
                       <div className="glass">
-                        <div className="glass-contents">
+                        <div className="glass-contents d-flex flex-column justify-content-center float-left">
                           <h6>{t("requiredUserMsg")}</h6>
-                          <h4>
+                          <h6 className="font-weight-bold">
                             {requiredUserCount ? requiredUserCount : "..."} {t("users")}
-                          </h4>
+                          </h6>
                           <h6 className="mt-3">{t("remainingQuota")}</h6>
                           {quota - checkedCount * 60 < 60 ? (
-                            <h4>{t("usedUpQuota")}</h4>
+                            <h6 className="font-weight-bold">{t("usedUpQuota")}</h6>
                           ) : (
-                            <h4>
+                            <h6 className="font-weight-bold">
                               {quota - checkedCount * 60} {t("minsRemaining")}
-                            </h4>
+                            </h6>
                           )}
                         </div>
                       </div>
