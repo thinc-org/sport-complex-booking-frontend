@@ -144,6 +144,7 @@ export const WarningMessage: React.FC<WarningMessageProps> = ({ show, verificati
   const { t } = useTranslation()
   const { isExpired } = useExtensionReminder()
   if (!show) return null
+  if (verification_status === "Information") return <WarningAlert title="" message={t("ssoNameChangeInfo")} category="info" />
   if (account === "CuStudent") {
     return <CheckValidityErrorMsg show={true} reason="INFO_NOT_FILLED" type="danger" />
   }
