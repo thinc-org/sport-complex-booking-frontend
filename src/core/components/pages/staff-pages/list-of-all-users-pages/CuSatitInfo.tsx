@@ -214,6 +214,7 @@ const UserInfo: FunctionComponent = () => {
       }
       if (name_th !== "" && surname_th !== "" && name_en !== "" && surname_en !== "" && personal_email !== "" && phone !== "")
         if (user.account_type === "SatitAndCuPersonel" && user.verification_status === "Verified") setShowModals("showSave")
+        else if (user.account_type === "CuStudent") setShowModals("showSave")
         else setShowModals("showNotVerified")
       else setShowAlert(true)
     }
@@ -476,37 +477,21 @@ const UserInfo: FunctionComponent = () => {
           <Row>
             <Col className="py-3">
               <p>ชื่อ (อังกฤษ)</p>
-              {String(user.account_type) === Account[Account.CuStudent] ? (
-                <p className="font-weight-bold mb-0">{user.name_en}</p>
-              ) : (
-                <Form.Control ref={register} name="name_en" defaultValue={user.name_en} />
-              )}
+              <Form.Control ref={register} name="name_en" defaultValue={user.name_en} />
             </Col>
             <Col className="py-3">
               <p>นามสกุล (อังกฤษ)</p>
-              {String(user.account_type) === Account[Account.CuStudent] ? (
-                <p className="font-weight-bold mb-0">{user.surname_en}</p>
-              ) : (
-                <Form.Control ref={register} name="surname_en" defaultValue={user.surname_en} />
-              )}
+              <Form.Control ref={register} name="surname_en" defaultValue={user.surname_en} />
             </Col>
           </Row>
           <Row>
             <Col className="py-3">
               <p>ชื่อ (ไทย)</p>
-              {String(user.account_type) === Account[Account.CuStudent] ? (
-                <p className="font-weight-bold mb-0">{user.name_th}</p>
-              ) : (
-                <Form.Control ref={register} name="name_th" defaultValue={user.name_th} />
-              )}
+              <Form.Control ref={register} name="name_th" defaultValue={user.name_th} />
             </Col>
             <Col className="py-3">
               <p>นามสกุล (ไทย)</p>
-              {String(user.account_type) === Account[Account.CuStudent] ? (
-                <p className="font-weight-bold mb-0">{user.surname_th}</p>
-              ) : (
-                <Form.Control ref={register} name="surname_th" defaultValue={user.surname_th} />
-              )}
+              <Form.Control ref={register} name="surname_th" defaultValue={user.surname_th} />
             </Col>
           </Row>
           <Row className="py-3">
