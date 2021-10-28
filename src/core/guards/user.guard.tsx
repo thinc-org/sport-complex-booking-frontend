@@ -5,8 +5,8 @@ import { useAuthContext } from "../controllers/authContext"
 
 function withUserGuard<P>(Component: ComponentType<P>): FC<P> {
   return function WithUserGuard(props: P) {
-    const { isUser } = useAuthContext()
-    if (!isUser && getCookie("token") === undefined) {
+    const { isUser, role } = useAuthContext()
+    if (isUser && (role !== "User" || getCookie("token") === undefined)) {
       return <Redirect to="/login" />
     } else {
       return <Component {...props} />
