@@ -7,10 +7,10 @@ import PersonalInfo from "../ui/login/personal-info-form"
 
 const FrontLoginPage = () => {
   const { path } = useRouteMatch()
-  const { isUser } = useAuthContext()
+  const { isUser, role } = useAuthContext()
   return (
     <>
-      {isUser && <Redirect to="/home" />}
+      {isUser && role === "User" && <Redirect to="/home" />}
       <Switch>
         <Route path={`${path}/personal`} component={PersonalInfo} />
         <Route exact path={path} component={FrontLoginMain} />
