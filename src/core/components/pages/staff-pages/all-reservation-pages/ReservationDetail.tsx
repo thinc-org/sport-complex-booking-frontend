@@ -7,6 +7,7 @@ import { Room, TimeObject } from "../../../../dto/reservation.dto"
 import { ConfirmDeleteModal, ErrModal, DeleteSuccessfulModal } from "./DeleteModalComponent"
 import { renderLoading } from "../list-of-all-users-pages/ListOfAllUsers"
 import { Sport } from "../../../../dto/sport.dto"
+import { useAuthContext } from "../../../../controllers/authContext"
 
 export const convertSlotToTime = (slot: number): TimeObject => {
   return {
@@ -54,6 +55,7 @@ const ReservationDetail: React.FC = () => {
 
   const history = useHistory()
   const { pagename, _id } = useParams<{ pagename: string; _id: string }>()
+  const { role } = useAuthContext()
 
   // request //
   const requestInfo = useCallback(() => {
@@ -131,7 +133,9 @@ const ReservationDetail: React.FC = () => {
   const memberTable = members?.map((member) => {
     return (
       <tr key={member?.username} className="tr-normal">
-        <td className="py-4 text-center"> {member?.username} </td>
+        <td className="py-4 text-center"> {member?.name_th ?? member?.name_en} </td>
+        <td className="py-4 text-center"> {member?.surname_th ?? member?.surname_en} </td>
+        {role === "Admin" && <td className="py-4 text-center"> {member?.username} </td>}
         <td className="text-center"> {member?.personal_email} </td>
         <td className="text-center"> {member?.phone} </td>
       </tr>
@@ -159,7 +163,9 @@ const ReservationDetail: React.FC = () => {
         <Table responsive className="text-center">
           <thead className="bg-light">
             <tr>
-              <th>ชื่อผู้ใช้</th>
+              <th>ชื่อจริง</th>
+              <th>นามสกุล</th>
+              {role === "Admin" && <th>ชื่อผู้ใช้</th>}
               <th>อีเมล</th>
               <th>เบอร์โทรศัพท์</th>
             </tr>
