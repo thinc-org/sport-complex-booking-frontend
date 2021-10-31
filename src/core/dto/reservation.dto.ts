@@ -10,6 +10,10 @@ export interface MemberInfoRes {
   personal_email: string
   phone: string
   username: string
+  name_th: string
+  name_en: string
+  surname_th: string
+  surname_en: string
   _id: string
 }
 

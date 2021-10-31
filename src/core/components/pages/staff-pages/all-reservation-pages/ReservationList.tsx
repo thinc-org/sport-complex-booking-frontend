@@ -33,6 +33,7 @@ const AllReservation: FunctionComponent = () => {
   const [searchTime, setSearchTime] = useState<number>(-1)
   // Reservation room state
   const [reserveInfo, setReserveInfo] = useState<Room[]>([])
+  const [pageReserveInfo, setPageReserveInfo] = useState<Room[]>([])
   const [allSports, setAllSports] = useState<Sport[]>([])
   const everySports = allSports.find((sport: Sport) => sport._id === sportType) ? allSports.find((sport: Sport) => sport._id === sportType) : null
 
@@ -78,6 +79,12 @@ const AllReservation: FunctionComponent = () => {
         console.log(response)
       })
   }, [pagename])
+
+  useEffect(() => {
+    setPageReserveInfo(reserveInfo)
+    const index = (pageNo - 1) * 10 + 1
+    setPageReserveInfo(reserveInfo.length <= 10 ? reserveInfo : reserveInfo.slice(index, index + 10))
+  }, [pageNo, reserveInfo])
 
   // handles //
   const handleInfo = (e: React.MouseEvent<HTMLInputElement>) => {
@@ -199,7 +206,7 @@ const AllReservation: FunctionComponent = () => {
     </Form.Row>
   )
 
-  const table = reserveInfo.map((info) => {
+  const table = pageReserveInfo.map((info) => {
     const { sport_id, court_number, date, time_slot } = info
     return (
       <tr key={info._id} className="tr-normal">
