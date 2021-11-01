@@ -60,7 +60,6 @@ export default function StaffManagement() {
 
   const fetchStaffInfo = useCallback(async () => {
     const res: AdminAndStaff = (await client.get("staffs/profile")).data
-    console.log(res)
     setCurrentStaff(res)
   }, [])
 
