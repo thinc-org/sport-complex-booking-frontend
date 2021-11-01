@@ -138,6 +138,7 @@ const ReservationDetail: React.FC = () => {
         {role === "Admin" && <td className="py-4 text-center"> {member?.username} </td>}
         <td className="text-center"> {member?.personal_email} </td>
         <td className="text-center"> {member?.phone} </td>
+        <td className="text-center"> {member?.is_penalize ? "โดนแบน" : "ปกติ"} </td>
       </tr>
     )
   })
@@ -158,7 +159,7 @@ const ReservationDetail: React.FC = () => {
 
   return (
     <>
-      <div className="reservationDetail px-5" style={{ display: isLoading ? "none" : "block", margin: "50px 10px" }}>
+      <div className="reservationDetail px-2" style={{ display: isLoading ? "none" : "block", margin: "50px 10px" }}>
         {renderHeader()}
         <Table responsive className="text-center">
           <thead className="bg-light">
@@ -168,6 +169,7 @@ const ReservationDetail: React.FC = () => {
               {role === "Admin" && <th>ชื่อผู้ใช้</th>}
               <th>อีเมล</th>
               <th>เบอร์โทรศัพท์</th>
+              <th>สถานะ</th>
             </tr>
           </thead>
           <tbody>{memberTable}</tbody>
