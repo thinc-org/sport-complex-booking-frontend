@@ -14,6 +14,7 @@ export interface MemberInfoRes {
   name_en: string
   surname_th: string
   surname_en: string
+  is_penalize: boolean
   _id: string
 }
 

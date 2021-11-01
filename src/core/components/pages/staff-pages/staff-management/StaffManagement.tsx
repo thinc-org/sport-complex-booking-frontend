@@ -58,9 +58,16 @@ export default function StaffManagement() {
     [pageNo]
   )
 
+  const fetchStaffInfo = useCallback(async () => {
+    const res: AdminAndStaff = (await client.get("staffs/profile")).data
+    console.log(res)
+    setCurrentStaff(res)
+  }, [])
+
   useEffect(() => {
+    fetchStaffInfo()
     requestStaffs()
-  }, [requestStaffs])
+  }, [requestStaffs, fetchStaffInfo])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -164,7 +171,7 @@ export default function StaffManagement() {
                     as="select"
                     custom
                     value={staff.is_admin ? "แอดมิน" : "สตาฟ"}
-                    disabled={staff.username === "admin"}
+                    disabled={staff.name === currentStaff.name}
                     onChange={(e) => {
                       onSubmitEditStaff(e.target.value, staff)
                       setShowEditStaff(true)
@@ -181,7 +188,7 @@ export default function StaffManagement() {
             <Button
               className="btn-normal btn-outline-black"
               variant="outline-danger"
-              disabled={staff.name === "first admin"}
+              disabled={staff.name === currentStaff.name}
               onClick={() => {
                 setShowDeleteStaff(true)
                 setCurrentStaff(staff)
