@@ -334,7 +334,7 @@
   "personalInfo": "Tell us about yourself",
   "cuHeader": "CU Sports Center",
   "invalidPhoneNum": "Invalid phone number.",
-  "checkinNotAllowed": "Check-in QR Code is only available 60 minutes before the booking.",
+  "checkinNotAllowed": "Check-in QR Code is only available 120 minutes before the booking.",
   "username*": "Username *",
   "password*":"Password *",
   "repeatPassword*":"Repeat Password *",

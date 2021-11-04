@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react"
 import QRCode from "qrcode.react"
 import { useTranslation } from "react-i18next"
 import { QRCodeProps } from "./PropsInterface"
+import { TWO_HOURS_MILLISECOND } from "../../../../../constant"
 
 export const QrCode: React.FC<QRCodeProps> = ({ isCheck, id, validTime, setValidTime, reservedTimeInMillisecond }) => {
   const { t } = useTranslation()
@@ -30,7 +31,8 @@ export const QrCode: React.FC<QRCodeProps> = ({ isCheck, id, validTime, setValid
 
   useEffect(() => {
     const currentTimeInMillisecond = new Date().getTime()
-    if (reservedTimeInMillisecond) reservedTimeInMillisecond - currentTimeInMillisecond > 3600000 ? setAllowCheckin(false) : setAllowCheckin(true)
+    if (reservedTimeInMillisecond)
+      reservedTimeInMillisecond - currentTimeInMillisecond > TWO_HOURS_MILLISECOND ? setAllowCheckin(false) : setAllowCheckin(true)
   }, [reservedTimeInMillisecond])
 
   if (isCheck) {

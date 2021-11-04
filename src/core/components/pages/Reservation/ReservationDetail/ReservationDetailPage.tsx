@@ -11,6 +11,7 @@ import Detail from "./Detail"
 import { Loading } from "../../../ui/loading/loading"
 import { LocationResponse, SportResponse, ReservationDetailResponse, CancellationDataResponse } from "../../../../dto/reservation.dto"
 import { NameResponse } from "../../../../dto/account.dto"
+import { ONE_HOUR_MILLISECOND, TWO_HOURS_MILLISECOND } from "../../../../../constant"
 
 const ReservationDetail = () => {
   const location = useLocation()
@@ -41,7 +42,7 @@ const ReservationDetail = () => {
       setSport(reservation.sport_id)
       setCourtNum(reservation.court_number)
       setDate(new Date(reservation.date).toLocaleDateString())
-      setReservedTimeInMillisecond(new Date(reservation.date).setHours(0, 0, 0, 0) + (reservation.time_slot[0] - 1) * 3600000) //1hr = 3600000ms
+      setReservedTimeInMillisecond(new Date(reservation.date).setHours(0, 0, 0, 0) + (reservation.time_slot[0] - 1) * ONE_HOUR_MILLISECOND) //1hr = 3600000ms
       setTimeList(reservation.time_slot)
       setMemberList(reservation.list_member)
       setIsCheck(reservation.is_check)
