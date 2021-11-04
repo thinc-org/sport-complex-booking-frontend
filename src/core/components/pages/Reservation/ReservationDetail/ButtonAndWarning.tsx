@@ -8,6 +8,7 @@ import { client } from "../../../../../axiosConfig"
 import { ReservationCancellationModal } from "../../../ui/Modals/ReservationCancelModal"
 import { LocationResponse, CancellationDataResponse } from "../../../../dto/reservation.dto"
 import { ButtonAndWarningProps } from "./PropsInterface"
+import { ONE_HOUR_MILLISECOND, ONE_MINUTE_MILLISECOND, TWO_HOURS_MILLISECOND } from "../../../../../constant"
 
 const ButtonAndWarning: React.FC<ButtonAndWarningProps> = ({
   isCheck,
@@ -41,8 +42,8 @@ const ButtonAndWarning: React.FC<ButtonAndWarningProps> = ({
       if (lateCancellationPunishment === 0) return setPunishment(false)
 
       const currentTime = new Date().getTime()
-      const differenceHour = (reservedTime - currentTime) / 3600000 // 1 hour = 3600000 milliseconds
-      const differenceMinute = (reservedTime - currentTime) / 60000 // 1 minute = 60000 milliseconds
+      const differenceHour = (reservedTime - currentTime) / ONE_HOUR_MILLISECOND // 1 hour = 3600000 milliseconds
+      const differenceMinute = (reservedTime - currentTime) / ONE_MINUTE_MILLISECOND // 1 minute = 60000 milliseconds
       if (lateCancellationDay === undefined) return
       const lateCancellationHour = lateCancellationDay * 24
       if (differenceMinute < 121) return setCancellationAllowance(false)

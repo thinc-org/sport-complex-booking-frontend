@@ -12,6 +12,7 @@ import { Row, Col, Container, Button, Form } from "react-bootstrap"
 import DatePicker from "react-datepicker"
 import { client } from "../../../../../axiosConfig"
 import { reduceOverlapData } from "./conflictManager"
+import { useAuthContext } from "../../../../controllers/authContext"
 
 interface Params {
   id: string
@@ -37,6 +38,7 @@ const ViewCourt = () => {
     overlapData,
   } = useViewTable(params.id)
   const { isEdit, setIsEdit, error, setError } = useEditCourt()
+  const { role } = useAuthContext()
   const toggleEdit = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     setIsEdit(true)
     e.preventDefault()
@@ -146,7 +148,7 @@ const ViewCourt = () => {
               <Button variant="outline-pink" className="mr-2" onClick={() => history.push("/staff/disableCourt")} style={{ fontSize: "20px" }}>
                 กลับ
               </Button>
-              <Button variant="pink" onClick={toggleEdit}>
+              <Button variant="pink" onClick={toggleEdit} disabled={role === "Staff"}>
                 แก้ไข
               </Button>
             </>

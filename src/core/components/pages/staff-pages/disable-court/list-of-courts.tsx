@@ -9,6 +9,7 @@ import { ErrorAlert } from "./modals"
 import { DeleteButton } from "./button"
 import { CourtTable, CourtRow } from "./disabled-court-table"
 import { ListOfCourtsForm, RowProps } from "../../../../dto/disableCourt.dto"
+import { useAuthContext } from "../../../../controllers/authContext"
 
 const ListOfCourts = () => {
   const history = useHistory()
@@ -20,6 +21,7 @@ const ListOfCourts = () => {
   const { startDate, endDate, onStartDateChange, onEndDateChange, showDateError, handleAlert, setStartDate, setEndDate } = useDate()
   const watchSports = useWatch({ control, name: "sports", defaultValue: "" })
   const { option } = useOption()
+  const { role } = useAuthContext()
 
   const onSelectStartDate = () => {
     startDateRef.current?.setOpen(true)
@@ -108,7 +110,7 @@ const ListOfCourts = () => {
         Row={CourtRow}
         data={data}
         header={["เลขคอร์ด", "ประเภทกีฬา", "วันที่เริ่มล็อค", "วันสิ้นสุดการล็อค"]}
-        Button={withDeletable(DeleteButton, onDelete)}
+        Button={role === "Admin" ? withDeletable(DeleteButton, onDelete) : undefined}
       />
       <div className="d-flex flex-row justify-content-between align-content-center">
         <Button variant="pink" className="disable-court-button" onClick={onAdd}>

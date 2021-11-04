@@ -74,7 +74,7 @@ const StaffRoute = () => {
                   </h1>
                   <Switch>
                     <Route path={`${path}/staffProfile`} component={StaffProfile} />
-                    <Route path={`${path}/disableCourt`} component={WithAdminGuard(DisableCourt)} />
+                    <Route path={`${path}/disableCourt`} component={DisableCourt} />
                     <Route exact path={`${path}/listOfAllUsers`} component={ListOfAllUsers} />
                     <Route exact path={`${path}/userInfo/other/:_id`} component={UserInfo} />
                     <Route exact path={`${path}/userInfo/:accType/:_id`} component={CuSatitInfo} />
