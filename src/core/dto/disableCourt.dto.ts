@@ -6,6 +6,7 @@ export interface DeleteButtonProps {
   indx: number | string
   type?: string
   phone?: string
+  disabled?: boolean
 }
 
 export interface RowProps {

@@ -57,14 +57,7 @@ function useSidebarData() {
   else
     return data.filter((link) => {
       const name = link.name
-      if (
-        name === "การตั้งค่า" ||
-        name === "การล็อคคอร์ด" ||
-        name === "จัดการสตาฟ" ||
-        name === "รับรองการลงทะเบียน" ||
-        name === "รับรองนักเรียนสาธิต"
-      )
-        return false
+      if (name === "การตั้งค่า" || name === "จัดการสตาฟ" || name === "รับรองการลงทะเบียน" || name === "รับรองนักเรียนสาธิต") return false
       else return true
     })
 }
