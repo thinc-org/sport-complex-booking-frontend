@@ -36,7 +36,7 @@ const ListOfAllUsers: FunctionComponent = () => {
   const [maxUser, setMaxUser] = useState<number>(1)
   const [maxUserPerPage] = useState<number>(10) // > 1
   const [searchName, setSearchName] = useState<string>("")
-  const [status, setStatus] = useState<number>(allStatus.All)
+  const [status, setStatus] = useState<number>(parseInt(window.localStorage.getItem("showPenalizedView") ?? allStatus.All.toString()))
   const [showNoUser, setShowNoUser] = useState<boolean>(false)
   const [showModal, setShowModal] = useState<ModalUserInfo>("none") // use only showErr in this page
   const [users, setUsers] = useState<UserInfoRes[]>([])
@@ -69,7 +69,9 @@ const ListOfAllUsers: FunctionComponent = () => {
   }, [history, maxUserPerPage, pageNo, searchName, status])
 
   // useEffect //
+
   useEffect(() => {
+    // setStatus(parseInt(window.localStorage.getItem("showPenalizedView") ?? "0"))
     requestUsers()
   }, [requestUsers])
 
@@ -188,10 +190,12 @@ const ListOfAllUsers: FunctionComponent = () => {
               <Form.Control
                 as="select"
                 custom
-                defaultValue={0}
+                defaultValue={parseInt(window.localStorage.getItem("showPenalizedView") ?? "0")}
                 style={{ backgroundColor: "white" }}
                 onChange={(e) => {
-                  setStatus(parseInt(e.target.value))
+                  const penalizeStatus = parseInt(e.target.value)
+                  window.localStorage.setItem("showPenalizedView", penalizeStatus.toString())
+                  setStatus(penalizeStatus)
                 }}
               >
                 <option disabled value={allStatus.All}>

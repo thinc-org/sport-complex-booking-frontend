@@ -8,7 +8,7 @@ import { client } from "../../../../../axiosConfig"
 import { ReservationCancellationModal } from "../../../ui/Modals/ReservationCancelModal"
 import { LocationResponse, CancellationDataResponse } from "../../../../dto/reservation.dto"
 import { ButtonAndWarningProps } from "./PropsInterface"
-import { ONE_HOUR_MILLISECOND, ONE_MINUTE_MILLISECOND, TWO_HOURS_MILLISECOND } from "../../../../../constant"
+import { ONE_HOUR_MILLISECOND, ONE_MINUTE_MILLISECOND } from "../../../../../constant"
 
 const ButtonAndWarning: React.FC<ButtonAndWarningProps> = ({
   isCheck,

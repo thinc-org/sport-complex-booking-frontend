@@ -11,7 +11,7 @@ import Detail from "./Detail"
 import { Loading } from "../../../ui/loading/loading"
 import { LocationResponse, SportResponse, ReservationDetailResponse, CancellationDataResponse } from "../../../../dto/reservation.dto"
 import { NameResponse } from "../../../../dto/account.dto"
-import { ONE_HOUR_MILLISECOND, TWO_HOURS_MILLISECOND } from "../../../../../constant"
+import { ONE_HOUR_MILLISECOND } from "../../../../../constant"
 
 const ReservationDetail = () => {
   const location = useLocation()

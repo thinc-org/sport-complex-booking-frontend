@@ -86,6 +86,19 @@ const AllReservation: FunctionComponent = () => {
     setPageReserveInfo(reserveInfo.length <= 10 ? reserveInfo : reserveInfo.slice(index, index + 10))
   }, [pageNo, reserveInfo])
 
+  useEffect(() => {
+    const recentSportType = window.localStorage.getItem("sportType")
+    const sportsExists = allSports.some((info) => info._id === recentSportType)
+    const thisSport = allSports.find((sport) => sport._id === recentSportType)
+    const courtExists = thisSport?.list_court.some((info) => info.court_num === parseInt(window.localStorage.getItem("courtNo") ?? "-2"))
+    if (sportsExists) {
+      setSportType(recentSportType ?? "")
+      setSportIdx(recentSportType ?? "")
+    }
+    if (courtExists) setCourtNo(parseInt(window.localStorage.getItem("courtNo") ?? "-2"))
+    else setCourtNo(-2)
+  }, [allSports])
+
   // handles //
   const handleInfo = (e: React.MouseEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement
@@ -94,10 +107,17 @@ const AllReservation: FunctionComponent = () => {
 
   const handleChangeSport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id: string = e.target.value
-    if (id !== "-1" && id !== "-2") setSportType(id)
-    else setSportType("")
+    if (id !== "-1" && id !== "-2") {
+      setSportType(id)
+      window.localStorage.setItem("sportType", id)
+    } else {
+      setSportType("")
+      window.localStorage.setItem("sportType", "")
+    }
     setCourtNo(-2)
+    window.localStorage.setItem("courtNo", "-2")
     setSportIdx(id)
+    window.localStorage.setItem("sportIdx", id)
   }
 
   const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -135,6 +155,7 @@ const AllReservation: FunctionComponent = () => {
         value={courtNo}
         onChange={(e) => {
           setCourtNo(parseInt(e.target.value))
+          window.localStorage.setItem("courtNo", e.target.value.toString())
         }}
       >
         <option value={-2} disabled>
