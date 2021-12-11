@@ -45,9 +45,10 @@ const AddCourt = () => {
             console.log(err.response.data)
             setOverlapData({ reservation: err.response.data.overlapReservations, waitingRoom: err.response.data.overlapWaitingRooms })
           }
+          const overlapString = err.response.data.overlaps.toString()
           setError("duplicate", {
             type: "manual",
-            message: "วันหรือเวลาของการล็อคคอร์ดนี้ซ้ำกับการล็อคคอร์ดที่มีอยู่แล้ว",
+            message: `วันหรือเวลาของการล็อคคอร์ดนี้ซ้ำกับการล็อคคอร์ดที่มีอยู่แล้ว: ${overlapString}`,
           })
         }
       })
