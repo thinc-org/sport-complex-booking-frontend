@@ -148,9 +148,11 @@ const ViewCourt = () => {
               <Button variant="outline-pink" className="mr-2" onClick={() => history.push("/staff/disableCourt")} style={{ fontSize: "20px" }}>
                 กลับ
               </Button>
-              <Button variant="pink" onClick={toggleEdit} disabled={role === "Staff"}>
-                แก้ไข
-              </Button>
+              {role === "Admin" && (
+                <Button variant="pink" onClick={toggleEdit}>
+                  แก้ไข
+                </Button>
+              )}
             </>
           ) : (
             <>
