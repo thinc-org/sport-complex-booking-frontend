@@ -183,15 +183,17 @@ const ReservationDetail: React.FC = () => {
             </Link>
           </Col>
           <Col>
-            <Button
-              variant="danger"
-              className="float-right btn-normal btn-outline-red"
-              onClick={() => {
-                setShowConfirmDel(true)
-              }}
-            >
-              ลบการจอง
-            </Button>
+            {role === "Admin" && (
+              <Button
+                variant="danger"
+                className="float-right btn-normal btn-outline-red"
+                onClick={() => {
+                  setShowConfirmDel(true)
+                }}
+              >
+                ลบการจอง
+              </Button>
+            )}
           </Col>
         </Row>
         {modals}
