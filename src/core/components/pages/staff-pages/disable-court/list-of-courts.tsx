@@ -113,9 +113,11 @@ const ListOfCourts = () => {
         Button={role === "Admin" ? withDeletable(DeleteButton, onDelete) : undefined}
       />
       <div className="d-flex flex-row justify-content-between align-content-center">
-        <Button variant="pink" className="disable-court-button" onClick={onAdd}>
-          เพิ่มการล็อคคอร์ด
-        </Button>
+        {role === "Admin" && (
+          <Button variant="pink" className="disable-court-button" onClick={onAdd}>
+            เพิ่มการล็อคคอร์ด
+          </Button>
+        )}
         <Pagination>
           <Pagination.Prev
             onClick={() => {
