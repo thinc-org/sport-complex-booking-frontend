@@ -228,9 +228,9 @@ const AllReservation: FunctionComponent = () => {
   )
 
   const table = pageReserveInfo.map((info) => {
-    const { sport_id, court_number, date, time_slot } = info
+    const { sport_id, court_number, date, time_slot, is_check } = info
     return (
-      <tr key={info._id} className="tr-normal">
+      <tr key={info._id} className="tr-normal" style={{ color: `${is_check ? "green" : "black"}` }}>
         <td>{sportIdToName(sport_id)}</td>
         <td>{court_number}</td>
         <td>{date ? format(new Date(date), "dd-MM-yyyy") : ""}</td>

@@ -35,6 +35,7 @@ export interface WaitingRoom extends DefaultRoom {
   access_code: string
   day_of_week: number
   expired_date: Date
+  is_check?: boolean
 }
 
 export interface TimeObject {
