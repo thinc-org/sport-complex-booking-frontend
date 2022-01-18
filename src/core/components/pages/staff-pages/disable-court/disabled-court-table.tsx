@@ -9,6 +9,7 @@ import { client } from "../../../../../axiosConfig"
 import { getMinute, getTime, dayArr } from "./mapTime"
 import { DeleteButton } from "./button"
 import { RowProps, TableProps, ViewRowProps, ConflictRowProps, OverlapDataTableProps } from "../../../../dto/disableCourt.dto"
+import { InfoCircle } from "react-bootstrap-icons"
 
 export const CourtRow = ({ _id, starting_date, expired_date, court_num, sport_id, button, description }: RowProps) => {
   const { path } = useRouteMatch()
@@ -36,7 +37,10 @@ export const CourtRow = ({ _id, starting_date, expired_date, court_num, sport_id
           </tr>
           <tr>
             <td colSpan={5} className="border-0 py-0">
-              <span>คำอธิบาย:</span> {`${description}`}
+              <span className="h5 mr-2">
+                <InfoCircle />
+              </span>
+              {` ${description}`}
             </td>
           </tr>
         </>
