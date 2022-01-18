@@ -15,6 +15,7 @@ import { format } from "date-fns"
 import { Sport } from "../../../../dto/sport.dto"
 import subDays from "date-fns/subDays"
 import { client } from "../../../../../axiosConfig"
+import { useQueryParams } from "../../../../utils/qs"
 
 export const toViewRowProps = (data: disable_time[] | undefined): ViewRowProps[] => {
   const result: ViewRowProps[] = []
@@ -75,8 +76,7 @@ export const useEditCourt = () => {
 }
 
 export const useDate = (initialStartDate: Date | undefined = undefined, initialEndDate: Date | undefined = undefined) => {
-  const currentDate = new Date()
-  currentDate.setHours(0, 0, 0, 0)
+  const { updateQuery } = useQueryParams()
   const [startDate, setStartDate] = useState<Date | undefined>(initialStartDate)
   const [endDate, setEndDate] = useState<Date | undefined>(initialEndDate)
   const [showDateError, setShowDateError] = useState(false)
@@ -84,30 +84,36 @@ export const useDate = (initialStartDate: Date | undefined = undefined, initialE
   const onStartDateChange = (date: Date) => {
     date.setHours(0, 0, 0, 0)
     if (endDate && date >= endDate) setShowDateError(true)
-    else setStartDate(date)
+    else {
+      setStartDate(date)
+      updateQuery({ startDate: date.toISOString() })
+    }
   }
   const onEndDateChange = (date: Date) => {
     date.setHours(0, 0, 0, 0)
     if (startDate && date <= startDate) setShowDateError(true)
-    else setEndDate(date)
+    else {
+      setEndDate(date)
+      updateQuery({ endDate: date.toISOString() })
+    }
   }
   return { startDate, endDate, onStartDateChange, onEndDateChange, showDateError, handleAlert, setStartDate, setEndDate }
 }
 
-export const useOption = () => {
+export const useOption = (afterFetch?: () => void) => {
   const [option, setOption] = useState<Sport[]>()
   const [currentSport, setCurrentSport] = useState<string>()
-  const fetchOption = () => {
+  useEffect(() => {
     client
       .get("/court-manager/sports")
       .then((res) => {
         setOption(res.data)
+        if (afterFetch) {
+          afterFetch()
+        }
       })
       .catch((err) => console.log(err))
-  }
-  useEffect(() => {
-    fetchOption()
-  }, [])
+  }, [afterFetch])
   return { option, currentSport, setCurrentSport }
 }
 
@@ -168,11 +174,12 @@ export const usePagination = () => {
   return { page, setPage, maxPage, setMaxPage, nearestFiveCeil, nearestFiveFloor, pageArr, jumpDown, jumpUp }
 }
 export const useTableWithPagination = () => {
+  const { queryParams } = useQueryParams()
   const [params, setParams] = useState<QueryParams>({
-    sportObjId: undefined,
-    starting_date: undefined,
-    expired_date: undefined,
-    court_num: undefined,
+    sportObjId: queryParams.sports,
+    starting_date: queryParams.startDate ? new Date(queryParams.startDate) : undefined,
+    expired_date: queryParams.endDate ? new Date(queryParams.endDate) : undefined,
+    court_num: parseInt(queryParams.courtNum),
     start: 0,
     end: 9,
   })

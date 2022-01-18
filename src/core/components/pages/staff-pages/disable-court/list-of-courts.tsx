@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useRef, useEffect } from "react"
 
 import { Form, Button, Pagination } from "react-bootstrap"
 import { useRouteMatch, useHistory } from "react-router-dom"
@@ -10,17 +10,27 @@ import { DeleteButton } from "./button"
 import { CourtTable, CourtRow } from "./disabled-court-table"
 import { ListOfCourtsForm, RowProps } from "../../../../dto/disableCourt.dto"
 import { useAuthContext } from "../../../../controllers/authContext"
+import { useQueryParams } from "../../../../utils/qs"
 
 const ListOfCourts = () => {
   const history = useHistory()
   const startDateRef = useRef<DatePicker>(null)
   const endDateRef = useRef<DatePicker>(null)
   const { path } = useRouteMatch()
-  const { data, maxPage, page, setPage, jumpUp, jumpDown, setParams, pageArr, onDelete, isError, setIsError } = useTableWithPagination()
-  const { register, handleSubmit, control, setValue } = useForm<ListOfCourtsForm>()
-  const { startDate, endDate, onStartDateChange, onEndDateChange, showDateError, handleAlert, setStartDate, setEndDate } = useDate()
+  const { data, maxPage, page, setPage, jumpUp, jumpDown, pageArr, onDelete, isError, setIsError } = useTableWithPagination()
+  const { queryParams, updateQuery } = useQueryParams()
+  const { register, control, setValue, reset } = useForm<ListOfCourtsForm>({
+    defaultValues: {
+      sports: queryParams.sports,
+      courtNum: queryParams.courtNum,
+    },
+  })
+  const { startDate, endDate, onStartDateChange, onEndDateChange, showDateError, handleAlert, setStartDate, setEndDate } = useDate(
+    queryParams.startDate ? new Date(queryParams.startDate) : undefined,
+    queryParams.endDate ? new Date(queryParams.endDate) : undefined
+  )
   const watchSports = useWatch({ control, name: "sports", defaultValue: "" })
-  const { option } = useOption()
+  const { option } = useOption(reset)
   const { role } = useAuthContext()
 
   const onSelectStartDate = () => {
@@ -30,20 +40,19 @@ const ListOfCourts = () => {
     endDateRef.current?.setOpen(true)
   }
 
-  const validateFilter = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value === "ประเภทกีฬา" || !event.target.value) setValue("courtNum", "เลขคอร์ด")
+  const refreshData = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.name, event.target.value)
+    if (event.target.name === "sports") {
+      updateQuery({ sports: event.target.value, courtNum: undefined })
+    } else {
+      updateQuery({ courtNum: event.target.value })
+    }
   }
 
-  const onSubmit = (form: ListOfCourtsForm) => {
-    setParams({
-      sportObjId: form.sports ? form.sports : undefined,
-      starting_date: startDate,
-      expired_date: endDate,
-      court_num: form.courtNum ? parseInt(form.courtNum) : undefined,
-      start: 0,
-      end: 9,
-    })
-  }
+  useEffect(() => {
+    setValue("sports", queryParams.sports)
+    setValue("courtNum", queryParams.courtNum)
+  }, [queryParams.sports, queryParams.courtNum, setValue])
 
   const onAdd = () => history.push(`${path}/add`)
   return (
@@ -51,11 +60,11 @@ const ListOfCourts = () => {
       <ErrorAlert inProp={isError} handleClose={() => setIsError(false)} header="การลบคอร์ด" message="ไม่สามารถลบคอร์ดได้ กรุณาลองอีกครั้ง" />
       <ErrorAlert inProp={showDateError} handleClose={handleAlert} header="วันที่ไม่ถูกต้อง" message="วันที่ไม่ถูกต้อง" />
       <div className="disable-court-wrapper px-1 py-2 mt-3">
-        <Form className="disable-court-filter" onSubmit={handleSubmit(onSubmit)}>
+        <Form className="disable-court-filter">
           <div className="d-flex flex-row align-items-center justify-content-between">
             <div className="d-flex flex-row align-items-center w-100">
               <Form.Label srOnly={true}>ประเภทกีฬา</Form.Label>
-              <Form.Control name="sports" as="select" ref={register} onChange={validateFilter}>
+              <Form.Control name="sports" as="select" ref={register} onChange={refreshData}>
                 <option value={""}>ประเภทกีฬา</option>
                 {option ? (
                   option.map((sport) => (
@@ -67,7 +76,7 @@ const ListOfCourts = () => {
                   <option value={""}>ประเภทกีฬา</option>
                 )}
               </Form.Control>
-              <Form.Control name="courtNum" as="select" ref={register} disabled={watchSports === "ประเภทกีฬา" ? true : false}>
+              <Form.Control name="courtNum" as="select" ref={register} onChange={refreshData} disabled={watchSports === "ประเภทกีฬา" ? true : false}>
                 <option value={""}>เลขคอร์ด</option>
                 {watchSports &&
                   option &&
@@ -86,7 +95,13 @@ const ListOfCourts = () => {
                   วันเริ่มต้นการล็อค
                 </label>
                 <DatePicker className="form-control" selected={startDate} onChange={onStartDateChange} name="somw" ref={startDateRef} />
-                <Button variant="outline-transparent" onClick={() => setStartDate(undefined)}>
+                <Button
+                  variant="outline-transparent"
+                  onClick={() => {
+                    setStartDate(undefined)
+                    updateQuery({ startDate: undefined })
+                  }}
+                >
                   ลบ
                 </Button>
               </div>
@@ -95,14 +110,26 @@ const ListOfCourts = () => {
                   วันสิ้นสุดการล็อค
                 </label>
                 <DatePicker className="form-control" selected={endDate} onChange={onEndDateChange} ref={endDateRef} />
-                <Button variant="outline-transparent" onClick={() => setEndDate(undefined)}>
+                <Button
+                  variant="outline-transparent"
+                  onClick={() => {
+                    setEndDate(undefined)
+                    updateQuery({ endDate: undefined })
+                  }}
+                >
                   ลบ
                 </Button>
               </div>
+              <Button
+                className="disable-court-button"
+                variant="pink"
+                onClick={() => {
+                  updateQuery({ sports: undefined, courtNum: undefined, startDate: undefined, endDate: undefined })
+                }}
+              >
+                ลบการกรอง
+              </Button>
             </div>
-            <Button className="disable-court-button" type="submit" variant="pink">
-              ค้นหา
-            </Button>
           </div>
         </Form>
       </div>
