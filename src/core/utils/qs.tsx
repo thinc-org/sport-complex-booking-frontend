@@ -9,7 +9,7 @@ export function useQueryParams() {
 
   const updateQuery = (queries: Record<string, string | undefined>) => {
     const newQs = { ...queryParams, ...queries }
-    history.push({
+    history.replace({
       search: qs.stringify(newQs),
     })
   }

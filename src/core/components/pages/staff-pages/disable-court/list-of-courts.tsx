@@ -43,8 +43,7 @@ const ListOfCourts = () => {
   const refreshData = async (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.name, event.target.value)
     if (event.target.name === "sports") {
-      const courtNum = event.target.value === "ประเภทกีฬา" || !queryParams.courtNum ? "" : queryParams.courtNum
-      updateQuery({ sports: event.target.value, courtNum })
+      updateQuery({ sports: event.target.value, courtNum: undefined })
     } else {
       updateQuery({ courtNum: event.target.value })
     }
