@@ -145,7 +145,7 @@ const ViewCourt = () => {
         <div className="d-flex flex-row justify-content-end">
           {!isEdit ? (
             <>
-              <Button variant="outline-pink" className="mr-2" onClick={() => history.push("/staff/disableCourt")} style={{ fontSize: "20px" }}>
+              <Button variant="outline-pink" className="mr-2" onClick={() => history.goBack()} style={{ fontSize: "20px" }}>
                 กลับ
               </Button>
               {role === "Admin" && (
