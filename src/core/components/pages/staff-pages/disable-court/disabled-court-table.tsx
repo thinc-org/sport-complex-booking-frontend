@@ -9,8 +9,9 @@ import { client } from "../../../../../axiosConfig"
 import { getMinute, getTime, dayArr } from "./mapTime"
 import { DeleteButton } from "./button"
 import { RowProps, TableProps, ViewRowProps, ConflictRowProps, OverlapDataTableProps } from "../../../../dto/disableCourt.dto"
+import { InfoCircle } from "react-bootstrap-icons"
 
-export const CourtRow = ({ _id, starting_date, expired_date, court_num, sport_id, button }: RowProps) => {
+export const CourtRow = ({ _id, starting_date, expired_date, court_num, sport_id, button, description }: RowProps) => {
   const { path } = useRouteMatch()
   const history = useHistory()
   const onNavigate = () => history.push(`${path}/${_id}`)
@@ -19,20 +20,30 @@ export const CourtRow = ({ _id, starting_date, expired_date, court_num, sport_id
   return (
     <>
       {_id && (court_num || court_num === 0) ? (
-        <tr>
-          <td>{court_num}</td>
-          <td>{sport_id.sport_name_th}</td>
-          <td>{format(startingDate, "dd/MM/yyyy")}</td>
-          <td className="d-flex flex-row justify-content-between align-items-center">
-            {format(expiredDate, "dd/MM/yyyy")}
-            <div className="d-flex flex-row">
-              <Button variant="outline-transparent" className="mr-2" onClick={onNavigate}>
-                ดูข้อมูล
-              </Button>
-              {button}
-            </div>
-          </td>
-        </tr>
+        <>
+          <tr className="border-bottom-0">
+            <td>{court_num}</td>
+            <td>{sport_id.sport_name_th}</td>
+            <td>{format(startingDate, "dd/MM/yyyy")}</td>
+            <td className="d-flex flex-row justify-content-between align-items-center border-0">
+              {format(expiredDate, "dd/MM/yyyy")}
+              <div className="d-flex flex-row">
+                <Button variant="outline-transparent" className="mr-2" onClick={onNavigate}>
+                  ดูข้อมูล
+                </Button>
+                {button}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colSpan={5} className="border-0 py-0">
+              <span className="h5 mr-2">
+                <InfoCircle />
+              </span>
+              {` ${description}`}
+            </td>
+          </tr>
+        </>
       ) : (
         <tr>ข้อมูลถูกลบไปแล้ว</tr>
       )}
