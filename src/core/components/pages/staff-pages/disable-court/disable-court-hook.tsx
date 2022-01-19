@@ -76,7 +76,6 @@ export const useEditCourt = () => {
 }
 
 export const useDate = (initialStartDate: Date | undefined = undefined, initialEndDate: Date | undefined = undefined) => {
-  const { updateQuery } = useQueryParams()
   const [startDate, setStartDate] = useState<Date | undefined>(initialStartDate)
   const [endDate, setEndDate] = useState<Date | undefined>(initialEndDate)
   const [showDateError, setShowDateError] = useState(false)
@@ -86,7 +85,6 @@ export const useDate = (initialStartDate: Date | undefined = undefined, initialE
     if (endDate && date >= endDate) setShowDateError(true)
     else {
       setStartDate(date)
-      updateQuery({ startDate: date.toISOString() })
     }
   }
   const onEndDateChange = (date: Date) => {
@@ -94,7 +92,6 @@ export const useDate = (initialStartDate: Date | undefined = undefined, initialE
     if (startDate && date <= startDate) setShowDateError(true)
     else {
       setEndDate(date)
-      updateQuery({ endDate: date.toISOString() })
     }
   }
   return { startDate, endDate, onStartDateChange, onEndDateChange, showDateError, handleAlert, setStartDate, setEndDate }

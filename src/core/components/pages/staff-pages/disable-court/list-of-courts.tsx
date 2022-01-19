@@ -94,7 +94,16 @@ const ListOfCourts = () => {
                 <label className="floating-label" onClick={onSelectStartDate} style={{ display: startDate ? "none" : "" }}>
                   วันเริ่มต้นการล็อค
                 </label>
-                <DatePicker className="form-control" selected={startDate} onChange={onStartDateChange} name="somw" ref={startDateRef} />
+                <DatePicker
+                  className="form-control"
+                  selected={startDate}
+                  onChange={(date: Date) => {
+                    onStartDateChange(date)
+                    updateQuery({ startDate: date.toISOString() })
+                  }}
+                  name="somw"
+                  ref={startDateRef}
+                />
                 <Button
                   variant="outline-transparent"
                   onClick={() => {
@@ -109,7 +118,15 @@ const ListOfCourts = () => {
                 <label className="floating-label" onClick={onSelectEndDate} style={{ display: endDate ? "none" : "" }}>
                   วันสิ้นสุดการล็อค
                 </label>
-                <DatePicker className="form-control" selected={endDate} onChange={onEndDateChange} ref={endDateRef} />
+                <DatePicker
+                  className="form-control"
+                  selected={endDate}
+                  onChange={(date: Date) => {
+                    onEndDateChange(date)
+                    updateQuery({ endDate: date.toISOString() })
+                  }}
+                  ref={endDateRef}
+                />
                 <Button
                   variant="outline-transparent"
                   onClick={() => {
