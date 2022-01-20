@@ -156,8 +156,8 @@ function CreateWaitingRoom() {
     }
     client
       .post<CreateResponse>("/reservation/createwaitingroom", newData)
-      .then(() => {
-        history.push({ pathname: "/waitingroom" })
+      .then((res) => {
+        history.push(res.data.isReservationCreated ? "/myreservation" : "/waitingroom")
       })
       .catch((error) => {
         setShowCantCreateWaitingRoomModal(true)
