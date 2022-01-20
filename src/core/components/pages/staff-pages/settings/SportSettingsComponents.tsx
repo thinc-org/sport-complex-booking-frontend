@@ -112,7 +112,7 @@ export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSp
               <Button
                 variant="pink"
                 className="button"
-                disabled={minMembers <= 5}
+                disabled={minMembers <= 6}
                 onClick={() => {
                   setValue("required_user", parseInt(getValues("required_user")) - 5)
                   setMinMembers(minMembers - 5)
@@ -123,7 +123,7 @@ export const AddSport: React.FC<AddSportProps> = ({ show, setShow, onSubmitAddSp
               <Button
                 variant="pink"
                 className="button"
-                disabled={minMembers <= 1}
+                disabled={minMembers <= 2}
                 onClick={() => {
                   setValue("required_user", parseInt(getValues("required_user")) - 1)
                   setMinMembers(minMembers - 1)
@@ -262,7 +262,7 @@ export const EditSport: React.FC<EditSportProps> = ({ show, setShow, setCurrentS
             <Button
               variant="pink"
               className="button"
-              disabled={currentSport["required_user"] <= 2}
+              disabled={currentSport["required_user"] <= 3}
               onClick={() => {
                 setCurrentSport({ ...currentSport, required_user: currentSport["required_user"] - 2 })
               }}
@@ -272,7 +272,7 @@ export const EditSport: React.FC<EditSportProps> = ({ show, setShow, setCurrentS
             <Button
               variant="pink"
               className="button"
-              disabled={currentSport["required_user"] <= 1}
+              disabled={currentSport["required_user"] <= 2}
               onClick={() => {
                 setCurrentSport({ ...currentSport, required_user: currentSport["required_user"] - 1 })
               }}
