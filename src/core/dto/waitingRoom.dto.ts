@@ -21,6 +21,7 @@ export interface ErrorMessageBannerProps {
 export interface CreateResponse {
   message: string
   statusCode: number
+  isReservationCreated: boolean
 }
 
 export interface HoorayHistoryStates {
