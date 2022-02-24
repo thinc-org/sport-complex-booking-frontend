@@ -705,3 +705,7 @@ td {
   position: absolute;
   right: 30px;
 }
+
+.status-error {
+  color: red;
+}

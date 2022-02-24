@@ -13,6 +13,7 @@ enum allStatus {
   All,
   Normal,
   Banned,
+  Expired,
 }
 
 interface ParamsDataRequest {
@@ -20,6 +21,7 @@ interface ParamsDataRequest {
   end: number
   name: string
   is_penalize: boolean
+  is_expired: boolean
 }
 
 export const renderLoading = (isLoading: boolean) => {
@@ -50,8 +52,18 @@ const ListOfAllUsers: FunctionComponent = () => {
       begin: (pageNo - 1) * maxUserPerPage,
       end: pageNo * maxUserPerPage,
     }
-    if (searchName !== "") param_data.name = searchName
-    if (status !== allStatus.All) param_data.is_penalize = allStatus.Banned === status
+    if (searchName !== "") {
+      param_data.name = searchName
+    }
+    if (status === allStatus.Normal) {
+      param_data.is_penalize = false
+    }
+    if (status === allStatus.Banned) {
+      param_data.is_penalize = true
+    }
+    if (status === allStatus.Expired) {
+      param_data.is_expired = true
+    }
     //  request users from server  //
     client({
       method: "GET",
@@ -145,16 +157,27 @@ const ListOfAllUsers: FunctionComponent = () => {
     )
   }
 
+  const getUserStatus = (user: UserInfoRes) => {
+    if (user.account_expiration_date && new Date(user.account_expiration_date) < new Date()) {
+      return "หมดอายุ"
+    }
+    if (user.is_penalize) {
+      return "โดนแบน"
+    }
+    return "ปกติ"
+  }
+
   const renderUsersTable = () => {
     let index = (pageNo - 1) * 10 + 1
     const usersList = users.map((user) => {
+      const userStatus = getUserStatus(user)
       return (
-        <tr key={index} className="tr-normal">
+        <tr key={index} className={`tr-normal ${userStatus !== "ปกติ" && "status-error"}`}>
           <td className="font-weight-bold"> {index} </td>
           <td> {user.name_th} </td>
           <td> {user.surname_th} </td>
           <td> {user.username} </td>
-          <td> {user.is_penalize ? "โดนแบน" : "ปกติ"} </td>
+          <td> {userStatus} </td>
           <td>
             <Button className="btn-normal btn-outline-black" variant="outline-secondary" id={String(index++)} onClick={handleInfo}>
               ดูข้อมูล
@@ -204,6 +227,7 @@ const ListOfAllUsers: FunctionComponent = () => {
                 <option value={allStatus.All}>ทั้งหมด</option>
                 <option value={allStatus.Normal}>ปกติ</option>
                 <option value={allStatus.Banned}>โดนแบน</option>
+                <option value={allStatus.Expired}>หมดอายุ</option>
               </Form.Control>
             </Col>
             <Button variant="pink" className="ml-3 py-1 btn-normal" onClick={handleSearch}>

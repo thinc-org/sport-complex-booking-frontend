@@ -8,6 +8,7 @@ export enum Account {
 
 export interface UserInfoRes extends VerifyInfoRes {
   is_penalize: boolean
+  account_expiration_date?: string
 }
 
 export type UserListRes = [number, UserInfoRes[]]
