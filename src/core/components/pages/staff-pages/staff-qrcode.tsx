@@ -16,7 +16,9 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [id, setId] = useState<string>()
   const [currentTime, setCurrentTime] = useState<number>()
+  const [formattedCurrentTime, setFormattedCurrentTime] = useState<string>("")
   const [validTime, setValidTime] = useState<number>()
+  const [formattedValidTime, setFormattedValidTime] = useState<string>("")
   const [isSuccessful, setIsSuccessful] = useState<boolean>()
 
   const handleScan = (data: string | null) => {
@@ -41,7 +43,13 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = () => {
     }
   }, [readingResult])
 
+  const setCurrentAndValidTime = useCallback(() => {
+    setFormattedCurrentTime(`${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`)
+    validTime && setFormattedValidTime(`${new Date(validTime).toLocaleDateString()} ${new Date(validTime).toLocaleTimeString()}`)
+  }, [validTime])
+
   const checkIn = useCallback(async (reservationId) => {
+    setCurrentAndValidTime()
     try {
       const res: ReservationDetailResponse = (await client.patch("myreservation/" + reservationId)).data
       if (res.is_check) {
@@ -75,6 +83,7 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = () => {
     if (validTime && id && currentTime) {
       if (currentTime <= validTime) checkIn(id)
       else {
+        setCurrentAndValidTime()
         setMessageHeader("คิวอาร์โค้ดหมดเวลา")
         setIsSuccessful(false)
         setMessageBody("ID: " + id)
@@ -109,7 +118,13 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = () => {
           <div className="box-container btn offset-1 col-10 pt-3" style={{ boxShadow: "none" }}>
             <QrReader delay={500} onError={handleError} onScan={handleScan} style={{ width: "100%" }} />
           </div>
-          <CheckinModal modalOpen={modalOpen} messageHeader={messageHeader} messageBody={messageBody} />
+          <CheckinModal
+            modalOpen={modalOpen}
+            currentTime={formattedCurrentTime}
+            validTime={formattedValidTime}
+            messageHeader={messageHeader}
+            messageBody={messageBody}
+          />
         </div>
       </div>
     </div>
