@@ -2,12 +2,12 @@ import React, { useState, useCallback, useEffect } from "react"
 import QRCode from "qrcode.react"
 import { useTranslation } from "react-i18next"
 import { QRCodeProps } from "./PropsInterface"
-import { TWO_HOURS_MILLISECOND } from "../../../../../constant"
+import { TWO_HOURS_MILLISECOND, DISPLAYED_QR_VALID_TIME_SECOND, ACTUAL_QR_VALID_TIME_MILLISECOND } from "../../../../../constant"
 
 export const QrCode: React.FC<QRCodeProps> = ({ isCheck, id, validTime, setValidTime, reservedTimeInMillisecond }) => {
   const { t } = useTranslation()
 
-  const [counter, setCounter] = useState<number>(40)
+  const [counter, setCounter] = useState<number>(DISPLAYED_QR_VALID_TIME_SECOND)
   const [allowCheckin, setAllowCheckin] = useState<boolean>(false)
 
   const countDown = useCallback(() => {
@@ -16,8 +16,8 @@ export const QrCode: React.FC<QRCodeProps> = ({ isCheck, id, validTime, setValid
         if (counter) {
           setCounter(counter - 1)
         } else if (counter === 0) {
-          setValidTime(new Date().getTime() + 10000)
-          setCounter(40)
+          setValidTime(new Date().getTime() + ACTUAL_QR_VALID_TIME_MILLISECOND)
+          setCounter(DISPLAYED_QR_VALID_TIME_SECOND)
         }
       }, 1000)
     }
