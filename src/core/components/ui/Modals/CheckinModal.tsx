@@ -22,8 +22,8 @@ export const CheckinModal: React.FC<CheckinModalProps> = ({ modalOpen, messageHe
           </div>
           <div className="modal-body pt-1 pb-0" style={{ fontSize: "14px", fontWeight: 300 }}>
             <div>{messageBody}</div>
-            <div>{`${t("currentTime")} ${currentTime}`}</div>
-            <div>{`${t("validTime")} ${validTime}`}</div>
+            {currentTime && <div>{`${t("currentTime")} ${currentTime}`}</div>}
+            {validTime && <div>{`${t("validTime")} ${validTime}`}</div>}
           </div>
           <div className="modal-footer pt-0 pb-0"></div>
         </div>

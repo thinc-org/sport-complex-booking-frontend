@@ -48,8 +48,13 @@ const QRScannerPage: FunctionComponent<RouteComponentProps> = () => {
     validTime && setFormattedValidTime(`${new Date(validTime).toLocaleDateString()} ${new Date(validTime).toLocaleTimeString()}`)
   }, [validTime])
 
+  const resetCurrentAndValidTime = () => {
+    setFormattedCurrentTime("")
+    setFormattedValidTime("")
+  }
+
   const checkIn = useCallback(async (reservationId) => {
-    setCurrentAndValidTime()
+    resetCurrentAndValidTime()
     try {
       const res: ReservationDetailResponse = (await client.patch("myreservation/" + reservationId)).data
       if (res.is_check) {
