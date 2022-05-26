@@ -504,7 +504,7 @@ const UserInfo: FunctionComponent = () => {
                 <p>รูปภาพบัตรนักเรียน</p>
                 <Form.File
                   label={studentCardPhotoFile ? (studentCardPhotoFile as File).name : "Choose File"}
-                  accept="application/pdf, image/jpeg, image/png"
+                  accept="application/pdf,image/*"
                   custom
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     if (e.target.files && e.target.files[0]?.size <= 2097152) {

@@ -408,7 +408,7 @@ export default function OtherEditInfoComponent({
               <Form.File
                 label={userPhotoFile ? (userPhotoFile as File).name : "Choose File"}
                 id="user_photo"
-                accept="image/png, image/jpeg"
+                accept="image/*"
                 custom
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   if (e.target.files && e.target.files[0]?.size <= 2097152) {
@@ -418,12 +418,12 @@ export default function OtherEditInfoComponent({
               />
             </div>
             <hr />
-            <label className="form-label my-2">เลขประจำตัวประชาชน / ทะเบียนบ้านที่มีหน้าของคุณ (.pdf เท่านั้น)</label>
+            <label className="form-label my-2">เลขประจำตัวประชาชน / ทะเบียนบ้านที่มีหน้าของคุณ</label>
             <div className="form-file">
               <Form.File
                 label={nationalIdPhotoFile ? (nationalIdPhotoFile as File).name : "Choose File"}
                 id="national_id_house_registration"
-                accept="application/pdf"
+                accept="application/pdf,image/*"
                 custom
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   if (e.target.files && e.target.files[0]?.size <= 2097152) {
@@ -438,7 +438,7 @@ export default function OtherEditInfoComponent({
               <Form.File
                 label={medicalCertificateFile ? (medicalCertificateFile as File).name : "Choose File"}
                 id="medical_certificate"
-                accept="application/pdf"
+                accept="application/pdf,image/*"
                 custom
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   if (e.target.files && e.target.files[0]?.size <= 2097152) {
@@ -455,7 +455,7 @@ export default function OtherEditInfoComponent({
                   <Form.File
                     label={relationshipVerificationDocumentFile ? (relationshipVerificationDocumentFile as File).name : "Choose File"}
                     id="relationship_verification_document"
-                    accept="application/pdf"
+                    accept="application/pdf,image/*"
                     custom
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       if (e.target.files && e.target.files[0]?.size <= 2097152) {
@@ -472,7 +472,7 @@ export default function OtherEditInfoComponent({
               <Form.File
                 label={paymentSlip ? (paymentSlip as File).name : "Choose File"}
                 id="payment_slip"
-                accept="application/pdf, image/png, image/jpeg"
+                accept="application/pdf,image/*"
                 custom
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   if (e.target.files && e.target.files[0]?.size <= 2097152) {

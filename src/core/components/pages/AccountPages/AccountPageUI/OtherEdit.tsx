@@ -434,7 +434,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                 className="form-file-input form-control"
                 id="user_photo"
                 required
-                accept="application/pdf,image/*"
+                accept="image/*"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("user_photo")}
                 onChange={(e) => {
                   if (e.target.files && e.target.files[0]?.size > 2097152) {

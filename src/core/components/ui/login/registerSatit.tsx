@@ -229,7 +229,7 @@ export const RegisterSatit = ({ user }: satitRejectedProps) => {
                   className="form-file-input form-control"
                   id="student_card_photo"
                   required
-                  accept="application/pdf, image/png, image/jpeg"
+                  accept="application/pdf,image/*"
                   onChange={(e) => {
                     if (e.target.files && e.target.files[0]?.size > 2097152) {
                       alert(t("fileTooBig"))
