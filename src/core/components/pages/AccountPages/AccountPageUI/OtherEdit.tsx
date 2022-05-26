@@ -434,7 +434,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                 className="form-file-input form-control"
                 id="user_photo"
                 required
-                accept="image/png, image/jpeg"
+                accept="application/pdf,image/*"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("user_photo")}
                 onChange={(e) => {
                   if (e.target.files && e.target.files[0]?.size > 2097152) {
@@ -466,7 +466,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                 className="form-file-input  form-control"
                 id="national_id_house_registration"
                 required
-                accept="application/pdf"
+                accept="application/pdf,image/*"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("national_id_house_registration")}
                 onChange={(e) => {
                   if (e.target.files && e.target.files[0]?.size > 2097152) {
@@ -498,7 +498,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                 className="form-file-input  form-control"
                 id="medical_certificate"
                 required
-                accept="application/pdf"
+                accept="application/pdf,image/*"
                 readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("medical_certificate")}
                 onChange={(e) => {
                   if (e.target.files && e.target.files[0]?.size > 2097152) {
@@ -535,7 +535,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                     required
                     className="form-control"
                     id="relationship_verification_document"
-                    accept="application/pdf"
+                    accept="application/pdf,image/*"
                     readOnly={user?.verification_status === "Rejected" && !user?.rejected_info?.includes("relationship_verification_document")}
                     onChange={(e) => {
                       if (e.target.files && e.target.files[0]?.size > 2097152) {
@@ -571,7 +571,7 @@ export default function OtherAccountEdit({ registrationInfo, isRegister }: Regis
                 required
                 className="form-control"
                 id="paymentEvidence"
-                accept="application/pdf, image/png, image/jpeg"
+                accept="application/pdf, image/*"
                 readOnly={user?.verification_status === "Rejected"}
                 onChange={(e) => {
                   if (e.target.files && e.target.files[0]?.size > 2097152) {
