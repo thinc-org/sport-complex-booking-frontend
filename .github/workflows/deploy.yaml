@@ -23,8 +23,8 @@ jobs:
         with:
           image_name: thinc-org/sport-complex-booking-frontend
           image_tag: "${{ env.STAGE }}"
-          username: sport-complex-booking
-          password: "${{ secrets.GHCR_PAT }}"
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
           registry: ghcr.io
           build_extra_args: "--build-arg=stage=${{ env.STAGE }}"
       - uses: appleboy/ssh-action@master
