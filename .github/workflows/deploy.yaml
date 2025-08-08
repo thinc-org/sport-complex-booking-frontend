@@ -9,6 +9,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read  # Or write, depending on your needs
+      packages: write # Grant write permission for packages
     steps:
       - name: Set environment
         run: |
