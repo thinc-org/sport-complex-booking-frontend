@@ -47,6 +47,7 @@ jobs:
             git clone -b $BRANCH https://.:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY $PROJECT
             cd $PROJECT
 
+            echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             docker pull ghcr.io/thinc-org/sport-complex-booking-frontend:$STAGE
             docker-compose --project-name=$PROJECT -f docker-compose.$STAGE.yml stop
             docker-compose --project-name=$PROJECT -f docker-compose.$STAGE.yml up -d
