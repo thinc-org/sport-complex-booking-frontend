@@ -10,7 +10,7 @@ const LoginForm = () => {
   const { register, handleSubmit, setError, errors, clearErrors } = useForm()
   const { isLoading, onLogin } = useLogin(setError)
   const SSOLogin = () => {
-    window.location.href = `https://account.it.chula.ac.th/html/index.html?service=${process.env.REACT_APP_URL}/login`
+    window.location.href = `https://account.it.chula.ac.th/login?service=${process.env.REACT_APP_URL}/login`
   }
   const handleBackendError = () => {
     if (errors.invalidInput) clearErrors("invalidInput")
